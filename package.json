@@ -1,6 +1,6 @@
 {
 	"name": "node-minify",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Javascript / CSS minifier based on YUI Compressor",
 	"homepage": "https://github.com/srod/node-minify",
 	"author": {
@@ -9,7 +9,7 @@
 		"url": "http://2clics.net"
 	},
 
-	"main": "node-minify",
+	"main": "index",
 
 	"repository": {
 		"type": "git",
