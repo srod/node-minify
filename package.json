@@ -1,0 +1,18 @@
+{
+	"name": "node-minify",
+	"version": "0.1.0",
+	"description": "Javascript / CSS minifier based on YUI Compressor",
+	"homepage": "https://github.com/srod/node-minify",
+	"author": {
+		"name": "Rodolphe Stoclin",
+		"email": "rodolphe@2clics.net",
+		"url": "http://2clics.net"
+	},
+
+	"main": "node-minify",
+
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/srod/node-minify.git"
+	}
+}
