@@ -1,7 +1,7 @@
 {
 	"name": "node-minify",
-	"version": "0.1.1",
-	"description": "Javascript / CSS minifier based on YUI Compressor",
+	"version": "0.2.0",
+	"description": "Javascript / CSS minifier based on YUI Compressor and Google Closure Compiler",
 	"homepage": "https://github.com/srod/node-minify",
 	"author": {
 		"name": "Rodolphe Stoclin",
