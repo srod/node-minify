@@ -4,7 +4,9 @@
   A very light minifier NodeJS module.
 
   Support:
+
   - YUI Compressor --version 2.4.6
+  
   - Google Closure Compiler --version 1043
   
   It allow you to compress javascript and css files.
