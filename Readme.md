@@ -13,6 +13,8 @@
   
   I recommend to execute it at boot time for production use.
 
+  See server.js in examples/
+
 ## Installation
 
     npm install node-minify
@@ -25,14 +27,20 @@
 	new compressor.minify({
 		type: 'gcc',
 		fileIn: 'public/js/base.js',
-		fileOut: 'public/js/base-min.js'
+		fileOut: 'public/js/base-min.js',
+		callback: function(err){
+			console.log(err);
+		}
 	});
 
 	// Using YUI Compressor
 	new compressor.minify({
 		type: 'yui',
 		fileIn: 'public/css/base.css',
-		fileOut: 'public/css/base-min.css'
+		fileOut: 'public/css/base-min.css',
+		callback: function(err){
+			console.log(err);
+		}
 	});
 
 ## YUI Compressor

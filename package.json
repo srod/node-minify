@@ -1,6 +1,6 @@
 {
 	"name": "node-minify",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "Javascript / CSS minifier based on YUI Compressor and Google Closure Compiler",
 	"homepage": "https://github.com/srod/node-minify",
 	"author": {
@@ -14,5 +14,7 @@
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/srod/node-minify.git"
-	}
+	},
+
+	"keywords": ["compressor", "minify", "minifier", "yui", "gcc", "google", "closure", "compiler"]
 }
