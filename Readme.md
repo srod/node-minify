@@ -8,6 +8,8 @@
   - YUI Compressor --version 2.4.6
   
   - Google Closure Compiler --version 1043
+
+  - UglifyJS
   
   It allow you to compress javascript and css files.
   
@@ -26,8 +28,8 @@
 	// Using Google Closure
 	new compressor.minify({
 		type: 'gcc',
-		fileIn: 'public/js/base.js',
-		fileOut: 'public/js/base-min.js',
+		fileIn: './public/js/base.js',
+		fileOut: './public/js/base-min-gcc.js',
 		callback: function(err){
 			console.log(err);
 		}
@@ -36,8 +38,18 @@
 	// Using YUI Compressor
 	new compressor.minify({
 		type: 'yui',
-		fileIn: 'public/css/base.css',
-		fileOut: 'public/css/base-min.css',
+		fileIn: './public/css/base.css',
+		fileOut: './public/css/base-min-yui.css',
+		callback: function(err){
+			console.log(err);
+		}
+	});
+
+	// Using UglifyJS
+	new compressor.minify({
+		type: 'uglifyjs',
+		fileIn: './public/css/base.css',
+		fileOut: './public/css/base-min-uglifyjs.css',
 		callback: function(err){
 			console.log(err);
 		}
@@ -57,8 +69,16 @@
 
   http://code.google.com/closure/compiler
 
+## UglifyJS
+
+  UglifyJS can compress only javascript files.
+
+  It will throw an error if you try with css files.
+
+  https://github.com/mishoo/UglifyJS
+
 ## Warning
 
-  It assumes you have java installed on your environment.
+  It assumes you have java installed on your environment for both GCC and Yui.
 
   java -version

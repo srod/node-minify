@@ -1,3 +1,7 @@
 .svn
 .idea
 ._*
+node_modules
+examples/public/js/base-min-yui.js
+examples/public/js/base-min-gcc.js
+examples/public/js/base-min-uglifyjs.js
