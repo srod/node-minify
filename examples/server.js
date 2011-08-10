@@ -1,5 +1,3 @@
-//require.paths.unshift('/opt/local/lib/node_modules');
-
 var http = require('http'),
 	compressor = require('../lib/node-minify');
 
