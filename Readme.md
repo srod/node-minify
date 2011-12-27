@@ -5,9 +5,9 @@
 
   Support:
 
-  - YUI Compressor --version 2.4.6
+  - YUI Compressor --version 2.4.7
   
-  - Google Closure Compiler --version 1314
+  - Google Closure Compiler --version 1592
 
   - UglifyJS
   
