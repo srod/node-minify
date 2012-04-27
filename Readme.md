@@ -54,6 +54,12 @@
 			console.log(err);
 		}
 	});
+	
+## Cocatenate Files
+
+In order to concatenate files, simply pass in an array with the file paths to fileIn.
+	
+	fileIn: ['public/js/base.js', 'public/js/base2.js', ...]
 
 ## YUI Compressor
 
