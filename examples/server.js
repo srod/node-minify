@@ -9,34 +9,16 @@ http.createServer(function (req, res) {
 new compressor.minify({
 	type: 'gcc',
 	fileIn: 'public/js/base.js',
-	fileOut: 'public/js/base-min-gcc.js',
+	fileOut: 'public/js/base-onefile-gcc.js',
 	callback: function(err){
 		console.log(err);
 	}
 });
 
 new compressor.minify({
-	type: 'yui',
-	fileIn: './public/js/base.js',
-	fileOut: './public/js/base-min-yui.js',
-	callback: function(err){
-		console.log(err);
-	}
-});
-
-new compressor.minify({
-	type: 'uglifyjs',
-	fileIn: './public/js/base.js',
-	fileOut: './public/js/base-min-uglifyjs.js',
-	callback: function(err){
-		console.log(err);
-	}
-});
-
-new compressor.minify({
-	type: 'yui',
-	fileIn: './public/css/base.css',
-	fileOut: './public/css/base-min.css',
+	type: 'gcc',
+	fileIn: ['public/js/base.js', 'public/js/base2.js'],
+	fileOut: 'public/js/base-concat-gcc.js',
 	callback: function(err){
 		console.log(err);
 	}

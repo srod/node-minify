@@ -1,4 +1,3 @@
-
 # Node-minify
       
   A very light minifier NodeJS module.
@@ -50,6 +49,29 @@
 		type: 'uglifyjs',
 		fileIn: './public/css/base.css',
 		fileOut: './public/css/base-min-uglifyjs.css',
+		callback: function(err){
+			console.log(err);
+		}
+	});
+	
+## Cocatenate Files
+
+In order to concatenate files, simply pass in an array with the file paths to fileIn.
+	
+	fileIn: ['public/js/base.js', 'public/js/base2.js', ...]
+	
+	
+## Max Buffer Size
+
+In some cases you might need a bigger max buffer size (for example when minifying really large files).
+By default the buffer is `1000 * 1024` which should be enough. If you however need more buffer, you can simply pass in the
+desired buffer size as an argument to compressor.minify like so:
+
+	new compressor.minify({
+		type: 'uglifyjs',
+		fileIn: './public/css/base.css',
+		fileOut: './public/css/base-min-uglifyjs.css',
+		buffer: 1000 * 1024,
 		callback: function(err){
 			console.log(err);
 		}
