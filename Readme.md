@@ -34,6 +34,16 @@
 		}
 	});
 
+	// Array
+	new compressor.minify({
+		type: 'gcc',
+		fileIn: ['public/js/base.js', 'public/js/base2.js'],
+		fileOut: './public/js/base-onefile-gcc.js',
+		callback: function(err){
+			console.log(err);
+		}
+	});
+
 	// Using YUI Compressor
 	new compressor.minify({
 		type: 'yui',
