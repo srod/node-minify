@@ -57,8 +57,8 @@
 	// Using UglifyJS
 	new compressor.minify({
 		type: 'uglifyjs',
-		fileIn: './public/css/base.css',
-		fileOut: './public/css/base-min-uglifyjs.css',
+		fileIn: 'public/js/base.js',
+		fileOut: 'public/js/base-onefile-uglify.js',
 		callback: function(err){
 			console.log(err);
 		}
