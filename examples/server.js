@@ -24,4 +24,24 @@ new compressor.minify({
 	}
 });
 
+// Using YUI Compressor
+new compressor.minify({
+    type: 'yui',
+    fileIn: './public/css/base.css',
+    fileOut: './public/css/base-min-yui.css',
+    callback: function(err){
+        console.log(err);
+    }
+});
+
+// Using UglifyJS
+new compressor.minify({
+    type: 'uglifyjs',
+    fileIn: './public/css/base.css',
+    fileOut: './public/css/base-min-uglifyjs.css',
+    callback: function(err){
+        console.log(err);
+    }
+});
+
 console.log('Server running at http://127.0.0.1:1337/');
