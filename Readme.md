@@ -27,8 +27,8 @@
 	// Using Google Closure
 	new compressor.minify({
 		type: 'gcc',
-		fileIn: './public/js/base.js',
-		fileOut: './public/js/base-min-gcc.js',
+		fileIn: 'public/js/base.js',
+		fileOut: 'public/js/base-min-gcc.js',
 		callback: function(err){
 			console.log(err);
 		}
@@ -38,17 +38,27 @@
 	new compressor.minify({
 		type: 'gcc',
 		fileIn: ['public/js/base.js', 'public/js/base2.js'],
-		fileOut: './public/js/base-onefile-gcc.js',
+		fileOut: 'public/js/base-onefile-gcc.js',
 		callback: function(err){
 			console.log(err);
 		}
 	});
 
-	// Using YUI Compressor
+	// Using YUI Compressor CSS
 	new compressor.minify({
 		type: 'yui',
-		fileIn: './public/css/base.css',
-		fileOut: './public/css/base-min-yui.css',
+		fileIn: 'public/css/base.css',
+		fileOut: 'public/css/base-min-yui.css',
+		callback: function(err){
+			console.log(err);
+		}
+	});
+
+	// Using YUI Compressor JS
+	new compressor.minify({
+		type: 'yui-js',
+		fileIn: 'public/js/base.js',
+		fileOut: 'public/js/base-min-yui.js',
 		callback: function(err){
 			console.log(err);
 		}
