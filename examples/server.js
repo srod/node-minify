@@ -11,6 +11,7 @@ new compressor.minify({
 	fileIn: 'public/js/base.js',
 	fileOut: 'public/js/base-onefile-gcc.js',
 	callback: function(err){
+		console.log('GCC one file');
 		console.log(err);
 	}
 });
@@ -20,6 +21,7 @@ new compressor.minify({
 	fileIn: ['public/js/base.js', 'public/js/base2.js'],
 	fileOut: 'public/js/base-concat-gcc.js',
 	callback: function(err){
+		console.log('GCC multi files');
 		console.log(err);
 	}
 });
@@ -27,9 +29,20 @@ new compressor.minify({
 // Using YUI Compressor
 new compressor.minify({
     type: 'yui',
-    fileIn: './public/css/base.css',
-    fileOut: './public/css/base-min-yui.css',
+    fileIn: 'public/css/base.css',
+    fileOut: 'public/css/base-min-yui.css',
     callback: function(err){
+		console.log('YUI CSS');
+        console.log(err);
+    }
+});
+
+new compressor.minify({
+    type: 'yui-js',
+    fileIn: 'public/js/base.js',
+    fileOut: 'public/js/base-min-yui.js',
+    callback: function(err){
+		console.log('YUI JS');
         console.log(err);
     }
 });
@@ -40,6 +53,7 @@ new compressor.minify({
 	fileIn: 'public/js/base.js',
 	fileOut: 'public/js/base-onefile-uglify.js',
     callback: function(err){
+		console.log('Uglifyjs');
         console.log(err);
     }
 });
