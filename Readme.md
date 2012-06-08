@@ -103,7 +103,7 @@ new compressor.minify({
 });
 ```
 
-## Temp path
+## Temp Path
 
 You can define a temporary folder where temporary files will be generated :
 
