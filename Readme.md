@@ -78,7 +78,7 @@ new compressor.minify({
 });
 ```
 
-## Cocatenate Files
+## Concatenate Files
 
 In order to concatenate files, simply pass in an array with the file paths to `fileIn`.
 
@@ -97,6 +97,22 @@ new compressor.minify({
 	fileIn: './public/css/base.css',
 	fileOut: './public/css/base-min-uglifyjs.css',
 	buffer: 1000 * 1024,
+	callback: function(err){
+		console.log(err);
+	}
+});
+```
+
+## Temp path
+
+You can define a temporary folder where temporary files will be generated
+
+```js
+new compressor.minify({
+	type: 'yui-js',
+	fileIn: 'public/js/base.js',
+	fileOut: 'public/js/base-min-yui.js',
+	tempPath: '/tmp',
 	callback: function(err){
 		console.log(err);
 	}
