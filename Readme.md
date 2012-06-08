@@ -105,7 +105,7 @@ new compressor.minify({
 
 ## Temp path
 
-You can define a temporary folder where temporary files will be generated
+You can define a temporary folder where temporary files will be generated :
 
 ```js
 new compressor.minify({
