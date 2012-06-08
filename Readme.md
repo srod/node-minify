@@ -6,7 +6,7 @@
 
   - YUI Compressor --version 2.4.7
 
-  - Google Closure Compiler --version 1810
+  - Google Closure Compiler --version 1918
 
   - UglifyJS
 
