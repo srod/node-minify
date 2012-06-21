@@ -58,4 +58,14 @@ new compressor.minify({
     }
 });
 
+new compressor.minify({
+	type: 'no-compress',
+	fileIn: ['public/js/base.js', 'public/js/base2.js'],
+	fileOut: 'public/js/base-concat-no-compress.js',
+	callback: function(err){
+		console.log('No compress');
+		console.log(err);
+	}
+});
+
 console.log('Server running at http://127.0.0.1:1337/');
