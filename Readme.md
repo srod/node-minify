@@ -47,6 +47,16 @@ new compressor.minify({
 	}
 });
 
+// Only concatenation of files (no compression)
+new compressor.minify({
+    type: 'no-compress',
+    fileIn: ['public/js/base.js', 'public/js/base2.js'],
+    fileOut: 'public/js/base-onefile-gcc.js',
+    callback: function(err){
+        console.log(err);
+    }
+});
+
 // Using YUI Compressor for CSS
 new compressor.minify({
 	type: 'yui-css',
