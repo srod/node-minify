@@ -10,6 +10,8 @@
 
   - UglifyJS
 
+  - UglifyJS2
+
   It allow you to compress JavaScript and CSS files.
 
   I recommend to execute it at boot time for production use.
@@ -86,6 +88,17 @@ new compressor.minify({
 		console.log(err);
 	}
 });
+
+// Using UglifyJS2
+new compressor.minify({
+    type: 'uglifyjs2',
+	fileIn: 'public/js/base.js',
+	fileOut: 'public/js/base-onefile-uglify2.js',
+    callback: function(err){
+		console.log('Uglifyjs2');
+        console.log(err);
+    }
+});
 ```
 
 ## Concatenate Files
@@ -150,6 +163,14 @@ new compressor.minify({
   It will throw an error if you try with CSS files.
 
   https://github.com/mishoo/UglifyJS
+
+## UglifyJS2
+
+  UglifyJS2 can compress only JavaScript files.
+
+  It will throw an error if you try with CSS files.
+
+  https://github.com/mishoo/UglifyJS2
 
 ## Warning
 
