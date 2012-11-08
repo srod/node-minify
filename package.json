@@ -17,7 +17,8 @@
 	},
 
 	"dependencies": {
-		"uglify-js": "*"
+		"uglify-js": "*",
+		"uglify-js2": "*"
 	},
 	
 	"keywords": ["compressor", "minify", "minifier", "yui", "gcc", "google", "closure", "compiler", "uglifyjs", "windows"]
