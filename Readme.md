@@ -12,6 +12,8 @@
 
   - UglifyJS2
 
+  - Sqwish
+
   It allow you to compress JavaScript and CSS files.
 
   I recommend to execute it at boot time for production use.
@@ -99,6 +101,17 @@ new compressor.minify({
         console.log(err);
     }
 });
+
+// Using Sqwish for CSS
+new compressor.minify({
+    type: 'sqwish',
+	fileIn: ['public/css/base.css', 'public/css/base2.css'],
+	fileOut: 'public/css/base-min-sqwish.css',
+    callback: function(err){
+		console.log('Sqwish');
+        console.log(err);
+    }
+});
 ```
 
 ## Concatenate Files
@@ -171,6 +184,12 @@ new compressor.minify({
   It will throw an error if you try with CSS files.
 
   https://github.com/mishoo/UglifyJS2
+
+## Sqwish
+
+  Sqwish can compress only CSS files.
+
+  https://github.com/ded/sqwish
 
 ## Warning
 

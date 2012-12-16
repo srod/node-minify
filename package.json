@@ -1,7 +1,7 @@
 {
 	"name": "node-minify",
 	"version": "0.6.1",
-	"description": "Javascript / CSS minifier based on YUI Compressor / Google Closure Compiler / UglifyJS / UglifyJS2",
+	"description": "Javascript / CSS minifier based on YUI Compressor / Google Closure Compiler / UglifyJS / UglifyJS2 / Sqwish",
 	"homepage": "https://github.com/srod/node-minify",
 	"author": {
 		"name": "Rodolphe Stoclin",
@@ -18,8 +18,9 @@
 
 	"dependencies": {
 		"uglify-js": "*",
-		"uglify-js2": "*"
+		"uglify-js2": "*",
+        "sqwish": "*"
 	},
 	
-	"keywords": ["compressor", "minify", "minifier", "yui", "gcc", "google", "closure", "compiler", "uglifyjs", "uglifyjs2", "windows"]
+	"keywords": ["compressor", "minify", "minifier", "yui", "gcc", "google", "closure", "compiler", "uglifyjs", "uglifyjs2", "windows", "sqwish"]
 }

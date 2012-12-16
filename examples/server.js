@@ -79,4 +79,15 @@ new compressor.minify({
 	}
 });
 
+// Using Sqwish
+new compressor.minify({
+    type: 'sqwish',
+	fileIn: ['public/css/base.css', 'public/css/base2.css'],
+	fileOut: 'public/css/base-min-sqwish.css',
+    callback: function(err){
+		console.log('Sqwish');
+        console.log(err);
+    }
+});
+
 console.log('Server running at http://127.0.0.1:1337/');
