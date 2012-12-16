@@ -81,7 +81,7 @@ new compressor.minify({
 	}
 });
 
-// Using UglifyJS
+// Using UglifyJS for JS
 new compressor.minify({
 	type: 'uglifyjs',
 	fileIn: 'public/js/base.js',
@@ -91,7 +91,7 @@ new compressor.minify({
 	}
 });
 
-// Using UglifyJS2
+// Using UglifyJS2 for JS
 new compressor.minify({
     type: 'uglifyjs2',
 	fileIn: 'public/js/base.js',
