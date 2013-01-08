@@ -58,17 +58,6 @@ new compressor.minify({
     }
 });
 
-// Using UglifyJS2
-new compressor.minify({
-    type: 'uglifyjs2',
-	fileIn: 'public/js/base.js',
-	fileOut: 'public/js/base-onefile-uglify2.js',
-    callback: function(err){
-		console.log('Uglifyjs2');
-        console.log(err);
-    }
-});
-
 new compressor.minify({
 	type: 'no-compress',
 	fileIn: ['public/js/base.js', 'public/js/base2.js'],
