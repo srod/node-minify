@@ -29,6 +29,18 @@ npm install node-minify
 ```js
 var compressor = require('node-minify');
 
+// Using Google Closure with jQuery 2.0
+new compressor.minify({
+	type: 'gcc',
+	language: 'ECMASCRIPT5',
+	fileIn: 'public/js/jquery-2.0.0.js',
+	fileOut: 'public/js/jquery-2.0.0-gcc.js',
+	callback: function(err){
+		console.log('GCC jquery 2.0');
+		console.log(err);
+	}
+});
+
 // Using Google Closure
 new compressor.minify({
 	type: 'gcc',
