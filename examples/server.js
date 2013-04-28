@@ -8,7 +8,7 @@ http.createServer(function (req, res) {
 
 new compressor.minify({
 	type: 'gcc',
-    language: 'ECMASCRIPT5',
+	language: 'ECMASCRIPT5',
 	fileIn: 'public/js/jquery-2.0.0.js',
 	fileOut: 'public/js/jquery-2.0.0-gcc.js',
 	callback: function(err){
