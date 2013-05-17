@@ -4,7 +4,7 @@
 
   Support:
 
-  - YUI Compressor --version 2.4.7
+  - YUI Compressor --version 2.4.8
 
   - Google Closure Compiler --version 2388
 
