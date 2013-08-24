@@ -98,4 +98,29 @@ new compressor.minify({
     }
 });
 
+// Using public folder option
+new compressor.minify({
+    type: 'yui-js',
+    publicFolder: 'public/js/',
+    fileIn: 'base.js',
+    fileOut: 'public/js/base-min-yui-publicfolder.js',
+    callback: function(err, min){
+		console.log('YUI JS with publicFolder option');
+        console.log(err);
+//        console.log(min);
+    }
+});
+
+new compressor.minify({
+    type: 'yui-js',
+    publicFolder: 'public/js/',
+    fileIn: ['base.js', 'base2.js'],
+    fileOut: 'public/js/base-min-yui-publicfolder-array.js',
+    callback: function(err, min){
+		console.log('YUI JS with publicFolder option and array');
+        console.log(err);
+//        console.log(min);
+    }
+});
+
 console.log('Server running at http://127.0.0.1:1337/');
