@@ -76,6 +76,17 @@ new compressor.minify({
 });
 
 new compressor.minify({
+    type: 'uglifyjs',
+	fileIn: ['public/js/base.js', 'public/js/base2.js'],
+	fileOut: 'public/js/base-onefile-uglify.js',
+    callback: function(err, min){
+		console.log('Uglifyjs multi files');
+        console.log(err);
+//        console.log(min);
+    }
+});
+
+new compressor.minify({
 	type: 'no-compress',
 	fileIn: ['public/js/base.js', 'public/js/base2.js'],
 	fileOut: 'public/js/base-concat-no-compress.js',
