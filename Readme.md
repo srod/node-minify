@@ -154,6 +154,27 @@ In order to concatenate files, simply pass in an array with the file paths to `f
 fileIn: ['public/js/base.js', 'public/js/base2.js', ...]
 ```
 
+## Passing options
+
+You can pass any option/flag you want
+
+```js
+options: ['--option=1', '--option=2']
+
+new compressor.minify({
+	type: 'gcc',
+	language: 'ECMASCRIPT5',
+	fileIn: 'public/js/jquery-2.0.0.js',
+	fileOut: 'public/js/jquery-2.0.0-gcc.js',
+    options: ['--option=1', '--option=2'],
+	callback: function(err, min){
+		console.log('GCC jquery 2.0');
+		console.log(err);
+//		console.log(min);
+	}
+});
+```
+
 ## Max Buffer Size
 
 In some cases you might need a bigger max buffer size (for example when minifying really large files).
