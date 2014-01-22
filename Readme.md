@@ -33,8 +33,8 @@ var compressor = require('node-minify');
 new compressor.minify({
 	type: 'gcc',
 	language: 'ECMASCRIPT5',
-	fileIn: 'public/js/jquery-2.0.0.js',
-	fileOut: 'public/js/jquery-2.0.0-gcc.js',
+	fileIn: 'public/js/jquery-2.0.3.js',
+	fileOut: 'public/js-dist/jquery-2.0.3-gcc.js',
 	callback: function(err, min){
 		console.log('GCC jquery 2.0');
 		console.log(err);
@@ -46,7 +46,7 @@ new compressor.minify({
 new compressor.minify({
 	type: 'gcc',
 	fileIn: 'public/js/base.js',
-	fileOut: 'public/js/base-min-gcc.js',
+	fileOut: 'public/js-dist/base-min-gcc.js',
 	callback: function(err, min){
 		console.log(err);
 //        console.log(min);
@@ -57,7 +57,7 @@ new compressor.minify({
 new compressor.minify({
 	type: 'gcc',
 	fileIn: ['public/js/base.js', 'public/js/base2.js'],
-	fileOut: 'public/js/base-onefile-gcc.js',
+	fileOut: 'public/js-dist/base-onefile-gcc.js',
 	callback: function(err, min){
 		console.log(err);
 //        console.log(min);
@@ -68,7 +68,7 @@ new compressor.minify({
 new compressor.minify({
     type: 'no-compress',
     fileIn: ['public/js/base.js', 'public/js/base2.js'],
-    fileOut: 'public/js/base-onefile-gcc.js',
+    fileOut: 'public/js-dist/base-onefile-gcc.js',
     callback: function(err, min){
 		console.log(err);
 //        console.log(min);
@@ -90,7 +90,7 @@ new compressor.minify({
 new compressor.minify({
 	type: 'yui-js',
 	fileIn: 'public/js/base.js',
-	fileOut: 'public/js/base-min-yui.js',
+	fileOut: 'public/js-dist/base-min-yui.js',
 	callback: function(err, min){
 		console.log(err);
 //        console.log(min);
@@ -101,7 +101,7 @@ new compressor.minify({
 new compressor.minify({
 	type: 'uglifyjs',
 	fileIn: 'public/js/base.js',
-	fileOut: 'public/js/base-onefile-uglify.js',
+	fileOut: 'public/js-dist/base-onefile-uglify.js',
 	callback: function(err, min){
 		console.log(err);
 //        console.log(min);
@@ -125,7 +125,7 @@ new compressor.minify({
     type: 'yui-js',
     publicFolder: 'public/js/',
     fileIn: 'base.js',
-    fileOut: 'public/js/base-min-yui-publicfolder.js',
+    fileOut: 'public/js-dist/base-min-yui-publicfolder.js',
     callback: function(err, min){
 		console.log('YUI JS with publicFolder option');
         console.log(err);
@@ -137,7 +137,7 @@ new compressor.minify({
     type: 'yui-js',
     publicFolder: 'public/js/',
     fileIn: ['base.js', 'base2.js'],
-    fileOut: 'public/js/base-min-yui-publicfolder-array.js',
+    fileOut: 'public/js-dist/base-min-yui-publicfolder-array.js',
     callback: function(err, min){
 		console.log('YUI JS with publicFolder option and array');
         console.log(err);
@@ -154,6 +154,21 @@ In order to concatenate files, simply pass in an array with the file paths to `f
 fileIn: ['public/js/base.js', 'public/js/base2.js', ...]
 ```
 
+## Using wildcards
+
+```js
+new compressor.minify({
+	type: 'gcc',
+	fileIn: 'public/**/*.js',
+	fileOut: 'public/js-dist/wildcards-match-gcc.js',
+	callback: function(err, min){
+		console.log('wildcards match GCC');
+		console.log(err);
+//		console.log(min);
+	}
+});
+```
+
 ## Passing options
 
 You can pass any option/flag you want
@@ -164,8 +179,8 @@ options: ['--option=1', '--option=2']
 new compressor.minify({
 	type: 'gcc',
 	language: 'ECMASCRIPT5',
-	fileIn: 'public/js/jquery-2.0.0.js',
-	fileOut: 'public/js/jquery-2.0.0-gcc.js',
+	fileIn: 'public/js/jquery-2.0.3.js',
+	fileOut: 'public/js-dist/jquery-2.0.3-gcc.js',
     options: ['--option=1', '--option=2'],
 	callback: function(err, min){
 		console.log('GCC jquery 2.0');
@@ -200,7 +215,7 @@ You can define a temporary folder where temporary files will be generated :
 new compressor.minify({
 	type: 'yui-js',
 	fileIn: 'public/js/base.js',
-	fileOut: 'public/js/base-min-yui.js',
+	fileOut: 'public/js-dist/base-min-yui.js',
 	tempPath: '/tmp',
 	callback: function(err){
 		console.log(err);
@@ -250,7 +265,7 @@ java -version
 
 ## MIT License
 
-Copyright (c) 2013 Rodolphe Stoclin
+Copyright (c) 2014 Rodolphe Stoclin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

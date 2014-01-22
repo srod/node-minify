@@ -8,9 +8,53 @@ http.createServer(function (req, res) {
 
 new compressor.minify({
 	type: 'gcc',
-	language: 'ECMASCRIPT5',
-	fileIn: 'public/js/jquery-2.0.0.js',
-	fileOut: 'public/js/jquery-2.0.0-gcc.js',
+	fileIn: 'public/**/*.js',
+	fileOut: 'public/js-dist/wildcards-match-gcc.js',
+	callback: function(err, min){
+		console.log('wildcards match GCC');
+		console.log(err);
+//		console.log(min);
+	}
+});
+
+new compressor.minify({
+    type: 'yui-js',
+    fileIn: 'public/**/*.js',
+    fileOut: 'public/js-dist/wildcards-match-yui.js',
+    callback: function(err, min){
+		console.log('wildcards match YUI JS');
+        console.log(err);
+//        console.log(min);
+    }
+});
+
+new compressor.minify({
+    type: 'uglifyjs',
+    fileIn: 'public/**/*.js',
+    fileOut: 'public/js-dist/wildcards-match-uglifyjs.js',
+    callback: function(err, min){
+		console.log('wildcards match Uglifyjs');
+        console.log(err);
+//        console.log(min);
+    }
+});
+
+new compressor.minify({
+    type: 'no-compress',
+    fileIn: 'public/**/*.js',
+    fileOut: 'public/js-dist/wildcards-match-no-compress.js',
+    callback: function(err, min){
+		console.log('wildcards match no-compress');
+        console.log(err);
+//        console.log(min);
+    }
+});
+
+new compressor.minify({
+	type: 'gcc',
+//	language: 'ECMASCRIPT5',
+	fileIn: 'public/js/jquery-2.0.3.js',
+	fileOut: 'public/js-dist/jquery-2.0.3-gcc.js',
 	callback: function(err, min){
 		console.log('GCC jquery 2.0');
 		console.log(err);
@@ -21,7 +65,7 @@ new compressor.minify({
 new compressor.minify({
 	type: 'gcc',
 	fileIn: 'public/js/base.js',
-	fileOut: 'public/js/base-onefile-gcc.js',
+	fileOut: 'public/js-dist/base-onefile-gcc.js',
 	callback: function(err, min){
 		console.log('GCC one file');
 		console.log(err);
@@ -32,7 +76,7 @@ new compressor.minify({
 new compressor.minify({
 	type: 'gcc',
 	fileIn: ['public/js/base.js', 'public/js/base2.js'],
-	fileOut: 'public/js/base-concat-gcc.js',
+	fileOut: 'public/js-dist/base-concat-gcc.js',
 	callback: function(err, min){
 		console.log('GCC multi files');
 		console.log(err);
@@ -55,7 +99,7 @@ new compressor.minify({
 new compressor.minify({
     type: 'yui-js',
     fileIn: 'public/js/base.js',
-    fileOut: 'public/js/base-min-yui.js',
+    fileOut: 'public/js-dist/base-min-yui.js',
     callback: function(err, min){
 		console.log('YUI JS');
         console.log(err);
@@ -67,7 +111,7 @@ new compressor.minify({
 new compressor.minify({
     type: 'uglifyjs',
 	fileIn: 'public/js/base.js',
-	fileOut: 'public/js/base-onefile-uglify.js',
+	fileOut: 'public/js-dist/base-onefile-uglify.js',
     callback: function(err, min){
 		console.log('Uglifyjs');
         console.log(err);
@@ -78,7 +122,7 @@ new compressor.minify({
 new compressor.minify({
     type: 'uglifyjs',
 	fileIn: ['public/js/base.js', 'public/js/base2.js'],
-	fileOut: 'public/js/base-onefile-uglify.js',
+	fileOut: 'public/js-dist/base-onefile-uglify.js',
     callback: function(err, min){
 		console.log('Uglifyjs multi files');
         console.log(err);
@@ -89,7 +133,7 @@ new compressor.minify({
 new compressor.minify({
 	type: 'no-compress',
 	fileIn: ['public/js/base.js', 'public/js/base2.js'],
-	fileOut: 'public/js/base-concat-no-compress.js',
+	fileOut: 'public/js-dist/base-concat-no-compress.js',
 	callback: function(err, min){
 		console.log('No compress');
 		console.log(err);
@@ -114,7 +158,7 @@ new compressor.minify({
     type: 'yui-js',
     publicFolder: 'public/js/',
     fileIn: 'base.js',
-    fileOut: 'public/js/base-min-yui-publicfolder.js',
+    fileOut: 'public/js-dist/base-min-yui-publicfolder.js',
     callback: function(err, min){
 		console.log('YUI JS with publicFolder option');
         console.log(err);
@@ -126,7 +170,7 @@ new compressor.minify({
     type: 'yui-js',
     publicFolder: 'public/js/',
     fileIn: ['base.js', 'base2.js'],
-    fileOut: 'public/js/base-min-yui-publicfolder-array.js',
+    fileOut: 'public/js-dist/base-min-yui-publicfolder-array.js',
     callback: function(err, min){
 		console.log('YUI JS with publicFolder option and array');
         console.log(err);
