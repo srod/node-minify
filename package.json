@@ -18,7 +18,8 @@
 
 	"dependencies": {
 		"uglify-js": "*",
-        "sqwish": "*"
+        "sqwish": "*",
+        "glob": "*"
 	},
 	
 	"keywords": ["compressor", "minify", "minifier", "yui", "gcc", "google", "closure", "compiler", "uglifyjs", "uglifyjs2", "windows", "sqwish"]
