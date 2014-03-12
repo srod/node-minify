@@ -1,0 +1,19 @@
+{
+    "globals": {
+    },
+    "indent": 4,
+    "quotmark": "single",
+    "strict": true,
+    "bitwise": true,
+    "curly": true,
+    "eqeqeq": true,
+    "latedef": true,
+    "newcap": true,
+    "noarg": true,
+    "noempty": false,
+    "nonew": true,
+    "undef": true,
+    "trailing": true,
+    "white": false,
+    "node": true
+}
