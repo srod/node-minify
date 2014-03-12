@@ -216,7 +216,7 @@ new compressor.minify({
 	type: 'yui-js',
 	fileIn: 'public/js/base.js',
 	fileOut: 'public/js-dist/base-min-yui.js',
-	tempPath: '/tmp',
+	tempPath: '/tmp/',
 	callback: function(err){
 		console.log(err);
 	}
