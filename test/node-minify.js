@@ -19,6 +19,24 @@ var tests = {
             }
         }
     ],
+    yuicss: [
+        {
+            it: 'should compress css with yui and a single file',
+            minify: {
+                type: 'yui-css',
+                fileIn: fileCSS,
+                fileOut: __dirname + '/../examples/public/css/base-min-yui.css'
+            }
+        },
+        {
+            it: 'should compress css with yui and an array of file',
+            minify: {
+                type: 'yui-css',
+                fileIn: fileCSSArray,
+                fileOut: __dirname + '/../examples/public/css/base-onefile-yui.css'
+            }
+        }
+    ],
     sqwish: [
         {
             it: 'should compress css with sqwish and a single file',
@@ -75,6 +93,15 @@ var tests = {
             }
         },
         {
+            it: 'should compress javascript with {type} and a single file with a custom buffer size',
+            minify: {
+                type: '{type}',
+                fileIn: oneFile,
+                fileOut: __dirname + '/../examples/public/js-dist/base-min-{type}.js',
+                buffer: 2000 * 1024
+            }
+        },
+        {
             it: 'should compress javascript with {type} and an array of file',
             minify: {
                 type: '{type}',
@@ -111,6 +138,15 @@ var tests = {
             }
         },
         {
+            it: 'should compress javascript with {type} and an array of file with a custom buffer size',
+            minify: {
+                type: '{type}',
+                fileIn: filesArray,
+                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
+                buffer: 2000 * 1024
+            }
+        },
+        {
             it: 'should compress javascript with {type} and wildcards path',
             minify: {
                 type: '{type}',
@@ -144,6 +180,15 @@ var tests = {
                 fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
                 publicFolder: __dirname + '/../examples/public/js/',
                 tempPath: '/tmp/'
+            }
+        },
+        {
+            it: 'should compress javascript with {type} and wildcards path with a custom buffer size',
+            minify: {
+                type: '{type}',
+                fileIn: __dirname + '/../examples/public/js/**/*.js',
+                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
+                buffer: 2000 * 1024
             }
         }
     ]
@@ -184,6 +229,10 @@ describe('node-minify', function () {
     describe('YUI', function() {
         tests.common.forEach(function (o) {
             runOneTest(o, 'yui-js');
+        });
+
+        tests.yuicss.forEach(function (o) {
+            runOneTest(o, 'yui-css');
         });
     });
 
