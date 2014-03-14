@@ -1,4 +1,7 @@
 [![Build Status](https://travis-ci.org/srod/node-minify.png?branch=master)](https://travis-ci.org/srod/node-minify)
+[![Dependency Status](https://david-dm.org/srod/node-minify.png?theme=shields.io)](https://david-dm.org/srod/node-minify)
+[![devDependency Status](https://david-dm.org/srod/node-minify/dev-status.png?theme=shields.io)](https://david-dm.org/srod/node-minify#info=devDependencies)
+[![NPM version](https://badge.fury.io/js/node-minify.png)](http://badge.fury.io/js/node-minify)
 
 # Node-minify
 
