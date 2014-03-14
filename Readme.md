@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/srod/node-minify.png?branch=master)](https://travis-ci.org/srod/node-minify)
+
 # Node-minify
 
   A very light minifier NodeJS module.
