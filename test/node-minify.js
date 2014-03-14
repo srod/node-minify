@@ -6,6 +6,7 @@ var compressor = require('../lib/node-minify');
 var oneFile = __dirname + '/../examples/public/js/base.js';
 var filesArray = [__dirname + '/../examples/public/js/base.js', __dirname + '/../examples/public/js/base2.js'];
 var fileCSS = __dirname + '/../examples/public/css/base.css';
+var fileCSSArray = [__dirname + '/../examples/public/css/base.css', __dirname + '/../examples/public/css/base2.css'];
 
 var tests = {
     concat: [
@@ -18,127 +19,145 @@ var tests = {
             }
         }
     ],
-    gcc: [
+    sqwish: [
         {
-            it: 'should compress javascript with gcc and a single file',
+            it: 'should compress css with sqwish and a single file',
             minify: {
-                type: 'gcc',
-                fileIn: oneFile,
-                fileOut: __dirname + '/../examples/public/js-dist/base-min-gcc.js'
-            }
-        },
-        {
-            it: 'should compress javascript with gcc and a single file with a custom temp path',
-            minify: {
-                type: 'gcc',
-                fileIn: oneFile,
-                fileOut: __dirname + '/../examples/public/js-dist/base-min-gcc.js',
-                tempPath: '/tmp/'
-            }
-        },
-        {
-            it: 'should compress javascript with gcc and an array of file',
-            minify: {
-                type: 'gcc',
-                fileIn: filesArray,
-                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-gcc.js'
-            }
-        },
-        {
-            it: 'should compress javascript with gcc and an array of file with a custom temp path',
-            minify: {
-                type: 'gcc',
-                fileIn: filesArray,
-                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-gcc.js',
-                tempPath: '/tmp/'
-            }
-        }
-    ],
-    yui: [
-        {
-            it: 'should compress javascript with yui and a single file',
-            minify: {
-                type: 'yui-js',
-                fileIn: oneFile,
-                fileOut: __dirname + '/../examples/public/js-dist/base-min-yui.js'
-            }
-        },
-        {
-            it: 'should compress javascript with yui and a single file with a custom temp path',
-            minify: {
-                type: 'yui-js',
-                fileIn: oneFile,
-                fileOut: __dirname + '/../examples/public/js-dist/base-min-yui.js',
-                tempPath: '/tmp/'
-            }
-        },
-        {
-            it: 'should compress javascript with yui and an array of file',
-            minify: {
-                type: 'yui-js',
-                fileIn: filesArray,
-                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-yui.js'
-            }
-        },
-        {
-            it: 'should compress javascript with yui and an array of file with a custom temp path',
-            minify: {
-                type: 'yui-js',
-                fileIn: filesArray,
-                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-yui.js',
-                tempPath: '/tmp/'
-            }
-        },
-        {
-            it: 'should compress css with yui',
-            minify: {
-                type: 'yui-css',
+                type: 'sqwish',
                 fileIn: fileCSS,
-                fileOut: __dirname + '/../examples/public/js-dist/base-min-yui.css'
-            }
-        }
-    ],
-    uglify: [
-        {
-            it: 'should compress javascript with UglifyJS and a single file',
-            minify: {
-                type: 'uglifyjs',
-                fileIn: oneFile,
-                fileOut: __dirname + '/../examples/public/js-dist/base-min-uglify.js'
+                fileOut: __dirname + '/../examples/public/css/base-min-sqwish.css'
             }
         },
         {
-            it: 'should compress javascript with UglifyJS and a single file with a custom temp path',
+            it: 'should compress css with sqwish and an array of file',
             minify: {
-                type: 'uglifyjs',
+                type: 'sqwish',
+                fileIn: fileCSSArray,
+                fileOut: __dirname + '/../examples/public/css/base-onefile-sqwish.css'
+            }
+        }
+    ],
+    common: [
+        {
+            it: 'should compress javascript with {type} and a single file',
+            minify: {
+                type: '{type}',
                 fileIn: oneFile,
-                fileOut: __dirname + '/../examples/public/js-dist/base-min-uglify.js',
+                fileOut: __dirname + '/../examples/public/js-dist/base-min-{type}.js'
+            }
+        },
+        {
+            it: 'should compress javascript with {type} and a single file with a custom temp path',
+            minify: {
+                type: '{type}',
+                fileIn: oneFile,
+                fileOut: __dirname + '/../examples/public/js-dist/base-min-{type}.js',
                 tempPath: '/tmp/'
             }
         },
         {
-            it: 'should compress javascript with UglifyJS and an array of file',
+            it: 'should compress javascript with {type} and a single file with a custom public folder',
             minify: {
-                type: 'uglifyjs',
-                fileIn: filesArray,
-                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-uglify.js'
+                type: '{type}',
+                fileIn: 'base.js',
+                fileOut: __dirname + '/../examples/public/js-dist/base-min-{type}.js',
+                publicFolder: __dirname + '/../examples/public/js/'
             }
         },
         {
-            it: 'should compress javascript with UglifyJS and an array of file with a custom temp path',
+            it: 'should compress javascript with {type} and a single file with a custom public folder and a custom temp path',
             minify: {
-                type: 'uglifyjs',
+                type: '{type}',
+                fileIn: 'base.js',
+                fileOut: __dirname + '/../examples/public/js-dist/base-min-{type}.js',
+                publicFolder: __dirname + '/../examples/public/js/',
+                tempPath: '/tmp/'
+            }
+        },
+        {
+            it: 'should compress javascript with {type} and an array of file',
+            minify: {
+                type: '{type}',
                 fileIn: filesArray,
-                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-uglify.js',
+                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js'
+            }
+        },
+        {
+            it: 'should compress javascript with {type} and an array of file with a custom temp path',
+            minify: {
+                type: '{type}',
+                fileIn: filesArray,
+                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
+                tempPath: '/tmp/'
+            }
+        },
+        {
+            it: 'should compress javascript with {type} and an array of file with a custom public folder',
+            minify: {
+                type: '{type}',
+                fileIn: ['base.js', 'base2.js'],
+                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
+                publicFolder: __dirname + '/../examples/public/js/'
+            }
+        },
+        {
+            it: 'should compress javascript with {type} and an array of file with a custom public folder and a custom temp path',
+            minify: {
+                type: '{type}',
+                fileIn: ['base.js', 'base2.js'],
+                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
+                publicFolder: __dirname + '/../examples/public/js/',
+                tempPath: '/tmp/'
+            }
+        },
+        {
+            it: 'should compress javascript with {type} and wildcards path',
+            minify: {
+                type: '{type}',
+                fileIn: __dirname + '/../examples/public/js/**/*.js',
+                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js'
+            }
+        },
+        {
+            it: 'should compress javascript with {type} and wildcards path with a custom temp path',
+            minify: {
+                type: '{type}',
+                fileIn: __dirname + '/../examples/public/js/**/*.js',
+                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
+                tempPath: '/tmp/'
+            }
+        },
+        {
+            it: 'should compress javascript with {type} and wildcards path with a custom public folder',
+            minify: {
+                type: '{type}',
+                fileIn: '**/*.js',
+                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
+                publicFolder: __dirname + '/../examples/public/js/'
+            }
+        },
+        {
+            it: 'should compress javascript with {type} and wildcards path with a custom public folder and a custom temp path',
+            minify: {
+                type: '{type}',
+                fileIn: '**/*.js',
+                fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
+                publicFolder: __dirname + '/../examples/public/js/',
                 tempPath: '/tmp/'
             }
         }
     ]
 };
 
-var runOneTest = function (options) {
-    it(options.it, function (done) {
-        options.minify.callback = function (err, min) {
+var runOneTest = function (options, type) {
+    // extend object
+    options = JSON.parse(JSON.stringify(options));
+
+    options.minify.type = options.minify.type.replace('{type}', type);
+    options.minify.fileOut = options.minify.fileOut.replace('{type}', type);
+
+    it(options.it.replace('{type}', type), function(done) {
+        options.minify.callback = function(err, min) {
             should.not.exist(err);
             should.exist(min);
 
@@ -151,26 +170,32 @@ var runOneTest = function (options) {
 
 describe('node-minify', function () {
     describe('Concatenation', function() {
-        tests.concat.forEach(function (o) {
-            runOneTest(o);
+        tests.concat.forEach(function(o) {
+            runOneTest(o, 'no-compress');
         });
     });
 
     describe('GCC', function() {
-        tests.gcc.forEach(function (o) {
-            runOneTest(o);
+        tests.common.forEach(function(o) {
+            runOneTest(o, 'gcc');
         });
     });
 
     describe('YUI', function() {
-        tests.yui.forEach(function (o) {
-            runOneTest(o);
+        tests.common.forEach(function (o) {
+            runOneTest(o, 'yui-js');
         });
     });
 
     describe('UglifyJS', function() {
-        tests.uglify.forEach(function (o) {
-            runOneTest(o);
+        tests.common.forEach(function (o) {
+            runOneTest(o, 'uglifyjs');
+        });
+    });
+
+    describe('Sqwish', function() {
+        tests.sqwish.forEach(function (o) {
+            runOneTest(o, 'sqwish');
         });
     });
 });
