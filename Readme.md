@@ -5,27 +5,24 @@
 
 # Node-minify
 
-  A very light minifier NodeJS module.
+A very light minifier NodeJS module.
 
-  Support:
+Support:
 
-  - YUI Compressor --version 2.4.8
+- YUI Compressor --version 2.4.8
+- Google Closure Compiler --version v20130411
+- UglifyJS2
+- Clean-css
+- CSSO
+- Sqwish
 
-  - Google Closure Compiler --version v20130411
+It allow you to compress JavaScript and CSS files.
 
-  - UglifyJS2
+CSS benchmark : http://goalsmashers.github.io/css-minification-benchmark/
 
-  - Clean-css
+I recommend to execute it at boot time for production use.
 
-  - CSSO
-
-  - Sqwish
-
-  It allow you to compress JavaScript and CSS files.
-
-  I recommend to execute it at boot time for production use.
-
-  See `server.js` in `examples/`.
+See `server.js` in `examples/`.
 
 ## Installation
 
@@ -37,19 +34,6 @@ npm install node-minify
 
 ```js
 var compressor = require('node-minify');
-
-// Using Google Closure with jQuery 2.0
-new compressor.minify({
-	type: 'gcc',
-	language: 'ECMASCRIPT5',
-	fileIn: 'public/js/jquery-2.0.3.js',
-	fileOut: 'public/js-dist/jquery-2.0.3-gcc.js',
-	callback: function(err, min){
-		console.log('GCC jquery 2.0');
-		console.log(err);
-//        console.log(min);
-	}
-});
 
 // Using Google Closure
 new compressor.minify({
@@ -137,18 +121,6 @@ new compressor.minify({
     fileOut: 'public/js-dist/base-min-yui-publicfolder.js',
     callback: function(err, min){
 		console.log('YUI JS with publicFolder option');
-        console.log(err);
-//        console.log(min);
-    }
-});
-
-new compressor.minify({
-    type: 'yui-js',
-    publicFolder: 'public/js/',
-    fileIn: ['base.js', 'base2.js'],
-    fileOut: 'public/js-dist/base-min-yui-publicfolder-array.js',
-    callback: function(err, min){
-		console.log('YUI JS with publicFolder option and array');
         console.log(err);
 //        console.log(min);
     }
