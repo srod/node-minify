@@ -17,6 +17,8 @@
 
   - Clean-css
 
+  - CSSO
+
   - Sqwish
 
   It allow you to compress JavaScript and CSS files.
@@ -163,6 +165,18 @@ new compressor.minify({
 //        console.log(min);
     }
 });
+
+// Using CSSO for CSS
+new compressor.minify({
+    type: 'csso',
+	fileIn: ['public/css/base.css', 'public/css/base2.css'],
+	fileOut: 'public/css/base-min-csso.css',
+    callback: function(err, min){
+		console.log('CSSO');
+		console.log(err);
+//        console.log(min);
+    }
+});
 ```
 
 ## Concatenate Files
@@ -269,6 +283,12 @@ new compressor.minify({
   Clean-css can compress only CSS files.
 
   https://github.com/GoalSmashers/clean-css
+
+## CSSO
+
+  CSSO can compress only CSS files.
+
+  https://github.com/css/csso
 
 ## Sqwish
 

@@ -19,61 +19,25 @@ var tests = {
             }
         }
     ],
-    yuicss: [
+    commoncss: [
         {
-            it: 'should compress css with yui and a single file',
+            it: 'should compress css with {type} and a single file',
             minify: {
-                type: 'yui-css',
+                type: '{type}',
                 fileIn: fileCSS,
-                fileOut: __dirname + '/../examples/public/css/base-min-yui.css'
+                fileOut: __dirname + '/../examples/public/css/base-min-{type}.css'
             }
         },
         {
-            it: 'should compress css with yui and an array of file',
+            it: 'should compress css with {type} and an array of file',
             minify: {
-                type: 'yui-css',
+                type: '{type}',
                 fileIn: fileCSSArray,
-                fileOut: __dirname + '/../examples/public/css/base-onefile-yui.css'
+                fileOut: __dirname + '/../examples/public/css/base-onefile-{type}.css'
             }
         }
     ],
-    sqwish: [
-        {
-            it: 'should compress css with sqwish and a single file',
-            minify: {
-                type: 'sqwish',
-                fileIn: fileCSS,
-                fileOut: __dirname + '/../examples/public/css/base-min-sqwish.css'
-            }
-        },
-        {
-            it: 'should compress css with sqwish and an array of file',
-            minify: {
-                type: 'sqwish',
-                fileIn: fileCSSArray,
-                fileOut: __dirname + '/../examples/public/css/base-onefile-sqwish.css'
-            }
-        }
-    ],
-    cleancss: [
-        {
-            it: 'should compress css with clean-css and a single file',
-            minify: {
-                type: 'clean-css',
-                fileIn: fileCSS,
-                fileOut: __dirname + '/../examples/public/css/base-min-cleancss.css'
-            }
-        },
-        {
-            it: 'should compress css with clean-css and an array of file',
-            minify: {
-                type: 'clean-css',
-                fileIn: fileCSSArray,
-                fileOut: __dirname + '/../examples/public/css/base-onefile-cleancss.css'
-            }
-        }
-    ],
-    common: [
+    commonjs: [
         {
             it: 'should compress javascript with {type} and a single file',
             minify: {
@@ -239,35 +203,41 @@ describe('node-minify', function () {
     });
 
     describe('GCC', function() {
-        tests.common.forEach(function(o) {
+        tests.commonjs.forEach(function(o) {
             runOneTest(o, 'gcc');
         });
     });
 
     describe('YUI', function() {
-        tests.common.forEach(function (o) {
+        tests.commonjs.forEach(function (o) {
             runOneTest(o, 'yui-js');
         });
 
-        tests.yuicss.forEach(function (o) {
+        tests.commoncss.forEach(function (o) {
             runOneTest(o, 'yui-css');
         });
     });
 
     describe('UglifyJS', function() {
-        tests.common.forEach(function (o) {
+        tests.commonjs.forEach(function (o) {
             runOneTest(o, 'uglifyjs');
         });
     });
 
     describe('Clean-css', function() {
-        tests.cleancss.forEach(function (o) {
+        tests.commoncss.forEach(function (o) {
             runOneTest(o, 'clean-css');
         });
     });
 
+    describe('CSSO', function() {
+        tests.commoncss.forEach(function (o) {
+            runOneTest(o, 'csso');
+        });
+    });
+
     describe('Sqwish', function() {
-        tests.sqwish.forEach(function (o) {
+        tests.commoncss.forEach(function (o) {
             runOneTest(o, 'sqwish');
         });
     });
