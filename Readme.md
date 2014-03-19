@@ -15,6 +15,8 @@
 
   - UglifyJS2
 
+  - Clean-css
+
   - Sqwish
 
   It allow you to compress JavaScript and CSS files.
@@ -149,6 +151,18 @@ new compressor.minify({
 //        console.log(min);
     }
 });
+
+// Using Clean-css for CSS
+new compressor.minify({
+    type: 'clean-css',
+	fileIn: ['public/css/base.css', 'public/css/base2.css'],
+	fileOut: 'public/css/base-min-cleancss.css',
+    callback: function(err, min){
+		console.log('Clean-css');
+		console.log(err);
+//        console.log(min);
+    }
+});
 ```
 
 ## Concatenate Files
@@ -249,6 +263,12 @@ new compressor.minify({
   It will throw an error if you try with CSS files.
 
   https://github.com/mishoo/UglifyJS
+
+## Clean-css
+
+  Clean-css can compress only CSS files.
+
+  https://github.com/GoalSmashers/clean-css
 
 ## Sqwish
 

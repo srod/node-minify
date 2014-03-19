@@ -16,7 +16,8 @@
   "dependencies": {
     "uglify-js": "*",
     "sqwish": "*",
-    "glob": "*"
+    "glob": "*",
+    "clean-css": "^2.1.6"
   },
   "keywords": [
     "compressor",

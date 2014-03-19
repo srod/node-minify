@@ -55,6 +55,24 @@ var tests = {
             }
         }
     ],
+    cleancss: [
+        {
+            it: 'should compress css with clean-css and a single file',
+            minify: {
+                type: 'clean-css',
+                fileIn: fileCSS,
+                fileOut: __dirname + '/../examples/public/css/base-min-cleancss.css'
+            }
+        },
+        {
+            it: 'should compress css with clean-css and an array of file',
+            minify: {
+                type: 'clean-css',
+                fileIn: fileCSSArray,
+                fileOut: __dirname + '/../examples/public/css/base-onefile-cleancss.css'
+            }
+        }
+    ],
     common: [
         {
             it: 'should compress javascript with {type} and a single file',
@@ -239,6 +257,12 @@ describe('node-minify', function () {
     describe('UglifyJS', function() {
         tests.common.forEach(function (o) {
             runOneTest(o, 'uglifyjs');
+        });
+    });
+
+    describe('Clean-css', function() {
+        tests.cleancss.forEach(function (o) {
+            runOneTest(o, 'clean-css');
         });
     });
 
