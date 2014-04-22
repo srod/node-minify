@@ -14,11 +14,12 @@
     "url": "https://github.com/srod/node-minify.git"
   },
   "dependencies": {
-    "uglify-js": "*",
-    "sqwish": "*",
-    "glob": "*",
     "clean-css": "*",
-    "csso": "*"
+    "csso": "*",
+    "glob": "*",
+    "node-uuid": "*",
+    "sqwish": "*",
+    "uglify-js": "*"
   },
   "keywords": [
     "compressor",
