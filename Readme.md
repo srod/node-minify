@@ -9,7 +9,7 @@ A very light minifier NodeJS module.
 
 Support:
 
-- YUI Compressor --version 2.4.8
+- YUI Compressor --version 2.4.7
 - Google Closure Compiler --version v20130411
 - UglifyJS2
 - Clean-css
