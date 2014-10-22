@@ -17,6 +17,7 @@
     "clean-css": "2.2.2",
     "csso": "1.3.11",
     "glob": "4.0.2",
+    "mkdirp": "0.5.0",
     "node-uuid": "1.4.1",
     "sqwish": "0.2.2",
     "uglify-js": "2.4.14"
