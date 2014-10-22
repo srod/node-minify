@@ -1,7 +1,7 @@
-[![Build Status](https://travis-ci.org/srod/node-minify.png?branch=master)](https://travis-ci.org/srod/node-minify)
-[![Dependency Status](https://david-dm.org/srod/node-minify.png?theme=shields.io)](https://david-dm.org/srod/node-minify)
-[![devDependency Status](https://david-dm.org/srod/node-minify/dev-status.png?theme=shields.io)](https://david-dm.org/srod/node-minify#info=devDependencies)
-[![NPM version](https://badge.fury.io/js/node-minify.png)](http://badge.fury.io/js/node-minify)
+[![Build Status](http://img.shields.io/travis/srod/node-minify.svg?style=flat)](https://travis-ci.org/srod/node-minify)
+[![Dependency Status](http://img.shields.io/david/srod/node-minify.svg?style=flat)](https://david-dm.org/srod/node-minify)
+[![devDependency Status](http://img.shields.io/david/dev/srod/node-minify.svg?style=flat)](https://david-dm.org/srod/node-minify#info=devDependencies)
+[![NPM version](http://img.shields.io/npm/v/node-minify.svg?style=flat)](https://www.npmjs.org/package/node-minify)
 
 # Node-minify
 
