@@ -39,7 +39,7 @@
     "csso"
   ],
   "scripts": {
-    "test": "grunt test"
+    "test": "make test"
   },
   "devDependencies": {
     "grunt": "0.4.5",
