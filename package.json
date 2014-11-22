@@ -14,13 +14,13 @@
     "url": "https://github.com/srod/node-minify.git"
   },
   "dependencies": {
-    "clean-css": "2.2.2",
+    "clean-css": "2.2.19",
     "csso": "1.3.11",
-    "glob": "4.0.2",
+    "glob": "4.2.1",
     "mkdirp": "0.5.0",
     "node-uuid": "1.4.1",
     "sqwish": "0.2.2",
-    "uglify-js": "2.4.14"
+    "uglify-js": "2.4.15"
   },
   "keywords": [
     "compressor",
@@ -45,12 +45,12 @@
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
     "grunt-contrib-jshint": "0.10.0",
-    "grunt-mocha-test": "0.11.0",
-    "jshint-stylish": "0.2.0",
-    "load-grunt-tasks": "0.5.0",
+    "grunt-mocha-test": "0.12.4",
+    "jshint-stylish": "1.0.0",
+    "load-grunt-tasks": "1.0.0",
     "mocha": "2.0.1",
     "semver": "4.1.0",
-    "should": "4.0.4",
-    "time-grunt": "0.3.2"
+    "should": "4.3.0",
+    "time-grunt": "1.0.0"
   }
 }
