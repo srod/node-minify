@@ -240,7 +240,7 @@ new compressor.minify({
 
   It will throw an error if you try with CSS files.
 
-  http://code.google.com/closure/compiler
+  https://developers.google.com/closure/compiler/
 
 ## UglifyJS
 
