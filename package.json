@@ -8,6 +8,7 @@
     "email": "rodolphe@2clics.net",
     "url": "http://2clics.net"
   },
+  "license": "MIT",
   "main": "index",
   "repository": {
     "type": "git",
