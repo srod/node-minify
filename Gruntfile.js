@@ -9,7 +9,7 @@ module.exports = function(grunt) {
       src: ['lib/*.js'],
       options: {
         reporter: require('jshint-stylish'),
-        jshintrc: '.jshintrc'
+        jshintrc: true
       }
     },
 

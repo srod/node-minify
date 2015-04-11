@@ -1,6 +1,5 @@
 {
   "globals": {},
-  "indent": 4,
   "quotmark": "single",
   "strict": true,
   "bitwise": true,
