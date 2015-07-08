@@ -10,6 +10,7 @@ new compressor.minify({
   type: 'gcc',
   fileIn: 'public/**/*.js',
   fileOut: 'public/js-dist/wildcards-match-gcc.js',
+  sync: true,
   callback: function(err, min) {
     console.log('wildcards match GCC');
     console.log(err);
