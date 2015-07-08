@@ -159,6 +159,22 @@ In order to concatenate files, simply pass in an array with the file paths to `f
 fileIn: ['public/js/base.js', 'public/js/base2.js', ...]
 ```
 
+## Using sync option
+```js
+new compressor.minify({
+  type: 'yui-js',
+  publicFolder: 'public/js/',
+  fileIn: 'base.js',
+  fileOut: 'public/js-dist/base-min-yui-publicfolder.js',
+  sync: true,
+  callback: function(err, min) {
+    console.log('YUI JS with publicFolder option');
+    console.log(err);
+    //console.log(min);
+  }
+});
+```
+
 ## Using wildcards
 
 ```js
