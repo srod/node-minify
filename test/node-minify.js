@@ -188,12 +188,16 @@ var tests = {
   ]
 };
 
-var runOneTest = function(options, type) {
+var runOneTest = function(options, type, sync) {
   // extend object
   options = JSON.parse(JSON.stringify(options));
 
   options.minify.type = options.minify.type.replace('{type}', type);
   options.minify.fileOut = options.minify.fileOut.replace('{type}', type);
+
+  if (sync) {
+    options.minify.sync = true;
+  }
 
   it(options.it.replace('{type}', type), function(done) {
     options.minify.callback = function(err, min) {
@@ -218,15 +222,24 @@ describe('node-minify', function() {
     tests.commonjs.forEach(function(o) {
       runOneTest(o, 'gcc');
     });
+    tests.commonjs.forEach(function(o) {
+      runOneTest(o, 'gcc', true);
+    });
   });
 
   describe('YUI', function() {
     tests.commonjs.forEach(function(o) {
       runOneTest(o, 'yui-js');
     });
+    tests.commonjs.forEach(function(o) {
+      runOneTest(o, 'yui-js', true);
+    });
 
     tests.commoncss.forEach(function(o) {
       runOneTest(o, 'yui-css');
+    });
+    tests.commoncss.forEach(function(o) {
+      runOneTest(o, 'yui-css', true);
     });
   });
 
@@ -234,11 +247,17 @@ describe('node-minify', function() {
     tests.commonjs.forEach(function(o) {
       runOneTest(o, 'uglifyjs');
     });
+    tests.commonjs.forEach(function(o) {
+      runOneTest(o, 'uglifyjs', true);
+    });
   });
 
   describe('Clean-css', function() {
     tests.commoncss.forEach(function(o) {
       runOneTest(o, 'clean-css');
+    });
+    tests.commoncss.forEach(function(o) {
+      runOneTest(o, 'clean-css', true);
     });
   });
 
@@ -246,11 +265,17 @@ describe('node-minify', function() {
     tests.commoncss.forEach(function(o) {
       runOneTest(o, 'csso');
     });
+    tests.commoncss.forEach(function(o) {
+      runOneTest(o, 'csso', true);
+    });
   });
 
   describe('Sqwish', function() {
     tests.commoncss.forEach(function(o) {
       runOneTest(o, 'sqwish');
+    });
+    tests.commoncss.forEach(function(o) {
+      runOneTest(o, 'sqwish', true);
     });
   });
 });
