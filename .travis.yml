@@ -8,7 +8,6 @@ node_js:
   - "iojs"
   - "iojs-v1.0.0"
   - "0.12"
-  - "0.11"
 before_install:
   - "npm config set spin false"
   - '[ "${TRAVIS_NODE_VERSION}" != "4" ] || npm install -g npm@3'
