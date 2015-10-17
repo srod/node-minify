@@ -1,5 +1,6 @@
 'use strict';
 
+var mkdirp = require('mkdirp');
 var should = require('should');
 var compressor = require('../lib/node-minify');
 
@@ -212,6 +213,8 @@ var runOneTest = function(options, type, sync) {
 };
 
 describe('node-minify', function() {
+  mkdirp('/tmp/');
+
   describe('Concatenation', function() {
     tests.concat.forEach(function(o) {
       runOneTest(o, 'no-compress');

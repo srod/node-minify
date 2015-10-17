@@ -3,7 +3,7 @@ BIN = ./node_modules/.bin
 test-jshint:
 	@$(BIN)/grunt jshint
 test-mocha:
-	@NODE_ENV=test $(BIN)/mocha --bail --timeout 30000 --reporter dot
+	@NODE_ENV=test $(BIN)/mocha --bail --timeout 60000 --reporter dot
 test: test-jshint test-mocha clean
 
 clean:
