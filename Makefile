@@ -2,12 +2,20 @@ BIN = ./node_modules/.bin
 
 test-jshint:
 	@$(BIN)/grunt jshint
+test-jscs:
+	@$(BIN)/grunt jscs
 test-mocha:
 	@NODE_ENV=test $(BIN)/mocha --bail --timeout 60000 --reporter dot
-test: test-jshint test-mocha clean
+test: test-jshint test-jscs test-mocha clean
+
+test-cov:
+	$(MAKE) test-jshint
+	$(MAKE) test-jscs
+	@NODE_ENV=test $(BIN)/istanbul cover \
+	./node_modules/mocha/bin/_mocha -- -t 60000 -R dot
 
 clean:
-	@rm -f ./examples/public/css/base-*.css ./examples/public/js-dist/base-*.js ./*.tmp
+	@rm -f ./examples/public/css/base-*.css ./examples/public/js-dist/base-*.js ./*.tmp && rm -Rf ./coverage
 
 define release
   VERSION=`node -pe "require('./package.json').version"` && \

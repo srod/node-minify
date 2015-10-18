@@ -2,6 +2,7 @@
 
 var mkdirp = require('mkdirp');
 var should = require('should');
+var expect = require('chai').expect;
 var compressor = require('../lib/node-minify');
 
 var oneFile = __dirname + '/../examples/public/js/base.js';
@@ -215,9 +216,28 @@ var runOneTest = function(options, type, sync) {
 describe('node-minify', function() {
   mkdirp('/tmp/');
 
+  describe('Fake binary', function() {
+    it('should throw an error if binary does not exist', function(done) {
+      var options = {};
+      options.minify = {
+        type: 'fake',
+        fileIn: __dirname + '/../examples/public/js/**/*.js',
+        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js'
+      };
+
+      expect(function() {
+        new compressor.minify(options.minify);
+      }).to.throw();
+      done();
+    });
+  });
+
   describe('Concatenation', function() {
     tests.concat.forEach(function(o) {
       runOneTest(o, 'no-compress');
+    });
+    tests.concat.forEach(function(o) {
+      runOneTest(o, 'no-compress', true);
     });
   });
 
