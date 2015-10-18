@@ -1,4 +1,10 @@
-.svn
 .idea
 ._*
 node_modules
+examples
+test
+.jshintrc
+.travis.yml
+Gruntfile.js
+Makefile
+appveyor.yml
