@@ -3,7 +3,9 @@
 node_modules
 examples
 test
+.jscsrc
 .jshintrc
+.npmignore
 .travis.yml
 Gruntfile.js
 Makefile
