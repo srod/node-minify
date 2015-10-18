@@ -13,6 +13,13 @@ module.exports = function(grunt) {
       }
     },
 
+    jscs: {
+      src: ['lib/*.js'],
+      options: {
+        config: '.jscsrc'
+      }
+    },
+
     mochaTest: {
       test: {
         options: {
@@ -26,6 +33,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', [
     'jshint',
+    'jscs',
     'mochaTest'
   ]);
 };

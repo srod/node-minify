@@ -2,9 +2,11 @@ BIN = ./node_modules/.bin
 
 test-jshint:
 	@$(BIN)/grunt jshint
+test-jscs:
+	@$(BIN)/grunt jscs
 test-mocha:
 	@NODE_ENV=test $(BIN)/mocha --bail --timeout 60000 --reporter dot
-test: test-jshint test-mocha clean
+test: test-jshint test-jscs test-mocha clean
 
 clean:
 	@rm -f ./examples/public/css/base-*.css ./examples/public/js-dist/base-*.js ./*.tmp

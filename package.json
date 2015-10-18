@@ -50,6 +50,7 @@
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
     "grunt-contrib-jshint": "0.11.3",
+    "grunt-jscs": "2.1.0",
     "grunt-mocha-test": "0.12.7",
     "jshint-stylish": "2.0.1",
     "load-grunt-tasks": "3.3.0",
