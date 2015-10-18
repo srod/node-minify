@@ -12,3 +12,7 @@ before_install:
   - "npm config set spin false"
   - '[ "${TRAVIS_NODE_VERSION}" != "4" ] || npm install -g npm@3'
   - "npm -v"
+script:
+  - "make test-cov"
+after_script:
+  - "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
