@@ -1,5 +1,6 @@
 [![Build Status](http://img.shields.io/travis/srod/node-minify.svg?style=flat)](https://travis-ci.org/srod/node-minify)
 [![Build status](https://ci.appveyor.com/api/projects/status/d2akiea7x4ygew39?svg=true)](https://ci.appveyor.com/project/srod/node-minify)
+[![Coverage Status](https://coveralls.io/repos/srod/node-minify/badge.svg?branch=master&service=github)](https://coveralls.io/github/srod/node-minify?branch=master)
 [![Dependency Status](http://img.shields.io/david/srod/node-minify.svg?style=flat)](https://david-dm.org/srod/node-minify)
 [![devDependency Status](http://img.shields.io/david/dev/srod/node-minify.svg?style=flat)](https://david-dm.org/srod/node-minify#info=devDependencies)
 [![NPM version](http://img.shields.io/npm/v/node-minify.svg?style=flat)](https://www.npmjs.org/package/node-minify)
