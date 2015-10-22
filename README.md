@@ -4,6 +4,7 @@
 [![Dependency Status](http://img.shields.io/david/srod/node-minify.svg?style=flat)](https://david-dm.org/srod/node-minify)
 [![devDependency Status](http://img.shields.io/david/dev/srod/node-minify.svg?style=flat)](https://david-dm.org/srod/node-minify#info=devDependencies)
 [![NPM version](http://img.shields.io/npm/v/node-minify.svg?style=flat)](https://www.npmjs.org/package/node-minify)
+[![NPM downloads](https://img.shields.io/npm/dm/node-minify.svg)](http://npm-stat.com/charts.html?package=node-minify)
 
 # Node-minify
 
