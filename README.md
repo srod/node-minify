@@ -1,10 +1,11 @@
-[![Build Status](http://img.shields.io/travis/srod/node-minify.svg?style=flat)](https://travis-ci.org/srod/node-minify)
-[![Build status](https://ci.appveyor.com/api/projects/status/d2akiea7x4ygew39?svg=true)](https://ci.appveyor.com/project/srod/node-minify)
-[![Coverage Status](https://coveralls.io/repos/srod/node-minify/badge.svg?branch=master&service=github)](https://coveralls.io/github/srod/node-minify?branch=master)
-[![Dependency Status](http://img.shields.io/david/srod/node-minify.svg?style=flat)](https://david-dm.org/srod/node-minify)
-[![devDependency Status](http://img.shields.io/david/dev/srod/node-minify.svg?style=flat)](https://david-dm.org/srod/node-minify#info=devDependencies)
-[![NPM version](http://img.shields.io/npm/v/node-minify.svg?style=flat)](https://www.npmjs.org/package/node-minify)
-[![NPM downloads](https://img.shields.io/npm/dm/node-minify.svg)](http://npm-stat.com/charts.html?package=node-minify)
+[![NPM Version][npm-version-image]][npm-url]
+[![NPM Downloads][npm-downloads-image]][npm-url]
+[![Linux Build][travis-image]][travis-url]
+[![Windows Build][appveyor-image]][appveyor-url]
+[![Coverage Status][coveralls-image]][coveralls-url]
+
+[![Dependency Status][dependency-image]][dependency-url]
+[![devDependency Status][devdependency-image]][devdependency-url]
 
 # Node-minify
 
@@ -298,3 +299,21 @@ java -version
 ## Windows support
 
   Since v0.5.0, a windows support is available for the no-compress option and uglify-js (thanks to pieces029 and benpusherhq)
+
+## License
+
+  [MIT](LICENSE)
+
+[npm-version-image]: https://img.shields.io/npm/v/node-minify.svg
+[npm-downloads-image]: https://img.shields.io/npm/dm/node-minify.svg
+[npm-url]: https://npmjs.org/package/node-minify
+[travis-image]: https://img.shields.io/travis/srod/node-minify/master.svg?label=linux
+[travis-url]: https://travis-ci.org/srod/node-minify
+[appveyor-image]: https://img.shields.io/appveyor/ci/srod/node-minify/master.svg?label=windows
+[appveyor-url]: https://ci.appveyor.com/project/srod/node-minify
+[coveralls-image]: https://img.shields.io/coveralls/srod/node-minify/master.svg
+[coveralls-url]: https://coveralls.io/r/srod/node-minify?branch=master
+[dependency-image]: https://img.shields.io/david/srod/node-minify.svg?style=flat
+[dependency-url]: https://david-dm.org/srod/node-minify
+[devdependency-image]: https://img.shields.io/david/dev/srod/node-minify.svg?style=flat
+[devdependency-url]: https://david-dm.org/srod/node-minify#info=devDependencies
