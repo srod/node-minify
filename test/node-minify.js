@@ -211,7 +211,7 @@ var runOneTest = function(options, type, sync) {
       done();
     };
 
-    new compressor.minify(options.minify);
+    compressor.minify(options.minify);
   });
 };
 
@@ -228,7 +228,7 @@ describe('node-minify', function() {
       };
 
       expect(function() {
-        new compressor.minify(options.minify);
+        compressor.minify(options.minify);
       }).to.throw();
       done();
     });
@@ -328,7 +328,7 @@ describe('node-minify', function() {
       };
 
       expect(function() {
-        new compressor.minify(options.minify);
+        compressor.minify(options.minify);
       }).to.throw();
       done();
     });

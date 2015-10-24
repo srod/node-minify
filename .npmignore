@@ -1,6 +1,7 @@
 .idea
 ._*
 node_modules
+coverage
 examples
 test
 .jscsrc

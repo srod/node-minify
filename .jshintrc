@@ -5,7 +5,6 @@
   "bitwise": true,
   "curly": true,
   "eqeqeq": true,
-  "latedef": true,
   "newcap": true,
   "noarg": true,
   "noempty": false,
