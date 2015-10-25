@@ -365,7 +365,7 @@ describe('node-minify', function() {
       runOneTest(o, 'yui-css');
     });
     tests.commoncss.forEach(function(o) {
-      runOneTest(o, 'yui-css', true);
+      runOneTest(o, 'yui', true);
     });
   });
 
