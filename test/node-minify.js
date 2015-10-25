@@ -21,10 +21,18 @@ var fileCSSArray = [
 var tests = {
   concat: [
     {
-      it: 'should concat javascript and no compress',
+      it: 'should concat javascript and no compress and an array of file',
       minify: {
         type: 'no-compress',
         fileIn: filesArray,
+        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-nocompress.js'
+      }
+    },
+    {
+      it: 'should concat javascript and no compress and a single file',
+      minify: {
+        type: 'no-compress',
+        fileIn: oneFile,
         fileOut: __dirname + '/../examples/public/js-dist/base-onefile-nocompress.js'
       }
     }
