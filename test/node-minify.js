@@ -2,7 +2,9 @@
 
 var fs = require('fs');
 var os = require('os');
+var child_process = require('child_process');
 var mkdirp = require('mkdirp');
+var sinon = require('sinon');
 var should = require('should');
 var expect = require('chai').expect;
 var compressor = require('../lib/node-minify');
@@ -257,6 +259,62 @@ describe('node-minify', function() {
     });
   });
 
+  describe('Create errors', function() {
+    before(function() {
+      if (os.platform() === 'win32') {
+        fs.renameSync(__dirname + '/../node_modules/.bin/sqwish.cmd', __dirname + '/../node_modules/.bin/sqwish.cmd.old');
+      }
+      fs.renameSync(__dirname + '/../node_modules/.bin/sqwish', __dirname + '/../node_modules/.bin/sqwish.old');
+      fs.renameSync(__dirname + '/../node_modules/sqwish/bin/sqwish', __dirname + '/../node_modules/sqwish/bin/sqwish.old');
+    });
+    after(function() {
+      if (os.platform() === 'win32') {
+        fs.renameSync(__dirname + '/../node_modules/.bin/sqwish.cmd.old', __dirname + '/../node_modules/.bin/sqwish.cmd');
+      }
+      fs.renameSync(__dirname + '/../node_modules/.bin/sqwish.old', __dirname + '/../node_modules/.bin/sqwish');
+      fs.renameSync(__dirname + '/../node_modules/sqwish/bin/sqwish.old', __dirname + '/../node_modules/sqwish/bin/sqwish');
+    });
+    it('should throw an error if binary does not exist on fs', function(done) {
+      var options = {};
+      options.minify = {
+        type: 'sqwish',
+        fileIn: fileCSS,
+        fileOut: __dirname + '/../examples/public/css/base-min-sqwish.css'
+      };
+
+      expect(function() {
+        compressor.minify(options.minify);
+      }).to.throw();
+      done();
+    });
+  });
+
+  describe('Create more errors', function() {
+    beforeEach(function() {
+      this.stub = sinon.stub(child_process, 'execSync').throws();
+    });
+    afterEach(function() {
+      this.stub.restore();
+    });
+    it('should throw on execSync', function(done) {
+      var options = {};
+      options.minify = {
+        type: 'sqwish',
+        fileIn: fileCSS,
+        fileOut: __dirname + '/../examples/public/css/base-min-sqwish.css',
+        sync: true,
+        callback: function() {
+          expect(child_process.execSync).to.have.been.called();
+        }
+      };
+
+      expect(function() {
+        compressor.minify(options.minify);
+      }).to.throw();
+      done();
+    });
+  });
+
   describe('Deprecated', function() {
     it('should show a deprecated message', function(done) {
       var options = {};
@@ -344,36 +402,6 @@ describe('node-minify', function() {
     });
     tests.commoncss.forEach(function(o) {
       runOneTest(o, 'sqwish', true);
-    });
-  });
-
-  describe('Sqwish with no binary', function() {
-    before(function() {
-      if (os.platform() === 'win32') {
-        fs.renameSync(__dirname + '/../node_modules/.bin/sqwish.cmd', __dirname + '/../node_modules/.bin/sqwish.cmd.old');
-      }
-      fs.renameSync(__dirname + '/../node_modules/.bin/sqwish', __dirname + '/../node_modules/.bin/sqwish.old');
-      fs.renameSync(__dirname + '/../node_modules/sqwish/bin/sqwish', __dirname + '/../node_modules/sqwish/bin/sqwish.old');
-    });
-    after(function() {
-      if (os.platform() === 'win32') {
-        fs.renameSync(__dirname + '/../node_modules/.bin/sqwish.cmd.old', __dirname + '/../node_modules/.bin/sqwish.cmd');
-      }
-      fs.renameSync(__dirname + '/../node_modules/.bin/sqwish.old', __dirname + '/../node_modules/.bin/sqwish');
-      fs.renameSync(__dirname + '/../node_modules/sqwish/bin/sqwish.old', __dirname + '/../node_modules/sqwish/bin/sqwish');
-    });
-    it('should throw an error if binary does not exist', function(done) {
-      var options = {};
-      options.minify = {
-        type: 'sqwish',
-        fileIn: fileCSS,
-        fileOut: __dirname + '/../examples/public/css/base-min-sqwish.css'
-      };
-
-      expect(function() {
-        compressor.minify(options.minify);
-      }).to.throw();
-      done();
     });
   });
 });
