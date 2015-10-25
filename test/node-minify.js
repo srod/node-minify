@@ -234,6 +234,41 @@ describe('node-minify', function() {
     });
   });
 
+  describe('No type', function() {
+    it('should throw an error if no type', function(done) {
+      var options = {};
+      options.minify = {
+        fileIn: __dirname + '/../examples/public/js/**/*.js',
+        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js'
+      };
+
+      expect(function() {
+        compressor.minify(options.minify);
+      }).to.throw();
+      done();
+    });
+  });
+
+  describe('Deprecated', function() {
+    it('should show a deprecated message', function(done) {
+      var options = {};
+      options.minify = {
+        type: 'uglifyjs',
+        fileIn: __dirname + '/../examples/public/js/**/*.js',
+        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js'
+      };
+
+      options.minify.callback = function(err, min) {
+        should.not.exist(err);
+        should.exist(min);
+
+        done();
+      };
+
+      new compressor.minify(options.minify);
+    });
+  });
+
   describe('Concatenation', function() {
     tests.concat.forEach(function(o) {
       runOneTest(o, 'no-compress');
