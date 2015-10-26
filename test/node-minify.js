@@ -257,6 +257,32 @@ describe('node-minify', function() {
       }).to.throw();
       done();
     });
+
+    it('should throw an error if no fileIn', function(done) {
+      var options = {};
+      options.minify = {
+        type: 'no-compress',
+        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js'
+      };
+
+      expect(function() {
+        compressor.minify(options.minify);
+      }).to.throw();
+      done();
+    });
+
+    it('should throw an error if no fileOut', function(done) {
+      var options = {};
+      options.minify = {
+        type: 'no-compress',
+        fileIn: __dirname + '/../examples/public/js/**/*.js'
+      };
+
+      expect(function() {
+        compressor.minify(options.minify);
+      }).to.throw();
+      done();
+    });
   });
 
   describe('Create errors', function() {
