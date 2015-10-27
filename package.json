@@ -1,6 +1,6 @@
 {
   "name": "node-minify",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "description": "Javascript / CSS minifier based on YUI Compressor / Google Closure Compiler / UglifyJS2 / Sqwish / Clean-css / CSSO",
   "homepage": "https://github.com/srod/node-minify",
   "author": {
