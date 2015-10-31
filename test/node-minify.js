@@ -287,25 +287,42 @@ describe('node-minify', function() {
 
   describe('Create errors', function() {
     before(function() {
-      if (os.platform() === 'win32') {
-        fs.renameSync(__dirname + '/../node_modules/.bin/sqwish.cmd', __dirname + '/../node_modules/.bin/sqwish.cmd.old');
-      }
-      fs.renameSync(__dirname + '/../node_modules/.bin/sqwish', __dirname + '/../node_modules/.bin/sqwish.old');
-      fs.renameSync(__dirname + '/../node_modules/sqwish/bin/sqwish', __dirname + '/../node_modules/sqwish/bin/sqwish.old');
+      fs.renameSync(__dirname + '/../lib/binaries/yuicompressor-2.4.7.jar', __dirname + '/../lib/binaries/yuicompressor-2.4.7.old.jar');
+      this.stub = sinon.stub(child_process, 'execSync').throws();
     });
     after(function() {
-      if (os.platform() === 'win32') {
-        fs.renameSync(__dirname + '/../node_modules/.bin/sqwish.cmd.old', __dirname + '/../node_modules/.bin/sqwish.cmd');
-      }
-      fs.renameSync(__dirname + '/../node_modules/.bin/sqwish.old', __dirname + '/../node_modules/.bin/sqwish');
-      fs.renameSync(__dirname + '/../node_modules/sqwish/bin/sqwish.old', __dirname + '/../node_modules/sqwish/bin/sqwish');
+      fs.renameSync(__dirname + '/../lib/binaries/yuicompressor-2.4.7.old.jar', __dirname + '/../lib/binaries/yuicompressor-2.4.7.jar');
+      this.stub.restore();
     });
-    it('should throw an error if binary does not exist on fs', function(done) {
+    it('should callback an error if binary does not exist on fs', function(done) {
+      var options = {};
+      options.minify = {
+        type: 'yui',
+        sync: true,
+        fileIn: fileCSS,
+        fileOut: __dirname + '/../examples/public/js-dist/base-min-yui.css'
+      };
+
+      options.minify.callback = function(err, min) {
+        should.exist(err);
+        should.not.exist(min);
+
+        done();
+      };
+
+      compressor.minify(options.minify);
+    });
+
+    it('should throw on execSync', function(done) {
       var options = {};
       options.minify = {
         type: 'sqwish',
         fileIn: fileCSS,
-        fileOut: __dirname + '/../examples/public/css/base-min-sqwish.css'
+        fileOut: __dirname + '/../examples/public/css/base-min-sqwish.css',
+        sync: true,
+        callback: function() {
+          expect(child_process.execSync).to.have.been.called();
+        }
       };
 
       expect(function() {
@@ -315,7 +332,7 @@ describe('node-minify', function() {
     });
   });
 
-  describe('Create more errors', function() {
+  /*describe('Create more errors', function() {
     beforeEach(function() {
       this.stub = sinon.stub(child_process, 'execSync').throws();
     });
@@ -339,7 +356,7 @@ describe('node-minify', function() {
       }).to.throw();
       done();
     });
-  });
+  });*/
 
   describe('Deprecated', function() {
     it('should show a deprecated message', function(done) {
