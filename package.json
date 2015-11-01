@@ -21,11 +21,13 @@
   "dependencies": {
     "clean-css": "3.4.6",
     "csso": "1.4.1",
+    "depd": "1.1.0",
     "glob": "5.0.15",
     "mkdirp": "0.5.1",
     "node-uuid": "1.4.3",
     "sqwish": "0.2.2",
-    "uglify-js": "2.5.0"
+    "uglify-js": "2.5.0",
+    "xtend": "4.0.0"
   },
   "keywords": [
     "compressor",
@@ -49,7 +51,6 @@
   "devDependencies": {
     "chai": "3.4.0",
     "coveralls": "2.11.4",
-    "depd": "1.1.0",
     "grunt": "0.4.5",
     "grunt-cli": "0.1.13",
     "grunt-contrib-jshint": "0.11.3",
@@ -62,7 +63,6 @@
     "semver": "5.0.3",
     "should": "7.1.1",
     "sinon": "1.17.2",
-    "time-grunt": "1.2.2",
-    "xtend": "4.0.0"
+    "time-grunt": "1.2.2"
   }
 }

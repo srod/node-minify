@@ -10,7 +10,14 @@ compressor.minify({
   type: 'yui-css',
   fileIn: 'public/css/base.css',
   fileOut: 'public/js-dist/yui-css.css',
-  sync: true,
+  //sync: true,
+  /*options: {
+    charset: 'utf8',
+    nomunge: true,
+    'line-break': 80,
+    'preserve-semi': false,
+    'disable-optimizations': true
+  },*/
   callback: function(err, min) {
     console.log('yui css');
     console.log(err);
@@ -20,9 +27,12 @@ compressor.minify({
 
 compressor.minify({
   type: 'sqwish',
-  fileIn: 'public/css/base2.css',
+  fileIn: 'public/css/base.css',
   fileOut: 'public/js-dist/sqwish.css',
-  sync: true,
+  //sync: true,
+  options: {
+    strict: true
+  },
   callback: function(err, min) {
     console.log('sqwish');
     console.log(err);
@@ -34,7 +44,12 @@ compressor.minify({
   type: 'clean-css',
   fileIn: 'public/css/base.css',
   fileOut: 'public/js-dist/clean-css.css',
-  sync: true,
+  //sync: true,
+  options: {
+    keepBreaks: true,
+    restructuring: false,
+    roundingPrecision: -1
+  },
   callback: function(err, min) {
     console.log('clean-css');
     console.log(err);
@@ -46,7 +61,7 @@ compressor.minify({
   type: 'csso',
   fileIn: 'public/css/base.css',
   fileOut: 'public/js-dist/csso.css',
-  sync: true,
+  //sync: true,
   callback: function(err, min) {
     console.log('csso');
     console.log(err);
@@ -58,7 +73,12 @@ compressor.minify({
   type: 'uglifyjs',
   fileIn: 'public/js/base.js',
   fileOut: 'public/js-dist/uglifyjs.js',
-  sync: true,
+  //sync: true,
+  options: {
+    warnings: true,
+    mangle: false,
+    compress: false
+  },
   callback: function(err, min) {
     console.log('uglify');
     console.log(err);
@@ -80,19 +100,27 @@ compressor.minify({
 
 /*compressor.minify({
   type: 'gcc',
-  publicFolder: './public/',
+  //publicFolder: './public/',
   //fileIn: '/js/!**!/!*.js',
-  fileIn: ['js/base.js', 'js/base2.js'],
-  fileOut: 'public/js-dist/wildcards-match-gcc.js',
+  fileIn: ['public/js/base.js', 'public/js/base2.js'],
+  fileOut: 'public/js-dist/gcc.js',
   sync: true,
+  options: {
+    accept_const_keyword: true,
+    charset: 'utf8',
+    compilation_level: 'ADVANCED_OPTIMIZATIONS',
+    jscomp_error: 'accessControls',
+    debug: true,
+    formatting: 'PRETTY_PRINT'
+  },
   callback: function(err, min) {
-    console.log('wildcards match GCC');
+    console.log('GCC');
     console.log(err);
     //console.log(min);
   }
-});
+});*/
 
-compressor.minify({
+/*compressor.minify({
   type: 'gcc',
   publicFolder: './public/',
   //fileIn: '/js/!**!/!*.js',
