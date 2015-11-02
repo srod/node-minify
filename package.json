@@ -19,6 +19,7 @@
     "iojs": ">=1.0.0"
   },
   "dependencies": {
+    "bluebird": "3.0.5",
     "clean-css": "3.4.6",
     "csso": "1.4.1",
     "depd": "1.1.0",

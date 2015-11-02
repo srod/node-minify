@@ -6,10 +6,10 @@ http.createServer(function(req, res) {
   res.end('Hello World\n');
 }).listen(1337, '127.0.0.1');
 
-compressor.minify({
+var test = compressor.minify({
   type: 'yui-css',
   fileIn: 'public/css/base.css',
-  fileOut: 'public/js-dist/yui-css.css',
+  fileOut: 'public/js-dist/yui-css.css'
   //sync: true,
   /*options: {
     charset: 'utf8',
@@ -18,14 +18,36 @@ compressor.minify({
     'preserve-semi': false,
     'disable-optimizations': true
   },*/
+});
+
+test.then(function(data) {
+  console.log('================== then', data);
+});
+
+test.catch(function(data) {
+  console.log('================== catch', data);
+});
+
+/*compressor.minify({
+  type: 'yui-css',
+  fileIn: 'public/css/base.css',
+  fileOut: 'public/js-dist/yui-css.css',
+  //sync: true,
+  /!*options: {
+    charset: 'utf8',
+    nomunge: true,
+    'line-break': 80,
+    'preserve-semi': false,
+    'disable-optimizations': true
+  },*!/
   callback: function(err, min) {
-    console.log('yui css');
+    console.log('CB - yui css');
     console.log(err);
     //console.log(min);
   }
-});
+});*/
 
-compressor.minify({
+/*compressor.minify({
   type: 'sqwish',
   fileIn: 'public/css/base.css',
   fileOut: 'public/js-dist/sqwish.css',
@@ -88,7 +110,7 @@ compressor.minify({
 
 compressor.minify({
   type: 'no-compress',
-  fileIn: 'public/js/**/*.js',
+  fileIn: 'public/js/!**!/!*.js',
   fileOut: 'public/js-dist/no-compress.js',
   sync: true,
   callback: function(err, min) {
@@ -96,7 +118,7 @@ compressor.minify({
     console.log(err);
     //console.log(min);
   }
-});
+});*/
 
 /*compressor.minify({
   type: 'gcc',
