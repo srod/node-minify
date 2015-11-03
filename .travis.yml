@@ -15,9 +15,12 @@ before_install:
   - "npm config set spin false"
   - "node -v"
   - "npm -v"
+  - "npm install jshint jscs -g"
+
 
 script:
-  - "make test-cov"
+  - "npm run test-cov"
 
 after_script:
   - "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+  - "npm run clean"

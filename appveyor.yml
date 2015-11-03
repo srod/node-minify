@@ -28,8 +28,8 @@ install:
   - set PATH=%APPDATA%\npm;%PATH%
   - node --version
   - npm --version
-  - npm install grunt-cli -g
+  - npm install jshint jscs -g
   - npm install
 
 test_script:
-  - cmd: grunt test --no-color
+  - cmd: npm run test

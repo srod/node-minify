@@ -7,7 +7,6 @@ test
 .jscsrc
 .jshintrc
 .npmignore
+.npmrc
 .travis.yml
-Gruntfile.js
-Makefile
 appveyor.yml
