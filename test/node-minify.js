@@ -67,31 +67,12 @@ var tests = {
       }
     },
     {
-      it: 'should compress javascript with {type} and a single file with a custom temp path',
-      minify: {
-        type: '{type}',
-        fileIn: oneFile,
-        fileOut: __dirname + '/../examples/public/js-dist/base-min-{type}.js',
-        tempPath: '/tmp/'
-      }
-    },
-    {
       it: 'should compress javascript with {type} and a single file with a custom public folder',
       minify: {
         type: '{type}',
         fileIn: 'base.js',
         fileOut: __dirname + '/../examples/public/js-dist/base-min-{type}.js',
         publicFolder: __dirname + '/../examples/public/js/'
-      }
-    },
-    {
-      it: 'should compress javascript with {type} and a single file with a custom public folder and a custom temp path',
-      minify: {
-        type: '{type}',
-        fileIn: 'base.js',
-        fileOut: __dirname + '/../examples/public/js-dist/base-min-{type}.js',
-        publicFolder: __dirname + '/../examples/public/js/',
-        tempPath: '/tmp/'
       }
     },
     {
@@ -104,20 +85,22 @@ var tests = {
       }
     },
     {
+      it: 'should compress javascript with {type} and a single file with some options',
+      minify: {
+        type: '{type}',
+        fileIn: oneFile,
+        fileOut: __dirname + '/../examples/public/js-dist/base-min-{type}.js',
+        options: {
+          charset: 'utf8'
+        }
+      }
+    },
+    {
       it: 'should compress javascript with {type} and an array of file',
       minify: {
         type: '{type}',
         fileIn: filesArray,
         fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js'
-      }
-    },
-    {
-      it: 'should compress javascript with {type} and an array of file with a custom temp path',
-      minify: {
-        type: '{type}',
-        fileIn: filesArray,
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
-        tempPath: '/tmp/'
       }
     },
     {
@@ -130,19 +113,6 @@ var tests = {
         ],
         fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
         publicFolder: __dirname + '/../examples/public/js/'
-      }
-    },
-    {
-      it: 'should compress javascript with {type} and an array of file with a custom public folder and a custom temp path',
-      minify: {
-        type: '{type}',
-        fileIn: [
-          'base.js',
-          'base2.js'
-        ],
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
-        publicFolder: __dirname + '/../examples/public/js/',
-        tempPath: '/tmp/'
       }
     },
     {
@@ -163,31 +133,12 @@ var tests = {
       }
     },
     {
-      it: 'should compress javascript with {type} and wildcards path with a custom temp path',
-      minify: {
-        type: '{type}',
-        fileIn: __dirname + '/../examples/public/js/**/*.js',
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
-        tempPath: '/tmp/'
-      }
-    },
-    {
       it: 'should compress javascript with {type} and wildcards path with a custom public folder',
       minify: {
         type: '{type}',
         fileIn: '**/*.js',
         fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
         publicFolder: __dirname + '/../examples/public/js/'
-      }
-    },
-    {
-      it: 'should compress javascript with {type} and wildcards path with a custom public folder and a custom temp path',
-      minify: {
-        type: '{type}',
-        fileIn: '**/*.js',
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
-        publicFolder: __dirname + '/../examples/public/js/',
-        tempPath: '/tmp/'
       }
     },
     {
@@ -203,7 +154,6 @@ var tests = {
 };
 
 var runOneTest = function(options, type, sync) {
-  // extend object
   options = JSON.parse(JSON.stringify(options));
 
   options.minify.type = options.minify.type.replace('{type}', type);
@@ -228,12 +178,12 @@ var runOneTest = function(options, type, sync) {
 describe('node-minify', function() {
   mkdirp('/tmp/');
 
-  /*describe('Fake binary', function() {
+  describe('Fake binary', function() {
     it('should throw an error if binary does not exist', function(done) {
       var options = {};
       options.minify = {
         type: 'fake',
-        fileIn: __dirname + '/../examples/public/js/!**!/!*.js',
+        fileIn: __dirname + '/../examples/public/js/**/*.js',
         fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js'
       };
 
@@ -242,9 +192,9 @@ describe('node-minify', function() {
       }).to.throw();
       done();
     });
-  });*/
+  });
 
-  describe('No type', function() {
+  describe('No mandatories', function() {
     it('should throw an error if no type', function(done) {
       var options = {};
       options.minify = {
@@ -285,78 +235,74 @@ describe('node-minify', function() {
     });
   });
 
-  /*describe('Create errors', function() {
-    before(function() {
-      fs.renameSync(__dirname + '/../lib/binaries/yuicompressor-2.4.7.jar', __dirname + '/../lib/binaries/yuicompressor-2.4.7.old.jar');
-      this.stub = sinon.stub(child_process, 'execSync').throws();
-    });
-    after(function() {
-      fs.renameSync(__dirname + '/../lib/binaries/yuicompressor-2.4.7.old.jar', __dirname + '/../lib/binaries/yuicompressor-2.4.7.jar');
-      this.stub.restore();
-    });
-    it('should callback an error if binary does not exist on fs', function(done) {
+  describe('Create errors', function() {
+    it('should callback an error if gcc with bad options', function(done) {
       var options = {};
       options.minify = {
-        type: 'yui',
-        sync: true,
-        fileIn: fileCSS,
-        fileOut: __dirname + '/../examples/public/js-dist/base-min-yui.css'
-      };
+        type: 'gcc',
+        fileIn: oneFile,
+        fileOut: __dirname + '/../examples/public/js-dist/base-min-gcc.js',
+        options: {
+          fake: true
+        },
+        callback: function(err, min) {
+          should.exist(err);
+          should.not.exist(min);
 
-      options.minify.callback = function(err, min) {
-        should.exist(err);
-        should.not.exist(min);
-
-        done();
+          done();
+        }
       };
 
       compressor.minify(options.minify);
     });
 
-    it('should throw on execSync', function(done) {
+    it('should callback an error if yui with bad options', function(done) {
       var options = {};
       options.minify = {
-        type: 'sqwish',
-        fileIn: fileCSS,
-        fileOut: __dirname + '/../examples/public/css/base-min-sqwish.css',
+        type: 'yui-js',
+        fileIn: oneFile,
+        fileOut: __dirname + '/../examples/public/js-dist/base-min-yui.js',
         sync: true,
-        callback: function() {
-          expect(child_process.execSync).to.have.been.called();
+        options: {
+          fake: true
+        },
+        callback: function(err, min) {
+          should.exist(err);
+          should.not.exist(min);
+
+          done();
         }
       };
 
-      expect(function() {
-        compressor.minify(options.minify);
-      }).to.throw();
-      done();
+      compressor.minify(options.minify);
     });
-  });*/
+  });
 
-  /*describe('Create more errors', function() {
+  describe('Create more errors', function() {
     beforeEach(function() {
-      this.stub = sinon.stub(child_process, 'execSync').throws();
+      this.stub = sinon.stub(child_process, 'spawnSync').throws();
     });
     afterEach(function() {
       this.stub.restore();
     });
-    it('should throw on execSync', function(done) {
+    it('should callback an error on spawnSync', function(done) {
       var options = {};
       options.minify = {
-        type: 'sqwish',
+        type: 'yui',
         fileIn: fileCSS,
         fileOut: __dirname + '/../examples/public/css/base-min-sqwish.css',
         sync: true,
-        callback: function() {
-          expect(child_process.execSync).to.have.been.called();
+        callback: function(err, min) {
+          should.exist(err);
+          should.not.exist(min);
+
+          done();
         }
       };
 
-      expect(function() {
-        compressor.minify(options.minify);
-      }).to.throw();
-      done();
+      compressor.minify(options.minify);
     });
-  });*/
+  });
 
   describe('Deprecated', function() {
     it('should show a deprecated message', function(done) {
