@@ -6,18 +6,18 @@ http.createServer(function(req, res) {
   res.end('Hello World\n');
 }).listen(1337, '127.0.0.1');
 
-var test = compressor.minify({
+/*var test = compressor.minify({
   type: 'yui-css',
   fileIn: 'public/css/base.css',
   fileOut: 'public/js-dist/yui-css.css'
   //sync: true,
-  /*options: {
+  /!*options: {
     charset: 'utf8',
     nomunge: true,
     'line-break': 80,
     'preserve-semi': false,
     'disable-optimizations': true
-  },*/
+  },*!/
 });
 
 test.then(function(data) {
@@ -26,7 +26,7 @@ test.then(function(data) {
 
 test.catch(function(data) {
   console.log('================== catch', data);
-});
+});*/
 
 /*compressor.minify({
   type: 'yui-css',
@@ -120,15 +120,14 @@ compressor.minify({
   }
 });*/
 
-/*compressor.minify({
+compressor.minify({
   type: 'gcc',
   //publicFolder: './public/',
-  //fileIn: '/js/!**!/!*.js',
+  //fileIn: '/js/**/*.js',
   fileIn: ['public/js/base.js', 'public/js/base2.js'],
   fileOut: 'public/js-dist/gcc.js',
-  sync: true,
+  //sync: true,
   options: {
-    accept_const_keyword: true,
     charset: 'utf8',
     compilation_level: 'ADVANCED_OPTIMIZATIONS',
     jscomp_error: 'accessControls',
@@ -140,7 +139,7 @@ compressor.minify({
     console.log(err);
     //console.log(min);
   }
-});*/
+});
 
 /*compressor.minify({
   type: 'gcc',
