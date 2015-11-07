@@ -9,7 +9,7 @@ http.createServer(function(req, res) {
 var test = compressor.minify({
   type: 'sqwish',
   fileIn: 'public/css/base.css',
-  fileOut: 'public/js-dist/yui-css.css'
+  fileOut: 'public/dist/yui-css.css'
   //sync: true,
   /*options: {
     charset: 'utf8',
@@ -31,7 +31,7 @@ test.catch(function(data) {
 /*compressor.minify({
   type: 'yui-css',
   fileIn: 'public/css/base.css',
-  fileOut: 'public/js-dist/yui-css.css',
+  fileOut: 'public/dist/yui-css.css',
   //sync: true,
   /!*options: {
     charset: 'utf8',
@@ -50,7 +50,7 @@ test.catch(function(data) {
 /*compressor.minify({
   type: 'sqwish',
   fileIn: 'public/css/base.css',
-  fileOut: 'public/js-dist/sqwish.css',
+  fileOut: 'public/dist/sqwish.css',
   //sync: true,
   options: {
     strict: true
@@ -65,7 +65,7 @@ test.catch(function(data) {
 compressor.minify({
   type: 'clean-css',
   fileIn: 'public/css/base.css',
-  fileOut: 'public/js-dist/clean-css.css',
+  fileOut: 'public/dist/clean-css.css',
   //sync: true,
   options: {
     keepBreaks: true,
@@ -82,7 +82,7 @@ compressor.minify({
 compressor.minify({
   type: 'csso',
   fileIn: 'public/css/base.css',
-  fileOut: 'public/js-dist/csso.css',
+  fileOut: 'public/dist/csso.css',
   //sync: true,
   callback: function(err, min) {
     console.log('csso');
@@ -94,7 +94,7 @@ compressor.minify({
 compressor.minify({
   type: 'uglifyjs',
   fileIn: 'public/js/base.js',
-  fileOut: 'public/js-dist/uglifyjs.js',
+  fileOut: 'public/dist/uglifyjs.js',
   //sync: true,
   options: {
     warnings: true,
@@ -111,7 +111,7 @@ compressor.minify({
 compressor.minify({
   type: 'no-compress',
   fileIn: 'public/js/!**!/!*.js',
-  fileOut: 'public/js-dist/no-compress.js',
+  fileOut: 'public/dist/no-compress.js',
   sync: true,
   callback: function(err, min) {
     console.log('no-compress');
@@ -127,7 +127,7 @@ compressor.minify({
   //publicFolder: './public/',
   //fileIn: '/js/**/*.js',
   fileIn: ['public/js/base.js', 'public/js/base2.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js'],
-  fileOut: 'public/js-dist/gcc.js',
+  fileOut: 'public/dist/gcc.js',
   //sync: true,
   /*options: {
     charset: 'utf8',
@@ -163,7 +163,7 @@ foo();
   publicFolder: './public/',
   //fileIn: '/js/!**!/!*.js',
   fileIn: 'js/base.js',
-  fileOut: 'public/js-dist/wildcards-match-gcc.js',
+  fileOut: 'public/dist/wildcards-match-gcc.js',
   sync: true
 });*/
 

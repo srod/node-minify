@@ -14,11 +14,13 @@ var filesArray = [
   __dirname + '/../examples/public/js/base.js',
   __dirname + '/../examples/public/js/base2.js'
 ];
+var fileJSOut = __dirname + '/../examples/public/dist/base.js';
 var fileCSS = __dirname + '/../examples/public/css/base.css';
 var fileCSSArray = [
   __dirname + '/../examples/public/css/base.css',
   __dirname + '/../examples/public/css/base2.css'
 ];
+var fileCSSOut = __dirname + '/../examples/public/dist/base.css';
 
 var tests = {
   concat: [
@@ -27,7 +29,7 @@ var tests = {
       minify: {
         type: 'no-compress',
         fileIn: filesArray,
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-nocompress.js'
+        fileOut: fileJSOut
       }
     },
     {
@@ -35,7 +37,7 @@ var tests = {
       minify: {
         type: 'no-compress',
         fileIn: oneFile,
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-nocompress.js'
+        fileOut: fileJSOut
       }
     }
   ],
@@ -45,7 +47,7 @@ var tests = {
       minify: {
         type: '{type}',
         fileIn: fileCSS,
-        fileOut: __dirname + '/../examples/public/css/base-min-{type}.css'
+        fileOut: fileCSSOut
       }
     },
     {
@@ -53,7 +55,7 @@ var tests = {
       minify: {
         type: '{type}',
         fileIn: fileCSSArray,
-        fileOut: __dirname + '/../examples/public/css/base-onefile-{type}.css'
+        fileOut: fileCSSOut
       }
     }
   ],
@@ -63,7 +65,7 @@ var tests = {
       minify: {
         type: '{type}',
         fileIn: oneFile,
-        fileOut: __dirname + '/../examples/public/js-dist/base-min-{type}.js'
+        fileOut: fileJSOut
       }
     },
     {
@@ -71,7 +73,7 @@ var tests = {
       minify: {
         type: '{type}',
         fileIn: 'base.js',
-        fileOut: __dirname + '/../examples/public/js-dist/base-min-{type}.js',
+        fileOut: fileJSOut,
         publicFolder: __dirname + '/../examples/public/js/'
       }
     },
@@ -80,7 +82,7 @@ var tests = {
       minify: {
         type: '{type}',
         fileIn: oneFile,
-        fileOut: __dirname + '/../examples/public/js-dist/base-min-{type}.js',
+        fileOut: fileJSOut,
         buffer: 2000 * 1024
       }
     },
@@ -89,7 +91,7 @@ var tests = {
       minify: {
         type: '{type}',
         fileIn: oneFile,
-        fileOut: __dirname + '/../examples/public/js-dist/base-min-{type}.js',
+        fileOut: fileJSOut,
         options: {
           charset: 'utf8'
         }
@@ -100,7 +102,7 @@ var tests = {
       minify: {
         type: '{type}',
         fileIn: filesArray,
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js'
+        fileOut: fileJSOut
       }
     },
     {
@@ -111,7 +113,7 @@ var tests = {
           'base.js',
           'base2.js'
         ],
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
+        fileOut: fileJSOut,
         publicFolder: __dirname + '/../examples/public/js/'
       }
     },
@@ -120,7 +122,7 @@ var tests = {
       minify: {
         type: '{type}',
         fileIn: filesArray,
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
+        fileOut: fileJSOut,
         buffer: 2000 * 1024
       }
     },
@@ -129,7 +131,7 @@ var tests = {
       minify: {
         type: '{type}',
         fileIn: __dirname + '/../examples/public/js/**/*.js',
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js'
+        fileOut: fileJSOut
       }
     },
     {
@@ -137,7 +139,7 @@ var tests = {
       minify: {
         type: '{type}',
         fileIn: '**/*.js',
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
+        fileOut: fileJSOut,
         publicFolder: __dirname + '/../examples/public/js/'
       }
     },
@@ -146,7 +148,7 @@ var tests = {
       minify: {
         type: '{type}',
         fileIn: __dirname + '/../examples/public/js/**/*.js',
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js',
+        fileOut: fileJSOut,
         buffer: 2000 * 1024
       }
     }
@@ -184,7 +186,7 @@ describe('node-minify', function() {
       options.minify = {
         type: 'fake',
         fileIn: __dirname + '/../examples/public/js/**/*.js',
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js'
+        fileOut: fileJSOut
       };
 
       expect(function() {
@@ -199,7 +201,7 @@ describe('node-minify', function() {
       var options = {};
       options.minify = {
         fileIn: __dirname + '/../examples/public/js/**/*.js',
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js'
+        fileOut: fileJSOut
       };
 
       expect(function() {
@@ -212,7 +214,7 @@ describe('node-minify', function() {
       var options = {};
       options.minify = {
         type: 'no-compress',
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js'
+        fileOut: fileJSOut
       };
 
       expect(function() {
@@ -241,7 +243,7 @@ describe('node-minify', function() {
       options.minify = {
         type: 'gcc',
         fileIn: oneFile,
-        fileOut: __dirname + '/../examples/public/js-dist/base-min-gcc.js',
+        fileOut: fileJSOut,
         options: {
           fake: true
         },
@@ -261,7 +263,7 @@ describe('node-minify', function() {
       options.minify = {
         type: 'yui-js',
         fileIn: oneFile,
-        fileOut: __dirname + '/../examples/public/js-dist/base-min-yui.js',
+        fileOut: fileJSOut,
         sync: true,
         options: {
           fake: true
@@ -290,7 +292,7 @@ describe('node-minify', function() {
       options.minify = {
         type: 'gcc',
         fileIn: oneFile,
-        fileOut: __dirname + '/../examples/public/css/base-min-gcc.js',
+        fileOut: fileJSOut,
         sync: true,
         callback: function(err, min) {
           should.exist(err);
@@ -310,7 +312,7 @@ describe('node-minify', function() {
       options.minify = {
         type: 'uglifyjs',
         fileIn: __dirname + '/../examples/public/js/**/*.js',
-        fileOut: __dirname + '/../examples/public/js-dist/base-onefile-{type}.js'
+        fileOut: fileJSOut
       };
 
       options.minify.callback = function(err, min) {
