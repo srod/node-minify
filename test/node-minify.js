@@ -280,7 +280,7 @@ describe('node-minify', function() {
 
   describe('Create more errors', function() {
     beforeEach(function() {
-      this.stub = sinon.stub(child_process, 'spawnSync').throws();
+      this.stub = sinon.stub(child_process, 'spawnSync').throws(new Error('UnsupportedClassVersionError'));
     });
     afterEach(function() {
       this.stub.restore();
@@ -288,9 +288,9 @@ describe('node-minify', function() {
     it('should callback an error on spawnSync', function(done) {
       var options = {};
       options.minify = {
-        type: 'yui',
-        fileIn: fileCSS,
-        fileOut: __dirname + '/../examples/public/css/base-min-sqwish.css',
+        type: 'gcc',
+        fileIn: oneFile,
+        fileOut: __dirname + '/../examples/public/css/base-min-gcc.js',
         sync: true,
         callback: function(err, min) {
           should.exist(err);
@@ -328,9 +328,6 @@ describe('node-minify', function() {
     tests.concat.forEach(function(o) {
       runOneTest(o, 'no-compress');
     });
-    tests.concat.forEach(function(o) {
-      runOneTest(o, 'no-compress', true);
-    });
   });
 
   describe('GCC', function() {
@@ -362,17 +359,11 @@ describe('node-minify', function() {
     tests.commonjs.forEach(function(o) {
       runOneTest(o, 'uglifyjs');
     });
-    tests.commonjs.forEach(function(o) {
-      runOneTest(o, 'uglifyjs', true);
-    });
   });
 
   describe('Clean-css', function() {
     tests.commoncss.forEach(function(o) {
       runOneTest(o, 'clean-css');
-    });
-    tests.commoncss.forEach(function(o) {
-      runOneTest(o, 'clean-css', true);
     });
   });
 
@@ -380,17 +371,11 @@ describe('node-minify', function() {
     tests.commoncss.forEach(function(o) {
       runOneTest(o, 'csso');
     });
-    tests.commoncss.forEach(function(o) {
-      runOneTest(o, 'csso', true);
-    });
   });
 
   describe('Sqwish', function() {
     tests.commoncss.forEach(function(o) {
       runOneTest(o, 'sqwish');
-    });
-    tests.commoncss.forEach(function(o) {
-      runOneTest(o, 'sqwish', true);
     });
   });
 });

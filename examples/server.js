@@ -6,18 +6,18 @@ http.createServer(function(req, res) {
   res.end('Hello World\n');
 }).listen(1337, '127.0.0.1');
 
-/*var test = compressor.minify({
-  type: 'yui-css',
+var test = compressor.minify({
+  type: 'sqwish',
   fileIn: 'public/css/base.css',
   fileOut: 'public/js-dist/yui-css.css'
   //sync: true,
-  /!*options: {
+  /*options: {
     charset: 'utf8',
     nomunge: true,
     'line-break': 80,
     'preserve-semi': false,
     'disable-optimizations': true
-  },*!/
+  },*/
 });
 
 test.then(function(data) {
@@ -26,7 +26,7 @@ test.then(function(data) {
 
 test.catch(function(data) {
   console.log('================== catch', data);
-});*/
+});
 
 /*compressor.minify({
   type: 'yui-css',
@@ -120,26 +120,43 @@ compressor.minify({
   }
 });*/
 
+var dataMin;
+
 compressor.minify({
   type: 'gcc',
   //publicFolder: './public/',
   //fileIn: '/js/**/*.js',
-  fileIn: ['public/js/base.js', 'public/js/base2.js'],
+  fileIn: ['public/js/base.js', 'public/js/base2.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js'],
   fileOut: 'public/js-dist/gcc.js',
   //sync: true,
-  options: {
+  /*options: {
     charset: 'utf8',
     compilation_level: 'ADVANCED_OPTIMIZATIONS',
     jscomp_error: 'accessControls',
     debug: true,
     formatting: 'PRETTY_PRINT'
-  },
+  },*/
   callback: function(err, min) {
-    console.log('GCC');
+    console.log('GCC cb');
+    //dataMin = min;
     console.log(err);
     //console.log(min);
   }
-});
+})
+  .then(function(data) {
+    console.log('promise data');
+    dataMin = data;
+    foo();
+  })
+  .catch(function(err) {
+    console.log('promise err', err);
+  });
+
+function foo() {
+  console.log('something else', typeof dataMin);
+}
+
+foo();
 
 /*compressor.minify({
   type: 'gcc',
