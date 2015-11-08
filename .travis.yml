@@ -23,4 +23,4 @@ script:
 
 after_script:
   - "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
-  - "npm run clean"
+  - "npm run clean-cov"
