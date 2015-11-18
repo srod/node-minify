@@ -310,9 +310,9 @@ describe('node-minify', function() {
     it('should show a deprecated message', function(done) {
       var options = {};
       options.minify = {
-        compressor: 'uglifyjs',
-        input: __dirname + '/../examples/public/js/**/*.js',
-        output: fileJSOut
+        type: 'uglifyjs',
+        fileIn: __dirname + '/../examples/public/js/**/*.js',
+        fileOut: fileJSOut
       };
 
       options.minify.callback = function(err, min) {
