@@ -7,9 +7,9 @@ http.createServer(function(req, res) {
 }).listen(1337, '127.0.0.1');
 
 var test = compressor.minify({
-  type: 'sqwish',
-  fileIn: 'public/css/base.css',
-  fileOut: 'public/dist/yui-css.css'
+  compressor: 'sqwish',
+  input: 'public/css/base.css',
+  output: 'public/dist/yui-css.css'
   //sync: true,
   /*options: {
     charset: 'utf8',
@@ -29,9 +29,9 @@ test.catch(function(data) {
 });
 
 /*compressor.minify({
-  type: 'yui-css',
-  fileIn: 'public/css/base.css',
-  fileOut: 'public/dist/yui-css.css',
+  compressor: 'yui-css',
+  input: 'public/css/base.css',
+  output: 'public/dist/yui-css.css',
   //sync: true,
   /!*options: {
     charset: 'utf8',
@@ -48,9 +48,9 @@ test.catch(function(data) {
 });*/
 
 /*compressor.minify({
-  type: 'sqwish',
-  fileIn: 'public/css/base.css',
-  fileOut: 'public/dist/sqwish.css',
+  compressor: 'sqwish',
+  input: 'public/css/base.css',
+  output: 'public/dist/sqwish.css',
   //sync: true,
   options: {
     strict: true
@@ -63,9 +63,9 @@ test.catch(function(data) {
 });
 
 compressor.minify({
-  type: 'clean-css',
-  fileIn: 'public/css/base.css',
-  fileOut: 'public/dist/clean-css.css',
+  compressor: 'clean-css',
+  input: 'public/css/base.css',
+  output: 'public/dist/clean-css.css',
   //sync: true,
   options: {
     keepBreaks: true,
@@ -80,9 +80,9 @@ compressor.minify({
 });
 
 compressor.minify({
-  type: 'csso',
-  fileIn: 'public/css/base.css',
-  fileOut: 'public/dist/csso.css',
+  compressor: 'csso',
+  input: 'public/css/base.css',
+  output: 'public/dist/csso.css',
   //sync: true,
   callback: function(err, min) {
     console.log('csso');
@@ -92,9 +92,9 @@ compressor.minify({
 });
 
 compressor.minify({
-  type: 'uglifyjs',
-  fileIn: 'public/js/base.js',
-  fileOut: 'public/dist/uglifyjs.js',
+  compressor: 'uglifyjs',
+  input: 'public/js/base.js',
+  output: 'public/dist/uglifyjs.js',
   //sync: true,
   options: {
     warnings: true,
@@ -109,9 +109,9 @@ compressor.minify({
 });
 
 compressor.minify({
-  type: 'no-compress',
-  fileIn: 'public/js/!**!/!*.js',
-  fileOut: 'public/dist/no-compress.js',
+  compressor: 'no-compress',
+  input: 'public/js/!**!/!*.js',
+  output: 'public/dist/no-compress.js',
   sync: true,
   callback: function(err, min) {
     console.log('no-compress');
@@ -123,11 +123,11 @@ compressor.minify({
 var dataMin;
 
 compressor.minify({
-  type: 'gcc',
+  compressor: 'gcc',
   //publicFolder: './public/',
-  //fileIn: '/js/**/*.js',
-  fileIn: ['public/js/base.js', 'public/js/base2.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js'],
-  fileOut: 'public/dist/gcc.js',
+  //input: '/js/**/*.js',
+  input: ['public/js/base.js', 'public/js/base2.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js'],
+  output: 'public/dist/gcc.js',
   //sync: true,
   /*options: {
     charset: 'utf8',
@@ -159,11 +159,11 @@ function foo() {
 foo();
 
 /*compressor.minify({
-  type: 'gcc',
+  compressor: 'gcc',
   publicFolder: './public/',
-  //fileIn: '/js/!**!/!*.js',
-  fileIn: 'js/base.js',
-  fileOut: 'public/dist/wildcards-match-gcc.js',
+  //input: '/js/!**!/!*.js',
+  input: 'js/base.js',
+  output: 'public/dist/wildcards-match-gcc.js',
   sync: true
 });*/
 

@@ -39,17 +39,17 @@ var compressor = require('node-minify');
 
 // Using Google Closure Compiler
 compressor.minify({
-  type: 'gcc',
-  fileIn: 'foo.js',
-  fileOut: 'bar.js',
+  compressor: 'gcc',
+  input: 'foo.js',
+  output: 'bar.js',
   callback: function (err, min) {}
 });
 
 // Using UglifyJS
 compressor.minify({
-  type: 'uglifyjs',
-  fileIn: './**/*.js',
-  fileOut: 'bar.js',
+  compressor: 'uglifyjs',
+  input: './**/*.js',
+  output: 'bar.js',
   callback: function (err, min) {}
 });
 ```
@@ -62,9 +62,9 @@ In order to concatenate files, simply pass in an array with the type `no-compres
 
 ```js
 compressor.minify({
-  type: 'no-compress',
-  fileIn: fileIn: ['foo.js', 'foo2.js', 'foo3.js'],
-  fileOut: 'bar.js',
+  compressor: 'no-compress',
+  input: input: ['foo.js', 'foo2.js', 'foo3.js'],
+  output: 'bar.js',
   callback: function (err, min) {}
 });
 ```
@@ -73,9 +73,9 @@ compressor.minify({
 
 ```js
 compressor.minify({
-  type: 'gcc',
-  fileIn: 'public/**/*.js',
-  fileOut: 'bar.js',
+  compressor: 'gcc',
+  input: 'public/**/*.js',
+  output: 'bar.js',
   callback: function (err, min) {}
 });
 ```
@@ -84,9 +84,9 @@ compressor.minify({
 
 ```js
 compressor.minify({
-  type: 'yui-js',
-  fileIn: 'foo.js',
-  fileOut: 'bar.js',
+  compressor: 'yui-js',
+  input: 'foo.js',
+  output: 'bar.js',
   sync: true,
   callback: function (err, min) {}
 });
@@ -100,10 +100,10 @@ It avoids you to specify the folder for each file.
 
 ```js
 compressor.minify({
-  type: 'gcc',
+  compressor: 'gcc',
   publicFolder: './public/',
-  fileIn: ['foo.js', 'foo2.js'],
-  fileOut: 'bar.js',
+  input: ['foo.js', 'foo2.js'],
+  output: 'bar.js',
   callback: function (err, min) {}
 });
 ```
@@ -115,9 +115,9 @@ By default the buffer is `1000 * 1024` which should be enough. If you however ne
 
 ```js
 compressor.minify({
-  type: 'gcc',
-  fileIn: 'foo.js',
-  fileOut: 'bar.js',
+  compressor: 'gcc',
+  input: 'foo.js',
+  output: 'bar.js',
   sync: true,
   buffer: 1000 * 1024,
   callback: function (err, min) {}
@@ -134,9 +134,9 @@ Please check available options.
 
 ```js
 compressor.minify({
-  type: 'yui-js',
-  fileIn: 'foo.js',
-  fileOut: 'bar.js',
+  compressor: 'yui-js',
+  input: 'foo.js',
+  output: 'bar.js',
   options: {
     'line-break': 80,
     charset: 'utf8'
@@ -152,9 +152,9 @@ compressor.minify({
 
 ```js
 compressor.minify({
-  type: 'gcc',
-  fileIn: 'foo.js',
-  fileOut: 'bar.js',
+  compressor: 'gcc',
+  input: 'foo.js',
+  output: 'bar.js',
   options: {
     compilation_level: 'WHITESPACE_ONLY',
     language: 'ECMASCRIPT6'
@@ -170,9 +170,9 @@ compressor.minify({
 
 ```js
 compressor.minify({
-  type: 'uglifyjs',
-  fileIn: 'foo.js',
-  fileOut: 'bar.js',
+  compressor: 'uglifyjs',
+  input: 'foo.js',
+  output: 'bar.js',
   options: {
     warnings: true, // pass true to display compressor warnings.
     mangle: false // pass false to skip mangling names.
@@ -189,9 +189,9 @@ compressor.minify({
 
 ```js
 compressor.minify({
-  type: 'clean-css',
-  fileIn: 'foo.css',
-  fileOut: 'bar.css',
+  compressor: 'clean-css',
+  input: 'foo.css',
+  output: 'bar.css',
   options: {
     advanced: false, // set to false to disable advanced optimizations - selector & property merging, reduction, etc.
     aggressiveMerging: false // set to false to disable aggressive merging of properties.
@@ -207,9 +207,9 @@ compressor.minify({
 
 ```js
 compressor.minify({
-  type: 'csso',
-  fileIn: 'foo.css',
-  fileOut: 'bar.css',
+  compressor: 'csso',
+  input: 'foo.css',
+  output: 'bar.css',
   options: {
     restructureOff: true // turns structure minimization off
   },
@@ -223,9 +223,9 @@ compressor.minify({
 
 ```js
 compressor.minify({
-  type: 'sqwish',
-  fileIn: 'foo.css',
-  fileOut: 'bar.css',
+  compressor: 'sqwish',
+  input: 'foo.css',
+  output: 'bar.css',
   options: {
     strict: true // strict optimizations
   },
