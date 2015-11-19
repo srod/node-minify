@@ -310,9 +310,9 @@ describe('node-minify', function() {
     it('should show a deprecated message', function(done) {
       var options = {};
       options.minify = {
-        type: 'uglifyjs',
-        fileIn: __dirname + '/../examples/public/js/**/*.js',
-        fileOut: fileJSOut
+        compressor: 'uglifyjs',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut
       };
 
       options.minify.callback = function(err, min) {
@@ -323,6 +323,48 @@ describe('node-minify', function() {
       };
 
       new nodeMinify.minify(options.minify);
+    });
+
+    it('should show throw on type option', function(done) {
+      var options = {};
+      options.minify = {
+        type: 'uglifyjs',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut
+      };
+
+      expect(function() {
+        nodeMinify.minify(options.minify);
+      }).to.throw();
+      done();
+    });
+    
+    it('should show throw on type fileIn', function(done) {
+      var options = {};
+      options.minify = {
+        compressor: 'uglifyjs',
+        fileIn: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut
+      };
+
+      expect(function() {
+        nodeMinify.minify(options.minify);
+      }).to.throw();
+      done();
+    });
+    
+    it('should show throw on type fileOut', function(done) {
+      var options = {};
+      options.minify = {
+        compressor: 'uglifyjs',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        fileOut: fileJSOut
+      };
+
+      expect(function() {
+        nodeMinify.minify(options.minify);
+      }).to.throw();
+      done();
     });
   });
 
