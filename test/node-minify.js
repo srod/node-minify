@@ -7,7 +7,7 @@ var mkdirp = require('mkdirp');
 var sinon = require('sinon');
 var should = require('should');
 var expect = require('chai').expect;
-var compressor = require('../lib/node-minify');
+var nodeMinify = require('../lib/node-minify');
 
 var oneFile = __dirname + '/../examples/public/js/base.js';
 var filesArray = [
@@ -27,145 +27,145 @@ var tests = {
     {
       it: 'should concat javascript and no compress and an array of file',
       minify: {
-        type: 'no-compress',
-        fileIn: filesArray,
-        fileOut: fileJSOut
+        compressor: 'no-compress',
+        input: filesArray,
+        output: fileJSOut
       }
     },
     {
       it: 'should concat javascript and no compress and a single file',
       minify: {
-        type: 'no-compress',
-        fileIn: oneFile,
-        fileOut: fileJSOut
+        compressor: 'no-compress',
+        input: oneFile,
+        output: fileJSOut
       }
     }
   ],
   commoncss: [
     {
-      it: 'should compress css with {type} and a single file',
+      it: 'should compress css with {compressor} and a single file',
       minify: {
-        type: '{type}',
-        fileIn: fileCSS,
-        fileOut: fileCSSOut
+        compressor: '{compressor}',
+        input: fileCSS,
+        output: fileCSSOut
       }
     },
     {
-      it: 'should compress css with {type} and an array of file',
+      it: 'should compress css with {compressor} and an array of file',
       minify: {
-        type: '{type}',
-        fileIn: fileCSSArray,
-        fileOut: fileCSSOut
+        compressor: '{compressor}',
+        input: fileCSSArray,
+        output: fileCSSOut
       }
     }
   ],
   commonjs: [
     {
-      it: 'should compress javascript with {type} and a single file',
+      it: 'should compress javascript with {compressor} and a single file',
       minify: {
-        type: '{type}',
-        fileIn: oneFile,
-        fileOut: fileJSOut
+        compressor: '{compressor}',
+        input: oneFile,
+        output: fileJSOut
       }
     },
     {
-      it: 'should compress javascript with {type} and a single file with a custom public folder',
+      it: 'should compress javascript with {compressor} and a single file with a custom public folder',
       minify: {
-        type: '{type}',
-        fileIn: 'base.js',
-        fileOut: fileJSOut,
+        compressor: '{compressor}',
+        input: 'base.js',
+        output: fileJSOut,
         publicFolder: __dirname + '/../examples/public/js/'
       }
     },
     {
-      it: 'should compress javascript with {type} and a single file with a custom buffer size',
+      it: 'should compress javascript with {compressor} and a single file with a custom buffer size',
       minify: {
-        type: '{type}',
-        fileIn: oneFile,
-        fileOut: fileJSOut,
+        compressor: '{compressor}',
+        input: oneFile,
+        output: fileJSOut,
         buffer: 2000 * 1024
       }
     },
     {
-      it: 'should compress javascript with {type} and a single file with some options',
+      it: 'should compress javascript with {compressor} and a single file with some options',
       minify: {
-        type: '{type}',
-        fileIn: oneFile,
-        fileOut: fileJSOut,
+        compressor: '{compressor}',
+        input: oneFile,
+        output: fileJSOut,
         options: {
           charset: 'utf8'
         }
       }
     },
     {
-      it: 'should compress javascript with {type} and an array of file',
+      it: 'should compress javascript with {compressor} and an array of file',
       minify: {
-        type: '{type}',
-        fileIn: filesArray,
-        fileOut: fileJSOut
+        compressor: '{compressor}',
+        input: filesArray,
+        output: fileJSOut
       }
     },
     {
-      it: 'should compress javascript with {type} and an array of file with a custom public folder',
+      it: 'should compress javascript with {compressor} and an array of file with a custom public folder',
       minify: {
-        type: '{type}',
-        fileIn: [
+        compressor: '{compressor}',
+        input: [
           'base.js',
           'base2.js'
         ],
-        fileOut: fileJSOut,
+        output: fileJSOut,
         publicFolder: __dirname + '/../examples/public/js/'
       }
     },
     {
-      it: 'should compress javascript with {type} and an array of file with a custom buffer size',
+      it: 'should compress javascript with {compressor} and an array of file with a custom buffer size',
       minify: {
-        type: '{type}',
-        fileIn: filesArray,
-        fileOut: fileJSOut,
+        compressor: '{compressor}',
+        input: filesArray,
+        output: fileJSOut,
         buffer: 2000 * 1024
       }
     },
     {
-      it: 'should compress javascript with {type} and wildcards path',
+      it: 'should compress javascript with {compressor} and wildcards path',
       minify: {
-        type: '{type}',
-        fileIn: __dirname + '/../examples/public/js/**/*.js',
-        fileOut: fileJSOut
+        compressor: '{compressor}',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut
       }
     },
     {
-      it: 'should compress javascript with {type} and wildcards path with a custom public folder',
+      it: 'should compress javascript with {compressor} and wildcards path with a custom public folder',
       minify: {
-        type: '{type}',
-        fileIn: '**/*.js',
-        fileOut: fileJSOut,
+        compressor: '{compressor}',
+        input: '**/*.js',
+        output: fileJSOut,
         publicFolder: __dirname + '/../examples/public/js/'
       }
     },
     {
-      it: 'should compress javascript with {type} and wildcards path with a custom buffer size',
+      it: 'should compress javascript with {compressor} and wildcards path with a custom buffer size',
       minify: {
-        type: '{type}',
-        fileIn: __dirname + '/../examples/public/js/**/*.js',
-        fileOut: fileJSOut,
+        compressor: '{compressor}',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut,
         buffer: 2000 * 1024
       }
     }
   ]
 };
 
-var runOneTest = function(options, type, sync) {
+var runOneTest = function(options, compressor, sync) {
   options = JSON.parse(JSON.stringify(options));
 
-  options.minify.type = options.minify.type.replace('{type}', type);
-  options.minify.fileOut = options.minify.fileOut.replace('{type}', type);
+  options.minify.compressor = options.minify.compressor.replace('{compressor}', compressor);
+  options.minify.output = options.minify.output.replace('{compressor}', compressor);
 
   if (sync) {
     options.minify.sync = true;
   }
 
-  it(options.it.replace('{type}', type), function(done) {
+  it(options.it.replace('{compressor}', compressor), function(done) {
     options.minify.callback = function(err, min) {
       should.not.exist(err);
       should.exist(min);
@@ -173,7 +173,7 @@ var runOneTest = function(options, type, sync) {
       done();
     };
 
-    compressor.minify(options.minify);
+    nodeMinify.minify(options.minify);
   });
 };
 
@@ -184,54 +184,54 @@ describe('node-minify', function() {
     it('should throw an error if binary does not exist', function(done) {
       var options = {};
       options.minify = {
-        type: 'fake',
-        fileIn: __dirname + '/../examples/public/js/**/*.js',
-        fileOut: fileJSOut
+        compressor: 'fake',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut
       };
 
       expect(function() {
-        compressor.minify(options.minify);
+        nodeMinify.minify(options.minify);
       }).to.throw();
       done();
     });
   });
 
   describe('No mandatories', function() {
-    it('should throw an error if no type', function(done) {
+    it('should throw an error if no compressor', function(done) {
       var options = {};
       options.minify = {
-        fileIn: __dirname + '/../examples/public/js/**/*.js',
-        fileOut: fileJSOut
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut
       };
 
       expect(function() {
-        compressor.minify(options.minify);
+        nodeMinify.minify(options.minify);
       }).to.throw();
       done();
     });
 
-    it('should throw an error if no fileIn', function(done) {
+    it('should throw an error if no input', function(done) {
       var options = {};
       options.minify = {
-        type: 'no-compress',
-        fileOut: fileJSOut
+        compressor: 'no-compress',
+        output: fileJSOut
       };
 
       expect(function() {
-        compressor.minify(options.minify);
+        nodeMinify.minify(options.minify);
       }).to.throw();
       done();
     });
 
-    it('should throw an error if no fileOut', function(done) {
+    it('should throw an error if no output', function(done) {
       var options = {};
       options.minify = {
-        type: 'no-compress',
-        fileIn: __dirname + '/../examples/public/js/**/*.js'
+        compressor: 'no-compress',
+        input: __dirname + '/../examples/public/js/**/*.js'
       };
 
       expect(function() {
-        compressor.minify(options.minify);
+        nodeMinify.minify(options.minify);
       }).to.throw();
       done();
     });
@@ -241,9 +241,9 @@ describe('node-minify', function() {
     it('should callback an error if gcc with bad options', function(done) {
       var options = {};
       options.minify = {
-        type: 'gcc',
-        fileIn: oneFile,
-        fileOut: fileJSOut,
+        compressor: 'gcc',
+        input: oneFile,
+        output: fileJSOut,
         options: {
           fake: true
         },
@@ -255,15 +255,15 @@ describe('node-minify', function() {
         }
       };
 
-      compressor.minify(options.minify);
+      nodeMinify.minify(options.minify);
     });
 
     it('should callback an error if yui with bad options', function(done) {
       var options = {};
       options.minify = {
-        type: 'yui-js',
-        fileIn: oneFile,
-        fileOut: fileJSOut,
+        compressor: 'yui-js',
+        input: oneFile,
+        output: fileJSOut,
         sync: true,
         options: {
           fake: true
@@ -276,7 +276,7 @@ describe('node-minify', function() {
         }
       };
 
-      compressor.minify(options.minify);
+      nodeMinify.minify(options.minify);
     });
   });
 
@@ -290,9 +290,9 @@ describe('node-minify', function() {
     it('should callback an error on spawnSync', function(done) {
       var options = {};
       options.minify = {
-        type: 'gcc',
-        fileIn: oneFile,
-        fileOut: fileJSOut,
+        compressor: 'gcc',
+        input: oneFile,
+        output: fileJSOut,
         sync: true,
         callback: function(err, min) {
           should.exist(err);
@@ -302,7 +302,7 @@ describe('node-minify', function() {
         }
       };
 
-      compressor.minify(options.minify);
+      nodeMinify.minify(options.minify);
     });
   });
 
@@ -310,9 +310,9 @@ describe('node-minify', function() {
     it('should show a deprecated message', function(done) {
       var options = {};
       options.minify = {
-        type: 'uglifyjs',
-        fileIn: __dirname + '/../examples/public/js/**/*.js',
-        fileOut: fileJSOut
+        compressor: 'uglifyjs',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut
       };
 
       options.minify.callback = function(err, min) {
@@ -322,7 +322,49 @@ describe('node-minify', function() {
         done();
       };
 
-      new compressor.minify(options.minify);
+      new nodeMinify.minify(options.minify);
+    });
+
+    it('should show throw on type option', function(done) {
+      var options = {};
+      options.minify = {
+        type: 'uglifyjs',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut
+      };
+
+      expect(function() {
+        nodeMinify.minify(options.minify);
+      }).to.throw();
+      done();
+    });
+    
+    it('should show throw on type fileIn', function(done) {
+      var options = {};
+      options.minify = {
+        compressor: 'uglifyjs',
+        fileIn: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut
+      };
+
+      expect(function() {
+        nodeMinify.minify(options.minify);
+      }).to.throw();
+      done();
+    });
+    
+    it('should show throw on type fileOut', function(done) {
+      var options = {};
+      options.minify = {
+        compressor: 'uglifyjs',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        fileOut: fileJSOut
+      };
+
+      expect(function() {
+        nodeMinify.minify(options.minify);
+      }).to.throw();
+      done();
     });
   });
 
