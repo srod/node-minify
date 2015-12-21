@@ -19,15 +19,15 @@
     "iojs": ">=1.0.0"
   },
   "dependencies": {
-    "bluebird": "3.0.5",
-    "clean-css": "3.4.6",
-    "csso": "1.4.1",
+    "bluebird": "3.1.1",
+    "clean-css": "3.4.8",
+    "csso": "1.4.4",
     "depd": "1.1.0",
-    "glob": "5.0.15",
+    "glob": "6.0.1",
     "mkdirp": "0.5.1",
     "sqwish": "0.2.2",
-    "uglify-js": "2.5.0",
-    "xtend": "4.0.0"
+    "uglify-js": "2.6.1",
+    "xtend": "4.0.1"
   },
   "keywords": [
     "compressor",
@@ -61,13 +61,13 @@
     "publish": "git push --tags origin HEAD:master && npm publish"
   },
   "devDependencies": {
-    "chai": "3.4.0",
-    "coveralls": "2.11.4",
-    "istanbul": "0.4.0",
+    "chai": "3.4.1",
+    "coveralls": "2.11.6",
+    "istanbul": "0.4.1",
     "jscs-stylish": "0.3.1",
-    "jshint-stylish": "2.0.1",
-    "mocha": "2.3.3",
-    "should": "7.1.1",
+    "jshint-stylish": "2.1.0",
+    "mocha": "2.3.4",
+    "should": "8.0.2",
     "sinon": "1.17.2"
   }
 }
