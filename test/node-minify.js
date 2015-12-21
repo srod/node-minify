@@ -2,7 +2,7 @@
 
 var fs = require('fs');
 var os = require('os');
-var child_process = require('child_process');
+var childProcess = require('child_process');
 var mkdirp = require('mkdirp');
 var sinon = require('sinon');
 var should = require('should');
@@ -282,7 +282,7 @@ describe('node-minify', function() {
 
   describe('Create more errors', function() {
     beforeEach(function() {
-      this.stub = sinon.stub(child_process, 'spawnSync').throws(new Error('UnsupportedClassVersionError'));
+      this.stub = sinon.stub(childProcess, 'spawnSync').throws(new Error('UnsupportedClassVersionError'));
     });
     afterEach(function() {
       this.stub.restore();
