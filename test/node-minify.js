@@ -383,6 +383,15 @@ describe('node-minify', function() {
     });
   });
 
+  describe('GCC Legacy', function() {
+    tests.commonjs.forEach(function(o) {
+      runOneTest(o, 'gcc-legacy');
+    });
+    tests.commonjs.forEach(function(o) {
+      runOneTest(o, 'gcc-legacy', true);
+    });
+  });
+
   describe('YUI', function() {
     tests.commonjs.forEach(function(o) {
       runOneTest(o, 'yui-js');
