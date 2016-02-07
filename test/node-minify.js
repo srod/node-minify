@@ -9,18 +9,23 @@ var should = require('should');
 var expect = require('chai').expect;
 var nodeMinify = require('../lib/node-minify');
 
-var oneFile = __dirname + '/../examples/public/js/base.js';
+var oneFile = __dirname + '/../examples/public/js/sample.js';
 var filesArray = [
-  __dirname + '/../examples/public/js/base.js',
-  __dirname + '/../examples/public/js/base2.js'
+  __dirname + '/../examples/public/js/sample.js',
+  __dirname + '/../examples/public/js/sample2.js'
 ];
-var fileJSOut = __dirname + '/../examples/public/dist/base.js';
-var fileCSS = __dirname + '/../examples/public/css/base.css';
+var filesArrayWithWildcards = [
+  __dirname + '/../examples/public/js/sample.js',
+  __dirname + '/../examples/public/js/sample2.js',
+  __dirname + '/../examples/public/js2/**/*.js'
+];
+var fileJSOut = __dirname + '/../examples/public/dist/sample.js';
+var fileCSS = __dirname + '/../examples/public/css/sample.css';
 var fileCSSArray = [
-  __dirname + '/../examples/public/css/base.css',
-  __dirname + '/../examples/public/css/base2.css'
+  __dirname + '/../examples/public/css/sample.css',
+  __dirname + '/../examples/public/css/sample2.css'
 ];
-var fileCSSOut = __dirname + '/../examples/public/dist/base.css';
+var fileCSSOut = __dirname + '/../examples/public/dist/sample.css';
 
 var tests = {
   concat: [
@@ -72,7 +77,7 @@ var tests = {
       it: 'should compress javascript with {compressor} and a single file with a custom public folder',
       minify: {
         compressor: '{compressor}',
-        input: 'base.js',
+        input: 'sample.js',
         output: fileJSOut,
         publicFolder: __dirname + '/../examples/public/js/'
       }
@@ -110,8 +115,8 @@ var tests = {
       minify: {
         compressor: '{compressor}',
         input: [
-          'base.js',
-          'base2.js'
+          'sample.js',
+          'sample2.js'
         ],
         output: fileJSOut,
         publicFolder: __dirname + '/../examples/public/js/'

@@ -8,7 +8,7 @@ http.createServer(function(req, res) {
 
 var test = compressor.minify({
   compressor: 'sqwish',
-  input: 'public/css/base.css',
+  input: 'public/css/sample.css',
   output: 'public/dist/yui-css.css'
   //sync: true,
   /*options: {
@@ -30,7 +30,7 @@ test.catch(function(data) {
 
 /*compressor.minify({
   compressor: 'yui-css',
-  input: 'public/css/base.css',
+  input: 'public/css/sample.css',
   output: 'public/dist/yui-css.css',
   //sync: true,
   /!*options: {
@@ -49,7 +49,7 @@ test.catch(function(data) {
 
 /*compressor.minify({
   compressor: 'sqwish',
-  input: 'public/css/base.css',
+  input: 'public/css/sample.css',
   output: 'public/dist/sqwish.css',
   //sync: true,
   options: {
@@ -64,7 +64,7 @@ test.catch(function(data) {
 
 compressor.minify({
   compressor: 'clean-css',
-  input: 'public/css/base.css',
+  input: 'public/css/sample.css',
   output: 'public/dist/clean-css.css',
   //sync: true,
   options: {
@@ -81,7 +81,7 @@ compressor.minify({
 
 compressor.minify({
   compressor: 'csso',
-  input: 'public/css/base.css',
+  input: 'public/css/sample.css',
   output: 'public/dist/csso.css',
   //sync: true,
   callback: function(err, min) {
@@ -93,7 +93,7 @@ compressor.minify({
 
 compressor.minify({
   compressor: 'uglifyjs',
-  input: 'public/js/base.js',
+  input: 'public/js/sample.js',
   output: 'public/dist/uglifyjs.js',
   //sync: true,
   options: {
@@ -162,7 +162,7 @@ foo();
   compressor: 'gcc',
   publicFolder: './public/',
   //input: '/js/!**!/!*.js',
-  input: 'js/base.js',
+  input: 'js/sample.js',
   output: 'public/dist/wildcards-match-gcc.js',
   sync: true
 });*/
