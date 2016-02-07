@@ -15,6 +15,11 @@ var filesArray = [
   __dirname + '/../examples/public/js/sample2.js'
 ];
 var filesArrayWithWildcards = [
+  'sample.js',
+  'sample2.js',
+  '**/*.js'
+];
+var filesArrayWithWildcards2 = [
   __dirname + '/../examples/public/js/sample.js',
   __dirname + '/../examples/public/js/sample2.js',
   __dirname + '/../examples/public/js2/**/*.js'
@@ -78,6 +83,15 @@ var tests = {
       minify: {
         compressor: '{compressor}',
         input: 'sample.js',
+        output: fileJSOut,
+        publicFolder: __dirname + '/../examples/public/js/'
+      }
+    },
+    {
+      it: 'should compress javascript with {compressor} and a single file with a custom public folder and full path',
+      minify: {
+        compressor: '{compressor}',
+        input: __dirname + '/../examples/public/js/sample.js',
         output: fileJSOut,
         publicFolder: __dirname + '/../examples/public/js/'
       }
@@ -155,6 +169,24 @@ var tests = {
         input: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut,
         buffer: 2000 * 1024
+      }
+    },
+    {
+      it: 'should compress javascript with {compressor} and an array of strings and wildcards path',
+      minify: {
+        compressor: '{compressor}',
+        input: filesArrayWithWildcards2,
+        output: fileJSOut
+      }
+    },
+    {
+      it: 'should compress javascript with {compressor} and an array of strings and wildcards path' +
+      ' with a custom public folder',
+      minify: {
+        compressor: '{compressor}',
+        input: filesArrayWithWildcards,
+        output: fileJSOut,
+        publicFolder: __dirname + '/../examples/public/js/'
       }
     }
   ]

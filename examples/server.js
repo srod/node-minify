@@ -123,19 +123,24 @@ compressor.minify({
 var dataMin;
 
 compressor.minify({
-  compressor: 'gcc',
+  compressor: 'yui-js',
   //publicFolder: './public/',
   //input: '/js/**/*.js',
-  input: ['public/js/base.js', 'public/js/base2.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js'],
+  //input: ['public/js/sample.js', 'public/js/sample2.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js'],
+  // input: ['public/js/sample.js', 'public/js/sample2.js', 'public/js/**/*.js', 'public/js2/**/*.js'],
+  input: ['sample-2.js', 'sample2-2.js', '**/*.js'],
+  // input: ['sample.js', 'sample2.js', '**/*.js'],
+  //input: 'public/js2/**/*.js',
   output: 'public/dist/gcc.js',
+  publicFolder: 'public/js2/',
   //sync: true,
-  /*options: {
-    charset: 'utf8',
-    compilation_level: 'ADVANCED_OPTIMIZATIONS',
-    jscomp_error: 'accessControls',
-    debug: true,
-    formatting: 'PRETTY_PRINT'
-  },*/
+  //options: {
+  //  charset: 'utf8',
+  //  compilation_level: 'ADVANCED_OPTIMIZATIONS',
+  //  jscomp_error: 'accessControls',
+  //  debug: true,
+  //  formatting: 'PRETTY_PRINT'
+  //},
   callback: function(err, min) {
     console.log('GCC cb');
     //dataMin = min;
@@ -157,6 +162,28 @@ function foo() {
 }
 
 foo();
+
+/*compressor.minify({
+  compressor: 'gcc-legacy',
+  //publicFolder: './public/',
+  //input: '/js/!**!/!*.js',
+  input: ['public/js/sample.js', 'public/js/sample2.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js'],
+  output: 'public/dist/gcc.js',
+  //sync: true,
+  //options: {
+  //  charset: 'utf8',
+  //  compilation_level: 'ADVANCED_OPTIMIZATIONS',
+  //  jscomp_error: 'accessControls',
+  //  debug: true,
+  //  formatting: 'PRETTY_PRINT'
+  //},
+  callback: function(err, min) {
+    console.log('GCC legacy cb');
+    //dataMin = min;
+    console.log(err);
+    //console.log(min);
+  }
+});*/
 
 /*compressor.minify({
   compressor: 'gcc',
