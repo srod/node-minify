@@ -52,6 +52,16 @@ compressor.minify({
   output: 'bar.js',
   callback: function (err, min) {}
 });
+
+// Using Promise
+var promise = compressor.minify({
+  compressor: 'uglifyjs',
+  input: './**/*.js',
+  output: 'bar.js',
+  callback: function (err, min) {}
+});
+
+promise.then(function(min) {});
 ```
 
 [More examples](https://github.com/srod/node-minify/blob/master/examples/server.js)
@@ -246,6 +256,21 @@ compressor.minify({
   Google Closure Compiler can compress only JavaScript files.
 
   It will throw an error if you try with CSS files.
+
+  GCC latest version requires Java 1.8
+  You can use the legacy version that use Java 1.6
+
+  ```js
+  var compressor = require('node-minify');
+
+  // Using Google Closure Compiler legacy version for Java 1.6
+  compressor.minify({
+    compressor: 'gcc-legacy',
+    input: 'foo.js',
+    output: 'bar.js',
+    callback: function (err, min) {}
+  });
+  ```
 
   [https://developers.google.com/closure/compiler/](https://developers.google.com/closure/compiler/)
 
