@@ -57,8 +57,7 @@ compressor.minify({
 var promise = compressor.minify({
   compressor: 'uglifyjs',
   input: './**/*.js',
-  output: 'bar.js',
-  callback: function (err, min) {}
+  output: 'bar.js'
 });
 
 promise.then(function(min) {});
