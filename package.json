@@ -19,14 +19,14 @@
     "iojs": ">=1.0.0"
   },
   "dependencies": {
-    "bluebird": "3.1.1",
+    "bluebird": "3.3.3",
     "clean-css": "3.4.9",
-    "csso": "1.5.4",
+    "csso": "1.6.1",
     "depd": "1.1.0",
-    "glob": "6.0.4",
+    "glob": "7.0.0",
     "mkdirp": "0.5.1",
     "sqwish": "0.2.2",
-    "uglify-js": "2.6.1",
+    "uglify-js": "2.6.2",
     "xtend": "4.0.1"
   },
   "keywords": [
@@ -62,12 +62,12 @@
   },
   "devDependencies": {
     "chai": "3.5.0",
-    "coveralls": "2.11.6",
+    "coveralls": "2.11.8",
     "istanbul": "0.4.2",
     "jscs-stylish": "0.3.1",
     "jshint-stylish": "2.1.0",
     "mocha": "2.4.5",
-    "should": "8.2.1",
+    "should": "8.2.2",
     "sinon": "1.17.3"
   }
 }
