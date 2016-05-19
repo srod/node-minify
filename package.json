@@ -19,11 +19,11 @@
     "iojs": ">=1.0.0"
   },
   "dependencies": {
-    "bluebird": "3.3.3",
-    "clean-css": "3.4.9",
-    "csso": "1.6.1",
+    "bluebird": "3.4.0",
+    "clean-css": "3.4.12",
+    "csso": "2.1.1",
     "depd": "1.1.0",
-    "glob": "7.0.0",
+    "glob": "7.0.3",
     "mkdirp": "0.5.1",
     "sqwish": "0.2.2",
     "uglify-js": "2.6.2",
@@ -62,12 +62,12 @@
   },
   "devDependencies": {
     "chai": "3.5.0",
-    "coveralls": "2.11.8",
-    "istanbul": "0.4.2",
+    "coveralls": "2.11.9",
+    "istanbul": "0.4.3",
     "jscs-stylish": "0.3.1",
-    "jshint-stylish": "2.1.0",
+    "jshint-stylish": "2.2.0",
     "mocha": "2.4.5",
-    "should": "8.2.2",
-    "sinon": "1.17.3"
+    "should": "8.3.2",
+    "sinon": "1.17.4"
   }
 }
