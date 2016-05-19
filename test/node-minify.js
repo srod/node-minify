@@ -30,6 +30,11 @@ var fileCSSArray = [
   __dirname + '/../examples/public/css/sample.css',
   __dirname + '/../examples/public/css/sample2.css'
 ];
+var fileCSSArrayWithWildcards = [
+  __dirname + '/../examples/public/css/sample.css',
+  __dirname + '/../examples/public/css/sample2.css',
+  __dirname + '/**/*.css'
+];
 var fileCSSOut = __dirname + '/../examples/public/dist/sample.css';
 
 var tests = {
@@ -65,6 +70,14 @@ var tests = {
       minify: {
         compressor: '{compressor}',
         input: fileCSSArray,
+        output: fileCSSOut
+      }
+    },
+    {
+      it: 'should compress css with {compressor} and an array of file with wildcards',
+      minify: {
+        compressor: '{compressor}',
+        input: fileCSSArrayWithWildcards,
         output: fileCSSOut
       }
     }
@@ -206,6 +219,7 @@ var runOneTest = function(options, compressor, sync) {
     options.minify.callback = function(err, min) {
       should.not.exist(err);
       should.exist(min);
+      should(typeof min).be.exactly('string');
 
       done();
     };
@@ -375,7 +389,7 @@ describe('node-minify', function() {
       }).to.throw();
       done();
     });
-    
+
     it('should show throw on type fileIn', function(done) {
       var options = {};
       options.minify = {
@@ -389,7 +403,7 @@ describe('node-minify', function() {
       }).to.throw();
       done();
     });
-    
+
     it('should show throw on type fileOut', function(done) {
       var options = {};
       options.minify = {
