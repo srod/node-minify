@@ -58,7 +58,8 @@
     "release-patch": "npm version patch -m 'Bump %s'",
     "release-minor": "npm version minor -m 'Bump %s'",
     "release-major": "npm version major -m 'Bump %s'",
-    "publish": "git push --tags origin HEAD:master && npm publish"
+    "publish-latest": "git push --tags origin HEAD:master && npm publish",
+    "publish-beta": "npm publish --tag beta"
   },
   "devDependencies": {
     "chai": "3.5.0",
