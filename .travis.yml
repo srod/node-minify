@@ -9,6 +9,7 @@ node_js:
   - "2"
   - "3"
   - "4"
+  - "5"
   - "stable"
 
 before_install:
