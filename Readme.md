@@ -306,6 +306,13 @@ compressor.minify({
 ```bash
 java -version
 ```
+  How to install:
+
+  Mac: [https://java.com/en/download/help/mac_install.xml](https://java.com/en/download/help/mac_install.xml)
+
+  Windows: [https://java.com/en/download/help/windows_manual_download.xml](https://java.com/en/download/help/windows_manual_download.xml)
+
+  Linux: [https://www.java.com/en/download/help/linux_x64_install.xml](https://www.java.com/en/download/help/linux_x64_install.xml)
 
 ## Windows support
 
