@@ -24,6 +24,7 @@
     "csso": "^2.2.1",
     "depd": "^1.1.0",
     "glob": "^7.0.6",
+    "google-closure-compiler-js": "^20160828.0.1",
     "mkdirp": "^0.5.1",
     "sqwish": "^0.2.2",
     "uglify-js": "^2.7.3",
