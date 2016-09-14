@@ -19,15 +19,15 @@
     "iojs": ">=1.0.0"
   },
   "dependencies": {
-    "bluebird": "^3.4.1",
-    "clean-css": "^3.4.18",
-    "csso": "^2.2.0",
-    "depd": "1.1.0",
-    "glob": "^7.0.5",
-    "mkdirp": "0.5.1",
-    "sqwish": "0.2.2",
-    "uglify-js": "^2.7.0",
-    "xtend": "4.0.1"
+    "bluebird": "^3.4.6",
+    "clean-css": "^3.4.19",
+    "csso": "^2.2.1",
+    "depd": "^1.1.0",
+    "glob": "^7.0.6",
+    "mkdirp": "^0.5.1",
+    "sqwish": "^0.2.2",
+    "uglify-js": "^2.7.3",
+    "xtend": "^4.0.1"
   },
   "keywords": [
     "compressor",
@@ -62,13 +62,13 @@
     "publish-beta": "npm publish --tag beta"
   },
   "devDependencies": {
-    "chai": "3.5.0",
-    "coveralls": "2.11.9",
-    "istanbul": "^0.4.4",
-    "jscs-stylish": "0.3.1",
-    "jshint-stylish": "2.2.0",
-    "mocha": "^2.5.3",
-    "should": "^9.0.2",
-    "sinon": "1.17.4"
+    "chai": "^3.5.0",
+    "coveralls": "^2.11.12",
+    "istanbul": "^0.4.5",
+    "jscs-stylish": "^0.3.1",
+    "jshint-stylish": "^2.2.1",
+    "mocha": "^3.0.2",
+    "should": "^11.1.0",
+    "sinon": "^1.17.5"
   }
 }
