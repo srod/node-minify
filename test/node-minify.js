@@ -292,7 +292,7 @@ describe('node-minify', function() {
     it('should callback an error if gcc with bad options', function(done) {
       var options = {};
       options.minify = {
-        compressor: 'gcc',
+        compressor: 'gcc-java',
         input: oneFile,
         output: fileJSOut,
         options: {
@@ -341,7 +341,7 @@ describe('node-minify', function() {
     it('should callback an error on spawnSync', function(done) {
       var options = {};
       options.minify = {
-        compressor: 'gcc',
+        compressor: 'gcc-java',
         input: oneFile,
         output: fileJSOut,
         sync: true,
@@ -431,6 +431,15 @@ describe('node-minify', function() {
     });
     tests.commonjs.forEach(function(o) {
       runOneTest(o, 'gcc', true);
+    });
+  });
+
+  describe('GCC Java', function() {
+    tests.commonjs.forEach(function(o) {
+      runOneTest(o, 'gcc-java');
+    });
+    tests.commonjs.forEach(function(o) {
+      runOneTest(o, 'gcc-java', true);
     });
   });
 

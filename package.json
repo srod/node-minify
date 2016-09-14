@@ -56,7 +56,7 @@
     "test-cov": "npm run pretest && istanbul cover ./node_modules/mocha/bin/_mocha -- -t 60000 -R spec",
     "test": "npm run mocha",
     "posttest": "npm run clean",
-    "clean": "rm -f ./examples/public/css/base-*.css ./examples/public/dist/base*",
+    "clean": "rm -f ./examples/public/dist/*",
     "clean-cov": "npm run clean && rm -Rf ./coverage",
     "release-patch": "npm version patch -m 'Bump %s'",
     "release-minor": "npm version minor -m 'Bump %s'",
