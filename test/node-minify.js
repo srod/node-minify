@@ -425,6 +425,15 @@ describe('node-minify', function() {
     });
   });
 
+  describe('Babili', function() {
+    tests.commonjs.forEach(function(o) {
+      runOneTest(o, 'babili');
+    });
+    tests.commonjs.forEach(function(o) {
+      runOneTest(o, 'babili', true);
+    });
+  });
+
   describe('GCC', function() {
     tests.commonjs.forEach(function(o) {
       runOneTest(o, 'gcc');
