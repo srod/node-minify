@@ -7,7 +7,6 @@ var mkdirp = require('mkdirp');
 var sinon = require('sinon');
 var should = require('should');
 var expect = require('chai').expect;
-var utils = require('../lib/utils');
 var nodeMinify = require('../lib/node-minify');
 
 var oneFile = __dirname + '/../examples/public/js/sample.js';
@@ -435,16 +434,14 @@ describe('node-minify', function() {
     });
   });
 
-  if (utils.isNodeV4AndHigher()) {
-    describe('GCC', function() {
-      tests.commonjs.forEach(function(o) {
-        runOneTest(o, 'gcc');
-      });
-      tests.commonjs.forEach(function(o) {
-        runOneTest(o, 'gcc', true);
-      });
+  describe('GCC', function() {
+    tests.commonjs.forEach(function(o) {
+      runOneTest(o, 'gcc');
     });
-  }
+    tests.commonjs.forEach(function(o) {
+      runOneTest(o, 'gcc', true);
+    });
+  });
 
   describe('GCC Java', function() {
     tests.commonjs.forEach(function(o) {
