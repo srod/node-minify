@@ -7,12 +7,8 @@ var mkdirp = require('mkdirp');
 var sinon = require('sinon');
 var should = require('should');
 var expect = require('chai').expect;
-var nodeVersion = require('node-version');
+var utils = require('../lib/utils');
 var nodeMinify = require('../lib/node-minify');
-
-function isNodeV4AndHigher() {
-  return parseInt(nodeVersion.major, 10) >= 4;
-}
 
 var oneFile = __dirname + '/../examples/public/js/sample.js';
 var filesArray = [
@@ -439,7 +435,7 @@ describe('node-minify', function() {
     });
   });
 
-  if (isNodeV4AndHigher) {
+  if (utils.isNodeV4AndHigher()) {
     describe('GCC', function() {
       tests.commonjs.forEach(function(o) {
         runOneTest(o, 'gcc');
