@@ -36,10 +36,9 @@
   ],
   "scripts": {
     "eslint": "eslint index.js lib test || true",
-    "mocha": "mocha --bail --timeout 60000 --reporter spec || true",
     "pretest": "npm run eslint",
-    "test-cov": "npm run pretest && istanbul cover ./node_modules/mocha/bin/_mocha -- -t 60000 -R spec",
-    "test": "npm run mocha",
+    "test-cov": "npm run pretest && jest --coverage",
+    "test": "jest",
     "posttest": "npm run clean",
     "clean": "rm -f ./examples/public/dist/*",
     "clean-cov": "npm run clean && rm -Rf ./coverage",
@@ -66,13 +65,14 @@
   },
   "devDependencies": {
     "babel-preset-es2015": "6.24.1",
-    "chai": "3.5.0",
     "coveralls": "2.13.0",
     "decache": "4.1.0",
     "eslint": "3.19.0",
-    "istanbul": "0.4.5",
-    "mocha": "3.2.0",
-    "should": "11.2.1",
-    "sinon": "2.1.0"
+    "jest": "15.1.1"
+  },
+  "jest": {
+    "notify": true,
+    "verbose": true,
+    "testEnvironment": "node"
   }
 }

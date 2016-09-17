@@ -1,11 +1,11 @@
 'use strict';
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
+jest.disableAutomock();
+
 var childProcess = require('child_process');
 var decache = require('decache');
 var mkdirp = require('mkdirp');
-var sinon = require('sinon');
-var should = require('should');
-var expect = require('chai').expect;
 var nodeMinify = require('../lib/node-minify');
 
 var oneFile = __dirname + '/../examples/public/js/sample.js';
@@ -350,16 +350,25 @@ var runOneTest = function(options, compressor, sync) {
     options.minify.sync = true;
   }
 
-  it(options.it.replace('{compressor}', compressor), function(done) {
-    options.minify.callback = function(err, min) {
-      should.not.exist(err);
-      should.exist(min);
-      should(typeof min).be.exactly('string');
+  it(options.it.replace('{compressor}', compressor), function() {
+    return new Promise(function(resolve) {
+      options.minify.callback = function(err, min) {
+        resolve(err, min);
+      };
 
+      nodeMinify.minify(options.minify);
+    }).then(function(err, min) {
+      expect(err).toBeNull();
+      expect(min).not.toBeNull();
+    });
+
+    /*options.minify.callback = function(err, min) {
+      expect(err).toBeNull();
+      expect(min).not.toBeNull();
       done();
     };
 
-    nodeMinify.minify(options.minify);
+    nodeMinify.minify(options.minify);*/
   });
 };
 
@@ -377,7 +386,7 @@ describe('node-minify', function() {
 
       expect(function() {
         nodeMinify.minify(options.minify);
-      }).to.throw();
+      }).toThrowError(/does not exist/);
       done();
     });
   });
@@ -386,13 +395,13 @@ describe('node-minify', function() {
     it('should throw an error if no compressor', function(done) {
       var options = {};
       options.minify = {
-        input: __dirname + '/../examples/public/js/**/*.js',
+        input: __dirname + '/../examples/public/js/!**!/!*.js',
         output: fileJSOut
       };
 
       expect(function() {
         nodeMinify.minify(options.minify);
-      }).to.throw();
+      }).toThrowError(/mandatory/);
       done();
     });
 
@@ -405,7 +414,7 @@ describe('node-minify', function() {
 
       expect(function() {
         nodeMinify.minify(options.minify);
-      }).to.throw();
+      }).toThrowError(/input is mandatory/);
       done();
     });
 
@@ -413,12 +422,12 @@ describe('node-minify', function() {
       var options = {};
       options.minify = {
         compressor: 'no-compress',
-        input: __dirname + '/../examples/public/js/**/*.js'
+        input: __dirname + '/../examples/public/js/!**/!*.js'
       };
 
       expect(function() {
         nodeMinify.minify(options.minify);
-      }).to.throw();
+      }).toThrowError(/output is mandatory/);
       done();
     });
   });
@@ -434,9 +443,8 @@ describe('node-minify', function() {
           fake: true
         },
         callback: function(err, min) {
-          should.exist(err);
-          should.not.exist(min);
-
+          expect(err).not.toBeNull();
+          expect(min).toBeUndefined();
           done();
         }
       };
@@ -455,9 +463,8 @@ describe('node-minify', function() {
           fake: true
         },
         callback: function(err, min) {
-          should.exist(err);
-          should.not.exist(min);
-
+          expect(err).not.toBeNull();
+          expect(min).toBeUndefined();
           done();
         }
       };
@@ -468,10 +475,7 @@ describe('node-minify', function() {
 
   describe('Create more errors', function() {
     beforeEach(function() {
-      this.stub = sinon.stub(childProcess, 'spawnSync').throws(new Error('UnsupportedClassVersionError'));
-    });
-    afterEach(function() {
-      this.stub.restore();
+      spyOn(childProcess, 'spawnSync').and.throwError('UnsupportedClassVersionError');
     });
     it('should callback an error on spawnSync', function(done) {
       var options = {};
@@ -481,9 +485,8 @@ describe('node-minify', function() {
         output: fileJSOut,
         sync: true,
         callback: function(err, min) {
-          should.exist(err);
-          should.not.exist(min);
-
+          expect(err).not.toBeNull();
+          expect(min).toBeUndefined();
           done();
         }
       };
@@ -502,9 +505,8 @@ describe('node-minify', function() {
       };
 
       options.minify.callback = function(err, min) {
-        should.not.exist(err);
-        should.exist(min);
-
+        expect(err).toBeNull();
+        expect(min).not.toBeNull();
         done();
       };
 
@@ -515,13 +517,13 @@ describe('node-minify', function() {
       var options = {};
       options.minify = {
         type: 'uglifyjs',
-        input: __dirname + '/../examples/public/js/**/*.js',
+        input: __dirname + '/../examples/public/js/!**!/!*.js',
         output: fileJSOut
       };
 
       expect(function() {
         nodeMinify.minify(options.minify);
-      }).to.throw();
+      }).toThrowError(/compressor is mandatory/);
       done();
     });
 
@@ -529,13 +531,13 @@ describe('node-minify', function() {
       var options = {};
       options.minify = {
         compressor: 'uglifyjs',
-        fileIn: __dirname + '/../examples/public/js/**/*.js',
+        fileIn: __dirname + '/../examples/public/js/!**!/!*.js',
         output: fileJSOut
       };
 
       expect(function() {
         nodeMinify.minify(options.minify);
-      }).to.throw();
+      }).toThrowError(/input is mandatory/);
       done();
     });
 
@@ -543,13 +545,13 @@ describe('node-minify', function() {
       var options = {};
       options.minify = {
         compressor: 'uglifyjs',
-        input: __dirname + '/../examples/public/js/**/*.js',
+        input: __dirname + '/../examples/public/js/!**/!*.js',
         fileOut: fileJSOut
       };
 
       expect(function() {
         nodeMinify.minify(options.minify);
-      }).to.throw();
+      }).toThrowError(/output is mandatory/);
       done();
     });
   });
