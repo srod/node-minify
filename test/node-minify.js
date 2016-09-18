@@ -22,7 +22,7 @@ var filesArrayWithWildcards = [
 var filesArrayWithWildcards2 = [
   __dirname + '/../examples/public/js/sample.js',
   __dirname + '/../examples/public/js/sample2.js',
-  __dirname + '/../examples/public/js2/**/*.js'
+  __dirname + '/../examples/public/js/**/*.js'
 ];
 var fileJSOut = __dirname + '/../examples/public/dist/sample.js';
 var fileCSS = __dirname + '/../examples/public/css/sample.css';

@@ -6,8 +6,8 @@
  Mauris sem turpis, lacinia eget faucibus vel, vulputate et ante.
  */
 
-cb.tools1 = {};
-cb.tools1.substitute = function(str, arr) {
+cb.tools3 = {};
+cb.tools3.substitute = function(str, arr) {
   var i, pattern, re, n = arr.length;
   for (i = 0; i < n; i++) {
     pattern = "\\{" + i + "\\}";
