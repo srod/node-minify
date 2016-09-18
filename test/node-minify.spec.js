@@ -1,6 +1,6 @@
 'use strict';
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 jest.disableAutomock();
 
 var childProcess = require('child_process');
