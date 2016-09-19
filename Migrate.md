@@ -1,4 +1,4 @@
-# Node-minify migration from v1 to v2
+# Node-minify migration from `1.x.x` to `2.x.x`
 
 ## Config changes
 
@@ -17,3 +17,31 @@
 - fileOut was renamed to output
 
 ```{ fileOut: 'bar.js' }``` to ```{ output: 'bar.js' }```
+
+## Example
+
+### From
+
+```js
+var compressor = require('node-minify');
+
+new compressor.minify({
+  type: 'gcc',
+  fileIn: 'public/js/base.js',
+  fileOut: 'public/js-dist/base-min-gcc.js',
+  callback: function(err, min) {}
+});
+```
+
+### To
+
+```js
+var compressor = require('node-minify');
+
+compressor.minify({
+  compressor: 'gcc',
+  input: 'foo.js',
+  output: 'bar.js',
+  callback: function(err, min) {}
+});
+```

@@ -26,7 +26,7 @@
     "csso": "^2.2.1",
     "depd": "^1.1.0",
     "glob": "^7.0.6",
-    "google-closure-compiler-js": "^20160828.0.1",
+    "google-closure-compiler-js": "^20160916.0.0",
     "mkdirp": "^0.5.1",
     "node-version": "^1.0.0",
     "sqwish": "^0.2.2",
