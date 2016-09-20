@@ -31,6 +31,11 @@ var fileCSSArray = [
   __dirname + '/../examples/public/css/sample2.css'
 ];
 var fileCSSArrayWithWildcards = [
+  'sample.css',
+  'sample2.css',
+  '/**/*.css'
+];
+var fileCSSArrayWithWildcards2 = [
   __dirname + '/../examples/public/css/sample.css',
   __dirname + '/../examples/public/css/sample2.css',
   __dirname + '/**/*.css'
@@ -66,6 +71,44 @@ var tests = {
       }
     },
     {
+      it: 'should compress css with {compressor} and a single file with a custom public folder',
+      minify: {
+        compressor: '{compressor}',
+        input: 'sample.css',
+        output: fileCSSOut,
+        publicFolder: __dirname + '/../examples/public/css/'
+      }
+    },
+    {
+      it: 'should compress css with {compressor} and a single file with a custom public folder and full path',
+      minify: {
+        compressor: '{compressor}',
+        input: __dirname + '/../examples/public/css/sample.css',
+        output: fileCSSOut,
+        publicFolder: __dirname + '/../examples/public/css/'
+      }
+    },
+    {
+      it: 'should compress css with {compressor} and a single file with a custom buffer size',
+      minify: {
+        compressor: '{compressor}',
+        input: fileCSS,
+        output: fileCSSOut,
+        buffer: 2000 * 1024
+      }
+    },
+    {
+      it: 'should compress css with {compressor} and a single file with some options',
+      minify: {
+        compressor: '{compressor}',
+        input: fileCSS,
+        output: fileCSSOut,
+        options: {
+          charset: 'utf8'
+        }
+      }
+    },
+    {
       it: 'should compress css with {compressor} and an array of file',
       minify: {
         compressor: '{compressor}',
@@ -74,11 +117,68 @@ var tests = {
       }
     },
     {
-      it: 'should compress css with {compressor} and an array of file with wildcards',
+      it: 'should compress css with {compressor} and an array of file with a custom public folder',
+      minify: {
+        compressor: '{compressor}',
+        input: [
+          'sample.css',
+          'sample2.css'
+        ],
+        output: fileCSSOut,
+        publicFolder: __dirname + '/../examples/public/css/'
+      }
+    },
+    {
+      it: 'should compress css with {compressor} and an array of file with a custom buffer size',
+      minify: {
+        compressor: '{compressor}',
+        input: fileCSSArray,
+        output: fileCSSOut,
+        buffer: 2000 * 1024
+      }
+    },
+    {
+      it: 'should compress css with {compressor} and wildcards path',
+      minify: {
+        compressor: '{compressor}',
+        input: __dirname + '/../examples/public/css/**/*.css',
+        output: fileCSSOut
+      }
+    },
+    {
+      it: 'should compress css with {compressor} and wildcards path with a custom public folder',
+      minify: {
+        compressor: '{compressor}',
+        input: '**/*.css',
+        output: fileCSSOut,
+        publicFolder: __dirname + '/../examples/public/css/'
+      }
+    },
+    {
+      it: 'should compress css with {compressor} and wildcards path with a custom buffer size',
+      minify: {
+        compressor: '{compressor}',
+        input: __dirname + '/../examples/public/css/**/*.css',
+        output: fileCSSOut,
+        buffer: 2000 * 1024
+      }
+    },
+    {
+      it: 'should compress css with {compressor} and an array of strings and wildcards path',
+      minify: {
+        compressor: '{compressor}',
+        input: fileCSSArrayWithWildcards2,
+        output: fileCSSOut
+      }
+    },
+    {
+      it: 'should compress css with {compressor} and an array of strings and wildcards path' +
+      ' with a custom public folder',
       minify: {
         compressor: '{compressor}',
         input: fileCSSArrayWithWildcards,
-        output: fileCSSOut
+        output: fileCSSOut,
+        publicFolder: __dirname + '/../examples/public/css/'
       }
     }
   ],
