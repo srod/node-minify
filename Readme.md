@@ -13,6 +13,7 @@ A very light minifier NodeJS module.
 
 Support:
 
+- Babili
 - YUI Compressor
 - Google Closure Compiler
 - UglifyJS
@@ -138,6 +139,24 @@ compressor.minify({
 You can pass an object to the compressor.
 
 Please check available options.
+
+### Options for Babili
+
+```js
+compressor.minify({
+  compressor: 'babili',
+  input: 'foo.js',
+  output: 'bar.js',
+  options: {
+    // 'line-break': 80,
+    // charset: 'utf8'
+    ... // See more information below
+  },
+  callback: function (err, min) {}
+});
+```
+
+[More informations](https://github.com/babel/babili)
 
 ### Options for YUI Compressor
 
