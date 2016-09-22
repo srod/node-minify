@@ -50,10 +50,9 @@
     "csso"
   ],
   "scripts": {
-    "jshint": "jshint --config .jshintrc --reporter ./node_modules/jshint-stylish lib || true",
-    "jscs": "jscs --config .jscsrc --reporter ./node_modules/jscs-stylish lib || true",
+    "eslint": "eslint index.js lib test || true",
     "mocha": "mocha --bail --timeout 60000 --reporter spec || true",
-    "pretest": "npm run jshint && npm run jscs",
+    "pretest": "npm run eslint",
     "test-cov": "npm run pretest && istanbul cover ./node_modules/mocha/bin/_mocha -- -t 60000 -R spec",
     "test": "npm run mocha",
     "posttest": "npm run clean",
@@ -68,11 +67,8 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "coveralls": "^2.11.12",
+    "eslint": "^3.5.0",
     "istanbul": "^0.4.5",
-    "jscs": "^3.0.7",
-    "jscs-stylish": "^0.3.1",
-    "jshint": "^2.9.3",
-    "jshint-stylish": "^2.2.1",
     "mocha": "^3.0.2",
     "should": "^11.1.0",
     "sinon": "^1.17.5"
