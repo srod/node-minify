@@ -16,7 +16,6 @@ before_install:
   - "npm config set spin false"
   - "node -v"
   - "npm -v"
-  - "npm install jshint jscs -g"
 
 
 script:

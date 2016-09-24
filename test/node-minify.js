@@ -1,7 +1,5 @@
 'use strict';
 
-var fs = require('fs');
-var os = require('os');
 var childProcess = require('child_process');
 var mkdirp = require('mkdirp');
 var sinon = require('sinon');

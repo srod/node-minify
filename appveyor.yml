@@ -29,7 +29,6 @@ install:
   - set PATH=%APPDATA%\npm;%PATH%
   - node --version
   - npm --version
-  - npm install jshint jscs -g
   - npm install
 
 test_script:
