@@ -21,9 +21,6 @@ version: "{build}"
 
 build: off
 
-cache:
-  - '%AppData%\npm-cache'
-
 install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   - set PATH=%APPDATA%\npm;%PATH%
