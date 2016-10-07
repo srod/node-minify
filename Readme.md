@@ -148,9 +148,8 @@ compressor.minify({
   input: 'foo.js',
   output: 'bar.js',
   options: {
-    // 'line-break': 80,
-    // charset: 'utf8'
-    ... // See more information below
+    babelrc: 'public/.babelrc',
+    presets: ['es2015']
   },
   callback: function (err, min) {}
 });
