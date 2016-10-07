@@ -300,6 +300,42 @@ var tests = {
         publicFolder: __dirname + '/../examples/public/js/'
       }
     }
+  ],
+  babili: [
+    {
+      it: 'should compress javascript with {compressor} and a single file with a babelrc',
+      minify: {
+        compressor: '{compressor}',
+        input: oneFile,
+        output: fileJSOut,
+        options: {
+          babelrc: __dirname + '/../examples/public/.babelrc'
+        }
+      }
+    },
+    {
+      it: 'should compress javascript with {compressor} and a single file with a preset',
+      minify: {
+        compressor: '{compressor}',
+        input: oneFile,
+        output: fileJSOut,
+        options: {
+          presets: ['es2015']
+        }
+      }
+    },
+    {
+      it: 'should compress javascript with {compressor} and a single file with a babelrc and preset',
+      minify: {
+        compressor: '{compressor}',
+        input: oneFile,
+        output: fileJSOut,
+        options: {
+          babelrc: __dirname + '/../examples/public/.babelrc',
+          presets: ['es2015']
+        }
+      }
+    }
   ]
 };
 
@@ -527,7 +563,13 @@ describe('node-minify', function() {
     tests.commonjs.forEach(function(o) {
       runOneTest(o, 'babili');
     });
+    tests.babili.forEach(function(o) {
+      runOneTest(o, 'babili');
+    });
     tests.commonjs.forEach(function(o) {
+      runOneTest(o, 'babili', true);
+    });
+    tests.babili.forEach(function(o) {
       runOneTest(o, 'babili', true);
     });
   });
