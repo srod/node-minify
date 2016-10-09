@@ -4,10 +4,6 @@ language: node_js
 
 node_js:
   - "0.12"
-  - "iojs-v1.0.0"
-  - "iojs"
-  - "2"
-  - "3"
   - "4"
   - "5"
   - "stable"
@@ -16,7 +12,6 @@ before_install:
   - "npm config set spin false"
   - "node -v"
   - "npm -v"
-
 
 script:
   - "npm run test-cov"
