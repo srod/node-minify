@@ -9,3 +9,4 @@ test
 .npmrc
 .travis.yml
 appveyor.yml
+yarn.lock
