@@ -9,7 +9,7 @@
 
 # Node-minify
 
-A very light minifier NodeJS module.
+A very light minifier Node.js module.
 
 Support:
 
@@ -167,7 +167,7 @@ compressor.minify({
   options: {
     'line-break': 80,
     charset: 'utf8'
-    ... // See more information below
+    ... // See more information link below
   },
   callback: function (err, min) {}
 });
@@ -185,7 +185,7 @@ compressor.minify({
   options: {
     compilation_level: 'WHITESPACE_ONLY',
     language: 'ECMASCRIPT6'
-    ... // See more information below
+    ... // See more information link below
   },
   callback: function (err, min) {}
 });
@@ -212,7 +212,7 @@ compressor.minify({
 
 [More informations](https://github.com/mishoo/UglifyJS2)
 
-### Options for Clean-css
+### Options for clean-css
 
 ```js
 compressor.minify({
@@ -222,7 +222,7 @@ compressor.minify({
   options: {
     advanced: false, // set to false to disable advanced optimizations - selector & property merging, reduction, etc.
     aggressiveMerging: false // set to false to disable aggressive merging of properties.
-    ... // See more information below
+    ... // See more information link below
   },
   callback: function (err, min) {}
 });
@@ -261,6 +261,12 @@ compressor.minify({
 ```
 
 [More informations](https://github.com/ded/sqwish)
+
+## Babili
+
+  Babili can compress only JavaScript files.
+  
+  [https://github.com/babel/babili](https://github.com/babel/babili)
 
 ## YUI Compressor
 
