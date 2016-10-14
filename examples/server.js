@@ -6,86 +6,32 @@ http.createServer(function(req, res) {
   res.end('Hello World\n');
 }).listen(1337, '127.0.0.1');
 
-var test = compressor.minify({
-  compressor: 'sqwish',
-  input: 'public/css/sample.css',
-  output: 'public/dist/yui-css.css'
-  //sync: true,
-  /*options: {
-    charset: 'utf8',
-    nomunge: true,
-    'line-break': 80,
-    'preserve-semi': false,
-    'disable-optimizations': true
-  },*/
+compressor.minify({
+  compressor: 'babili',
+  input: 'public/js-es6/**/*.js',
+  output: 'public/js-dist/babili-es6.js'
+}).then(function(min) {
+  //console.log(min);
 });
 
-test.then(function(data) {
-  console.log('================== then', data);
-});
-
-test.catch(function(data) {
-  console.log('================== catch', data);
-});
-
-/*compressor.minify({
-  compressor: 'yui-css',
-  input: 'public/css/sample.css',
-  output: 'public/dist/yui-css.css',
-  //sync: true,
-  /!*options: {
-    charset: 'utf8',
-    nomunge: true,
-    'line-break': 80,
-    'preserve-semi': false,
-    'disable-optimizations': true
-  },*!/
+compressor.minify({
+  compressor: 'gcc',
+  input: 'public/js/**/*.js',
+  output: 'public/js-dist/gcc-wildcards.js',
+  sync: true,
   callback: function(err, min) {
-    console.log('CB - yui css');
-    console.log(err);
-    //console.log(min);
-  }
-});*/
-
-/*compressor.minify({
-  compressor: 'sqwish',
-  input: 'public/css/sample.css',
-  output: 'public/dist/sqwish.css',
-  //sync: true,
-  options: {
-    strict: true
-  },
-  callback: function(err, min) {
-    console.log('sqwish');
+    console.log('wildcards GCC');
     console.log(err);
     //console.log(min);
   }
 });
 
 compressor.minify({
-  compressor: 'clean-css',
-  input: 'public/css/sample.css',
-  output: 'public/dist/clean-css.css',
-  //sync: true,
-  options: {
-    keepBreaks: true,
-    restructuring: false,
-    roundingPrecision: -1
-  },
+  compressor: 'yui-js',
+  input: 'public/js/**/*.js',
+  output: 'public/js-dist/yui-wildcards.js',
   callback: function(err, min) {
-    console.log('clean-css');
-    console.log(err);
-    //console.log(min);
-  }
-});
-
-compressor.minify({
-  compressor: 'csso',
-  input: 'public/css/sample.css',
-  output: 'public/dist/csso.css',
-  //sync: true,
-  callback: function(err, min) {
-    console.log('csso');
+    console.log('wildcards YUI JS');
     console.log(err);
     //console.log(min);
   }
@@ -93,16 +39,10 @@ compressor.minify({
 
 compressor.minify({
   compressor: 'uglifyjs',
-  input: 'public/js/sample.js',
-  output: 'public/dist/uglifyjs.js',
-  //sync: true,
-  options: {
-    warnings: true,
-    mangle: false,
-    compress: false
-  },
+  input: 'public/js/**/*.js',
+  output: 'public/js-dist/uglifyjs-wildcards.js',
   callback: function(err, min) {
-    console.log('uglify');
+    console.log('wildcards Uglifyjs');
     console.log(err);
     //console.log(min);
   }
@@ -110,88 +50,144 @@ compressor.minify({
 
 compressor.minify({
   compressor: 'no-compress',
-  input: 'public/js/!**!/!*.js',
-  output: 'public/dist/no-compress.js',
-  sync: true,
+  input: 'public/js/**/*.js',
+  output: 'public/js-dist/no-compress-wildcards.js',
   callback: function(err, min) {
-    console.log('no-compress');
+    console.log('wildcards no-compress');
     console.log(err);
     //console.log(min);
   }
-});*/
+});
 
-var dataMin;
+compressor.minify({
+  compressor: 'gcc',
+  input: 'public/js/sample.js',
+  output: 'public/js-dist/gcc-onefile.js',
+  callback: function(err, min) {
+    console.log('GCC one file');
+    console.log(err);
+    //console.log(min);
+  }
+});
+
+compressor.minify({
+  compressor: 'gcc',
+  input: [
+    'public/js/sample.js',
+    'public/js/sample2.js'
+  ],
+  output: 'public/js-dist/gcc-concat.js',
+  callback: function(err, min) {
+    console.log('GCC concat multi files');
+    console.log(err);
+    //console.log(min);
+  }
+});
+
+// Using YUI Compressor
+compressor.minify({
+  compressor: 'yui',
+  input: 'public/css/sample.css',
+  output: 'public/css-dist/yui-onefile.css',
+  callback: function(err, min) {
+    console.log('YUI CSS one file');
+    console.log(err);
+    //console.log(min);
+  }
+});
 
 compressor.minify({
   compressor: 'yui-js',
-  //publicFolder: './public/',
-  //input: '/js/**/*.js',
-  //input: ['public/js/sample.js', 'public/js/sample2.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js'],
-  // input: ['public/js/sample.js', 'public/js/sample2.js', 'public/js/**/*.js', 'public/js2/**/*.js'],
-  input: ['sample-2.js', 'sample2-2.js', '**/*.js'],
-  // input: ['sample.js', 'sample2.js', '**/*.js'],
-  //input: 'public/js2/**/*.js',
-  output: 'public/dist/gcc.js',
-  publicFolder: 'public/js2/',
-  //sync: true,
-  //options: {
-  //  charset: 'utf8',
-  //  compilation_level: 'ADVANCED_OPTIMIZATIONS',
-  //  jscomp_error: 'accessControls',
-  //  debug: true,
-  //  formatting: 'PRETTY_PRINT'
-  //},
+  input: 'public/js/sample.js',
+  output: 'public/js-dist/yui-onefile.js',
   callback: function(err, min) {
-    console.log('GCC cb');
-    //dataMin = min;
+    console.log('YUI JS one file');
     console.log(err);
     //console.log(min);
   }
-})
-  .then(function(data) {
-    console.log('promise data');
-    dataMin = data;
-    foo();
-  })
-  .catch(function(err) {
-    console.log('promise err', err);
-  });
+});
 
-function foo() {
-  console.log('something else', typeof dataMin);
-}
-
-foo();
-
-/*compressor.minify({
-  compressor: 'gcc-legacy',
-  //publicFolder: './public/',
-  //input: '/js/!**!/!*.js',
-  input: ['public/js/sample.js', 'public/js/sample2.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js', 'public/js/jquery-2.1.4.js'],
-  output: 'public/dist/gcc.js',
-  //sync: true,
-  //options: {
-  //  charset: 'utf8',
-  //  compilation_level: 'ADVANCED_OPTIMIZATIONS',
-  //  jscomp_error: 'accessControls',
-  //  debug: true,
-  //  formatting: 'PRETTY_PRINT'
-  //},
+// Using UglifyJS
+compressor.minify({
+  compressor: 'uglifyjs',
+  input: 'public/js/sample.js',
+  output: 'public/js-dist/uglify-onefile.js',
   callback: function(err, min) {
-    console.log('GCC legacy cb');
-    //dataMin = min;
+    console.log('Uglifyjs one file');
     console.log(err);
     //console.log(min);
   }
-});*/
+});
 
-/*compressor.minify({
-  compressor: 'gcc',
-  publicFolder: './public/',
-  //input: '/js/!**!/!*.js',
-  input: 'js/sample.js',
-  output: 'public/dist/wildcards-match-gcc.js',
-  sync: true
-});*/
+compressor.minify({
+  compressor: 'uglifyjs',
+  input: [
+    'public/js/sample.js',
+    'public/js/sample2.js'
+  ],
+  output: 'public/js-dist/uglify-concat.js',
+  callback: function(err, min) {
+    console.log('Uglifyjs concat multi files');
+    console.log(err);
+    //console.log(min);
+  }
+});
+
+compressor.minify({
+  compressor: 'no-compress',
+  input: [
+    'public/js/sample.js',
+    'public/js/sample2.js'
+  ],
+  output: 'public/js-dist/no-compress-concat.js',
+  callback: function(err, min) {
+    console.log('No compress concat');
+    console.log(err);
+    //console.log(min);
+  }
+});
+
+// Using Sqwish
+compressor.minify({
+  compressor: 'sqwish',
+  input: [
+    'public/css/sample.css',
+    'public/css/sample2.css'
+  ],
+  output: 'public/css-dist/sqwish-concat.css',
+  callback: function(err, min) {
+    console.log('Sqwish concat');
+    console.log(err);
+    //console.log(min);
+  }
+});
+
+// Using public folder option
+compressor.minify({
+  compressor: 'yui-js',
+  publicFolder: 'public/js/',
+  input: 'sample.js',
+  output: 'public/js-dist/yui-publicfolder.js',
+  callback: function(err, min) {
+    console.log('YUI JS with publicFolder option');
+    console.log(err);
+    //console.log(min);
+  }
+});
+
+compressor.minify({
+  compressor: 'yui-js',
+  publicFolder: 'public/js/',
+  input: [
+    'sample.js',
+    'sample2.js'
+  ],
+  output: 'public/js-dist/yui-publicfolder-concat.js',
+  callback: function(err, min) {
+    console.log('YUI JS with publicFolder option and array');
+    console.log(err);
+    //console.log(min);
+  }
+});
 
 console.log('Server running at http://127.0.0.1:1337/');
