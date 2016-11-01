@@ -6,66 +6,63 @@ http.createServer(function(req, res) {
   res.end('Hello World\n');
 }).listen(1337, '127.0.0.1');
 
-new compressor.minify({
-  type: 'gcc',
-  fileIn: 'public/**/*.js',
-  fileOut: 'public/js-dist/wildcards-match-gcc.js',
+compressor.minify({
+  compressor: 'babili',
+  input: 'public/js-es6/**/*.js',
+  output: 'public/js-dist/babili-es6.js'
+}).then(function(min) {
+  //console.log(min);
+});
+
+compressor.minify({
+  compressor: 'gcc',
+  input: 'public/js/**/*.js',
+  output: 'public/js-dist/gcc-wildcards.js',
   sync: true,
   callback: function(err, min) {
-    console.log('wildcards match GCC');
+    console.log('wildcards GCC');
     console.log(err);
     //console.log(min);
   }
 });
 
-new compressor.minify({
-  type: 'yui-js',
-  fileIn: 'public/**/*.js',
-  fileOut: 'public/js-dist/wildcards-match-yui.js',
+compressor.minify({
+  compressor: 'yui-js',
+  input: 'public/js/**/*.js',
+  output: 'public/js-dist/yui-wildcards.js',
   callback: function(err, min) {
-    console.log('wildcards match YUI JS');
+    console.log('wildcards YUI JS');
     console.log(err);
     //console.log(min);
   }
 });
 
-new compressor.minify({
-  type: 'uglifyjs',
-  fileIn: 'public/**/*.js',
-  fileOut: 'public/js-dist/wildcards-match-uglifyjs.js',
+compressor.minify({
+  compressor: 'uglifyjs',
+  input: 'public/js/**/*.js',
+  output: 'public/js-dist/uglifyjs-wildcards.js',
   callback: function(err, min) {
-    console.log('wildcards match Uglifyjs');
+    console.log('wildcards Uglifyjs');
     console.log(err);
     //console.log(min);
   }
 });
 
-new compressor.minify({
-  type: 'no-compress',
-  fileIn: 'public/**/*.js',
-  fileOut: 'public/js-dist/wildcards-match-no-compress.js',
+compressor.minify({
+  compressor: 'no-compress',
+  input: 'public/js/**/*.js',
+  output: 'public/js-dist/no-compress-wildcards.js',
   callback: function(err, min) {
-    console.log('wildcards match no-compress');
+    console.log('wildcards no-compress');
     console.log(err);
     //console.log(min);
   }
 });
 
-new compressor.minify({
-  type: 'gcc', //	language: 'ECMASCRIPT5',
-  fileIn: 'public/js/jquery-2.0.3.js',
-  fileOut: 'public/js-dist/jquery-2.0.3-gcc.js',
-  callback: function(err, min) {
-    console.log('GCC jquery 2.0');
-    console.log(err);
-    //console.log(min);
-  }
-});
-
-new compressor.minify({
-  type: 'gcc',
-  fileIn: 'public/js/base.js',
-  fileOut: 'public/js-dist/base-onefile-gcc.js',
+compressor.minify({
+  compressor: 'gcc',
+  input: 'public/js/sample.js',
+  output: 'public/js-dist/gcc-onefile.js',
   callback: function(err, min) {
     console.log('GCC one file');
     console.log(err);
@@ -73,104 +70,104 @@ new compressor.minify({
   }
 });
 
-new compressor.minify({
-  type: 'gcc',
-  fileIn: [
-    'public/js/base.js',
-    'public/js/base2.js'
+compressor.minify({
+  compressor: 'gcc',
+  input: [
+    'public/js/sample.js',
+    'public/js/sample2.js'
   ],
-  fileOut: 'public/js-dist/base-concat-gcc.js',
+  output: 'public/js-dist/gcc-concat.js',
   callback: function(err, min) {
-    console.log('GCC multi files');
+    console.log('GCC concat multi files');
     console.log(err);
     //console.log(min);
   }
 });
 
 // Using YUI Compressor
-new compressor.minify({
-  type: 'yui',
-  fileIn: 'public/css/base.css',
-  fileOut: 'public/css/base-min-yui.css',
+compressor.minify({
+  compressor: 'yui',
+  input: 'public/css/sample.css',
+  output: 'public/css-dist/yui-onefile.css',
   callback: function(err, min) {
-    console.log('YUI CSS');
+    console.log('YUI CSS one file');
     console.log(err);
     //console.log(min);
   }
 });
 
-new compressor.minify({
-  type: 'yui-js',
-  fileIn: 'public/js/base.js',
-  fileOut: 'public/js-dist/base-min-yui.js',
+compressor.minify({
+  compressor: 'yui-js',
+  input: 'public/js/sample.js',
+  output: 'public/js-dist/yui-onefile.js',
   callback: function(err, min) {
-    console.log('YUI JS');
+    console.log('YUI JS one file');
     console.log(err);
     //console.log(min);
   }
 });
 
 // Using UglifyJS
-new compressor.minify({
-  type: 'uglifyjs',
-  fileIn: 'public/js/base.js',
-  fileOut: 'public/js-dist/base-onefile-uglify.js',
+compressor.minify({
+  compressor: 'uglifyjs',
+  input: 'public/js/sample.js',
+  output: 'public/js-dist/uglify-onefile.js',
   callback: function(err, min) {
-    console.log('Uglifyjs');
+    console.log('Uglifyjs one file');
     console.log(err);
     //console.log(min);
   }
 });
 
-new compressor.minify({
-  type: 'uglifyjs',
-  fileIn: [
-    'public/js/base.js',
-    'public/js/base2.js'
+compressor.minify({
+  compressor: 'uglifyjs',
+  input: [
+    'public/js/sample.js',
+    'public/js/sample2.js'
   ],
-  fileOut: 'public/js-dist/base-onefile-uglify.js',
+  output: 'public/js-dist/uglify-concat.js',
   callback: function(err, min) {
-    console.log('Uglifyjs multi files');
+    console.log('Uglifyjs concat multi files');
     console.log(err);
     //console.log(min);
   }
 });
 
-new compressor.minify({
-  type: 'no-compress',
-  fileIn: [
-    'public/js/base.js',
-    'public/js/base2.js'
+compressor.minify({
+  compressor: 'no-compress',
+  input: [
+    'public/js/sample.js',
+    'public/js/sample2.js'
   ],
-  fileOut: 'public/js-dist/base-concat-no-compress.js',
+  output: 'public/js-dist/no-compress-concat.js',
   callback: function(err, min) {
-    console.log('No compress');
+    console.log('No compress concat');
     console.log(err);
     //console.log(min);
   }
 });
 
 // Using Sqwish
-new compressor.minify({
-  type: 'sqwish',
-  fileIn: [
-    'public/css/base.css',
-    'public/css/base2.css'
+compressor.minify({
+  compressor: 'sqwish',
+  input: [
+    'public/css/sample.css',
+    'public/css/sample2.css'
   ],
-  fileOut: 'public/css/base-min-sqwish.css',
+  output: 'public/css-dist/sqwish-concat.css',
   callback: function(err, min) {
-    console.log('Sqwish');
+    console.log('Sqwish concat');
     console.log(err);
     //console.log(min);
   }
 });
 
 // Using public folder option
-new compressor.minify({
-  type: 'yui-js',
+compressor.minify({
+  compressor: 'yui-js',
   publicFolder: 'public/js/',
-  fileIn: 'base.js',
-  fileOut: 'public/js-dist/base-min-yui-publicfolder.js',
+  input: 'sample.js',
+  output: 'public/js-dist/yui-publicfolder.js',
   callback: function(err, min) {
     console.log('YUI JS with publicFolder option');
     console.log(err);
@@ -178,14 +175,14 @@ new compressor.minify({
   }
 });
 
-new compressor.minify({
-  type: 'yui-js',
+compressor.minify({
+  compressor: 'yui-js',
   publicFolder: 'public/js/',
-  fileIn: [
-    'base.js',
-    'base2.js'
+  input: [
+    'sample.js',
+    'sample2.js'
   ],
-  fileOut: 'public/js-dist/base-min-yui-publicfolder-array.js',
+  output: 'public/js-dist/yui-publicfolder-concat.js',
   callback: function(err, min) {
     console.log('YUI JS with publicFolder option and array');
     console.log(err);

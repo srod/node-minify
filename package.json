@@ -1,7 +1,7 @@
 {
   "name": "node-minify",
-  "version": "1.3.9",
-  "description": "Javascript / CSS minifier based on YUI Compressor / Google Closure Compiler / UglifyJS2 / Sqwish / Clean-css / CSSO",
+  "version": "2.0.0-beta.2",
+  "description": "Javascript / CSS minifier based on Babili / YUI Compressor / Google Closure Compiler / UglifyJS2 / Sqwish / Clean-css / CSSO",
   "homepage": "https://github.com/srod/node-minify",
   "author": {
     "name": "Rodolphe Stoclin",
@@ -19,13 +19,19 @@
     "iojs": ">=1.0.0"
   },
   "dependencies": {
-    "clean-css": "3.4.8",
-    "csso": "1.4.3",
-    "glob": "6.0.1",
-    "mkdirp": "0.5.1",
-    "node-uuid": "1.4.7",
-    "sqwish": "0.2.2",
-    "uglify-js": "2.6.1"
+    "babel-core": "^6.18.0",
+    "babel-preset-babili": "0.0.8",
+    "bluebird": "^3.4.6",
+    "clean-css": "^3.4.19",
+    "csso": "^2.3.0",
+    "depd": "^1.1.0",
+    "glob": "^7.1.1",
+    "google-closure-compiler-js": "^20161024.0.0",
+    "mkdirp": "^0.5.1",
+    "node-version": "^1.0.0",
+    "sqwish": "^0.2.2",
+    "uglify-js": "^2.7.4",
+    "xtend": "^4.0.1"
   },
   "keywords": [
     "compressor",
@@ -41,25 +47,32 @@
     "windows",
     "sqwish",
     "clean-css",
-    "csso"
+    "csso",
+    "babili"
   ],
   "scripts": {
-    "test": "make test"
+    "eslint": "eslint index.js lib test || true",
+    "mocha": "mocha --bail --timeout 60000 --reporter spec || true",
+    "pretest": "npm run eslint",
+    "test-cov": "npm run pretest && istanbul cover ./node_modules/mocha/bin/_mocha -- -t 60000 -R spec",
+    "test": "npm run mocha",
+    "posttest": "npm run clean",
+    "clean": "rm -f ./examples/public/dist/*",
+    "clean-cov": "npm run clean && rm -Rf ./coverage",
+    "release-patch": "npm version patch -m 'Bump %s'",
+    "release-minor": "npm version minor -m 'Bump %s'",
+    "release-major": "npm version major -m 'Bump %s'",
+    "publish-latest": "git push --tags origin HEAD:master && npm publish",
+    "publish-beta": "npm publish --tag beta"
   },
   "devDependencies": {
-    "chai": "3.4.1",
-    "coveralls": "2.11.4",
-    "grunt": "0.4.5",
-    "grunt-cli": "0.1.13",
-    "grunt-contrib-jshint": "0.11.3",
-    "grunt-jscs": "2.4.0",
-    "grunt-mocha-test": "0.12.7",
-    "istanbul": "0.4.1",
-    "jshint-stylish": "2.1.0",
-    "load-grunt-tasks": "3.3.0",
-    "mocha": "2.3.4",
-    "semver": "5.1.0",
-    "should": "8.0.0",
-    "time-grunt": "1.2.2"
+    "babel-preset-es2015": "^6.18.0",
+    "chai": "^3.5.0",
+    "coveralls": "^2.11.12",
+    "eslint": "^3.9.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.1.2",
+    "should": "^11.1.1",
+    "sinon": "^1.17.5"
   }
 }

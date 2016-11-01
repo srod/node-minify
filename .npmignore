@@ -1,12 +1,12 @@
 .idea
 ._*
 node_modules
+coverage
 examples
 test
-.jscsrc
-.jshintrc
+.eslintrc
 .npmignore
+.npmrc
 .travis.yml
-Gruntfile.js
-Makefile
 appveyor.yml
+yarn.lock
