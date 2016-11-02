@@ -4,20 +4,12 @@
  * MIT Licensed
  */
 
-'use strict';
-
 /**
  * Module dependencies.
  */
 
-var sqwish = require('sqwish');
-var utils = require('../utils');
-
-/**
- * Expose `compressSqwish()`.
- */
-
-module.exports = compressSqwish;
+import sqwish from 'sqwish';
+import { utils } from '../utils';
 
 /**
  * Run sqwish.
@@ -27,11 +19,17 @@ module.exports = compressSqwish;
  * @param {Function} callback
  */
 
-function compressSqwish(settings, content, callback) {
-  var contentMinified = sqwish.minify(content, settings.options.strict);
+const compressSqwish = (settings, content, callback) => {
+  const contentMinified = sqwish.minify(content, settings.options.strict);
   utils.writeFile(settings.output, contentMinified);
   if (callback) {
     return callback(null, contentMinified);
   }
   return contentMinified;
-}
+};
+
+/**
+ * Expose `compressSqwish()`.
+ */
+
+export { compressSqwish };

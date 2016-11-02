@@ -36,7 +36,7 @@
     "butternut"
   ],
   "scripts": {
-    "eslint": "eslint lib test || true",
+    "eslint": "eslint src test || true",
     "pretest": "npm run eslint",
     "test": "jest",
     "posttest": "npm run clean",
@@ -45,11 +45,13 @@
     "release-minor": "npm version minor -m 'Bump %s' && git push --tags origin HEAD:master",
     "release-major": "npm version major -m 'Bump %s' && git push --tags origin HEAD:master",
     "release-next": "git push --tags origin HEAD:develop",
+    "prepublish": "npm run build",
     "publish-latest": "npm publish",
     "publish-next": "npm publish --tag next",
     "prettier": "prettier",
     "prettier-write": "npm run prettier -- --write",
-    "prettier-project": "npm run prettier-write -- '{lib,__tests__}/**/*.js'"
+    "prettier-project": "npm run prettier-write -- '{bin,src,__tests__}/**/*.js'",
+    "build": "rimraf lib && babel src -d lib && cp -r src/binaries lib/binaries"
   },
   "bin": {
     "node-minify": "bin/cli.js"
@@ -63,8 +65,6 @@
     "commander": "2.15.1",
     "crass": "0.12.3",
     "csso": "3.5.1",
-    "depd": "1.1.2",
-    "glob": "7.1.2",
     "google-closure-compiler-js": "20180610.0.0",
     "gzip-size": "4.1.0",
     "mkdirp": "0.5.1",
@@ -77,6 +77,9 @@
     "xtend": "4.0.1"
   },
   "devDependencies": {
+    "babel-cli": "6.18.0",
+    "babel-jest": "19.0.0",
+    "babel-plugin-transform-runtime": "6.23.0",
     "babel-preset-env": "1.7.0",
     "codecov": "3.0.2",
     "eslint": "4.19.1",
@@ -86,6 +89,11 @@
     "jest": "23.1.0",
     "lint-staged": "7.2.0",
     "prettier": "1.13.5"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
   },
   "jest": {
     "notify": true,

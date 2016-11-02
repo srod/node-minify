@@ -4,20 +4,12 @@
  * MIT Licensed
  */
 
-'use strict';
-
 /**
  * Module dependencies.
  */
 
-var uglifyJS = require('uglify-js');
-var utils = require('../utils');
-
-/**
- * Expose `compressUglifyJS()`.
- */
-
-module.exports = compressUglifyJS;
+import uglifyJS from 'uglify-js';
+import { utils } from '../utils';
 
 /**
  * Run uglifyJS.
@@ -27,8 +19,8 @@ module.exports = compressUglifyJS;
  * @param {Function} callback
  */
 
-function compressUglifyJS(settings, content, callback) {
-  var contentMinified = uglifyJS.minify(content, settings.options);
+const compressUglifyJS = (settings, content, callback) => {
+  const contentMinified = uglifyJS.minify(content, settings.options);
   if (contentMinified.map && settings.options.sourceMap) {
     utils.writeFile(settings.options.sourceMap.url, contentMinified.map);
   }
@@ -37,4 +29,10 @@ function compressUglifyJS(settings, content, callback) {
     return callback(null, contentMinified.code);
   }
   return contentMinified.code;
-}
+};
+
+/**
+ * Expose `compressUglifyJS()`.
+ */
+
+export { compressUglifyJS };

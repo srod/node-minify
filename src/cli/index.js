@@ -4,32 +4,30 @@
  * MIT Licensed
  */
 
-'use strict';
-
 /**
  * Module dependencies.
  */
 
-var chalk = require('chalk');
-var table = require('text-table');
-var compress = require('./compress');
-var spinner = require('./spinner');
+import chalk from 'chalk';
+import table from 'text-table';
+import { compress } from './compress';
+import { spinnerStart, spinnerStop, spinnerError } from './spinner';
 
 /**
  * Module variables.
  */
 
-var all = ['babel-minify', 'butternut', 'gcc', 'uglifyjs', 'yui'];
-var cliOptions;
-var selectedCompressors;
+const all = ['babel-minify', 'butternut', 'gcc', 'uglifyjs', 'yui'];
+let cliOptions;
+let selectedCompressors;
 
 /**
  * Last step after minify.
  */
 
-function finalize(results, smallers) {
+const finalize = (results, smallers) => {
   if (results.length - 1 === selectedCompressors.length) {
-    var _table = table(results);
+    const _table = table(results);
 
     console.log('');
     console.log(chalk.bgBlue.black(' INFO '), 'Result');
@@ -39,34 +37,34 @@ function finalize(results, smallers) {
     console.log(chalk.bgBlue.black(' INFO '), formatSmallers(smallers));
 
     console.log('\nCompressing with ' + chalk.green(smallers[0].compressor) + ' to ' + chalk.yellow(cliOptions.output));
-    runOne(cliOptions, smallers[0].compressor, results, smallers).then(function() {
+    runOne(cliOptions, smallers[0].compressor, results, smallers).then(() => {
       console.log('');
       console.log(chalk.bgGreen.black(' DONE '), chalk.green('All done!'));
       console.log('');
     });
   }
-}
+};
 
 /**
  * Format the output.
  */
 
-function formatSmallers(smallers) {
-  var sizeGzip = 0;
-  var output = 'The smallest ' + (smallers.length > 1 ? 'are' : 'is') + ': ';
-  smallers.forEach(function(item) {
+const formatSmallers = smallers => {
+  let sizeGzip = 0;
+  let output = 'The smallest ' + (smallers.length > 1 ? 'are' : 'is') + ': ';
+  smallers.forEach(item => {
     output += chalk.green(item.compressor) + ' ';
     sizeGzip = chalk.green(item.sizeGzip);
   });
   output += 'with ' + sizeGzip;
   return output;
-}
+};
 
 /**
  * Set the smallers compressor result.
  */
 
-function setSmaller(result, smallers) {
+const setSmaller = (result, smallers) => {
   if (!smallers[0].sizeGzip) {
     smallers[0] = result;
     return;
@@ -79,50 +77,50 @@ function setSmaller(result, smallers) {
   if (smallers[0].sizeGzip === result.sizeGzip) {
     smallers.push(result);
   }
-}
+};
 
 /**
  * Run one compressor.
  */
 
-function runOne(cli, compressor, results, smallers) {
-  return new Promise(function(resolve, reject) {
-    var options = {
+const runOne = (cli, compressor, results, smallers) => {
+  return new Promise((resolve, reject) => {
+    const options = {
       compressor: compressor || cli.compressor,
       input: cli.input.split(','),
       output: cli.output
     };
 
-    spinner.start(compressor || cli.compressor);
+    spinnerStart(compressor || cli.compressor);
 
     return compress(options)
-      .then(function(result) {
+      .then(result => {
         results.push([result.compressor, result.size, result.sizeGzip]);
         setSmaller(result, smallers);
-        spinner.stop(compressor);
+        spinnerStop(compressor);
         resolve();
       })
-      .catch(function(err) {
-        spinner.error(compressor);
+      .catch(err => {
+        spinnerError(compressor);
         reject(err);
       });
   });
-}
+};
 
 /**
  * Run cli.
  */
 
-function run(cli) {
-  var results = [['Compressor', 'Size minified', 'Size Gzipped']];
-  var smallers = [{ sizeGzip: undefined }];
+const run = cli => {
+  const results = [['Compressor', 'Size minified', 'Size Gzipped']];
+  const smallers = [{ sizeGzip: undefined }];
   cliOptions = cli;
 
   console.log('');
   console.log(chalk.bgBlue.black(' INFO '), 'Starting compression...');
   console.log('');
 
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     if (cli.compressor === 'all') {
       selectedCompressors = all;
     } else {
@@ -133,14 +131,14 @@ function run(cli) {
     const isMultipleCompressors = selectedCompressors.length > 1;
 
     if (isMultipleCompressors) {
-      var sequence = Promise.resolve();
-      selectedCompressors.forEach(function(compressor) {
-        sequence = sequence.then(function() {
+      let sequence = Promise.resolve();
+      selectedCompressors.forEach(compressor => {
+        sequence = sequence.then(() => {
           return runOne(cli, compressor, results, smallers);
         });
       });
       sequence
-        .then(function() {
+        .then(() => {
           finalize(results, smallers);
           resolve();
         })
@@ -148,7 +146,7 @@ function run(cli) {
       return sequence;
     } else {
       runOne(cli, cli.compressor, results, smallers)
-        .then(function() {
+        .then(() => {
           console.log('');
           console.log(chalk.bgGreen.black(' DONE '), chalk.green('Done!'));
           console.log('');
@@ -157,6 +155,6 @@ function run(cli) {
         .catch(reject);
     }
   });
-}
+};
 
-module.exports = run;
+export { run };

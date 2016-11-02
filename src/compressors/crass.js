@@ -4,34 +4,35 @@
  * MIT Licensed
  */
 
-'use strict';
-
 /**
  * Module dependencies.
  */
 
-var CleanCSS = require('clean-css');
-var utils = require('../utils');
+import crass from 'crass';
+import { utils } from '../utils';
 
 /**
- * Expose `compressCleanCSS()`.
- */
-
-module.exports = compressCleanCSS;
-
-/**
- * Run clean-css.
+ * Run crass.
  *
  * @param {Object} settings
  * @param {String} content
  * @param {Function} callback
  */
 
-function compressCleanCSS(settings, content, callback) {
-  var contentMinified = new CleanCSS(settings.options).minify(content).styles;
+const compressCrass = (settings, content, callback) => {
+  const contentMinified = crass
+    .parse(content)
+    .optimize()
+    .toString();
   utils.writeFile(settings.output, contentMinified);
   if (callback) {
     return callback(null, contentMinified);
   }
   return contentMinified;
-}
+};
+
+/**
+ * Expose `compressCrass()`.
+ */
+
+export { compressCrass };

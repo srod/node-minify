@@ -4,16 +4,15 @@
  * MIT Licensed
  */
 
-'use strict';
-
 /**
  * Module dependencies.
  */
 
-var gcc = require('google-closure-compiler-js');
-var utils = require('../utils');
+import gcc from 'google-closure-compiler-js';
+import { utils } from '../utils';
+
 // the allowed flags, taken from https://github.com/google/closure-compiler-js
-var allowedFlags = [
+const allowedFlags = [
   'angularPass',
   'applyInputSourceMaps',
   'assumeFunctionWrapper',
@@ -40,12 +39,6 @@ var allowedFlags = [
 ];
 
 /**
- * Expose `compressGCCJS()`.
- */
-
-module.exports = compressGCCJS;
-
-/**
  * Run Google Closure Compiler.
  *
  * @param {Object} settings
@@ -53,10 +46,10 @@ module.exports = compressGCCJS;
  * @param {Function} callback
  */
 
-function compressGCCJS(settings, content, callback) {
-  var flags = { jsCode: [{ src: content }] };
+const compressGCCJS = (settings, content, callback) => {
+  let flags = { jsCode: [{ src: content }] };
   flags = applyOptions(flags, settings.options);
-  var contentMinified = gcc.compile(flags);
+  const contentMinified = gcc.compile(flags);
   utils.writeFile(settings.output, contentMinified.compiledCode);
 
   /**
@@ -67,7 +60,7 @@ function compressGCCJS(settings, content, callback) {
    */
 
   if (settings.options.createSourceMap) {
-    var sourceMapOutput =
+    const sourceMapOutput =
       typeof settings.options.createSourceMap === 'boolean'
         ? settings.output + '.map'
         : settings.options.createSourceMap;
@@ -78,7 +71,7 @@ function compressGCCJS(settings, content, callback) {
     return callback(null, contentMinified.compiledCode);
   }
   return contentMinified.compiledCode;
-}
+};
 
 /**
  * Adds any valid options passed in the options parameters to the flags parameter and returns the flags object.
@@ -87,16 +80,18 @@ function compressGCCJS(settings, content, callback) {
  * @returns {Object} flags
  */
 
-function applyOptions(flags, options) {
+const applyOptions = (flags, options) => {
   if (!options || Object.keys(options).length === 0) {
     return flags;
   }
   Object.keys(options)
-    .filter(function(option) {
-      return allowedFlags.indexOf(option) > -1;
-    })
-    .forEach(function(option) {
-      return (flags[option] = options[option]);
-    });
+    .filter(option => allowedFlags.indexOf(option) > -1)
+    .forEach(option => (flags[option] = options[option]));
   return flags;
-}
+};
+
+/**
+ * Expose `compressGCCJS()`.
+ */
+
+export { compressGCCJS };
