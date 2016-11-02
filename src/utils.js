@@ -4,21 +4,15 @@
  * MIT Licensed
  */
 
-'use strict';
-
 /**
  * Module dependencies.
  */
 
-var fs = require('fs');
-var nodeVersion = require('node-version');
-var gzipSize = require('gzip-size');
+import fs from 'fs';
+import nodeVersion from 'node-version';
+import gzipSize from 'gzip-size';
 
-/**
- * Expose `utils`.
- */
-
-var utils = (module.exports = {});
+const utils = {};
 
 /**
  * Read content from file.
@@ -27,9 +21,7 @@ var utils = (module.exports = {});
  * @returns {String}
  */
 
-utils.readFile = function readFile(file) {
-  return fs.readFileSync(file, 'utf8');
-};
+utils.readFile = file => fs.readFileSync(file, 'utf8');
 
 /**
  * Write content into file.
@@ -39,7 +31,7 @@ utils.readFile = function readFile(file) {
  * @returns {String}
  */
 
-utils.writeFile = function writeFile(file, content) {
+utils.writeFile = (file, content) => {
   fs.writeFileSync(file, content, 'utf8');
   return content;
 };
@@ -51,10 +43,10 @@ utils.writeFile = function writeFile(file, content) {
  * @returns {Array}
  */
 
-utils.buildArgs = function buildArgs(options) {
-  var args = [];
+utils.buildArgs = options => {
+  const args = [];
 
-  Object.keys(options).forEach(function(key) {
+  Object.keys(options).forEach(key => {
     if (options[key] && options[key] !== false) {
       args.push('--' + key);
     }
@@ -74,9 +66,7 @@ utils.buildArgs = function buildArgs(options) {
  * @returns {Object}
  */
 
-utils.clone = function clone(obj) {
-  return JSON.parse(JSON.stringify(obj));
-};
+utils.clone = obj => JSON.parse(JSON.stringify(obj));
 
 /**
  * Check in node is higher or equal to 4.
@@ -84,9 +74,7 @@ utils.clone = function clone(obj) {
  * @returns {Boolean}
  */
 
-utils.isNodeV4AndHigher = function isNodeV4AndHigher() {
-  return parseInt(nodeVersion.major, 10) >= 4;
-};
+utils.isNodeV4AndHigher = () => parseInt(nodeVersion.major, 10) >= 4;
 
 /**
  * Get the file size in bytes.
@@ -94,9 +82,9 @@ utils.isNodeV4AndHigher = function isNodeV4AndHigher() {
  * @returns {String}
  */
 
-utils.getFilesizeInBytes = function(file) {
-  var stats = fs.statSync(file);
-  var fileSizeInBytes = stats.size;
+utils.getFilesizeInBytes = file => {
+  const stats = fs.statSync(file);
+  const fileSizeInBytes = stats.size;
   return utils.prettyBytes(fileSizeInBytes);
 };
 
@@ -106,10 +94,10 @@ utils.getFilesizeInBytes = function(file) {
  * @returns {Promise.<String>}
  */
 
-utils.getFilesizeGzippedInBytes = function(file) {
-  return new Promise(function(resolve) {
-    var source = fs.createReadStream(file);
-    source.pipe(gzipSize.stream()).on('gzip-size', function(size) {
+utils.getFilesizeGzippedInBytes = file => {
+  return new Promise(resolve => {
+    const source = fs.createReadStream(file);
+    source.pipe(gzipSize.stream()).on('gzip-size', size => {
       resolve(utils.prettyBytes(size));
     });
   });
@@ -122,14 +110,14 @@ utils.getFilesizeGzippedInBytes = function(file) {
  * @returns {String}
  */
 
-utils.prettyBytes = function(num) {
-  var UNITS = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+utils.prettyBytes = num => {
+  const UNITS = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
   if (!Number.isFinite(num)) {
-    throw new TypeError('Expected a finite number, got ' + typeof num + ': ' + num);
+    throw new TypeError(`Expected a finite number, got ${typeof num}: ${num}`);
   }
 
-  var neg = num < 0;
+  const neg = num < 0;
 
   if (neg) {
     num = -num;
@@ -139,9 +127,15 @@ utils.prettyBytes = function(num) {
     return (neg ? '-' : '') + num + ' B';
   }
 
-  var exponent = Math.min(Math.floor(Math.log(num) / Math.log(1000)), UNITS.length - 1);
-  var numStr = Number((num / Math.pow(1000, exponent)).toPrecision(3));
-  var unit = UNITS[exponent];
+  const exponent = Math.min(Math.floor(Math.log(num) / Math.log(1000)), UNITS.length - 1);
+  const numStr = Number((num / Math.pow(1000, exponent)).toPrecision(3));
+  const unit = UNITS[exponent];
 
   return (neg ? '-' : '') + numStr + ' ' + unit;
 };
+
+/**
+ * Expose `utils`.
+ */
+
+export { utils };

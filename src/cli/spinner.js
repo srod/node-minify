@@ -4,36 +4,32 @@
  * MIT Licensed
  */
 
-'use strict';
-
 /**
  * Module dependencies.
  */
 
-var chalk = require('chalk');
-var ora = require('ora');
+import chalk from 'chalk';
+import ora from 'ora';
+
+const spinner = ora();
+
+const start = compressor => {
+  spinner.text = 'Compressing file(s) with ' + chalk.green(compressor) + '...';
+  spinner.start();
+};
+
+const stop = compressor => {
+  spinner.text = 'File(s) compressed successfully with ' + chalk.green(compressor);
+  spinner.succeed();
+};
+
+const error = compressor => {
+  spinner.text = 'Error - file(s) not compressed with ' + chalk.red(compressor);
+  spinner.fail();
+};
 
 /**
  * Expose `start() and stop()`.
  */
 
-module.exports.start = start;
-module.exports.stop = stop;
-module.exports.error = error;
-
-var spinner = ora();
-
-function start(compressor) {
-  spinner.text = 'Compressing file(s) with ' + chalk.green(compressor) + '...';
-  spinner.start();
-}
-
-function stop(compressor) {
-  spinner.text = 'File(s) compressed successfully with ' + chalk.green(compressor);
-  spinner.succeed();
-}
-
-function error(compressor) {
-  spinner.text = 'Error - file(s) not compressed with ' + chalk.red(compressor);
-  spinner.fail();
-}
+export { start as spinnerStart, stop as spinnerStop, error as spinnerError };

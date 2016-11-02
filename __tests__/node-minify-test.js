@@ -4,37 +4,35 @@
  * MIT Licensed
  */
 
-'use strict';
-
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
-var childProcess = require('child_process');
-var mkdirp = require('mkdirp');
-var nodeMinify = require('../lib/node-minify');
+import childProcess from 'child_process';
+import mkdirp from 'mkdirp';
+import { minify } from '../src/node-minify';
 
-var oneFile = __dirname + '/../examples/public/js/sample.js';
-var filesArray = [__dirname + '/../examples/public/js/sample.js', __dirname + '/../examples/public/js/sample2.js'];
-var filesArrayWithWildcards = ['sample.js', 'sample2.js', '**/*.js'];
-var filesArrayWithWildcards2 = [
+const oneFile = __dirname + '/../examples/public/js/sample.js';
+const filesArray = [__dirname + '/../examples/public/js/sample.js', __dirname + '/../examples/public/js/sample2.js'];
+const filesArrayWithWildcards = ['sample.js', 'sample2.js', '**/*.js'];
+const filesArrayWithWildcards2 = [
   __dirname + '/../examples/public/js/sample.js',
   __dirname + '/../examples/public/js/sample2.js',
   __dirname + '/../examples/public/js/**/*.js'
 ];
-var fileJSOut = __dirname + '/../examples/public/dist/sample.js';
-var fileCSS = __dirname + '/../examples/public/css/sample.css';
-var fileCSSArray = [
+const fileJSOut = __dirname + '/../examples/public/dist/sample.js';
+const fileCSS = __dirname + '/../examples/public/css/sample.css';
+const fileCSSArray = [
   __dirname + '/../examples/public/css/sample.css',
   __dirname + '/../examples/public/css/sample2.css'
 ];
-var fileCSSArrayWithWildcards = ['sample.css', 'sample2.css', '/**/*.css'];
-var fileCSSArrayWithWildcards2 = [
+const fileCSSArrayWithWildcards = ['sample.css', 'sample2.css', '/**/*.css'];
+const fileCSSArrayWithWildcards2 = [
   __dirname + '/../examples/public/css/sample.css',
   __dirname + '/../examples/public/css/sample2.css',
   __dirname + '/**/*.css'
 ];
-var fileCSSOut = __dirname + '/../examples/public/dist/sample.css';
+const fileCSSOut = __dirname + '/../examples/public/dist/sample.css';
 
-var tests = {
+const tests = {
   concat: [
     {
       it: 'should concat javascript and no compress and an array of file',
@@ -406,7 +404,7 @@ var tests = {
   ]
 };
 
-var runOneTest = function(options, compressor, sync) {
+const runOneTest = (options, compressor, sync) => {
   options = JSON.parse(JSON.stringify(options));
 
   options.minify.compressor = options.minify.compressor.replace('{compressor}', compressor);
@@ -416,79 +414,79 @@ var runOneTest = function(options, compressor, sync) {
     options.minify.sync = true;
   }
 
-  test(options.it.replace('{compressor}', compressor), function() {
-    return new Promise(function(resolve) {
-      options.minify.callback = function(err, min) {
+  test(options.it.replace('{compressor}', compressor), () => {
+    return new Promise(resolve => {
+      options.minify.callback = (err, min) => {
         resolve(err, min);
       };
 
-      nodeMinify.minify(options.minify);
-    }).then(function(err, min) {
+      minify(options.minify);
+    }).then((err, min) => {
       expect(err).toBeNull();
       expect(min).not.toBeNull();
     });
   });
 };
 
-describe('node-minify', function() {
+describe('node-minify', () => {
   mkdirp('/tmp/');
 
-  describe('Fake binary', function() {
-    test('should throw an error if binary does not exist', function() {
-      var options = {};
+  describe('Fake binary', () => {
+    test('should throw an error if binary does not exist', () => {
+      const options = {};
       options.minify = {
         compressor: 'fake',
         input: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut
       };
 
-      return nodeMinify.minify(options.minify).catch(function(err) {
+      return minify(options.minify).catch(err => {
         return expect(err.toString()).toEqual('Error: Type "fake" does not exist');
       });
     });
   });
 
-  describe('No mandatories', function() {
-    test('should throw an error if no compressor', function() {
-      var options = {};
+  describe('No mandatories', () => {
+    test('should throw an error if no compressor', () => {
+      const options = {};
       options.minify = {
         input: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut
       };
 
-      return nodeMinify.minify(options.minify).catch(function(err) {
+      return minify(options.minify).catch(err => {
         return expect(err.toString()).toEqual('Error: compressor is mandatory.');
       });
     });
 
-    test('should throw an error if no input', function() {
-      var options = {};
+    test('should throw an error if no input', () => {
+      const options = {};
       options.minify = {
         compressor: 'no-compress',
         output: fileJSOut
       };
 
-      return nodeMinify.minify(options.minify).catch(function(err) {
+      return minify(options.minify).catch(err => {
         return expect(err.toString()).toEqual('Error: input is mandatory.');
       });
     });
 
-    test('should throw an error if no output', function() {
-      var options = {};
+    test('should throw an error if no output', () => {
+      const options = {};
       options.minify = {
         compressor: 'no-compress',
         input: __dirname + '/../examples/public/js/**/*.js'
       };
 
-      return nodeMinify.minify(options.minify).catch(function(err) {
+      return minify(options.minify).catch(err => {
         return expect(err.toString()).toEqual('Error: output is mandatory.');
       });
     });
   });
 
-  describe('Create errors', function() {
-    test('should callback an error if gcc with bad options', function() {
-      var options = {};
+  describe('Create errors', () => {
+    test('should callback an error if gcc with bad options', () => {
+      const options = {};
       options.minify = {
         compressor: 'gcc-java',
         input: oneFile,
@@ -496,18 +494,18 @@ describe('node-minify', function() {
         options: {
           fake: true
         },
-        callback: function() {}
+        callback: () => {}
       };
-      var spy = jest.spyOn(options.minify, 'callback');
+      const spy = jest.spyOn(options.minify, 'callback');
 
-      return nodeMinify.minify(options.minify).catch(function(err) {
+      return minify(options.minify).catch(err => {
         expect(spy).toHaveBeenCalled();
         return expect(err.toString()).toMatch('"--fake" is not a valid option');
       });
     });
 
-    test('should callback an error if gcc with bad options and sync', function() {
-      var options = {};
+    test('should callback an error if gcc with bad options and sync', () => {
+      const options = {};
       options.minify = {
         compressor: 'gcc-java',
         input: oneFile,
@@ -518,13 +516,13 @@ describe('node-minify', function() {
         }
       };
 
-      return nodeMinify.minify(options.minify).catch(function(err) {
+      return minify(options.minify).catch(err => {
         return expect(err.toString()).toMatch('"--fake" is not a valid option');
       });
     });
 
-    test('should callback an error if yui with bad options', function() {
-      var options = {};
+    test('should callback an error if yui with bad options', () => {
+      const options = {};
       options.minify = {
         compressor: 'yui-js',
         input: oneFile,
@@ -534,13 +532,13 @@ describe('node-minify', function() {
         }
       };
 
-      return nodeMinify.minify(options.minify).catch(function(err) {
+      return minify(options.minify).catch(err => {
         return expect(err.toString()).toMatch('Usage: java -jar');
       });
     });
 
-    test('should callback an error if yui with bad options and sync', function() {
-      var options = {};
+    test('should callback an error if yui with bad options and sync', () => {
+      const options = {};
       options.minify = {
         compressor: 'yui-js',
         input: oneFile,
@@ -551,18 +549,18 @@ describe('node-minify', function() {
         }
       };
 
-      return nodeMinify.minify(options.minify).catch(function(err) {
+      return minify(options.minify).catch(err => {
         return expect(err.toString()).toMatch('Usage: java -jar');
       });
     });
   });
 
-  describe('Create sync errors', function() {
-    beforeEach(function() {
+  describe('Create sync errors', () => {
+    beforeEach(() => {
       spyOn(childProcess, 'spawnSync').and.throwError('UnsupportedClassVersionError');
     });
-    test('should callback an error on spawnSync', function() {
-      var options = {};
+    test('should callback an error on spawnSync', () => {
+      const options = {};
       options.minify = {
         compressor: 'gcc-java',
         input: oneFile,
@@ -570,7 +568,7 @@ describe('node-minify', function() {
         sync: true
       };
 
-      return nodeMinify.minify(options.minify).catch(function(err) {
+      return minify(options.minify).catch(err => {
         return expect(err.toString()).toEqual(
           'Latest Google Closure Compiler requires Java >= 1.7, please' + ' update Java or use gcc-legacy'
         );
@@ -578,156 +576,96 @@ describe('node-minify', function() {
     });
   });
 
-  describe('Create async errors', function() {
-    beforeEach(function() {
+  describe('Create async errors', () => {
+    beforeEach(() => {
       spyOn(childProcess, 'spawn').and.throwError('error manual test');
     });
-    test('should callback an error on spawn', function() {
-      var options = {};
+    test('should callback an error on spawn', () => {
+      const options = {};
       options.minify = {
         compressor: 'gcc-java',
         input: oneFile,
         output: fileJSOut,
         sync: false,
-        callback: function() {}
+        callback: () => {}
       };
-      var spy = jest.spyOn(options.minify, 'callback');
+      const spy = jest.spyOn(options.minify, 'callback');
 
-      return nodeMinify.minify(options.minify).catch(function(err) {
+      return minify(options.minify).catch(err => {
         expect(spy).toHaveBeenCalled();
         return expect(err.toString()).toEqual('Error: error manual test');
       });
     });
   });
 
-  describe('Deprecated', function() {
-    test('should show a deprecated message', function(done) {
-      var options = {};
-      options.minify = {
-        compressor: 'uglifyjs',
-        input: __dirname + '/../examples/public/js/**/*.js',
-        output: fileJSOut
-      };
-
-      options.minify.callback = function(err, min) {
-        expect(err).toBeNull();
-        expect(min).not.toBeNull();
-        done();
-      };
-
-      new nodeMinify.minify(options.minify);
-    });
-
-    test('should show a deprecated message for babili', function(done) {
-      var options = {};
-      options.minify = {
-        compressor: 'babili',
-        input: __dirname + '/../examples/public/js/**/*.js',
-        output: fileJSOut
-      };
-
-      options.minify.callback = function(err, min) {
-        expect(err).toBeNull();
-        expect(min).not.toBeNull();
-        done();
-      };
-
-      new nodeMinify.minify(options.minify);
-    });
-
-    test('should show throw on type option', function() {
-      var options = {};
+  describe('Mandatory', () => {
+    test('should show throw on type option', () => {
+      const options = {};
       options.minify = {
         type: 'uglifyjs',
         input: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut,
-        callback: function() {}
+        callback: () => {}
       };
 
-      return nodeMinify.minify(options.minify).catch(function(err) {
+      return minify(options.minify).catch(err => {
         return expect(err.toString()).toEqual('Error: compressor is mandatory.');
-      });
-    });
-
-    test('should show throw on type fileIn', function() {
-      var options = {};
-      options.minify = {
-        compressor: 'uglifyjs',
-        fileIn: __dirname + '/../examples/public/js/**/*.js',
-        output: fileJSOut
-      };
-
-      return nodeMinify.minify(options.minify).catch(function(err) {
-        return expect(err.toString()).toEqual('Error: input is mandatory.');
-      });
-    });
-
-    test('should show throw on type fileOut', function() {
-      var options = {};
-      options.minify = {
-        compressor: 'uglifyjs',
-        input: __dirname + '/../examples/public/js/**/*.js',
-        fileOut: fileJSOut
-      };
-
-      return nodeMinify.minify(options.minify).catch(function(err) {
-        return expect(err.toString()).toEqual('Error: output is mandatory.');
       });
     });
   });
 
-  describe('use_strict', function() {
-    beforeEach(function() {
-      this.originalExecArgv = JSON.parse(JSON.stringify(process.execArgv));
+  describe('use_strict', () => {
+    let originalExecArgv;
+    beforeEach(() => {
+      originalExecArgv = JSON.parse(JSON.stringify(process.execArgv));
       process.execArgv.push('--use_strict');
     });
-    afterEach(function() {
-      process.execArgv = this.originalExecArgv;
+    afterEach(() => {
+      process.execArgv = originalExecArgv;
     });
-    test('should not throw with --use_strict flag', function(done) {
+    test('should not throw with --use_strict flag', done => {
       jest.resetModules();
-      var nodeMinify = require('../lib/node-minify');
-      var options = {};
+      const nodeMinify = require('../src/node-minify').minify;
+      const options = {};
       options.minify = {
         compressor: 'gcc',
         input: __dirname + '/../examples/public/js/sample.js',
         output: fileJSOut
       };
 
-      options.minify.callback = function(err, min) {
+      options.minify.callback = (err, min) => {
         expect(err).toBeNull();
         expect(min).not.toBeNull();
         done();
       };
-
-      new nodeMinify.minify(options.minify);
+      nodeMinify(options.minify);
     });
   });
 
-  describe('Concatenation', function() {
-    tests.concat.forEach(function(o) {
+  describe('Concatenation', () => {
+    tests.concat.forEach(o => {
       runOneTest(o, 'no-compress');
     });
-    tests.concat.forEach(function(o) {
+    tests.concat.forEach(o => {
       runOneTest(o, 'no-compress', true);
     });
   });
 
-  describe('Babel-minify', function() {
-    tests.commonjs.forEach(function(o) {
+  describe('Babel-minify', () => {
+    tests.commonjs.forEach(o => {
       runOneTest(o, 'babel-minify');
     });
-    tests.babelMinify.forEach(function(o) {
+    tests.babelMinify.forEach(o => {
       runOneTest(o, 'babel-minify');
     });
-    tests.commonjs.forEach(function(o) {
+    tests.commonjs.forEach(o => {
       runOneTest(o, 'babel-minify', true);
     });
-    tests.babelMinify.forEach(function(o) {
+    tests.babelMinify.forEach(o => {
       runOneTest(o, 'babel-minify', true);
     });
-    test('should compress with some options', function(done) {
-      var options = {};
+    test('should compress with some options', done => {
+      const options = {};
       options.minify = {
         compressor: 'babel-minify',
         input: __dirname + '/../examples/public/js/**/*.js',
@@ -737,41 +675,41 @@ describe('node-minify', function() {
         }
       };
 
-      options.minify.callback = function(err, min) {
+      options.minify.callback = (err, min) => {
         expect(err).toBeNull();
         expect(min).not.toBeNull();
 
         done();
       };
 
-      nodeMinify.minify(options.minify);
+      minify(options.minify);
     });
   });
 
-  describe('Butternut', function() {
-    tests.commonjs.forEach(function(o) {
+  describe('Butternut', () => {
+    tests.commonjs.forEach(o => {
       runOneTest(o, 'butternut');
     });
-    tests.butternut.forEach(function(o) {
+    tests.butternut.forEach(o => {
       runOneTest(o, 'butternut');
     });
-    tests.commonjs.forEach(function(o) {
+    tests.commonjs.forEach(o => {
       runOneTest(o, 'butternut', true);
     });
-    tests.butternut.forEach(function(o) {
+    tests.butternut.forEach(o => {
       runOneTest(o, 'butternut', true);
     });
   });
 
-  describe('GCC', function() {
-    tests.commonjs.forEach(function(o) {
+  describe('GCC', () => {
+    tests.commonjs.forEach(o => {
       runOneTest(o, 'gcc');
     });
-    tests.commonjs.forEach(function(o) {
+    tests.commonjs.forEach(o => {
       runOneTest(o, 'gcc', true);
     });
-    test('should compress with some options', function(done) {
-      var options = {};
+    test('should compress with some options', done => {
+      const options = {};
       options.minify = {
         compressor: 'gcc',
         input: __dirname + '/../examples/public/js/**/*.js',
@@ -782,26 +720,26 @@ describe('node-minify', function() {
         }
       };
 
-      options.minify.callback = function(err, min) {
+      options.minify.callback = (err, min) => {
         expect(err).toBeNull();
         expect(min).not.toBeNull();
 
         done();
       };
 
-      nodeMinify.minify(options.minify);
+      minify(options.minify);
     });
   });
 
-  describe('GCC Java', function() {
-    tests.commonjs.forEach(function(o) {
+  describe('GCC Java', () => {
+    tests.commonjs.forEach(o => {
       runOneTest(o, 'gcc-java');
     });
-    tests.commonjs.forEach(function(o) {
+    tests.commonjs.forEach(o => {
       runOneTest(o, 'gcc-java', true);
     });
-    test('should compress with some options', function(done) {
-      var options = {};
+    test('should compress with some options', done => {
+      const options = {};
       options.minify = {
         compressor: 'gcc-java',
         input: __dirname + '/../examples/public/js/**/*.js',
@@ -811,26 +749,26 @@ describe('node-minify', function() {
         }
       };
 
-      options.minify.callback = function(err, min) {
+      options.minify.callback = (err, min) => {
         expect(err).toBeNull();
         expect(min).not.toBeNull();
 
         done();
       };
 
-      nodeMinify.minify(options.minify);
+      minify(options.minify);
     });
   });
 
-  describe('GCC Legacy', function() {
-    tests.commonjs.forEach(function(o) {
+  describe('GCC Legacy', () => {
+    tests.commonjs.forEach(o => {
       runOneTest(o, 'gcc-legacy');
     });
-    tests.commonjs.forEach(function(o) {
+    tests.commonjs.forEach(o => {
       runOneTest(o, 'gcc-legacy', true);
     });
-    test('should compress with some options', function(done) {
-      var options = {};
+    test('should compress with some options', done => {
+      const options = {};
       options.minify = {
         compressor: 'gcc-legacy',
         input: __dirname + '/../examples/public/js/**/*.js',
@@ -840,33 +778,33 @@ describe('node-minify', function() {
         }
       };
 
-      options.minify.callback = function(err, min) {
+      options.minify.callback = (err, min) => {
         expect(err).toBeNull();
         expect(min).not.toBeNull();
 
         done();
       };
 
-      nodeMinify.minify(options.minify);
+      minify(options.minify);
     });
   });
 
-  describe('YUI', function() {
-    tests.commonjs.forEach(function(o) {
+  describe('YUI', () => {
+    tests.commonjs.forEach(o => {
       runOneTest(o, 'yui-js');
     });
-    tests.commonjs.forEach(function(o) {
+    tests.commonjs.forEach(o => {
       runOneTest(o, 'yui-js', true);
     });
 
-    tests.commoncss.forEach(function(o) {
+    tests.commoncss.forEach(o => {
       runOneTest(o, 'yui-css');
     });
-    tests.commoncss.forEach(function(o) {
+    tests.commoncss.forEach(o => {
       runOneTest(o, 'yui', true);
     });
-    test('should compress with some options', function(done) {
-      var options = {};
+    test('should compress with some options', done => {
+      const options = {};
       options.minify = {
         compressor: 'yui-js',
         input: __dirname + '/../examples/public/js/**/*.js',
@@ -876,26 +814,26 @@ describe('node-minify', function() {
         }
       };
 
-      options.minify.callback = function(err, min) {
+      options.minify.callback = (err, min) => {
         expect(err).toBeNull();
         expect(min).not.toBeNull();
 
         done();
       };
 
-      nodeMinify.minify(options.minify);
+      minify(options.minify);
     });
   });
 
-  describe('UglifyJS', function() {
-    tests.commonjs.forEach(function(o) {
+  describe('UglifyJS', () => {
+    tests.commonjs.forEach(o => {
       runOneTest(o, 'uglifyjs');
     });
-    tests.commonjs.forEach(function(o) {
+    tests.commonjs.forEach(o => {
       runOneTest(o, 'uglifyjs', true);
     });
-    test('should create a source map', function(done) {
-      var options = {};
+    test('should create a source map', done => {
+      const options = {};
       options.minify = {
         compressor: 'uglifyjs',
         input: __dirname + '/../examples/public/js/**/*.js',
@@ -908,17 +846,17 @@ describe('node-minify', function() {
         }
       };
 
-      options.minify.callback = function(err, min) {
+      options.minify.callback = (err, min) => {
         expect(err).toBeNull();
         expect(min).not.toBeNull();
 
         done();
       };
 
-      nodeMinify.minify(options.minify);
+      minify(options.minify);
     });
-    test('should compress with some options', function(done) {
-      var options = {};
+    test('should compress with some options', done => {
+      const options = {};
       options.minify = {
         compressor: 'uglifyjs',
         input: __dirname + '/../examples/public/js/**/*.js',
@@ -928,40 +866,40 @@ describe('node-minify', function() {
         }
       };
 
-      options.minify.callback = function(err, min) {
+      options.minify.callback = (err, min) => {
         expect(err).toBeNull();
         expect(min).not.toBeNull();
 
         done();
       };
 
-      nodeMinify.minify(options.minify);
+      minify(options.minify);
     });
   });
 
-  describe('Clean-css', function() {
-    tests.commoncss.forEach(function(o) {
+  describe('Clean-css', () => {
+    tests.commoncss.forEach(o => {
       runOneTest(o, 'clean-css');
     });
-    tests.commoncss.forEach(function(o) {
+    tests.commoncss.forEach(o => {
       runOneTest(o, 'clean-css', true);
     });
   });
 
-  describe('CSSO', function() {
-    tests.commoncss.forEach(function(o) {
+  describe('CSSO', () => {
+    tests.commoncss.forEach(o => {
       runOneTest(o, 'csso');
     });
-    tests.commoncss.forEach(function(o) {
+    tests.commoncss.forEach(o => {
       runOneTest(o, 'csso', true);
     });
   });
 
-  describe('Sqwish', function() {
-    tests.commoncss.forEach(function(o) {
+  describe('Sqwish', () => {
+    tests.commoncss.forEach(o => {
       runOneTest(o, 'sqwish');
     });
-    tests.commoncss.forEach(function(o) {
+    tests.commoncss.forEach(o => {
       runOneTest(o, 'sqwish', true);
     });
   });

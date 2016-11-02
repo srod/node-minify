@@ -6,10 +6,10 @@
  * MIT Licensed
  */
 
-var updateNotifier = require('update-notifier');
-var program = require('commander');
-var cli = require('../lib/cli');
-var pkg = require('../package.json');
+const updateNotifier = require('update-notifier');
+const program = require('commander');
+const cli = require('../lib/cli');
+const pkg = require('../package.json');
 
 updateNotifier({ pkg: pkg }).notify();
 
@@ -32,7 +32,7 @@ program.on('--help', function() {
 
 program.parse(process.argv);
 
-var options = program.opts();
+const options = program.opts();
 
 /**
  * Show help if missing mandatory.
@@ -42,7 +42,7 @@ if (!options.compressor || !options.input || !options.output) {
   program.help();
 }
 
-cli(options).catch(function(err) {
+cli.run(options).catch(err => {
   console.error(err);
   process.exit(1);
 });

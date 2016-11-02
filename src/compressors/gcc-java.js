@@ -4,27 +4,19 @@
  * MIT Licensed
  */
 
-'use strict';
-
 /**
  * Module dependencies.
  */
 
-var path = require('path');
-var utils = require('../utils');
-var execCompressor = require('../runner');
+import path from 'path';
+import { utils } from '../utils';
+import { runCommandLine } from '../runner';
 
 /**
  * Module variables.
  */
-var binGcc = path.normalize(__dirname + '/../binaries/google_closure_compiler-v20151216.jar');
-var binGccLegacy = path.normalize(__dirname + '/../binaries/google_closure_compiler-v20131014-legacy-java-1.6.jar');
-
-/**
- * Expose `compressGCC()`.
- */
-
-module.exports = compressGCC;
+const binGcc = path.normalize(__dirname + '/../binaries/google_closure_compiler-v20151216.jar');
+const binGccLegacy = path.normalize(__dirname + '/../binaries/google_closure_compiler-v20131014-legacy-java-1.6.jar');
 
 /**
  * Run Google Closure Compiler.
@@ -35,8 +27,8 @@ module.exports = compressGCC;
  * @param {Function} callback
  */
 
-function compressGCC(settings, content, callback, legacy) {
-  return execCompressor(gccCommand(settings.options, legacy), content, settings, function(err, contentMinified) {
+const compressGCC = (settings, content, callback, legacy) => {
+  return runCommandLine(gccCommand(settings.options, legacy), content, settings, (err, contentMinified) => {
     if (err) {
       return handleErrors(err, callback);
     }
@@ -46,10 +38,10 @@ function compressGCC(settings, content, callback, legacy) {
     }
     return contentMinified;
   });
-}
+};
 
-function handleErrors(err, callback) {
-  var message = null;
+const handleErrors = (err, callback) => {
+  let message = null;
   if (err.message.indexOf('UnsupportedClassVersionError') > -1) {
     message = 'Latest Google Closure Compiler requires Java >= 1.7, please update Java or use gcc-legacy';
   }
@@ -59,13 +51,13 @@ function handleErrors(err, callback) {
   } else {
     throw message || err;
   }
-}
+};
 
 /**
  * Google Closure Compiler command line.
  */
 
-function gccCommand(options, legacy) {
+const gccCommand = (options, legacy) => {
   return [
     '-server',
     '-XX:+TieredCompilation',
@@ -75,4 +67,10 @@ function gccCommand(options, legacy) {
     '--warning_level',
     'QUIET'
   ].concat(utils.buildArgs(options));
-}
+};
+
+/**
+ * Expose `compressGCC()`.
+ */
+
+export { compressGCC };

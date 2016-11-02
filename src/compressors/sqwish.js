@@ -4,34 +4,32 @@
  * MIT Licensed
  */
 
-'use strict';
-
 /**
  * Module dependencies.
  */
 
-var CleanCSS = require('clean-css');
-var utils = require('../utils');
+import sqwish from 'sqwish';
+import { utils } from '../utils';
 
 /**
- * Expose `compressCleanCSS()`.
- */
-
-module.exports = compressCleanCSS;
-
-/**
- * Run clean-css.
+ * Run sqwish.
  *
  * @param {Object} settings
  * @param {String} content
  * @param {Function} callback
  */
 
-function compressCleanCSS(settings, content, callback) {
-  var contentMinified = new CleanCSS(settings.options).minify(content).styles;
+const compressSqwish = (settings, content, callback) => {
+  const contentMinified = sqwish.minify(content, settings.options.strict);
   utils.writeFile(settings.output, contentMinified);
   if (callback) {
     return callback(null, contentMinified);
   }
   return contentMinified;
-}
+};
+
+/**
+ * Expose `compressSqwish()`.
+ */
+
+export { compressSqwish };
