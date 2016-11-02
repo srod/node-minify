@@ -9,7 +9,7 @@
     "url": "http://2clics.net"
   },
   "license": "MIT",
-  "main": "lib/node-minify.js",
+  "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/srod/node-minify.git"
@@ -51,7 +51,7 @@
     "publish-next": "npm publish --tag next",
     "prettier": "prettier",
     "prettier-write": "npm run prettier -- --write",
-    "prettier-project": "npm run prettier-write -- '{lib,__tests__}/**/*.js'"
+    "prettier-project": "npm run prettier-write -- '{bin,lib,__tests__}/**/*.js'"
   },
   "bin": {
     "node-minify": "bin/cli.js"
@@ -66,6 +66,7 @@
     "crass": "0.12.3",
     "csso": "3.5.1",
     "depd": "1.1.2",
+    "esm": "3.0.51",
     "glob": "7.1.2",
     "google-closure-compiler": "20180805.0.0",
     "gzip-size": "5.0.0",
@@ -88,6 +89,11 @@
     "jest": "23.1.0",
     "lint-staged": "7.2.0",
     "prettier": "1.14.2"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
   },
   "jest": {
     "notify": true,
