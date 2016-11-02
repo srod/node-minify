@@ -64,6 +64,7 @@
     "clean-css": "4.1.11",
     "commander": "2.15.1",
     "csso": "3.5.1",
+    "glob": "7.1.2",
     "google-closure-compiler-js": "20180506.0.0",
     "gzip-size": "4.1.0",
     "mkdirp": "0.5.1",
