@@ -11,16 +11,12 @@ environment:
 
 skip_tags: true
 
-platform:
-  - x86
-  - x64
-
 version: "{build}"
 
 build: off
 
 install:
-  - ps: Install-Product node $env:nodejs_version $env:platform
+  - ps: Install-Product node $env:nodejs_version
   - set PATH=%APPDATA%\npm;%PATH%
   - node --version
   - npm --version
