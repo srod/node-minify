@@ -10,6 +10,7 @@ node_js:
   - "stable"
 
 before_install:
+  - if [[ `node -v` == v7* ]]; then npm i -g npm@4; fi
   - "npm config set spin false"
   - "node -v"
   - "npm -v"
