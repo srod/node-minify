@@ -73,7 +73,7 @@ In order to concatenate files, simply pass in an array with the type `no-compres
 ```js
 compressor.minify({
   compressor: 'no-compress',
-  input: input: ['foo.js', 'foo2.js', 'foo3.js'],
+  input: ['foo.js', 'foo2.js', 'foo3.js'],
   output: 'bar.js',
   callback: function (err, min) {}
 });
