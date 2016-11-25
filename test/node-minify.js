@@ -1,6 +1,7 @@
 'use strict';
 
 var childProcess = require('child_process');
+var decache = require('decache');
 var mkdirp = require('mkdirp');
 var sinon = require('sinon');
 var should = require('should');
@@ -550,6 +551,35 @@ describe('node-minify', function() {
         nodeMinify.minify(options.minify);
       }).to.throw();
       done();
+    });
+  });
+
+  describe('use_strict', function() {
+    before(function() {
+      this.originalExecArgv = JSON.parse(JSON.stringify(process.execArgv));
+      process.execArgv.push('--use_strict');
+      decache('../lib/node-minify');
+    });
+    after(function() {
+      process.execArgv = this.originalExecArgv;
+    });
+    it('should not throw with --use_strict flag', function(done) {
+      var nodeMinify = require('../lib/node-minify');
+      var options = {};
+      options.minify = {
+        compressor: 'gcc',
+        input: __dirname + '/../examples/public/js/sample.js',
+        output: fileJSOut
+      };
+
+      options.minify.callback = function(err, min) {
+        should.not.exist(err);
+        should.exist(min);
+
+        done();
+      };
+
+      new nodeMinify.minify(options.minify);
     });
   });
 
