@@ -59,10 +59,10 @@
     "posttest": "npm run clean",
     "clean": "rm -f ./examples/public/dist/*",
     "clean-cov": "npm run clean && rm -Rf ./coverage",
-    "release-patch": "npm version patch -m 'Bump %s'",
-    "release-minor": "npm version minor -m 'Bump %s'",
-    "release-major": "npm version major -m 'Bump %s'",
-    "publish-latest": "git push --tags origin HEAD:master && npm publish",
+    "release-patch": "npm version patch -m 'Bump %s' && git push --tags origin HEAD:develop",
+    "release-minor": "npm version minor -m 'Bump %s' && git push --tags origin HEAD:develop",
+    "release-major": "npm version major -m 'Bump %s' && git push --tags origin HEAD:develop",
+    "publish-latest": "npm publish",
     "publish-beta": "npm publish --tag beta"
   },
   "devDependencies": {
