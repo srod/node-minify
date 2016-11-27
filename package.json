@@ -1,6 +1,6 @@
 {
   "name": "node-minify",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "Javascript / CSS minifier based on Babili / YUI Compressor / Google Closure Compiler / UglifyJS2 / Sqwish / Clean-css / CSSO",
   "homepage": "https://github.com/srod/node-minify",
   "author": {
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "babel-core": "^6.18.0",
-    "babel-preset-babili": "0.0.8",
+    "babel-preset-babili": "0.0.5",
     "bluebird": "^3.4.6",
     "clean-css": "^3.4.19",
     "csso": "^2.3.0",
@@ -59,16 +59,17 @@
     "posttest": "npm run clean",
     "clean": "rm -f ./examples/public/dist/*",
     "clean-cov": "npm run clean && rm -Rf ./coverage",
-    "release-patch": "npm version patch -m 'Bump %s'",
-    "release-minor": "npm version minor -m 'Bump %s'",
-    "release-major": "npm version major -m 'Bump %s'",
-    "publish-latest": "git push --tags origin HEAD:master && npm publish",
+    "release-patch": "npm version patch -m 'Bump %s' && git push --tags origin HEAD:develop",
+    "release-minor": "npm version minor -m 'Bump %s' && git push --tags origin HEAD:develop",
+    "release-major": "npm version major -m 'Bump %s' && git push --tags origin HEAD:develop",
+    "publish-latest": "npm publish",
     "publish-beta": "npm publish --tag beta"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.18.0",
     "chai": "^3.5.0",
     "coveralls": "^2.11.12",
+    "decache": "^4.1.0",
     "eslint": "^3.9.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.1.2",

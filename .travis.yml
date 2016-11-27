@@ -6,9 +6,11 @@ node_js:
   - "0.12"
   - "4"
   - "5"
+  - "6"
   - "stable"
 
 before_install:
+  - if [[ `node -v` == v7* ]]; then npm i -g npm@4; fi
   - "npm config set spin false"
   - "node -v"
   - "npm -v"
