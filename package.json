@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "babel-core": "^6.18.0",
-    "babel-preset-babili": "0.0.8",
+    "babel-preset-babili": "0.0.5",
     "bluebird": "^3.4.6",
     "clean-css": "^3.4.19",
     "csso": "^2.3.0",
