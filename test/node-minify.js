@@ -651,6 +651,26 @@ describe('node-minify', function() {
     tests.commonjs.forEach(function(o) {
       runOneTest(o, 'uglifyjs');
     });
+    it('should create a source map', function(done) {
+      var options = {};
+      options.minify = {
+        compressor: 'uglifyjs',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut,
+        options: {
+          outSourceMap: fileJSOut + '.map'
+        }
+      };
+
+      options.minify.callback = function(err, min) {
+        should.not.exist(err);
+        should.exist(min);
+
+        done();
+      };
+
+      nodeMinify.minify(options.minify);
+    });
   });
 
   describe('Clean-css', function() {
