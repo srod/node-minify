@@ -665,8 +665,8 @@ describe('node-minify', function() {
       };
 
       options.minify.callback = function(err, min) {
-        should.not.exist(err);
-        should.exist(min);
+        expect(err).toBeNull();
+        expect(min).not.toBeNull();
 
         done();
       };
