@@ -1,6 +1,6 @@
 {
   "name": "node-minify",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Javascript / CSS minifier based on Babili / YUI Compressor / Google Closure Compiler / UglifyJS2 / Sqwish / Clean-css / CSSO",
   "homepage": "https://github.com/srod/node-minify",
   "author": {
