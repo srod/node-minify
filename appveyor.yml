@@ -20,7 +20,7 @@ install:
   - set PATH=%APPDATA%\npm;%PATH%
   - node --version
   - npm --version
-  - npm install
+  - appveyor-retry npm install
 
 test_script:
   - cmd: npm run test
