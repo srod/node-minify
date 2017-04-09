@@ -15,23 +15,7 @@
     "url": "https://github.com/srod/node-minify.git"
   },
   "engines": {
-    "node": ">=0.12.0",
-    "iojs": ">=1.0.0"
-  },
-  "dependencies": {
-    "babel-core": "^6.18.0",
-    "babel-preset-babili": "0.0.5",
-    "bluebird": "^3.4.6",
-    "clean-css": "^3.4.19",
-    "csso": "^2.3.0",
-    "depd": "^1.1.0",
-    "glob": "^7.1.1",
-    "google-closure-compiler-js": "^20161024.0.0",
-    "mkdirp": "^0.5.1",
-    "node-version": "^1.0.0",
-    "sqwish": "^0.2.2",
-    "uglify-js": "^2.7.4",
-    "xtend": "^4.0.1"
+    "node": ">=4.0.0"
   },
   "keywords": [
     "compressor",
@@ -59,21 +43,36 @@
     "posttest": "npm run clean",
     "clean": "rm -f ./examples/public/dist/*",
     "clean-cov": "npm run clean && rm -Rf ./coverage",
-    "release-patch": "npm version patch -m 'Bump %s' && git push --tags origin HEAD:develop",
-    "release-minor": "npm version minor -m 'Bump %s' && git push --tags origin HEAD:develop",
-    "release-major": "npm version major -m 'Bump %s' && git push --tags origin HEAD:develop",
+    "release-patch": "npm version patch -m 'Bump %s' && git push --tags origin HEAD:master",
+    "release-minor": "npm version minor -m 'Bump %s' && git push --tags origin HEAD:master",
+    "release-major": "npm version major -m 'Bump %s' && git push --tags origin HEAD:master",
     "publish-latest": "npm publish",
     "publish-beta": "npm publish --tag beta"
   },
+  "dependencies": {
+    "babel-core": "6.22.1",
+    "babel-preset-babili": "0.0.11",
+    "bluebird": "3.4.7",
+    "clean-css": "4.0.6",
+    "csso": "2.3.1",
+    "depd": "1.1.0",
+    "glob": "7.1.1",
+    "google-closure-compiler-js": "20170124.0.0",
+    "mkdirp": "0.5.1",
+    "node-version": "1.0.0",
+    "sqwish": "0.2.2",
+    "uglify-js": "2.7.5",
+    "xtend": "4.0.1"
+  },
   "devDependencies": {
-    "babel-preset-es2015": "^6.18.0",
-    "chai": "^3.5.0",
-    "coveralls": "^2.11.12",
-    "decache": "^4.1.0",
-    "eslint": "^3.9.1",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.1.2",
-    "should": "^11.1.1",
-    "sinon": "^1.17.5"
+    "babel-preset-es2015": "6.24.1",
+    "chai": "3.5.0",
+    "coveralls": "2.13.0",
+    "decache": "4.1.0",
+    "eslint": "3.19.0",
+    "istanbul": "0.4.5",
+    "mocha": "3.2.0",
+    "should": "11.2.1",
+    "sinon": "2.1.0"
   }
 }
