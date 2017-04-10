@@ -66,9 +66,8 @@
   "devDependencies": {
     "babel-preset-es2015": "6.24.1",
     "coveralls": "2.13.0",
-    "decache": "4.1.0",
     "eslint": "3.19.0",
-    "jest": "15.1.1"
+    "jest": "19.0.2"
   },
   "jest": {
     "notify": true,

@@ -4,7 +4,6 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 jest.disableAutomock();
 
 var childProcess = require('child_process');
-//var decache = require('decache');
 var mkdirp = require('mkdirp');
 var nodeMinify = require('../lib/node-minify');
 
@@ -350,7 +349,7 @@ var runOneTest = function(options, compressor, sync) {
     options.minify.sync = true;
   }
 
-  it(options.it.replace('{compressor}', compressor), function() {
+  test(options.it.replace('{compressor}', compressor), function() {
     return new Promise(function(resolve) {
       options.minify.callback = function(err, min) {
         resolve(err, min);
@@ -361,14 +360,6 @@ var runOneTest = function(options, compressor, sync) {
       expect(err).toBeNull();
       expect(min).not.toBeNull();
     });
-
-    /*options.minify.callback = function(err, min) {
-      expect(err).toBeNull();
-      expect(min).not.toBeNull();
-      done();
-    };
-
-    nodeMinify.minify(options.minify);*/
   });
 };
 
@@ -376,7 +367,7 @@ describe('node-minify', function() {
   mkdirp('/tmp/');
 
   describe('Fake binary', function() {
-    it('should throw an error if binary does not exist', function(done) {
+    test('should throw an error if binary does not exist', function(done) {
       var options = {};
       options.minify = {
         compressor: 'fake',
@@ -392,7 +383,7 @@ describe('node-minify', function() {
   });
 
   describe('No mandatories', function() {
-    it('should throw an error if no compressor', function(done) {
+    test('should throw an error if no compressor', function(done) {
       var options = {};
       options.minify = {
         input: __dirname + '/../examples/public/js/!**!/!*.js',
@@ -405,7 +396,7 @@ describe('node-minify', function() {
       done();
     });
 
-    it('should throw an error if no input', function(done) {
+    test('should throw an error if no input', function(done) {
       var options = {};
       options.minify = {
         compressor: 'no-compress',
@@ -418,7 +409,7 @@ describe('node-minify', function() {
       done();
     });
 
-    it('should throw an error if no output', function(done) {
+    test('should throw an error if no output', function(done) {
       var options = {};
       options.minify = {
         compressor: 'no-compress',
@@ -433,7 +424,7 @@ describe('node-minify', function() {
   });
 
   describe('Create errors', function() {
-    it('should callback an error if gcc with bad options', function(done) {
+    test('should callback an error if gcc with bad options', function(done) {
       var options = {};
       options.minify = {
         compressor: 'gcc-java',
@@ -452,7 +443,7 @@ describe('node-minify', function() {
       nodeMinify.minify(options.minify);
     });
 
-    it('should callback an error if yui with bad options', function(done) {
+    test('should callback an error if yui with bad options', function(done) {
       var options = {};
       options.minify = {
         compressor: 'yui-js',
@@ -477,7 +468,7 @@ describe('node-minify', function() {
     beforeEach(function() {
       spyOn(childProcess, 'spawnSync').and.throwError('UnsupportedClassVersionError');
     });
-    it('should callback an error on spawnSync', function(done) {
+    test('should callback an error on spawnSync', function(done) {
       var options = {};
       options.minify = {
         compressor: 'gcc-java',
@@ -496,7 +487,7 @@ describe('node-minify', function() {
   });
 
   describe('Deprecated', function() {
-    it('should show a deprecated message', function(done) {
+    test('should show a deprecated message', function(done) {
       var options = {};
       options.minify = {
         compressor: 'uglifyjs',
@@ -513,7 +504,7 @@ describe('node-minify', function() {
       new nodeMinify.minify(options.minify);
     });
 
-    it('should show throw on type option', function(done) {
+    test('should show throw on type option', function(done) {
       var options = {};
       options.minify = {
         type: 'uglifyjs',
@@ -527,7 +518,7 @@ describe('node-minify', function() {
       done();
     });
 
-    it('should show throw on type fileIn', function(done) {
+    test('should show throw on type fileIn', function(done) {
       var options = {};
       options.minify = {
         compressor: 'uglifyjs',
@@ -541,7 +532,7 @@ describe('node-minify', function() {
       done();
     });
 
-    it('should show throw on type fileOut', function(done) {
+    test('should show throw on type fileOut', function(done) {
       var options = {};
       options.minify = {
         compressor: 'uglifyjs',
@@ -556,16 +547,16 @@ describe('node-minify', function() {
     });
   });
 
-  /*describe('use_strict', function() {
+  describe('use_strict', function() {
     beforeEach(function() {
       this.originalExecArgv = JSON.parse(JSON.stringify(process.execArgv));
       process.execArgv.push('--use_strict');
-      decache('../lib/node-minify');
     });
     afterEach(function() {
       process.execArgv = this.originalExecArgv;
     });
-    it('should not throw with --use_strict flag', function(done) {
+    test('should not throw with --use_strict flag', function(done) {
+      jest.resetModules();
       var nodeMinify = require('../lib/node-minify');
       var options = {};
       options.minify = {
@@ -583,7 +574,7 @@ describe('node-minify', function() {
 
       new nodeMinify.minify(options.minify);
     });
-  });*/
+  });
 
   describe('Concatenation', function() {
     tests.concat.forEach(function(o) {
@@ -653,7 +644,7 @@ describe('node-minify', function() {
     tests.commonjs.forEach(function(o) {
       runOneTest(o, 'uglifyjs');
     });
-    it('should create a source map', function(done) {
+    test('should create a source map', function(done) {
       var options = {};
       options.minify = {
         compressor: 'uglifyjs',
