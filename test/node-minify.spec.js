@@ -386,7 +386,7 @@ describe('node-minify', function() {
     test('should throw an error if no compressor', function(done) {
       var options = {};
       options.minify = {
-        input: __dirname + '/../examples/public/js/!**!/!*.js',
+        input: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut
       };
 
@@ -413,7 +413,7 @@ describe('node-minify', function() {
       var options = {};
       options.minify = {
         compressor: 'no-compress',
-        input: __dirname + '/../examples/public/js/!**/!*.js'
+        input: __dirname + '/../examples/public/js/**/*.js'
       };
 
       expect(function() {
@@ -508,7 +508,7 @@ describe('node-minify', function() {
       var options = {};
       options.minify = {
         type: 'uglifyjs',
-        input: __dirname + '/../examples/public/js/!**!/!*.js',
+        input: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut
       };
 
@@ -522,7 +522,7 @@ describe('node-minify', function() {
       var options = {};
       options.minify = {
         compressor: 'uglifyjs',
-        fileIn: __dirname + '/../examples/public/js/!**!/!*.js',
+        fileIn: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut
       };
 
@@ -536,7 +536,7 @@ describe('node-minify', function() {
       var options = {};
       options.minify = {
         compressor: 'uglifyjs',
-        input: __dirname + '/../examples/public/js/!**/!*.js',
+        input: __dirname + '/../examples/public/js/**/*.js',
         fileOut: fileJSOut
       };
 
