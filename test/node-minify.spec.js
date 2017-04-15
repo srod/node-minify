@@ -1,7 +1,6 @@
 'use strict';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
-jest.disableAutomock();
 
 var childProcess = require('child_process');
 var mkdirp = require('mkdirp');
@@ -367,7 +366,7 @@ describe('node-minify', function() {
   mkdirp('/tmp/');
 
   describe('Fake binary', function() {
-    test('should throw an error if binary does not exist', function(done) {
+    test('should throw an error if binary does not exist', function() {
       var options = {};
       options.minify = {
         compressor: 'fake',
@@ -375,56 +374,56 @@ describe('node-minify', function() {
         output: fileJSOut
       };
 
-      expect(function() {
-        nodeMinify.minify(options.minify);
-      }).toThrowError(/does not exist/);
-      done();
+      return nodeMinify.minify(options.minify)
+      .catch(function(err) {
+        return expect(err.toString()).toEqual('Error: Type "fake" does not exist');
+      });
     });
   });
 
   describe('No mandatories', function() {
-    test('should throw an error if no compressor', function(done) {
+    test('should throw an error if no compressor', function() {
       var options = {};
       options.minify = {
         input: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut
       };
 
-      expect(function() {
-        nodeMinify.minify(options.minify);
-      }).toThrowError(/mandatory/);
-      done();
+      return nodeMinify.minify(options.minify)
+      .catch(function(err) {
+        return expect(err.toString()).toEqual('Error: compressor is mandatory.');
+      });
     });
 
-    test('should throw an error if no input', function(done) {
+    test('should throw an error if no input', function() {
       var options = {};
       options.minify = {
         compressor: 'no-compress',
         output: fileJSOut
       };
 
-      expect(function() {
-        nodeMinify.minify(options.minify);
-      }).toThrowError(/input is mandatory/);
-      done();
+      return nodeMinify.minify(options.minify)
+      .catch(function(err) {
+        return expect(err.toString()).toEqual('Error: input is mandatory.');
+      });
     });
 
-    test('should throw an error if no output', function(done) {
+    test('should throw an error if no output', function() {
       var options = {};
       options.minify = {
         compressor: 'no-compress',
         input: __dirname + '/../examples/public/js/**/*.js'
       };
 
-      expect(function() {
-        nodeMinify.minify(options.minify);
-      }).toThrowError(/output is mandatory/);
-      done();
+      return nodeMinify.minify(options.minify)
+      .catch(function(err) {
+        return expect(err.toString()).toEqual('Error: output is mandatory.');
+      });
     });
   });
 
   describe('Create errors', function() {
-    test('should callback an error if gcc with bad options', function(done) {
+    test('should callback an error if gcc with bad options', function() {
       var options = {};
       options.minify = {
         compressor: 'gcc-java',
@@ -433,17 +432,19 @@ describe('node-minify', function() {
         options: {
           fake: true
         },
-        callback: function(err, min) {
-          expect(err).not.toBeNull();
-          expect(min).toBeUndefined();
-          done();
+        callback: function() {
         }
       };
+      var spy = jest.spyOn(options.minify, 'callback');
 
-      nodeMinify.minify(options.minify);
+      return nodeMinify.minify(options.minify)
+      .catch(function(err) {
+        expect(spy).toHaveBeenCalled();
+        return expect(err.toString()).toMatch('Error: "--fake" is not a valid option');
+      });
     });
 
-    test('should callback an error if yui with bad options', function(done) {
+    test('should callback an error if yui with bad options', function() {
       var options = {};
       options.minify = {
         compressor: 'yui-js',
@@ -453,14 +454,16 @@ describe('node-minify', function() {
         options: {
           fake: true
         },
-        callback: function(err, min) {
-          expect(err).not.toBeNull();
-          expect(min).toBeUndefined();
-          done();
+        callback: function() {
         }
       };
+      var spy = jest.spyOn(options.minify, 'callback');
 
-      nodeMinify.minify(options.minify);
+      return nodeMinify.minify(options.minify)
+      .catch(function(err) {
+        expect(spy).toHaveBeenCalled();
+        return expect(err.toString()).toMatch('Usage: java -jar');
+      });
     });
   });
 
@@ -468,21 +471,24 @@ describe('node-minify', function() {
     beforeEach(function() {
       spyOn(childProcess, 'spawnSync').and.throwError('UnsupportedClassVersionError');
     });
-    test('should callback an error on spawnSync', function(done) {
+    test('should callback an error on spawnSync', function() {
       var options = {};
       options.minify = {
         compressor: 'gcc-java',
         input: oneFile,
         output: fileJSOut,
         sync: true,
-        callback: function(err, min) {
-          expect(err).not.toBeNull();
-          expect(min).toBeUndefined();
-          done();
+        callback: function() {
         }
       };
+      var spy = jest.spyOn(options.minify, 'callback');
 
-      nodeMinify.minify(options.minify);
+      return nodeMinify.minify(options.minify)
+      .catch(function(err) {
+        expect(spy).toHaveBeenCalled();
+        return expect(err.toString()).toEqual('Error: Latest Google Closure Compiler requires Java >= 1.7, please' +
+          ' update Java or use gcc-legacy');
+      });
     });
   });
 
@@ -504,21 +510,23 @@ describe('node-minify', function() {
       new nodeMinify.minify(options.minify);
     });
 
-    test('should show throw on type option', function(done) {
+    test('should show throw on type option', function() {
       var options = {};
       options.minify = {
         type: 'uglifyjs',
         input: __dirname + '/../examples/public/js/**/*.js',
-        output: fileJSOut
+        output: fileJSOut,
+        callback: function() {
+        }
       };
 
-      expect(function() {
-        nodeMinify.minify(options.minify);
-      }).toThrowError(/compressor is mandatory/);
-      done();
+      return nodeMinify.minify(options.minify)
+      .catch(function(err) {
+        return expect(err.toString()).toEqual('Error: compressor is mandatory.');
+      });
     });
 
-    test('should show throw on type fileIn', function(done) {
+    test('should show throw on type fileIn', function() {
       var options = {};
       options.minify = {
         compressor: 'uglifyjs',
@@ -526,13 +534,13 @@ describe('node-minify', function() {
         output: fileJSOut
       };
 
-      expect(function() {
-        nodeMinify.minify(options.minify);
-      }).toThrowError(/input is mandatory/);
-      done();
+      return nodeMinify.minify(options.minify)
+      .catch(function(err) {
+        return expect(err.toString()).toEqual('Error: input is mandatory.');
+      });
     });
 
-    test('should show throw on type fileOut', function(done) {
+    test('should show throw on type fileOut', function() {
       var options = {};
       options.minify = {
         compressor: 'uglifyjs',
@@ -540,10 +548,10 @@ describe('node-minify', function() {
         fileOut: fileJSOut
       };
 
-      expect(function() {
-        nodeMinify.minify(options.minify);
-      }).toThrowError(/output is mandatory/);
-      done();
+      return nodeMinify.minify(options.minify)
+      .catch(function(err) {
+        return expect(err.toString()).toEqual('Error: output is mandatory.');
+      });
     });
   });
 
@@ -568,7 +576,6 @@ describe('node-minify', function() {
       options.minify.callback = function(err, min) {
         expect(err).toBeNull();
         expect(min).not.toBeNull();
-
         done();
       };
 
