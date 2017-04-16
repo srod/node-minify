@@ -9,7 +9,7 @@
     "url": "http://2clics.net"
   },
   "license": "MIT",
-  "main": "index",
+  "main": "lib/node-minify.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/srod/node-minify.git"
@@ -35,7 +35,7 @@
     "babili"
   ],
   "scripts": {
-    "eslint": "eslint index.js lib test || true",
+    "eslint": "eslint lib test || true",
     "pretest": "npm run eslint",
     "test-cov": "npm run pretest && jest --coverage",
     "test": "jest",
