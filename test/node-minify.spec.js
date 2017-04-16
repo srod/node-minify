@@ -565,7 +565,6 @@ describe('node-minify', function() {
     });
     test('should not throw with --use_strict flag', function(done) {
       jest.resetModules();
-      var nodeMinify = require('../lib/node-minify');
       var options = {};
       options.minify = {
         compressor: 'gcc',
