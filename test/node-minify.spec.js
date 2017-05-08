@@ -1,3 +1,9 @@
+/*!
+ * node-minify
+ * Copyright(c) 2011-2017 Rodolphe Stoclin
+ * MIT Licensed
+ */
+
 'use strict';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
