@@ -216,14 +216,12 @@ var tests = {
       }
     },
     {
-      it: 'should compress javascript with {compressor} and a single file with some options',
+      it: 'should compress javascript with {compressor} and a single file with empty options',
       minify: {
         compressor: '{compressor}',
         input: oneFile,
         output: fileJSOut,
-        options: {
-          charset: 'utf8'
-        }
+        options: {}
       }
     },
     {
@@ -602,6 +600,26 @@ describe('node-minify', function() {
     tests.babili.forEach(function(o) {
       runOneTest(o, 'babili', true);
     });
+    test('should compress with some options', function(done) {
+      var options = {};
+      options.minify = {
+        compressor: 'babili',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut,
+        options: {
+          charset: 'utf8'
+        }
+      };
+
+      options.minify.callback = function(err, min) {
+        expect(err).toBeNull();
+        expect(min).not.toBeNull();
+
+        done();
+      };
+
+      nodeMinify.minify(options.minify);
+    });
   });
 
   describe('GCC', function() {
@@ -610,6 +628,26 @@ describe('node-minify', function() {
     });
     tests.commonjs.forEach(function(o) {
       runOneTest(o, 'gcc', true);
+    });
+    test('should compress with some options', function(done) {
+      var options = {};
+      options.minify = {
+        compressor: 'gcc',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut,
+        options: {
+          charset: 'utf8'
+        }
+      };
+
+      options.minify.callback = function(err, min) {
+        expect(err).toBeNull();
+        expect(min).not.toBeNull();
+
+        done();
+      };
+
+      nodeMinify.minify(options.minify);
     });
   });
 
@@ -620,6 +658,26 @@ describe('node-minify', function() {
     tests.commonjs.forEach(function(o) {
       runOneTest(o, 'gcc-java', true);
     });
+    test('should compress with some options', function(done) {
+      var options = {};
+      options.minify = {
+        compressor: 'gcc-java',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut,
+        options: {
+          charset: 'utf8'
+        }
+      };
+
+      options.minify.callback = function(err, min) {
+        expect(err).toBeNull();
+        expect(min).not.toBeNull();
+
+        done();
+      };
+
+      nodeMinify.minify(options.minify);
+    });
   });
 
   describe('GCC Legacy', function() {
@@ -628,6 +686,26 @@ describe('node-minify', function() {
     });
     tests.commonjs.forEach(function(o) {
       runOneTest(o, 'gcc-legacy', true);
+    });
+    test('should compress with some options', function(done) {
+      var options = {};
+      options.minify = {
+        compressor: 'gcc-legacy',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut,
+        options: {
+          charset: 'utf8'
+        }
+      };
+
+      options.minify.callback = function(err, min) {
+        expect(err).toBeNull();
+        expect(min).not.toBeNull();
+
+        done();
+      };
+
+      nodeMinify.minify(options.minify);
     });
   });
 
@@ -645,6 +723,26 @@ describe('node-minify', function() {
     tests.commoncss.forEach(function(o) {
       runOneTest(o, 'yui', true);
     });
+    test('should compress with some options', function(done) {
+      var options = {};
+      options.minify = {
+        compressor: 'yui-js',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut,
+        options: {
+          charset: 'utf8'
+        }
+      };
+
+      options.minify.callback = function(err, min) {
+        expect(err).toBeNull();
+        expect(min).not.toBeNull();
+
+        done();
+      };
+
+      nodeMinify.minify(options.minify);
+    });
   });
 
   describe('UglifyJS', function() {
@@ -658,7 +756,30 @@ describe('node-minify', function() {
         input: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut,
         options: {
-          outSourceMap: fileJSOut + '.map'
+          sourceMap: {
+            filename: fileJSOut + '.map',
+            url: fileJSOut + '.map'
+          }
+        }
+      };
+
+      options.minify.callback = function(err, min) {
+        expect(err).toBeNull();
+        expect(min).not.toBeNull();
+
+        done();
+      };
+
+      nodeMinify.minify(options.minify);
+    });
+    test('should compress with some options', function(done) {
+      var options = {};
+      options.minify = {
+        compressor: 'uglifyjs',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut,
+        options: {
+          mangle: false
         }
       };
 
