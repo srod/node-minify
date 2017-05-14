@@ -2,7 +2,8 @@
 [![NPM Downloads][npm-downloads-image]][npm-url]
 [![Linux Build][travis-image]][travis-url]
 [![Windows Build][appveyor-image]][appveyor-url]
-[![Coverage Status][coveralls-image]][coveralls-url]
+[![Code Climate][codeclimate-image]][codeclimate-url]
+[![Test Coverage][codeclimatecoverage-image]][codeclimatecoverage-url]
 
 [![Dependency Status][dependency-image]][dependency-url]
 [![devDependency Status][devdependency-image]][devdependency-url]
@@ -359,3 +360,7 @@ java -version
 [dependency-url]: https://david-dm.org/srod/node-minify
 [devdependency-image]: https://img.shields.io/david/dev/srod/node-minify.svg?style=flat
 [devdependency-url]: https://david-dm.org/srod/node-minify#info=devDependencies
+[codeclimate-image]: https://codeclimate.com/github/srod/node-minify/badges/gpa.svg
+[codeclimate-url]: https://codeclimate.com/github/srod/node-minify
+[codeclimatecoverage-image]: https://codeclimate.com/github/srod/node-minify/badges/coverage.svg
+[codeclimatecoverage-url]: https://codeclimate.com/github/srod/node-minify/coverage
