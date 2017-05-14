@@ -7,3 +7,6 @@ engines:
 ratings:
   paths:
     - "lib/**.js"
+exclude_paths:
+  - __tests__/**/*
+  - examples/**/*
