@@ -15,6 +15,7 @@ A very light minifier Node.js module.
 Support:
 
 - Babili
+- Butternut
 - YUI Compressor
 - Google Closure Compiler
 - UglifyJS
@@ -158,6 +159,24 @@ compressor.minify({
 
 [More informations](https://github.com/babel/babili)
 
+### Options for Butternut
+
+```js
+compressor.minify({
+  compressor: 'butternut',
+  input: 'foo.js',
+  output: 'bar.js',
+  options: {
+    check: false,
+    allowDangerousEval: false,
+    sourceMap: true
+  },
+  callback: function (err, min) {}
+});
+```
+
+[More informations](https://github.com/Rich-Harris/butternut)
+
 ### Options for YUI Compressor
 
 ```js
@@ -266,8 +285,14 @@ compressor.minify({
 ## Babili
 
   Babili can compress only JavaScript files.
-  
+
   [https://github.com/babel/babili](https://github.com/babel/babili)
+
+## Butternut
+
+  Butternut can compress only JavaScript files.
+
+  [https://github.com/Rich-Harris/butternut](https://github.com/Rich-Harris/butternut)
 
 ## YUI Compressor
 
