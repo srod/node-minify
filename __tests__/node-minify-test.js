@@ -375,6 +375,17 @@ var tests = {
       }
     },
     {
+      it: 'should compress javascript with {compressor} and a single file with option sourceMap',
+      minify: {
+        compressor: '{compressor}',
+        input: oneFile,
+        output: fileJSOut,
+        options: {
+          sourceMap: true
+        }
+      }
+    },
+    {
       it: 'should compress javascript with {compressor} and a single file with option file',
       minify: {
         compressor: '{compressor}',
