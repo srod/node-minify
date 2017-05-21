@@ -1,0 +1,12 @@
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+        - javascript
+ratings:
+  paths:
+    - "lib/**.js"
+exclude_paths:
+  - __tests__/**/*
+  - examples/**/*

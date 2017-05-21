@@ -2,7 +2,8 @@
 [![NPM Downloads][npm-downloads-image]][npm-url]
 [![Linux Build][travis-image]][travis-url]
 [![Windows Build][appveyor-image]][appveyor-url]
-[![Coverage Status][coveralls-image]][coveralls-url]
+[![Code Climate][codeclimate-image]][codeclimate-url]
+[![Test Coverage][codeclimatecoverage-image]][codeclimatecoverage-url]
 
 [![Dependency Status][dependency-image]][dependency-url]
 [![devDependency Status][devdependency-image]][devdependency-url]
@@ -14,6 +15,7 @@ A very light minifier Node.js module.
 Support:
 
 - Babili
+- Butternut
 - YUI Compressor
 - Google Closure Compiler
 - UglifyJS
@@ -157,6 +159,24 @@ compressor.minify({
 
 [More informations](https://github.com/babel/babili)
 
+### Options for Butternut
+
+```js
+compressor.minify({
+  compressor: 'butternut',
+  input: 'foo.js',
+  output: 'bar.js',
+  options: {
+    check: false,
+    allowDangerousEval: false,
+    sourceMap: true
+  },
+  callback: function (err, min) {}
+});
+```
+
+[More informations](https://github.com/Rich-Harris/butternut)
+
 ### Options for YUI Compressor
 
 ```js
@@ -265,8 +285,14 @@ compressor.minify({
 ## Babili
 
   Babili can compress only JavaScript files.
-  
+
   [https://github.com/babel/babili](https://github.com/babel/babili)
+
+## Butternut
+
+  Butternut can compress only JavaScript files.
+
+  [https://github.com/Rich-Harris/butternut](https://github.com/Rich-Harris/butternut)
 
 ## YUI Compressor
 
@@ -359,3 +385,7 @@ java -version
 [dependency-url]: https://david-dm.org/srod/node-minify
 [devdependency-image]: https://img.shields.io/david/dev/srod/node-minify.svg?style=flat
 [devdependency-url]: https://david-dm.org/srod/node-minify#info=devDependencies
+[codeclimate-image]: https://codeclimate.com/github/srod/node-minify/badges/gpa.svg
+[codeclimate-url]: https://codeclimate.com/github/srod/node-minify
+[codeclimatecoverage-image]: https://codeclimate.com/github/srod/node-minify/badges/coverage.svg
+[codeclimatecoverage-url]: https://codeclimate.com/github/srod/node-minify/coverage

@@ -1,7 +1,7 @@
 {
   "name": "node-minify",
   "version": "2.0.5",
-  "description": "Javascript / CSS minifier based on Babili / YUI Compressor / Google Closure Compiler / UglifyJS2 / Sqwish / Clean-css / CSSO",
+  "description": "Javascript / CSS minifier based on Babili / Butternut / YUI Compressor / Google Closure Compiler / UglifyJS2 / Sqwish / Clean-css / CSSO",
   "homepage": "https://github.com/srod/node-minify",
   "author": {
     "name": "Rodolphe Stoclin",
@@ -9,7 +9,7 @@
     "url": "http://2clics.net"
   },
   "license": "MIT",
-  "main": "index",
+  "main": "lib/node-minify.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/srod/node-minify.git"
@@ -32,14 +32,14 @@
     "sqwish",
     "clean-css",
     "csso",
-    "babili"
+    "babili",
+    "butternut"
   ],
   "scripts": {
-    "eslint": "eslint index.js lib test || true",
-    "mocha": "mocha --bail --timeout 60000 --reporter spec || true",
+    "eslint": "eslint lib test || true",
     "pretest": "npm run eslint",
-    "test-cov": "npm run pretest && istanbul cover ./node_modules/mocha/bin/_mocha -- -t 60000 -R spec",
-    "test": "npm run mocha",
+    "test-cov": "npm run pretest && jest --coverage",
+    "test": "jest",
     "posttest": "npm run clean",
     "clean": "rm -f ./examples/public/dist/*",
     "clean-cov": "npm run clean && rm -Rf ./coverage",
@@ -52,27 +52,26 @@
   "dependencies": {
     "babel-core": "6.24.1",
     "babel-preset-babili": "0.0.12",
-    "bluebird": "3.5.0",
-    "clean-css": "4.1.0",
+    "butternut": "0.4.6",
+    "clean-css": "4.1.3",
     "csso": "3.1.1",
     "depd": "1.1.0",
-    "glob": "7.1.1",
+    "glob": "7.1.2",
     "google-closure-compiler-js": "20170423.0.0",
     "mkdirp": "0.5.1",
     "node-version": "1.0.0",
     "sqwish": "0.2.2",
-    "uglify-js": "2.8.23",
+    "uglify-js": "3.0.10",
     "xtend": "4.0.1"
   },
   "devDependencies": {
     "babel-preset-es2015": "6.24.1",
-    "chai": "3.5.0",
-    "coveralls": "2.13.1",
-    "decache": "4.1.0",
     "eslint": "3.19.0",
-    "istanbul": "0.4.5",
-    "mocha": "3.3.0",
-    "should": "11.2.1",
-    "sinon": "2.2.0"
+    "jest": "20.0.3"
+  },
+  "jest": {
+    "notify": true,
+    "verbose": true,
+    "testEnvironment": "node"
   }
 }

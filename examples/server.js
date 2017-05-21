@@ -7,6 +7,17 @@ http.createServer(function(req, res) {
 }).listen(1337, '127.0.0.1');
 
 compressor.minify({
+  compressor: 'butternut',
+  input: 'public/js-es6/**/*.js',
+  output: 'public/js-dist/butternut-es6.js',
+  options: {
+    sourceMap: true
+  }
+}).then(function(min) {
+  // console.log(min);
+});
+
+compressor.minify({
   compressor: 'babili',
   input: 'public/js-es6/**/*.js',
   output: 'public/js-dist/babili-es6.js'

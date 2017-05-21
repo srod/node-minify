@@ -2,21 +2,26 @@ sudo: false
 
 language: node_js
 
+addons:
+  code_climate:
+    repo_token: 77b49f716879b7239f36d85baa44d387aa1e734df0399b53b8bb6e48508c6196
+
 node_js:
-  - "4"
-  - "5"
-  - "6"
-  - "stable"
+  - 4
+  - 5
+  - 6
+  - stable
 
 before_install:
   - if [[ `node -v` == v7* ]]; then npm i -g npm@4; fi
-  - "npm config set spin false"
-  - "node -v"
-  - "npm -v"
+  - npm config set spin false
+  - node -v
+  - npm -v
 
 script:
-  - "npm run test-cov"
+  - npm run test-cov
 
 after_script:
-  - "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
-  - "npm run clean-cov"
+  - npm install codeclimate-test-reporter
+  - codeclimate-test-reporter < coverage/lcov.info
+  - npm run clean-cov

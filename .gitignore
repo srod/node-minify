@@ -2,3 +2,4 @@
 .idea
 ._*
 node_modules
+coverage
