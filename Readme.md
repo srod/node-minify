@@ -390,5 +390,5 @@ java -version
 [codeclimate-url]: https://codeclimate.com/github/srod/node-minify
 [codeclimatecoverage-image]: https://codeclimate.com/github/srod/node-minify/badges/coverage.svg
 [codeclimatecoverage-url]: https://codeclimate.com/github/srod/node-minify/coverage
-[circleci-image]: https://circleci.com/gh/srod/node-minify/tree/master.svg?style=svg
+[circleci-image]: https://circleci.com/gh/srod/node-minify/tree/master.svg?style=shield
 [circleci-url]: https://circleci.com/gh/srod/node-minify/tree/master
