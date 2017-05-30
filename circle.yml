@@ -1,12 +1,12 @@
 machine:
   environment:
     NODE_ENV: test
-  node:
-    version: v7
+
+dependencies:
+  pre:
+    - case $CIRCLE_NODE_INDEX in 0) NODE_VERSION=4 ;; 1) NODE_VERSION=6 ;; 2) NODE_VERSION=8 ;; esac; nvm install $NODE_VERSION && nvm alias default $NODE_VERSION
 
 test:
   override:
-    - npm run test-cov
-    - nvm use 4 && npm run test-cov
-    - nvm use 5 && npm run test-cov
-    - nvm use 6 && npm run test-cov
+    - npm run test-cov:
+        parallel: true
