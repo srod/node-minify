@@ -1,6 +1,13 @@
-sudo: false
+git:
+  depth: 3
 
+sudo: false
 language: node_js
+
+cache:
+  yarn: true
+  directories:
+    - node_modules
 
 addons:
   code_climate:
@@ -11,16 +18,26 @@ node_js:
   - 6
   - 8
 
+env:
+  matrix:
+    - PKG_CMD="npm"
+    - PKG_CMD="yarn"
+
 before_install:
-  - if [[ `node -v` == v7* ]]; then npm i -g npm@4; fi
+  - nvm use $TRAVIS_NODE_VERSION
+  - npm set loglevel error
+  - npm set progress false
   - npm config set spin false
   - node -v
   - npm -v
 
-script:
-  - npm run test-cov
+install:
+  - $PKG_CMD install
 
-after_script:
+script:
+  - $PKG_CMD run test-cov
+
+after_success:
   - npm install codeclimate-test-reporter
   - codeclimate-test-reporter < coverage/lcov.info
   - npm run clean-cov
