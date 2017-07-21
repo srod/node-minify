@@ -8,9 +8,8 @@ addons:
 
 node_js:
   - 4
-  - 5
   - 6
-  - stable
+  - 8
 
 before_install:
   - if [[ `node -v` == v7* ]]; then npm i -g npm@4; fi
