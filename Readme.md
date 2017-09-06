@@ -11,6 +11,8 @@
 
 # Node-minify
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/srod/node-minify.svg)](https://greenkeeper.io/)
+
 A very light minifier Node.js module.
 
 Support:
