@@ -12,9 +12,9 @@ node_js:
   - 8
 
 before_install:
-  - if [[ `node -v` == v7* ]]; then npm i -g npm@4; fi
   - npm config set spin false
-  - yarn global add greenkeeper-lockfile@1
+  - npm install -g npm@5
+  - npm install -g greenkeeper-lockfile@1
   - node -v
   - npm -v
 
