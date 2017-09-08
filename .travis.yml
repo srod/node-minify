@@ -7,9 +7,9 @@ addons:
     repo_token: 77b49f716879b7239f36d85baa44d387aa1e734df0399b53b8bb6e48508c6196
 
 node_js:
-  - 4
-  - 6
   - 8
+  - 6
+  - 4
 
 before_install:
   - npm config set spin false
