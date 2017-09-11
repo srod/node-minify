@@ -58,7 +58,7 @@
     "babel-preset-babili": "0.1.4",
     "butternut": "0.4.6",
     "clean-css": "4.1.8",
-    "csso": "3.1.1",
+    "csso": "3.2.0",
     "depd": "1.1.1",
     "glob": "7.1.2",
     "google-closure-compiler-js": "20170806.0.0",
