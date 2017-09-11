@@ -1022,13 +1022,7 @@ combined-stream@^1.0.5, combined-stream@~1.0.5:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@^2.9.0:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.9.0.tgz#9c99094176e12240cb22d6c5146098400fe0f7d4"
-  dependencies:
-    graceful-readlink ">= 1.0.0"
-
-commander@~2.11.0:
+commander@^2.9.0, commander@~2.11.0:
   version "2.11.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.11.0.tgz#157152fd1e7a6c8d98a5b715cf376df928004563"
 
@@ -1091,17 +1085,18 @@ cryptiles@2.x.x:
   dependencies:
     boom "2.x.x"
 
-css-tree@1.0.0-alpha19:
-  version "1.0.0-alpha19"
-  resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-1.0.0-alpha19.tgz#949aa846c2c15b3979792e8fce05f6b6e3ebcad4"
+css-tree@1.0.0-alpha23:
+  version "1.0.0-alpha23"
+  resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-1.0.0-alpha23.tgz#5129518def61e99931d9a3397c3d6758af2ff0c5"
   dependencies:
+    mdn-data "^1.0.0"
     source-map "^0.5.3"
 
-csso@3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/csso/-/csso-3.1.1.tgz#ab427584486c2e02e180327511b0b02a9179c272"
+csso@3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/csso/-/csso-3.2.0.tgz#b290b9581551904aad45bca8988af17ca0711235"
   dependencies:
-    css-tree "1.0.0-alpha19"
+    css-tree "1.0.0-alpha23"
 
 cssom@0.3.x, "cssom@>= 0.3.2 < 0.4.0":
   version "0.3.2"
@@ -1687,10 +1682,6 @@ google-closure-compiler-js@20170806.0.0:
 graceful-fs@^4.1.11, graceful-fs@^4.1.2:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
-
-"graceful-readlink@>= 1.0.0":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
 growly@^1.3.0:
   version "1.3.0"
@@ -2631,6 +2622,10 @@ makeerror@1.0.x:
   resolved "https://registry.yarnpkg.com/makeerror/-/makeerror-1.0.11.tgz#e01a5c9109f2af79660e4e8b9587790184f5a96c"
   dependencies:
     tmpl "1.0.x"
+
+mdn-data@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-1.0.0.tgz#a69d9da76847b4d5834c1465ea25c0653a1fbf66"
 
 mem@^1.1.0:
   version "1.1.0"
