@@ -1671,9 +1671,9 @@ globby@^5.0.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
-google-closure-compiler-js@20170806.0.0:
-  version "20170806.0.0"
-  resolved "https://registry.yarnpkg.com/google-closure-compiler-js/-/google-closure-compiler-js-20170806.0.0.tgz#e1ac2574ebbfb5d66d538e7d218cb91d0f482f89"
+google-closure-compiler-js@20170910.0.0:
+  version "20170910.0.0"
+  resolved "https://registry.yarnpkg.com/google-closure-compiler-js/-/google-closure-compiler-js-20170910.0.0.tgz#7076054bcf4906b685a8547e493467f5116d5ab8"
   dependencies:
     minimist "^1.2.0"
     vinyl "^2.0.1"
