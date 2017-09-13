@@ -502,7 +502,7 @@ describe('node-minify', function() {
 
       return nodeMinify.minify(options.minify).catch(function(err) {
         expect(spy).toHaveBeenCalled();
-        return expect(err.toString()).toMatch('Error: "--fake" is not a valid option');
+        return expect(err.toString()).toMatch('"--fake" is not a valid option');
       });
     });
 
