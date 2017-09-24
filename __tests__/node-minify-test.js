@@ -13,15 +13,8 @@ var mkdirp = require('mkdirp');
 var nodeMinify = require('../lib/node-minify');
 
 var oneFile = __dirname + '/../examples/public/js/sample.js';
-var filesArray = [
-  __dirname + '/../examples/public/js/sample.js',
-  __dirname + '/../examples/public/js/sample2.js'
-];
-var filesArrayWithWildcards = [
-  'sample.js',
-  'sample2.js',
-  '**/*.js'
-];
+var filesArray = [__dirname + '/../examples/public/js/sample.js', __dirname + '/../examples/public/js/sample2.js'];
+var filesArrayWithWildcards = ['sample.js', 'sample2.js', '**/*.js'];
 var filesArrayWithWildcards2 = [
   __dirname + '/../examples/public/js/sample.js',
   __dirname + '/../examples/public/js/sample2.js',
@@ -33,11 +26,7 @@ var fileCSSArray = [
   __dirname + '/../examples/public/css/sample.css',
   __dirname + '/../examples/public/css/sample2.css'
 ];
-var fileCSSArrayWithWildcards = [
-  'sample.css',
-  'sample2.css',
-  '/**/*.css'
-];
+var fileCSSArrayWithWildcards = ['sample.css', 'sample2.css', '/**/*.css'];
 var fileCSSArrayWithWildcards2 = [
   __dirname + '/../examples/public/css/sample.css',
   __dirname + '/../examples/public/css/sample2.css',
@@ -123,10 +112,7 @@ var tests = {
       it: 'should compress css with {compressor} and an array of file with a custom public folder',
       minify: {
         compressor: '{compressor}',
-        input: [
-          'sample.css',
-          'sample2.css'
-        ],
+        input: ['sample.css', 'sample2.css'],
         output: fileCSSOut,
         publicFolder: __dirname + '/../examples/public/css/'
       }
@@ -175,8 +161,9 @@ var tests = {
       }
     },
     {
-      it: 'should compress css with {compressor} and an array of strings and wildcards path' +
-      ' with a custom public folder',
+      it:
+        'should compress css with {compressor} and an array of strings and wildcards path' +
+        ' with a custom public folder',
       minify: {
         compressor: '{compressor}',
         input: fileCSSArrayWithWildcards,
@@ -242,10 +229,7 @@ var tests = {
       it: 'should compress javascript with {compressor} and an array of file with a custom public folder',
       minify: {
         compressor: '{compressor}',
-        input: [
-          'sample.js',
-          'sample2.js'
-        ],
+        input: ['sample.js', 'sample2.js'],
         output: fileJSOut,
         publicFolder: __dirname + '/../examples/public/js/'
       }
@@ -294,8 +278,9 @@ var tests = {
       }
     },
     {
-      it: 'should compress javascript with {compressor} and an array of strings and wildcards path' +
-      ' with a custom public folder',
+      it:
+        'should compress javascript with {compressor} and an array of strings and wildcards path' +
+        ' with a custom public folder',
       minify: {
         compressor: '{compressor}',
         input: filesArrayWithWildcards,
@@ -457,8 +442,7 @@ describe('node-minify', function() {
         output: fileJSOut
       };
 
-      return nodeMinify.minify(options.minify)
-      .catch(function(err) {
+      return nodeMinify.minify(options.minify).catch(function(err) {
         return expect(err.toString()).toEqual('Error: Type "fake" does not exist');
       });
     });
@@ -472,8 +456,7 @@ describe('node-minify', function() {
         output: fileJSOut
       };
 
-      return nodeMinify.minify(options.minify)
-      .catch(function(err) {
+      return nodeMinify.minify(options.minify).catch(function(err) {
         return expect(err.toString()).toEqual('Error: compressor is mandatory.');
       });
     });
@@ -485,8 +468,7 @@ describe('node-minify', function() {
         output: fileJSOut
       };
 
-      return nodeMinify.minify(options.minify)
-      .catch(function(err) {
+      return nodeMinify.minify(options.minify).catch(function(err) {
         return expect(err.toString()).toEqual('Error: input is mandatory.');
       });
     });
@@ -498,8 +480,7 @@ describe('node-minify', function() {
         input: __dirname + '/../examples/public/js/**/*.js'
       };
 
-      return nodeMinify.minify(options.minify)
-      .catch(function(err) {
+      return nodeMinify.minify(options.minify).catch(function(err) {
         return expect(err.toString()).toEqual('Error: output is mandatory.');
       });
     });
@@ -515,15 +496,13 @@ describe('node-minify', function() {
         options: {
           fake: true
         },
-        callback: function() {
-        }
+        callback: function() {}
       };
       var spy = jest.spyOn(options.minify, 'callback');
 
-      return nodeMinify.minify(options.minify)
-      .catch(function(err) {
+      return nodeMinify.minify(options.minify).catch(function(err) {
         expect(spy).toHaveBeenCalled();
-        return expect(err.toString()).toMatch('Error: "--fake" is not a valid option');
+        return expect(err.toString()).toMatch('"--fake" is not a valid option');
       });
     });
 
@@ -537,13 +516,11 @@ describe('node-minify', function() {
         options: {
           fake: true
         },
-        callback: function() {
-        }
+        callback: function() {}
       };
       var spy = jest.spyOn(options.minify, 'callback');
 
-      return nodeMinify.minify(options.minify)
-      .catch(function(err) {
+      return nodeMinify.minify(options.minify).catch(function(err) {
         expect(spy).toHaveBeenCalled();
         return expect(err.toString()).toMatch('Usage: java -jar');
       });
@@ -561,16 +538,15 @@ describe('node-minify', function() {
         input: oneFile,
         output: fileJSOut,
         sync: true,
-        callback: function() {
-        }
+        callback: function() {}
       };
       var spy = jest.spyOn(options.minify, 'callback');
 
-      return nodeMinify.minify(options.minify)
-      .catch(function(err) {
+      return nodeMinify.minify(options.minify).catch(function(err) {
         expect(spy).toHaveBeenCalled();
-        return expect(err.toString()).toEqual('Error: Latest Google Closure Compiler requires Java >= 1.7, please' +
-          ' update Java or use gcc-legacy');
+        return expect(err.toString()).toEqual(
+          'Error: Latest Google Closure Compiler requires Java >= 1.7, please' + ' update Java or use gcc-legacy'
+        );
       });
     });
   });
@@ -599,12 +575,10 @@ describe('node-minify', function() {
         type: 'uglifyjs',
         input: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut,
-        callback: function() {
-        }
+        callback: function() {}
       };
 
-      return nodeMinify.minify(options.minify)
-      .catch(function(err) {
+      return nodeMinify.minify(options.minify).catch(function(err) {
         return expect(err.toString()).toEqual('Error: compressor is mandatory.');
       });
     });
@@ -617,8 +591,7 @@ describe('node-minify', function() {
         output: fileJSOut
       };
 
-      return nodeMinify.minify(options.minify)
-      .catch(function(err) {
+      return nodeMinify.minify(options.minify).catch(function(err) {
         return expect(err.toString()).toEqual('Error: input is mandatory.');
       });
     });
@@ -631,8 +604,7 @@ describe('node-minify', function() {
         fileOut: fileJSOut
       };
 
-      return nodeMinify.minify(options.minify)
-      .catch(function(err) {
+      return nodeMinify.minify(options.minify).catch(function(err) {
         return expect(err.toString()).toEqual('Error: output is mandatory.');
       });
     });
@@ -736,7 +708,7 @@ describe('node-minify', function() {
         input: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut,
         options: {
-          charset: 'utf8'
+          languageIn: 'ECMASCRIPT5'
         }
       };
 

@@ -5,8 +5,18 @@
     "jest": true,
     "jasmine": true
   },
+  "plugins": [
+    "prettier"
+  ],
   "rules": {
-    "no-console": 0
+    "no-console": 0,
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true,
+        "printWidth": 120
+      }
+    ]
   },
-  "extends": "eslint:recommended"
+  "extends": "prettier"
 }
