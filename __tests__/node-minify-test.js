@@ -708,7 +708,7 @@ describe('node-minify', function() {
         input: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut,
         options: {
-          charset: 'utf8'
+          languageIn: 'ECMASCRIPT5'
         }
       };
 
