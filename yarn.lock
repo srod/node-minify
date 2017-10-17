@@ -1097,9 +1097,9 @@ css-tree@1.0.0-alpha25:
     mdn-data "^1.0.0"
     source-map "^0.5.3"
 
-csso@3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/csso/-/csso-3.3.0.tgz#bb9b777596065feaf8e74705fb24c63a82f74796"
+csso@3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/csso/-/csso-3.3.1.tgz#e069a8f52adcf53685a8a7374256ccbc22c6ce3e"
   dependencies:
     css-tree "1.0.0-alpha25"
 
