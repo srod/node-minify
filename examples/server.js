@@ -30,6 +30,7 @@ compressor
     }
   })
   .then(function(min) {
+    console.log('then promise called');
     // console.log(min);
   });
 
