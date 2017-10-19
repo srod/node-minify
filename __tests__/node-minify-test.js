@@ -515,13 +515,10 @@ describe('node-minify', function() {
         sync: true,
         options: {
           fake: true
-        },
-        callback: function() {}
+        }
       };
-      var spy = jest.spyOn(options.minify, 'callback');
 
       return nodeMinify.minify(options.minify).catch(function(err) {
-        expect(spy).toHaveBeenCalled();
         return expect(err.toString()).toMatch('Usage: java -jar');
       });
     });
@@ -537,15 +534,12 @@ describe('node-minify', function() {
         compressor: 'gcc-java',
         input: oneFile,
         output: fileJSOut,
-        sync: true,
-        callback: function() {}
+        sync: true
       };
-      var spy = jest.spyOn(options.minify, 'callback');
 
       return nodeMinify.minify(options.minify).catch(function(err) {
-        expect(spy).toHaveBeenCalled();
         return expect(err.toString()).toEqual(
-          'Error: Latest Google Closure Compiler requires Java >= 1.7, please' + ' update Java or use gcc-legacy'
+          'Latest Google Closure Compiler requires Java >= 1.7, please' + ' update Java or use gcc-legacy'
         );
       });
     });

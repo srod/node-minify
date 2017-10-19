@@ -1,29 +1,47 @@
 var http = require('http');
 var compressor = require('../lib/node-minify');
 
-http.createServer(function(req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World\n');
-}).listen(1337, '127.0.0.1');
+http
+  .createServer(function(req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello World\n');
+  })
+  .listen(1337, '127.0.0.1');
 
+console.log('sync 1');
 compressor.minify({
-  compressor: 'butternut',
-  input: 'public/js-es6/**/*.js',
-  output: 'public/js-dist/butternut-es6.js',
-  options: {
-    sourceMap: true
+  compressor: 'yui-js',
+  input: ['public/js/sample.js', 'public/js/sample2.js'],
+  output: 'public/js-dist/yui-publicfolder-concat.js',
+  sync: true,
+  callback: function(err, value) {
+    console.log('sync 2', value);
   }
-}).then(function(min) {
-  // console.log(min);
 });
+console.log('sync 3');
 
-compressor.minify({
-  compressor: 'babili',
-  input: 'public/js-es6/**/*.js',
-  output: 'public/js-dist/babili-es6.js'
-}).then(function(min) {
-  //console.log(min);
-});
+compressor
+  .minify({
+    compressor: 'butternut',
+    input: 'public/js-es6/**/*.js',
+    output: 'public/js-dist/butternut-es6.js',
+    options: {
+      sourceMap: true
+    }
+  })
+  .then(function(min) {
+    // console.log(min);
+  });
+
+compressor
+  .minify({
+    compressor: 'babili',
+    input: 'public/js-es6/**/*.js',
+    output: 'public/js-dist/babili-es6.js'
+  })
+  .then(function(min) {
+    //console.log(min);
+  });
 
 compressor.minify({
   compressor: 'gcc',
@@ -83,10 +101,7 @@ compressor.minify({
 
 compressor.minify({
   compressor: 'gcc',
-  input: [
-    'public/js/sample.js',
-    'public/js/sample2.js'
-  ],
+  input: ['public/js/sample.js', 'public/js/sample2.js'],
   output: 'public/js-dist/gcc-concat.js',
   callback: function(err, min) {
     console.log('GCC concat multi files');
@@ -132,10 +147,7 @@ compressor.minify({
 
 compressor.minify({
   compressor: 'uglifyjs',
-  input: [
-    'public/js/sample.js',
-    'public/js/sample2.js'
-  ],
+  input: ['public/js/sample.js', 'public/js/sample2.js'],
   output: 'public/js-dist/uglify-concat.js',
   callback: function(err, min) {
     console.log('Uglifyjs concat multi files');
@@ -146,10 +158,7 @@ compressor.minify({
 
 compressor.minify({
   compressor: 'no-compress',
-  input: [
-    'public/js/sample.js',
-    'public/js/sample2.js'
-  ],
+  input: ['public/js/sample.js', 'public/js/sample2.js'],
   output: 'public/js-dist/no-compress-concat.js',
   callback: function(err, min) {
     console.log('No compress concat');
@@ -161,10 +170,7 @@ compressor.minify({
 // Using Sqwish
 compressor.minify({
   compressor: 'sqwish',
-  input: [
-    'public/css/sample.css',
-    'public/css/sample2.css'
-  ],
+  input: ['public/css/sample.css', 'public/css/sample2.css'],
   output: 'public/css-dist/sqwish-concat.css',
   callback: function(err, min) {
     console.log('Sqwish concat');
@@ -189,10 +195,7 @@ compressor.minify({
 compressor.minify({
   compressor: 'yui-js',
   publicFolder: 'public/js/',
-  input: [
-    'sample.js',
-    'sample2.js'
-  ],
+  input: ['sample.js', 'sample2.js'],
   output: 'public/js-dist/yui-publicfolder-concat.js',
   callback: function(err, min) {
     console.log('YUI JS with publicFolder option and array');
