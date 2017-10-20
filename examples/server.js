@@ -44,6 +44,16 @@ compressor
     //console.log(min);
   });
 
+compressor
+  .minify({
+    compressor: 'babel-minify',
+    input: 'public/js-es6/**/*.js',
+    output: 'public/js-dist/babel-minify-es6.js'
+  })
+  .then(function(min) {
+    //console.log(min);
+  });
+
 compressor.minify({
   compressor: 'gcc',
   input: 'public/js/**/*.js',

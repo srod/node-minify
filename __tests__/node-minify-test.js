@@ -289,7 +289,7 @@ var tests = {
       }
     }
   ],
-  babili: [
+  babelMinify: [
     {
       it: 'should compress javascript with {compressor} and a single file with a babelrc',
       minify: {
@@ -308,7 +308,7 @@ var tests = {
         input: oneFile,
         output: fileJSOut,
         options: {
-          presets: ['es2015']
+          presets: ['env']
         }
       }
     },
@@ -320,7 +320,7 @@ var tests = {
         output: fileJSOut,
         options: {
           babelrc: __dirname + '/../examples/public/.babelrc',
-          presets: ['es2015']
+          presets: ['env']
         }
       }
     }
@@ -596,6 +596,23 @@ describe('node-minify', function() {
       new nodeMinify.minify(options.minify);
     });
 
+    test('should show a deprecated message for babili', function(done) {
+      var options = {};
+      options.minify = {
+        compressor: 'babili',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut
+      };
+
+      options.minify.callback = function(err, min) {
+        expect(err).toBeNull();
+        expect(min).not.toBeNull();
+        done();
+      };
+
+      new nodeMinify.minify(options.minify);
+    });
+
     test('should show throw on type option', function() {
       var options = {};
       options.minify = {
@@ -674,23 +691,23 @@ describe('node-minify', function() {
     });
   });
 
-  describe('Babili', function() {
+  describe('Babel-minify', function() {
     tests.commonjs.forEach(function(o) {
-      runOneTest(o, 'babili');
+      runOneTest(o, 'babel-minify');
     });
-    tests.babili.forEach(function(o) {
-      runOneTest(o, 'babili');
+    tests.babelMinify.forEach(function(o) {
+      runOneTest(o, 'babel-minify');
     });
     tests.commonjs.forEach(function(o) {
-      runOneTest(o, 'babili', true);
+      runOneTest(o, 'babel-minify', true);
     });
-    tests.babili.forEach(function(o) {
-      runOneTest(o, 'babili', true);
+    tests.babelMinify.forEach(function(o) {
+      runOneTest(o, 'babel-minify', true);
     });
     test('should compress with some options', function(done) {
       var options = {};
       options.minify = {
-        compressor: 'babili',
+        compressor: 'babel-minify',
         input: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut,
         options: {
