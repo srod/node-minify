@@ -387,9 +387,9 @@ java -version
 [dependency-url]: https://david-dm.org/srod/node-minify
 [devdependency-image]: https://img.shields.io/david/dev/srod/node-minify.svg?style=flat
 [devdependency-url]: https://david-dm.org/srod/node-minify#info=devDependencies
-[codeclimate-image]: https://codeclimate.com/github/srod/node-minify/badges/gpa.svg
-[codeclimate-url]: https://codeclimate.com/github/srod/node-minify
-[codeclimatecoverage-image]: https://codeclimate.com/github/srod/node-minify/badges/coverage.svg
-[codeclimatecoverage-url]: https://codeclimate.com/github/srod/node-minify/coverage
+[codeclimate-image]: https://api.codeclimate.com/v1/badges/30cd2af0fdc1a50b1121/maintainability
+[codeclimate-url]: https://codeclimate.com/github/srod/node-minify/maintainability
+[codeclimatecoverage-image]: https://api.codeclimate.com/v1/badges/30cd2af0fdc1a50b1121/test_coverage
+[codeclimatecoverage-url]: https://codeclimate.com/github/srod/node-minify/test_coverage
 [circleci-image]: https://circleci.com/gh/srod/node-minify/tree/master.svg?style=shield
 [circleci-url]: https://circleci.com/gh/srod/node-minify/tree/master
