@@ -289,7 +289,7 @@ var tests = {
       }
     }
   ],
-  babili: [
+  babelMinify: [
     {
       it: 'should compress javascript with {compressor} and a single file with a babelrc',
       minify: {
@@ -308,7 +308,7 @@ var tests = {
         input: oneFile,
         output: fileJSOut,
         options: {
-          presets: ['es2015']
+          presets: ['env']
         }
       }
     },
@@ -320,7 +320,7 @@ var tests = {
         output: fileJSOut,
         options: {
           babelrc: __dirname + '/../examples/public/.babelrc',
-          presets: ['es2015']
+          presets: ['env']
         }
       }
     }
@@ -506,7 +506,40 @@ describe('node-minify', function() {
       });
     });
 
+    test('should callback an error if gcc with bad options and sync', function() {
+      var options = {};
+      options.minify = {
+        compressor: 'gcc-java',
+        input: oneFile,
+        output: fileJSOut,
+        sync: true,
+        options: {
+          fake: true
+        }
+      };
+
+      return nodeMinify.minify(options.minify).catch(function(err) {
+        return expect(err.toString()).toMatch('"--fake" is not a valid option');
+      });
+    });
+
     test('should callback an error if yui with bad options', function() {
+      var options = {};
+      options.minify = {
+        compressor: 'yui-js',
+        input: oneFile,
+        output: fileJSOut,
+        options: {
+          fake: true
+        }
+      };
+
+      return nodeMinify.minify(options.minify).catch(function(err) {
+        return expect(err.toString()).toMatch('Usage: java -jar');
+      });
+    });
+
+    test('should callback an error if yui with bad options and sync', function() {
       var options = {};
       options.minify = {
         compressor: 'yui-js',
@@ -515,13 +548,10 @@ describe('node-minify', function() {
         sync: true,
         options: {
           fake: true
-        },
-        callback: function() {}
+        }
       };
-      var spy = jest.spyOn(options.minify, 'callback');
 
       return nodeMinify.minify(options.minify).catch(function(err) {
-        expect(spy).toHaveBeenCalled();
         return expect(err.toString()).toMatch('Usage: java -jar');
       });
     });
@@ -537,15 +567,12 @@ describe('node-minify', function() {
         compressor: 'gcc-java',
         input: oneFile,
         output: fileJSOut,
-        sync: true,
-        callback: function() {}
+        sync: true
       };
-      var spy = jest.spyOn(options.minify, 'callback');
 
       return nodeMinify.minify(options.minify).catch(function(err) {
-        expect(spy).toHaveBeenCalled();
         return expect(err.toString()).toEqual(
-          'Error: Latest Google Closure Compiler requires Java >= 1.7, please' + ' update Java or use gcc-legacy'
+          'Latest Google Closure Compiler requires Java >= 1.7, please' + ' update Java or use gcc-legacy'
         );
       });
     });
@@ -556,6 +583,23 @@ describe('node-minify', function() {
       var options = {};
       options.minify = {
         compressor: 'uglifyjs',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut
+      };
+
+      options.minify.callback = function(err, min) {
+        expect(err).toBeNull();
+        expect(min).not.toBeNull();
+        done();
+      };
+
+      new nodeMinify.minify(options.minify);
+    });
+
+    test('should show a deprecated message for babili', function(done) {
+      var options = {};
+      options.minify = {
+        compressor: 'babili',
         input: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut
       };
@@ -642,25 +686,28 @@ describe('node-minify', function() {
     tests.concat.forEach(function(o) {
       runOneTest(o, 'no-compress');
     });
+    tests.concat.forEach(function(o) {
+      runOneTest(o, 'no-compress', true);
+    });
   });
 
-  describe('Babili', function() {
+  describe('Babel-minify', function() {
     tests.commonjs.forEach(function(o) {
-      runOneTest(o, 'babili');
+      runOneTest(o, 'babel-minify');
     });
-    tests.babili.forEach(function(o) {
-      runOneTest(o, 'babili');
+    tests.babelMinify.forEach(function(o) {
+      runOneTest(o, 'babel-minify');
     });
     tests.commonjs.forEach(function(o) {
-      runOneTest(o, 'babili', true);
+      runOneTest(o, 'babel-minify', true);
     });
-    tests.babili.forEach(function(o) {
-      runOneTest(o, 'babili', true);
+    tests.babelMinify.forEach(function(o) {
+      runOneTest(o, 'babel-minify', true);
     });
     test('should compress with some options', function(done) {
       var options = {};
       options.minify = {
-        compressor: 'babili',
+        compressor: 'babel-minify',
         input: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut,
         options: {
@@ -821,6 +868,9 @@ describe('node-minify', function() {
     tests.commonjs.forEach(function(o) {
       runOneTest(o, 'uglifyjs');
     });
+    tests.commonjs.forEach(function(o) {
+      runOneTest(o, 'uglifyjs', true);
+    });
     test('should create a source map', function(done) {
       var options = {};
       options.minify = {
@@ -870,17 +920,26 @@ describe('node-minify', function() {
     tests.commoncss.forEach(function(o) {
       runOneTest(o, 'clean-css');
     });
+    tests.commoncss.forEach(function(o) {
+      runOneTest(o, 'clean-css', true);
+    });
   });
 
   describe('CSSO', function() {
     tests.commoncss.forEach(function(o) {
       runOneTest(o, 'csso');
     });
+    tests.commoncss.forEach(function(o) {
+      runOneTest(o, 'csso', true);
+    });
   });
 
   describe('Sqwish', function() {
     tests.commoncss.forEach(function(o) {
       runOneTest(o, 'sqwish');
+    });
+    tests.commoncss.forEach(function(o) {
+      runOneTest(o, 'sqwish', true);
     });
   });
 });
