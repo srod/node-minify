@@ -2,9 +2,9 @@ sudo: false
 
 language: node_js
 
-addons:
-  code_climate:
-    repo_token: 77b49f716879b7239f36d85baa44d387aa1e734df0399b53b8bb6e48508c6196
+env:
+  global:
+    - CC_TEST_REPORTER_ID=36090871ed7524206012db9d5d5e3a69ecf78c034d50d3d330b6549bc7c03758
 
 node_js:
   - 8
@@ -18,13 +18,16 @@ before_install:
   - node -v
   - npm -v
 
-before_script: greenkeeper-lockfile-update
+before_script:
+  - greenkeeper-lockfile-update
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 
 script:
   - npm run test-cov
 
 after_script:
-  - npm install codeclimate-test-reporter
-  - codeclimate-test-reporter < coverage/lcov.info
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
   - npm run clean-cov
   - greenkeeper-lockfile-upload
