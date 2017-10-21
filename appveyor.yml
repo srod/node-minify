@@ -1,11 +1,8 @@
-init:
-  - git config --global core.autocrlf input
-
 environment:
   matrix:
-  - nodejs_version: "4"
-  - nodejs_version: "6"
-  - nodejs_version: "8"
+    - node_version: "8"
+    - node_version: "6"
+    - node_version: "4"
 
 skip_tags: true
 
@@ -13,12 +10,21 @@ version: "{build}"
 
 build: off
 
+clone_depth: 50
+
+matrix:
+  fast_finish: true
+
+cache:
+ - node_modules
+ - "%LOCALAPPDATA%/Yarn"
+
 install:
-  - ps: Install-Product node $env:nodejs_version
-  - set PATH=%APPDATA%\npm;%PATH%
+  - ps: Install-Product node $env:node_version
   - node --version
   - npm --version
-  - appveyor-retry npm install
+  - yarn --version
+  - appveyor-retry yarn install
 
 test_script:
-  - cmd: npm run test
+  - cmd: yarn test

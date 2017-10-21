@@ -13,5 +13,5 @@ dependencies:
 
 test:
   override:
-    - yarn test-cov:
+    - yarn test:
         parallel: true
