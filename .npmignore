@@ -10,6 +10,5 @@ __tests__
 .travis.yml
 appveyor.yml
 yarn.lock
-.codeclimate.yml
 .yarnrc
 circle.yml

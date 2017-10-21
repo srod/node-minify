@@ -70,6 +70,7 @@
   },
   "devDependencies": {
     "babel-preset-env": "1.6.1",
+    "codecov": "2.3.1",
     "eslint": "4.9.0",
     "eslint-config-prettier": "2.6.0",
     "eslint-plugin-prettier": "2.3.1",
@@ -81,7 +82,9 @@
   "jest": {
     "notify": true,
     "verbose": true,
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   },
   "lint-staged": {
     "*.js": [
