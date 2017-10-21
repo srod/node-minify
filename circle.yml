@@ -7,7 +7,7 @@ dependencies:
     - curl -o- -L https://yarnpkg.com/install.sh | bash
     - case $CIRCLE_NODE_INDEX in 0) NODE_VERSION=4 ;; 1) NODE_VERSION=6 ;; 2) NODE_VERSION=8 ;; esac; nvm install $NODE_VERSION && nvm alias default $NODE_VERSION
   cache_directories:
-    - ~/.yarn-cache
+    - ~/.cache/yarn
   override:
     - yarn
 
