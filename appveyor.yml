@@ -10,17 +10,18 @@ version: "{build}"
 
 build: off
 
-clone_depth: 50
+clone_depth: 10
 
 matrix:
   fast_finish: true
 
 cache:
  - node_modules
- - "%LOCALAPPDATA%/Yarn"
+ - "%LOCALAPPDATA%\\Yarn"
 
 install:
   - ps: Install-Product node $env:node_version
+  - choco install -i yarn
   - node --version
   - npm --version
   - yarn --version
