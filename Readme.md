@@ -3,8 +3,6 @@
 [![Linux Build][travis-image]][travis-url]
 [![Windows Build][appveyor-image]][appveyor-url]
 [![Circle CI Build][circleci-image]][circleci-url]
-[![Code Climate][codeclimate-image]][codeclimate-url]
-[![Test Coverage][codeclimatecoverage-image]][codeclimatecoverage-url]
 
 [![Dependency Status][dependency-image]][dependency-url]
 [![devDependency Status][devdependency-image]][devdependency-url]
@@ -387,9 +385,5 @@ java -version
 [dependency-url]: https://david-dm.org/srod/node-minify
 [devdependency-image]: https://img.shields.io/david/dev/srod/node-minify.svg?style=flat
 [devdependency-url]: https://david-dm.org/srod/node-minify#info=devDependencies
-[codeclimate-image]: https://api.codeclimate.com/v1/badges/30cd2af0fdc1a50b1121/maintainability
-[codeclimate-url]: https://codeclimate.com/github/srod/node-minify/maintainability
-[codeclimatecoverage-image]: https://api.codeclimate.com/v1/badges/30cd2af0fdc1a50b1121/test_coverage
-[codeclimatecoverage-url]: https://codeclimate.com/github/srod/node-minify/test_coverage
 [circleci-image]: https://circleci.com/gh/srod/node-minify/tree/master.svg?style=shield
 [circleci-url]: https://circleci.com/gh/srod/node-minify/tree/master
