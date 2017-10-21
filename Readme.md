@@ -3,6 +3,7 @@
 [![Linux Build][travis-image]][travis-url]
 [![Windows Build][appveyor-image]][appveyor-url]
 [![Circle CI Build][circleci-image]][circleci-url]
+[![Codecov][codecov-image]][codecov-url]
 
 [![Dependency Status][dependency-image]][dependency-url]
 [![devDependency Status][devdependency-image]][devdependency-url]
@@ -387,3 +388,5 @@ java -version
 [devdependency-url]: https://david-dm.org/srod/node-minify#info=devDependencies
 [circleci-image]: https://circleci.com/gh/srod/node-minify/tree/master.svg?style=shield
 [circleci-url]: https://circleci.com/gh/srod/node-minify/tree/master
+[codecov-image]: https://codecov.io/gh/srod/node-minify/branch/develop/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/srod/node-minify
