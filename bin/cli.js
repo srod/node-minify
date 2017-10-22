@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-// /Users/rodolphe/.nvm/versions/node/v8.3.0/bin/node-minify -c all -i lol.js -o lolo.js
-
 var updateNotifier = require('update-notifier');
 var program = require('commander');
 var cli = require('../lib/cli');
@@ -16,8 +14,6 @@ program
   .option('-o, --output [file]', 'output file path')
   .parse(process.argv);
 
-//console.log(program);
-
 var options = program.opts();
 
 /**
@@ -28,4 +24,6 @@ if (!options.compressor || !options.input || !options.output) {
   program.help();
 }
 
-cli(options);
+cli(options).catch(function(err) {
+  console.error(err);
+});
