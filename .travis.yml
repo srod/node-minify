@@ -1,30 +1,31 @@
+git:
+  depth: 10
 sudo: false
-
 language: node_js
-
-addons:
-  code_climate:
-    repo_token: 77b49f716879b7239f36d85baa44d387aa1e734df0399b53b8bb6e48508c6196
-
+cache:
+  yarn: true
+  directories:
+  - node_modules
 node_js:
   - 8
   - 6
   - 4
 
 before_install:
-  - npm config set spin false
-  - npm install -g npm@5
-  - npm install -g greenkeeper-lockfile@1
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.2.1
+  - export PATH=$HOME/.yarn/bin:$PATH
   - node -v
   - npm -v
+  - yarn -v
+  - yarn global add greenkeeper-lockfile@1
 
-before_script: greenkeeper-lockfile-update
+before_script:
+  - greenkeeper-lockfile-update
 
 script:
-  - npm run test-cov
+  - yarn test-cov
+  - codecov
 
 after_script:
-  - npm install codeclimate-test-reporter
-  - codeclimate-test-reporter < coverage/lcov.info
-  - npm run clean-cov
+  - yarn clean-cov
   - greenkeeper-lockfile-upload

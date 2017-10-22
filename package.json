@@ -65,11 +65,12 @@
     "mkdirp": "0.5.1",
     "node-version": "1.1.0",
     "sqwish": "0.2.2",
-    "uglify-js": "3.1.4",
+    "uglify-js": "3.1.5",
     "xtend": "4.0.1"
   },
   "devDependencies": {
     "babel-preset-env": "1.6.1",
+    "codecov": "2.3.1",
     "eslint": "4.9.0",
     "eslint-config-prettier": "2.6.0",
     "eslint-plugin-prettier": "2.3.1",
@@ -81,7 +82,9 @@
   "jest": {
     "notify": true,
     "verbose": true,
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   },
   "lint-staged": {
     "*.js": [
