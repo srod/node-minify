@@ -21,7 +21,7 @@ cache:
 
 install:
   - ps: Install-Product node $env:node_version
-  - choco install -i yarn
+  - npm install yarn -g
   - node --version
   - npm --version
   - yarn --version
