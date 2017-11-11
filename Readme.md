@@ -204,6 +204,7 @@ compressor.minify({
   input: 'foo.js',
   output: 'bar.js',
   options: {
+    createSourceMap: true,
     compilation_level: 'WHITESPACE_ONLY',
     language: 'ECMASCRIPT6'
     ... // See more information link below

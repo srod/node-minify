@@ -755,7 +755,8 @@ describe('node-minify', function() {
         input: __dirname + '/../examples/public/js/**/*.js',
         output: fileJSOut,
         options: {
-          languageIn: 'ECMASCRIPT5'
+          languageIn: 'ECMASCRIPT5',
+          createSourceMap: true
         }
       };
 
