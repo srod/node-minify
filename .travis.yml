@@ -23,9 +23,8 @@ before_script:
   - greenkeeper-lockfile-update
 
 script:
-  - yarn test-cov
+  - yarn test
   - codecov
 
 after_script:
-  - yarn clean-cov
   - greenkeeper-lockfile-upload
