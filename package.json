@@ -63,7 +63,7 @@
     "mkdirp": "0.5.1",
     "node-version": "1.1.0",
     "sqwish": "0.2.2",
-    "uglify-js": "3.3.2",
+    "uglify-js": "3.3.3",
     "xtend": "4.0.1"
   },
   "devDependencies": {
