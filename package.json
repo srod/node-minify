@@ -59,7 +59,7 @@
     "csso": "3.4.0",
     "depd": "1.1.1",
     "glob": "7.1.2",
-    "google-closure-compiler-js": "20171203.0.0",
+    "google-closure-compiler-js": "20180101.0.0",
     "mkdirp": "0.5.1",
     "node-version": "1.1.0",
     "sqwish": "0.2.2",
