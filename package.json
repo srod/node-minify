@@ -57,7 +57,7 @@
     "butternut": "0.4.6",
     "clean-css": "4.1.9",
     "csso": "3.4.0",
-    "depd": "1.1.1",
+    "depd": "1.1.2",
     "glob": "7.1.2",
     "google-closure-compiler-js": "20180101.0.0",
     "mkdirp": "0.5.1",
