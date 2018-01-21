@@ -72,7 +72,7 @@
     "eslint": "4.16.0",
     "eslint-config-prettier": "2.9.0",
     "eslint-plugin-prettier": "2.5.0",
-    "husky": "0.14.3",
+    "husky": "0.15.0-rc.2",
     "jest": "21.2.1",
     "lint-staged": "6.0.1",
     "prettier": "1.10.0"
