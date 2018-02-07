@@ -53,7 +53,7 @@
   },
   "dependencies": {
     "babel-core": "6.26.0",
-    "babel-preset-minify": "0.2.0",
+    "babel-preset-minify": "0.3.0",
     "butternut": "0.4.6",
     "clean-css": "4.1.9",
     "csso": "3.5.0",
