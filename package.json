@@ -74,7 +74,7 @@
     "eslint-plugin-prettier": "2.6.0",
     "husky": "0.15.0-rc.2",
     "jest": "21.2.1",
-    "lint-staged": "6.1.1",
+    "lint-staged": "7.0.0",
     "prettier": "1.10.0"
   },
   "jest": {
