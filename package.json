@@ -55,7 +55,7 @@
     "babel-core": "6.26.0",
     "babel-preset-minify": "0.3.0",
     "butternut": "0.4.6",
-    "clean-css": "4.1.10",
+    "clean-css": "4.1.11",
     "csso": "3.5.0",
     "depd": "1.1.2",
     "glob": "7.1.2",
