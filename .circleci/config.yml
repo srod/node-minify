@@ -1,0 +1,55 @@
+workflows:
+  version: 2
+  node-multi-build:
+    jobs:
+      - node-v4
+      - node-v6
+      - node-v8
+
+version: 2
+jobs:
+  node-base: &node-base
+    docker:
+      - image: circleci/node:latest
+    working_directory: ~/working_directory
+    steps:
+      - run:
+          name: Versions
+          command: |
+            yarn versions
+            echo "npm: $(npm --version)"
+      - checkout
+      - restore_cache:
+          keys:
+            - v{{ .Environment.CIRCLE_CACHE_VERSION }}-yarn-lock-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "yarn.lock" }}
+            - v{{ .Environment.CIRCLE_CACHE_VERSION }}-yarn-lock-master-{{ .Environment.CIRCLE_JOB }}-{{ checksum "yarn.lock" }}
+            - v{{ .Environment.CIRCLE_CACHE_VERSION }}-yarn-cache-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}
+            - v{{ .Environment.CIRCLE_CACHE_VERSION }}-yarn-cache-master-{{ .Environment.CIRCLE_JOB }}
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - run:
+          name: Test
+          command: yarn test
+      - save_cache:
+          key: v{{ .Environment.CIRCLE_CACHE_VERSION }}-yarn-lock-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+      - save_cache:
+          key: v{{ .Environment.CIRCLE_CACHE_VERSION }}-yarn-cache-{{ .Branch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "yarn.lock" }}
+          paths:
+            - /usr/local/share/.cache/yarn
+            - /root/.cache/yarn
+
+  node-v4:
+    <<: *node-base
+    docker:
+      - image: circleci/node:4-browsers
+  node-v6:
+    <<: *node-base
+    docker:
+      - image: circleci/node:6-browsers
+  node-v8:
+    <<: *node-base
+    docker:
+      - image: circleci/node:8-browsers
