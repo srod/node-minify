@@ -1115,9 +1115,9 @@ commander@^2.11.0, commander@^2.9.0:
   version "2.11.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.11.0.tgz#157152fd1e7a6c8d98a5b715cf376df928004563"
 
-commander@~2.14.1:
-  version "2.14.1"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.14.1.tgz#2235123e37af8ca3c65df45b026dbd357b01b9aa"
+commander@~2.15.0:
+  version "2.15.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.15.0.tgz#ad2a23a1c3b036e392469b8012cec6b33b4c1322"
 
 concat-map@0.0.1:
   version "0.0.1"
@@ -3777,11 +3777,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-uglify-js@3.3.14:
-  version "3.3.14"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.3.14.tgz#d3d84d18722ff342fa96029cca71c67367700079"
+uglify-js@3.3.15:
+  version "3.3.15"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.3.15.tgz#5b8783b6856110d3a03a9b81e07324a3b925f2dd"
   dependencies:
-    commander "~2.14.1"
+    commander "~2.15.0"
     source-map "~0.6.1"
 
 uglify-js@^2.6:
