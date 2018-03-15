@@ -5,6 +5,7 @@ workflows:
       - node-v4
       - node-v6
       - node-v8
+      - node-v9
 
 version: 2
 jobs:
@@ -53,3 +54,7 @@ jobs:
     <<: *node-base
     docker:
       - image: circleci/node:8-browsers
+  node-v9:
+    <<: *node-base
+    docker:
+      - image: circleci/node:9-browsers
