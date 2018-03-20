@@ -1,5 +1,8 @@
+.DS_Store
 .idea
+.vscode
 ._*
+.history
 node_modules
 coverage
 examples
