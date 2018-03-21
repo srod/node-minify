@@ -2831,9 +2831,9 @@ node-pre-gyp@^0.6.36:
     tar "^2.2.1"
     tar-pack "^3.4.0"
 
-node-version@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/node-version/-/node-version-1.1.0.tgz#f437d7ba407e65e2c4eaef8887b1718ba523d4f0"
+node-version@1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/node-version/-/node-version-1.1.2.tgz#692762ac17a85e5ca40140102cb268a55e25d6d1"
 
 nopt@^4.0.1:
   version "4.0.1"
