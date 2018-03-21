@@ -1,6 +1,6 @@
 {
   "name": "node-minify",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "Javascript / CSS minifier based on Babel-minify / Butternut / YUI Compressor / Google Closure Compiler / UglifyJS2 / Sqwish / Clean-css / CSSO",
   "homepage": "https://github.com/srod/node-minify",
   "author": {
