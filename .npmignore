@@ -7,11 +7,14 @@ node_modules
 coverage
 examples
 __tests__
+.circleci
+.editorconfig
 .eslintrc
+.gitignore
 .npmignore
 .npmrc
 .travis.yml
-appveyor.yml
-yarn.lock
 .yarnrc
-circle.yml
+appveyor.yml
+codecov.yml
+yarn.lock
