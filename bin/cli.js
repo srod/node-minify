@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 
+/*!
+ * node-minify
+ * Copyright(c) 2011-2018 Rodolphe Stoclin
+ * MIT Licensed
+ */
+
 var updateNotifier = require('update-notifier');
 var program = require('commander');
 var cli = require('../lib/cli');
