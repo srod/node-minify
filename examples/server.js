@@ -36,7 +36,7 @@ compressor
 
 compressor
   .minify({
-    compressor: 'babili',
+    compressor: 'babel-minify',
     input: 'public/js-es6/**/*.js',
     output: 'public/js-dist/babili-es6.js'
   })
