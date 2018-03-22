@@ -9,20 +9,20 @@
 [![devDependency Status][devdependency-image]][devdependency-url]
 [![Greenkeeper badge](https://badges.greenkeeper.io/srod/node-minify.svg)](https://greenkeeper.io/)
 
-# Node-minify
+# node-minify
 
 A very light minifier Node.js module.
 
 Support:
 
-- Babel-minify
-- Butternut
-- YUI Compressor
-- Google Closure Compiler
-- UglifyJS
-- Clean-css
-- CSSO
-- Sqwish
+* [Babel-minify](#options-for-babel-minify)
+* [Butternut](#options-for-butternut)
+* [YUI Compressor](#options-for-yui-compressor)
+* [Google Closure Compiler](#options-for-google-closure-compiler)
+* [UglifyJS](#options-for-uglifyjs)
+* [Clean-css](#options-for-clean-css)
+* [CSSO](#options-for-csso)
+* [Sqwish](#options-for-sqwish)
 
 It allow you to compress JavaScript and CSS files.
 
@@ -46,7 +46,7 @@ compressor.minify({
   compressor: 'gcc',
   input: 'foo.js',
   output: 'bar.js',
-  callback: function (err, min) {}
+  callback: function(err, min) {}
 });
 
 // Using UglifyJS
@@ -54,7 +54,7 @@ compressor.minify({
   compressor: 'uglifyjs',
   input: './**/*.js',
   output: 'bar.js',
-  callback: function (err, min) {}
+  callback: function(err, min) {}
 });
 
 // Using Promise
@@ -69,6 +69,24 @@ promise.then(function(min) {});
 
 [More examples](https://github.com/srod/node-minify/blob/master/examples/server.js)
 
+## Command line
+
+:tada: New in version 3
+
+You can compress files using the command line.
+
+Usage for one compressor :
+
+```js
+node-minify --compressor babel-minify --input 'sample.js' --output 'output.js'
+```
+
+Usage for all the compressors :
+
+```js
+node-minify --compressor all --input 'sample.js' --output 'output.js'
+```
+
 ## Concatenate Files
 
 In order to concatenate files, simply pass in an array with the type `no-compress`.
@@ -78,7 +96,7 @@ compressor.minify({
   compressor: 'no-compress',
   input: ['foo.js', 'foo2.js', 'foo3.js'],
   output: 'bar.js',
-  callback: function (err, min) {}
+  callback: function(err, min) {}
 });
 ```
 
@@ -89,7 +107,7 @@ compressor.minify({
   compressor: 'gcc',
   input: 'public/**/*.js',
   output: 'bar.js',
-  callback: function (err, min) {}
+  callback: function(err, min) {}
 });
 ```
 
@@ -101,7 +119,7 @@ compressor.minify({
   input: 'foo.js',
   output: 'bar.js',
   sync: true,
-  callback: function (err, min) {}
+  callback: function(err, min) {}
 });
 ```
 
@@ -117,7 +135,7 @@ compressor.minify({
   publicFolder: './public/',
   input: ['foo.js', 'foo2.js'],
   output: 'bar.js',
-  callback: function (err, min) {}
+  callback: function(err, min) {}
 });
 ```
 
@@ -133,7 +151,7 @@ compressor.minify({
   output: 'bar.js',
   sync: true,
   buffer: 1000 * 1024,
-  callback: function (err, min) {}
+  callback: function(err, min) {}
 });
 ```
 
@@ -154,7 +172,7 @@ compressor.minify({
     babelrc: 'public/.babelrc',
     presets: ['env']
   },
-  callback: function (err, min) {}
+  callback: function(err, min) {}
 });
 ```
 
@@ -172,7 +190,7 @@ compressor.minify({
     allowDangerousEval: false,
     sourceMap: true
   },
-  callback: function (err, min) {}
+  callback: function(err, min) {}
 });
 ```
 
@@ -262,7 +280,7 @@ compressor.minify({
   options: {
     restructureOff: true // turns structure minimization off
   },
-  callback: function (err, min) {}
+  callback: function(err, min) {}
 });
 ```
 
@@ -278,7 +296,7 @@ compressor.minify({
   options: {
     strict: true // strict optimizations
   },
-  callback: function (err, min) {}
+  callback: function(err, min) {}
 });
 ```
 
@@ -286,93 +304,94 @@ compressor.minify({
 
 ## Babel-minify
 
-  Babel-minify can compress only JavaScript files.
+Babel-minify can compress only JavaScript files.
 
-  [https://github.com/babel/minify](https://github.com/babel/minify)
+[https://github.com/babel/minify](https://github.com/babel/minify)
 
 ## Butternut
 
-  Butternut can compress only JavaScript files.
+Butternut can compress only JavaScript files.
 
-  [https://github.com/Rich-Harris/butternut](https://github.com/Rich-Harris/butternut)
+[https://github.com/Rich-Harris/butternut](https://github.com/Rich-Harris/butternut)
 
 ## YUI Compressor
 
-  Yahoo Compressor can compress both JavaScript and CSS files.
+Yahoo Compressor can compress both JavaScript and CSS files.
 
-  [http://developer.yahoo.com/yui/compressor/](http://developer.yahoo.com/yui/compressor/)
+[http://developer.yahoo.com/yui/compressor/](http://developer.yahoo.com/yui/compressor/)
 
 ## Google Closure Compiler
 
-  Google Closure Compiler can compress only JavaScript files.
+Google Closure Compiler can compress only JavaScript files.
 
-  It will throw an error if you try with CSS files.
+It will throw an error if you try with CSS files.
 
-  GCC latest version requires Java 1.8
-  You can use the legacy version that use Java 1.6
+GCC latest version requires Java 1.8
+You can use the legacy version that use Java 1.6
 
-  ```js
-  var compressor = require('node-minify');
+```js
+var compressor = require('node-minify');
 
-  // Using Google Closure Compiler legacy version for Java 1.6
-  compressor.minify({
-    compressor: 'gcc-legacy',
-    input: 'foo.js',
-    output: 'bar.js',
-    callback: function (err, min) {}
-  });
-  ```
+// Using Google Closure Compiler legacy version for Java 1.6
+compressor.minify({
+  compressor: 'gcc-legacy',
+  input: 'foo.js',
+  output: 'bar.js',
+  callback: function(err, min) {}
+});
+```
 
-  [https://developers.google.com/closure/compiler/](https://developers.google.com/closure/compiler/)
+[https://developers.google.com/closure/compiler/](https://developers.google.com/closure/compiler/)
 
 ## UglifyJS
 
-  UglifyJS can compress only JavaScript files.
+UglifyJS can compress only JavaScript files.
 
-  It will throw an error if you try with CSS files.
+It will throw an error if you try with CSS files.
 
-  [https://github.com/mishoo/UglifyJS2](https://github.com/mishoo/UglifyJS2)
+[https://github.com/mishoo/UglifyJS2](https://github.com/mishoo/UglifyJS2)
 
 ## Clean-css
 
-  Clean-css can compress only CSS files.
+Clean-css can compress only CSS files.
 
-  [https://github.com/GoalSmashers/clean-css](https://github.com/GoalSmashers/clean-css)
+[https://github.com/GoalSmashers/clean-css](https://github.com/GoalSmashers/clean-css)
 
 ## CSSO
 
-  CSSO can compress only CSS files.
+CSSO can compress only CSS files.
 
-  [https://github.com/css/csso](https://github.com/css/csso)
+[https://github.com/css/csso](https://github.com/css/csso)
 
 ## Sqwish
 
-  Sqwish can compress only CSS files.
+Sqwish can compress only CSS files.
 
-  [https://github.com/ded/sqwish](https://github.com/ded/sqwish)
+[https://github.com/ded/sqwish](https://github.com/ded/sqwish)
 
 ## Warning
 
-  It assumes that you have Java installed on your environment for both GCC and YUI Compressor. To check, run:
+It assumes that you have Java installed on your environment for both GCC and YUI Compressor. To check, run:
 
 ```bash
 java -version
 ```
-  How to install:
 
-  Mac: [https://java.com/en/download/help/mac_install.xml](https://java.com/en/download/help/mac_install.xml)
+How to install:
 
-  Windows: [https://java.com/en/download/help/windows_manual_download.xml](https://java.com/en/download/help/windows_manual_download.xml)
+Mac: [https://java.com/en/download/help/mac_install.xml](https://java.com/en/download/help/mac_install.xml)
 
-  Linux: [https://www.java.com/en/download/help/linux_x64_install.xml](https://www.java.com/en/download/help/linux_x64_install.xml)
+Windows: [https://java.com/en/download/help/windows_manual_download.xml](https://java.com/en/download/help/windows_manual_download.xml)
+
+Linux: [https://www.java.com/en/download/help/linux_x64_install.xml](https://www.java.com/en/download/help/linux_x64_install.xml)
 
 ## Windows support
 
-  Since v0.5.0, a windows support is available for the no-compress option and uglify-js (thanks to pieces029 and benpusherhq)
+Since v0.5.0, a windows support is available for the no-compress option and uglify-js (thanks to pieces029 and benpusherhq)
 
 ## License
 
-  [MIT](LICENSE)
+[MIT](LICENSE)
 
 [npm-version-image]: https://img.shields.io/npm/v/node-minify.svg
 [npm-downloads-image]: https://img.shields.io/npm/dm/node-minify.svg
