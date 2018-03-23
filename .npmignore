@@ -9,7 +9,6 @@ examples
 __tests__
 .circleci
 .editorconfig
-.eslintrc
 .gitignore
 .npmignore
 .npmrc
