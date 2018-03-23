@@ -36,8 +36,6 @@
     "butternut"
   ],
   "scripts": {
-    "eslint": "eslint lib test || true",
-    "pretest": "npm run eslint",
     "test": "jest",
     "posttest": "npm run clean",
     "precommit": "lint-staged",
@@ -48,7 +46,7 @@
     "publish-latest": "npm publish",
     "publish-beta": "npm publish --tag beta",
     "prettier": "prettier",
-    "prettier-write": "npm run prettier -- --single-quote --print-width 120 --write",
+    "prettier-write": "npm run prettier -- --write",
     "prettier-project": "npm run prettier-write -- '{lib,__tests__}/**/*.js'"
   },
   "bin": {
@@ -78,9 +76,6 @@
   "devDependencies": {
     "babel-preset-env": "1.6.1",
     "codecov": "3.0.0",
-    "eslint": "4.19.1",
-    "eslint-config-prettier": "2.9.0",
-    "eslint-plugin-prettier": "2.6.0",
     "husky": "0.15.0-rc.2",
     "jest": "21.2.1",
     "lint-staged": "6.1.1",
@@ -98,5 +93,9 @@
       "npm run prettier-write --",
       "git add"
     ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 120
   }
 }
