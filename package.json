@@ -36,6 +36,8 @@
     "butternut"
   ],
   "scripts": {
+    "eslint": "eslint lib test || true",
+    "pretest": "npm run eslint",
     "test": "jest",
     "posttest": "npm run clean",
     "precommit": "lint-staged",
@@ -76,6 +78,9 @@
   "devDependencies": {
     "babel-preset-env": "1.6.1",
     "codecov": "3.0.0",
+    "eslint": "4.19.1",
+    "eslint-config-prettier": "2.9.0",
+    "eslint-plugin-prettier": "2.6.0",
     "husky": "0.15.0-rc.2",
     "jest": "21.2.1",
     "lint-staged": "6.1.1",
