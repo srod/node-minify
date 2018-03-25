@@ -1,0 +1,13 @@
+{
+  "env": {
+    "node": true
+  },
+  "plugins": ["prettier"],
+  "extends": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error"
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  }
+}
