@@ -64,7 +64,7 @@
     "csso": "3.5.0",
     "depd": "1.1.2",
     "glob": "7.1.2",
-    "google-closure-compiler-js": "20180204.0.0",
+    "google-closure-compiler-js": "20180319.0.0",
     "gzip-size": "3.0.0",
     "mkdirp": "0.5.1",
     "node-version": "1.1.3",
