@@ -1,19 +1,23 @@
-[![NPM Version][npm-version-image]][npm-url]
-[![NPM Downloads][npm-downloads-image]][npm-url]
-[![Linux Build][travis-image]][travis-url]
-[![Windows Build][appveyor-image]][appveyor-url]
-[![Circle CI Build][circleci-image]][circleci-url]
-[![Codecov][codecov-image]][codecov-url]
+<div align="center"><img src="/node-minify.svg" width="348"></div>
 
-[![Dependency Status][dependency-image]][dependency-url]
-[![devDependency Status][devdependency-image]][devdependency-url]
-[![Greenkeeper badge](https://badges.greenkeeper.io/srod/node-minify.svg)](https://greenkeeper.io/)
+<p align="center">A very light minifier Node.js module.</p>
 
-# node-minify
+<p align="center">
+  <br>
+  <a href="https://npmjs.org/package/node-minify"><img src="https://img.shields.io/npm/v/node-minify.svg"></a>
+  <a href="https://npmjs.org/package/node-minify"><img src="https://img.shields.io/npm/dm/node-minify.svg"></a><br>
+  <a href="https://travis-ci.org/srod/node-minify"><img src="https://img.shields.io/travis/srod/node-minify/master.svg?label=linux"></a>
+  <a href="https://ci.appveyor.com/project/srod/node-minify"><img src="https://img.shields.io/appveyor/ci/srod/node-minify/master.svg?label=windows"></a>
+  <a href="https://circleci.com/gh/srod/node-minify/tree/master"><img src="https://circleci.com/gh/srod/node-minify/tree/master.svg?style=shield"></a>
+  <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/develop/graph/badge.svg"></a><br>
+  <a href="https://david-dm.org/srod/node-minify"><img src="https://img.shields.io/david/srod/node-minify.svg?style=flat"></a>
+  <a href="https://david-dm.org/srod/node-minify#info=devDependencies"><img src="https://img.shields.io/david/dev/srod/node-minify.svg?style=flat"></a>
+  <a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/srod/node-minify.svg"></a>
+</p>
 
-A very light minifier Node.js module.
+# Features
 
-Support:
+It allow you to compress JavaScript and CSS files.
 
 * [Babel-minify](#options-for-babel-minify)
 * [Butternut](#options-for-butternut)
@@ -23,8 +27,7 @@ Support:
 * [Clean-css](#options-for-clean-css)
 * [CSSO](#options-for-csso)
 * [Sqwish](#options-for-sqwish)
-
-It allow you to compress JavaScript and CSS files.
+* [CLI](#cli) :tada: new in version 3
 
 CSS benchmark : http://goalsmashers.github.io/css-minification-benchmark/
 
@@ -69,22 +72,24 @@ promise.then(function(min) {});
 
 [More examples](https://github.com/srod/node-minify/blob/master/examples/server.js)
 
-## Command line
-
-:tada: New in version 3
+## CLI
 
 You can compress files using the command line.
 
-Usage for one compressor :
+Usage for one or multiple compressors :
 
 ```bash
-node-minify --compressor babel-minify --input 'sample.js' --output 'output.js'
+node-minify --compressor babel-minify --input 'input.js' --output 'output.js'
+```
+
+```bash
+node-minify --compressor 'babel-minify, uglifyjs, gcc' --input 'input.js' --output 'output.js'
 ```
 
 Usage for all the compressors :
 
 ```bash
-node-minify --compressor all --input 'sample.js' --output 'output.js'
+node-minify --compressor all --input 'input.js' --output 'output.js'
 ```
 
 ## Concatenate Files
@@ -392,21 +397,3 @@ Since v0.5.0, a windows support is available for the no-compress option and ugli
 ## License
 
 [MIT](LICENSE)
-
-[npm-version-image]: https://img.shields.io/npm/v/node-minify.svg
-[npm-downloads-image]: https://img.shields.io/npm/dm/node-minify.svg
-[npm-url]: https://npmjs.org/package/node-minify
-[travis-image]: https://img.shields.io/travis/srod/node-minify/master.svg?label=linux
-[travis-url]: https://travis-ci.org/srod/node-minify
-[appveyor-image]: https://img.shields.io/appveyor/ci/srod/node-minify/master.svg?label=windows
-[appveyor-url]: https://ci.appveyor.com/project/srod/node-minify
-[coveralls-image]: https://img.shields.io/coveralls/srod/node-minify/master.svg
-[coveralls-url]: https://coveralls.io/r/srod/node-minify?branch=master
-[dependency-image]: https://img.shields.io/david/srod/node-minify.svg?style=flat
-[dependency-url]: https://david-dm.org/srod/node-minify
-[devdependency-image]: https://img.shields.io/david/dev/srod/node-minify.svg?style=flat
-[devdependency-url]: https://david-dm.org/srod/node-minify#info=devDependencies
-[circleci-image]: https://circleci.com/gh/srod/node-minify/tree/master.svg?style=shield
-[circleci-url]: https://circleci.com/gh/srod/node-minify/tree/master
-[codecov-image]: https://codecov.io/gh/srod/node-minify/branch/develop/graph/badge.svg
-[codecov-url]: https://codecov.io/gh/srod/node-minify
