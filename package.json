@@ -55,7 +55,6 @@
     "node-minify": "bin/cli.js"
   },
   "dependencies": {
-    "app-root-path": "2.0.1",
     "babel-core": "6.26.0",
     "babel-preset-minify": "0.3.0",
     "butternut": "0.4.6",
