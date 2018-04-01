@@ -17,8 +17,20 @@ program
   .version(pkg.version, '-v, --version')
   .option('-c, --compressor [compressor]', 'use the specified compressor [uglifyjs]', 'uglifyjs')
   .option('-i, --input [file]', 'input file path')
-  .option('-o, --output [file]', 'output file path')
-  .parse(process.argv);
+  .option('-o, --output [file]', 'output file path');
+
+program.on('--help', function() {
+  console.log('  List of compressors:');
+  console.log('');
+  console.log('    - babel-minify');
+  console.log('    - butternut');
+  console.log('    - gcc');
+  console.log('    - uglifyjs');
+  console.log('    - yui');
+  console.log('');
+});
+
+program.parse(process.argv);
 
 var options = program.opts();
 
@@ -32,4 +44,5 @@ if (!options.compressor || !options.input || !options.output) {
 
 cli(options).catch(function(err) {
   console.error(err);
+  process.exit(1);
 });
