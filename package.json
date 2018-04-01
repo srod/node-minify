@@ -1,6 +1,6 @@
 {
   "name": "node-minify",
-  "version": "2.4.2",
+  "version": "3.0.0-beta.1",
   "description": "Javascript / CSS minifier based on Babel-minify / Butternut / YUI Compressor / Google Closure Compiler / UglifyJS2 / Sqwish / Clean-css / CSSO",
   "homepage": "https://github.com/srod/node-minify",
   "author": {
@@ -45,8 +45,9 @@
     "release-patch": "npm version patch -m 'Bump %s' && git push --tags origin HEAD:master",
     "release-minor": "npm version minor -m 'Bump %s' && git push --tags origin HEAD:master",
     "release-major": "npm version major -m 'Bump %s' && git push --tags origin HEAD:master",
+    "release-next": "git push --tags origin HEAD:develop",
     "publish-latest": "npm publish",
-    "publish-beta": "npm publish --tag beta",
+    "publish-next": "npm publish --tag next",
     "prettier": "prettier",
     "prettier-write": "npm run prettier -- --write",
     "prettier-project": "npm run prettier-write -- '{lib,__tests__}/**/*.js'"
