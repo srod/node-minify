@@ -1,4 +1,4 @@
-<div align="center"><img src="/node-minify.svg" width="348"></div>
+<div align="center"><img src="/static/node-minify.svg" width="348"></div>
 
 <p align="center">A very light minifier Node.js module.</p>
 
@@ -91,6 +91,8 @@ Usage for all the compressors :
 ```bash
 node-minify --compressor all --input 'input.js' --output 'output.js'
 ```
+
+<img src="/static/cli.png" width="784" height="433">
 
 ## Concatenate Files
 
