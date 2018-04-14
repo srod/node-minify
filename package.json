@@ -73,7 +73,7 @@
     "sqwish": "0.2.2",
     "text-table": "0.2.0",
     "uglify-js": "3.3.21",
-    "update-notifier": "2.4.0",
+    "update-notifier": "2.5.0",
     "xtend": "4.0.1"
   },
   "devDependencies": {
