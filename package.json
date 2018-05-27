@@ -85,7 +85,7 @@
     "husky": "0.15.0-rc.2",
     "jest": "21.2.1",
     "lint-staged": "6.1.1",
-    "prettier": "1.12.1"
+    "prettier": "1.13.0"
   },
   "jest": {
     "notify": true,
