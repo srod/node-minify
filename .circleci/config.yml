@@ -2,10 +2,9 @@ workflows:
   version: 2
   node-multi-build:
     jobs:
-      - node-v4
       - node-v6
       - node-v8
-      - node-v9
+      - node-v10
 
 version: 2
 jobs:
@@ -42,10 +41,6 @@ jobs:
             - /usr/local/share/.cache/yarn
             - /root/.cache/yarn
 
-  node-v4:
-    <<: *node-base
-    docker:
-      - image: circleci/node:4-browsers
   node-v6:
     <<: *node-base
     docker:
@@ -54,7 +49,7 @@ jobs:
     <<: *node-base
     docker:
       - image: circleci/node:8-browsers
-  node-v9:
+  node-v10:
     <<: *node-base
     docker:
-      - image: circleci/node:9-browsers
+      - image: circleci/node:10-browsers
