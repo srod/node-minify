@@ -40,7 +40,6 @@
     "pretest": "npm run eslint",
     "test": "jest",
     "posttest": "npm run clean",
-    "precommit": "lint-staged",
     "clean": "rm -f ./examples/public/dist/* ./examples/public/js-dist/*",
     "release-patch": "npm version patch -m 'Bump %s' && git push --tags origin HEAD:master",
     "release-minor": "npm version minor -m 'Bump %s' && git push --tags origin HEAD:master",
@@ -107,5 +106,10 @@
   "prettier": {
     "singleQuote": true,
     "printWidth": 120
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
