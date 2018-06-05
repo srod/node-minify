@@ -19,15 +19,15 @@
 
 It allow you to compress JavaScript and CSS files.
 
-* [Babel-minify](#options-for-babel-minify)
-* [Butternut](#options-for-butternut)
-* [YUI Compressor](#options-for-yui-compressor)
-* [Google Closure Compiler](#options-for-google-closure-compiler)
-* [UglifyJS](#options-for-uglifyjs)
-* [Clean-css](#options-for-clean-css)
-* [CSSO](#options-for-csso)
-* [Sqwish](#options-for-sqwish)
-* [CLI](#cli) :tada: new in version 3
+- [Babel-minify](#options-for-babel-minify)
+- [Butternut](#options-for-butternut)
+- [YUI Compressor](#options-for-yui-compressor)
+- [Google Closure Compiler](#options-for-google-closure-compiler)
+- [UglifyJS](#options-for-uglifyjs)
+- [Clean-css](#options-for-clean-css)
+- [CSSO](#options-for-csso)
+- [Sqwish](#options-for-sqwish)
+- [CLI](#cli) :tada: new in version 3
 
 CSS benchmark : http://goalsmashers.github.io/css-minification-benchmark/
 
@@ -222,6 +222,25 @@ compressor.minify({
 [More informations](http://yui.github.io/yuicompressor)
 
 ### Options for Google Closure Compiler
+
+```js
+compressor.minify({
+  compressor: 'gcc',
+  input: 'foo.js',
+  output: 'bar.js',
+  options: {
+    createSourceMap: true,
+    compilationLevel: 'WHITESPACE_ONLY',
+    languageIn: 'ECMASCRIPT6'
+    ... // See more information link below
+  },
+  callback: function (err, min) {}
+});
+```
+
+[More informations](https://github.com/google/closure-compiler-js#flags)
+
+### Options for Google Closure Compiler Legacy (java version)
 
 ```js
 compressor.minify({
