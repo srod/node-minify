@@ -9,11 +9,15 @@ examples
 __tests__
 .circleci
 .editorconfig
+.eslintrc
 .gitignore
 .npmignore
 .npmrc
+.prettierignore
 .travis.yml
 .yarnrc
 appveyor.yml
 codecov.yml
+static/cli.png
+static/node-minify.svg
 yarn.lock
