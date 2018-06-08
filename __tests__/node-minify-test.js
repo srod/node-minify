@@ -557,7 +557,7 @@ describe('node-minify', function() {
     });
   });
 
-  describe('Create more errors', function() {
+  describe('Create sync errors', function() {
     beforeEach(function() {
       spyOn(childProcess, 'spawnSync').and.throwError('UnsupportedClassVersionError');
     });
@@ -574,6 +574,28 @@ describe('node-minify', function() {
         return expect(err.toString()).toEqual(
           'Latest Google Closure Compiler requires Java >= 1.7, please' + ' update Java or use gcc-legacy'
         );
+      });
+    });
+  });
+
+  describe('Create async errors', function() {
+    beforeEach(function() {
+      spyOn(childProcess, 'spawn').and.throwError('error manual test');
+    });
+    test('should callback an error on spawn', function() {
+      var options = {};
+      options.minify = {
+        compressor: 'gcc-java',
+        input: oneFile,
+        output: fileJSOut,
+        sync: false,
+        callback: function() {}
+      };
+      var spy = jest.spyOn(options.minify, 'callback');
+
+      return nodeMinify.minify(options.minify).catch(function(err) {
+        expect(spy).toHaveBeenCalled();
+        return expect(err.toString()).toEqual('Error: error manual test');
       });
     });
   });
