@@ -1,5 +1,5 @@
-var http = require('http');
-var compressor = require('../lib/node-minify');
+let http = require('http');
+let compressor = require('../src/index');
 
 http
   .createServer(function(req, res) {

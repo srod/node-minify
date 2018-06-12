@@ -1,7 +1,9 @@
 {
   "env": {
     "node": true,
-    "es6": true
+    "es6": true,
+    "jasmine": true,
+    "jest": true
   },
   "plugins": ["prettier"],
   "extends": ["eslint:recommended", "prettier"],

@@ -113,7 +113,11 @@ const runOne = (cli, compressor, results, smallers) => {
 
 const run = cli => {
   const results = [['Compressor', 'Size minified', 'Size Gzipped']];
-  const smallers = [{ sizeGzip: undefined }];
+  const smallers = [
+    {
+      sizeGzip: undefined
+    }
+  ];
   cliOptions = cli;
 
   console.log('');
