@@ -965,4 +965,13 @@ describe('node-minify', function() {
       runOneTest(o, 'sqwish', true);
     });
   });
+
+  describe('Crass', function() {
+    tests.commoncss.forEach(function(o) {
+      runOneTest(o, 'crass');
+    });
+    tests.commoncss.forEach(function(o) {
+      runOneTest(o, 'crass', true);
+    });
+  });
 });
