@@ -190,6 +190,18 @@ compressor.minify({
   }
 });
 
+// Using Crass
+compressor.minify({
+  compressor: 'crass',
+  input: ['public/css/sample.css', 'public/css/sample2.css'],
+  output: 'public/css-dist/crass-concat.css',
+  callback: function(err, min) {
+    console.log('Crass concat');
+    console.log(err);
+    //console.log(min);
+  }
+});
+
 // Using public folder option
 compressor.minify({
   compressor: 'yui-js',

@@ -27,6 +27,7 @@ It allow you to compress JavaScript and CSS files.
 - [Clean-css](#options-for-clean-css)
 - [CSSO](#options-for-csso)
 - [Sqwish](#options-for-sqwish)
+- [Crass](#options-for-crass)
 - [CLI](#cli) :tada: new in version 3
 
 CSS benchmark : http://goalsmashers.github.io/css-minification-benchmark/
@@ -328,6 +329,19 @@ compressor.minify({
 
 [More informations](https://github.com/ded/sqwish)
 
+### Options for Crass
+
+```js
+compressor.minify({
+  compressor: 'crass',
+  input: 'foo.css',
+  output: 'bar.css',
+  callback: function(err, min) {}
+});
+```
+
+[More informations](https://github.com/mattbasta/crass)
+
 ## Babel-minify
 
 Babel-minify can compress only JavaScript files.
@@ -394,6 +408,12 @@ CSSO can compress only CSS files.
 Sqwish can compress only CSS files.
 
 [https://github.com/ded/sqwish](https://github.com/ded/sqwish)
+
+## Crass
+
+Crass can compress only CSS files.
+
+[https://github.com/mattbasta/crass](https://github.com/mattbasta/crass)
 
 ## Warning
 
