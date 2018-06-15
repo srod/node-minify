@@ -7,7 +7,6 @@
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
 import childProcess from 'child_process';
-import { minify } from '../src/node-minify';
 import * as cli from '../src/cli';
 import { utils } from '../src/utils';
 
