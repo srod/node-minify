@@ -60,7 +60,7 @@
     "butternut": "0.4.6",
     "chalk": "2.4.1",
     "clean-css": "4.1.11",
-    "commander": "2.15.1",
+    "commander": "2.16.0",
     "crass": "0.12.3",
     "csso": "3.5.1",
     "depd": "1.1.2",
