@@ -165,7 +165,7 @@ argparse@^1.0.7:
   dependencies:
     sprintf-js "~1.0.2"
 
-argv@0.0.2:
+argv@^0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/argv/-/argv-0.0.2.tgz#ecbd16f8949b157183711b1bda334f37840185ab"
 
@@ -1271,14 +1271,14 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codecov@3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/codecov/-/codecov-3.0.3.tgz#e6a209f1674f3e3a8ff6d889ab7ac0b4a8895fa2"
+codecov@3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/codecov/-/codecov-3.0.4.tgz#37f2bf9ed71086923aac7496d982e32e5899dfd8"
   dependencies:
-    argv "0.0.2"
-    ignore-walk "3.0.0"
-    request "2.81.0"
-    urlgrey "0.4.4"
+    argv "^0.0.2"
+    ignore-walk "^3.0.1"
+    request "^2.87.0"
+    urlgrey "^0.4.4"
 
 collection-visit@^1.0.0:
   version "1.0.0"
@@ -2349,9 +2349,9 @@ iconv-lite@0.4.19, iconv-lite@^0.4.17:
   version "0.4.19"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.19.tgz#f7468f60135f5e5dad3399c0a81be9a1603a082b"
 
-ignore-walk@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/ignore-walk/-/ignore-walk-3.0.0.tgz#e407919edee5c47c63473b319bfe3ea4a771a57e"
+ignore-walk@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/ignore-walk/-/ignore-walk-3.0.1.tgz#a83e62e7d272ac0e3b551aaa82831a19b69f82f8"
   dependencies:
     minimatch "^3.0.4"
 
@@ -3715,9 +3715,9 @@ optionator@^0.8.1, optionator@^0.8.2:
     type-check "~0.3.2"
     wordwrap "~1.0.0"
 
-ora@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/ora/-/ora-2.1.0.tgz#6caf2830eb924941861ec53a173799e008b51e5b"
+ora@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/ora/-/ora-3.0.0.tgz#8179e3525b9aafd99242d63cc206fd64732741d0"
   dependencies:
     chalk "^2.3.1"
     cli-cursor "^2.1.0"
@@ -4176,7 +4176,7 @@ request@2.81.0:
     tunnel-agent "^0.6.0"
     uuid "^3.0.0"
 
-request@^2.83.0:
+request@^2.83.0, request@^2.87.0:
   version "2.87.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.87.0.tgz#32f00235cd08d482b4d0d68db93a829c0ed5756e"
   dependencies:
@@ -4817,9 +4817,9 @@ type-check@~0.3.2:
   dependencies:
     prelude-ls "~1.1.2"
 
-uglify-js@3.4.4:
-  version "3.4.4"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.4.4.tgz#92e79532a3aeffd4b6c65755bdba8d5bad98d607"
+uglify-js@3.4.5:
+  version "3.4.5"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.4.5.tgz#650889c0766cf0f6fd5346cea09cd212f544be69"
   dependencies:
     commander "~2.16.0"
     source-map "~0.6.1"
@@ -4898,7 +4898,7 @@ url-parse-lax@^1.0.0:
   dependencies:
     prepend-http "^1.0.1"
 
-urlgrey@0.4.4:
+urlgrey@^0.4.4:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/urlgrey/-/urlgrey-0.4.4.tgz#892fe95960805e85519f1cd4389f2cb4cbb7652f"
 
