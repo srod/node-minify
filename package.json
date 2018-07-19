@@ -36,7 +36,7 @@
     "butternut"
   ],
   "scripts": {
-    "eslint": "eslint lib test || true",
+    "eslint": "eslint lib __tests__ || true",
     "pretest": "npm run eslint",
     "test": "jest",
     "posttest": "npm run clean",
@@ -72,7 +72,7 @@
     "ora": "3.0.0",
     "sqwish": "0.2.2",
     "text-table": "0.2.0",
-    "uglify-js": "3.4.5",
+    "uglify-es": "3.3.9",
     "update-notifier": "2.5.0",
     "xtend": "4.0.1"
   },
