@@ -791,6 +791,18 @@ describe('node-minify', function() {
 
       nodeMinify.minify(options.minify);
     });
+    test('should throw an error', function() {
+      var options = {};
+      options.minify = {
+        compressor: 'gcc',
+        input: __dirname + '/../examples/public/js-errors/sample-error.js',
+        output: fileJSOut
+      };
+
+      return nodeMinify.minify(options.minify).catch(function(err) {
+        return expect(err).not.toBeNull();
+      });
+    });
   });
 
   describe('GCC Java', function() {
@@ -820,6 +832,18 @@ describe('node-minify', function() {
 
       nodeMinify.minify(options.minify);
     });
+    test('should throw an error', function() {
+      var options = {};
+      options.minify = {
+        compressor: 'gcc-java',
+        input: __dirname + '/../examples/public/js-errors/**/*.js',
+        output: fileJSOut
+      };
+
+      return nodeMinify.minify(options.minify).catch(function(err) {
+        return expect(err).not.toBeNull();
+      });
+    });
   });
 
   describe('GCC Legacy', function() {
@@ -848,6 +872,18 @@ describe('node-minify', function() {
       };
 
       nodeMinify.minify(options.minify);
+    });
+    test('should throw an error', function() {
+      var options = {};
+      options.minify = {
+        compressor: 'gcc-legacy',
+        input: __dirname + '/../examples/public/js-errors/**/*.js',
+        output: fileJSOut
+      };
+
+      return nodeMinify.minify(options.minify).catch(function(err) {
+        return expect(err).not.toBeNull();
+      });
     });
   });
 
@@ -936,6 +972,18 @@ describe('node-minify', function() {
       };
 
       nodeMinify.minify(options.minify);
+    });
+    test('should throw an error', function() {
+      var options = {};
+      options.minify = {
+        compressor: 'uglifyjs',
+        input: __dirname + '/../examples/public/js-errors/**/*.js',
+        output: fileJSOut
+      };
+
+      return nodeMinify.minify(options.minify).catch(function(err) {
+        return expect(err).not.toBeNull();
+      });
     });
   });
 
