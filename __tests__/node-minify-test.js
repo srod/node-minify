@@ -987,6 +987,70 @@ describe('node-minify', function() {
     });
   });
 
+  describe('UglifyES', function() {
+    tests.commonjs.forEach(function(o) {
+      runOneTest(o, 'uglify-es');
+    });
+    tests.commonjs.forEach(function(o) {
+      runOneTest(o, 'uglify-es', true);
+    });
+    test('should create a source map', function(done) {
+      var options = {};
+      options.minify = {
+        compressor: 'uglify-es',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut,
+        options: {
+          sourceMap: {
+            filename: fileJSOut + '.map',
+            url: fileJSOut + '.map'
+          }
+        }
+      };
+
+      options.minify.callback = function(err, min) {
+        expect(err).toBeNull();
+        expect(min).not.toBeNull();
+
+        done();
+      };
+
+      nodeMinify.minify(options.minify);
+    });
+    test('should compress with some options', function(done) {
+      var options = {};
+      options.minify = {
+        compressor: 'uglify-es',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut,
+        options: {
+          mangle: false
+        }
+      };
+
+      options.minify.callback = function(err, min) {
+        expect(err).toBeNull();
+        expect(min).not.toBeNull();
+
+        done();
+      };
+
+      nodeMinify.minify(options.minify);
+    });
+    test('should throw an error', function() {
+      var options = {};
+      options.minify = {
+        compressor: 'uglify-es',
+        input: __dirname + '/../examples/public/js-errors/**/*.js',
+        output: fileJSOut
+      };
+
+      return nodeMinify.minify(options.minify).catch(function(err) {
+        return expect(err).not.toBeNull();
+      });
+    });
+  });
+
   describe('Clean-css', function() {
     tests.commoncss.forEach(function(o) {
       runOneTest(o, 'clean-css');
