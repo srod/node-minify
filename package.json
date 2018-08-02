@@ -36,6 +36,8 @@
     "butternut"
   ],
   "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
     "eslint": "eslint lib __tests__ || true",
     "pretest": "npm run eslint",
     "test": "jest",
