@@ -59,7 +59,7 @@
     "babel-preset-minify": "0.4.3",
     "butternut": "0.4.6",
     "chalk": "2.4.1",
-    "clean-css": "4.1.11",
+    "clean-css": "4.2.0",
     "commander": "2.16.0",
     "crass": "0.12.3",
     "csso": "3.5.1",
