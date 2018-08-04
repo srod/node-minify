@@ -36,6 +36,8 @@
     "butternut"
   ],
   "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
     "eslint": "eslint lib __tests__ || true",
     "pretest": "npm run eslint",
     "test": "jest",
@@ -59,8 +61,8 @@
     "babel-preset-minify": "0.4.3",
     "butternut": "0.4.6",
     "chalk": "2.4.1",
-    "clean-css": "4.1.11",
-    "commander": "2.16.0",
+    "clean-css": "4.2.0",
+    "commander": "2.17.0",
     "crass": "0.12.3",
     "csso": "3.5.1",
     "depd": "1.1.2",
@@ -72,6 +74,7 @@
     "ora": "3.0.0",
     "sqwish": "0.2.2",
     "text-table": "0.2.0",
+    "uglify-es": "3.3.9",
     "uglify-js": "3.4.6",
     "update-notifier": "2.5.0",
     "xtend": "4.0.1"
