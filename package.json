@@ -1,6 +1,6 @@
 {
   "name": "node-minify",
-  "version": "3.1.2",
+  "version": "3.2.0",
   "description": "Javascript / CSS minifier based on Babel-minify / Butternut / YUI Compressor / Google Closure Compiler / UglifyJS2 / Sqwish / Clean-css / CSSO",
   "homepage": "https://github.com/srod/node-minify",
   "author": {
