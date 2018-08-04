@@ -3,6 +3,7 @@
 .vscode
 ._*
 .history
+docs
 node_modules
 coverage
 examples
