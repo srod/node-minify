@@ -74,7 +74,7 @@
     "ora": "3.0.0",
     "sqwish": "0.2.2",
     "uglify-es": "3.3.9",
-    "uglify-js": "3.4.6",
+    "uglify-js": "3.4.7",
     "update-notifier": "2.5.0",
     "xtend": "4.0.1"
   },
