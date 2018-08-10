@@ -13,7 +13,8 @@ describe('cli', function() {
     cli({
       compressor: 'gcc',
       input: 'examples/public/js/sample.js',
-      output: 'examples/public/js-dist/babili-es6.js'
+      output: 'examples/public/js-dist/babili-es6.js',
+      option: '{"createSourceMap": true}'
     });
     expect(spy).toHaveBeenCalled();
   });
