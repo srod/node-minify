@@ -17,7 +17,8 @@ program
   .version(pkg.version, '-v, --version')
   .option('-c, --compressor [compressor]', 'use the specified compressor [uglifyjs]', 'uglifyjs')
   .option('-i, --input [file]', 'input file path')
-  .option('-o, --output [file]', 'output file path');
+  .option('-o, --output [file]', 'output file path')
+  .option('-O, --option [option]', 'option for the compressor as JSON object', '');
 
 program.on('--help', function() {
   console.log('  List of compressors:');

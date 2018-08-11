@@ -13,7 +13,8 @@ describe('cli', function() {
     cli({
       compressor: 'gcc',
       input: 'examples/public/js/sample.js',
-      output: 'examples/public/js-dist/babili-es6.js'
+      output: 'examples/public/js-dist/babili-es6.js',
+      option: '{"createSourceMap": true}'
     });
     expect(spy).toHaveBeenCalled();
   });
@@ -36,7 +37,7 @@ describe('cli error', function() {
   test('should minify to throw with all compressors', function() {
     var spy = jest.spyOn(nodeMinify, 'minify');
     return cli({
-      compressor: 'all',
+      compressor: 'gcc-java',
       input: 'examples/public/js/sample.js',
       output: 'examples/public/js-dist/babili-es6.js'
     }).catch(function(err) {
