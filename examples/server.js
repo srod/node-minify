@@ -24,20 +24,6 @@ console.log('sync 3');
 
 compressor
   .minify({
-    compressor: 'butternut',
-    input: 'public/js-es6/**/*.js',
-    output: 'public/js-dist/butternut-es6.js',
-    options: {
-      sourceMap: true
-    }
-  })
-  .then(function(min) {
-    console.log('then promise called');
-    // console.log(min);
-  });
-
-compressor
-  .minify({
     compressor: 'babel-minify',
     input: 'public/js-es6/**/*.js',
     output: 'public/js-dist/babili-es6.js'

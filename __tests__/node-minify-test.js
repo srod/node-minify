@@ -322,85 +322,6 @@ const tests = {
         }
       }
     }
-  ],
-  butternut: [
-    {
-      it: 'should compress javascript with {compressor} and a single file with option check',
-      minify: {
-        compressor: '{compressor}',
-        input: oneFile,
-        output: fileJSOut,
-        options: {
-          check: true
-        }
-      }
-    },
-    {
-      it: 'should compress javascript with {compressor} and a single file with option allowDangerousEval',
-      minify: {
-        compressor: '{compressor}',
-        input: oneFile,
-        output: fileJSOut,
-        options: {
-          allowDangerousEval: true
-        }
-      }
-    },
-    {
-      it: 'should compress javascript with {compressor} and a single file with option sourceMap',
-      minify: {
-        compressor: '{compressor}',
-        input: oneFile,
-        output: fileJSOut,
-        options: {
-          sourceMap: false
-        }
-      }
-    },
-    {
-      it: 'should compress javascript with {compressor} and a single file with option sourceMap',
-      minify: {
-        compressor: '{compressor}',
-        input: oneFile,
-        output: fileJSOut,
-        options: {
-          sourceMap: true
-        }
-      }
-    },
-    {
-      it: 'should compress javascript with {compressor} and a single file with option file',
-      minify: {
-        compressor: '{compressor}',
-        input: oneFile,
-        output: fileJSOut,
-        options: {
-          file: 'file.js'
-        }
-      }
-    },
-    {
-      it: 'should compress javascript with {compressor} and a single file with option source',
-      minify: {
-        compressor: '{compressor}',
-        input: oneFile,
-        output: fileJSOut,
-        options: {
-          source: 'source.js'
-        }
-      }
-    },
-    {
-      it: 'should compress javascript with {compressor} and a single file with option includeContent',
-      minify: {
-        compressor: '{compressor}',
-        input: oneFile,
-        output: fileJSOut,
-        options: {
-          includeContent: false
-        }
-      }
-    }
   ]
 };
 
@@ -683,21 +604,6 @@ describe('node-minify', () => {
       };
 
       minify(options.minify);
-    });
-  });
-
-  describe('Butternut', () => {
-    tests.commonjs.forEach(o => {
-      runOneTest(o, 'butternut');
-    });
-    tests.butternut.forEach(o => {
-      runOneTest(o, 'butternut');
-    });
-    tests.commonjs.forEach(o => {
-      runOneTest(o, 'butternut', true);
-    });
-    tests.butternut.forEach(o => {
-      runOneTest(o, 'butternut', true);
     });
   });
 
