@@ -53,6 +53,19 @@ describe('cli error', () => {
   });
 });
 
+describe('getFilesizeInBytes', () => {
+  test('should return file size', () => expect(utils.getFilesizeInBytes('examples/public/js/sample.js')).toBe('613 B'));
+});
+
+describe('getFilesizeGzippedInBytes', () => {
+  test('should return file size', done => {
+    utils.getFilesizeGzippedInBytes('examples/public/js/sample.js').then(size => {
+      expect(size).toBe('402 B');
+      done();
+    });
+  });
+});
+
 describe('pretty bytes', () => {
   test('should throw when not a number', () => {
     expect(() => utils.prettyBytes('a')).toThrow();
