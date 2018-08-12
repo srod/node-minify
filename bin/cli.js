@@ -24,7 +24,6 @@ program.on('--help', function() {
   console.log('  List of compressors:');
   console.log('');
   console.log('    - babel-minify');
-  console.log('    - butternut');
   console.log('    - gcc');
   console.log('    - uglifyjs');
   console.log('    - uglify-es');
