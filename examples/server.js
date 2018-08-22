@@ -22,6 +22,20 @@ console.log('sync 3');
 
 compressor
   .minify({
+    compressor: 'html-minifier',
+    input: 'public/index.html',
+    output: 'public/dist/index.min.html',
+    options: {
+      minifyJS: false
+    }
+  })
+  .then(function(min) {
+    console.log('html min');
+    console.log(min);
+  });
+
+compressor
+  .minify({
     compressor: 'butternut',
     input: 'public/js-es6/**/*.js',
     output: 'public/js-dist/butternut-es6.js',

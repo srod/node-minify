@@ -26,6 +26,7 @@ program.on('--help', function() {
   console.log('    - babel-minify');
   console.log('    - butternut');
   console.log('    - gcc');
+  console.log('    - html-minifier');
   console.log('    - uglifyjs');
   console.log('    - uglify-es');
   console.log('    - yui');
