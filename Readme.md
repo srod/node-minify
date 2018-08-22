@@ -17,17 +17,30 @@
 
 # Features
 
-It allow you to compress JavaScript and CSS files.
+It allow you to compress JavaScript, CSS and HTML files.
+
+**JavaScript:**
 
 - [babel-minify](https://node-minify.2clics.net/compressors/babel-minify.html)
-- [YUI Compressor](https://node-minify.2clics.net/compressors/yui.html)
 - [Google Closure Compiler](https://node-minify.2clics.net/compressors/gcc.html)
-- [uglify-es](https://node-minify.2clics.net/compressors/uglify-es.html)
 - [uglify-js](https://node-minify.2clics.net/compressors/uglify-js.html)
+- [uglify-es](https://node-minify.2clics.net/compressors/uglify-es.html)
+- [YUI Compressor](https://node-minify.2clics.net/compressors/yui.html)
+
+**CSS:**
+
 - [clean-css](https://node-minify.2clics.net/compressors/clean-css.html)
+- [crass](https://node-minify.2clics.net/compressors/crass.html)
 - [CSSO](https://node-minify.2clics.net/compressors/csso.html)
 - [sqwish](https://node-minify.2clics.net/compressors/sqwish.html)
-- [crass](https://node-minify.2clics.net/compressors/crass.html)
+- [YUI Compressor](https://node-minify.2clics.net/compressors/yui.html)
+
+**HTML:**
+
+- [html-minifier](https://node-minify.2clics.net/compressors/html-minifier.html)
+
+**Command Line Interface:**
+
 - [CLI](https://node-minify.2clics.net/cli.html) :tada: new in version 3
 
 ## Installation
