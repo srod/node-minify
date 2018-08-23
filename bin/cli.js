@@ -18,6 +18,7 @@ program
   .option('-c, --compressor [compressor]', 'use the specified compressor [uglifyjs]', 'uglifyjs')
   .option('-i, --input [file]', 'input file path')
   .option('-o, --output [file]', 'output file path')
+  .option('-s, --silence', 'no output will be printed')
   .option('-O, --option [option]', 'option for the compressor as JSON object', '');
 
 program.on('--help', function() {
@@ -26,6 +27,7 @@ program.on('--help', function() {
   console.log('    - babel-minify');
   console.log('    - butternut');
   console.log('    - gcc');
+  console.log('    - html-minifier');
   console.log('    - uglifyjs');
   console.log('    - uglify-es');
   console.log('    - yui');
