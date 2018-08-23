@@ -31,6 +31,15 @@ const fileCSSArrayWithWildcards2 = [
   __dirname + '/**/*.css'
 ];
 const fileCSSOut = __dirname + '/../examples/public/dist/sample.css';
+const oneFileHTML = __dirname + '/../examples/public/index.html';
+const fileHTMLOut = __dirname + '/../examples/public/dist/index.min.html';
+const filesHTMLArray = [__dirname + '/../examples/public/index.html', __dirname + '/../examples/public/index.html'];
+const filesHTMLArrayWithWildcards = [
+  __dirname + '/../examples/public/index.html',
+  __dirname + '/../examples/public/index.html',
+  __dirname + '/../examples/public/**/*.html'
+];
+const filesHTMLArrayWithWildcards2 = ['index.html', 'index.html', '**/*.html'];
 
 const tests = {
   concat: [
@@ -320,6 +329,87 @@ const tests = {
           babelrc: __dirname + '/../examples/public/.babelrc',
           presets: ['env']
         }
+      }
+    }
+  ],
+  commonhtml: [
+    {
+      it: 'should compress html with {compressor} and a single file',
+      minify: {
+        compressor: '{compressor}',
+        input: oneFileHTML,
+        output: fileHTMLOut
+      }
+    },
+    {
+      it: 'should compress html with {compressor} and a single file with a custom public folder',
+      minify: {
+        compressor: '{compressor}',
+        input: 'index.html',
+        output: fileHTMLOut,
+        publicFolder: __dirname + '/../examples/public/'
+      }
+    },
+    {
+      it: 'should compress html with {compressor} and a single file with empty options',
+      minify: {
+        compressor: '{compressor}',
+        input: oneFileHTML,
+        output: fileHTMLOut,
+        options: {}
+      }
+    },
+    {
+      it: 'should compress html with {compressor} and an array of file',
+      minify: {
+        compressor: '{compressor}',
+        input: filesHTMLArray,
+        output: fileHTMLOut
+      }
+    },
+    {
+      it: 'should compress html with {compressor} and an array of file with a custom public folder',
+      minify: {
+        compressor: '{compressor}',
+        input: ['index.html', 'index.html'],
+        output: fileHTMLOut,
+        publicFolder: __dirname + '/../examples/public/'
+      }
+    },
+    {
+      it: 'should compress javascript with {compressor} and wildcards path',
+      minify: {
+        compressor: '{compressor}',
+        input: __dirname + '/../examples/public/**/*.html',
+        output: fileHTMLOut
+      }
+    },
+    {
+      it: 'should compress html with {compressor} and wildcards path with a custom public folder',
+      minify: {
+        compressor: '{compressor}',
+        input: '**/*.html',
+        output: fileHTMLOut,
+        publicFolder: __dirname + '/../examples/public/'
+      }
+    },
+    {
+      it: 'should compress html with {compressor} and an array of strings and wildcards path',
+      minify: {
+        compressor: '{compressor}',
+        input: filesHTMLArrayWithWildcards,
+        output: fileHTMLOut
+      }
+    },
+    {
+      it:
+        'should compress html with {compressor} and an array of strings and wildcards path' +
+        ' with a custom public folder',
+      minify: {
+        compressor: '{compressor}',
+        input: filesHTMLArrayWithWildcards2,
+        output: fileHTMLOut,
+        publicFolder: __dirname + '/../examples/public/'
       }
     }
   ]
@@ -728,6 +818,15 @@ describe('node-minify', () => {
       return minify(options.minify).catch(function(err) {
         return expect(err).not.toBeNull();
       });
+    });
+  });
+
+  describe('html-minifier', () => {
+    tests.commonhtml.forEach(o => {
+      runOneTest(o, 'html-minifier');
+    });
+    tests.commonhtml.forEach(o => {
+      runOneTest(o, 'html-minifier', true);
     });
   });
 

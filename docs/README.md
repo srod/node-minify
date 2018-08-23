@@ -4,7 +4,7 @@
 
 ## Features
 
-It allow you to compress JavaScript and CSS files.
+It allow you to compress JavaScript, CSS and HTML files.
 
 **JavaScript:**
 
@@ -21,6 +21,10 @@ It allow you to compress JavaScript and CSS files.
 - [CSSO](/compressors/csso.md)
 - [sqwish](/compressors/sqwish.md)
 - [YUI Compressor](/compressors/yui.md)
+
+**HTML:**
+
+- [html-minifier](/compressors/html-minifier.md)
 
 **Command Line Interface:**
 
