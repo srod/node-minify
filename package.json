@@ -83,7 +83,7 @@
   },
   "devDependencies": {
     "babel-preset-env": "1.7.0",
-    "codecov": "3.0.4",
+    "codecov": "3.1.0",
     "eslint": "5.0.1",
     "eslint-config-prettier": "3.0.1",
     "eslint-plugin-prettier": "2.6.2",
