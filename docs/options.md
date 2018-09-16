@@ -24,6 +24,21 @@ compressor.minify({
 });
 ```
 
+## Using wildcards with $1 output
+
+This option will not merge the files.
+
+```js
+compressor.minify({
+  compressor: 'babel-minify',
+  input: 'public/**/*.js',
+  output: '$1.min.js',
+  callback: function(err, min) {}
+});
+```
+
+If you have 3 files `file1.js`, `file2.js` and `file3.js`; those files will be outputed as `file1.min.js`, `file2.min.js` and `file3.min.js`
+
 ## Using sync option
 
 ```js
