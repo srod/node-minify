@@ -40,7 +40,7 @@ compressor
   .minify({
     compressor: 'babel-minify',
     input: 'public/js-es6/**/*.js',
-    output: 'public/js-dist/babili-es6.js'
+    output: 'public/js-dist/babel-minify-$1.js'
   })
   .then(function(min) {
     //console.log(min);

@@ -19,6 +19,7 @@ const filesArrayWithWildcards2 = [
   __dirname + '/../examples/public/js/**/*.js'
 ];
 const fileJSOut = __dirname + '/../examples/public/dist/sample.js';
+const fileJSOutReplace = __dirname + '/../examples/public/dist/$1.js';
 const fileCSS = __dirname + '/../examples/public/css/sample.css';
 const fileCSSArray = [
   __dirname + '/../examples/public/css/sample.css',
@@ -189,6 +190,14 @@ const tests = {
       }
     },
     {
+      it: 'should compress javascript with {compressor} and a single file and output $1',
+      minify: {
+        compressor: '{compressor}',
+        input: oneFile,
+        output: fileJSOutReplace
+      }
+    },
+    {
       it: 'should compress javascript with {compressor} and a single file with a custom public folder',
       minify: {
         compressor: '{compressor}',
@@ -230,6 +239,14 @@ const tests = {
         compressor: '{compressor}',
         input: filesArray,
         output: fileJSOut
+      }
+    },
+    {
+      it: 'should compress javascript with {compressor} and an array of file and output $1',
+      minify: {
+        compressor: '{compressor}',
+        input: filesArray,
+        output: fileJSOutReplace
       }
     },
     {
