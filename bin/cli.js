@@ -28,6 +28,7 @@ program.on('--help', function() {
   console.log('    - butternut');
   console.log('    - gcc');
   console.log('    - html-minifier');
+  console.log('    - terser');
   console.log('    - uglifyjs');
   console.log('    - uglify-es');
   console.log('    - yui');
