@@ -883,6 +883,70 @@ describe('node-minify', () => {
     });
   });
 
+  describe('Terser', () => {
+    tests.commonjs.forEach(o => {
+      runOneTest(o, 'terser');
+    });
+    tests.commonjs.forEach(o => {
+      runOneTest(o, 'terser', true);
+    });
+    test('should create a source map', done => {
+      let options = {};
+      options.minify = {
+        compressor: 'terser',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut,
+        options: {
+          sourceMap: {
+            filename: fileJSOut + '.map',
+            url: fileJSOut + '.map'
+          }
+        }
+      };
+
+      options.minify.callback = (err, min) => {
+        expect(err).toBeNull();
+        expect(min).not.toBeNull();
+
+        done();
+      };
+
+      minify(options.minify);
+    });
+    test('should compress with some options', done => {
+      let options = {};
+      options.minify = {
+        compressor: 'terser',
+        input: __dirname + '/../examples/public/js/**/*.js',
+        output: fileJSOut,
+        options: {
+          mangle: false
+        }
+      };
+
+      options.minify.callback = (err, min) => {
+        expect(err).toBeNull();
+        expect(min).not.toBeNull();
+
+        done();
+      };
+
+      minify(options.minify);
+    });
+    test('should throw an error', () => {
+      let options = {};
+      options.minify = {
+        compressor: 'terser',
+        input: __dirname + '/../examples/public/js-errors/**/*.js',
+        output: fileJSOut
+      };
+
+      return minify(options.minify).catch(err => {
+        return expect(err).not.toBeNull();
+      });
+    });
+  });
+
   describe('UglifyJS', () => {
     tests.commonjs.forEach(o => {
       runOneTest(o, 'uglifyjs');
