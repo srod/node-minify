@@ -22,6 +22,17 @@ console.log('sync 3');
 
 compressor
   .minify({
+    compressor: 'terser',
+    input: ['public/js/sample.js', 'public/js/sample2.js'],
+    output: 'public/js-dist/terser-concat.js'
+  })
+  .then(function(min) {
+    console.log('terser min');
+    console.log(min);
+  });
+
+compressor
+  .minify({
     compressor: 'html-minifier',
     input: 'public/index.html',
     output: 'public/dist/index.min.html',
