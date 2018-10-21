@@ -10,6 +10,7 @@ It allow you to compress JavaScript, CSS and HTML files.
 
 - [babel-minify](/compressors/babel-minify.md)
 - [Google Closure Compiler](/compressors/gcc.md)
+- [terser](/compressors/terser.md)
 - [uglify-js](/compressors/uglify-js.md)
 - [uglify-es](/compressors/uglify-es.md)
 - [YUI Compressor](/compressors/yui.md)

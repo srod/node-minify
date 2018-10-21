@@ -23,6 +23,7 @@ It allow you to compress JavaScript, CSS and HTML files.
 
 - [babel-minify](https://node-minify.2clics.net/compressors/babel-minify.html)
 - [Google Closure Compiler](https://node-minify.2clics.net/compressors/gcc.html)
+- [terser](https://node-minify.2clics.net/compressors/terser.html)
 - [uglify-js](https://node-minify.2clics.net/compressors/uglify-js.html)
 - [uglify-es](https://node-minify.2clics.net/compressors/uglify-es.html)
 - [YUI Compressor](https://node-minify.2clics.net/compressors/yui.html)
