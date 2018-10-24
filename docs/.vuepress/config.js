@@ -39,6 +39,7 @@ module.exports = {
           'compressors/csso',
           'compressors/gcc',
           'compressors/sqwish',
+          'compressors/terser',
           'compressors/uglify-es',
           'compressors/uglify-js',
           'compressors/yui'
