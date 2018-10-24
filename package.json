@@ -1,7 +1,7 @@
 {
   "name": "node-minify",
   "version": "3.5.1",
-  "description": "Javascript / CSS minifier based on Babel-minify / Butternut / YUI Compressor / Google Closure Compiler / UglifyJS2 / Sqwish / Clean-css / CSSO",
+  "description": "Javascript / CSS minifier based on Babel-minify / Butternut / YUI Compressor / Google Closure Compiler / Terser / UglifyJS2 / Sqwish / Clean-css / CSSO",
   "homepage": "https://github.com/srod/node-minify",
   "author": {
     "name": "Rodolphe Stoclin",
@@ -33,7 +33,8 @@
     "clean-css",
     "csso",
     "babel-minify",
-    "butternut"
+    "butternut",
+    "terser"
   ],
   "scripts": {
     "docs:dev": "vuepress dev docs",
