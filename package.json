@@ -1,6 +1,6 @@
 {
   "name": "node-minify",
-  "version": "4.0.0-beta.5",
+  "version": "4.0.0-beta.6",
   "description": "Javascript / CSS minifier based on Babel-minify / YUI Compressor / Google Closure Compiler / UglifyJS2 / Sqwish / Clean-css / CSSO",
   "homepage": "https://github.com/srod/node-minify",
   "author": {
