@@ -32,7 +32,8 @@
     "sqwish",
     "clean-css",
     "csso",
-    "babel-minify"
+    "babel-minify",
+    "terser"
   ],
   "scripts": {
     "docs:dev": "vuepress dev docs",
@@ -67,7 +68,7 @@
     "husky": "1.1.2",
     "jest": "23.1.0",
     "lerna": "3.4.3",
-    "lint-staged": "7.3.0",
+    "lint-staged": "8.0.4",
     "prettier": "1.14.3"
   },
   "babel": {
