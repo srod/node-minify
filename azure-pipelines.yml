@@ -17,15 +17,15 @@ strategy:
       node_version: 6.14.x
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: $(node_version)
-  displayName: 'Install Node.js'
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(node_version)
+    displayName: 'Install Node.js'
 
-- script: |
-    yarn install
-  displayName: 'Install dependencies'
+  - script: |
+      yarn && yarn bootstrap
+    displayName: 'Install dependencies'
 
-- script: |
-    yarn test
-  displayName: 'Run tests'
+  - script: |
+      yarn test
+    displayName: 'Run tests'

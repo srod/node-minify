@@ -36,9 +36,10 @@
     "terser"
   ],
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "eslint": "eslint --ignore-path .gitignore --ext .js packages",
+    "eslint": "eslint --ignore-path .gitignore packages",
     "lint": "npm run eslint || true",
     "pretest": "npm run eslint",
     "test": "lerna run test",
@@ -74,17 +75,6 @@
   "babel": {
     "presets": [
       "env"
-    ]
-  },
-  "jest": {
-    "notify": true,
-    "verbose": true,
-    "testEnvironment": "node",
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true,
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      ".history"
     ]
   },
   "lint-staged": {
