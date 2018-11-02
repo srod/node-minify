@@ -68,7 +68,7 @@ describe('core', () => {
   });
 
   describe('Create errors', () => {
-    test('should callback an error if gcc with bad options', () => {
+    test('should catch an error if gcc with bad options', () => {
       const options = {};
       options.minify = {
         compressor: gcc,
@@ -87,7 +87,7 @@ describe('core', () => {
       });
     });
 
-    test('should callback an error if gcc with bad options and sync', () => {
+    test('should catch an error if gcc with bad options and sync', () => {
       const options = {};
       options.minify = {
         compressor: gcc,
@@ -104,7 +104,7 @@ describe('core', () => {
       });
     });
 
-    test('should callback an error if yui with bad options', () => {
+    test('should catch an error if yui with bad options', () => {
       const options = {};
       options.minify = {
         compressor: yui,
@@ -117,11 +117,11 @@ describe('core', () => {
       };
 
       return minify(options.minify).catch(err => {
-        return expect(err.toString()).toMatch('Usage: java -jar');
+        return expect(err.toString()).toMatch('Error');
       });
     });
 
-    test('should callback an error if yui with bad options and sync', () => {
+    test('should catch an error if yui with bad options and sync', () => {
       const options = {};
       options.minify = {
         compressor: yui,
@@ -135,7 +135,7 @@ describe('core', () => {
       };
 
       return minify(options.minify).catch(err => {
-        return expect(err.toString()).toMatch('Usage: java -jar');
+        return expect(err.toString()).toMatch('Error');
       });
     });
   });
