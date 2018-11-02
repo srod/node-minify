@@ -12,7 +12,6 @@
   <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/develop/graph/badge.svg"></a><br>
   <a href="https://david-dm.org/srod/node-minify"><img src="https://img.shields.io/david/srod/node-minify.svg?style=flat"></a>
   <a href="https://david-dm.org/srod/node-minify#info=devDependencies"><img src="https://img.shields.io/david/dev/srod/node-minify.svg?style=flat"></a>
-  <a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/srod/node-minify.svg"></a>
 </p>
 
 # Features
