@@ -12,20 +12,11 @@ node_js:
   - 6
 
 before_install:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.2.1
-  - export PATH=$HOME/.yarn/bin:$PATH
   - node -v
   - npm -v
   - yarn -v
-  - yarn global add greenkeeper-lockfile@1
-
-before_script:
-  - greenkeeper-lockfile-update
 
 script:
   - yarn bootstrap
   - yarn test
   - codecov
-
-after_script:
-  - greenkeeper-lockfile-upload
