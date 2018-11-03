@@ -13,7 +13,7 @@
   "bin": {
     "node-minify": "bin/cli.js"
   },
-  "main": "lib/index.js",
+  "main": "lib/cli.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -36,16 +36,5 @@
     "commander": "2.19.0",
     "ora": "3.0.0",
     "update-notifier": "2.5.0"
-  },
-  "jest": {
-    "notify": true,
-    "verbose": true,
-    "testEnvironment": "node",
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true,
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      ".history"
-    ]
   }
 }

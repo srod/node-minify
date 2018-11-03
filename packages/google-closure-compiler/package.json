@@ -12,7 +12,7 @@
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
   "homepage": "https://github.com/srod/node-minify/tree/master/packages/google-closure-compiler#readme",
   "license": "MIT",
-  "main": "lib/index.js",
+  "main": "lib/google-closure-compiler.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -32,16 +32,5 @@
   },
   "dependencies": {
     "google-closure-compiler": "20181008.0.0"
-  },
-  "jest": {
-    "notify": true,
-    "verbose": true,
-    "testEnvironment": "node",
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true,
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      ".history"
-    ]
   }
 }

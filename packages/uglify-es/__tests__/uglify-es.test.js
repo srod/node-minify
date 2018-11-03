@@ -4,8 +4,6 @@
  * MIT Licensed
  */
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
-
 import { minify } from '@node-minify/core';
 import uglifyes from '@node-minify/uglify-es';
 import { filesJS } from '../../../tests/files-path';

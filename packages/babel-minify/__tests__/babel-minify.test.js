@@ -4,8 +4,6 @@
  * MIT Licensed
  */
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
-
 import babelMinify from '@node-minify/babel-minify';
 import { runOneTest, tests } from '../../../tests/fixtures';
 

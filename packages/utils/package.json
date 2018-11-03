@@ -30,16 +30,5 @@
   },
   "dependencies": {
     "gzip-size": "5.0.0"
-  },
-  "jest": {
-    "notify": true,
-    "verbose": true,
-    "testEnvironment": "node",
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true,
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      ".history"
-    ]
   }
 }

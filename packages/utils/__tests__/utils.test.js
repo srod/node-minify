@@ -1,4 +1,4 @@
-import { utils } from '../lib/utils';
+import { utils } from '@node-minify/utils';
 
 const fixtureFile = __dirname + '/../../../tests/fixtures/fixture-content.js';
 

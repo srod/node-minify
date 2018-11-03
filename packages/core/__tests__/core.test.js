@@ -4,8 +4,6 @@
  * MIT Licensed
  */
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
-
 import childProcess from 'child_process';
 import { minify } from '@node-minify/core';
 import gcc from '@node-minify/google-closure-compiler';

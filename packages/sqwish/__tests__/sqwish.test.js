@@ -4,8 +4,6 @@
  * MIT Licensed
  */
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
-
 import sqwish from '@node-minify/sqwish';
 import { runOneTest, tests } from '../../../tests/fixtures';
 

@@ -8,7 +8,7 @@
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
   "homepage": "https://github.com/srod/node-minify/tree/master/packages/no-compress#readme",
   "license": "MIT",
-  "main": "lib/index.js",
+  "main": "lib/no-compress.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -25,16 +25,5 @@
   },
   "bugs": {
     "url": "https://github.com/srod/node-minify/issues"
-  },
-  "jest": {
-    "notify": true,
-    "verbose": true,
-    "testEnvironment": "node",
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true,
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      ".history"
-    ]
   }
 }

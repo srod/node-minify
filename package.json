@@ -18,15 +18,20 @@
     "node": ">=6.0.0"
   },
   "scripts": {
+    "setup": "npm run clean:packages && yarn && npm run bootstrap && npm run build",
     "bootstrap": "lerna bootstrap",
+    "build": "npm run clean:build && npm run build-js",
+    "build-js": "lerna exec --parallel -- babel --root-mode upward src --out-dir lib --copy-files",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "eslint": "eslint --ignore-path .gitignore packages",
     "lint": "npm run eslint || true",
-    "pretest": "npm run eslint",
-    "test": "lerna run test",
-    "posttest": "npm run clean",
-    "clean": "rm -f ./tests/tmp/*.{js,js.map,css,html}",
+    "pretest": "npm run build && npm run eslint",
+    "test": "jest --maxWorkers=4",
+    "posttest": "npm run clean:coverage",
+    "clean:build": "rimraf packages/*/lib",
+    "clean:coverage": "rimraf tests/tmp/*.{js,js.map,css,html}",
+    "clean:packages": "rimraf node_modules packages/*/node_modules",
     "release-patch": "npm version patch -m 'Bump %s' && git push --tags origin HEAD:master",
     "release-minor": "npm version minor -m 'Bump %s' && git push --tags origin HEAD:master",
     "release-major": "npm version major -m 'Bump %s' && git push --tags origin HEAD:master",
@@ -40,6 +45,11 @@
     "prettier-project": "npm run prettier-write -- '{bin,lib,__tests__}/**/*.js'"
   },
   "devDependencies": {
+    "@babel/cli": "7.1.2",
+    "@babel/core": "7.1.2",
+    "@babel/preset-env": "7.1.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "23.6.0",
     "babel-preset-env": "1.7.0",
     "codecov": "3.1.0",
     "eslint": "5.8.0",
@@ -49,12 +59,8 @@
     "jest": "23.6.0",
     "lerna": "3.4.3",
     "lint-staged": "8.0.4",
-    "prettier": "1.14.3"
-  },
-  "babel": {
-    "presets": [
-      "env"
-    ]
+    "prettier": "1.14.3",
+    "rimraf": "2.6.2"
   },
   "lint-staged": {
     "*.js": [
@@ -73,5 +79,20 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "<rootDir>/coverage/",
+    "notify": true,
+    "projects": [
+      "<rootDir>/packages/*"
+    ],
+    "rootDir": "./",
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      ".history"
+    ],
+    "verbose": true
+  }
 }

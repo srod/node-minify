@@ -4,8 +4,6 @@
  * MIT Licensed
  */
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
-
 import cleanCss from '@node-minify/clean-css';
 import { runOneTest, tests } from '../../../tests/fixtures';
 

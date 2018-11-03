@@ -11,7 +11,7 @@
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
   "homepage": "https://github.com/srod/node-minify/tree/master/packages/sqwish#readme",
   "license": "MIT",
-  "main": "lib/index.js",
+  "main": "lib/sqwish.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -31,16 +31,5 @@
   },
   "dependencies": {
     "sqwish": "0.2.2"
-  },
-  "jest": {
-    "notify": true,
-    "verbose": true,
-    "testEnvironment": "node",
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true,
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      ".history"
-    ]
   }
 }

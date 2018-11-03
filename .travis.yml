@@ -17,6 +17,7 @@ before_install:
   - yarn -v
 
 script:
-  - yarn bootstrap
+  - yarn
+  - yarn setup
   - yarn test
   - codecov

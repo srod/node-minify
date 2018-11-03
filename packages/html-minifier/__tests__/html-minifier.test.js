@@ -4,8 +4,6 @@
  * MIT Licensed
  */
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
-
 import htmlMinifier from '@node-minify/html-minifier';
 import { runOneTest, tests } from '../../../tests/fixtures';
 

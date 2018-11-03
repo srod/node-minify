@@ -5,4 +5,5 @@
 node_modules
 coverage
 dist
+lib
 .history

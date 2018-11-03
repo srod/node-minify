@@ -4,8 +4,6 @@
  * MIT Licensed
  */
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
-
 import noCompress from '@node-minify/no-compress';
 import { runOneTest, tests } from '../../../tests/fixtures';
 

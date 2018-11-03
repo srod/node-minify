@@ -23,7 +23,8 @@ steps:
     displayName: 'Install Node.js'
 
   - script: |
-      yarn && yarn bootstrap
+      yarn
+      yarn setup
     displayName: 'Install dependencies'
 
   - script: |
