@@ -1,9 +1,11 @@
 {
   "name": "@node-minify/utils",
-  "version": "5.0.0",
-  "description": "todo",
+  "version": "4.0.0-beta.6",
+  "description": "utils for @node-minify",
   "keywords": [
-    "utils"
+    "compressor",
+    "minify",
+    "minifier"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
   "homepage": "https://github.com/srod/node-minify/tree/master/packages/utils#readme",

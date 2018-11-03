@@ -1,9 +1,12 @@
 {
   "name": "@node-minify/babel-minify",
-  "version": "5.0.0",
-  "description": "todo",
+  "version": "4.0.0-beta.6",
+  "description": "babel-minify plugin for @node-minify",
   "keywords": [
-    "todo"
+    "compressor",
+    "minify",
+    "minifier",
+    "babel-minify"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
   "homepage": "https://github.com/srod/node-minify/tree/master/packages/babel-minify#readme",

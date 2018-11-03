@@ -1,9 +1,9 @@
 {
   "name": "@node-minify/no-compress",
-  "version": "5.0.0",
-  "description": "todo",
+  "version": "4.0.0-beta.6",
+  "description": "no compress plugin for @node-minify, only concatenate",
   "keywords": [
-    "todo"
+    "concatenate"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
   "homepage": "https://github.com/srod/node-minify/tree/master/packages/no-compress#readme",

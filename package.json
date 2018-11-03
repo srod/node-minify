@@ -17,24 +17,6 @@
   "engines": {
     "node": ">=6.0.0"
   },
-  "keywords": [
-    "compressor",
-    "minify",
-    "minifier",
-    "yui",
-    "gcc",
-    "google",
-    "closure",
-    "compiler",
-    "uglifyjs",
-    "uglifyjs2",
-    "windows",
-    "sqwish",
-    "clean-css",
-    "csso",
-    "babel-minify",
-    "terser"
-  ],
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "docs:dev": "vuepress dev docs",
@@ -56,9 +38,6 @@
     "prettier": "prettier",
     "prettier-write": "npm run prettier -- --write",
     "prettier-project": "npm run prettier-write -- '{bin,lib,__tests__}/**/*.js'"
-  },
-  "bin": {
-    "node-minify": "bin/cli.js"
   },
   "devDependencies": {
     "babel-preset-env": "1.7.0",

@@ -1,8 +1,11 @@
 {
   "name": "@node-minify/yui",
-  "version": "5.0.0",
-  "description": "todo",
+  "version": "4.0.0-beta.6",
+  "description": "yui - yahoo compressor plugin for @node-minify",
   "keywords": [
+    "compressor",
+    "minify",
+    "minifier",
     "yui"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
