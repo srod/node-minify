@@ -1,8 +1,8 @@
-import { utils } from '@node-minify/utils';
+import { utils } from '../src/utils';
 
 const fixtureFile = __dirname + '/../../../tests/fixtures/fixture-content.js';
 
-describe('utils', () => {
+describe('Package: utils', () => {
   describe('readFile', () => {
     test('should return the content', () => expect(utils.readFile(fixtureFile)).toMatch("console.log('content');"));
   });

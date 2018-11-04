@@ -4,13 +4,13 @@
  * MIT Licensed
  */
 
-import cleanCss from '@node-minify/clean-css';
+import cleanCss from '../src/clean-css';
 import { runOneTest, tests } from '../../../tests/fixtures';
 
 const compressorLabel = 'clean-css';
 const compressor = cleanCss;
 
-describe('clean-css', () => {
+describe('Package: clean-css', () => {
   tests.commoncss.forEach(options => {
     runOneTest({ options, compressorLabel, compressor });
   });

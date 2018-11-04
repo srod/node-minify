@@ -4,13 +4,13 @@
  * MIT Licensed
  */
 
-import sqwish from '@node-minify/sqwish';
+import sqwish from '../../sqwish/src/sqwish';
 import { runOneTest, tests } from '../../../tests/fixtures';
 
 const compressorLabel = 'sqwish';
 const compressor = sqwish;
 
-describe('sqwish', () => {
+describe('Package: sqwish', () => {
   tests.commonjs.forEach(options => {
     runOneTest({ options, compressorLabel, compressor });
   });

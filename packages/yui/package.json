@@ -23,9 +23,6 @@
     "type": "git",
     "url": "git+https://github.com/srod/node-minify.git"
   },
-  "scripts": {
-    "test": "jest"
-  },
   "bugs": {
     "url": "https://github.com/srod/node-minify/issues"
   }

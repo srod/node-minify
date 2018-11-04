@@ -4,13 +4,13 @@
  * MIT Licensed
  */
 
-import crass from '@node-minify/crass';
+import crass from '../../crass/src/crass';
 import { runOneTest, tests } from '../../../tests/fixtures';
 
 const compressorLabel = 'crass';
 const compressor = crass;
 
-describe('crass', () => {
+describe('Package: crass', () => {
   tests.commoncss.forEach(options => {
     runOneTest({ options, compressorLabel, compressor });
   });

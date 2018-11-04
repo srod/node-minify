@@ -5,12 +5,12 @@
  */
 
 import childProcess from 'child_process';
-import * as cli from '../lib/cli';
-import gcc from '@node-minify/google-closure-compiler';
-import yui from '@node-minify/yui';
+import * as cli from '../src/cli';
+import gcc from '../../google-closure-compiler/src/google-closure-compiler';
+import yui from '../../yui/src/yui';
 import { filesJS } from '../../../tests/files-path';
 
-describe('cli', () => {
+describe('Package: cli', () => {
   test('should minify to have been called with gcc', () => {
     const spy = jest.spyOn(cli, 'run');
     return cli

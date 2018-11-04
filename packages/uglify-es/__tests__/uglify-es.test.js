@@ -4,15 +4,15 @@
  * MIT Licensed
  */
 
-import { minify } from '@node-minify/core';
-import uglifyes from '@node-minify/uglify-es';
+import { minify } from '../../core/src/core';
+import uglifyes from '../../uglify-es/src/uglify-es';
 import { filesJS } from '../../../tests/files-path';
 import { runOneTest, tests } from '../../../tests/fixtures';
 
 const compressorLabel = 'uglify-es';
 const compressor = uglifyes;
 
-describe('uglify-es', () => {
+describe('Package: uglify-es', () => {
   tests.commonjs.forEach(options => {
     runOneTest({ options, compressorLabel, compressor });
   });

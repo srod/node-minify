@@ -4,13 +4,13 @@
  * MIT Licensed
  */
 
-import htmlMinifier from '@node-minify/html-minifier';
+import htmlMinifier from '../../html-minifier/src/html-minifier';
 import { runOneTest, tests } from '../../../tests/fixtures';
 
 const compressorLabel = 'html-minifier';
 const compressor = htmlMinifier;
 
-describe('html-minifier', () => {
+describe('Package: html-minifier', () => {
   tests.commonhtml.forEach(options => {
     runOneTest({ options, compressorLabel, compressor });
   });

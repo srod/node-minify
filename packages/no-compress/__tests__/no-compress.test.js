@@ -4,13 +4,13 @@
  * MIT Licensed
  */
 
-import noCompress from '@node-minify/no-compress';
+import noCompress from '../../no-compress/src/no-compress';
 import { runOneTest, tests } from '../../../tests/fixtures';
 
 const compressorLabel = 'no-compress';
 const compressor = noCompress;
 
-describe('no-compress', () => {
+describe('Package: no-compress', () => {
   tests.concat.forEach(options => {
     runOneTest({ options, compressorLabel, compressor });
   });

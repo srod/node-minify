@@ -4,15 +4,15 @@
  * MIT Licensed
  */
 
-import { minify } from '@node-minify/core';
-import gcc from '@node-minify/google-closure-compiler';
+import { minify } from '../../core/src/core';
+import gcc from '../../google-closure-compiler/src/google-closure-compiler';
 import { filesJS } from '../../../tests/files-path';
 import { runOneTest, tests } from '../../../tests/fixtures';
 
 const compressorLabel = 'google-closure-compiler';
 const compressor = gcc;
 
-describe('google-closure-compiler', () => {
+describe('Package: google-closure-compiler', () => {
   tests.commonjs.forEach(options => {
     runOneTest({ options, compressorLabel, compressor });
   });

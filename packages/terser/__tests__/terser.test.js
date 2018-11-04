@@ -4,15 +4,15 @@
  * MIT Licensed
  */
 
-import { minify } from '@node-minify/core';
-import terser from '@node-minify/terser';
+import { minify } from '../../core/src/core';
+import terser from '../../terser/src/terser';
 import { filesJS } from '../../../tests/files-path';
 import { runOneTest, tests } from '../../../tests/fixtures';
 
 const compressorLabel = 'terser';
 const compressor = terser;
 
-describe('terser', () => {
+describe('Package: terser', () => {
   tests.commonjs.forEach(options => {
     runOneTest({ options, compressorLabel, compressor });
   });

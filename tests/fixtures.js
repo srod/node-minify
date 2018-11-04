@@ -1,4 +1,4 @@
-import { minify } from '@node-minify/core';
+import { minify } from '../packages/core/src/core';
 import { filesJS, filesCSS, filesHTML } from './files-path';
 
 const runOneTest = ({ options, compressorLabel, compressor, sync }) => {

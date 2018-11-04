@@ -4,13 +4,13 @@
  * MIT Licensed
  */
 
-import babelMinify from '@node-minify/babel-minify';
+import babelMinify from '../src/babel-minify';
 import { runOneTest, tests } from '../../../tests/fixtures';
 
 const compressorLabel = 'babel-minify';
 const compressor = babelMinify;
 
-describe('babel-minify', () => {
+describe('Package: babel-minify', () => {
   tests.commonjs.forEach(options => {
     runOneTest({ options, compressorLabel, compressor });
   });

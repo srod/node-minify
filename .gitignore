@@ -7,3 +7,4 @@ coverage
 dist
 lib
 .history
+tests/tmp

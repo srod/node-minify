@@ -5,13 +5,24 @@
  */
 
 import childProcess from 'child_process';
-import { minify } from '@node-minify/core';
-import gcc from '@node-minify/google-closure-compiler';
-import noCompress from '@node-minify/no-compress';
-import yui from '@node-minify/yui';
+import { minify } from '../../core/src/core';
+import gcc from '../../google-closure-compiler/src/google-closure-compiler';
+import noCompress from '../../no-compress/src/no-compress';
+import yui from '../../yui/src/yui';
+import uglifyes from '../../uglify-es/src/uglify-es';
 import { filesJS } from '../../../tests/files-path';
+import { runOneTest, tests } from '../../../tests/fixtures';
 
-describe('core', () => {
+const compressorLabel = 'uglify-es';
+const compressor = uglifyes;
+
+describe('Package: core', () => {
+  tests.commonjs.forEach(options => {
+    runOneTest({ options, compressorLabel, compressor });
+  });
+  tests.commonjs.forEach(options => {
+    runOneTest({ options, compressorLabel, compressor, sync: true });
+  });
   describe('Fake binary', () => {
     test('should throw an error if binary does not exist', () => {
       const options = {};
@@ -197,6 +208,41 @@ describe('core', () => {
 
       return minify(options.minify).catch(err => {
         return expect(err.toString()).toEqual('Error: compressor is mandatory.');
+      });
+    });
+  });
+
+  describe('Should be OK', () => {
+    test('should be OK with GCC and async', () => {
+      const options = {};
+      options.minify = {
+        compressor: gcc,
+        input: filesJS.oneFile,
+        output: filesJS.fileJSOut,
+        callback: () => {}
+      };
+      const spy = jest.spyOn(options.minify, 'callback');
+
+      return minify(options.minify).then(min => {
+        expect(spy).toHaveBeenCalled();
+        return expect(min).toBeDefined();
+      });
+    });
+
+    test('should be OK with GCC and sync', () => {
+      const options = {};
+      options.minify = {
+        compressor: gcc,
+        input: filesJS.oneFile,
+        output: filesJS.fileJSOut,
+        sync: true,
+        callback: () => {}
+      };
+      const spy = jest.spyOn(options.minify, 'callback');
+
+      return minify(options.minify).then(min => {
+        expect(spy).toHaveBeenCalled();
+        return expect(min).toBeDefined();
       });
     });
   });
