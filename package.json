@@ -76,7 +76,7 @@
     "node-version": "1.2.0",
     "ora": "3.0.0",
     "sqwish": "0.2.2",
-    "terser": "3.10.8",
+    "terser": "3.10.11",
     "uglify-es": "3.3.9",
     "uglify-js": "3.4.9",
     "update-notifier": "2.5.0"
