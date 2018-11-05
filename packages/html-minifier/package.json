@@ -1,0 +1,32 @@
+{
+  "name": "@node-minify/html-minifier",
+  "version": "4.0.0-beta.6",
+  "description": "html-minifier plugin for @node-minify",
+  "keywords": [
+    "compressor",
+    "minify",
+    "minifier",
+    "html-minifier"
+  ],
+  "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
+  "homepage": "https://github.com/srod/node-minify/tree/master/packages/html-minifier#readme",
+  "license": "MIT",
+  "main": "lib/html-minifier.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srod/node-minify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/srod/node-minify/issues"
+  },
+  "dependencies": {
+    "html-minifier": "3.5.21"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "@node-minify/uglify-es",
+  "version": "4.0.0-beta.6",
+  "description": "uglify-es plugin for @node-minify",
+  "keywords": [
+    "compressor",
+    "minify",
+    "minifier",
+    "uglify-es"
+  ],
+  "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
+  "homepage": "https://github.com/srod/node-minify/tree/master/packages/uglify-es#readme",
+  "license": "MIT",
+  "main": "lib/uglify-es.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srod/node-minify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/srod/node-minify/issues"
+  },
+  "dependencies": {
+    "uglify-es": "3.3.9"
+  }
+}
