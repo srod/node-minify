@@ -19,10 +19,12 @@ let silence = false;
 /**
  * Run one compressor.
  */
-const runOne = (cli, compressor) => {
+const runOne = cli => {
   return new Promise((resolve, reject) => {
+    const compressor = typeof cli.compressor === 'string' ? require(`@node-minify/${cli.compressor}`) : cli.compressor;
     const options = {
-      compressor: compressor || cli.compressor,
+      compressorLabel: cli.compressor,
+      compressor,
       input: cli.input.split(','),
       output: cli.output
     };
@@ -64,7 +66,7 @@ const run = cli => {
   }
 
   return new Promise((resolve, reject) => {
-    runOne(cli, cli.compressor)
+    runOne(cli)
       .then(() => {
         if (!silence) {
           console.log('');

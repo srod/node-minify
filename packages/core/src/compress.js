@@ -17,7 +17,7 @@ import mkdirp from 'mkdirp';
  */
 const compress = settings => {
   if (typeof settings.compressor !== 'function') {
-    throw new Error(`Type "${settings.compressor}" does not exist`);
+    throw new Error(`compressor should be a function, maybe you forgot to install the compressor`);
   }
 
   createDirectory(settings.output);

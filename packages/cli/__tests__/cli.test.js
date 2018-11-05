@@ -6,8 +6,6 @@
 
 import childProcess from 'child_process';
 import * as cli from '../src/cli';
-import gcc from '../../google-closure-compiler/src/google-closure-compiler';
-import yui from '../../yui/src/yui';
 import { filesJS } from '../../../tests/files-path';
 
 describe('Package: cli', () => {
@@ -15,7 +13,7 @@ describe('Package: cli', () => {
     const spy = jest.spyOn(cli, 'run');
     return cli
       .run({
-        compressor: gcc,
+        compressor: 'google-closure-compiler',
         input: filesJS.oneFile,
         output: filesJS.fileJSOut,
         option: '{"createSourceMap": true}'
@@ -30,7 +28,7 @@ describe('cli error', () => {
     const spy = jest.spyOn(cli, 'run');
     return cli
       .run({
-        compressor: yui,
+        compressor: 'yui',
         input: filesJS.oneFile,
         output: filesJS.fileJSOut
       })

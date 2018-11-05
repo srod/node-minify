@@ -18,7 +18,7 @@ const spinner = ora();
  * @param {Object} options
  */
 const start = options => {
-  spinner.text = 'Compressing file(s) with ' + chalk.green(options.compressor) + '...';
+  spinner.text = 'Compressing file(s) with ' + chalk.green(options.compressorLabel) + '...';
   spinner.start();
 };
 
@@ -30,7 +30,7 @@ const start = options => {
 const stop = result => {
   spinner.text =
     'File(s) compressed successfully with ' +
-    chalk.green(result.compressor) +
+    chalk.green(result.compressorLabel) +
     ' (' +
     chalk.green(result.size) +
     ' minified, ' +
@@ -45,7 +45,7 @@ const stop = result => {
  * @param {Object} options
  */
 const error = options => {
-  spinner.text = 'Error - file(s) not compressed with ' + chalk.red(options.compressor);
+  spinner.text = 'Error - file(s) not compressed with ' + chalk.red(options.compressorLabel);
   spinner.fail();
 };
 

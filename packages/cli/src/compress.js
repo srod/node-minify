@@ -23,6 +23,7 @@ const compress = options => {
           .getFilesizeGzippedInBytes(options.output)
           .then(sizeGzip => {
             resolve({
+              compressorLabel: options.compressorLabel,
               compressor: options.compressor,
               size: utils.getFilesizeInBytes(options.output),
               sizeGzip: sizeGzip

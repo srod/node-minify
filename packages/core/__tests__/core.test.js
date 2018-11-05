@@ -33,7 +33,9 @@ describe('Package: core', () => {
       };
 
       return minify(options.minify).catch(err => {
-        return expect(err.toString()).toEqual('Error: Type "fake" does not exist');
+        return expect(err.toString()).toEqual(
+          'Error: compressor should be a function, maybe you forgot to install the compressor'
+        );
       });
     });
   });
