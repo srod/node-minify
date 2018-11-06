@@ -1,0 +1,40 @@
+{
+  "name": "@node-minify/cli",
+  "version": "4.0.0-beta.6",
+  "description": "CLI - command line interface for @node-minify",
+  "keywords": [
+    "compressor",
+    "minify",
+    "minifier"
+  ],
+  "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
+  "homepage": "https://github.com/srod/node-minify/tree/master/packages/cli#readme",
+  "license": "MIT",
+  "bin": {
+    "node-minify": "bin/cli.js"
+  },
+  "main": "lib/cli.js",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srod/node-minify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/srod/node-minify/issues"
+  },
+  "dependencies": {
+    "chalk": "2.4.1",
+    "commander": "2.19.0",
+    "ora": "3.0.0",
+    "update-notifier": "2.5.0"
+  }
+}

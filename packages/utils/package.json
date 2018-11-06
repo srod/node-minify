@@ -1,0 +1,34 @@
+{
+  "name": "@node-minify/utils",
+  "version": "4.0.0-beta.6",
+  "description": "utils for @node-minify",
+  "keywords": [
+    "compressor",
+    "minify",
+    "minifier"
+  ],
+  "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
+  "homepage": "https://github.com/srod/node-minify/tree/master/packages/utils#readme",
+  "license": "MIT",
+  "main": "lib/utils.js",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srod/node-minify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/srod/node-minify/issues"
+  },
+  "dependencies": {
+    "gzip-size": "5.0.0"
+  }
+}

@@ -1,7 +1,6 @@
 {
   "name": "node-minify",
-  "version": "3.5.1",
-  "description": "Javascript / CSS minifier based on Babel-minify / Butternut / YUI Compressor / Google Closure Compiler / Terser / UglifyJS2 / Sqwish / Clean-css / CSSO",
+  "description": "Monorepo for node-minify",
   "homepage": "https://github.com/srod/node-minify",
   "author": {
     "name": "Rodolphe Stoclin",
@@ -9,80 +8,44 @@
     "url": "http://2clics.net"
   },
   "license": "MIT",
-  "main": "lib/node-minify.js",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/srod/node-minify.git"
   },
-  "engines": {
-    "node": ">=6.0.0"
-  },
-  "keywords": [
-    "compressor",
-    "minify",
-    "minifier",
-    "yui",
-    "gcc",
-    "google",
-    "closure",
-    "compiler",
-    "uglifyjs",
-    "uglifyjs2",
-    "windows",
-    "sqwish",
-    "clean-css",
-    "csso",
-    "babel-minify",
-    "butternut",
-    "terser"
-  ],
   "scripts": {
+    "setup": "npm run clean:packages && yarn && npm run bootstrap && npm run build",
+    "bootstrap": "lerna bootstrap",
+    "build": "npm run clean:build && npm run build-js",
+    "build-js": "lerna exec --parallel -- babel --root-mode upward src --out-dir lib --copy-files",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "eslint": "eslint lib __tests__ || true",
-    "pretest": "npm run eslint",
-    "test": "jest",
-    "posttest": "npm run clean",
-    "clean": "rm -f ./examples/public/dist/* ./examples/public/js-dist/* ./examples/public/css-dist/*",
+    "eslint": "eslint --ignore-path .gitignore packages",
+    "lint": "npm run eslint || true",
+    "pretest": "npm run build && npm run eslint",
+    "test": "jest --maxWorkers=4",
+    "posttest": "npm run clean:coverage",
+    "clean:build": "rimraf packages/*/lib",
+    "clean:coverage": "rimraf tests/tmp/*.{js,js.map,css,html}",
+    "clean:packages": "rimraf node_modules packages/*/node_modules",
     "release-patch": "npm version patch -m 'Bump %s' && git push --tags origin HEAD:master",
     "release-minor": "npm version minor -m 'Bump %s' && git push --tags origin HEAD:master",
     "release-major": "npm version major -m 'Bump %s' && git push --tags origin HEAD:master",
     "release-next-major": "npm version premajor --preid=beta && git push --tags origin HEAD:next",
     "release-next-prerelease": "npm version prerelease --preid=beta && git push --tags origin HEAD:next",
     "showpack": "npm pack --dry",
-    "publish-latest": "npm publish",
-    "publish-next": "npm publish --tag next",
+    "publish-latest": "npm publish --access=public",
+    "publish-next": "npm publish --access=public --tag next",
     "prettier": "prettier",
     "prettier-write": "npm run prettier -- --write",
-    "prettier-project": "npm run prettier-write -- '{lib,__tests__}/**/*.js'"
-  },
-  "bin": {
-    "node-minify": "bin/cli.js"
-  },
-  "dependencies": {
-    "babel-core": "6.26.3",
-    "babel-preset-minify": "0.5.0",
-    "butternut": "0.4.6",
-    "chalk": "2.4.1",
-    "clean-css": "4.2.1",
-    "commander": "2.19.0",
-    "crass": "0.12.3",
-    "csso": "3.5.1",
-    "depd": "2.0.0",
-    "glob": "7.1.3",
-    "google-closure-compiler": "20181008.0.0",
-    "gzip-size": "5.0.0",
-    "html-minifier": "3.5.21",
-    "mkdirp": "0.5.1",
-    "node-version": "1.2.0",
-    "ora": "3.0.0",
-    "sqwish": "0.2.2",
-    "terser": "3.10.11",
-    "uglify-es": "3.3.9",
-    "uglify-js": "3.4.9",
-    "update-notifier": "2.5.0"
+    "prettier-project": "npm run prettier-write -- '{bin,lib,__tests__}/**/*.js'"
   },
   "devDependencies": {
+    "@babel/cli": "7.1.2",
+    "@babel/core": "7.1.2",
+    "@babel/preset-env": "7.1.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "23.6.0",
     "babel-preset-env": "1.7.0",
     "codecov": "3.1.0",
     "eslint": "5.8.0",
@@ -90,19 +53,10 @@
     "eslint-plugin-prettier": "3.0.0",
     "husky": "1.1.3",
     "jest": "23.6.0",
+    "lerna": "3.4.3",
     "lint-staged": "8.0.4",
-    "prettier": "1.14.3"
-  },
-  "jest": {
-    "notify": true,
-    "verbose": true,
-    "testEnvironment": "node",
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true,
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      ".history"
-    ]
+    "prettier": "1.14.3",
+    "rimraf": "2.6.2"
   },
   "lint-staged": {
     "*.js": [
@@ -118,5 +72,23 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "<rootDir>/coverage/",
+    "notify": true,
+    "projects": [
+      "<rootDir>/packages/*"
+    ],
+    "rootDir": "./",
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      ".history"
+    ],
+    "verbose": true
   }
 }
