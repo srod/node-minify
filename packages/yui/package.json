@@ -12,6 +12,9 @@
   "homepage": "https://github.com/srod/node-minify/tree/master/packages/yui#readme",
   "license": "MIT",
   "main": "lib/yui.js",
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "directories": {
     "lib": "lib",
     "test": "__tests__"

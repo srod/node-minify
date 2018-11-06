@@ -14,6 +14,9 @@
     "node-minify": "bin/cli.js"
   },
   "main": "lib/cli.js",
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "directories": {
     "lib": "lib",
     "test": "__tests__"
