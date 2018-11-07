@@ -31,6 +31,6 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "google-closure-compiler": "20181008.0.0"
+    "google-closure-compiler": "20181028.0.1"
   }
 }
