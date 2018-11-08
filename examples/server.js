@@ -1,4 +1,3 @@
-const http = require('http');
 const compressor = require('@node-minify/core');
 const yui = require('@node-minify/yui');
 const terser = require('@node-minify/terser');
@@ -9,15 +8,6 @@ const uglifyjs = require('@node-minify/uglify-js');
 const noCompress = require('@node-minify/no-compress');
 const sqwish = require('@node-minify/sqwish');
 const crass = require('@node-minify/crass');
-
-http
-  .createServer(function(req, res) {
-    res.writeHead(200, {
-      'Content-Type': 'text/plain'
-    });
-    res.end('Hello World\n');
-  })
-  .listen(1337, '127.0.0.1');
 
 console.log('sync 1');
 compressor.minify({
@@ -254,5 +244,3 @@ compressor.minify({
     //console.log(min);
   }
 });
-
-console.log('Server running at http://127.0.0.1:1337/');
