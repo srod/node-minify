@@ -7,10 +7,13 @@
 ## Usage
 
 ```js
+const compressor = require('@node-minify/core');
+const babelMinify = require('@node-minify/babel-minify');
+
 compressor.minify({
-  compressor: 'babel-minify',
-  input: 'foo.css',
-  output: 'bar.css',
+  compressor: babelMinify,
+  input: 'foo.js',
+  output: 'bar.js',
   callback: function(err, min) {}
 });
 ```
@@ -19,7 +22,7 @@ compressor.minify({
 
 ```js
 compressor.minify({
-  compressor: 'babel-minify',
+  compressor: babelMinify,
   input: 'foo.js',
   output: 'bar.js',
   options: {

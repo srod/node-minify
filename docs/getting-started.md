@@ -3,17 +3,25 @@
 ## Installation
 
 ```bash
-npm install node-minify # OR yarn add node-minify
+npm install @node-minify/core # OR yarn add @node-minify/core
+```
+
+And install the compressor you want
+
+```bash
+npm install @node-minify/uglify-js # OR yarn add @node-minify/uglify-js
 ```
 
 ## Quick Start
 
 ```js
-var compressor = require('node-minify');
+const compressor = require('@node-minify/core');
+const gcc = require('@node-minify/google-closure-compiler');
+const uglifyjs = require('@node-minify/uglify-js');
 
 // Using Google Closure Compiler
 compressor.minify({
-  compressor: 'gcc',
+  compressor: gcc,
   input: 'foo.js',
   output: 'bar.js',
   callback: function(err, min) {}
@@ -21,7 +29,7 @@ compressor.minify({
 
 // Using UglifyJS
 compressor.minify({
-  compressor: 'uglifyjs',
+  compressor: uglifyjs,
   input: './**/*.js',
   output: 'bar.js',
   callback: function(err, min) {}
@@ -29,7 +37,7 @@ compressor.minify({
 
 // Using Promise
 var promise = compressor.minify({
-  compressor: 'uglifyjs',
+  compressor: uglifyjs,
   input: './**/*.js',
   output: 'bar.js'
 });

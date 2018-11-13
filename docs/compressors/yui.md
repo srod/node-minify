@@ -7,8 +7,12 @@
 ## Usage for JavaScript
 
 ```js
+const compressor = require('@node-minify/core');
+const yui = require('@node-minify/yui');
+
 compressor.minify({
-  compressor: 'yui-js',
+  compressor: yui,
+  type: 'js',
   input: 'foo.js',
   output: 'bar.js',
   callback: function(err, min) {}
@@ -19,9 +23,10 @@ compressor.minify({
 
 ```js
 compressor.minify({
-  compressor: 'yui-css', // OR 'yui'
-  input: 'foo.js',
-  output: 'bar.js',
+  compressor: yui,
+  type: 'css',
+  input: 'foo.css',
+  output: 'bar.css',
   callback: function(err, min) {}
 });
 ```
@@ -50,7 +55,8 @@ Linux: [https://www.java.com/en/download/help/linux_x64_install.xml](https://www
 
 ```js
 compressor.minify({
-  compressor: 'yui-js',
+  compressor: yui,
+  type: 'js',
   input: 'foo.js',
   output: 'bar.js',
   options: {

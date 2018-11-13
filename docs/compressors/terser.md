@@ -7,8 +7,11 @@
 ## Usage
 
 ```js
+const compressor = require('@node-minify/core');
+const terser = require('@node-minify/terser');
+
 compressor.minify({
-  compressor: 'terser',
+  compressor: terser,
   input: 'foo.css',
   output: 'bar.css',
   callback: function(err, min) {}
@@ -19,7 +22,7 @@ compressor.minify({
 
 ```js
 compressor.minify({
-  compressor: 'terser',
+  compressor: terser,
   input: 'foo.js',
   output: 'bar.js',
   options: {
