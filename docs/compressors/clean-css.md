@@ -7,8 +7,11 @@
 ## Usage
 
 ```js
+const compressor = require('@node-minify/core');
+const cleanCSS = require('@node-minify/clean-css');
+
 compressor.minify({
-  compressor: 'clean-css',
+  compressor: cleanCSS,
   input: 'foo.css',
   output: 'bar.css',
   callback: function(err, min) {}
@@ -19,7 +22,7 @@ compressor.minify({
 
 ```js
 compressor.minify({
-  compressor: 'clean-css',
+  compressor: cleanCSS,
   input: 'foo.css',
   output: 'bar.css',
   options: {
