@@ -34,8 +34,8 @@
     "release-next-major": "lerna version premajor --preid beta && git push --tags origin HEAD:next",
     "release-next-prerelease": "lerna version prerelease --preid beta && git push --tags origin HEAD:next",
     "showpack": "lerna pack --dry",
-    "publish-latest": "lerna publish",
-    "publish-next": "lerna publish --npm-tag next",
+    "publish-latest": "lerna publish from-git",
+    "publish-next": "lerna publish from-git --npm-tag next",
     "prettier": "prettier",
     "prettier-write": "npm run prettier -- --write",
     "prettier-project": "npm run prettier-write -- '{bin,lib,__tests__}/**/*.js'"
