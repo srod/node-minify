@@ -22,6 +22,7 @@
     "test": "__tests__"
   },
   "files": [
+    "bin",
     "lib"
   ],
   "publishConfig": {
