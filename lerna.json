@@ -8,7 +8,7 @@
     }
   },
   "packages": ["packages/*"],
-  "version": "independent",
   "npmClient": "yarn",
-  "useWorkspaces": true
+  "useWorkspaces": true,
+  "version": "4.0.0-beta.11"
 }
