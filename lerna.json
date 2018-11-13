@@ -1,12 +1,13 @@
 {
   "command": {
     "init": {
-      "exact": true
+      "exact": true,
+      "publish": {
+        "npmClient": "yarn"
+      }
     }
   },
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/*"],
   "version": "independent",
   "npmClient": "yarn",
   "useWorkspaces": true
