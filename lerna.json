@@ -3,7 +3,7 @@
     "init": {
       "exact": true,
       "publish": {
-        "npmClient": "yarn"
+        "npmClient": "npm"
       }
     }
   },
