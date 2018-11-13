@@ -84,7 +84,7 @@ promise.then(function(min) {});
 
 ## Documentation
 
-Visit https://node-minify.2clics.net for full documentation
+Visit https://node-minify.2clics.net for full documentation.
 
 ## Windows support
 
