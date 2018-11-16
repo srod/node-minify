@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/cli",
-  "version": "4.0.0-beta.8",
+  "version": "4.0.0-beta.7",
   "description": "CLI - command line interface for @node-minify",
   "keywords": [
     "compressor",
@@ -36,7 +36,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/core": "^4.0.0-beta.8",
+    "@node-minify/core": "^4.0.0-beta.7",
     "@node-minify/utils": "^4.0.0-beta.7",
     "chalk": "2.4.1",
     "commander": "2.19.0",

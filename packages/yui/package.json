@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/yui",
-  "version": "4.0.0-beta.8",
+  "version": "4.0.0-beta.7",
   "description": "yui - yahoo compressor plugin for @node-minify",
   "keywords": [
     "compressor",
