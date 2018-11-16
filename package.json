@@ -32,7 +32,7 @@
     "release-minor": "lerna version minor -m 'Bump %s' && git push --tags origin HEAD:master",
     "release-major": "lerna version major -m 'Bump %s' && git push --tags origin HEAD:master",
     "release-next-major": "lerna version premajor --preid beta",
-    "release-next-prerelease": "NPM_CONFIG_TAG-VERSION-PREFIX= lerna version prerelease --preid beta",
+    "release-next-prerelease": "NPM_CONFIG_TAG_VERSION_PREFIX= lerna version prerelease --preid beta",
     "showpack": "lerna pack --dry",
     "prepublish": "npm run build",
     "publish-latest": "NPM_CONFIG_OTP=xxx lerna publish from-git",
