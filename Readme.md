@@ -52,11 +52,13 @@ npm install node-minify # OR yarn add node-minify
 ## Quick Start
 
 ```js
-const minify = require('node-minify');
+const minify = require('@node-minify/core');
+const gcc = require('@node-minify/google-closure-compiler');
+const uglifyJS = require('@node-minify/uglify-js');
 
 // Using Google Closure Compiler
 minify({
-  compressor: 'gcc',
+  compressor: gcc,
   input: 'foo.js',
   output: 'bar.js',
   callback: function(err, min) {}
@@ -64,7 +66,7 @@ minify({
 
 // Using UglifyJS with wildcards
 minify({
-  compressor: 'uglifyjs',
+  compressor: uglifyJS,
   input: './**/*.js',
   output: 'bar.js',
   callback: function(err, min) {}
@@ -72,7 +74,7 @@ minify({
 
 // With Promise
 var promise = minify({
-  compressor: 'uglifyjs',
+  compressor: uglifyJS,
   input: './**/*.js',
   output: 'bar.js'
 });
