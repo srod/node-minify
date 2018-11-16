@@ -7,7 +7,7 @@
 /**
  * Module dependencies.
  */
-import { minify } from '@node-minify/core';
+import minify from '@node-minify/core';
 import { utils } from '@node-minify/utils';
 
 /**

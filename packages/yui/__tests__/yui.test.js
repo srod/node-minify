@@ -7,7 +7,7 @@
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
 import childProcess from 'child_process';
-import { minify } from '../../core/src/core';
+import minify from '../../core/src/core';
 import yui from '../../yui/src/yui';
 import { filesJS } from '../../../tests/files-path';
 import { runOneTest, tests } from '../../../tests/fixtures';

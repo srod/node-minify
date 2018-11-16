@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { minify } from '../../core/src/core';
+import minify from '../../core/src/core';
 import uglifyes from '../../uglify-es/src/uglify-es';
 import { filesJS } from '../../../tests/files-path';
 import { runOneTest, tests } from '../../../tests/fixtures';

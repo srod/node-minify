@@ -5,7 +5,7 @@
  */
 
 import childProcess from 'child_process';
-import { minify } from '../../core/src/core';
+import minify from '../../core/src/core';
 import gcc from '../../google-closure-compiler/src/google-closure-compiler';
 import noCompress from '../../no-compress/src/no-compress';
 import yui from '../../yui/src/yui';

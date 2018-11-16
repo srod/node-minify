@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { minify } from '../../core/src/core';
+import minify from '../../core/src/core';
 import terser from '../../terser/src/terser';
 import { filesJS } from '../../../tests/files-path';
 import { runOneTest, tests } from '../../../tests/fixtures';
