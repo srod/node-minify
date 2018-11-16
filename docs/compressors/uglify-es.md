@@ -7,10 +7,10 @@
 ## Usage
 
 ```js
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const uglifyES = require('@node-minify/uglify-es');
 
-compressor.minify({
+minify({
   compressor: uglifyES,
   input: 'foo.js',
   output: 'bar.js',
@@ -21,7 +21,7 @@ compressor.minify({
 ## Options
 
 ```js
-compressor.minify({
+minify({
   compressor: uglifyES,
   input: 'foo.js',
   output: 'bar.js',

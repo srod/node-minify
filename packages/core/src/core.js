@@ -42,4 +42,7 @@ const minify = settings => {
   });
 };
 
-export { minify };
+/**
+ * Expose `minify()`.
+ */
+module.exports = minify;

@@ -39,7 +39,7 @@ const defaultOptions = {
  * @param {String} content
  * @param {Function} callback
  */
-const compressHTMLMinifier = ({ settings, content, callback, index }) => {
+const minifyHTMLMinifier = ({ settings, content, callback, index }) => {
   const options = Object.assign({}, defaultOptions, settings.options);
   const contentMinified = HTMLMinifier(content, options);
   utils.writeFile({ file: settings.output, content: contentMinified, index });
@@ -50,6 +50,6 @@ const compressHTMLMinifier = ({ settings, content, callback, index }) => {
 };
 
 /**
- * Expose `compressHTMLMinifier()`.
+ * Expose `minifyHTMLMinifier()`.
  */
-module.exports = compressHTMLMinifier;
+module.exports = minifyHTMLMinifier;

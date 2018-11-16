@@ -7,10 +7,10 @@
 ## Usage
 
 ```js
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const terser = require('@node-minify/terser');
 
-compressor.minify({
+minify({
   compressor: terser,
   input: 'foo.css',
   output: 'bar.css',
@@ -21,7 +21,7 @@ compressor.minify({
 ## Options
 
 ```js
-compressor.minify({
+minify({
   compressor: terser,
   input: 'foo.js',
   output: 'bar.js',

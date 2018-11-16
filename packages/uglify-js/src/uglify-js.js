@@ -17,7 +17,7 @@ import { utils } from '@node-minify/utils';
  * @param {String} content
  * @param {Function} callback
  */
-const compressUglifyJS = ({ settings, content, callback, index }) => {
+const minifyUglifyJS = ({ settings, content, callback, index }) => {
   const contentMinified = uglifyJS.minify(content, settings.options);
   if (contentMinified.error) {
     if (callback) {
@@ -35,6 +35,6 @@ const compressUglifyJS = ({ settings, content, callback, index }) => {
 };
 
 /**
- * Expose `compressUglifyJS()`.
+ * Expose `minifyUglifyJS()`.
  */
-module.exports = compressUglifyJS;
+module.exports = minifyUglifyJS;

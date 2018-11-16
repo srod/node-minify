@@ -17,7 +17,7 @@ import { utils } from '@node-minify/utils';
  * @param {String} content
  * @param {Function} callback
  */
-const compressCrass = ({ settings, content, callback, index }) => {
+const minifyCrass = ({ settings, content, callback, index }) => {
   const contentMinified = crass
     .parse(content)
     .optimize()
@@ -30,6 +30,6 @@ const compressCrass = ({ settings, content, callback, index }) => {
 };
 
 /**
- * Expose `compressCrass()`.
+ * Expose `minifyCrass()`.
  */
-module.exports = compressCrass;
+module.exports = minifyCrass;

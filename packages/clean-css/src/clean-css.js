@@ -17,7 +17,7 @@ import { utils } from '@node-minify/utils';
  * @param {String} content
  * @param {Function} callback
  */
-const compressCleanCSS = ({ settings, content, callback, index }) => {
+const minifyCleanCSS = ({ settings, content, callback, index }) => {
   const contentMinified = new CleanCSS(settings.options).minify(content).styles;
   utils.writeFile({ file: settings.output, content: contentMinified, index });
   if (callback) {
@@ -27,6 +27,6 @@ const compressCleanCSS = ({ settings, content, callback, index }) => {
 };
 
 /**
- * Expose `compressCleanCSS()`.
+ * Expose `minifyCleanCSS()`.
  */
-module.exports = compressCleanCSS;
+module.exports = minifyCleanCSS;

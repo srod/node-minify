@@ -19,10 +19,10 @@
 - usage
 
 ```js
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const uglifyJS = require('@node-minify/uglify-js');
 
-compressor.minify({
+minify({
   compressor: uglifyJS,
   input: 'foo.js',
   output: 'bar.js',
@@ -61,10 +61,10 @@ compressor.minify({
 ### Example after
 
 ```js
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const yui = require('@node-minify/yui');
 
-compressor.minify({
+minify({
   compressor: yui,
   type: 'js',
   input: 'foo.js',
@@ -74,10 +74,10 @@ compressor.minify({
 ```
 
 ```js
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const yui = require('@node-minify/yui');
 
-compressor.minify({
+minify({
   compressor: yui,
   type: 'css',
   input: 'foo.css',

@@ -17,7 +17,7 @@ import { utils } from '@node-minify/utils';
  * @param {String} content
  * @param {Function} callback
  */
-const compressCSSO = ({ settings, content, callback, index }) => {
+const minifyCSSO = ({ settings, content, callback, index }) => {
   const contentMinified = csso.minify(content, settings.options.restructureOff);
   utils.writeFile({ file: settings.output, content: contentMinified.css, index });
   if (callback) {
@@ -27,6 +27,6 @@ const compressCSSO = ({ settings, content, callback, index }) => {
 };
 
 /**
- * Expose `compressCSSO()`.
+ * Expose `minifyCSSO()`.
  */
-module.exports = compressCSSO;
+module.exports = minifyCSSO;

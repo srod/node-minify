@@ -52,10 +52,10 @@ npm install node-minify # OR yarn add node-minify
 ## Quick Start
 
 ```js
-var compressor = require('node-minify');
+const minify = require('node-minify');
 
 // Using Google Closure Compiler
-compressor.minify({
+minify({
   compressor: 'gcc',
   input: 'foo.js',
   output: 'bar.js',
@@ -63,7 +63,7 @@ compressor.minify({
 });
 
 // Using UglifyJS with wildcards
-compressor.minify({
+minify({
   compressor: 'uglifyjs',
   input: './**/*.js',
   output: 'bar.js',
@@ -71,13 +71,27 @@ compressor.minify({
 });
 
 // With Promise
-var promise = compressor.minify({
+var promise = minify({
   compressor: 'uglifyjs',
   input: './**/*.js',
   output: 'bar.js'
 });
 
 promise.then(function(min) {});
+```
+
+### ES2015+
+
+```js
+import minify from '@node-minify/core';
+import babelMinify from '@node-minify/babel-minify';
+
+minify({
+  compressor: babelMinify,
+  input: 'foo.js',
+  output: 'bar.js',
+  callback: function(err, min) {}
+});
 ```
 
 [More examples](https://github.com/srod/node-minify/blob/master/examples/server.js)

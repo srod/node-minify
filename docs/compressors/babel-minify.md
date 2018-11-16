@@ -7,10 +7,10 @@
 ## Usage
 
 ```js
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const babelMinify = require('@node-minify/babel-minify');
 
-compressor.minify({
+minify({
   compressor: babelMinify,
   input: 'foo.js',
   output: 'bar.js',
@@ -21,7 +21,7 @@ compressor.minify({
 ## Options
 
 ```js
-compressor.minify({
+minify({
   compressor: babelMinify,
   input: 'foo.js',
   output: 'bar.js',

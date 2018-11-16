@@ -18,7 +18,7 @@ import { utils } from '@node-minify/utils';
  * @param {String} content
  * @param {Function} callback
  */
-const compressBabelMinify = ({ settings, content, callback, index }) => {
+const minifyBabel = ({ settings, content, callback, index }) => {
   let babelOptions = {
     presets: []
   };
@@ -45,6 +45,6 @@ const compressBabelMinify = ({ settings, content, callback, index }) => {
 };
 
 /**
- * Expose `compressBabelMinify()`.
+ * Expose `minifyBabel()`.
  */
-module.exports = compressBabelMinify;
+module.exports = minifyBabel;

@@ -7,10 +7,10 @@
 ## Usage for JavaScript
 
 ```js
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const yui = require('@node-minify/yui');
 
-compressor.minify({
+minify({
   compressor: yui,
   type: 'js',
   input: 'foo.js',
@@ -22,7 +22,7 @@ compressor.minify({
 ## Usage for CSS
 
 ```js
-compressor.minify({
+minify({
   compressor: yui,
   type: 'css',
   input: 'foo.css',
@@ -54,7 +54,7 @@ Linux: [https://www.java.com/en/download/help/linux_x64_install.xml](https://www
 ## Options
 
 ```js
-compressor.minify({
+minify({
   compressor: yui,
   type: 'js',
   input: 'foo.js',

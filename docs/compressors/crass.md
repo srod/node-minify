@@ -7,10 +7,10 @@
 ## Usage
 
 ```js
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const crass = require('@node-minify/crass');
 
-compressor.minify({
+minify({
   compressor: crass,
   input: 'foo.css',
   output: 'bar.css',

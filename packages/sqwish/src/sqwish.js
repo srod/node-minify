@@ -17,7 +17,7 @@ import { utils } from '@node-minify/utils';
  * @param {String} content
  * @param {Function} callback
  */
-const compressSqwish = ({ settings, content, callback, index }) => {
+const minifySqwish = ({ settings, content, callback, index }) => {
   const contentMinified = sqwish.minify(content, settings.options.strict);
   utils.writeFile({ file: settings.output, content: contentMinified, index });
   if (callback) {
@@ -27,6 +27,6 @@ const compressSqwish = ({ settings, content, callback, index }) => {
 };
 
 /**
- * Expose `compressSqwish()`.
+ * Expose `minifySqwish()`.
  */
-module.exports = compressSqwish;
+module.exports = minifySqwish;

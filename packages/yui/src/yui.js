@@ -25,7 +25,7 @@ const binYui = path.normalize(__dirname + '/binaries/yuicompressor-2.4.7.jar');
  * @param {Function} callback
  */
 
-const compressYUI = ({ settings, data, callback, index }) => {
+const minifyYUI = ({ settings, data, callback, index }) => {
   return runCommandLine({
     args: yuiCommand(settings.type, settings.options),
     data,
@@ -57,7 +57,7 @@ const yuiCommand = (type = 'js', options) => {
 };
 
 /**
- * Expose `compressYUI()`.
+ * Expose `minifyYUI()`.
  */
 
-module.exports = compressYUI;
+module.exports = minifyYUI;

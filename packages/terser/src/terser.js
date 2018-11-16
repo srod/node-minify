@@ -17,7 +17,7 @@ import { utils } from '@node-minify/utils';
  * @param {String} content
  * @param {Function} callback
  */
-const compressTerser = ({ settings, content, callback, index }) => {
+const minifyTerser = ({ settings, content, callback, index }) => {
   const contentMinified = terser.minify(content, settings.options);
 
   if (contentMinified.error) {
@@ -36,6 +36,6 @@ const compressTerser = ({ settings, content, callback, index }) => {
 };
 
 /**
- * Expose `compressTerser()`.
+ * Expose `minifyTerser()`.
  */
-module.exports = compressTerser;
+module.exports = minifyTerser;

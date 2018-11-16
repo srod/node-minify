@@ -1,4 +1,4 @@
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const yui = require('@node-minify/yui');
 const terser = require('@node-minify/terser');
 const htmlMinifier = require('@node-minify/html-minifier');
@@ -10,7 +10,7 @@ const sqwish = require('@node-minify/sqwish');
 const crass = require('@node-minify/crass');
 
 console.log('sync 1');
-compressor.minify({
+minify({
   compressor: yui,
   input: ['public/js/sample.js', 'public/js/sample2.js'],
   output: 'public/js-dist/yui-publicfolder-concat.js',
@@ -22,52 +22,44 @@ compressor.minify({
 });
 console.log('sync 3');
 
-compressor
-  .minify({
-    compressor: terser,
-    input: ['public/js/sample.js', 'public/js/sample2.js'],
-    output: 'public/js-dist/terser-concat.js'
-  })
-  .then(function(min) {
-    console.log('terser min');
-    console.log(min);
-  });
+minify({
+  compressor: terser,
+  input: ['public/js/sample.js', 'public/js/sample2.js'],
+  output: 'public/js-dist/terser-concat.js'
+}).then(function(min) {
+  console.log('terser min');
+  console.log(min);
+});
 
-compressor
-  .minify({
-    compressor: htmlMinifier,
-    input: 'public/index.html',
-    output: 'public/dist/index.min.html',
-    options: {
-      minifyJS: false
-    }
-  })
-  .then(function(min) {
-    console.log('html min');
-    console.log(min);
-  });
+minify({
+  compressor: htmlMinifier,
+  input: 'public/index.html',
+  output: 'public/dist/index.min.html',
+  options: {
+    minifyJS: false
+  }
+}).then(function(min) {
+  console.log('html min');
+  console.log(min);
+});
 
-compressor
-  .minify({
-    compressor: babelMinify,
-    input: 'public/js-es6/**/*.js',
-    output: 'public/js-dist/babel-minify-$1.js'
-  })
-  .then(function(min) {
-    //console.log(min);
-  });
+minify({
+  compressor: babelMinify,
+  input: 'public/js-es6/**/*.js',
+  output: 'public/js-dist/babel-minify-$1.js'
+}).then(function(min) {
+  //console.log(min);
+});
 
-compressor
-  .minify({
-    compressor: babelMinify,
-    input: 'public/js-es6/**/*.js',
-    output: 'public/js-dist/babel-minify-es6.js'
-  })
-  .then(function(min) {
-    //console.log(min);
-  });
+minify({
+  compressor: babelMinify,
+  input: 'public/js-es6/**/*.js',
+  output: 'public/js-dist/babel-minify-es6.js'
+}).then(function(min) {
+  //console.log(min);
+});
 
-compressor.minify({
+minify({
   compressor: gcc,
   input: 'public/js/**/*.js',
   output: 'public/js-dist/gcc-wildcards.js',
@@ -79,7 +71,7 @@ compressor.minify({
   }
 });
 
-compressor.minify({
+minify({
   compressor: yui,
   input: 'public/js/**/*.js',
   output: 'public/js-dist/yui-wildcards.js',
@@ -91,7 +83,7 @@ compressor.minify({
   }
 });
 
-compressor.minify({
+minify({
   compressor: uglifyjs,
   input: 'public/js/**/*.js',
   output: 'public/js-dist/uglifyjs-wildcards.js',
@@ -102,7 +94,7 @@ compressor.minify({
   }
 });
 
-compressor.minify({
+minify({
   compressor: noCompress,
   input: 'public/js/**/*.js',
   output: 'public/js-dist/no-compress-wildcards.js',
@@ -113,7 +105,7 @@ compressor.minify({
   }
 });
 
-compressor.minify({
+minify({
   compressor: gcc,
   input: 'public/js/sample.js',
   output: 'public/js-dist/gcc-onefile.js',
@@ -124,7 +116,7 @@ compressor.minify({
   }
 });
 
-compressor.minify({
+minify({
   compressor: gcc,
   input: ['public/js/sample.js', 'public/js/sample2.js'],
   output: 'public/js-dist/gcc-concat.js',
@@ -136,7 +128,7 @@ compressor.minify({
 });
 
 // Using YUI Compressor
-compressor.minify({
+minify({
   compressor: yui,
   input: 'public/css/sample.css',
   output: 'public/css-dist/yui-onefile.css',
@@ -148,7 +140,7 @@ compressor.minify({
   }
 });
 
-compressor.minify({
+minify({
   compressor: yui,
   input: 'public/js/sample.js',
   output: 'public/js-dist/yui-onefile.js',
@@ -161,7 +153,7 @@ compressor.minify({
 });
 
 // Using UglifyJS
-compressor.minify({
+minify({
   compressor: uglifyjs,
   input: 'public/js/sample.js',
   output: 'public/js-dist/uglify-onefile.js',
@@ -172,7 +164,7 @@ compressor.minify({
   }
 });
 
-compressor.minify({
+minify({
   compressor: uglifyjs,
   input: ['public/js/sample.js', 'public/js/sample2.js'],
   output: 'public/js-dist/uglify-concat.js',
@@ -183,7 +175,7 @@ compressor.minify({
   }
 });
 
-compressor.minify({
+minify({
   compressor: noCompress,
   input: ['public/js/sample.js', 'public/js/sample2.js'],
   output: 'public/js-dist/no-compress-concat.js',
@@ -195,7 +187,7 @@ compressor.minify({
 });
 
 // Using Sqwish
-compressor.minify({
+minify({
   compressor: sqwish,
   input: ['public/css/sample.css', 'public/css/sample2.css'],
   output: 'public/css-dist/sqwish-concat.css',
@@ -207,7 +199,7 @@ compressor.minify({
 });
 
 // Using Crass
-compressor.minify({
+minify({
   compressor: crass,
   input: ['public/css/sample.css', 'public/css/sample2.css'],
   output: 'public/css-dist/crass-concat.css',
@@ -219,7 +211,7 @@ compressor.minify({
 });
 
 // Using public folder option
-compressor.minify({
+minify({
   compressor: yui,
   publicFolder: 'public/js/',
   input: 'sample.js',
@@ -232,7 +224,7 @@ compressor.minify({
   }
 });
 
-compressor.minify({
+minify({
   compressor: yui,
   publicFolder: 'public/js/',
   input: ['sample.js', 'sample2.js'],

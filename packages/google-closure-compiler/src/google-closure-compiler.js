@@ -49,7 +49,7 @@ const allowedFlags = [
  * @param {String} content
  * @param {Function} callback
  */
-const compressGCCJS = ({ settings, content, callback, index }) => {
+const minifyGCC = ({ settings, content, callback, index }) => {
   const options = applyOptions({}, settings.options);
   const gcc = new ClosureCompiler(options);
   const contentMinified = gcc.run([{ src: content }], (exitCode, stdOut, stdErr) => {
@@ -98,6 +98,6 @@ const applyOptions = (flags, options) => {
 };
 
 /**
- * Expose `compressGCCJS()`.
+ * Expose `minifyGCC()`.
  */
-module.exports = compressGCCJS;
+module.exports = minifyGCC;
