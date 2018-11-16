@@ -29,10 +29,10 @@ npm install @node-minify/core @node-minify/clean-css
 ## Usage
 
 ```js
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const cleanCSS = require('@node-minify/clean-css');
 
-compressor.minify({
+minify({
   compressor: cleanCSS,
   input: 'foo.css',
   output: 'bar.css',

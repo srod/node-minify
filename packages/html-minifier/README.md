@@ -29,10 +29,10 @@ npm install @node-minify/core @node-minify/html-minifier
 ## Usage
 
 ```js
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const htmlMinifier = require('@node-minify/html-minifier');
 
-compressor.minify({
+minify({
   compressor: htmlMinifier,
   input: 'foo.js',
   output: 'bar.js',

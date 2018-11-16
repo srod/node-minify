@@ -27,10 +27,10 @@ npm install @node-minify/core @node-minify/no-compress
 ## Usage
 
 ```js
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const noCompress = require('@node-minify/no-compress');
 
-compressor.minify({
+minify({
   compressor: noCompress,
   input: ['foo.js', 'foo2.js'],
   output: 'bar.js',

@@ -29,10 +29,10 @@ npm install @node-minify/core @node-minify/terser
 ## Usage
 
 ```js
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const terser = require('@node-minify/terser');
 
-compressor.minify({
+minify({
   compressor: terser,
   input: 'foo.js',
   output: 'bar.js',

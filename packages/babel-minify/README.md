@@ -29,10 +29,10 @@ npm install @node-minify/core @node-minify/babel-minify
 ## Usage
 
 ```js
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const babelMinify = require('@node-minify/babel-minify');
 
-compressor.minify({
+minify({
   compressor: babelMinify,
   input: 'foo.js',
   output: 'bar.js',

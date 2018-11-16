@@ -29,10 +29,10 @@ npm install @node-minify/core @node-minify/yui
 ## Usage
 
 ```js
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const yui = require('@node-minify/yui');
 
-compressor.minify({
+minify({
   compressor: yui,
   type: 'js',
   input: 'foo.js',
@@ -40,7 +40,7 @@ compressor.minify({
   callback: function(err, min) {}
 });
 
-compressor.minify({
+minify({
   compressor: yui,
   type: 'css',
   input: 'foo.css',

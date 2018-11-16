@@ -29,10 +29,10 @@ npm install @node-minify/core @node-minify/google-closure-compiler
 ## Usage
 
 ```js
-const compressor = require('@node-minify/core');
+const minify = require('@node-minify/core');
 const gcc = require('@node-minify/google-closure-compiler');
 
-compressor.minify({
+minify({
   compressor: gcc,
   input: 'foo.js',
   output: 'bar.js',
