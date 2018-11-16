@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/babel-minify",
-  "version": "4.0.0-beta.11",
+  "version": "4.0.0-beta.6",
   "description": "babel-minify plugin for @node-minify",
   "keywords": [
     "compressor",
