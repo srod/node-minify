@@ -33,6 +33,6 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "terser": "3.10.3"
+    "terser": "3.10.12"
   }
 }
