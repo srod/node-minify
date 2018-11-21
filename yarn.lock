@@ -7988,10 +7988,10 @@ term-size@^1.2.0:
   dependencies:
     execa "^0.7.0"
 
-terser@3.10.3:
-  version "3.10.3"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-3.10.3.tgz#4085f9e62171ca746c5759fe955d921291703ee6"
-  integrity sha512-uyL5hwDICjnv49JANhZvQYLikt/HADWNbUFsKQpZ/i+JSOkL2T4V7WUpW7S/5QGZceVq2x0HRVhEQQuW2ZpX6g==
+terser@3.10.12:
+  version "3.10.12"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-3.10.12.tgz#06d40765e40b33fd97977c0896c75b2b5d42142d"
+  integrity sha512-3ODPC1eVt25EVNb04s/PkHxOmzKBQUF6bwwuR6h2DbEF8/j265Y1UkwNtOk9am/pRxfJ5HPapOlUlO6c16mKQQ==
   dependencies:
     commander "~2.17.1"
     source-map "~0.6.1"
