@@ -1,0 +1,38 @@
+{
+  "name": "@node-minify/core",
+  "version": "4.0.0-beta.7",
+  "description": "core of @node-minify",
+  "keywords": [
+    "compressor",
+    "minify",
+    "minifier"
+  ],
+  "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
+  "homepage": "https://github.com/srod/node-minify/tree/master/packages/core#readme",
+  "license": "MIT",
+  "main": "lib/core.js",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srod/node-minify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/srod/node-minify/issues"
+  },
+  "dependencies": {
+    "glob": "7.1.3",
+    "mkdirp": "0.5.1"
+  }
+}

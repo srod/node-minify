@@ -9,7 +9,9 @@
   "extends": ["eslint:recommended", "prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "no-console": 0
+    "no-console": 0,
+    "no-var": "error",
+    "strict": [2, "never"]
   },
   "parserOptions": {
     "sourceType": "module"

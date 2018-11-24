@@ -1,0 +1,41 @@
+/*!
+ * node-minify
+ * Copyright(c) 2011-2018 Rodolphe Stoclin
+ * MIT Licensed
+ */
+
+/**
+ * Module dependencies.
+ */
+import minify from '@node-minify/core';
+import { utils } from '@node-minify/utils';
+
+/**
+ * Run compression.
+ *
+ * @param {Object} options
+ */
+const compress = options => {
+  return new Promise((resolve, reject) => {
+    minify(options)
+      .then(() => {
+        utils
+          .getFilesizeGzippedInBytes(options.output)
+          .then(sizeGzip => {
+            resolve({
+              compressorLabel: options.compressorLabel,
+              compressor: options.compressor,
+              size: utils.getFilesizeInBytes(options.output),
+              sizeGzip: sizeGzip
+            });
+          })
+          .catch(reject);
+      })
+      .catch(reject);
+  });
+};
+
+/**
+ * Expose `compress()`.
+ */
+export { compress };

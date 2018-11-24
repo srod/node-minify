@@ -11,8 +11,11 @@
 ## Usage
 
 ```js
-compressor.minify({
-  compressor: 'uglifyjs',
+const minify = require('@node-minify/core');
+const uglifyJS = require('@node-minify/uglify-js');
+
+minify({
+  compressor: uglifyJS,
   input: 'foo.js',
   output: 'bar.js',
   callback: function(err, min) {}
@@ -22,8 +25,8 @@ compressor.minify({
 ## Options
 
 ```js
-compressor.minify({
-  compressor: 'uglifyjs',
+minify({
+  compressor: uglifyJS,
   input: 'foo.js',
   output: 'bar.js',
   options: {

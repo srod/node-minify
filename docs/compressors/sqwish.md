@@ -7,8 +7,11 @@
 ## Usage
 
 ```js
-compressor.minify({
-  compressor: 'sqwish',
+const minify = require('@node-minify/core');
+const sqwish = require('@node-minify/sqwish');
+
+minify({
+  compressor: sqwish,
   input: 'foo.css',
   output: 'bar.css',
   callback: function(err, min) {}
@@ -18,8 +21,8 @@ compressor.minify({
 ## Options
 
 ```js
-compressor.minify({
-  compressor: 'sqwish',
+minify({
+  compressor: sqwish,
   input: 'foo.css',
   output: 'bar.css',
   options: {

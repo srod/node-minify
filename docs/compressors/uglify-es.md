@@ -7,10 +7,13 @@
 ## Usage
 
 ```js
-compressor.minify({
-  compressor: 'uglify-es',
-  input: 'foo.css',
-  output: 'bar.css',
+const minify = require('@node-minify/core');
+const uglifyES = require('@node-minify/uglify-es');
+
+minify({
+  compressor: uglifyES,
+  input: 'foo.js',
+  output: 'bar.js',
   callback: function(err, min) {}
 });
 ```
@@ -18,8 +21,8 @@ compressor.minify({
 ## Options
 
 ```js
-compressor.minify({
-  compressor: 'uglify-es',
+minify({
+  compressor: uglifyES,
   input: 'foo.js',
   output: 'bar.js',
   options: {

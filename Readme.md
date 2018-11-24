@@ -12,7 +12,6 @@
   <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/develop/graph/badge.svg"></a><br>
   <a href="https://david-dm.org/srod/node-minify"><img src="https://img.shields.io/david/srod/node-minify.svg?style=flat"></a>
   <a href="https://david-dm.org/srod/node-minify#info=devDependencies"><img src="https://img.shields.io/david/dev/srod/node-minify.svg?style=flat"></a>
-  <a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/srod/node-minify.svg"></a>
 </p>
 
 # Features
@@ -53,39 +52,60 @@ npm install node-minify # OR yarn add node-minify
 ## Quick Start
 
 ```js
-var compressor = require('node-minify');
+const minify = require('@node-minify/core');
+const gcc = require('@node-minify/google-closure-compiler');
+const uglifyJS = require('@node-minify/uglify-js');
 
 // Using Google Closure Compiler
-compressor.minify({
-  compressor: 'gcc',
+minify({
+  compressor: gcc,
   input: 'foo.js',
   output: 'bar.js',
   callback: function(err, min) {}
 });
 
 // Using UglifyJS with wildcards
-compressor.minify({
-  compressor: 'uglifyjs',
+minify({
+  compressor: uglifyJS,
   input: './**/*.js',
   output: 'bar.js',
   callback: function(err, min) {}
 });
 
 // With Promise
-var promise = compressor.minify({
-  compressor: 'uglifyjs',
+var promise = minify({
+  compressor: uglifyJS,
   input: './**/*.js',
   output: 'bar.js'
 });
 
 promise.then(function(min) {});
+
+// Async/Await
+async function doMinify() {
+  const min = await minify({ compressor: babelMinify, input: 'foo.js', output: 'bar.js' });
+}
+```
+
+### ES2015+
+
+```js
+import minify from '@node-minify/core';
+import babelMinify from '@node-minify/babel-minify';
+
+minify({
+  compressor: babelMinify,
+  input: 'foo.js',
+  output: 'bar.js',
+  callback: function(err, min) {}
+});
 ```
 
 [More examples](https://github.com/srod/node-minify/blob/master/examples/server.js)
 
 ## Documentation
 
-Visit https://node-minify.2clics.net for full documentation
+Visit https://node-minify.2clics.net for full documentation.
 
 ## Windows support
 

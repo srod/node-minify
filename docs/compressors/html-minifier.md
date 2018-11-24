@@ -7,8 +7,11 @@
 ## Usage
 
 ```js
-compressor.minify({
-  compressor: 'html-minifier',
+const minify = require('@node-minify/core');
+const htmlMinifier = require('@node-minify/html-minifier');
+
+minify({
+  compressor: htmlMinifier,
   input: 'foo.html',
   output: 'bar.html',
   callback: function(err, min) {}
@@ -18,8 +21,8 @@ compressor.minify({
 ## Options
 
 ```js
-compressor.minify({
-  compressor: 'html-minifier',
+minify({
+  compressor: htmlMinifier,
   input: 'foo.html',
   output: 'bar.html',
   options: {

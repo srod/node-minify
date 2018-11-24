@@ -29,7 +29,7 @@ It allow you to compress JavaScript, CSS and HTML files.
 
 **Command Line Interface:**
 
-- [CLI](/cli.md) :tada: new in version 3
+- [CLI](/cli.md)
 
 CSS benchmark: [http://goalsmashers.github.io/css-minification-benchmark/](http://goalsmashers.github.io/css-minification-benchmark/)
 
