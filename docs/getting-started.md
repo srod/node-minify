@@ -43,6 +43,11 @@ var promise = minify({
 });
 
 promise.then(function(min) {});
+
+// Async/Await
+async function doMinify() {
+  const min = await minify({ compressor: babelMinify, input: 'foo.js', output: 'bar.js' });
+}
 ```
 
 ### ES2015+
