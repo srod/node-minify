@@ -1,4 +1,4 @@
-# Node-minify migration from `2.x.x` and `3.x.x` to `4.x.x`
+# Node-minify migration from `3.x.x` to `4.x.x`
 
 ## Config changes
 
