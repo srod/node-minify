@@ -34,8 +34,8 @@
     "release-next-major": "lerna version premajor --preid beta --tag-version-prefix ''",
     "release-next-prerelease": "lerna version prerelease --preid beta --tag-version-prefix ''",
     "showpack": "lerna pack --dry",
-    "publish-latest": "NPM_CONFIG_OTP=xxx npm run build && lerna publish from-git",
-    "publish-next": "NPM_CONFIG_OTP=xxx npm run build && lerna publish from-git --npm-tag next",
+    "publish-latest": "NPM_CONFIG_OTP=xxx lerna publish from-git",
+    "publish-next": "NPM_CONFIG_OTP=xxx lerna publish from-git --npm-tag next",
     "prettier": "prettier",
     "prettier-write": "npm run prettier -- --write",
     "prettier-project": "npm run prettier-write -- '{bin,lib,__tests__}/**/*.js'"
