@@ -34,6 +34,7 @@
     "release-next-major": "lerna version premajor --preid beta --tag-version-prefix ''",
     "release-next-prerelease": "lerna version prerelease --preid beta --tag-version-prefix ''",
     "showpack": "lerna pack --dry",
+    "prepare": "npm run build",
     "prepublish": "npm run build",
     "publish-latest": "NPM_CONFIG_OTP=xxx lerna publish from-git",
     "publish-next": "NPM_CONFIG_OTP=xxx lerna publish from-git --npm-tag next",
