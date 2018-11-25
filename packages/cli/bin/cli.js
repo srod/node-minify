@@ -15,7 +15,7 @@ updateNotifier({ pkg: pkg }).notify();
 
 program
   .version(pkg.version, '-v, --version')
-  .option('-c, --compressor [compressor]', 'use the specified compressor [uglifyjs]', 'uglifyjs')
+  .option('-c, --compressor [compressor]', 'use the specified compressor [uglify-js]', 'uglify-js')
   .option('-i, --input [file]', 'input file path')
   .option('-o, --output [file]', 'output file path')
   .option('-s, --silence', 'no output will be printed')

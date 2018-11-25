@@ -33,6 +33,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
+    "@node-minify/utils": "4.0.0-beta.7",
     "clean-css": "4.2.1"
   }
 }
