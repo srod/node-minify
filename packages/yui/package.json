@@ -31,5 +31,9 @@
   },
   "bugs": {
     "url": "https://github.com/srod/node-minify/issues"
+  },
+  "dependencies": {
+    "@node-minify/run": "4.0.0-beta.7",
+    "@node-minify/utils": "4.0.0-beta.7"
   }
 }
