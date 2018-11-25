@@ -22,7 +22,7 @@
     "docs:build": "vuepress build docs",
     "eslint": "eslint --ignore-path .gitignore packages",
     "lint": "npm run eslint || true",
-    "pretest": "npm run eslint",
+    "pretest": "npm run build && npm run eslint",
     "test": "jest --maxWorkers=4",
     "posttest": "npm run clean:coverage",
     "clean:build": "rimraf packages/*/lib",
