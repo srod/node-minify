@@ -28,7 +28,7 @@ program.on('--help', function() {
   console.log('    - gcc');
   console.log('    - html-minifier');
   console.log('    - terser');
-  console.log('    - uglifyjs');
+  console.log('    - uglify-js');
   console.log('    - uglify-es');
   console.log('    - yui');
   console.log('');

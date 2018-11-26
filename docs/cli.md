@@ -21,5 +21,5 @@ node-minify --compressor uglify-js --input 'input.js' --output 'output.js'
 You can pass an `option` as a JSON string to the compressor.
 
 ```bash
-node-minify --compressor uglifyjs --input 'input.js' --output 'output.js' --option '{"warnings": true, "mangle": false}'
+node-minify --compressor uglify-js --input 'input.js' --output 'output.js' --option '{"warnings": true, "mangle": false}'
 ```
