@@ -44,7 +44,13 @@ It allow you to compress JavaScript, CSS and HTML files.
 ## Installation
 
 ```bash
-npm install node-minify # OR yarn add node-minify
+npm install @node-minify/core # OR yarn add @node-minify/core
+```
+
+And install the compressor you want
+
+```bash
+npm install @node-minify/uglify-js # OR yarn add @node-minify/uglify-js
 ```
 
 ## Quick Start
@@ -52,7 +58,7 @@ npm install node-minify # OR yarn add node-minify
 ```js
 const minify = require('@node-minify/core');
 const gcc = require('@node-minify/google-closure-compiler');
-const uglifyJS = require('@node-minify/uglify-js');
+const uglifyjs = require('@node-minify/uglify-js');
 
 // Using Google Closure Compiler
 minify({
@@ -62,17 +68,17 @@ minify({
   callback: function(err, min) {}
 });
 
-// Using UglifyJS with wildcards
+// Using UglifyJS
 minify({
-  compressor: uglifyJS,
+  compressor: uglifyjs,
   input: './**/*.js',
   output: 'bar.js',
   callback: function(err, min) {}
 });
 
-// With Promise
+// Using Promise
 var promise = minify({
-  compressor: uglifyJS,
+  compressor: uglifyjs,
   input: './**/*.js',
   output: 'bar.js'
 });
@@ -81,7 +87,7 @@ promise.then(function(min) {});
 
 // Async/Await
 async function doMinify() {
-  const min = await minify({ compressor: babelMinify, input: 'foo.js', output: 'bar.js' });
+  const min = await minify({ compressor: uglifyjs, input: 'foo.js', output: 'bar.js' });
 }
 ```
 
@@ -89,10 +95,10 @@ async function doMinify() {
 
 ```js
 import minify from '@node-minify/core';
-import babelMinify from '@node-minify/babel-minify';
+import gcc from '@node-minify/google-closure-compiler';
 
 minify({
-  compressor: babelMinify,
+  compressor: gcc,
   input: 'foo.js',
   output: 'bar.js',
   callback: function(err, min) {}
@@ -104,10 +110,6 @@ minify({
 ## Documentation
 
 Visit https://node-minify.2clics.net for full documentation.
-
-## Windows support
-
-Since v0.5.0, a windows support is available for the no-compress option and uglify-js (thanks to pieces029 and benpusherhq)
 
 ## License
 
