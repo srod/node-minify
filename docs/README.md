@@ -37,10 +37,6 @@ CSS benchmark: [http://goalsmashers.github.io/css-minification-benchmark/](http:
 I recommend to execute it at boot time for production use.
 :::
 
-## Windows support
-
-Since v0.5.0, a windows support is available for the no-compress option and uglify-js (thanks to pieces029 and benpusherhq)
-
 ## License
 
 [MIT](https://github.com/srod/node-minify/blob/master/LICENSE)

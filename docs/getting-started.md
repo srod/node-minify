@@ -46,7 +46,7 @@ promise.then(function(min) {});
 
 // Async/Await
 async function doMinify() {
-  const min = await minify({ compressor: babelMinify, input: 'foo.js', output: 'bar.js' });
+  const min = await minify({ compressor: uglifyjs, input: 'foo.js', output: 'bar.js' });
 }
 ```
 
