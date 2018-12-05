@@ -41,7 +41,7 @@
     "prettier-project": "npm run prettier-write -- '{bin,lib,__tests__}/**/*.js'"
   },
   "devDependencies": {
-    "@babel/cli": "7.1.5",
+    "@babel/cli": "7.2.0",
     "@babel/core": "7.2.0",
     "@babel/preset-env": "7.1.6",
     "babel-core": "7.0.0-bridge.0",
