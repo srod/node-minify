@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/uglify-js",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "uglify-js plugin for @node-minify",
   "keywords": [
     "compressor",
@@ -33,7 +33,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/utils": "^4.0.1",
+    "@node-minify/utils": "^4.0.2",
     "uglify-js": "3.4.9"
   }
 }
