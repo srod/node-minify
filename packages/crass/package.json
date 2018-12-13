@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/crass",
-  "version": "4.0.2",
+  "version": "4.0.1",
   "description": "crass plugin for @node-minify",
   "keywords": [
     "compressor",
@@ -33,7 +33,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/utils": "^4.0.2",
+    "@node-minify/utils": "^4.0.1",
     "crass": "0.12.3"
   }
 }
