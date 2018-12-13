@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/babel-minify",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "babel-minify plugin for @node-minify",
   "keywords": [
     "compressor",
@@ -33,7 +33,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/utils": "^4.0.1",
+    "@node-minify/utils": "^4.0.2",
     "babel-core": "6.26.3",
     "babel-preset-minify": "0.5.0"
   }
