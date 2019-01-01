@@ -1,0 +1,40 @@
+{
+  "name": "@node-minify/cssnano",
+  "version": "4.0.2",
+  "description": "cssnano plugin for @node-minify",
+  "keywords": [
+    "compressor",
+    "minify",
+    "minifier",
+    "cssnano"
+  ],
+  "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
+  "homepage": "https://github.com/srod/node-minify/tree/master/packages/cssnano#readme",
+  "license": "MIT",
+  "main": "lib/cssnano.js",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srod/node-minify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/srod/node-minify/issues"
+  },
+  "dependencies": {
+    "@node-minify/utils": "^4.0.2",
+    "cssnano": "^4.1.8",
+    "postcss": "^7.0.7"
+  }
+}

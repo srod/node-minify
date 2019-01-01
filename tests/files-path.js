@@ -47,6 +47,7 @@ const fileCSSArrayWithWildcards2 = [
   `${__dirname}/fixtures/css/fixture-2.css`,
   `${__dirname}/fixtures/css/**/*.css`
 ];
+const fileCSSErrors = `${__dirname}/fixtures/css-errors/**/*.css`;
 const publicFolderCSS = `${__dirname}/fixtures/css/`;
 const fileCSSOut = `${__dirname}/tmp/fixture-output-1.css`;
 
@@ -59,7 +60,8 @@ export const filesCSS = {
   fileCSSArrayWithWildcards,
   fileCSSArrayWithWildcards2,
   publicFolderCSS,
-  fileCSSOut
+  fileCSSOut,
+  fileCSSErrors
 };
 
 /**

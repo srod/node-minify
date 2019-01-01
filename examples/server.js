@@ -8,6 +8,7 @@ const uglifyjs = require('@node-minify/uglify-js');
 const noCompress = require('@node-minify/no-compress');
 const sqwish = require('@node-minify/sqwish');
 const crass = require('@node-minify/crass');
+const cssnano = require('@node-minify/cssnano');
 
 console.log('sync 1');
 minify({
@@ -232,6 +233,18 @@ minify({
   type: 'js',
   callback: function(err, min) {
     console.log('YUI JS with publicFolder option and array');
+    console.log(err);
+    //console.log(min);
+  }
+});
+
+// Using cssnano
+minify({
+  compressor: cssnano,
+  input: ['public/css/sample.css', 'public/css/sample2.css'],
+  output: 'public/css-dist/cssnano-concat.css',
+  callback: function(err, min) {
+    console.log('cssnano concat');
     console.log(err);
     //console.log(min);
   }
