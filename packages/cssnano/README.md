@@ -16,7 +16,7 @@
 
 `cssnano` is a plugin for [`node-minify`](https://github.com/srod/node-minify)
 
-It allow you to compress JavaScript files.
+It allow you to compress CSS files.
 
 ## Installation
 
