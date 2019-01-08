@@ -11,10 +11,10 @@ const compressorLabel = 'sqwish';
 const compressor = sqwish;
 
 describe('Package: sqwish', () => {
-  tests.commonjs.forEach(options => {
+  tests.commoncss.forEach(options => {
     runOneTest({ options, compressorLabel, compressor });
   });
-  tests.commonjs.forEach(options => {
+  tests.commoncss.forEach(options => {
     runOneTest({ options, compressorLabel, compressor, sync: true });
   });
 });

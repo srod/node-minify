@@ -36,6 +36,7 @@ module.exports = {
           'compressors/babel-minify',
           'compressors/clean-css',
           'compressors/crass',
+          'compressors/cssnano',
           'compressors/csso',
           'compressors/gcc',
           'compressors/sqwish',

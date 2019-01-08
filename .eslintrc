@@ -14,6 +14,7 @@
     "strict": [2, "never"]
   },
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaVersion": 2017
   }
 }

@@ -29,6 +29,7 @@ It allow you to compress JavaScript, CSS and HTML files.
 
 - [clean-css](https://node-minify.2clics.net/compressors/clean-css.html)
 - [crass](https://node-minify.2clics.net/compressors/crass.html)
+- [cssnano](https://node-minify.2clics.net/compressors/cssnano.html)
 - [CSSO](https://node-minify.2clics.net/compressors/csso.html)
 - [sqwish](https://node-minify.2clics.net/compressors/sqwish.html)
 - [YUI Compressor](https://node-minify.2clics.net/compressors/yui.html)
