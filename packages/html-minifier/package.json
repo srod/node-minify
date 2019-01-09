@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/html-minifier",
-  "version": "4.0.2",
+  "version": "4.0.5",
   "description": "html-minifier plugin for @node-minify",
   "keywords": [
     "compressor",
@@ -33,7 +33,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/utils": "^4.0.2",
+    "@node-minify/utils": "^4.0.5",
     "html-minifier": "3.5.21"
   }
 }
