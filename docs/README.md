@@ -19,6 +19,7 @@ It allow you to compress JavaScript, CSS and HTML files.
 
 - [clean-css](/compressors/clean-css.md)
 - [crass](/compressors/crass.md)
+- [cssnano](/compressors/cssnano.md)
 - [CSSO](/compressors/csso.md)
 - [sqwish](/compressors/sqwish.md)
 - [YUI Compressor](/compressors/yui.md)

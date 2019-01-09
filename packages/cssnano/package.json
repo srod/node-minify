@@ -1,17 +1,17 @@
 {
-  "name": "@node-minify/terser",
-  "version": "4.0.5",
-  "description": "terser plugin for @node-minify",
+  "name": "@node-minify/cssnano",
+  "version": "4.0.2",
+  "description": "cssnano plugin for @node-minify",
   "keywords": [
     "compressor",
     "minify",
     "minifier",
-    "terser"
+    "cssnano"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
-  "homepage": "https://github.com/srod/node-minify/tree/master/packages/terser#readme",
+  "homepage": "https://github.com/srod/node-minify/tree/master/packages/cssnano#readme",
   "license": "MIT",
-  "main": "lib/terser.js",
+  "main": "lib/cssnano.js",
   "engines": {
     "node": ">=6.0.0"
   },
@@ -33,7 +33,8 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/utils": "^4.0.5",
-    "terser": "3.14.1"
+    "@node-minify/utils": "^4.0.2",
+    "cssnano": "^4.1.8",
+    "postcss": "^7.0.7"
   }
 }
