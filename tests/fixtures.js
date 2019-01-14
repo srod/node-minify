@@ -10,16 +10,14 @@ const runOneTest = ({ options, compressorLabel, compressor, sync }) => {
     options.minify.sync = true;
   }
 
-  test(options.it.replace('{compressor}', compressorLabel), done => {
+  test(options.it.replace('{compressor}', compressorLabel), () => {
     return new Promise(resolve => {
       options.minify.callback = (err, min) => {
-        done();
         resolve(err, min);
       };
 
       minify(options.minify);
     }).then((err, min) => {
-      done();
       expect(err).toBeNull();
       expect(min).not.toBeNull();
     });
