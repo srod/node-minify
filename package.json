@@ -50,7 +50,7 @@
     "jest": "24.0.0",
     "lerna": "3.10.7",
     "lint-staged": "8.1.1",
-    "prettier": "1.16.1",
+    "prettier": "1.16.2",
     "rimraf": "2.6.3"
   },
   "lint-staged": {
