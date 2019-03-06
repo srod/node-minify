@@ -35,6 +35,6 @@
   },
   "dependencies": {
     "@node-minify/utils": "^4.0.5",
-    "google-closure-compiler": "20190215.0.2"
+    "google-closure-compiler": "20190301.0.0"
   }
 }
