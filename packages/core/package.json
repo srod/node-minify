@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@node-minify/utils": "^4.0.5",
-    "glob": "7.1.3",
+    "glob": "7.1.4",
     "mkdirp": "0.5.1"
   }
 }
