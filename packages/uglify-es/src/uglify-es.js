@@ -25,7 +25,7 @@ const minifyUglifyES = ({ settings, content, callback, index }) => {
     }
   }
   if (contentMinified.map && settings.options.sourceMap) {
-    utils.writeFile({ file: settings.options.sourceMap.url, content: contentMinified.map, index });
+    utils.writeFile({ file: `${settings.output}.map`, content: contentMinified.map, index });
   }
   utils.writeFile({ file: settings.output, content: contentMinified.code, index });
   if (callback) {
