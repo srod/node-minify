@@ -18,6 +18,9 @@ import { utils } from '@node-minify/utils';
  * @param {Function} callback
  */
 const minifyUglifyES = ({ settings, content, callback, index }) => {
+  if (settings.options.sourceMap) {
+    content = { [settings.options.sourceMap.filename]: content };
+  }
   const contentMinified = uglifyES.minify(content, settings.options);
   if (contentMinified.error) {
     if (callback) {
