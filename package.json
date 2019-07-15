@@ -33,7 +33,7 @@
     "publish-next": "NPM_CONFIG_OTP=xxx lerna publish --tag-version-prefix '' --preid beta --npm-tag next",
     "prettier": "prettier",
     "prettier-write": "npm run prettier -- --write",
-    "prettier-project": "npm run prettier-write -- '{bin,lib,__tests__}/**/*.js'"
+    "prettier-project": "npm run prettier-write -- './packages/**/{bin,src,__tests__}/**/*.js'"
   },
   "devDependencies": {
     "@babel/cli": "7.5.0",
