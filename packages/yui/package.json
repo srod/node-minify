@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/yui",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "yui - yahoo compressor plugin for @node-minify",
   "keywords": [
     "compressor",
@@ -33,7 +33,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/run": "^4.0.5",
-    "@node-minify/utils": "^4.1.1"
+    "@node-minify/run": "^4.1.2",
+    "@node-minify/utils": "^4.1.2"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/no-compress",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "no compress plugin for @node-minify, only concatenate",
   "keywords": [
     "concatenate"
@@ -30,6 +30,6 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/utils": "^4.1.1"
+    "@node-minify/utils": "^4.1.2"
   }
 }

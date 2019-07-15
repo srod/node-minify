@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/run",
-  "version": "4.0.5",
+  "version": "4.1.2",
   "description": "exec commands for @node-minify",
   "keywords": [
     "compressor",
