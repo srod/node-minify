@@ -23,10 +23,10 @@ steps:
     displayName: 'Install Node.js'
 
   - script: |
-      yarn
-      yarn setup
+      npm i
+      npm run setup
     displayName: 'Install dependencies'
 
   - script: |
-      yarn test
+      npm test
     displayName: 'Run tests'

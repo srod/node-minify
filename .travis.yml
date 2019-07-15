@@ -17,6 +17,6 @@ before_install:
   - yarn -v
 
 script:
-  - yarn setup
-  - yarn test
+  - npm run setup
+  - npm test
   - codecov
