@@ -18,6 +18,9 @@ import { utils } from '@node-minify/utils';
  * @param {Function} callback
  */
 const minifyUglifyES = ({ settings, content, callback, index }) => {
+  if (settings.options.sourceMap) {
+    content = { [settings.options.sourceMap.filename]: content };
+  }
   const contentMinified = uglifyES.minify(content, settings.options);
   if (contentMinified.error) {
     if (callback) {
@@ -25,7 +28,7 @@ const minifyUglifyES = ({ settings, content, callback, index }) => {
     }
   }
   if (contentMinified.map && settings.options.sourceMap) {
-    utils.writeFile({ file: settings.options.sourceMap.url, content: contentMinified.map, index });
+    utils.writeFile({ file: `${settings.output}.map`, content: contentMinified.map, index });
   }
   utils.writeFile({ file: settings.output, content: contentMinified.code, index });
   if (callback) {
