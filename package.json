@@ -36,7 +36,7 @@
     "prettier-project": "npm run prettier-write -- './packages/**/{bin,src,__tests__}/**/*.js'"
   },
   "devDependencies": {
-    "@babel/cli": "7.5.0",
+    "@babel/cli": "7.5.5",
     "@babel/core": "7.5.4",
     "@babel/preset-env": "7.5.5",
     "babel-core": "7.0.0-bridge.0",
