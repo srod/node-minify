@@ -128,7 +128,7 @@ utils.prettyBytes = num => {
  */
 utils.setFileNameMin = function(file, output) {
   const fileWithoutPath = file.substr(file.lastIndexOf('/') + 1);
-  const fileWithoutExtension = fileWithoutPath.substr(0, fileWithoutPath.lastIndexOf('.js'));
+  const fileWithoutExtension = fileWithoutPath.substr(0, fileWithoutPath.lastIndexOf('.'));
   return output.replace('$1', fileWithoutExtension);
 };
 
