@@ -18,7 +18,15 @@ import { utils } from '@node-minify/utils';
  * @param {Function} callback
  */
 const minifyCleanCSS = ({ settings, content, callback, index }) => {
-  const contentMinified = new CleanCSS(settings.options).minify(content).styles;
+  if (settings.options.sourceMap) {
+    settings.options._sourceMap = settings.options.sourceMap;
+    settings.options.sourceMap = true;
+  }
+  const _cleanCSS = new CleanCSS(settings.options).minify(content);
+  const contentMinified = _cleanCSS.styles;
+  if (_cleanCSS.sourceMap && settings.options._sourceMap) {
+    utils.writeFile({ file: settings.options._sourceMap.url, content: _cleanCSS.sourceMap.toString(), index });
+  }
   utils.writeFile({ file: settings.output, content: contentMinified, index });
   if (callback) {
     return callback(null, contentMinified);
