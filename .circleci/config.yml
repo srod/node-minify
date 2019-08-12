@@ -1,5 +1,7 @@
 workflows:
-  version: 2
+  version: 2.1
+  orbs:
+    win: circleci/windows@1.0.0
   node-multi-build:
     jobs:
       - node-v8
@@ -53,3 +55,13 @@ jobs:
     <<: *node-base
     docker:
       - image: circleci/node:12-browsers
+  build:
+    executor: win/vs2019
+    steps:
+      - checkout
+      - run:
+          name: 'Install dependencies'
+          command: yarn && yarn setup
+      - run:
+          name: 'Run tests'
+          command: yarn test
