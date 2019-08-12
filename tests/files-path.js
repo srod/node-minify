@@ -80,6 +80,7 @@ const filesHTMLArrayWithWildcards = [
 const filesHTMLArrayWithWildcards2 = [`fixture-1.html`, `fixture-2.html`, `**/*.html`];
 const publicFolderHTML = `${__dirname}/fixtures/html/`;
 const fileHTMLOut = `${__dirname}/tmp/fixture-1.min.html`;
+const fileHTMLOutReplace = `${__dirname}/tmp/$1.html`;
 
 export const filesHTML = {
   oneFileHTML,
@@ -90,5 +91,6 @@ export const filesHTML = {
   filesHTMLArrayWithWildcards,
   filesHTMLArrayWithWildcards2,
   publicFolderHTML,
-  fileHTMLOut
+  fileHTMLOut,
+  fileHTMLOutReplace
 };

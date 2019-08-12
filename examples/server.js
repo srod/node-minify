@@ -46,6 +46,32 @@ minify({
 });
 
 minify({
+  compressor: htmlMinifier,
+  publicFolder: 'public/html/',
+  input: '*.html',
+  output: 'public/html-dist/html.min.html',
+  options: {
+    minifyJS: false
+  }
+}).then(function(min) {
+  console.log('html min');
+  console.log(min);
+});
+
+minify({
+  compressor: htmlMinifier,
+  publicFolder: 'public/html/',
+  input: '*.html',
+  output: '$1.min.html',
+  options: {
+    minifyJS: false
+  }
+}).then(function(min) {
+  console.log('html min');
+  console.log(min);
+});
+
+minify({
   compressor: babelMinify,
   input: 'public/js-es6/**/*.js',
   output: 'public/js-dist/babel-minify-$1.js'

@@ -176,6 +176,14 @@ const tests = {
       }
     },
     {
+      it: 'should compress javascript with {compressor} and a single file and output $1 with a custom public folder',
+      minify: {
+        input: filesJS.oneFile,
+        output: filesJS.fileJSOutReplace,
+        publicFolder: filesJS.publicFolderES5
+      }
+    },
+    {
       it: 'should compress javascript with {compressor} and a single file with a custom public folder',
       minify: {
         input: filesJS.oneFileWithoutPath,
@@ -219,6 +227,14 @@ const tests = {
       minify: {
         input: filesJS.filesArray,
         output: filesJS.fileJSOutReplace
+      }
+    },
+    {
+      it: 'should compress javascript with {compressor} and an array of file and output $1 with a custom public folder',
+      minify: {
+        input: filesJS.filesArray,
+        output: filesJS.fileJSOutReplace,
+        publicFolder: filesJS.publicFolderES5
       }
     },
     {
@@ -414,6 +430,22 @@ const tests = {
       minify: {
         input: filesHTML.filesHTMLArrayWithWildcards2,
         output: filesHTML.fileHTMLOut,
+        publicFolder: filesHTML.publicFolderHTML
+      }
+    },
+    {
+      it: 'should compress javascript with {compressor} and a single file and output $1 with a custom public folder',
+      minify: {
+        input: filesHTML.oneFileHTMLWithoutPath,
+        output: filesHTML.fileHTMLOutReplace,
+        publicFolder: filesHTML.publicFolderHTML
+      }
+    },
+    {
+      it: 'should compress javascript with {compressor} and an array of file and output $1 with a custom public folder',
+      minify: {
+        input: filesHTML.filesHTMLArrayWithoutPath,
+        output: filesHTML.fileHTMLOutReplace,
         publicFolder: filesHTML.publicFolderHTML
       }
     }

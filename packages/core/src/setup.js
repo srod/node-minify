@@ -32,7 +32,7 @@ const setup = inputSettings => {
 
   let settings = Object.assign(utils.clone(defaultSettings), inputSettings);
   settings = Object.assign(settings, wildcards(settings.input, settings.publicFolder));
-  settings = Object.assign(settings, checkOutput(settings.input, settings.output));
+  settings = Object.assign(settings, checkOutput(settings.input, settings.output, settings.publicFolder));
   settings = Object.assign(settings, setPublicFolder(settings.input, settings.publicFolder));
 
   return settings;
@@ -44,21 +44,22 @@ const setup = inputSettings => {
  *
  * @param {String|Array} input - Path file
  * @param {String} output - Path to the output file
+ * @param {String} publicFolder - Path to the public folder
  * @return {Object}
  */
-function checkOutput(input, output) {
+const checkOutput = (input, output, publicFolder) => {
   let reg = new RegExp('\\$1');
   if (reg.test(output)) {
     if (Array.isArray(input)) {
       const outputMin = input.map(file => {
-        return utils.setFileNameMin(file, output);
+        return utils.setFileNameMin(file, output, publicFolder);
       });
       return { output: outputMin };
     } else {
-      return { output: utils.setFileNameMin(input, output) };
+      return { output: utils.setFileNameMin(input, output, publicFolder) };
     }
   }
-}
+};
 
 /**
  * Handle wildcards in a path, get the real path of each files.
