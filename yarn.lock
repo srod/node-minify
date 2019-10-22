@@ -3773,6 +3773,14 @@ css-tree@1.0.0-alpha.29:
     mdn-data "~1.1.0"
     source-map "^0.5.3"
 
+css-tree@1.0.0-alpha.36:
+  version "1.0.0-alpha.36"
+  resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-1.0.0-alpha.36.tgz#48a848ecad1859c9d005bf900ce58a3465987954"
+  integrity sha512-AFAFvEOaB8NPmPtSIy1wVyD6K1bC8YBc07BYTCmeB3EbQUqKBU/TUIbJGSgDWbrHPX1a6QsJExx7rd6mzagK0w==
+  dependencies:
+    mdn-data "2.0.4"
+    source-map "^0.5.3"
+
 css-unit-converter@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/css-unit-converter/-/css-unit-converter-1.1.1.tgz#d9b9281adcfd8ced935bdbaba83786897f64e996"
@@ -3861,7 +3869,14 @@ cssnano@^4.1.8:
     is-resolvable "^1.0.0"
     postcss "^7.0.0"
 
-csso@3.5.1, csso@^3.5.0:
+csso@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/csso/-/csso-4.0.0.tgz#a3584049c8daaa20cb1211cbf7ee478d2efe6e4f"
+  integrity sha512-vKE9QtYIJOAS1eTXwdU4LtztQKnydQLSSk5S034men9lwCprqN1h8jjtd1hrPtX+x6iNc4z2CEcBuKXN87O/fg==
+  dependencies:
+    css-tree "1.0.0-alpha.36"
+
+csso@^3.5.0:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/csso/-/csso-3.5.1.tgz#7b9eb8be61628973c1b261e169d2f024008e758b"
   integrity sha512-vrqULLffYU1Q2tLdJvaCYbONStnfkfimRxXNaGjxMldI0C7JPBC4rB1RyjhfdZ4m1frm8pM9uRPKH3d2knZ8gg==
@@ -6839,6 +6854,11 @@ map-visit@^1.0.0:
   integrity sha1-7Nyo8TFE5mDxtb1B8S80edmN+48=
   dependencies:
     object-visit "^1.0.0"
+
+mdn-data@2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.4.tgz#699b3c38ac6f1d728091a64650b65d388502fd5b"
+  integrity sha512-iV3XNKw06j5Q7mi6h+9vbx23Tv7JkjEVgKHW4pimwyDGWm0OIQntJJ+u1C6mg6mK1EaTv42XQ7w76yuzH7M2cA==
 
 mdn-data@~1.1.0:
   version "1.1.4"
