@@ -122,8 +122,13 @@ const createDirectory = file => {
   if (Array.isArray(file)) {
     file = file[0];
   }
-
-  mkdirp.sync(file.substr(0, file.lastIndexOf('/')));
+  const dir = file.substr(0, file.lastIndexOf('/'));
+  if (!dir) {
+    return;
+  }
+  if (!fs.statSync(dir).isDirectory()) {
+    mkdirp.sync(dir);
+  }
 };
 
 /**

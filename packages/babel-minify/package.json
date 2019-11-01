@@ -13,7 +13,7 @@
   "license": "MIT",
   "main": "lib/babel-minify.js",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "directories": {
     "lib": "lib",
@@ -35,6 +35,6 @@
   "dependencies": {
     "@node-minify/utils": "^4.1.2",
     "babel-core": "6.26.3",
-    "babel-preset-minify": "0.5.0"
+    "babel-preset-minify": "0.5.1"
   }
 }

@@ -9,6 +9,7 @@ const noCompress = require('@node-minify/no-compress');
 const sqwish = require('@node-minify/sqwish');
 const crass = require('@node-minify/crass');
 const cssnano = require('@node-minify/cssnano');
+const cleanCSS = require('@node-minify/clean-css');
 
 console.log('sync 1');
 minify({
@@ -36,6 +37,32 @@ minify({
   compressor: htmlMinifier,
   input: 'public/index.html',
   output: 'public/dist/index.min.html',
+  options: {
+    minifyJS: false
+  }
+}).then(function(min) {
+  console.log('html min');
+  console.log(min);
+});
+
+minify({
+  compressor: htmlMinifier,
+  publicFolder: 'public/html/',
+  input: '*.html',
+  output: 'public/html-dist/html.min.html',
+  options: {
+    minifyJS: false
+  }
+}).then(function(min) {
+  console.log('html min');
+  console.log(min);
+});
+
+minify({
+  compressor: htmlMinifier,
+  publicFolder: 'public/html/',
+  input: '*.html',
+  output: '$1.min.html',
   options: {
     minifyJS: false
   }
@@ -247,5 +274,23 @@ minify({
     console.log('cssnano concat');
     console.log(err);
     //console.log(min);
+  }
+});
+
+// Using cleancss
+minify({
+  compressor: cleanCSS,
+  input: ['public/css/sample.css', 'public/css/sample2.css'],
+  output: 'public/css-dist/cleancss-concat.css',
+  callback: function(err, min) {
+    console.log('cleancss concat');
+    console.log(err);
+    //console.log(min);
+  },
+  options: {
+    sourceMap: {
+      filename: `public/css-dist/cleancss-concat.map`,
+      url: `public/css-dist/cleancss-concat.map`
+    }
   }
 });

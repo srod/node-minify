@@ -31,31 +31,29 @@
     "showpack": "lerna pack --dry",
     "publish-latest": "NPM_CONFIG_OTP=xxx lerna publish --tag-version-prefix ''",
     "publish-next": "NPM_CONFIG_OTP=xxx lerna publish --tag-version-prefix '' --preid beta --npm-tag next",
-    "prettier": "prettier",
-    "prettier-write": "npm run prettier -- --write",
-    "prettier-project": "npm run prettier-write -- './packages/**/{bin,src,__tests__}/**/*.js'"
+    "prettier-project": "prettier --write './packages/**/{bin,src,__tests__}/**/*.js'"
   },
   "devDependencies": {
-    "@babel/cli": "7.5.0",
-    "@babel/core": "7.5.4",
-    "@babel/preset-env": "7.5.4",
+    "@babel/cli": "7.6.4",
+    "@babel/core": "7.6.4",
+    "@babel/preset-env": "7.6.3",
     "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "24.8.0",
+    "babel-jest": "24.9.0",
     "babel-preset-env": "1.7.0",
-    "codecov": "3.5.0",
-    "eslint": "5.16.0",
-    "eslint-config-prettier": "6.0.0",
-    "eslint-plugin-prettier": "3.1.0",
-    "husky": "1.3.1",
-    "jest": "24.8.0",
-    "lerna": "3.15.0",
-    "lint-staged": "8.2.1",
+    "codecov": "3.6.1",
+    "eslint": "6.6.0",
+    "eslint-config-prettier": "6.5.0",
+    "eslint-plugin-prettier": "3.1.1",
+    "husky": "3.0.9",
+    "jest": "24.9.0",
+    "lerna": "3.18.3",
+    "lint-staged": "9.4.2",
     "prettier": "1.18.2",
-    "rimraf": "2.6.3"
+    "rimraf": "3.0.0"
   },
   "lint-staged": {
     "*.js": [
-      "npm run prettier-write --",
+      "prettier --write",
       "git add"
     ]
   },

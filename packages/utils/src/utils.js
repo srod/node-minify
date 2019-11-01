@@ -124,11 +124,15 @@ utils.prettyBytes = num => {
  *
  * @param {String} file
  * @param {String} output
+ * @param {String} publicFolder
  * @returns {String}
  */
-utils.setFileNameMin = function(file, output) {
+utils.setFileNameMin = (file, output, publicFolder) => {
   const fileWithoutPath = file.substr(file.lastIndexOf('/') + 1);
-  const fileWithoutExtension = fileWithoutPath.substr(0, fileWithoutPath.lastIndexOf('.js'));
+  let fileWithoutExtension = fileWithoutPath.substr(0, fileWithoutPath.lastIndexOf('.'));
+  if (publicFolder) {
+    fileWithoutExtension = publicFolder + fileWithoutExtension;
+  }
   return output.replace('$1', fileWithoutExtension);
 };
 
