@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/core",
-  "version": "4.1.2",
+  "version": "5.0.0",
   "description": "core of @node-minify",
   "keywords": [
     "compressor",
@@ -32,7 +32,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/utils": "^4.1.2",
+    "@node-minify/utils": "^5.0.0",
     "glob": "7.1.5",
     "mkdirp": "0.5.1"
   }
