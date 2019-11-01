@@ -123,6 +123,9 @@ const createDirectory = file => {
     file = file[0];
   }
   const dir = file.substr(0, file.lastIndexOf('/'));
+  if (!dir) {
+    return;
+  }
   if (!fs.statSync(dir).isDirectory()) {
     mkdirp.sync(dir);
   }

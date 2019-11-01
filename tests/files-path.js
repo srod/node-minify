@@ -17,6 +17,7 @@ const errors = `${__dirname}/fixtures/js-errors/**/*.js`;
 const publicFolderES5 = `${__dirname}/fixtures/es5/`;
 const fileJSOut = `${__dirname}/tmp/fixture-output-1.js`;
 const fileJSOutReplace = `${__dirname}/tmp/$1.js`;
+const fileJSOutReplacePublicFolder = `$1.js`;
 
 export const filesJS = {
   oneFile,
@@ -30,7 +31,8 @@ export const filesJS = {
   errors,
   publicFolderES5,
   fileJSOut,
-  fileJSOutReplace
+  fileJSOutReplace,
+  fileJSOutReplacePublicFolder
 };
 
 /**
@@ -81,6 +83,7 @@ const filesHTMLArrayWithWildcards2 = [`fixture-1.html`, `fixture-2.html`, `**/*.
 const publicFolderHTML = `${__dirname}/fixtures/html/`;
 const fileHTMLOut = `${__dirname}/tmp/fixture-1.min.html`;
 const fileHTMLOutReplace = `${__dirname}/tmp/$1.html`;
+const fileHTMLOutReplacePublicFolder = `$1.html`;
 
 export const filesHTML = {
   oneFileHTML,
@@ -92,5 +95,6 @@ export const filesHTML = {
   filesHTMLArrayWithWildcards2,
   publicFolderHTML,
   fileHTMLOut,
-  fileHTMLOutReplace
+  fileHTMLOutReplace,
+  fileHTMLOutReplacePublicFolder
 };
