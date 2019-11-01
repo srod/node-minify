@@ -176,6 +176,14 @@ const tests = {
       }
     },
     {
+      it: 'should compress javascript with {compressor} and a single file and output $1 with a custom public folder',
+      minify: {
+        input: filesJS.oneFile,
+        output: filesJS.fileJSOutReplacePublicFolder,
+        publicFolder: filesJS.publicFolderES5
+      }
+    },
+    {
       it: 'should compress javascript with {compressor} and a single file with a custom public folder',
       minify: {
         input: filesJS.oneFileWithoutPath,
@@ -219,6 +227,14 @@ const tests = {
       minify: {
         input: filesJS.filesArray,
         output: filesJS.fileJSOutReplace
+      }
+    },
+    {
+      it: 'should compress javascript with {compressor} and an array of file and output $1 with a custom public folder',
+      minify: {
+        input: filesJS.filesArray,
+        output: filesJS.fileJSOutReplacePublicFolder,
+        publicFolder: filesJS.publicFolderES5
       }
     },
     {
@@ -386,7 +402,7 @@ const tests = {
       }
     },
     {
-      it: 'should compress javascript with {compressor} and wildcards path',
+      it: 'should compress html with {compressor} and wildcards path',
       minify: {
         input: filesHTML.fileHTMLWithWildcards,
         output: filesHTML.fileHTMLOut
@@ -414,6 +430,36 @@ const tests = {
       minify: {
         input: filesHTML.filesHTMLArrayWithWildcards2,
         output: filesHTML.fileHTMLOut,
+        publicFolder: filesHTML.publicFolderHTML
+      }
+    },
+    {
+      it: 'should compress html with {compressor} and a single file and output $1',
+      minify: {
+        input: filesHTML.oneFileHTML,
+        output: filesHTML.fileHTMLOutReplace
+      }
+    },
+    {
+      it: 'should compress html with {compressor} and a single file and output $1 with a custom public folder',
+      minify: {
+        input: filesHTML.oneFileHTMLWithoutPath,
+        output: filesHTML.fileHTMLOutReplacePublicFolder,
+        publicFolder: filesHTML.publicFolderHTML
+      }
+    },
+    {
+      it: 'should compress html with {compressor} and an array of file and output $1',
+      minify: {
+        input: filesHTML.filesHTMLArray,
+        output: filesHTML.fileHTMLOutReplace
+      }
+    },
+    {
+      it: 'should compress html with {compressor} and an array of file and output $1 with a custom public folder',
+      minify: {
+        input: filesHTML.filesHTMLArrayWithoutPath,
+        output: filesHTML.fileHTMLOutReplacePublicFolder,
         publicFolder: filesHTML.publicFolderHTML
       }
     }
