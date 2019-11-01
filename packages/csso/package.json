@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/csso",
-  "version": "4.0.5",
+  "version": "4.1.2",
   "description": "csso plugin for @node-minify",
   "keywords": [
     "compressor",
@@ -33,7 +33,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/utils": "^4.0.5",
+    "@node-minify/utils": "^4.1.2",
     "csso": "4.0.2"
   }
 }
