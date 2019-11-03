@@ -28,7 +28,9 @@ const minifyTerser = ({ settings, content, callback, index }) => {
   if (contentMinified.map && settings.options.sourceMap) {
     utils.writeFile({ file: settings.options.sourceMap.url, content: contentMinified.map, index });
   }
-  utils.writeFile({ file: settings.output, content: contentMinified.code, index });
+  if (!settings.content) {
+    utils.writeFile({ file: settings.output, content: contentMinified.code, index });
+  }
   if (callback) {
     return callback(null, contentMinified.code);
   }

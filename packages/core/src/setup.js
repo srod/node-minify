@@ -28,9 +28,16 @@ const defaultSettings = {
  * @return {Object}
  */
 const setup = inputSettings => {
+  let settings = Object.assign(utils.clone(defaultSettings), inputSettings);
+
+  // In memory
+  if (settings.content) {
+    checkMandatoriesMemoryContent(inputSettings);
+    return settings;
+  }
+
   checkMandatories(inputSettings);
 
-  let settings = Object.assign(utils.clone(defaultSettings), inputSettings);
   settings = Object.assign(settings, wildcards(settings.input, settings.publicFolder));
   settings = Object.assign(settings, checkOutput(settings.input, settings.output, settings.publicFolder));
   settings = Object.assign(settings, setPublicFolder(settings.input, settings.publicFolder));
@@ -187,6 +194,15 @@ const setPublicFolder = (input, publicFolder) => {
  */
 const checkMandatories = settings => {
   ['compressor', 'input', 'output'].forEach(item => mandatory(item, settings));
+};
+
+/**
+ * Check if some settings are here for memory content.
+ *
+ * @param {Object} settings
+ */
+const checkMandatoriesMemoryContent = settings => {
+  ['compressor', 'content'].forEach(item => mandatory(item, settings));
 };
 
 /**

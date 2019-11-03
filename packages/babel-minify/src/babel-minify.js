@@ -37,7 +37,9 @@ const minifyBabel = ({ settings, content, callback, index }) => {
   }
 
   const contentMinified = transform(content, babelOptions);
-  utils.writeFile({ file: settings.output, content: contentMinified.code, index });
+  if (!settings.content) {
+    utils.writeFile({ file: settings.output, content: contentMinified.code, index });
+  }
   if (callback) {
     return callback(null, contentMinified.code);
   }

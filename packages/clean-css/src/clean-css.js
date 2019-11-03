@@ -27,7 +27,9 @@ const minifyCleanCSS = ({ settings, content, callback, index }) => {
   if (_cleanCSS.sourceMap && settings.options._sourceMap) {
     utils.writeFile({ file: settings.options._sourceMap.url, content: _cleanCSS.sourceMap.toString(), index });
   }
-  utils.writeFile({ file: settings.output, content: contentMinified, index });
+  if (!settings.content) {
+    utils.writeFile({ file: settings.output, content: contentMinified, index });
+  }
   if (callback) {
     return callback(null, contentMinified);
   }

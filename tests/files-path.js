@@ -18,6 +18,7 @@ const publicFolderES5 = `${__dirname}/fixtures/es5/`;
 const fileJSOut = `${__dirname}/tmp/fixture-output-1.js`;
 const fileJSOutReplace = `${__dirname}/tmp/$1.js`;
 const fileJSOutReplacePublicFolder = `$1.js`;
+const contentJS = `var tools = true; if(tools){ console.log('true'); }`;
 
 export const filesJS = {
   oneFile,
@@ -32,13 +33,15 @@ export const filesJS = {
   publicFolderES5,
   fileJSOut,
   fileJSOutReplace,
-  fileJSOutReplacePublicFolder
+  fileJSOutReplacePublicFolder,
+  contentJS
 };
 
 /**
  * CSS
  */
 const fileCSS = `${__dirname}/fixtures/css/fixture-1.css`;
+const fileCSSSourceMaps = `${__dirname}/fixtures/css/fixture-1.map`;
 const fileCSSWithoutPath = `fixture-1.css`;
 const fileCSSWithWildcards = `${__dirname}/fixtures/css/**/*.css`;
 const fileCSSArray = [`${__dirname}/fixtures/css/fixture-1.css`, `${__dirname}/fixtures/css/fixture-2.css`];
@@ -52,9 +55,11 @@ const fileCSSArrayWithWildcards2 = [
 const fileCSSErrors = `${__dirname}/fixtures/css-errors/**/*.css`;
 const publicFolderCSS = `${__dirname}/fixtures/css/`;
 const fileCSSOut = `${__dirname}/tmp/fixture-output-1.css`;
+const contentCSS = `.foo { display: block; margin-left: 0; margin-right: 0; }`;
 
 export const filesCSS = {
   fileCSS,
+  fileCSSSourceMaps,
   fileCSSWithoutPath,
   fileCSSWithWildcards,
   fileCSSArray,
@@ -63,7 +68,8 @@ export const filesCSS = {
   fileCSSArrayWithWildcards2,
   publicFolderCSS,
   fileCSSOut,
-  fileCSSErrors
+  fileCSSErrors,
+  contentCSS
 };
 
 /**
@@ -84,6 +90,12 @@ const publicFolderHTML = `${__dirname}/fixtures/html/`;
 const fileHTMLOut = `${__dirname}/tmp/fixture-1.min.html`;
 const fileHTMLOutReplace = `${__dirname}/tmp/$1.html`;
 const fileHTMLOutReplacePublicFolder = `$1.html`;
+const contentHTML = `<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+</html>`;
 
 export const filesHTML = {
   oneFileHTML,
@@ -96,5 +108,6 @@ export const filesHTML = {
   publicFolderHTML,
   fileHTMLOut,
   fileHTMLOutReplace,
-  fileHTMLOutReplacePublicFolder
+  fileHTMLOutReplacePublicFolder,
+  contentHTML
 };
