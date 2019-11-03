@@ -9,6 +9,7 @@
  */
 import { setup } from './setup';
 import { compress } from './compress';
+import { compressInMemory } from './compressInMemory';
 
 /**
  * Run node-minify.
@@ -17,9 +18,10 @@ import { compress } from './compress';
  */
 const minify = settings => {
   return new Promise((resolve, reject) => {
+    const method = settings.content ? compressInMemory : compress;
     settings = setup(settings);
     if (!settings.sync) {
-      compress(settings)
+      method(settings)
         .then(minified => {
           if (settings.callback) {
             settings.callback(null, minified);
@@ -33,7 +35,7 @@ const minify = settings => {
           reject(err);
         });
     } else {
-      const minified = compress(settings);
+      const minified = method(settings);
       if (settings.callback) {
         settings.callback(null, minified);
       }

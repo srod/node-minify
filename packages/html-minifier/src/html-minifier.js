@@ -42,7 +42,9 @@ const defaultOptions = {
 const minifyHTMLMinifier = ({ settings, content, callback, index }) => {
   const options = Object.assign({}, defaultOptions, settings.options);
   const contentMinified = HTMLMinifier(content, options);
-  utils.writeFile({ file: settings.output, content: contentMinified, index });
+  if (!settings.content) {
+    utils.writeFile({ file: settings.output, content: contentMinified, index });
+  }
   if (callback) {
     return callback(null, contentMinified);
   }

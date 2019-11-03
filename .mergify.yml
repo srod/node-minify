@@ -1,0 +1,12 @@
+pull_request_rules:
+  - name: automatic merge for Dependabot pull requests
+    conditions:
+      - author=dependabot[bot]
+      - status-success=continuous-integration/travis-ci/pr
+      - 'status-success=ci/circleci: node-v12'
+      - 'status-success=ci/circleci: node-v10'
+      - 'status-success=ci/circleci: node-v8'
+      - status-success=srod.node-minify
+    actions:
+      merge:
+        method: merge

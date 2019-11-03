@@ -33,6 +33,30 @@ minify({
   console.log(min);
 });
 
+const html = `
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+</html>
+`;
+
+minify({
+  compressor: htmlMinifier,
+  content: html,
+  options: {
+    minifyJS: false
+  },
+  callback: function(err, min) {
+    console.log('callback min');
+    console.log(min);
+  }
+}).then(function(min) {
+  console.log('html min');
+  console.log(min);
+});
+
 minify({
   compressor: htmlMinifier,
   input: 'public/index.html',

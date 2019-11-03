@@ -19,7 +19,9 @@ import { utils } from '@node-minify/utils';
  */
 const minifyCSSO = ({ settings, content, callback, index }) => {
   const contentMinified = csso.minify(content, settings.options.restructureOff);
-  utils.writeFile({ file: settings.output, content: contentMinified.css, index });
+  if (!settings.content) {
+    utils.writeFile({ file: settings.output, content: contentMinified.css, index });
+  }
   if (callback) {
     return callback(null, contentMinified.css);
   }

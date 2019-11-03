@@ -38,8 +38,9 @@ const minifyYUI = ({ settings, data, callback, index }) => {
           throw err;
         }
       }
-
-      utils.writeFile({ file: settings.output, content, index });
+      if (!settings.content) {
+        utils.writeFile({ file: settings.output, content, index });
+      }
       if (callback) {
         return callback(null, content);
       }
