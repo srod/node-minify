@@ -22,7 +22,9 @@ const minifyCrass = ({ settings, content, callback, index }) => {
     .parse(content)
     .optimize()
     .toString();
-  utils.writeFile({ file: settings.output, content: contentMinified, index });
+  if (!settings.content) {
+    utils.writeFile({ file: settings.output, content: contentMinified, index });
+  }
   if (callback) {
     return callback(null, contentMinified);
   }

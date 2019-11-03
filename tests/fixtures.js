@@ -39,6 +39,12 @@ const tests = {
         input: filesJS.oneFile,
         output: filesJS.fileJSOut
       }
+    },
+    {
+      it: 'should concat javascript and no compress in memory',
+      minify: {
+        content: filesJS.contentJS
+      }
     }
   ],
   commoncss: [
@@ -157,6 +163,12 @@ const tests = {
         output: filesCSS.fileCSSOut,
         type: 'css',
         publicFolder: filesCSS.publicFolderCSS
+      }
+    },
+    {
+      it: 'should compress css with {compressor} in memory',
+      minify: {
+        content: filesCSS.contentCSS
       }
     }
   ],
@@ -291,6 +303,12 @@ const tests = {
         input: filesJS.filesArrayWithWildcards,
         output: filesJS.fileJSOut,
         publicFolder: filesJS.publicFolderES5
+      }
+    },
+    {
+      it: 'should compress javascript with {compressor} in memory',
+      minify: {
+        content: filesJS.contentJS
       }
     }
   ],
@@ -461,6 +479,12 @@ const tests = {
         input: filesHTML.filesHTMLArrayWithoutPath,
         output: filesHTML.fileHTMLOutReplacePublicFolder,
         publicFolder: filesHTML.publicFolderHTML
+      }
+    },
+    {
+      it: 'should compress html with {compressor} in memory',
+      minify: {
+        content: filesHTML.contentHTML
       }
     }
   ]

@@ -137,6 +137,64 @@ utils.setFileNameMin = (file, output, publicFolder) => {
 };
 
 /**
+ * Compress a single file.
+ *
+ * @param {Object} settings
+ */
+utils.compressSingleFile = settings => {
+  const content = settings.content ? settings.content : utils.getContentFromFiles(settings.input);
+  return settings.sync ? utils.runSync({ settings, content }) : utils.runAsync({ settings, content });
+};
+
+/**
+ * Concatenate all input files and get the data.
+ *
+ * @param {String|Array} input
+ * @return {String}
+ */
+utils.getContentFromFiles = input => {
+  if (!Array.isArray(input)) {
+    return fs.readFileSync(input, 'utf8');
+  }
+
+  return input.map(path => fs.readFileSync(path, 'utf8')).join('\n');
+};
+
+/**
+ * Run compressor in sync.
+ *
+ * @param {Object} settings
+ * @param {String} content
+ * @param {Number} index - index of the file being processed
+ * @return {String}
+ */
+utils.runSync = ({ settings, content, index }) => settings.compressor({ settings, content, callback: null, index });
+
+/**
+ * Run compressor in async.
+ *
+ * @param {Object} settings
+ * @param {String} content
+ * @param {Number} index - index of the file being processed
+ * @return {Promise}
+ */
+utils.runAsync = ({ settings, content, index }) => {
+  return new Promise((resolve, reject) => {
+    settings.compressor({
+      settings,
+      content,
+      callback: (err, min) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(min);
+      },
+      index
+    });
+  });
+};
+
+/**
  * Expose `utils`.
  */
 export { utils };

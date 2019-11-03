@@ -19,7 +19,9 @@ import { utils } from '@node-minify/utils';
  */
 const minifySqwish = ({ settings, content, callback, index }) => {
   const contentMinified = sqwish.minify(content, settings.options.strict);
-  utils.writeFile({ file: settings.output, content: contentMinified, index });
+  if (!settings.content) {
+    utils.writeFile({ file: settings.output, content: contentMinified, index });
+  }
   if (callback) {
     return callback(null, contentMinified);
   }

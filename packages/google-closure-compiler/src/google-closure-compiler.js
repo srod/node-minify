@@ -57,8 +57,9 @@ const minifyGCC = ({ settings, content, callback, index }) => {
       return callback(stdErr);
     }
   });
-
-  utils.writeFile({ file: settings.output, content: contentMinified.compiledCode, index });
+  if (!settings.content) {
+    utils.writeFile({ file: settings.output, content: contentMinified.compiledCode, index });
+  }
 
   /**
    * Write GCC sourceMap

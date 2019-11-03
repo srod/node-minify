@@ -10,6 +10,7 @@ import gcc from '../../google-closure-compiler/src/google-closure-compiler';
 import noCompress from '../../no-compress/src/no-compress';
 import yui from '../../yui/src/yui';
 import uglifyes from '../../uglify-es/src/uglify-es';
+import htmlMinifier from '../../html-minifier/src/html-minifier';
 import { filesJS } from '../../../tests/files-path';
 import { runOneTest, tests } from '../../../tests/fixtures';
 
@@ -245,6 +246,53 @@ describe('Package: core', () => {
       return minify(options.minify).then(min => {
         expect(spy).toHaveBeenCalled();
         return expect(min).toBeDefined();
+      });
+    });
+  });
+
+  describe('In Memory', () => {
+    test('should be OK with html minifier and async', () => {
+      const options = {};
+      options.minify = {
+        compressor: htmlMinifier,
+        content: '<html><body><div>content</div></body></html>',
+        callback: () => {}
+      };
+      const spy = jest.spyOn(options.minify, 'callback');
+
+      return minify(options.minify).then(min => {
+        expect(spy).toHaveBeenCalled();
+        return expect(min).toBeDefined();
+      });
+    });
+
+    test('should be OK with GCC and sync', () => {
+      const options = {};
+      options.minify = {
+        compressor: htmlMinifier,
+        content: '<html><body><div>content</div></body></html>',
+        sync: true,
+        callback: () => {}
+      };
+      const spy = jest.spyOn(options.minify, 'callback');
+
+      return minify(options.minify).then(min => {
+        expect(spy).toHaveBeenCalled();
+        return expect(min).toBeDefined();
+      });
+    });
+
+    test('should throw an error if binary does not exist', () => {
+      const options = {};
+      options.minify = {
+        compressor: 'fake',
+        content: '<html><body><div>content</div></body></html>'
+      };
+
+      return minify(options.minify).catch(err => {
+        return expect(err.toString()).toEqual(
+          'Error: compressor should be a function, maybe you forgot to install the compressor'
+        );
       });
     });
   });
