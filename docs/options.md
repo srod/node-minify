@@ -30,7 +30,7 @@ minify({
 });
 ```
 
-## Using wildcards with $1 output
+## Using wildcards with \$1 output
 
 This option will not merge the files.
 
@@ -47,6 +47,21 @@ minify({
 ```
 
 If you have 3 files `file1.js`, `file2.js` and `file3.js`; those files will be outputed as `file1.min.js`, `file2.min.js` and `file3.min.js`
+
+If you want to save those files in same directory than source, you can use `replaceInPlace` option.
+
+```js
+const minify = require('@node-minify/core');
+const babelMinify = require('@node-minify/babel-minify');
+
+minify({
+  compressor: babelMinify,
+  input: 'public/**/*.js',
+  output: '$1.min.js',
+  replaceInPlace: true
+  callback: function(err, min) {}
+});
+```
 
 ## Using sync option
 

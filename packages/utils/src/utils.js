@@ -125,13 +125,18 @@ utils.prettyBytes = num => {
  * @param {String} file
  * @param {String} output
  * @param {String} publicFolder
+ * @param {Boolean} replaceInPlace
  * @returns {String}
  */
-utils.setFileNameMin = (file, output, publicFolder) => {
+utils.setFileNameMin = (file, output, publicFolder, replaceInPlace) => {
+  const filePath = file.substr(0, file.lastIndexOf('/') + 1);
   const fileWithoutPath = file.substr(file.lastIndexOf('/') + 1);
   let fileWithoutExtension = fileWithoutPath.substr(0, fileWithoutPath.lastIndexOf('.'));
   if (publicFolder) {
     fileWithoutExtension = publicFolder + fileWithoutExtension;
+  }
+  if (replaceInPlace) {
+    fileWithoutExtension = filePath + fileWithoutExtension;
   }
   return output.replace('$1', fileWithoutExtension);
 };

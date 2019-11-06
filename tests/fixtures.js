@@ -281,6 +281,16 @@ const tests = {
       }
     },
     {
+      it:
+        'should compress javascript with {compressor} and wildcards path with a custom public folder and replaceInPlace option',
+      minify: {
+        input: '**/*.js',
+        output: filesJS.fileJSOut,
+        publicFolder: filesJS.publicFolderES5,
+        replaceInPlace: true
+      }
+    },
+    {
       it: 'should compress javascript with {compressor} and wildcards path with a custom buffer size',
       minify: {
         input: filesJS.oneFileWithWildcards,
