@@ -39,7 +39,10 @@ const setup = inputSettings => {
   checkMandatories(inputSettings);
 
   settings = Object.assign(settings, wildcards(settings.input, settings.publicFolder));
-  settings = Object.assign(settings, checkOutput(settings.input, settings.output, settings.publicFolder));
+  settings = Object.assign(
+    settings,
+    checkOutput(settings.input, settings.output, settings.publicFolder, settings.replaceInPlace)
+  );
   settings = Object.assign(settings, setPublicFolder(settings.input, settings.publicFolder));
 
   return settings;
@@ -52,18 +55,19 @@ const setup = inputSettings => {
  * @param {String|Array} input - Path file
  * @param {String} output - Path to the output file
  * @param {String} publicFolder - Path to the public folder
+ * @param {Boolean} replaceInPlace - True to replace file in same folder
  * @return {Object}
  */
-const checkOutput = (input, output, publicFolder) => {
+const checkOutput = (input, output, publicFolder, replaceInPlace) => {
   let reg = new RegExp('\\$1');
   if (reg.test(output)) {
     if (Array.isArray(input)) {
-      const outputMin = input.map(file => {
-        return utils.setFileNameMin(file, output, publicFolder);
-      });
+      const outputMin = input.map(file =>
+        utils.setFileNameMin(file, output, replaceInPlace ? null : publicFolder, replaceInPlace)
+      );
       return { output: outputMin };
     } else {
-      return { output: utils.setFileNameMin(input, output, publicFolder) };
+      return { output: utils.setFileNameMin(input, output, replaceInPlace ? null : publicFolder, replaceInPlace) };
     }
   }
 };
