@@ -59,8 +59,20 @@ minify({
 
 minify({
   compressor: htmlMinifier,
+  publicFolder: 'public/html/',
+  input: '**/*.html',
+  output: '$1.min.html',
+  replaceInPlace: true,
+  callback: function(err, _min) {
+    if (err) console.log(err);
+    console.log(_min);
+  }
+});
+
+minify({
+  compressor: htmlMinifier,
   input: 'public/index.html',
-  output: 'public/dist/index.min.html',
+  output: 'public/html-dist/index.min.html',
   options: {
     minifyJS: false
   }
