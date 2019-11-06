@@ -30,7 +30,7 @@ minify({
 });
 ```
 
-## Using wildcards with \$1 output
+## Using wildcards with $1 output
 
 This option will not merge the files.
 
