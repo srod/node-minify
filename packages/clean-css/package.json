@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/clean-css",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "description": "clean-css plugin for @node-minify",
   "keywords": [
     "compressor",
@@ -33,7 +33,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/utils": "^5.1.0",
+    "@node-minify/utils": "^5.2.0",
     "clean-css": "4.2.1"
   }
 }
