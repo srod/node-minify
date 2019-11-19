@@ -45,7 +45,10 @@ if (!options.compressor || !options.input || !options.output) {
   program.help();
 }
 
-cli.run(options).catch(err => {
-  console.error(err);
-  process.exit(1);
-});
+cli
+  .run(options)
+  .then(() => process.exit())
+  .catch(err => {
+    console.error(err);
+    process.exit(1);
+  });
