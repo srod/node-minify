@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/terser",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "terser plugin for @node-minify",
   "keywords": [
     "compressor",
