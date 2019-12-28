@@ -27,7 +27,7 @@ jobs:
             - v{{ .Environment.CIRCLE_CACHE_VERSION }}-yarn-cache-master-{{ .Environment.CIRCLE_JOB }}
       - run:
           name: Install dependencies
-          command: sudo npm i yarn -g && yarn && yarn setup
+          command: yarn && yarn setup
       - run:
           name: Test
           command: yarn test
