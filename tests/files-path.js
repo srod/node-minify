@@ -111,3 +111,45 @@ export const filesHTML = {
   fileHTMLOutReplacePublicFolder,
   contentHTML
 };
+
+/**
+ * JSON
+ */
+const oneFileJSON = `${__dirname}/fixtures/json/fixture-1.json`;
+const oneFileJSONWithoutPath = `fixture-1.json`;
+const fileJSONWithWildcards = `${__dirname}/fixtures/json/**/*.json`;
+const filesJSONArray = [`${__dirname}/fixtures/json/fixture-1.json`, `${__dirname}/fixtures/json/fixture-2.json`];
+const filesJSONArrayWithoutPath = [`fixture-1.json`, `fixture-2.json`];
+const filesJSONArrayWithWildcards = [
+  `${__dirname}/fixtures/json/fixture-1.json`,
+  `${__dirname}/fixtures/json/fixture-2.json`,
+  `${__dirname}/fixtures/json/**/*.json`
+];
+const filesJSONArrayWithWildcards2 = [`fixture-1.json`, `fixture-2.json`, `**/*.json`];
+const publicFolderJSON = `${__dirname}/fixtures/json/`;
+const fileJSONOut = `${__dirname}/tmp/fixture-1.min.json`;
+const fileJSONOutReplace = `${__dirname}/tmp/$1.json`;
+const fileJSONOutReplacePublicFolder = `$1.json`;
+const contentJSON = `[
+  {
+    "item1": "item1"
+  },
+    {
+    "item2": "item2"
+  }
+]`;
+
+export const filesJSON = {
+  oneFileJSON,
+  oneFileJSONWithoutPath,
+  fileJSONWithWildcards,
+  filesJSONArray,
+  filesJSONArrayWithoutPath,
+  filesJSONArrayWithWildcards,
+  filesJSONArrayWithWildcards2,
+  publicFolderJSON,
+  fileJSONOut,
+  fileJSONOutReplace,
+  fileJSONOutReplacePublicFolder,
+  contentJSON
+};

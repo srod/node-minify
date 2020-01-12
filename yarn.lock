@@ -6591,6 +6591,11 @@ jsonfile@^4.0.0:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
+jsonminify@0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/jsonminify/-/jsonminify-0.4.1.tgz#805dafbb39395188cee9ab582c81ef959d7e710c"
+  integrity sha1-gF2vuzk5UYjO6atYLIHvlZ1+cQw=
+
 jsonparse@^1.2.0:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/jsonparse/-/jsonparse-1.3.1.tgz#3f4dae4a91fac315f71062f8521cc239f1366280"
