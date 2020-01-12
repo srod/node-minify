@@ -1,5 +1,5 @@
 import minify from '../packages/core/src/core';
-import { filesJS, filesCSS, filesHTML } from './files-path';
+import { filesJS, filesCSS, filesHTML, filesJSON } from './files-path';
 
 const runOneTest = ({ options, compressorLabel, compressor, sync }) => {
   options = JSON.parse(JSON.stringify(options));
@@ -495,6 +495,114 @@ const tests = {
       it: 'should compress html with {compressor} in memory',
       minify: {
         content: filesHTML.contentHTML
+      }
+    }
+  ],
+  commonjson: [
+    {
+      it: 'should compress json with {compressor} and a single file',
+      minify: {
+        input: filesJSON.oneFileJSON,
+        output: filesJSON.fileJSONOut
+      }
+    },
+    {
+      it: 'should compress json with {compressor} and a single file with a custom public folder',
+      minify: {
+        input: filesJSON.oneFileJSONWithoutPath,
+        output: filesJSON.fileJSONOut,
+        publicFolder: filesJSON.publicFolderJSON
+      }
+    },
+    {
+      it: 'should compress json with {compressor} and a single file with empty options',
+      minify: {
+        input: filesJSON.oneFileJSON,
+        output: filesJSON.fileJSONOut,
+        options: {}
+      }
+    },
+    {
+      it: 'should compress json with {compressor} and an array of file',
+      minify: {
+        input: filesJSON.filesJSONArray,
+        output: filesJSON.fileJSONOut
+      }
+    },
+    {
+      it: 'should compress json with {compressor} and an array of file with a custom public folder',
+      minify: {
+        input: filesJSON.filesJSONArrayWithoutPath,
+        output: filesJSON.fileJSONOut,
+        publicFolder: filesJSON.publicFolderJSON
+      }
+    },
+    {
+      it: 'should compress json with {compressor} and wildcards path',
+      minify: {
+        input: filesJSON.fileJSONWithWildcards,
+        output: filesJSON.fileJSONOut
+      }
+    },
+    {
+      it: 'should compress json with {compressor} and wildcards path with a custom public folder',
+      minify: {
+        input: '**/*.json',
+        output: filesJSON.fileJSONOut,
+        publicFolder: filesJSON.publicFolderJSON
+      }
+    },
+    {
+      it: 'should compress json with {compressor} and an array of strings and wildcards path',
+      minify: {
+        input: filesJSON.filesJSONArrayWithWildcards,
+        output: filesJSON.fileJSONOut
+      }
+    },
+    {
+      it:
+        'should compress json with {compressor} and an array of strings and wildcards path' +
+        ' with a custom public folder',
+      minify: {
+        input: filesJSON.filesJSONArrayWithWildcards2,
+        output: filesJSON.fileJSONOut,
+        publicFolder: filesJSON.publicFolderJSON
+      }
+    },
+    {
+      it: 'should compress json with {compressor} and a single file and output $1',
+      minify: {
+        input: filesJSON.oneFileJSON,
+        output: filesJSON.fileJSONOutReplace
+      }
+    },
+    {
+      it: 'should compress json with {compressor} and a single file and output $1 with a custom public folder',
+      minify: {
+        input: filesJSON.oneFileJSONWithoutPath,
+        output: filesJSON.fileJSONOutReplacePublicFolder,
+        publicFolder: filesJSON.publicFolderJSON
+      }
+    },
+    {
+      it: 'should compress json with {compressor} and an array of file and output $1',
+      minify: {
+        input: filesJSON.filesJSONArray,
+        output: filesJSON.fileJSONOutReplace
+      }
+    },
+    {
+      it: 'should compress json with {compressor} and an array of file and output $1 with a custom public folder',
+      minify: {
+        input: filesJSON.filesJSONArrayWithoutPath,
+        output: filesJSON.fileJSONOutReplacePublicFolder,
+        publicFolder: filesJSON.publicFolderJSON
+      }
+    },
+    {
+      it: 'should compress json with {compressor} in memory',
+      minify: {
+        content: filesJSON.contentJSON
       }
     }
   ]

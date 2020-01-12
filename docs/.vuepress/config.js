@@ -1,7 +1,10 @@
 module.exports = {
   title: 'Node-minify',
   description: 'Full documentation of node-minify',
-  head: [['link', { rel: 'manifest', href: '/manifest.json' }], ['meta', { name: 'theme-color', content: '#3eaf7c' }]],
+  head: [
+    ['link', { rel: 'manifest', href: '/manifest.json' }],
+    ['meta', { name: 'theme-color', content: '#3eaf7c' }]
+  ],
   serviceWorker: true,
   evergreen: true,
   ga: 'UA-65399-7',
@@ -39,6 +42,8 @@ module.exports = {
           'compressors/cssnano',
           'compressors/csso',
           'compressors/gcc',
+          'compressors/html-minifier',
+          'compressors/jsonminify',
           'compressors/sqwish',
           'compressors/terser',
           'compressors/uglify-es',

@@ -10,6 +10,7 @@ const sqwish = require('@node-minify/sqwish');
 const crass = require('@node-minify/crass');
 const cssnano = require('@node-minify/cssnano');
 const cleanCSS = require('@node-minify/clean-css');
+const jsonminify = require('@node-minify/jsonminify');
 
 console.log('sync 1');
 minify({
@@ -104,6 +105,29 @@ minify({
   }
 }).then(function(min) {
   console.log('html min');
+  console.log(min);
+});
+
+const json = `
+[
+  {
+    "item1": "item1"
+  },
+    {
+    "item2": "item2"
+  }
+]
+`;
+
+minify({
+  compressor: jsonminify,
+  content: json,
+  callback: function(err, min) {
+    console.log('callback min');
+    console.log(min);
+  }
+}).then(function(min) {
+  console.log('json min');
   console.log(min);
 });
 
