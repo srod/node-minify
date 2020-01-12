@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/core",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "core of @node-minify",
   "keywords": [
     "compressor",

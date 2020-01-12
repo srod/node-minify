@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/google-closure-compiler",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "google closure compiler plugin for @node-minify",
   "keywords": [
     "compressor",
