@@ -4,17 +4,17 @@
  * MIT Licensed
  */
 
-import csso from '../../csso/src/csso';
+import jsonminify from '../src/jsonminify';
 import { runOneTest, tests } from '../../../tests/fixtures';
 
-const compressorLabel = 'csso';
-const compressor = csso;
+const compressorLabel = 'jsonminify';
+const compressor = jsonminify;
 
-describe('Package: csso', () => {
-  tests.commoncss.forEach(options => {
+describe('Package: jsonminify', () => {
+  tests.commonjson.forEach(options => {
     runOneTest({ options, compressorLabel, compressor });
   });
-  tests.commoncss.forEach(options => {
+  tests.commonjson.forEach(options => {
     runOneTest({ options, compressorLabel, compressor, sync: true });
   });
 });

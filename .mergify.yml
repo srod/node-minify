@@ -2,10 +2,12 @@ pull_request_rules:
   - name: automatic merge for Dependabot pull requests
     conditions:
       - author=dependabot-preview[bot]
-      - 'status-success=ci/circleci: node-v12'
-      - 'status-success=ci/circleci: node-v10'
-      - 'status-success=ci/circleci: node-v8'
-      - status-success=srod.node-minify
+      - 'status-success=Test / test (ubuntu-latest, 8.x) (push)'
+      - 'status-success=Test / test (ubuntu-latest, 10.x) (push)'
+      - 'status-success=Test / test (ubuntu-latest, 12.x) (push)'
+      - 'status-success=Test / test (windows-latest, 8.x) (push)'
+      - 'status-success=Test / test (windows-latest, 10.x) (push)'
+      - 'status-success=Test / test (windows-latest, 12.x) (push)'
     actions:
       merge:
         method: merge

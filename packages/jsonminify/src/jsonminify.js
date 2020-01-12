@@ -7,21 +7,18 @@
 /**
  * Module dependencies.
  */
-import crass from 'crass';
+import jsonminify from 'jsonminify';
 import { utils } from '@node-minify/utils';
 
 /**
- * Run crass.
+ * Run jsonminify.
  *
  * @param {Object} settings
  * @param {String} content
  * @param {Function} callback
  */
-const minifyCrass = ({ settings, content, callback, index }) => {
-  const contentMinified = crass
-    .parse(content)
-    .optimize()
-    .toString();
+const minifyJsonMinify = ({ settings, content, callback, index }) => {
+  const contentMinified = jsonminify(content);
   if (!settings.content) {
     utils.writeFile({ file: settings.output, content: contentMinified, index });
   }
@@ -32,6 +29,6 @@ const minifyCrass = ({ settings, content, callback, index }) => {
 };
 
 /**
- * Expose `minifyCrass()`.
+ * Expose `minifyJsonMinify()`.
  */
-module.exports = minifyCrass;
+module.exports = minifyJsonMinify;

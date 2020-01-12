@@ -1,17 +1,18 @@
 {
-  "name": "@node-minify/uglify-js",
-  "version": "5.2.1",
-  "description": "uglify-js plugin for @node-minify",
+  "name": "@node-minify/jsonminify",
+  "version": "5.2.0",
+  "description": "jsonminify plugin for @node-minify",
   "keywords": [
     "compressor",
     "minify",
     "minifier",
-    "uglify-js"
+    "json",
+    "jsonminify"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
-  "homepage": "https://github.com/srod/node-minify/tree/master/packages/uglify-js#readme",
+  "homepage": "https://github.com/srod/node-minify/tree/master/packages/jsonminify#readme",
   "license": "MIT",
-  "main": "lib/uglify-js.js",
+  "main": "lib/jsonminify.js",
   "engines": {
     "node": ">=8.0.0"
   },
@@ -34,6 +35,6 @@
   },
   "dependencies": {
     "@node-minify/utils": "^5.2.0",
-    "uglify-js": "3.7.4"
+    "jsonminify": "0.4.1"
   }
 }

@@ -28,6 +28,10 @@ It allow you to compress JavaScript, CSS and HTML files.
 
 - [html-minifier](/compressors/html-minifier.md)
 
+**JSON:**
+
+- [jsonminify](/compressors/jsonminify.md)
+
 **Command Line Interface:**
 
 - [CLI](/cli.md)
