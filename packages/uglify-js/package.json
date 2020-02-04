@@ -34,6 +34,6 @@
   },
   "dependencies": {
     "@node-minify/utils": "^5.2.0",
-    "uglify-js": "3.7.6"
+    "uglify-js": "3.7.7"
   }
 }
