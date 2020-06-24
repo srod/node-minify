@@ -19,6 +19,16 @@ const compress = options => {
   return new Promise((resolve, reject) => {
     minify(options)
       .then(() => {
+        if (options.output.includes('$1')) {
+          // TODO handle $1 output
+          // npx node-minify --compressor uglify-js --input 'source/**/*.js' --output 'source/$1.min.js' --option '{"warnings": true, "mangle": false}'
+          return resolve({
+            compressorLabel: options.compressorLabel,
+            compressor: options.compressor,
+            size: 0,
+            sizeGzip: 0
+          });
+        }
         utils
           .getFilesizeGzippedInBytes(options.output)
           .then(sizeGzip => {
