@@ -23,7 +23,7 @@
     "eslint": "eslint --ignore-path .gitignore packages",
     "lint": "npm run eslint || true",
     "pretest": "npm run build && npm run eslint",
-    "test": "jest --maxWorkers=4",
+    "test": "jest --maxWorkers=2",
     "posttest": "npm run clean:coverage",
     "clean:build": "rimraf packages/*/lib",
     "clean:coverage": "rimraf tests/tmp/*.{js,js.map,css,html}",
