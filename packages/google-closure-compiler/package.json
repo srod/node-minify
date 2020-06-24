@@ -14,7 +14,7 @@
   "license": "MIT",
   "main": "lib/google-closure-compiler.js",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.0.0"
   },
   "directories": {
     "lib": "lib",
@@ -35,6 +35,6 @@
   },
   "dependencies": {
     "@node-minify/utils": "^5.3.0",
-    "google-closure-compiler": "20200101.0.0"
+    "google-closure-compiler": "20200614.0.0"
   }
 }

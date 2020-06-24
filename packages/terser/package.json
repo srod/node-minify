@@ -13,7 +13,7 @@
   "license": "MIT",
   "main": "lib/terser.js",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.0.0"
   },
   "directories": {
     "lib": "lib",
@@ -34,6 +34,6 @@
   },
   "dependencies": {
     "@node-minify/utils": "^5.3.0",
-    "terser": "4.6.2"
+    "terser": "4.8.0"
   }
 }
