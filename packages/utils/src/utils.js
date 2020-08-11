@@ -29,7 +29,12 @@ utils.readFile = file => fs.readFileSync(file, 'utf8');
  * @returns {String}
  */
 utils.writeFile = ({ file, content, index }) => {
-  fs.writeFileSync(index !== undefined ? file[index] : file, content, 'utf8');
+
+  const _file = index !== undefined ? file[index] : file;
+  if (!fs.lstatSync(_file).isDirectory()) {
+    fs.default.writeFileSync(_file, content, 'utf8');
+  }
+
   return content;
 };
 
@@ -162,7 +167,7 @@ utils.getContentFromFiles = input => {
     return fs.readFileSync(input, 'utf8');
   }
 
-  return input.map(path => fs.readFileSync(path, 'utf8')).join('\n');
+  return input.map(path => (!fs.lstatSync(path).isDirectory())? fs.readFileSync(path, 'utf8').join('\n') : '');
 };
 
 /**
