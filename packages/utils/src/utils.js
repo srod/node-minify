@@ -29,10 +29,9 @@ utils.readFile = file => fs.readFileSync(file, 'utf8');
  * @returns {String}
  */
 utils.writeFile = ({ file, content, index }) => {
-
   const _file = index !== undefined ? file[index] : file;
-  if (!fs.lstatSync(_file).isDirectory()) {
-    fs.default.writeFileSync(_file, content, 'utf8');
+  if (!fs.existsSync(_file) || (fs.existsSync(_file) && !fs.lstatSync(_file).isDirectory())) {
+    fs.writeFileSync(_file, content, 'utf8');
   }
 
   return content;
@@ -167,7 +166,13 @@ utils.getContentFromFiles = input => {
     return fs.readFileSync(input, 'utf8');
   }
 
-  return input.map(path => (!fs.lstatSync(path).isDirectory())? fs.readFileSync(path, 'utf8').join('\n') : '');
+  return input
+    .map(path =>
+      !fs.existsSync(path) || (fs.existsSync(path) && !fs.lstatSync(path).isDirectory())
+        ? fs.readFileSync(path, 'utf8')
+        : ''
+    )
+    .join('\n');
 };
 
 /**
