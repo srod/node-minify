@@ -168,6 +168,7 @@ const tests = {
     {
       it: 'should compress css with {compressor} in memory',
       minify: {
+        type: 'css',
         content: filesCSS.contentCSS
       }
     }
