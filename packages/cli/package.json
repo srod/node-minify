@@ -41,6 +41,6 @@
     "chalk": "4.1.0",
     "commander": "6.0.0",
     "ora": "5.0.0",
-    "update-notifier": "4.1.0"
+    "update-notifier": "4.1.1"
   }
 }
