@@ -41,14 +41,14 @@
     "babel-jest": "26.3.0",
     "babel-preset-env": "1.7.0",
     "codecov": "3.7.2",
-    "eslint": "7.8.1",
+    "eslint": "7.9.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-prettier": "3.1.4",
     "husky": "4.3.0",
     "jest": "26.4.2",
     "lerna": "3.22.1",
     "lint-staged": "10.3.0",
-    "prettier": "1.19.1",
+    "prettier": "2.1.1",
     "rimraf": "3.0.2"
   },
   "lint-staged": {
@@ -59,7 +59,9 @@
   },
   "prettier": {
     "singleQuote": true,
-    "printWidth": 120
+    "printWidth": 120,
+    "arrowParens": "avoid",
+    "trailingComma": "none"
   },
   "husky": {
     "hooks": {
