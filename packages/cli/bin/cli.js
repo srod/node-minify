@@ -21,7 +21,7 @@ program
   .option('-s, --silence', 'no output will be printed')
   .option('-O, --option [option]', 'option for the compressor as JSON object', '');
 
-program.on('--help', function() {
+program.on('--help', function () {
   console.log('  List of compressors:');
   console.log('');
   console.log('    - babel-minify');

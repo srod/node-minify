@@ -8,7 +8,12 @@
   "plugins": ["prettier"],
   "extends": ["eslint:recommended", "prettier"],
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     "no-console": 0,
     "no-var": "error",
     "strict": [2, "never"]
