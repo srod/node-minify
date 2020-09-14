@@ -23,7 +23,7 @@ module.exports = {
       },
       {
         text: 'NPM',
-        link: 'https://www.npmjs.com/package/node-minify'
+        link: 'https://www.npmjs.com/package/@node-minify/core'
       }
     ],
     sidebar: [

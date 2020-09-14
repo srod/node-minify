@@ -18,10 +18,7 @@ import { utils } from '@node-minify/utils';
  * @param {Function} callback
  */
 const minifyCrass = ({ settings, content, callback, index }) => {
-  const contentMinified = crass
-    .parse(content)
-    .optimize()
-    .toString();
+  const contentMinified = crass.parse(content).optimize().toString();
   if (!settings.content) {
     utils.writeFile({ file: settings.output, content: contentMinified, index });
   }

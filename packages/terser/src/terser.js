@@ -17,24 +17,28 @@ import { utils } from '@node-minify/utils';
  * @param {String} content
  * @param {Function} callback
  */
-const minifyTerser = ({ settings, content, callback, index }) => {
-  const contentMinified = terser.minify(content, settings.options);
+const minifyTerser = async ({ settings, content, callback, index }) => {
+  try {
+    const contentMinified = await terser.minify(content, settings.options);
 
-  if (contentMinified.error) {
-    if (callback) {
-      return callback(contentMinified.error);
+    if (contentMinified.error) {
+      if (callback) {
+        return callback(contentMinified.error);
+      }
     }
+    if (contentMinified.map && settings.options.sourceMap) {
+      utils.writeFile({ file: settings.options.sourceMap.url, content: contentMinified.map, index });
+    }
+    if (!settings.content) {
+      utils.writeFile({ file: settings.output, content: contentMinified.code, index });
+    }
+    if (callback) {
+      return callback(null, contentMinified.code);
+    }
+    return contentMinified.code;
+  } catch (error) {
+    return callback(error);
   }
-  if (contentMinified.map && settings.options.sourceMap) {
-    utils.writeFile({ file: settings.options.sourceMap.url, content: contentMinified.map, index });
-  }
-  if (!settings.content) {
-    utils.writeFile({ file: settings.output, content: contentMinified.code, index });
-  }
-  if (callback) {
-    return callback(null, contentMinified.code);
-  }
-  return contentMinified.code;
 };
 
 /**
