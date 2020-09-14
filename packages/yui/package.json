@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/yui",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "description": "yui - yahoo compressor plugin for @node-minify",
   "keywords": [
     "compressor",
@@ -34,6 +34,6 @@
   },
   "dependencies": {
     "@node-minify/run": "^6.0.0",
-    "@node-minify/utils": "^6.0.0"
+    "@node-minify/utils": "^6.1.0"
   }
 }
