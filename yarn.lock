@@ -8712,9 +8712,9 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.5:
     supports-color "^6.1.0"
 
 postcss@^8.0.2:
-  version "8.0.2"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.0.2.tgz#77c96c22a78192424f11050d81c53b4ce3d79a9e"
-  integrity sha512-6huADw2K8nEmIqFudqrSntnp/J3PvwNn26cRypSJahI2kZHNLLxMxLR6r2jlPc42ZXbPI606rkuzEHKGYU1nKA==
+  version "8.0.4"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.0.4.tgz#c2ce10272c83cb86083c59725ba673e445f6bc88"
+  integrity sha512-1XnscHU1hafSVykema78TOeBf1my7WThfK2jaSDtOQW90CAny63oEsWVC+EN/WSMSBpghq5PxUdPgozK693tJw==
   dependencies:
     colorette "^1.2.1"
     line-column "^1.0.2"
