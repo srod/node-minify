@@ -12,8 +12,8 @@ const terser = require('@node-minify/terser');
 
 minify({
   compressor: terser,
-  input: 'foo.css',
-  output: 'bar.css',
+  input: 'foo.js',
+  output: 'bar.js',
   callback: function(err, min) {}
 });
 ```
