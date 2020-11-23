@@ -32,6 +32,6 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "gzip-size": "5.1.1"
+    "gzip-size": "6.0.0"
   }
 }
