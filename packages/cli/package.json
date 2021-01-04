@@ -40,7 +40,7 @@
     "@node-minify/utils": "^6.0.0",
     "chalk": "4.1.0",
     "commander": "6.2.1",
-    "ora": "5.1.0",
+    "ora": "5.2.0",
     "update-notifier": "5.0.1"
   }
 }
