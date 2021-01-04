@@ -10506,10 +10506,10 @@ uglify-es@3.3.9:
     commander "~2.13.0"
     source-map "~0.6.1"
 
-uglify-js@3.12.3, uglify-js@^3.1.4, uglify-js@^3.5.1:
-  version "3.12.3"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.12.3.tgz#bb26c4abe0e68c55e9776bca9bed99a4df73facf"
-  integrity sha512-feZzR+kIcSVuLi3s/0x0b2Tx4Iokwqt+8PJM7yRHKuldg4MLdam4TCFeICv+lgDtuYiCtdmrtIP+uN9LWvDasw==
+uglify-js@3.12.4, uglify-js@^3.1.4, uglify-js@^3.5.1:
+  version "3.12.4"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.12.4.tgz#93de48bb76bb3ec0fc36563f871ba46e2ee5c7ee"
+  integrity sha512-L5i5jg/SHkEqzN18gQMTWsZk3KelRsfD1wUVNqtq0kzqWQqcJjyL8yc1o8hJgRrWqrAl2mUFbhfznEIoi7zi2A==
 
 uid-number@0.0.6:
   version "0.0.6"
