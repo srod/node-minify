@@ -14,6 +14,7 @@ const pkg = require('../package.json');
 updateNotifier({ pkg: pkg }).notify();
 
 program
+  .storeOptionsAsProperties()
   .version(pkg.version, '-v, --version')
   .option('-c, --compressor [compressor]', 'use the specified compressor [uglify-js]', 'uglify-js')
   .option('-i, --input [file]', 'input file path')
