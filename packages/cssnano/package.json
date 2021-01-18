@@ -35,6 +35,6 @@
   "dependencies": {
     "@node-minify/utils": "^6.1.0",
     "cssnano": "^4.1.8",
-    "postcss": "^7.0.7"
+    "postcss": "^8.0.2"
   }
 }
