@@ -65,7 +65,7 @@ const createDirectory = file => {
   if (Array.isArray(file)) {
     file = file[0];
   }
-  const dir = file.substr(0, file.lastIndexOf('/'));
+  const dir = file && file.substr(0, file.lastIndexOf('/'));
   if (!dir) {
     return;
   }
