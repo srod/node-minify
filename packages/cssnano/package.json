@@ -13,7 +13,7 @@
   "license": "MIT",
   "main": "lib/cssnano.js",
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=12.0.0"
   },
   "directories": {
     "lib": "lib",

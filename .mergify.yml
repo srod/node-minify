@@ -2,12 +2,12 @@ pull_request_rules:
   - name: automatic merge for Dependabot pull requests
     conditions:
       - author=dependabot-preview[bot]
-      - status-success=test (ubuntu-latest, 10.x)
       - status-success=test (ubuntu-latest, 12.x)
       - status-success=test (ubuntu-latest, 14.x)
-      - status-success=test (windows-latest, 10.x)
+      - status-success=test (ubuntu-latest, 16.x)
       - status-success=test (windows-latest, 12.x)
       - status-success=test (windows-latest, 14.x)
+      - status-success=test (windows-latest, 16.x)
     actions:
       merge:
         method: merge
