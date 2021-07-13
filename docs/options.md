@@ -9,7 +9,7 @@ const minify = require('@node-minify/core');
 const noCompress = require('@node-minify/no-compress');
 
 minify({
-  compressor: 'noCompress',
+  compressor: noCompress,
   input: ['foo.js', 'foo2.js', 'foo3.js'],
   output: 'bar.js',
   callback: function(err, min) {}
