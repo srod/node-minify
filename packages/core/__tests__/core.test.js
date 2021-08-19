@@ -4,6 +4,8 @@
  * MIT Licensed
  */
 
+jest.setTimeout(30000);
+
 import childProcess from 'child_process';
 import minify from '../../core/src/core';
 import gcc from '../../google-closure-compiler/src/google-closure-compiler';
