@@ -4,6 +4,8 @@
  * MIT Licensed
  */
 
+jest.setTimeout(30000);
+
 import childProcess from 'child_process';
 import minify from '../../core/src/core';
 import yui from '../../yui/src/yui';
@@ -106,7 +108,7 @@ describe('Package: YUI', () => {
         options: {
           fake: true
         },
-        callback: () => {}
+        callback: () => { }
       };
       const spy = jest.spyOn(options.minify, 'callback');
       expect(minify(options.minify)).rejects.toThrow();
