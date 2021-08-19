@@ -91,7 +91,7 @@ describe('Package: core', () => {
         options: {
           fake: true
         },
-        callback: () => { }
+        callback: () => {}
       };
       const spy = jest.spyOn(options.minify, 'callback');
 
@@ -197,7 +197,7 @@ describe('Package: core', () => {
         options: {
           fake: true
         },
-        callback: () => { }
+        callback: () => {}
       };
       const spy = jest.spyOn(options.minify, 'callback');
       expect(minify(options.minify)).rejects.toThrow();
@@ -215,7 +215,7 @@ describe('Package: core', () => {
         type: 'uglifyjs',
         input: filesJS.oneFileWithWildcards,
         output: filesJS.fileJSOut,
-        callback: () => { }
+        callback: () => {}
       };
 
       return minify(options.minify).catch(err => {
@@ -231,7 +231,7 @@ describe('Package: core', () => {
         compressor: gcc,
         input: filesJS.oneFile,
         output: filesJS.fileJSOut,
-        callback: () => { }
+        callback: () => {}
       };
       const spy = jest.spyOn(options.minify, 'callback');
 
@@ -248,7 +248,7 @@ describe('Package: core', () => {
         input: filesJS.oneFile,
         output: filesJS.fileJSOut,
         sync: true,
-        callback: () => { }
+        callback: () => {}
       };
       const spy = jest.spyOn(options.minify, 'callback');
 
@@ -265,7 +265,7 @@ describe('Package: core', () => {
       options.minify = {
         compressor: htmlMinifier,
         content: '<html><body><div>content</div></body></html>',
-        callback: () => { }
+        callback: () => {}
       };
       const spy = jest.spyOn(options.minify, 'callback');
 
@@ -281,7 +281,7 @@ describe('Package: core', () => {
         compressor: htmlMinifier,
         content: '<html><body><div>content</div></body></html>',
         sync: true,
-        callback: () => { }
+        callback: () => {}
       };
       const spy = jest.spyOn(options.minify, 'callback');
 
