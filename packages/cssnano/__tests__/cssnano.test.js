@@ -4,8 +4,6 @@
  * MIT Licensed
  */
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
-
 import minify from '../../core/src/core';
 import cssnano from '../src/cssnano';
 import { filesCSS } from '../../../tests/files-path';
