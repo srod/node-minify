@@ -108,7 +108,7 @@ describe('Package: YUI', () => {
         options: {
           fake: true
         },
-        callback: () => { }
+        callback: () => {}
       };
       const spy = jest.spyOn(options.minify, 'callback');
       expect(minify(options.minify)).rejects.toThrow();
