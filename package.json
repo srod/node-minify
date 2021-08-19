@@ -23,7 +23,7 @@
     "eslint": "eslint --ignore-path .gitignore packages",
     "lint": "npm run eslint || true",
     "pretest": "npm run build && npm run eslint",
-    "test": "jest --maxWorkers=2",
+    "test": "jest",
     "posttest": "npm run clean:coverage",
     "clean:build": "rimraf packages/*/lib",
     "clean:coverage": "rimraf tests/tmp/*.{js,js.map,css,html}",
@@ -80,11 +80,9 @@
       "<rootDir>/packages/*"
     ],
     "rootDir": "./",
-    "testEnvironment": "node",
     "testPathIgnorePatterns": [
       "/node_modules/",
       ".history"
-    ],
-    "verbose": true
+    ]
   }
 }
