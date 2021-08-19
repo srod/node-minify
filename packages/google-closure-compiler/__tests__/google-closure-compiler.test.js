@@ -4,6 +4,8 @@
  * MIT Licensed
  */
 
+jest.setTimeout(30000);
+
 import minify from '../../core/src/core';
 import gcc from '../../google-closure-compiler/src/google-closure-compiler';
 import { filesJS } from '../../../tests/files-path';
