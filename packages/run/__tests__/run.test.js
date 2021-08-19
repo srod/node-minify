@@ -4,6 +4,8 @@
  * MIT Licensed
  */
 
+jest.setTimeout(30000);
+
 import childProcess from 'child_process';
 import { runCommandLine } from '../src/run';
 
