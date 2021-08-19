@@ -4,8 +4,6 @@
  * MIT Licensed
  */
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
-
 import childProcess from 'child_process';
 import { runCommandLine } from '../src/run';
 
@@ -81,8 +79,11 @@ describe('Package: run', () => {
   });
 
   describe('Create sync errors', () => {
-    beforeEach(() => {
-      spyOn(childProcess, 'spawnSync').and.throwError('UnsupportedClassVersionError');
+    beforeAll(() => {
+      let spy = jest.spyOn(childProcess, 'spawnSync');
+      spy.mockImplementation(() => {
+        throw new Error();
+      });
     });
     test('should not be OK with YUI and sync', () => {
       const command = {
@@ -98,5 +99,8 @@ describe('Package: run', () => {
       const spy = jest.spyOn(command, 'callback');
       runCommandLine(command);
     });
+  });
+  afterAll(() => {
+    jest.restoreAllMocks();
   });
 });
