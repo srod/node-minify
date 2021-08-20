@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/cssnano",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "description": "cssnano plugin for @node-minify",
   "keywords": [
     "compressor",
@@ -33,7 +33,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/utils": "^6.1.0",
+    "@node-minify/utils": "^6.2.0",
     "cssnano": "^5.0.0",
     "postcss": "^8.0.2"
   }

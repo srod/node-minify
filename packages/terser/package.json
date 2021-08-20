@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/terser",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "description": "terser plugin for @node-minify",
   "keywords": [
     "compressor",
@@ -33,7 +33,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/utils": "^6.1.0",
+    "@node-minify/utils": "^6.2.0",
     "terser": "5.7.1"
   }
 }
