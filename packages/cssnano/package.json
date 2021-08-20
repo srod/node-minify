@@ -13,7 +13,7 @@
   "license": "MIT",
   "main": "lib/cssnano.js",
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=12.0.0"
   },
   "directories": {
     "lib": "lib",
@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@node-minify/utils": "^6.2.0",
-    "cssnano": "^4.1.8",
+    "cssnano": "^5.0.0",
     "postcss": "^8.0.2"
   }
 }

@@ -12,7 +12,7 @@
   "license": "MIT",
   "main": "lib/core.js",
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=12.0.0"
   },
   "directories": {
     "lib": "lib",
@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@node-minify/utils": "^6.2.0",
-    "globby": "11.0.2",
+    "globby": "11.0.4",
     "mkdirp": "1.0.4"
   }
 }

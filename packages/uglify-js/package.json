@@ -13,7 +13,7 @@
   "license": "MIT",
   "main": "lib/uglify-js.js",
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=12.0.0"
   },
   "directories": {
     "lib": "lib",
@@ -34,6 +34,6 @@
   },
   "dependencies": {
     "@node-minify/utils": "^6.2.0",
-    "uglify-js": "3.12.4"
+    "uglify-js": "3.14.1"
   }
 }

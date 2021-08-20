@@ -1,6 +1,6 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2020 Rodolphe Stoclin
+ * Copyright(c) 2011-2021 Rodolphe Stoclin
  * MIT Licensed
  */
 
@@ -65,7 +65,7 @@ const createDirectory = file => {
   if (Array.isArray(file)) {
     file = file[0];
   }
-  const dir = file.substr(0, file.lastIndexOf('/'));
+  const dir = file && file.substr(0, file.lastIndexOf('/'));
   if (!dir) {
     return;
   }

@@ -1,8 +1,10 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2020 Rodolphe Stoclin
+ * Copyright(c) 2011-2021 Rodolphe Stoclin
  * MIT Licensed
  */
+
+jest.setTimeout(30000);
 
 import minify from '../../core/src/core';
 import gcc from '../../google-closure-compiler/src/google-closure-compiler';

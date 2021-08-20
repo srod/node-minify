@@ -1,8 +1,10 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2020 Rodolphe Stoclin
+ * Copyright(c) 2011-2021 Rodolphe Stoclin
  * MIT Licensed
  */
+
+jest.setTimeout(30000);
 
 import childProcess from 'child_process';
 import * as cli from '../src/cli';
@@ -23,18 +25,23 @@ describe('Package: cli', () => {
 });
 
 describe('cli error', () => {
-  beforeEach(() => spyOn(childProcess, 'spawn').and.throwError('UnsupportedClassVersionError'));
+  beforeAll(() => {
+    let spy = jest.spyOn(childProcess, 'spawn');
+    spy.mockImplementation(() => {
+      throw new Error();
+    });
+  });
   test('should minify to throw with yui error', () => {
     const spy = jest.spyOn(cli, 'run');
-    return cli
-      .run({
-        compressor: 'yui',
-        input: filesJS.oneFile,
-        output: filesJS.fileJSOut
-      })
-      .catch(err => {
-        expect(spy).toHaveBeenCalled();
-        return expect(err.message).toMatch(/(UnsupportedClassVersionError)/);
-      });
+    const options = {
+      compressor: 'yui',
+      input: filesJS.oneFile,
+      output: filesJS.fileJSOut
+    };
+    expect(cli.run(options)).rejects.toThrow();
+    return cli.run(options).catch(() => expect(spy).toHaveBeenCalled());
+  });
+  afterAll(() => {
+    jest.restoreAllMocks();
   });
 });

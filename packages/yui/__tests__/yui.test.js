@@ -1,10 +1,10 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2020 Rodolphe Stoclin
+ * Copyright(c) 2011-2021 Rodolphe Stoclin
  * MIT Licensed
  */
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
+jest.setTimeout(30000);
 
 import childProcess from 'child_process';
 import minify from '../../core/src/core';
@@ -67,8 +67,11 @@ describe('Package: YUI', () => {
   });
 
   describe('Create sync errors', () => {
-    beforeEach(() => {
-      spyOn(childProcess, 'spawnSync').and.throwError('UnsupportedClassVersionError');
+    beforeAll(() => {
+      let spy = jest.spyOn(childProcess, 'spawnSync');
+      spy.mockImplementation(() => {
+        throw new Error();
+      });
     });
     test('should callback an error on spawnSync', () => {
       const options = {};
@@ -81,16 +84,19 @@ describe('Package: YUI', () => {
           fake: true
         }
       };
-
-      return minify(options.minify).catch(err => {
-        return expect(err.toString()).toEqual('Error: UnsupportedClassVersionError');
-      });
+      return expect(minify(options.minify)).rejects.toThrow();
+    });
+    afterAll(() => {
+      jest.restoreAllMocks();
     });
   });
 
   describe('Create async errors', () => {
-    beforeEach(() => {
-      spyOn(childProcess, 'spawn').and.throwError('error manual test');
+    beforeAll(() => {
+      let spy = jest.spyOn(childProcess, 'spawn');
+      spy.mockImplementation(() => {
+        throw new Error();
+      });
     });
     test('should callback an error on spawn', () => {
       const options = {};
@@ -105,11 +111,11 @@ describe('Package: YUI', () => {
         callback: () => {}
       };
       const spy = jest.spyOn(options.minify, 'callback');
-
-      return minify(options.minify).catch(err => {
-        expect(spy).toHaveBeenCalled();
-        return expect(err.toString()).toEqual('Error: error manual test');
-      });
+      expect(minify(options.minify)).rejects.toThrow();
+      return minify(options.minify).catch(() => expect(spy).toHaveBeenCalled());
     });
+  });
+  afterAll(() => {
+    jest.restoreAllMocks();
   });
 });

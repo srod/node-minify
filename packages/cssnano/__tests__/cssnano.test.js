@@ -1,10 +1,8 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2020 Rodolphe Stoclin
+ * Copyright(c) 2011-2021 Rodolphe Stoclin
  * MIT Licensed
  */
-
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
 import minify from '../../core/src/core';
 import cssnano from '../src/cssnano';
