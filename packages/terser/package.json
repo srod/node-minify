@@ -34,6 +34,6 @@
   },
   "dependencies": {
     "@node-minify/utils": "^6.2.0",
-    "terser": "5.7.1"
+    "terser": "5.7.2"
   }
 }
