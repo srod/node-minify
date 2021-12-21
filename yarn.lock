@@ -3667,7 +3667,7 @@ caniuse-api@^3.0.0:
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000844, caniuse-lite@^1.0.30001043, caniuse-lite@^1.0.30001181, caniuse-lite@^1.0.30001219, caniuse-lite@^1.0.30001251:
   version "1.0.30001291"
-  resolved "https://pkgs.dev.azure.com/IngEurCDaaS01/IngOne/_packaging/P00333-incoming-npm/npm/registry/caniuse-lite/-/caniuse-lite-1.0.30001291.tgz"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001291.tgz"
 
 caseless@~0.12.0:
   version "0.12.0"
