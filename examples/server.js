@@ -12,6 +12,20 @@ const cssnano = require('@node-minify/cssnano');
 const cleanCSS = require('@node-minify/clean-css');
 const jsonminify = require('@node-minify/jsonminify');
 
+const contentJS = `var tools = true; if(tools){ console.log('true'); }`;
+
+minify({
+  compressor: gcc,
+  content: contentJS,
+  output: 'public/js-dist/gcc-contentJS.js',
+  sync: true,
+  callback: function (err, min) {
+    console.log('contentJS GCC');
+    console.log(err);
+    //console.log(min);
+  }
+});
+
 console.log('sync 1');
 minify({
   compressor: yui,
@@ -19,7 +33,7 @@ minify({
   output: 'public/js-dist/yui-publicfolder-concat.js',
   type: 'js',
   sync: true,
-  callback: function(err, value) {
+  callback: function (err, value) {
     console.log('sync 2', value);
   }
 });
@@ -29,7 +43,7 @@ minify({
   compressor: terser,
   input: ['public/js/sample.js', 'public/js/sample2.js'],
   output: 'public/js-dist/terser-concat.js'
-}).then(function(min) {
+}).then(function (min) {
   console.log('terser min');
   console.log(min);
 });
@@ -49,11 +63,11 @@ minify({
   options: {
     minifyJS: false
   },
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('callback min');
     console.log(min);
   }
-}).then(function(min) {
+}).then(function (min) {
   console.log('html min');
   console.log(min);
 });
@@ -64,7 +78,7 @@ minify({
   input: '**/*.html',
   output: '$1.min.html',
   replaceInPlace: true,
-  callback: function(err, _min) {
+  callback: function (err, _min) {
     if (err) console.log(err);
     console.log(_min);
   }
@@ -77,7 +91,7 @@ minify({
   options: {
     minifyJS: false
   }
-}).then(function(min) {
+}).then(function (min) {
   console.log('html min');
   console.log(min);
 });
@@ -90,7 +104,7 @@ minify({
   options: {
     minifyJS: false
   }
-}).then(function(min) {
+}).then(function (min) {
   console.log('html min');
   console.log(min);
 });
@@ -103,7 +117,7 @@ minify({
   options: {
     minifyJS: false
   }
-}).then(function(min) {
+}).then(function (min) {
   console.log('html min');
   console.log(min);
 });
@@ -122,11 +136,11 @@ const json = `
 minify({
   compressor: jsonminify,
   content: json,
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('callback min');
     console.log(min);
   }
-}).then(function(min) {
+}).then(function (min) {
   console.log('json min');
   console.log(min);
 });
@@ -135,7 +149,7 @@ minify({
   compressor: babelMinify,
   input: 'public/js-es6/**/*.js',
   output: 'public/js-dist/babel-minify-$1.js'
-}).then(function(min) {
+}).then(function (min) {
   //console.log(min);
 });
 
@@ -143,7 +157,7 @@ minify({
   compressor: babelMinify,
   input: 'public/js-es6/**/*.js',
   output: 'public/js-dist/babel-minify-es6.js'
-}).then(function(min) {
+}).then(function (min) {
   //console.log(min);
 });
 
@@ -152,7 +166,7 @@ minify({
   input: 'public/js/**/*.js',
   output: 'public/js-dist/gcc-wildcards.js',
   sync: true,
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('wildcards GCC');
     console.log(err);
     //console.log(min);
@@ -164,7 +178,7 @@ minify({
   input: 'public/js/**/*.js',
   output: 'public/js-dist/yui-wildcards.js',
   type: 'js',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('wildcards YUI JS');
     console.log(err);
     //console.log(min);
@@ -175,7 +189,7 @@ minify({
   compressor: uglifyjs,
   input: 'public/js/**/*.js',
   output: 'public/js-dist/uglifyjs-wildcards.js',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('wildcards Uglifyjs');
     console.log(err);
     //console.log(min);
@@ -186,7 +200,7 @@ minify({
   compressor: noCompress,
   input: 'public/js/**/*.js',
   output: 'public/js-dist/no-compress-wildcards.js',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('wildcards no-compress');
     console.log(err);
     //console.log(min);
@@ -197,7 +211,7 @@ minify({
   compressor: gcc,
   input: 'public/js/sample.js',
   output: 'public/js-dist/gcc-onefile.js',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('GCC one file');
     console.log(err);
     //console.log(min);
@@ -208,7 +222,7 @@ minify({
   compressor: gcc,
   input: ['public/js/sample.js', 'public/js/sample2.js'],
   output: 'public/js-dist/gcc-concat.js',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('GCC concat multi files');
     console.log(err);
     //console.log(min);
@@ -221,7 +235,7 @@ minify({
   input: 'public/css/sample.css',
   output: 'public/css-dist/yui-onefile.css',
   type: 'css',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('YUI CSS one file');
     console.log(err);
     //console.log(min);
@@ -233,7 +247,7 @@ minify({
   input: 'public/js/sample.js',
   output: 'public/js-dist/yui-onefile.js',
   type: 'js',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('YUI JS one file');
     console.log(err);
     //console.log(min);
@@ -245,7 +259,7 @@ minify({
   compressor: uglifyjs,
   input: 'public/js/sample.js',
   output: 'public/js-dist/uglify-onefile.js',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('Uglifyjs one file');
     console.log(err);
     //console.log(min);
@@ -256,7 +270,7 @@ minify({
   compressor: uglifyjs,
   input: ['public/js/sample.js', 'public/js/sample2.js'],
   output: 'public/js-dist/uglify-concat.js',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('Uglifyjs concat multi files');
     console.log(err);
     //console.log(min);
@@ -267,7 +281,7 @@ minify({
   compressor: noCompress,
   input: ['public/js/sample.js', 'public/js/sample2.js'],
   output: 'public/js-dist/no-compress-concat.js',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('No compress concat');
     console.log(err);
     //console.log(min);
@@ -279,7 +293,7 @@ minify({
   compressor: sqwish,
   input: ['public/css/sample.css', 'public/css/sample2.css'],
   output: 'public/css-dist/sqwish-concat.css',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('Sqwish concat');
     console.log(err);
     //console.log(min);
@@ -291,7 +305,7 @@ minify({
   compressor: crass,
   input: ['public/css/sample.css', 'public/css/sample2.css'],
   output: 'public/css-dist/crass-concat.css',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('Crass concat');
     console.log(err);
     //console.log(min);
@@ -305,7 +319,7 @@ minify({
   input: 'sample.js',
   output: 'public/js-dist/yui-publicfolder.js',
   type: 'js',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('YUI JS with publicFolder option');
     console.log(err);
     //console.log(min);
@@ -318,7 +332,7 @@ minify({
   input: ['sample.js', 'sample2.js'],
   output: 'public/js-dist/yui-publicfolder-concat.js',
   type: 'js',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('YUI JS with publicFolder option and array');
     console.log(err);
     //console.log(min);
@@ -330,7 +344,7 @@ minify({
   compressor: cssnano,
   input: ['public/css/sample.css', 'public/css/sample2.css'],
   output: 'public/css-dist/cssnano-concat.css',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('cssnano concat');
     console.log(err);
     //console.log(min);
@@ -342,7 +356,7 @@ minify({
   compressor: cleanCSS,
   input: ['public/css/sample.css', 'public/css/sample2.css'],
   output: 'public/css-dist/cleancss-concat.css',
-  callback: function(err, min) {
+  callback: function (err, min) {
     console.log('cleancss concat');
     console.log(err);
     //console.log(min);

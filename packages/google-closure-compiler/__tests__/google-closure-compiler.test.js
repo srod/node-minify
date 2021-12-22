@@ -28,8 +28,7 @@ describe('Package: google-closure-compiler', () => {
       input: filesJS.oneFileWithWildcards,
       output: filesJS.fileJSOut,
       options: {
-        languageIn: 'ECMASCRIPT5',
-        createSourceMap: true
+        language_in: 'ECMASCRIPT5'
       }
     };
 
