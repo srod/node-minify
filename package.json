@@ -38,7 +38,7 @@
     "@babel/core": "7.16.7",
     "@babel/preset-env": "7.16.7",
     "babel-core": "6.26.3",
-    "babel-jest": "27.4.5",
+    "babel-jest": "27.4.6",
     "babel-preset-env": "1.7.0",
     "codecov": "3.8.3",
     "eslint": "8.6.0",
