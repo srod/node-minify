@@ -35,6 +35,6 @@
   },
   "dependencies": {
     "@node-minify/utils": "^6.3.0",
-    "jsonminify": "0.4.1"
+    "jsonminify": "0.4.2"
   }
 }
