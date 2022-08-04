@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@node-minify/utils": "^6.3.0",
-    "globby": "11.0.4",
+    "globby": "13.1.2",
     "mkdirp": "1.0.4"
   }
 }
