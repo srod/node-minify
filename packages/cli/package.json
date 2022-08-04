@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/cli",
-  "version": "6.3.0",
+  "version": "6.4.0",
   "description": "CLI - command line interface for @node-minify",
   "keywords": [
     "compressor",
@@ -36,8 +36,8 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/core": "^6.3.0",
-    "@node-minify/utils": "^6.3.0",
+    "@node-minify/core": "^6.4.0",
+    "@node-minify/utils": "^6.4.0",
     "chalk": "4.1.2",
     "commander": "9.4.0",
     "ora": "5.4.1",
