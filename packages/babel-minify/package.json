@@ -35,6 +35,6 @@
   "dependencies": {
     "@node-minify/utils": "^6.3.0",
     "babel-core": "6.26.3",
-    "babel-preset-minify": "0.5.1"
+    "babel-preset-minify": "0.5.2"
   }
 }

@@ -82,42 +82,6 @@ describe('Package: core', () => {
   });
 
   describe('Create errors', () => {
-    test('should catch an error if gcc with bad options', () => {
-      const options = {};
-      options.minify = {
-        compressor: gcc,
-        input: filesJS.oneFile,
-        output: filesJS.fileJSOut,
-        options: {
-          fake: true
-        },
-        callback: () => {}
-      };
-      const spy = jest.spyOn(options.minify, 'callback');
-
-      return minify(options.minify).catch(err => {
-        expect(spy).toHaveBeenCalled();
-        return expect(err.toString()).toMatch('"--fake" is not a valid option');
-      });
-    });
-
-    test('should catch an error if gcc with bad options and sync', () => {
-      const options = {};
-      options.minify = {
-        compressor: gcc,
-        input: filesJS.oneFile,
-        output: filesJS.fileJSOut,
-        sync: true,
-        options: {
-          fake: true
-        }
-      };
-
-      return minify(options.minify).catch(err => {
-        return expect(err.toString()).toMatch('"--fake" is not a valid option');
-      });
-    });
-
     test('should catch an error if yui with bad options', () => {
       const options = {};
       options.minify = {
@@ -129,12 +93,10 @@ describe('Package: core', () => {
           fake: true
         }
       };
-
       return minify(options.minify).catch(err => {
         return expect(err.toString()).toMatch('Error');
       });
     });
-
     test('should catch an error if yui with bad options and sync', () => {
       const options = {};
       options.minify = {
@@ -147,7 +109,6 @@ describe('Package: core', () => {
           fake: true
         }
       };
-
       return minify(options.minify).catch(err => {
         return expect(err.toString()).toMatch('Error');
       });
