@@ -38,6 +38,14 @@ utils.writeFile = ({ file, content, index }) => {
 };
 
 /**
+ * Delete file.
+ *
+ * @param {String} file
+ * @returns {String}
+ */
+utils.deleteFile = file => fs.unlinkSync(file);
+
+/**
  * Builds arguments array based on an object.
  *
  * @param {Object} options
