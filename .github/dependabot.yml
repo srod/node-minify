@@ -6,3 +6,9 @@ updates:
       interval: monthly
       time: '04:00'
     open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: 'chalk'
+      - dependency-name: 'globby'
+      - dependency-name: 'gzip-size'
+      - dependency-name: 'jest'
+      - dependency-name: 'ora'
