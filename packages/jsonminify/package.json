@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/jsonminify",
-  "version": "6.4.0",
+  "version": "7.0.0",
   "description": "jsonminify plugin for @node-minify",
   "keywords": [
     "compressor",
@@ -34,7 +34,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/utils": "^6.4.0",
+    "@node-minify/utils": "^7.0.0",
     "jsonminify": "0.4.2"
   }
 }
