@@ -7,39 +7,31 @@
 /**
  * Module dependencies.
  */
-import compiler from 'google-closure-compiler';
+import compilerPath from 'google-closure-compiler-java';
 import { utils } from '@node-minify/utils';
+import { runCommandLine } from '@node-minify/run';
 
-/**
- * Module variables.
- */
-const ClosureCompiler = compiler.jsCompiler;
-
-// the allowed flags, taken from https://github.com/google/closure-compiler
+// the allowed flags, taken from https://github.com/google/closure-compiler/wiki/Flags-and-Options
 const allowedFlags = [
-  'angularPass',
-  'applyInputSourceMaps',
-  'assumeFunctionWrapper',
-  'checksOnly',
-  'compilationLevel',
-  'createSourceMap',
-  'dartPass',
-  'defines',
+  'angular_pass',
+  'assume_function_wrapper',
+  'checks_only',
+  'compilation_level',
+  'create_source_map',
+  'define',
   'env',
   'externs',
-  'exportLocalPropertyDefinitions',
-  'generateExports',
-  'languageIn',
-  'languageOut',
-  'newTypeInf',
-  'outputWrapper',
-  'polymerVersion',
-  'preserveTypeAnnotations',
-  'processCommonJsModules',
-  'renamePrefixNamespace',
-  'rewritePolyfills',
-  'useTypesForOptimization',
-  'warningLevel'
+  'export_local_property_definitions',
+  'generate_exports',
+  'language_in',
+  'language_out',
+  'output_wrapper',
+  'polymer_version',
+  'process_common_js_modules',
+  'rename_prefix_namespace',
+  'rewrite_polyfills',
+  'use_types_for_optimization',
+  'warning_level'
 ];
 
 /**
@@ -51,35 +43,27 @@ const allowedFlags = [
  */
 const minifyGCC = ({ settings, content, callback, index }) => {
   const options = applyOptions({}, settings.options);
-  const gcc = new ClosureCompiler(options);
-  const contentMinified = gcc.run([{ src: content }], (exitCode, stdOut, stdErr) => {
-    if (exitCode > 0 && callback) {
-      return callback(stdErr);
+  return runCommandLine({
+    args: gccCommand(options),
+    data: content,
+    settings,
+    callback: (err, content) => {
+      if (err) {
+        if (callback) {
+          return callback(err);
+        } else {
+          throw err;
+        }
+      }
+      if (!settings.content) {
+        utils.writeFile({ file: settings.output, content, index });
+      }
+      if (callback) {
+        return callback(null, content);
+      }
+      return content;
     }
   });
-  if (!settings.content) {
-    utils.writeFile({ file: settings.output, content: contentMinified.compiledCode, index });
-  }
-
-  /**
-   * Write GCC sourceMap
-   * If the createSourceMap option is passed we'll write the sourceMap file
-   * If createSourceMap is a boolean we'll append .map to the settings.output file path
-   * otherwise use createSourceMap as the file path.
-   */
-
-  if (settings.options.createSourceMap) {
-    const sourceMapOutput =
-      typeof settings.options.createSourceMap === 'boolean'
-        ? settings.output + '.map'
-        : settings.options.createSourceMap;
-    utils.writeFile({ file: sourceMapOutput, content: contentMinified.sourceMap, index });
-  }
-
-  if (callback) {
-    return callback(null, contentMinified.compiledCode);
-  }
-  return contentMinified.compiledCode;
 };
 
 /**
@@ -96,6 +80,14 @@ const applyOptions = (flags, options) => {
     .filter(option => allowedFlags.indexOf(option) > -1)
     .forEach(option => (flags[option] = options[option]));
   return flags;
+};
+
+/**
+ * GCC command line.
+ */
+
+const gccCommand = options => {
+  return ['-jar', compilerPath].concat(utils.buildArgs(options || {}));
 };
 
 /**
