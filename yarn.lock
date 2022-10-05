@@ -5342,10 +5342,10 @@ globby@^11.0.2, globby@^11.1.0:
     merge2 "^1.4.1"
     slash "^3.0.0"
 
-google-closure-compiler-java@20220803.0.0:
-  version "20220803.0.0"
-  resolved "https://registry.yarnpkg.com/google-closure-compiler-java/-/google-closure-compiler-java-20220803.0.0.tgz#387c114195510ebed04cd43e70ac50794491b1b6"
-  integrity sha512-Oevg580k6iRqOSgWe/TfmUCFHvCpXNzSslKt638mX+TkGA2E2oczzXJ9STo9OS6w9fBaqcUc/db9ZbNPdVdwnQ==
+google-closure-compiler-java@20220905.0.0:
+  version "20220905.0.0"
+  resolved "https://registry.yarnpkg.com/google-closure-compiler-java/-/google-closure-compiler-java-20220905.0.0.tgz#53d4b081c63fac09b6589729f5f359c8ec3ce27e"
+  integrity sha512-wxGxNla/0UDS1Lm0cRxEy85KhVRd0vNlsTclnIJ9f1gRWzvvTsJ4lwz+PdT60R6y2hKAOBvydIJHh+B8XJastA==
 
 got@^12.1.0:
   version "12.3.0"
