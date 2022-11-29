@@ -34,6 +34,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
+    "@node-minify/run": "^6.4.0",
     "@node-minify/utils": "^6.4.0",
     "google-closure-compiler-java": "20221102.0.1"
   }

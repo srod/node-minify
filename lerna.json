@@ -7,10 +7,7 @@
       "npmClient": "npm"
     }
   },
-  "packages": [
-    "packages/*"
-  ],
-  "npmClient": "yarn",
+  "npmClient": "pnpm",
   "useWorkspaces": true,
   "version": "6.4.0"
 }
