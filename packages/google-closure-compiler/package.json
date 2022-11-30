@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/google-closure-compiler",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "description": "google closure compiler plugin for @node-minify",
   "keywords": [
     "compressor",
@@ -34,8 +34,8 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "dependencies": {
-    "@node-minify/run": "^7.0.0",
-    "@node-minify/utils": "^7.0.0",
+    "@node-minify/run": "^7.1.0",
+    "@node-minify/utils": "^7.1.0",
     "google-closure-compiler-java": "20221102.0.1"
   }
 }
