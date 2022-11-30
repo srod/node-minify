@@ -3,13 +3,13 @@
 ## Installation
 
 ```bash
-npm install @node-minify/core # OR yarn add @node-minify/core OR pnpm install @node-minify/core
+npm install @node-minify/core # OR yarn add @node-minify/core OR pnpm add @node-minify/core
 ```
 
 And install the compressor you want
 
 ```bash
-npm install @node-minify/uglify-js # OR yarn add @node-minify/uglify-js OR pnpm install @node-minify/uglify-js
+npm install @node-minify/uglify-js # OR yarn add @node-minify/uglify-js OR pnpm add @node-minify/uglify-js
 ```
 
 ## Quick Start
