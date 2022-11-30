@@ -43,13 +43,13 @@ It allow you to compress JavaScript, CSS and HTML files.
 ## Installation
 
 ```bash
-npm install @node-minify/core # OR yarn add @node-minify/core
+npm install @node-minify/core # OR yarn add @node-minify/core OR pnpm install @node-minify/core
 ```
 
 And install the compressor you want
 
 ```bash
-npm install @node-minify/uglify-js # OR yarn add @node-minify/uglify-js
+npm install @node-minify/uglify-js # OR yarn add @node-minify/uglify-js OR pnpm install @node-minify/uglify-js
 ```
 
 ## Quick Start
@@ -64,7 +64,7 @@ minify({
   compressor: gcc,
   input: 'foo.js',
   output: 'bar.js',
-  callback: function(err, min) {}
+  callback: function (err, min) {}
 });
 
 // Using UglifyJS
@@ -72,7 +72,7 @@ minify({
   compressor: uglifyjs,
   input: './**/*.js',
   output: 'bar.js',
-  callback: function(err, min) {}
+  callback: function (err, min) {}
 });
 
 // Using Promise
@@ -82,7 +82,7 @@ var promise = minify({
   output: 'bar.js'
 });
 
-promise.then(function(min) {});
+promise.then(function (min) {});
 
 // Async/Await
 async function doMinify() {
@@ -100,7 +100,7 @@ minify({
   compressor: gcc,
   input: 'foo.js',
   output: 'bar.js',
-  callback: function(err, min) {}
+  callback: function (err, min) {}
 });
 ```
 
@@ -120,7 +120,7 @@ const html = `
 minify({
   compressor: htmlMinifier,
   content: html
-}).then(function(min) {
+}).then(function (min) {
   console.log('html min');
   console.log(min);
 });
