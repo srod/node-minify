@@ -76,7 +76,7 @@ importers:
 
   packages/babel-minify:
     specifiers:
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/utils': ^7.0.0
       babel-core: 6.26.3
       babel-preset-minify: 0.5.2
     dependencies:
@@ -86,7 +86,7 @@ importers:
 
   packages/clean-css:
     specifiers:
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/utils': ^7.0.0
       clean-css: 5.3.1
     dependencies:
       '@node-minify/utils': link:../utils
@@ -94,8 +94,8 @@ importers:
 
   packages/cli:
     specifiers:
-      '@node-minify/core': ^6.4.0
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/core': ^7.0.0
+      '@node-minify/utils': ^7.0.0
       chalk: 4.1.2
       commander: 9.4.1
       ora: 5.4.1
@@ -110,7 +110,7 @@ importers:
 
   packages/core:
     specifiers:
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/utils': ^7.0.0
       globby: 11.0.4
       mkdirp: 1.0.4
     dependencies:
@@ -120,7 +120,7 @@ importers:
 
   packages/crass:
     specifiers:
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/utils': ^7.0.0
       crass: 0.12.3
     dependencies:
       '@node-minify/utils': link:../utils
@@ -128,7 +128,7 @@ importers:
 
   packages/cssnano:
     specifiers:
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/utils': ^7.0.0
       cssnano: ^5.0.0
       postcss: 8.4.19
     dependencies:
@@ -138,7 +138,7 @@ importers:
 
   packages/csso:
     specifiers:
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/utils': ^7.0.0
       csso: 5.0.5
     dependencies:
       '@node-minify/utils': link:../utils
@@ -146,8 +146,8 @@ importers:
 
   packages/google-closure-compiler:
     specifiers:
-      '@node-minify/run': ^6.4.0
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/run': ^7.0.0
+      '@node-minify/utils': ^7.0.0
       google-closure-compiler-java: 20221102.0.1
     dependencies:
       '@node-minify/run': link:../run
@@ -156,7 +156,7 @@ importers:
 
   packages/html-minifier:
     specifiers:
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/utils': ^7.0.0
       html-minifier: 4.0.0
     dependencies:
       '@node-minify/utils': link:../utils
@@ -164,7 +164,7 @@ importers:
 
   packages/jsonminify:
     specifiers:
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/utils': ^7.0.0
       jsonminify: 0.4.2
     dependencies:
       '@node-minify/utils': link:../utils
@@ -172,7 +172,7 @@ importers:
 
   packages/no-compress:
     specifiers:
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/utils': ^7.0.0
     dependencies:
       '@node-minify/utils': link:../utils
 
@@ -181,7 +181,7 @@ importers:
 
   packages/sqwish:
     specifiers:
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/utils': ^7.0.0
       sqwish: 0.2.2
     dependencies:
       '@node-minify/utils': link:../utils
@@ -189,7 +189,7 @@ importers:
 
   packages/terser:
     specifiers:
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/utils': ^7.0.0
       terser: 5.15.1
     dependencies:
       '@node-minify/utils': link:../utils
@@ -197,7 +197,7 @@ importers:
 
   packages/uglify-es:
     specifiers:
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/utils': ^7.0.0
       uglify-es: 3.3.9
     dependencies:
       '@node-minify/utils': link:../utils
@@ -205,7 +205,7 @@ importers:
 
   packages/uglify-js:
     specifiers:
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/utils': ^7.0.0
       uglify-js: 3.17.4
     dependencies:
       '@node-minify/utils': link:../utils
@@ -219,8 +219,8 @@ importers:
 
   packages/yui:
     specifiers:
-      '@node-minify/run': ^6.4.0
-      '@node-minify/utils': ^6.4.0
+      '@node-minify/run': ^7.0.0
+      '@node-minify/utils': ^7.0.0
     dependencies:
       '@node-minify/run': link:../run
       '@node-minify/utils': link:../utils
