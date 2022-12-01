@@ -190,10 +190,10 @@ importers:
   packages/terser:
     specifiers:
       '@node-minify/utils': ^7.0.0
-      terser: 5.15.1
+      terser: 5.16.0
     dependencies:
       '@node-minify/utils': 7.1.0
-      terser: 5.15.1
+      terser: 5.16.0
 
   packages/uglify-es:
     specifiers:
@@ -9527,8 +9527,8 @@ packages:
       supports-hyperlinks: 2.3.0
     dev: true
 
-  /terser/5.15.1:
-    resolution: {integrity: sha512-K1faMUvpm/FBxjBXud0LWVAGxmvoPbZbfTCYbSgaaYQaIXI3/TdI7a7ZGA73Zrou6Q8Zmz3oeUTsp/dj+ag2Xw==}
+  /terser/5.16.0:
+    resolution: {integrity: sha512-KjTV81QKStSfwbNiwlBXfcgMcOloyuRdb62/iLFPGBcVNF4EXjhdYBhYHmbJpiBrVxZhDvltE11j+LBQUxEEJg==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
