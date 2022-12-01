@@ -111,11 +111,11 @@ importers:
   packages/core:
     specifiers:
       '@node-minify/utils': ^7.0.0
-      globby: 11.0.4
+      globby: 11.1.0
       mkdirp: 1.0.4
     dependencies:
       '@node-minify/utils': 7.1.0
-      globby: 11.0.4
+      globby: 11.1.0
       mkdirp: 1.0.4
 
   packages/crass:
@@ -5808,7 +5808,6 @@ packages:
       ignore: 5.2.1
       merge2: 1.4.1
       slash: 3.0.0
-    dev: true
 
   /google-closure-compiler-java/20221102.0.1:
     resolution: {integrity: sha512-rMKLEma3uSe/6MGHtivDezTv4u5iaDEyxoy9No+1WruPSZ5h1gBZLONcfCA8JaoGojFPdHZI1qbwT0EveEWnAg==}
