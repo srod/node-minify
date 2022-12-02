@@ -12,16 +12,29 @@
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
   "homepage": "https://github.com/srod/node-minify/tree/master/packages/google-closure-compiler#readme",
   "license": "MIT",
-  "main": "lib/google-closure-compiler.js",
   "engines": {
     "node": ">=14.0.0"
   },
   "directories": {
-    "lib": "lib",
+    "lib": "dist",
     "test": "__tests__"
   },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/types/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/types/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "types": "./dist/cjs/types/index.d.ts",
+  "main": "./dist/cjs/index.js",
   "files": [
-    "lib"
+    "dist/**/*"
   ],
   "publishConfig": {
     "access": "public"
@@ -33,9 +46,17 @@
   "bugs": {
     "url": "https://github.com/srod/node-minify/issues"
   },
+  "scripts": {
+    "clean": "pnpm dlx rimraf dist",
+    "build": "npm run clean && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+    "prepack": "npm run build"
+  },
   "dependencies": {
-    "@node-minify/run": "^7.0.0",
-    "@node-minify/utils": "^7.0.0",
+    "@node-minify/run": "workspace:*",
+    "@node-minify/utils": "workspace:*",
     "google-closure-compiler-java": "20221102.0.1"
+  },
+  "devDependencies": {
+    "@node-minify/types": "workspace:*"
   }
 }

@@ -1,0 +1,29 @@
+{
+  "name": "@node-minify/types",
+  "version": "7.0.0",
+  "description": "types for @node-minify",
+  "keywords": [
+    "compressor",
+    "minify",
+    "minifier",
+    "types"
+  ],
+  "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
+  "homepage": "https://github.com/srod/node-minify/tree/master/packages/types#readme",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "main": "src/types.ts",
+  "types": "src/types.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srod/node-minify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/srod/node-minify/issues"
+  }
+}
