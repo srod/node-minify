@@ -1,0 +1,18 @@
+{
+  "*": {
+    "theme": {
+      "footer": false,
+      "toc": false
+    }
+  },
+  "index": "Introduction",
+  "getting-started": "Getting Started",
+  "options": "Options",
+  "cli": "CLI",
+  "npm": {
+    "title": "NPM ↗",
+    "type": "page",
+    "href": "https://www.npmjs.com/package/@node-minify/core",
+    "newWindow": true
+  }
+}

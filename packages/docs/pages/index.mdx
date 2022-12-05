@@ -1,0 +1,50 @@
+import Image from 'next/image';
+import { Callout } from 'nextra-theme-docs';
+
+<div align="center">
+  <Image src="/static/node-minify.png" alt="node-minify" width={348} height={80} priority />
+</div>
+
+<p align="center">A very light minifier Node.js module.</p>
+
+## Features
+
+It allow you to compress JavaScript, CSS and HTML files.
+
+**JavaScript:**
+
+- [babel-minify](/compressors/babel-minify)
+- [Google Closure Compiler](/compressors/gcc)
+- [terser](/compressors/terser)
+- [uglify-js](/compressors/uglify-js)
+- [uglify-es](/compressors/uglify-es)
+- [YUI Compressor](/compressors/yui)
+
+**CSS:**
+
+- [clean-css](/compressors/clean-css)
+- [crass](/compressors/crass)
+- [cssnano](/compressors/cssnano)
+- [CSSO](/compressors/csso)
+- [sqwish](/compressors/sqwish)
+- [YUI Compressor](/compressors/yui)
+
+**HTML:**
+
+- [html-minifier](/compressors/html-minifier)
+
+**JSON:**
+
+- [jsonminify](/compressors/jsonminify)
+
+**Command Line Interface:**
+
+- [CLI](/cli)
+
+CSS benchmark: [http://goalsmashers.github.io/css-minification-benchmark/](http://goalsmashers.github.io/css-minification-benchmark/)
+
+<Callout type="info">I recommend to execute it at boot time for production use.</Callout>
+
+## License
+
+[MIT](https://github.com/srod/node-minify/blob/master/LICENSE)

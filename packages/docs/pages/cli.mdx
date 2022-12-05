@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 # CLI
 
 You can compress files using the command line.
@@ -14,7 +16,7 @@ npm install -g @node-minify/cli # OR yarn global add @node-minify/cli OR pnpm ad
 node-minify --compressor uglify-js --input 'input.js' --output 'output.js'
 ```
 
-<img src="../static/cli.png" width="749" height="322" alt="cli">
+<Image src="/static/cli.png" alt="cli" width={749} height={322} priority />
 
 ## Options
 
