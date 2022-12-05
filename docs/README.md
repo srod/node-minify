@@ -1,47 +1,23 @@
-<div align="center"><img src="../static/node-minify.png" width="348" alt="node-minify"></div>
+# Nextra Docs Template
 
-<p align="center">A very light minifier Node.js module.</p>
+This is a template for creating documentation with [Nextra](https://nextra.site).
 
-## Features
+[**Live Demo →**](https://nextra-docs-template.vercel.app)
 
-It allow you to compress JavaScript, CSS and HTML files.
+[![](.github/screenshot.png)](https://nextra-docs-template.vercel.app)
 
-**JavaScript:**
+## Quick Start
 
-- [babel-minify](/compressors/babel-minify.md)
-- [Google Closure Compiler](/compressors/gcc.md)
-- [terser](/compressors/terser.md)
-- [uglify-js](/compressors/uglify-js.md)
-- [uglify-es](/compressors/uglify-es.md)
-- [YUI Compressor](/compressors/yui.md)
+Click the button to clone this repository and deploy it on Vercel:
 
-**CSS:**
+[![](https://vercel.com/button)](https://vercel.com/new/clone?s=https%3A%2F%2Fgithub.com%2Fshuding%2Fnextra-docs-template&showOptionalTeamCreation=false)
 
-- [clean-css](/compressors/clean-css.md)
-- [crass](/compressors/crass.md)
-- [cssnano](/compressors/cssnano.md)
-- [CSSO](/compressors/csso.md)
-- [sqwish](/compressors/sqwish.md)
-- [YUI Compressor](/compressors/yui.md)
+## Local Development
 
-**HTML:**
+First, run `pnpm i` to install the dependencies.
 
-- [html-minifier](/compressors/html-minifier.md)
-
-**JSON:**
-
-- [jsonminify](/compressors/jsonminify.md)
-
-**Command Line Interface:**
-
-- [CLI](/cli.md)
-
-CSS benchmark: [http://goalsmashers.github.io/css-minification-benchmark/](http://goalsmashers.github.io/css-minification-benchmark/)
-
-::: tip
-I recommend to execute it at boot time for production use.
-:::
+Then, run `pnpm dev` to start the development server and visit localhost:3000.
 
 ## License
 
-[MIT](https://github.com/srod/node-minify/blob/master/LICENSE)
+This project is licensed under the MIT License.

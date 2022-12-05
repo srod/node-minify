@@ -21,8 +21,6 @@
     "setup": "npm run clean:packages && npm run build",
     "build": "npm run clean:build && npm run build-js",
     "build-js": "pnpm lerna exec --parallel -- babel --root-mode upward src --out-dir lib --copy-files",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs",
     "eslint": "eslint --ignore-path .gitignore packages",
     "lerna": "lerna",
     "lint": "npm run eslint || true",
