@@ -4,11 +4,12 @@
  * MIT Licensed
  */
 
-import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import minify from '../../core/src';
 import terser from '../src';
 import { filesJS } from '../../../tests/files-path';
 import { runOneTest, tests } from '../../../tests/fixtures';
+import { Options } from '../../../tests/types';
 
 const compressorLabel = 'terser';
 const compressor = terser;
@@ -27,11 +28,12 @@ describe('Package: terser', () => {
     runOneTest({ options, compressorLabel, compressor, sync: true });
   });
   test('should throw an error', () => {
-    const options = {};
-    options.minify = {
-      compressor: terser,
-      input: filesJS.errors,
-      output: filesJS.fileJSOut
+    const options: Options = {
+      minify: {
+        compressor: terser,
+        input: filesJS.errors,
+        output: filesJS.fileJSOut
+      }
     };
 
     return minify(options.minify).catch(err => {

@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { describe } from 'vitest';
 import noCompress from '../src';
 import { runOneTest, tests } from '../../../tests/fixtures';
 

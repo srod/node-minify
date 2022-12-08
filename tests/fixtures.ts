@@ -1,8 +1,9 @@
 import { test, expect } from 'vitest';
+import { Settings } from '@node-minify/types';
 import minify from '../packages/core/src';
 import { filesJS, filesCSS, filesHTML, filesJSON } from './files-path';
 
-const runOneTest = ({ options, compressorLabel, compressor, sync }) => {
+const runOneTest = ({ options, compressorLabel, compressor, sync }: Settings) => {
   options = JSON.parse(JSON.stringify(options));
 
   options.minify.compressor = compressor;
@@ -11,14 +12,14 @@ const runOneTest = ({ options, compressorLabel, compressor, sync }) => {
     options.minify.sync = true;
   }
 
-  test(options.it.replace('{compressor}', compressorLabel), () => {
-    return new Promise(resolve => {
-      options.minify.callback = (err, min) => {
-        resolve(err, min);
+  test(options.it.replace('{compressor}', compressorLabel), (): Promise<void> => {
+    return new Promise<{ err: Error; min: string }>(resolve => {
+      options.minify.callback = (err: Error, min: string) => {
+        resolve({ err, min });
       };
 
       minify(options.minify);
-    }).then((err, min) => {
+    }).then(({ err, min }) => {
       expect(err).toBeNull();
       expect(min).not.toBeNull();
     });

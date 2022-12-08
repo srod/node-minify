@@ -6,9 +6,10 @@
 
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import childProcess from 'child_process';
+import { Settings } from '@node-minify/types';
 import * as cli from '../src';
 import { filesJS } from '../../../tests/files-path';
-import { TESTS_TIMEOUT } from '../../../constants';
+import { TESTS_TIMEOUT } from '../../../tests/constants';
 
 describe(
   'Package: cli',
@@ -39,7 +40,7 @@ describe(
     });
     test('should minify to throw with yui error', () => {
       const spy = vi.spyOn(cli, 'run');
-      const options = {
+      const options: Settings = {
         compressor: 'yui',
         input: filesJS.oneFile,
         output: filesJS.fileJSOut

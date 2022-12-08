@@ -14,7 +14,8 @@ import uglifyes from '../../uglify-es/src';
 import htmlMinifier from '../../html-minifier/src';
 import { filesJS } from '../../../tests/files-path';
 import { runOneTest, tests } from '../../../tests/fixtures';
-import { TESTS_TIMEOUT } from '../../../constants';
+import { TESTS_TIMEOUT } from '../../../tests/constants';
+import { Options } from '../../../tests/types';
 
 const compressorLabel = 'uglify-es';
 const compressor = uglifyes;
@@ -28,11 +29,12 @@ describe('Package: core', () => {
   });
   describe('Fake binary', () => {
     test('should throw an error if binary does not exist', () => {
-      const options = {};
-      options.minify = {
-        compressor: 'fake',
-        input: filesJS.oneFileWithWildcards,
-        output: filesJS.fileJSOut
+      const options: Options = {
+        minify: {
+          compressor: 'fake',
+          input: filesJS.oneFileWithWildcards,
+          output: filesJS.fileJSOut
+        }
       };
 
       return minify(options.minify).catch(err => {
@@ -45,10 +47,11 @@ describe('Package: core', () => {
 
   describe('No mandatories', () => {
     test('should throw an error if no compressor', () => {
-      const options = {};
-      options.minify = {
-        input: filesJS.oneFileWithWildcards,
-        output: filesJS.fileJSOut
+      const options: Options = {
+        minify: {
+          input: filesJS.oneFileWithWildcards,
+          output: filesJS.fileJSOut
+        }
       };
 
       return minify(options.minify).catch(err => {
@@ -57,10 +60,11 @@ describe('Package: core', () => {
     });
 
     test('should throw an error if no input', () => {
-      const options = {};
-      options.minify = {
-        compressor: noCompress,
-        output: filesJS.fileJSOut
+      const options: Options = {
+        minify: {
+          compressor: noCompress,
+          output: filesJS.fileJSOut
+        }
       };
 
       return minify(options.minify).catch(err => {
@@ -69,10 +73,11 @@ describe('Package: core', () => {
     });
 
     test('should throw an error if no output', () => {
-      const options = {};
-      options.minify = {
-        compressor: noCompress,
-        input: filesJS.oneFileWithWildcards
+      const options: Options = {
+        minify: {
+          compressor: noCompress,
+          input: filesJS.oneFileWithWildcards
+        }
       };
 
       return minify(options.minify).catch(err => {
@@ -85,32 +90,36 @@ describe('Package: core', () => {
     'Create errors',
     () => {
       test('should catch an error if yui with bad options', () => {
-        const options = {};
-        options.minify = {
-          compressor: yui,
-          type: 'js',
-          input: filesJS.oneFile,
-          output: filesJS.fileJSOut,
-          options: {
-            fake: true
+        const options: Options = {
+          minify: {
+            compressor: yui,
+            type: 'js',
+            input: filesJS.oneFile,
+            output: filesJS.fileJSOut,
+            options: {
+              fake: true
+            }
           }
         };
+
         return minify(options.minify).catch(err => {
           return expect(err.toString()).toMatch('Error');
         });
       });
       test('should catch an error if yui with bad options and sync', () => {
-        const options = {};
-        options.minify = {
-          compressor: yui,
-          type: 'js',
-          input: filesJS.oneFile,
-          output: filesJS.fileJSOut,
-          sync: true,
-          options: {
-            fake: true
+        const options: Options = {
+          minify: {
+            compressor: yui,
+            type: 'js',
+            input: filesJS.oneFile,
+            output: filesJS.fileJSOut,
+            sync: true,
+            options: {
+              fake: true
+            }
           }
         };
+
         return minify(options.minify).catch(err => {
           return expect(err.toString()).toMatch('Error');
         });
@@ -129,16 +138,18 @@ describe('Package: core', () => {
         });
       });
       test('should callback an error on spawnSync', () => {
-        const options = {};
-        options.minify = {
-          compressor: yui,
-          input: filesJS.oneFile,
-          output: filesJS.fileJSOut,
-          sync: true,
-          options: {
-            fake: true
+        const options: Options = {
+          minify: {
+            compressor: yui,
+            input: filesJS.oneFile,
+            output: filesJS.fileJSOut,
+            sync: true,
+            options: {
+              fake: true
+            }
           }
         };
+
         return expect(minify(options.minify)).rejects.toThrow();
       });
       afterAll(() => {
@@ -158,19 +169,21 @@ describe('Package: core', () => {
         });
       });
       test('should callback an error on spawn', () =>
-        new Promise(done => {
-          const options = {};
-          options.minify = {
-            compressor: yui,
-            input: filesJS.oneFile,
-            output: filesJS.fileJSOut,
-            sync: false,
-            options: {
-              fake: true
-            },
-            callback: () => {}
+        new Promise<void>(done => {
+          const options: Options = {
+            minify: {
+              compressor: yui,
+              input: filesJS.oneFile,
+              output: filesJS.fileJSOut,
+              sync: false,
+              options: {
+                fake: true
+              },
+              callback: () => {}
+            }
           };
           const spy = vi.spyOn(options.minify, 'callback');
+
           expect(minify(options.minify)).rejects.toThrow();
           done();
           return minify(options.minify).catch(() => expect(spy).toHaveBeenCalled());
@@ -184,12 +197,13 @@ describe('Package: core', () => {
 
   describe('Mandatory', () => {
     test('should show throw on type option', () => {
-      const options = {};
-      options.minify = {
-        type: 'uglifyjs',
-        input: filesJS.oneFileWithWildcards,
-        output: filesJS.fileJSOut,
-        callback: () => {}
+      const options: Options = {
+        minify: {
+          type: 'uglifyjs',
+          input: filesJS.oneFileWithWildcards,
+          output: filesJS.fileJSOut,
+          callback: () => {}
+        }
       };
 
       return minify(options.minify).catch(err => {
@@ -201,16 +215,18 @@ describe('Package: core', () => {
   describe(
     'Should be OK',
     () => {
-      test('should be OK with GCC and async', () =>
-        new Promise(done => {
-          const options = {};
-          options.minify = {
-            compressor: gcc,
-            input: filesJS.oneFile,
-            output: filesJS.fileJSOut,
-            callback: () => {}
+      test('should be OK with GCC and async', (): Promise<void> =>
+        new Promise<void>(done => {
+          const options: Options = {
+            minify: {
+              compressor: gcc,
+              input: filesJS.oneFile,
+              output: filesJS.fileJSOut,
+              callback: () => {}
+            }
           };
           const spy = vi.spyOn(options.minify, 'callback');
+
           return minify(options.minify).then(min => {
             expect(spy).toHaveBeenCalled();
             done();
@@ -218,18 +234,20 @@ describe('Package: core', () => {
           });
         }));
       test('should be OK with GCC and sync', () =>
-        new Promise(done => {
-          const options = {};
-          options.minify = {
-            compressor: gcc,
-            input: filesJS.oneFile,
-            output: filesJS.fileJSOut,
-            sync: true,
-            callback: () => {
-              done();
+        new Promise<void>(done => {
+          const options: Options = {
+            minify: {
+              compressor: gcc,
+              input: filesJS.oneFile,
+              output: filesJS.fileJSOut,
+              sync: true,
+              callback: () => {
+                done();
+              }
             }
           };
           const spy = vi.spyOn(options.minify, 'callback');
+
           return minify(options.minify).then(min => {
             expect(spy).toHaveBeenCalled();
             return expect(min).toBeDefined();
@@ -243,12 +261,13 @@ describe('Package: core', () => {
     'In Memory',
     () => {
       test('should be OK with html minifier and async', () =>
-        new Promise(done => {
-          const options = {};
-          options.minify = {
-            compressor: htmlMinifier,
-            content: '<html><body><div>content</div></body></html>',
-            callback: () => {}
+        new Promise<void>(done => {
+          const options: Options = {
+            minify: {
+              compressor: htmlMinifier,
+              content: '<html><body><div>content</div></body></html>',
+              callback: () => {}
+            }
           };
           const spy = vi.spyOn(options.minify, 'callback');
 
@@ -259,14 +278,15 @@ describe('Package: core', () => {
           });
         }));
 
-      test('should be OK with GCC and sync', () =>
-        new Promise(done => {
-          const options = {};
-          options.minify = {
-            compressor: htmlMinifier,
-            content: '<html><body><div>content</div></body></html>',
-            sync: true,
-            callback: () => {}
+      test('should be OK with GCC and sync', (): Promise<void> =>
+        new Promise<void>(done => {
+          const options: Options = {
+            minify: {
+              compressor: htmlMinifier,
+              content: '<html><body><div>content</div></body></html>',
+              sync: true,
+              callback: () => {}
+            }
           };
           const spy = vi.spyOn(options.minify, 'callback');
 
@@ -278,10 +298,11 @@ describe('Package: core', () => {
         }));
 
       test('should throw an error if binary does not exist', () => {
-        const options = {};
-        options.minify = {
-          compressor: 'fake',
-          content: '<html><body><div>content</div></body></html>'
+        const options: Options = {
+          minify: {
+            compressor: 'fake',
+            content: '<html><body><div>content</div></body></html>'
+          }
         };
 
         return minify(options.minify).catch(err => {

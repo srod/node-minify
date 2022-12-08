@@ -9,6 +9,7 @@ import minify from '../../core/src';
 import cssnano from '../src';
 import { filesCSS } from '../../../tests/files-path';
 import { runOneTest, tests } from '../../../tests/fixtures';
+import { Options } from '../../../tests/types';
 
 const compressorLabel = 'cssnano';
 const compressor = cssnano;
@@ -21,11 +22,12 @@ describe('Package: cssnano', () => {
     runOneTest({ options, compressorLabel, compressor, sync: true });
   });
   test('should be ok with no callback', () => {
-    const options = {};
-    options.minify = {
-      compressor: cssnano,
-      input: filesCSS.fileCSS,
-      output: filesCSS.fileCSSOut
+    const options: Options = {
+      minify: {
+        compressor: cssnano,
+        input: filesCSS.fileCSS,
+        output: filesCSS.fileCSSOut
+      }
     };
 
     return minify(options.minify).then(min => {
@@ -33,12 +35,13 @@ describe('Package: cssnano', () => {
     });
   });
   test('should throw an error', () => {
-    const options = {};
-    options.minify = {
-      compressor: cssnano,
-      input: filesCSS.fileCSSErrors,
-      output: filesCSS.fileCSSOut,
-      callback: () => {}
+    const options: Options = {
+      minify: {
+        compressor: cssnano,
+        input: filesCSS.fileCSSErrors,
+        output: filesCSS.fileCSSOut,
+        callback: () => {}
+      }
     };
 
     return minify(options.minify).catch(err => {

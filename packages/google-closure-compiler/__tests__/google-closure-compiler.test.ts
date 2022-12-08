@@ -9,7 +9,8 @@ import minify from '../../core/src';
 import gcc from '../src';
 import { filesJS } from '../../../tests/files-path';
 import { runOneTest, tests } from '../../../tests/fixtures';
-import { TESTS_TIMEOUT } from '../../../constants';
+import { TESTS_TIMEOUT } from '../../../tests/constants';
+import { Options } from '../../../tests/types';
 
 const compressorLabel = 'google-closure-compiler';
 const compressor = gcc;
@@ -23,15 +24,16 @@ describe(
     tests.commonjs.forEach(options => {
       runOneTest({ options, compressorLabel, compressor, sync: true });
     });
-    test('should compress with some options', () =>
-      new Promise(done => {
-        const options = {};
-        options.minify = {
-          compressor: gcc,
-          input: filesJS.oneFileWithWildcards,
-          output: filesJS.fileJSOut,
-          options: {
-            language_in: 'ECMASCRIPT5'
+    test('should compress with some options', (): Promise<void> =>
+      new Promise<void>(done => {
+        const options: Options = {
+          minify: {
+            compressor: gcc,
+            input: filesJS.oneFileWithWildcards,
+            output: filesJS.fileJSOut,
+            options: {
+              language_in: 'ECMASCRIPT5'
+            }
           }
         };
 
@@ -45,11 +47,12 @@ describe(
         minify(options.minify);
       }));
     test('should throw an error', () => {
-      const options = {};
-      options.minify = {
-        compressor: gcc,
-        input: filesJS.errors,
-        output: filesJS.fileJSOut
+      const options: Options = {
+        minify: {
+          compressor: gcc,
+          input: filesJS.errors,
+          output: filesJS.fileJSOut
+        }
       };
 
       return minify(options.minify).catch(err => {

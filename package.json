@@ -20,7 +20,7 @@
   "scripts": {
     "build": "lerna run build",
     "clean": "pnpm clean:build; pnpm clean:packages",
-    "clean:build": "pnpm dlx rimraf packages/*/dist",
+    "clean:build": "pnpm dlx rimraf packages/*/dist docs/.next",
     "clean:packages": "pnpm lerna clean -y",
     "clean:test": "pnpm dlx rimraf tests/tmp/*.{js,js.map,css,html}",
     "coverage": "vitest run --coverage",
@@ -50,6 +50,7 @@
     "@node-minify/run": "workspace:*",
     "@node-minify/sqwish": "workspace:*",
     "@node-minify/terser": "workspace:*",
+    "@node-minify/types": "workspace:*",
     "@node-minify/uglify-es": "workspace:*",
     "@node-minify/uglify-js": "workspace:*",
     "@node-minify/utils": "workspace:*",
@@ -65,6 +66,7 @@
     "node-notifier": "10.0.1",
     "prettier": "2.8.0",
     "rimraf": "3.0.2",
+    "tsup": "6.5.0",
     "typescript": "4.9.3",
     "vitest": "0.25.3"
   },

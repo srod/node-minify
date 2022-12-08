@@ -9,6 +9,7 @@ import minify from '../../core/src';
 import uglifyes from '../src';
 import { filesJS } from '../../../tests/files-path';
 import { runOneTest, tests } from '../../../tests/fixtures';
+import { Options } from '../../../tests/types';
 
 const compressorLabel = 'uglify-es';
 const compressor = uglifyes;
@@ -27,11 +28,12 @@ describe('Package: uglify-es', () => {
     runOneTest({ options, compressorLabel, compressor, sync: true });
   });
   test('should throw an error', () => {
-    const options = {};
-    options.minify = {
-      compressor: uglifyes,
-      input: filesJS.errors,
-      output: filesJS.fileJSOut
+    const options: Options = {
+      minify: {
+        compressor: uglifyes,
+        input: filesJS.errors,
+        output: filesJS.fileJSOut
+      }
     };
 
     return minify(options.minify).catch(err => {

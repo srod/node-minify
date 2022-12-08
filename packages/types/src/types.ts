@@ -14,7 +14,7 @@ export interface Options {
 // }
 
 export interface Settings {
-  compressorLabel: string | Function;
+  compressorLabel?: string | Function;
   compressor: string | Function;
   sync?: boolean;
   callback?: Function;
@@ -23,8 +23,10 @@ export interface Settings {
   output: string;
   // options?: string | Options;
   options?: Options;
+  option?: string;
   buffer?: number;
   type?: string;
+  silence?: boolean;
 }
 
 export interface MinifierOptions {
@@ -38,14 +40,14 @@ export interface MinifierOptions {
   input?: string | string[];
 }
 
-export interface Cli {
-  compressor: string | Function;
-  input: string;
-  output: string;
-  // option: Options;
-  option: string;
-  silence?: boolean;
-}
+// export interface Cli {
+//   compressor: string | Function;
+//   input: string;
+//   output: string;
+//   // option: Options;
+//   option: string;
+//   silence?: boolean;
+// }
 
 export interface Result {
   compressor?: string | Function;

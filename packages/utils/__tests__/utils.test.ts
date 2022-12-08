@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import { utils } from '../src';
 
 const fixtureFile = __dirname + '/../../../tests/fixtures/fixture-content.js';
@@ -40,8 +40,8 @@ describe('Package: utils', () => {
   });
 
   describe('getFilesizeGzippedInBytes', () => {
-    test('should return file size', () =>
-      new Promise(done => {
+    test('should return file size', (): Promise<void> =>
+      new Promise<void>(done => {
         utils.getFilesizeGzippedInBytes(fixtureFile).then(size => {
           expect(size).toMatch(/(44 B)|(45 B)/);
           done();

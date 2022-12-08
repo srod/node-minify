@@ -7,7 +7,7 @@
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import childProcess from 'child_process';
 import { runCommandLine } from '../src';
-import { TESTS_TIMEOUT } from '../../../constants';
+import { TESTS_TIMEOUT } from '../../../tests/constants';
 
 const jar = `${__dirname}/../../yui/src/binaries/yuicompressor-2.4.7.jar`;
 
@@ -15,8 +15,8 @@ describe('Package: run', () => {
   describe(
     'Base',
     () => {
-      test('should be OK with YUI and async', () =>
-        new Promise(done => {
+      test('should be OK with YUI and async', (): Promise<void> =>
+        new Promise<void>(done => {
           const command = {
             args: ['-jar', '-Xss2048k', jar, '--type', 'js'],
             data: 'console.log("foo");',
@@ -33,8 +33,8 @@ describe('Package: run', () => {
           const spy = vi.spyOn(command, 'callback');
           runCommandLine(command);
         }));
-      test('should not be OK with YUI and sync, fake arg', () =>
-        new Promise(done => {
+      test('should not be OK with YUI and sync, fake arg', (): Promise<void> =>
+        new Promise<void>(done => {
           const command = {
             args: ['-jar', '-Xss2048k', jar, '--type', 'js', '--fake'],
             data: 'console.log("foo");',
@@ -51,8 +51,8 @@ describe('Package: run', () => {
           const spy = vi.spyOn(command, 'callback');
           runCommandLine(command);
         }));
-      test('should be OK with YUI and sync', () =>
-        new Promise(done => {
+      test('should be OK with YUI and sync', (): Promise<void> =>
+        new Promise<void>(done => {
           const command = {
             args: ['-jar', '-Xss2048k', jar, '--type', 'js'],
             data: 'console.log("foo");',
@@ -67,8 +67,8 @@ describe('Package: run', () => {
           const spy = vi.spyOn(command, 'callback');
           runCommandLine(command);
         }));
-      test('should not be OK with YUI and sync, fake arg', () =>
-        new Promise(done => {
+      test('should not be OK with YUI and sync, fake arg', (): Promise<void> =>
+        new Promise<void>(done => {
           const command = {
             args: ['-jar', '-Xss2048k', jar, '--type', 'js', '--fake'],
             data: 'console.log("foo");',
@@ -96,8 +96,8 @@ describe('Package: run', () => {
           throw new Error();
         });
       });
-      test('should not be OK with YUI and sync', () =>
-        new Promise(done => {
+      test('should not be OK with YUI and sync', (): Promise<void> =>
+        new Promise<void>(done => {
           const command = {
             args: ['-jar', '-Xss2048k', 'foo.jar', '--type', 'js', '--fake'],
             data: 'console.log("foo");',

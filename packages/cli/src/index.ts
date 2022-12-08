@@ -10,7 +10,7 @@
 import chalk from 'chalk';
 import { compress } from './compress';
 import { spinnerStart, spinnerStop, spinnerError } from './spinner';
-import { Cli, Settings, Result } from '@node-minify/types';
+import { Settings, Result } from '@node-minify/types';
 
 // export interface Options {
 //   compressorLabel: string | Function;
@@ -46,7 +46,7 @@ let silence = false;
 /**
  * Run one compressor.
  */
-const runOne = (cli: Cli): Promise<Result> => {
+const runOne = (cli: Settings): Promise<Result> => {
   return new Promise<Result>((resolve, reject) => {
     const compressor =
       typeof cli.compressor === 'string' ? require(`@node-minify/${cli.compressor}`).default : cli.compressor;
@@ -54,7 +54,7 @@ const runOne = (cli: Cli): Promise<Result> => {
     const options: Settings = {
       compressorLabel: cli.compressor,
       compressor,
-      input: cli.input.split(','),
+      input: typeof cli.input === 'string' ? cli.input.split(',') : '',
       output: cli.output
     };
 
@@ -85,7 +85,7 @@ const runOne = (cli: Cli): Promise<Result> => {
 /**
  * Run cli.
  */
-const run = (cli: Cli) => {
+const run = (cli: Settings) => {
   silence = !!cli.silence;
 
   if (!silence) {

@@ -1,21 +1,8 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "strictNullChecks": true,
-    "esModuleInterop": true,
-    "noUnusedLocals": true,
-    "skipLibCheck": true,
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "declaration": true,
-    "noImplicitAny": false,
-    "removeComments": true,
-    "noLib": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "target": "es6",
-    "sourceMap": true,
-    "lib": ["es6"]
+    "target": "ESNext",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node"
   },
-  "exclude": ["node_modules", "**/__tests__/**"]
+  "exclude": ["node_modules", "**/__tests__/**", "**/dist/**"]
 }
