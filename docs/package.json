@@ -1,7 +1,8 @@
 {
   "name": "nextra-docs-template",
-  "version": "0.0.1",
+  "version": "8.0.0-beta.0",
   "description": "Nextra docs template",
+  "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
