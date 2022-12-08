@@ -2,7 +2,8 @@
   "compilerOptions": {
     "target": "ESNext",
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "esModuleInterop": true
   },
   "exclude": ["node_modules", "**/__tests__/**", "**/dist/**"]
 }

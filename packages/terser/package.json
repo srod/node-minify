@@ -41,7 +41,7 @@
   },
   "scripts": {
     "clean": "pnpm dlx rimraf dist",
-    "build": "npm run clean && tsup src/index.ts --format cjs,esm --dts --clean",
+    "build": "npm run clean && tsup src/index.ts --format cjs,esm --dts --clean --sourcemap",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
