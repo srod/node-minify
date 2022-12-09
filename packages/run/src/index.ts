@@ -18,19 +18,6 @@ import { MinifierOptions } from '@node-minify/types';
  * @param {Object} settings
  * @param {Function} callback
  */
-
-// interface Settings {
-//   sync: boolean;
-//   buffer: number;
-// }
-
-// interface MinifierOptions {
-//   args: string[];
-//   data: string;
-//   settings?: Settings;
-//   callback: Function;
-// }
-
 const runCommandLine = ({ args, data, settings, callback }: MinifierOptions) => {
   if (settings && settings.sync) {
     return runSync({ settings, data, args, callback });

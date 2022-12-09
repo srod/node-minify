@@ -12,26 +12,6 @@ import minify from 'babel-preset-minify';
 import { utils } from '@node-minify/utils';
 import { MinifierOptions } from '@node-minify/types';
 
-// interface Options {
-//   sourceMap?: boolean;
-//   _sourceMap?: { url: string } | boolean;
-//   babelrc?: {};
-//   presets?: [];
-// }
-
-// interface Settings {
-//   options: Options;
-//   content: string;
-//   output: string;
-// }
-
-// interface MinifierOptions {
-//   settings: Settings;
-//   content: string;
-//   callback: Function;
-//   index: number;
-// }
-
 interface BabelOptions {
   presets: string[];
 }
@@ -74,4 +54,5 @@ const minifyBabel = ({ settings, content, callback, index }: MinifierOptions) =>
 /**
  * Expose `minifyBabel()`.
  */
-export default minifyBabel;
+minifyBabel.default = minifyBabel;
+export = minifyBabel;

@@ -6,16 +6,18 @@
  * MIT Licensed
  */
 
-const updateNotifier = require('update-notifier');
-const program = require('commander');
-const cli = require('../lib/cli');
-const pkg = require('../package.json');
+import updateNotifier from 'update-notifier';
+import { Command } from 'commander';
+const program = new Command();
+import { run } from '../';
+import packageJson from '../../package.json';
+import { Settings } from '@node-minify/types';
 
-updateNotifier({ pkg: pkg }).notify();
+updateNotifier({ pkg: packageJson }).notify();
 
 program
   .storeOptionsAsProperties()
-  .version(pkg.version, '-v, --version')
+  .version(packageJson.version, '-v, --version')
   .option('-c, --compressor [compressor]', 'use the specified compressor [uglify-js]', 'uglify-js')
   .option('-i, --input [file]', 'input file path')
   .option('-o, --output [file]', 'output file path')
@@ -37,7 +39,7 @@ program.on('--help', function () {
 
 program.parse(process.argv);
 
-const options = program.opts();
+const options: Settings = program.opts();
 
 /**
  * Show help if missing mandatory.
@@ -46,8 +48,7 @@ if (!options.compressor || !options.input || !options.output) {
   program.help();
 }
 
-cli
-  .run(options)
+run(options)
   .then(() => process.exit())
   .catch(err => {
     console.error(err);

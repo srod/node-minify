@@ -23,24 +23,6 @@ interface MinifierOptionsUglifyJS extends Omit<MinifierOptions, 'settings'> {
   settings: SettingsUglifyJS;
 }
 
-// interface Options {
-//   sourceMap?: { filename: string };
-//   // _sourceMap?: { url: string } | boolean;
-// }
-
-// interface Settings {
-//   options: Options;
-//   content: string;
-//   output: string;
-// }
-
-// interface MinifierOptions {
-//   settings: Settings;
-//   content: string /* | Dictionary<string> */;
-//   callback: Function;
-//   index: number;
-// }
-
 /**
  * Run uglifyJS.
  *
@@ -71,4 +53,5 @@ const minifyUglifyJS = ({ settings, content, callback, index }: MinifierOptionsU
 /**
  * Expose `minifyUglifyJS()`.
  */
-export default minifyUglifyJS;
+minifyUglifyJS.default = minifyUglifyJS;
+export = minifyUglifyJS;

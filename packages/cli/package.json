@@ -11,7 +11,7 @@
   "homepage": "https://github.com/srod/node-minify/tree/master/packages/cli#readme",
   "license": "MIT",
   "bin": {
-    "node-minify": "bin/cli.js"
+    "node-minify": "dist/cli.mjs"
   },
   "engines": {
     "node": ">=14.0.0"
@@ -44,7 +44,7 @@
   },
   "scripts": {
     "clean": "pnpm dlx rimraf dist",
-    "build": "npm run clean && tsup src/index.ts --format cjs,esm --dts --clean --sourcemap",
+    "build": "npm run clean && tsup src/index.ts --format cjs,esm --dts --sourcemap && tsup src/bin/cli.ts --format esm --dts --sourcemap",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {

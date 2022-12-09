@@ -11,24 +11,6 @@ import crass from 'crass';
 import { utils } from '@node-minify/utils';
 import { MinifierOptions } from '@node-minify/types';
 
-// interface Options {
-//   sourceMap?: boolean;
-//   _sourceMap?: { url: string } | boolean;
-// }
-
-// interface Settings {
-//   options: Options;
-//   content: string;
-//   output: string;
-// }
-
-// interface MinifierOptions {
-//   settings: Settings;
-//   content: string;
-//   callback: Function;
-//   index: number;
-// }
-
 /**
  * Run crass.
  *
@@ -50,4 +32,5 @@ const minifyCrass = ({ settings, content, callback, index }: MinifierOptions) =>
 /**
  * Expose `minifyCrass()`.
  */
-export default minifyCrass;
+minifyCrass.default = minifyCrass;
+export = minifyCrass;

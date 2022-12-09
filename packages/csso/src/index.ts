@@ -11,24 +11,6 @@ import { minify } from 'csso';
 import { utils } from '@node-minify/utils';
 import { MinifierOptions } from '@node-minify/types';
 
-// interface Options {
-//   sourceMap?: boolean;
-//   _sourceMap?: { url: string } | boolean;
-// }
-
-// interface Settings {
-//   options: Options;
-//   content: string;
-//   output: string;
-// }
-
-// interface MinifierOptions {
-//   settings: Settings;
-//   content: string;
-//   callback: Function;
-//   index: number;
-// }
-
 /**
  * Run csso.
  *
@@ -50,4 +32,5 @@ const minifyCSSO = ({ settings, content, callback, index }: MinifierOptions) => 
 /**
  * Expose `minifyCSSO()`.
  */
-export default minifyCSSO;
+minifyCSSO.default = minifyCSSO;
+export = minifyCSSO;

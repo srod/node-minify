@@ -1,9 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
     "moduleResolution": "node",
-    "esModuleInterop": true
+    "noImplicitAny": false,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "target": "es6"
   },
   "exclude": ["node_modules", "**/__tests__/**", "**/dist/**"]
 }

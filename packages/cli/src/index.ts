@@ -12,32 +12,6 @@ import { compress } from './compress';
 import { spinnerStart, spinnerStop, spinnerError } from './spinner';
 import { Settings, Result } from '@node-minify/types';
 
-// export interface Options {
-//   compressorLabel: string | Function;
-//   compressor: Function;
-//   input: string | string[];
-//   output: string;
-//   options?: string;
-// }
-
-// interface Option {}
-
-// interface Cli {
-//   compressor: string | Function;
-//   input: string;
-//   output: string;
-//   // option: Options;
-//   option: string;
-//   silence?: boolean;
-// }
-
-// export interface Result {
-//   compressor?: string | Function;
-//   compressorLabel: string | Function;
-//   size: number;
-//   sizeGzip: number;
-// }
-
 /**
  * Module variables.
  */

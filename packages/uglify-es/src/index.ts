@@ -15,17 +15,6 @@ interface OptionsUglifyES extends Omit<Options, 'sourceMap'> {
   sourceMap?: { filename: string };
 }
 
-// interface Options {
-//   sourceMap?: { filename: string };
-//   // _sourceMap?: { url: string } | boolean;
-// }
-
-// interface Settings {
-//   options: Options;
-//   content: string;
-//   output: string;
-// }
-
 interface SettingsUglifyES extends Omit<Settings, 'options'> {
   options: OptionsUglifyES;
 }
@@ -33,17 +22,6 @@ interface SettingsUglifyES extends Omit<Settings, 'options'> {
 interface MinifierOptionsUglifyES extends Omit<MinifierOptions, 'settings'> {
   settings: SettingsUglifyES;
 }
-
-// interface MinifierOptions {
-//   settings: Settings;
-//   content: string /* | Dictionary<string> */;
-//   callback: Function;
-//   index: number;
-// }
-
-// interface Dictionary<T> {
-//   [Key: string]: T;
-// }
 
 /**
  * Run uglifyES.
@@ -78,4 +56,5 @@ const minifyUglifyES = ({ settings, content, callback, index }: MinifierOptionsU
 /**
  * Expose `minifyUglifyES()`.
  */
-export default minifyUglifyES;
+minifyUglifyES.default = minifyUglifyES;
+export = minifyUglifyES;

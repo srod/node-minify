@@ -23,24 +23,6 @@ interface MinifierOptionsTerser extends Omit<MinifierOptions, 'settings'> {
   settings: SettingsTerser;
 }
 
-// interface Options {
-//   sourceMap?: { url: string };
-//   // _sourceMap?: { url: string } | boolean;
-// }
-
-// interface Settings {
-//   options: Options;
-//   content: string;
-//   output: string;
-// }
-
-// interface MinifierOptions {
-//   settings: Settings;
-//   content: string;
-//   callback: Function;
-//   index: number;
-// }
-
 /**
  * Run terser.
  *
@@ -75,4 +57,5 @@ const minifyTerser = async ({ settings, content, callback, index }: MinifierOpti
 /**
  * Expose `minifyTerser()`.
  */
-export default minifyTerser;
+minifyTerser.default = minifyTerser;
+export = minifyTerser;

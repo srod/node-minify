@@ -11,25 +11,6 @@ import sqwish from 'sqwish';
 import { utils } from '@node-minify/utils';
 import { MinifierOptions } from '@node-minify/types';
 
-// interface Options {
-//   sourceMap?: boolean;
-//   _sourceMap?: { url: string } | boolean;
-//   strict?: boolean;
-// }
-
-// interface Settings {
-//   options: Options;
-//   content: string;
-//   output: string;
-// }
-
-// interface MinifierOptions {
-//   settings: Settings;
-//   content: string;
-//   callback: Function;
-//   index: number;
-// }
-
 /**
  * Run sqwish.
  *
@@ -51,4 +32,5 @@ const minifySqwish = ({ settings, content, callback, index }: MinifierOptions) =
 /**
  * Expose `minifySqwish()`.
  */
-export default minifySqwish;
+minifySqwish.default = minifySqwish;
+export = minifySqwish;

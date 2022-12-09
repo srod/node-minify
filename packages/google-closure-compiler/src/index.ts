@@ -12,25 +12,6 @@ import { utils } from '@node-minify/utils';
 import { runCommandLine } from '@node-minify/run';
 import { MinifierOptions, Options, Dictionary } from '@node-minify/types';
 
-// interface Options2 {
-//   [Key: string]: string;
-// }
-
-// interface Settings {
-//   options: Options;
-//   content: string;
-//   output: string;
-//   sync: boolean;
-//   buffer: number;
-// }
-
-// interface MinifierOptions {
-//   settings: Settings;
-//   content: string;
-//   callback: Function;
-//   index: number;
-// }
-
 // the allowed flags, taken from https://github.com/google/closure-compiler/wiki/Flags-and-Options
 const allowedFlags = [
   'angular_pass',
@@ -86,10 +67,6 @@ const minifyGCC = ({ settings, content, callback, index }: MinifierOptions) => {
   });
 };
 
-// interface Dictionary<T> {
-//   [Key: string]: T;
-// }
-
 /**
  * Adds any valid options passed in the options parameters to the flags parameter and returns the flags object.
  * @param {Object} flags
@@ -117,4 +94,5 @@ const gccCommand = (options: {}) => {
 /**
  * Expose `minifyGCC()`.
  */
-export default minifyGCC;
+minifyGCC.default = minifyGCC;
+export = minifyGCC;

@@ -12,17 +12,6 @@ import { compress } from './compress';
 import { compressInMemory } from './compressInMemory';
 import { Settings } from '@node-minify/types';
 
-// export interface Settings {
-//   compressorLabel: string | Function;
-//   compressor?: string | Function;
-//   sync?: boolean;
-//   callback?: Function;
-//   content?: string;
-//   input: string | string[];
-//   output: string;
-//   options?: string;
-// }
-
 /**
  * Run node-minify.
  *
@@ -59,4 +48,5 @@ const minify = (settings: Settings) => {
 /**
  * Expose `minify()`.
  */
-export default minify;
+minify.default = minify;
+export = minify;

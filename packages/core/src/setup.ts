@@ -10,6 +10,7 @@
 import path from 'path';
 import globby from 'globby';
 import { utils } from '@node-minify/utils';
+import { Dictionary } from '@node-minify/types';
 
 /**
  * Default settings.
@@ -223,9 +224,6 @@ const checkMandatoriesMemoryContent = (settings: {}) => {
  * @param {String} setting
  * @param {Object} settings
  */
-interface Dictionary<T> {
-  [Key: string]: T;
-}
 const mandatory = (setting: string, settings: Dictionary<string>) => {
   if (!settings[setting]) {
     throw new Error(setting + ' is mandatory.');

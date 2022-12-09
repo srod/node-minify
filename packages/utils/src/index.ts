@@ -9,8 +9,7 @@
  */
 import fs from 'fs';
 import gzipSize from 'gzip-size';
-import { MinifierOptions } from '@node-minify/types';
-// import { MinifierOptions } from '../../../types';
+import { Dictionary, MinifierOptions } from '@node-minify/types';
 
 interface Utils {
   readFile: Function;
@@ -27,28 +26,6 @@ interface Utils {
   runSync: Function;
   runAsync: Function;
 }
-
-// interface Options {
-//   // sourceMap?: { filename: string };
-//   // _sourceMap?: { url: string } | boolean;
-// }
-
-// interface Settings {
-//   compressor: Function;
-//   options: Options;
-//   content: string;
-//   output: string;
-//   type: string;
-// }
-
-// interface MinifierOptions {
-//   settings: Settings;
-//   content: string /* | Dictionary<string> */;
-//   callback: Function;
-//   index: number;
-//   input: string;
-//   sync: boolean;
-// }
 
 interface WriteFile {
   file: string;
@@ -97,9 +74,6 @@ utils.deleteFile = (file: string) => fs.unlinkSync(file);
  * @param {Object} options
  * @returns {Array}
  */
-interface Dictionary<T> {
-  [Key: string]: T;
-}
 utils.buildArgs = (options: Dictionary<string | boolean>) => {
   const args: (string | boolean)[] = [];
   Object.keys(options).forEach((key: string) => {

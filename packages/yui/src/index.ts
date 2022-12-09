@@ -13,27 +13,6 @@ import { utils } from '@node-minify/utils';
 import { runCommandLine } from '@node-minify/run';
 import { MinifierOptions, Options } from '@node-minify/types';
 
-// interface Options {
-//   // sourceMap?: { filename: string };
-//   // _sourceMap?: { url: string } | boolean;
-// }
-
-// interface Settings {
-//   options: Options;
-//   content: string;
-//   output: string;
-//   type: string;
-//   sync: boolean;
-//   buffer: number;
-// }
-
-// interface MinifierOptions {
-//   settings: Settings;
-//   content: string /* | Dictionary<string> */;
-//   callback: Function;
-//   index: number;
-// }
-
 /**
  * Module variables.
  */
@@ -46,7 +25,6 @@ const binYui = path.normalize(__dirname + '/binaries/yuicompressor-2.4.7.jar');
  * @param {String} content
  * @param {Function} callback
  */
-
 const minifyYUI = ({ settings, content, callback, index }: MinifierOptions) => {
   return runCommandLine({
     args: yuiCommand(settings && settings.type, settings && settings.options),
@@ -74,7 +52,6 @@ const minifyYUI = ({ settings, content, callback, index }: MinifierOptions) => {
 /**
  * YUI Compressor CSS command line.
  */
-
 const yuiCommand = (type = 'js', options?: Options) => {
   return ['-jar', '-Xss2048k', binYui, '--type', type].concat(utils.buildArgs(options || {}));
 };
@@ -82,5 +59,5 @@ const yuiCommand = (type = 'js', options?: Options) => {
 /**
  * Expose `minifyYUI()`.
  */
-
-export default minifyYUI;
+minifyYUI.default = minifyYUI;
+export = minifyYUI;
