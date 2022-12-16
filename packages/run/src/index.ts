@@ -88,7 +88,7 @@ const runSync = ({ settings, data, args, callback }: MinifierOptions) => {
     }
 
     return callback && callback(null, stdout);
-  } catch (err) {
+  } catch (err: unknown) {
     return callback && callback(err);
   }
 };

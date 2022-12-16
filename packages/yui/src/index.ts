@@ -11,7 +11,7 @@
 import path from 'path';
 import { utils } from '@node-minify/utils';
 import { runCommandLine } from '@node-minify/run';
-import { MinifierOptions, Options } from '@node-minify/types';
+import { MinifierOptions } from '@node-minify/types';
 
 /**
  * Module variables.
@@ -52,7 +52,7 @@ const minifyYUI = ({ settings, content, callback, index }: MinifierOptions) => {
 /**
  * YUI Compressor CSS command line.
  */
-const yuiCommand = (type = 'js', options?: Options) => {
+const yuiCommand = (type = 'js', options) => {
   return ['-jar', '-Xss2048k', binYui, '--type', type].concat(utils.buildArgs(options || {}));
 };
 

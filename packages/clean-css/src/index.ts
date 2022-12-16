@@ -25,18 +25,15 @@ const minifyCleanCSS = ({ settings, content, callback, index }: MinifierOptions)
   }
   const _cleanCSS = new CleanCSS(settings && settings.options).minify(content || '');
   const contentMinified = _cleanCSS.styles;
-  if (_cleanCSS.sourceMap && settings && settings.options && settings.options._sourceMap) {
+  if (_cleanCSS.sourceMap && settings && settings.options && typeof settings.options._sourceMap === 'object') {
     utils.writeFile({
-      file:
-        settings.options._sourceMap !== true && settings.options._sourceMap.url
-          ? settings.options._sourceMap.url
-          : null,
+      file: settings.options._sourceMap.url ? settings.options._sourceMap.url : '',
       content: _cleanCSS.sourceMap.toString(),
       index
     });
   }
   if (settings && !settings.content) {
-    utils.writeFile({ file: settings.output, content: contentMinified, index });
+    settings.output && utils.writeFile({ file: settings.output, content: contentMinified, index });
   }
   if (callback) {
     return callback(null, contentMinified);

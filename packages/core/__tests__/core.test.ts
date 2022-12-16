@@ -132,7 +132,7 @@ describe('Package: core', () => {
     'Create sync errors',
     () => {
       beforeAll(() => {
-        let spy = vi.spyOn(childProcess, 'spawnSync');
+        const spy = vi.spyOn(childProcess, 'spawnSync');
         spy.mockImplementation(() => {
           throw new Error();
         });
@@ -163,7 +163,7 @@ describe('Package: core', () => {
     'Create async errors',
     () => {
       beforeAll(() => {
-        let spy = vi.spyOn(childProcess, 'spawn');
+        const spy = vi.spyOn(childProcess, 'spawn');
         spy.mockImplementation(() => {
           throw new Error();
         });
@@ -179,7 +179,9 @@ describe('Package: core', () => {
               options: {
                 fake: true
               },
-              callback: () => {}
+              callback: (): void => {
+                return;
+              }
             }
           };
           const spy = vi.spyOn(options.minify, 'callback');
@@ -202,7 +204,9 @@ describe('Package: core', () => {
           type: 'uglifyjs',
           input: filesJS.oneFileWithWildcards,
           output: filesJS.fileJSOut,
-          callback: () => {}
+          callback: (): void => {
+            return;
+          }
         }
       };
 
@@ -222,7 +226,9 @@ describe('Package: core', () => {
               compressor: gcc,
               input: filesJS.oneFile,
               output: filesJS.fileJSOut,
-              callback: () => {}
+              callback: (): void => {
+                return;
+              }
             }
           };
           const spy = vi.spyOn(options.minify, 'callback');
@@ -241,7 +247,7 @@ describe('Package: core', () => {
               input: filesJS.oneFile,
               output: filesJS.fileJSOut,
               sync: true,
-              callback: () => {
+              callback: (): void => {
                 done();
               }
             }
@@ -266,7 +272,9 @@ describe('Package: core', () => {
             minify: {
               compressor: htmlMinifier,
               content: '<html><body><div>content</div></body></html>',
-              callback: () => {}
+              callback: (): void => {
+                return;
+              }
             }
           };
           const spy = vi.spyOn(options.minify, 'callback');
@@ -285,7 +293,9 @@ describe('Package: core', () => {
               compressor: htmlMinifier,
               content: '<html><body><div>content</div></body></html>',
               sync: true,
-              callback: () => {}
+              callback: (): void => {
+                return;
+              }
             }
           };
           const spy = vi.spyOn(options.minify, 'callback');

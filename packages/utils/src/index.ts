@@ -7,30 +7,30 @@
 /**
  * Module dependencies.
  */
-import fs from 'fs';
+import fs from 'node:fs';
 import gzipSize from 'gzip-size';
-import { Dictionary, MinifierOptions } from '@node-minify/types';
+import { Dictionary, MinifierOptions, Settings, Options } from '@node-minify/types';
 
 interface Utils {
-  readFile: Function;
-  writeFile: Function;
-  deleteFile: Function;
-  buildArgs: Function;
-  clone: Function;
-  getFilesizeInBytes: Function;
-  getFilesizeGzippedInBytes: Function;
-  prettyBytes: Function;
-  setFileNameMin: Function;
-  compressSingleFile: Function;
-  getContentFromFiles: Function;
-  runSync: Function;
-  runAsync: Function;
+  readFile: (file: string) => string;
+  writeFile: ({ file, content, index }: WriteFile) => string;
+  deleteFile: (file: string) => void;
+  buildArgs: (options: Options & Dictionary<string | boolean>) => any;
+  clone: (obj: object) => object;
+  getFilesizeInBytes: (file: string) => string;
+  getFilesizeGzippedInBytes: (file: string) => Promise<string>;
+  prettyBytes: (num: number) => string;
+  setFileNameMin: (file: string, output: string, publicFolder: string, replaceInPlace: boolean) => string;
+  compressSingleFile: (settings: Settings) => string | Promise<string>;
+  getContentFromFiles: (input: string) => string;
+  runSync: ({ settings, content, index }: MinifierOptions) => string;
+  runAsync: ({ settings, content, index }: MinifierOptions) => Promise<string>;
 }
 
 interface WriteFile {
   file: string;
-  content: string;
-  index: number;
+  content: any;
+  index?: number;
 }
 
 const utils = {} as Utils;
@@ -95,7 +95,7 @@ utils.buildArgs = (options: Dictionary<string | boolean>) => {
  * @param {Object} obj
  * @returns {Object}
  */
-utils.clone = (obj: {}) => JSON.parse(JSON.stringify(obj));
+utils.clone = (obj: object) => JSON.parse(JSON.stringify(obj));
 
 /**
  * Get the file size in bytes.
@@ -180,8 +180,10 @@ utils.setFileNameMin = (file: string, output: string, publicFolder: string, repl
  *
  * @param {Object} settings
  */
-utils.compressSingleFile = (settings: MinifierOptions) => {
-  const content = settings.content ? settings.content : utils.getContentFromFiles(settings.input);
+utils.compressSingleFile = (settings: Settings): Promise<string> | string => {
+  const content = settings.content
+    ? settings.content
+    : utils.getContentFromFiles(typeof settings.input === 'string' ? settings.input : '');
   return settings.sync ? utils.runSync({ settings, content }) : utils.runAsync({ settings, content });
 };
 
@@ -213,10 +215,12 @@ utils.getContentFromFiles = (input: string) => {
  * @param {Number} index - index of the file being processed
  * @return {String}
  */
-utils.runSync = ({ settings, content, index }: MinifierOptions) =>
+utils.runSync = ({ settings, content, index }: MinifierOptions): string =>
   settings && typeof settings.compressor !== 'string'
-    ? settings.compressor({ settings, content, callback: null, index })
-    : null;
+    ? typeof settings.compressor === 'function'
+      ? settings.compressor({ settings, content, callback: null, index })
+      : ''
+    : '';
 
 /**
  * Run compressor in async.
@@ -226,17 +230,17 @@ utils.runSync = ({ settings, content, index }: MinifierOptions) =>
  * @param {Number} index - index of the file being processed
  * @return {Promise}
  */
-utils.runAsync = ({ settings, content, index }: MinifierOptions) => {
+utils.runAsync = ({ settings, content, index }: MinifierOptions): Promise<string> => {
   return new Promise((resolve, reject) => {
-    settings && typeof settings.compressor !== 'string'
+    settings && settings.compressor && typeof settings.compressor !== 'string'
       ? settings.compressor({
           settings,
           content,
-          callback: (err: Error, min: string) => {
+          callback: (err: unknown, result?: string) => {
             if (err) {
               return reject(err);
             }
-            resolve(min);
+            resolve(result || '');
           },
           index
         })
