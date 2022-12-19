@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/cli",
-  "version": "7.0.0",
+  "version": "8.0.2-beta.0",
   "description": "CLI - command line interface for @node-minify",
   "keywords": [
     "compressor",
@@ -11,19 +11,26 @@
   "homepage": "https://github.com/srod/node-minify/tree/master/packages/cli#readme",
   "license": "MIT",
   "bin": {
-    "node-minify": "bin/cli.js"
+    "node-minify": "dist/cli.mjs"
   },
-  "main": "lib/cli.js",
   "engines": {
     "node": ">=14.0.0"
   },
   "directories": {
-    "lib": "lib",
+    "lib": "dist",
     "test": "__tests__"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
   },
   "files": [
     "bin",
-    "lib"
+    "dist/**/*"
   ],
   "publishConfig": {
     "access": "public"
@@ -35,12 +42,22 @@
   "bugs": {
     "url": "https://github.com/srod/node-minify/issues"
   },
+  "scripts": {
+    "clean": "pnpm dlx rimraf dist",
+    "build": "pnpm clean && tsup src/index.ts --format cjs,esm --dts --sourcemap && tsup src/bin/cli.ts --format esm --dts --sourcemap",
+    "prepublishOnly": "pnpm build"
+  },
   "dependencies": {
-    "@node-minify/core": "^7.0.0",
-    "@node-minify/utils": "^7.0.0",
+    "@node-minify/core": "workspace:*",
+    "@node-minify/utils": "workspace:*",
     "chalk": "4.1.2",
     "commander": "9.4.1",
     "ora": "5.4.1",
     "update-notifier": "6.0.2"
+  },
+  "devDependencies": {
+    "@node-minify/types": "workspace:*",
+    "@types/chalk": "^2.2.0",
+    "@types/ora": "^3.2.0"
   }
 }
