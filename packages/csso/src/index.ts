@@ -21,7 +21,7 @@ import { MinifierOptions } from '@node-minify/types';
 const minifyCSSO = ({ settings, content, callback, index }: MinifierOptions) => {
   const contentMinified = minify(content || '', settings && settings.options);
   if (settings && !settings.content) {
-    utils.writeFile({ file: settings.output, content: contentMinified.css, index });
+    settings.output && utils.writeFile({ file: settings.output, content: contentMinified.css, index });
   }
   if (callback) {
     return callback(null, contentMinified.css);

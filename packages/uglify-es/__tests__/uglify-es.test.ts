@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import minify from '../../core/src';
 import uglifyes from '../src';
 import { filesJS } from '../../../tests/files-path';

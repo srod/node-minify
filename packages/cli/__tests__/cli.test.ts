@@ -33,7 +33,7 @@ describe(
   'cli error',
   () => {
     beforeAll(() => {
-      let spy = vi.spyOn(childProcess, 'spawn');
+      const spy = vi.spyOn(childProcess, 'spawn');
       spy.mockImplementation(() => {
         throw new Error();
       });

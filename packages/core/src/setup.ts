@@ -28,7 +28,7 @@ const defaultSettings = {
  * @param {Object} inputSettings
  * @return {Object}
  */
-const setup = (inputSettings: {}) => {
+const setup = (inputSettings: object) => {
   let settings = Object.assign(utils.clone(defaultSettings), inputSettings);
 
   // In memory
@@ -60,7 +60,7 @@ const setup = (inputSettings: {}) => {
  * @return {Object}
  */
 const checkOutput = (input: string | string[], output: string, publicFolder: string, replaceInPlace: boolean) => {
-  let reg = new RegExp('\\$1');
+  const reg = new RegExp('\\$1');
   if (reg.test(output)) {
     if (Array.isArray(input)) {
       const outputMin = input.map(file =>
@@ -114,7 +114,7 @@ const wildcardsString = (input: string, publicFolder: string) => {
  * @return {Object}
  */
 const wildcardsArray = (input: string[], publicFolder: string) => {
-  let output: { input?: string[] } = {};
+  const output: { input?: string[] } = {};
   let isWildcardsPresent = false;
 
   output.input = input;
@@ -168,7 +168,7 @@ const getFilesFromWildcards = (input: string, publicFolder: string) => {
  * @return {Object}
  */
 const setPublicFolder = (input: string | string[], publicFolder: string) => {
-  let output: { input?: string | string[] } = {};
+  const output: { input?: string | string[] } = {};
 
   if (typeof publicFolder !== 'string') {
     return output;
@@ -205,7 +205,7 @@ const setPublicFolder = (input: string | string[], publicFolder: string) => {
  *
  * @param {Object} settings
  */
-const checkMandatories = (settings: {}) => {
+const checkMandatories = (settings: object) => {
   ['compressor', 'input', 'output'].forEach(item => mandatory(item, settings));
 };
 
@@ -214,7 +214,7 @@ const checkMandatories = (settings: {}) => {
  *
  * @param {Object} settings
  */
-const checkMandatoriesMemoryContent = (settings: {}) => {
+const checkMandatoriesMemoryContent = (settings: object) => {
   ['compressor', 'content'].forEach(item => mandatory(item, settings));
 };
 

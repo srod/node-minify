@@ -19,7 +19,7 @@ import { Settings } from '@node-minify/types';
  */
 const minify = (settings: Settings) => {
   return new Promise((resolve, reject) => {
-    const method = settings.content ? compressInMemory : compress;
+    const method: any = settings.content ? compressInMemory : compress;
     settings = setup(settings);
     if (!settings.sync) {
       method(settings)
@@ -38,7 +38,7 @@ const minify = (settings: Settings) => {
     } else {
       const minified = method(settings);
       if (settings.callback) {
-        settings.callback(null, minified);
+        settings.callback(null, typeof minified === 'string' ? minified : '');
       }
       resolve(minified);
     }

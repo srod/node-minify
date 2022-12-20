@@ -22,11 +22,13 @@ let silence = false;
  */
 const runOne = (cli: Settings): Promise<Result> => {
   return new Promise<Result>((resolve, reject) => {
+    /* eslint-disable  @typescript-eslint/no-var-requires */
     const compressor =
       typeof cli.compressor === 'string' ? require(`@node-minify/${cli.compressor}`).default : cli.compressor;
+    /* eslint-enable  @typescript-eslint/no-var-requires */
 
     const options: Settings = {
-      compressorLabel: cli.compressor,
+      compressorLabel: typeof cli.compressor === 'string' ? cli.compressor : cli.compressor.name, // TODO: test name function
       compressor,
       input: typeof cli.input === 'string' ? cli.input.split(',') : '',
       output: cli.output

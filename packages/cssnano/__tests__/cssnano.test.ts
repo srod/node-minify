@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import minify from '../../core/src';
 import cssnano from '../src';
 import { filesCSS } from '../../../tests/files-path';
@@ -40,7 +40,9 @@ describe('Package: cssnano', () => {
         compressor: cssnano,
         input: filesCSS.fileCSSErrors,
         output: filesCSS.fileCSSOut,
-        callback: () => {}
+        callback: (): void => {
+          return;
+        }
       }
     };
 

@@ -91,7 +91,7 @@ describe('Package: run', () => {
     'Create sync errors',
     () => {
       beforeAll(() => {
-        let spy = vi.spyOn(childProcess, 'spawnSync');
+        const spy = vi.spyOn(childProcess, 'spawnSync');
         spy.mockImplementation(() => {
           throw new Error();
         });

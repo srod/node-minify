@@ -8,15 +8,16 @@
  * Module dependencies.
  */
 
-import path from 'path';
+// import path from 'path';
+import dirname from 'es-dirname';
 import { utils } from '@node-minify/utils';
 import { runCommandLine } from '@node-minify/run';
-import { MinifierOptions, Options } from '@node-minify/types';
+import { MinifierOptions } from '@node-minify/types';
 
 /**
  * Module variables.
  */
-const binYui = path.normalize(__dirname + '/binaries/yuicompressor-2.4.7.jar');
+const binYui = `${dirname()}/binaries/yuicompressor-2.4.7.jar`;
 
 /**
  * Run YUI Compressor.
@@ -52,7 +53,7 @@ const minifyYUI = ({ settings, content, callback, index }: MinifierOptions) => {
 /**
  * YUI Compressor CSS command line.
  */
-const yuiCommand = (type = 'js', options?: Options) => {
+const yuiCommand = (type = 'js', options) => {
   return ['-jar', '-Xss2048k', binYui, '--type', type].concat(utils.buildArgs(options || {}));
 };
 

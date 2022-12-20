@@ -87,7 +87,7 @@ const applyOptions = (flags: Dictionary<string>, options: Options) => {
  * GCC command line.
  */
 
-const gccCommand = (options: {}) => {
+const gccCommand = (options: Dictionary<string>) => {
   return ['-jar', compilerPath].concat(utils.buildArgs(options || {}));
 };
 

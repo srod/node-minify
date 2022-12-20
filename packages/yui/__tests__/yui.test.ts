@@ -75,7 +75,7 @@ describe(
 
     describe('Create sync errors', () => {
       beforeAll(() => {
-        let spy = vi.spyOn(childProcess, 'spawnSync');
+        const spy = vi.spyOn(childProcess, 'spawnSync');
         spy.mockImplementation(() => {
           throw new Error();
         });
@@ -101,7 +101,7 @@ describe(
 
     describe('Create async errors', () => {
       beforeAll(() => {
-        let spy = vi.spyOn(childProcess, 'spawn');
+        const spy = vi.spyOn(childProcess, 'spawn');
         spy.mockImplementation(() => {
           throw new Error();
         });
@@ -117,7 +117,9 @@ describe(
               options: {
                 fake: true
               },
-              callback: () => {}
+              callback: (): void => {
+                return;
+              }
             }
           };
           const spy = vi.spyOn(options.minify, 'callback');
