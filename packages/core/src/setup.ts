@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import path from 'path';
-import globby from 'globby';
+import { globbySync } from 'globby';
 import { utils } from '@node-minify/utils';
 import { Dictionary } from '@node-minify/types';
 
@@ -128,7 +128,7 @@ const wildcardsArray = (input: string[], publicFolder: string) => {
   });
 
   if (isWildcardsPresent) {
-    output.input = globby.sync(inputWithPublicFolder);
+    output.input = globbySync(inputWithPublicFolder);
   }
 
   // Remove all wildcards from array
@@ -154,7 +154,7 @@ const getFilesFromWildcards = (input: string, publicFolder: string) => {
   let output: string[] = [];
 
   if (input.indexOf('*') > -1) {
-    output = globby.sync((publicFolder || '') + input);
+    output = globbySync((publicFolder || '') + input);
   }
 
   return output;
