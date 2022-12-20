@@ -134,14 +134,14 @@ importers:
       '@node-minify/utils': workspace:*
       '@types/chalk': ^2.2.0
       '@types/ora': ^3.2.0
-      chalk: 4.1.2
+      chalk: 5.2.0
       commander: 9.4.1
       ora: 5.4.1
       update-notifier: 6.0.2
     dependencies:
       '@node-minify/core': link:../core
       '@node-minify/utils': link:../utils
-      chalk: 4.1.2
+      chalk: 5.2.0
       commander: 9.4.1
       ora: 5.4.1
       update-notifier: 6.0.2
@@ -2140,7 +2140,7 @@ packages:
     resolution: {integrity: sha512-1zzPV9FDe1I/WHhRkf9SNgqtRJWZqrBWgu7JGveuHmmyR9CnAPCie2N/x+iHrgnpYBIcCJWHBoMRv2TRWktsvw==}
     deprecated: This is a stub types definition for chalk (https://github.com/chalk/chalk). chalk provides its own type definitions, so you don't need @types/chalk installed!
     dependencies:
-      chalk: 4.1.2
+      chalk: 5.2.0
     dev: true
 
   /@types/clean-css/4.2.6:
@@ -3665,7 +3665,6 @@ packages:
   /chalk/5.2.0:
     resolution: {integrity: sha512-ree3Gqw/nazQAPuJJEy+avdl7QfZMcUvmHIKgEZkGL+xOBzRvup5Hxo6LHuMceSxOabuJLJm5Yp/92R9eMmMvA==}
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
-    dev: false
 
   /character-entities-html4/2.1.0:
     resolution: {integrity: sha512-1v7fgQRj6hnSwFpq1Eu0ynr/CDEw0rXo2B61qXrLNdHZmPKgb7fqS1a2JwF0rISo9q77jDI8VMEHoApn8qDoZA==}
