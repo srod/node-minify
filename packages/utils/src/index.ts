@@ -7,7 +7,7 @@
 /**
  * Module dependencies.
  */
-import fs from 'node:fs';
+import { readFileSync, lstatSync, statSync, existsSync, writeFileSync, unlinkSync, createReadStream } from 'node:fs';
 import gzipSize from 'gzip-size';
 import { Dictionary, MinifierOptions, Settings, Options } from '@node-minify/types';
 
@@ -22,7 +22,7 @@ interface Utils {
   prettyBytes: (num: number) => string;
   setFileNameMin: (file: string, output: string, publicFolder: string, replaceInPlace: boolean) => string;
   compressSingleFile: (settings: Settings) => string | Promise<string>;
-  getContentFromFiles: (input: string) => string;
+  getContentFromFiles: (input: string | string[]) => string;
   runSync: ({ settings, content, index }: MinifierOptions) => string;
   runAsync: ({ settings, content, index }: MinifierOptions) => Promise<string>;
 }
@@ -41,7 +41,7 @@ const utils = {} as Utils;
  * @param {String} file
  * @returns {String}
  */
-utils.readFile = (file: string) => fs.readFileSync(file, 'utf8');
+utils.readFile = (file: string) => readFileSync(file, 'utf8');
 
 /**
  * Write content into file.
@@ -53,8 +53,8 @@ utils.readFile = (file: string) => fs.readFileSync(file, 'utf8');
  */
 utils.writeFile = ({ file, content, index }: WriteFile) => {
   const _file = index !== undefined ? file[index] : file;
-  if (!fs.existsSync(_file) || (fs.existsSync(_file) && !fs.lstatSync(_file).isDirectory())) {
-    fs.writeFileSync(_file, content, 'utf8');
+  if (!existsSync(_file) || (existsSync(_file) && !lstatSync(_file).isDirectory())) {
+    writeFileSync(_file, content, 'utf8');
   }
 
   return content;
@@ -66,7 +66,7 @@ utils.writeFile = ({ file, content, index }: WriteFile) => {
  * @param {String} file
  * @returns {String}
  */
-utils.deleteFile = (file: string) => fs.unlinkSync(file);
+utils.deleteFile = (file: string) => unlinkSync(file);
 
 /**
  * Builds arguments array based on an object.
@@ -103,7 +103,7 @@ utils.clone = (obj: object) => JSON.parse(JSON.stringify(obj));
  * @returns {String}
  */
 utils.getFilesizeInBytes = (file: string) => {
-  const stats = fs.statSync(file);
+  const stats = statSync(file);
   const fileSizeInBytes = stats.size;
   return utils.prettyBytes(fileSizeInBytes);
 };
@@ -115,7 +115,7 @@ utils.getFilesizeInBytes = (file: string) => {
  */
 utils.getFilesizeGzippedInBytes = (file: string) => {
   return new Promise(resolve => {
-    const source = fs.createReadStream(file);
+    const source = createReadStream(file);
     source.pipe(gzipSize.stream()).on('gzip-size', size => {
       resolve(utils.prettyBytes(size));
     });
@@ -181,9 +181,7 @@ utils.setFileNameMin = (file: string, output: string, publicFolder: string, repl
  * @param {Object} settings
  */
 utils.compressSingleFile = (settings: Settings): Promise<string> | string => {
-  const content = settings.content
-    ? settings.content
-    : utils.getContentFromFiles(typeof settings.input === 'string' ? settings.input : '');
+  const content = settings.content ? settings.content : utils.getContentFromFiles(settings.input);
   return settings.sync ? utils.runSync({ settings, content }) : utils.runAsync({ settings, content });
 };
 
@@ -193,16 +191,14 @@ utils.compressSingleFile = (settings: Settings): Promise<string> | string => {
  * @param {String|Array} input
  * @return {String}
  */
-utils.getContentFromFiles = (input: string) => {
+utils.getContentFromFiles = (input: string | string[]) => {
   if (!Array.isArray(input)) {
-    return fs.readFileSync(input, 'utf8');
+    return readFileSync(input, 'utf8');
   }
 
   return input
     .map(path =>
-      !fs.existsSync(path) || (fs.existsSync(path) && !fs.lstatSync(path).isDirectory())
-        ? fs.readFileSync(path, 'utf8')
-        : ''
+      !existsSync(path) || (existsSync(path) && !lstatSync(path).isDirectory()) ? readFileSync(path, 'utf8') : ''
     )
     .join('\n');
 };

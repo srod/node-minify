@@ -321,9 +321,11 @@ importers:
       '@node-minify/run': workspace:*
       '@node-minify/types': workspace:*
       '@node-minify/utils': workspace:*
+      es-dirname: 0.1.0
     dependencies:
       '@node-minify/run': link:../run
       '@node-minify/utils': link:../utils
+      es-dirname: 0.1.0
     devDependencies:
       '@node-minify/types': link:../types
 
@@ -4531,6 +4533,10 @@ packages:
     dependencies:
       is-arrayish: 0.2.1
     dev: true
+
+  /es-dirname/0.1.0:
+    resolution: {integrity: sha512-tcTj4pVFXe5EdiHCybjynDTlvkwuNN6JCg9+5BVB+n9qQoMyWOtxpREoL7rGO3sCIAX55Y6CYZi4s1c30uxvPg==}
+    dev: false
 
   /esbuild-android-64/0.15.18:
     resolution: {integrity: sha512-wnpt3OXRhcjfIDSZu9bnzT4/TNTDsOUvip0foZOUBG7QbSt//w3QV4FInVJxNhKc/ErhUxc5z4QjHtMi7/TbgA==}

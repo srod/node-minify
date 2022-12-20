@@ -19,6 +19,7 @@
     ],
     "no-console": 0,
     "no-var": "error",
-    "strict": [2, "never"]
+    "strict": [2, "never"],
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }
