@@ -22,7 +22,7 @@
     "clean": "pnpm run clean:build && pnpm run clean:packages",
     "clean:build": "pnpm dlx rimraf packages/*/dist docs/.next",
     "clean:packages": "pnpm run lerna clean -y",
-    "clean:test": "pnpm dlx rimraf tests/tmp/*.{js,js.map,css,html}",
+    "clean:test": "pnpm dlx rimraf tests/tmp/*.{js,js.map,css,html,json}",
     "coverage": "vitest run --coverage",
     "eslint": "eslint --ext .ts .",
     "lerna": "lerna",
