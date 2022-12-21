@@ -5,6 +5,7 @@ export default defineConfig({
     reporters: 'dot',
     coverage: {
       reporter: ['text', 'json', 'html']
-    }
+    },
+    testTimeout: 60000
   }
 });
