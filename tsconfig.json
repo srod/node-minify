@@ -1,12 +1,10 @@
 {
+  "extends": "@tsconfig/node14/tsconfig.json",
   "compilerOptions": {
+    "strict": false,
     "declaration": true,
-    "esModuleInterop": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
     "removeComments": true,
-    "resolveJsonModule": true,
-    "target": "es6"
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules", "**/__tests__/**", "**/dist/**"]
 }
