@@ -32,7 +32,7 @@ const minifyCleanCSS = ({ settings, content, callback, index }: MinifierOptions)
       index
     });
   }
-  if (settings && !settings.content) {
+  if (settings && !settings.content && settings.output) {
     settings.output && utils.writeFile({ file: settings.output, content: contentMinified, index });
   }
   if (callback) {

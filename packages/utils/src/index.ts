@@ -15,7 +15,9 @@ interface Utils {
   readFile: (file: string) => string;
   writeFile: ({ file, content, index }: WriteFile) => string;
   deleteFile: (file: string) => void;
-  buildArgs: (options: Options & Dictionary<string | boolean>) => any;
+  buildArgs: (
+    options: Options & Dictionary<string | boolean | [] | { url: string } | { filename: string } | undefined>
+  ) => any;
   clone: (obj: object) => object;
   getFilesizeInBytes: (file: string) => string;
   getFilesizeGzippedInBytes: (file: string) => Promise<string>;
@@ -74,8 +76,8 @@ utils.deleteFile = (file: string) => unlinkSync(file);
  * @param {Object} options
  * @returns {Array}
  */
-utils.buildArgs = (options: Dictionary<string | boolean>) => {
-  const args: (string | boolean)[] = [];
+utils.buildArgs = (options: Dictionary<string | boolean | [] | { url: string } | { filename: string } | undefined>) => {
+  const args: (string | boolean | [] | { url: string } | { filename: string } | undefined)[] = [];
   Object.keys(options).forEach((key: string) => {
     if (options[key] && options[key] !== false) {
       args.push('--' + key);
@@ -181,7 +183,7 @@ utils.setFileNameMin = (file: string, output: string, publicFolder: string, repl
  * @param {Object} settings
  */
 utils.compressSingleFile = (settings: Settings): Promise<string> | string => {
-  const content = settings.content ? settings.content : utils.getContentFromFiles(settings.input);
+  const content = settings.content ? settings.content : settings.input ? utils.getContentFromFiles(settings.input) : '';
   return settings.sync ? utils.runSync({ settings, content }) : utils.runAsync({ settings, content });
 };
 

@@ -1,7 +1,6 @@
 {
   "extends": "@tsconfig/node14/tsconfig.json",
   "compilerOptions": {
-    "strict": false,
     "declaration": true,
     "removeComments": true,
     "resolveJsonModule": true

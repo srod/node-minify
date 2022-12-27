@@ -18,7 +18,7 @@ import { MinifierOptions } from '@node-minify/types';
  * @param {Function} callback
  */
 const noCompress = ({ settings, content, callback, index }: MinifierOptions) => {
-  if (settings && !settings.content) {
+  if (settings && !settings.content && settings.output) {
     utils.writeFile({ file: settings.output, content, index });
   }
   if (callback) {

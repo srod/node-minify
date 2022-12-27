@@ -28,7 +28,7 @@ const minifyCssnano = async ({ settings, content, callback, index }: MinifierOpt
       return callback(e);
     }
   }
-  if (settings && !settings.content) {
+  if (settings && !settings.content && settings.output) {
     settings.output && utils.writeFile({ file: settings.output, content: contentMinified.css, index });
   }
   if (callback) {

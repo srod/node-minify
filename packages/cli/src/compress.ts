@@ -26,13 +26,13 @@ const compress = (options: Settings): Promise<Result> => {
           return resolve({
             compressorLabel: options.compressorLabel || '',
             compressor: options.compressor,
-            size: 0,
-            sizeGzip: 0
+            size: '0',
+            sizeGzip: '0'
           });
         }
         utils
           .getFilesizeGzippedInBytes(options.output)
-          .then((sizeGzip: number) => {
+          .then((sizeGzip: string) => {
             resolve({
               compressorLabel: options.compressorLabel || '',
               compressor: options.compressor,

@@ -20,7 +20,7 @@ import { MinifierOptions } from '@node-minify/types';
  */
 const minifySqwish = ({ settings, content, callback, index }: MinifierOptions) => {
   const contentMinified = sqwish.minify(content, settings && settings.options && settings.options.strict);
-  if (settings && !settings.content) {
+  if (settings && !settings.content && settings.output) {
     utils.writeFile({ file: settings.output, content: contentMinified, index });
   }
   if (callback) {

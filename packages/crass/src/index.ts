@@ -20,7 +20,7 @@ import { MinifierOptions } from '@node-minify/types';
  */
 const minifyCrass = ({ settings, content, callback, index }: MinifierOptions) => {
   const contentMinified = crass.parse(content).optimize().toString();
-  if (settings && !settings.content) {
+  if (settings && !settings.content && settings.output) {
     settings.output && utils.writeFile({ file: settings.output, content: contentMinified, index });
   }
   if (callback) {

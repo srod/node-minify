@@ -10,7 +10,7 @@
 import path from 'path';
 import { globbySync } from 'globby';
 import { utils } from '@node-minify/utils';
-import { Dictionary } from '@node-minify/types';
+import { Settings } from '@node-minify/types';
 
 /**
  * Default settings.
@@ -29,7 +29,7 @@ const defaultSettings = {
  * @return {Object}
  */
 const setup = (inputSettings: object) => {
-  let settings = Object.assign(utils.clone(defaultSettings), inputSettings);
+  let settings: Settings = Object.assign(utils.clone(defaultSettings), inputSettings);
 
   // In memory
   if (settings.content) {
@@ -205,8 +205,8 @@ const setPublicFolder = (input: string | string[], publicFolder: string) => {
  *
  * @param {Object} settings
  */
-const checkMandatories = (settings: object) => {
-  ['compressor', 'input', 'output'].forEach(item => mandatory(item, settings));
+const checkMandatories = (settings: Settings) => {
+  ['compressor', 'input', 'output'].forEach((item: string) => mandatory(item, settings));
 };
 
 /**
@@ -214,8 +214,8 @@ const checkMandatories = (settings: object) => {
  *
  * @param {Object} settings
  */
-const checkMandatoriesMemoryContent = (settings: object) => {
-  ['compressor', 'content'].forEach(item => mandatory(item, settings));
+const checkMandatoriesMemoryContent = (settings: Settings) => {
+  ['compressor', 'content'].forEach((item: string) => mandatory(item, settings));
 };
 
 /**
@@ -224,7 +224,7 @@ const checkMandatoriesMemoryContent = (settings: object) => {
  * @param {String} setting
  * @param {Object} settings
  */
-const mandatory = (setting: string, settings: Dictionary<string>) => {
+const mandatory = (setting: string, settings: Settings) => {
   if (!settings[setting]) {
     throw new Error(setting + ' is mandatory.');
   }

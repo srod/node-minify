@@ -36,7 +36,7 @@ const compress = (settings: Settings): Promise<string> | string => {
  *
  * @param {Object} settings
  */
-const compressArrayOfFilesSync = (settings: Settings) => {
+const compressArrayOfFilesSync = (settings: Settings): any => {
   return (
     Array.isArray(settings.input) &&
     settings.input.forEach((input, index) => {
@@ -51,8 +51,8 @@ const compressArrayOfFilesSync = (settings: Settings) => {
  *
  * @param {Object} settings
  */
-const compressArrayOfFilesAsync = (settings: Settings) => {
-  let sequence = Promise.resolve();
+const compressArrayOfFilesAsync = (settings: Settings): Promise<string | void> => {
+  let sequence: Promise<string | void> = Promise.resolve();
   Array.isArray(settings.input) &&
     settings.input.forEach((input, index) => {
       const content = utils.getContentFromFiles(input);

@@ -27,8 +27,11 @@ const runOne = (cli: Settings): Promise<Result> => {
       typeof cli.compressor === 'string' ? require(`@node-minify/${cli.compressor}`).default : cli.compressor;
     /* eslint-enable  @typescript-eslint/no-var-requires */
 
+    const compressorName =
+      typeof cli.compressor === 'string' ? cli.compressor : cli.compressor ? cli.compressor.name : 'unknownCompressor';
+
     const options: Settings = {
-      compressorLabel: typeof cli.compressor === 'string' ? cli.compressor : cli.compressor.name, // TODO: test name function
+      compressorLabel: compressorName,
       compressor,
       input: typeof cli.input === 'string' ? cli.input.split(',') : '',
       output: cli.output

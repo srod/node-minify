@@ -1,4 +1,5 @@
 export interface Options {
+  [key: string]: string | boolean | [] | { url: string } | { filename: string } | undefined;
   sourceMap?: boolean;
   _sourceMap?: { url: string } | boolean;
   babelrc?: string;
@@ -10,7 +11,7 @@ export interface Settings {
   compressorLabel?: string;
   compressor?: string | ((arg0: MinifierOptions) => string);
   sync?: boolean;
-  callback?: (err: Error, minified?: string) => void;
+  callback?: (err: unknown, minified?: string) => void;
   content?: string;
   input?: string | string[];
   output?: string;
@@ -19,13 +20,15 @@ export interface Settings {
   buffer?: number;
   type?: string;
   silence?: boolean;
+  publicFolder?: string;
+  replaceInPlace?: boolean;
 }
 
 export interface MinifierOptions {
   settings?: Settings;
   content?: string;
   callback?: null | ((err?: unknown | null, result?: string) => void);
-  compressor?: string | (() => void);
+  compressor?: string | ((arg0: MinifierOptions) => void);
   index?: number;
   args?: string[];
   data?: string;
@@ -35,10 +38,10 @@ export interface MinifierOptions {
 }
 
 export interface Result {
-  compressor?: string | (() => void);
+  compressor?: string | ((arg0: MinifierOptions) => void);
   compressorLabel: string | (() => void);
-  size: number;
-  sizeGzip: number;
+  size: string;
+  sizeGzip: string;
 }
 
 export interface Dictionary<T> {

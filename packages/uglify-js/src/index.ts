@@ -41,7 +41,7 @@ const minifyUglifyJS = ({ settings, content, callback, index }: MinifierOptionsU
     // TODO
     utils.writeFile({ file: settings.options.sourceMap.filename, content: contentMinified.map, index });
   }
-  if (settings && !settings.content) {
+  if (settings && !settings.content && settings.output) {
     utils.writeFile({ file: settings.output, content: contentMinified.code, index });
   }
   if (callback) {

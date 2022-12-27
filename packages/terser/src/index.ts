@@ -42,7 +42,7 @@ const minifyTerser = async ({ settings, content, callback, index }: MinifierOpti
     ) {
       utils.writeFile({ file: settings.options.sourceMap.url, content: contentMinified.map, index });
     }
-    if (settings && !settings.content) {
+    if (settings && !settings.content && settings.output) {
       utils.writeFile({ file: settings.output, content: contentMinified.code, index });
     }
     if (callback) {

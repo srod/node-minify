@@ -48,7 +48,7 @@ const minifyGCC = ({ settings, content, callback, index }: MinifierOptions) => {
     args: gccCommand(options),
     data: content,
     settings,
-    callback: (err: Error, content: string) => {
+    callback: (err: unknown, content?: string) => {
       if (err) {
         if (callback) {
           return callback(err);
@@ -56,7 +56,7 @@ const minifyGCC = ({ settings, content, callback, index }: MinifierOptions) => {
           throw err;
         }
       }
-      if (settings && !settings.content) {
+      if (settings && !settings.content && settings.output) {
         utils.writeFile({ file: settings.output, content, index });
       }
       if (callback) {
@@ -73,7 +73,10 @@ const minifyGCC = ({ settings, content, callback, index }: MinifierOptions) => {
  * @param {Object} options
  * @returns {Object} flags
  */
-const applyOptions = (flags: Dictionary<string>, options: Options) => {
+const applyOptions = (
+  flags: Dictionary<string | boolean | [] | { url: string } | { filename: string } | undefined>,
+  options: Options
+) => {
   if (!options || Object.keys(options).length === 0) {
     return flags;
   }
@@ -87,7 +90,9 @@ const applyOptions = (flags: Dictionary<string>, options: Options) => {
  * GCC command line.
  */
 
-const gccCommand = (options: Dictionary<string>) => {
+const gccCommand = (
+  options: Dictionary<string | boolean | [] | { url: string } | { filename: string } | undefined>
+) => {
   return ['-jar', compilerPath].concat(utils.buildArgs(options || {}));
 };
 

@@ -31,7 +31,7 @@ const minifyYUI = ({ settings, content, callback, index }: MinifierOptions) => {
     args: yuiCommand(settings && settings.type, settings && settings.options),
     data: content,
     settings,
-    callback: (err: Error, content: string) => {
+    callback: (err: unknown, content?: string) => {
       if (err) {
         if (callback) {
           return callback(err);
@@ -39,7 +39,7 @@ const minifyYUI = ({ settings, content, callback, index }: MinifierOptions) => {
           throw err;
         }
       }
-      if (settings && !settings.content) {
+      if (settings && !settings.content && settings.output) {
         utils.writeFile({ file: settings.output, content, index });
       }
       if (callback) {
@@ -53,7 +53,7 @@ const minifyYUI = ({ settings, content, callback, index }: MinifierOptions) => {
 /**
  * YUI Compressor CSS command line.
  */
-const yuiCommand = (type = 'js', options) => {
+const yuiCommand = (type = 'js', options: any) => {
   return ['-jar', '-Xss2048k', binYui, '--type', type].concat(utils.buildArgs(options || {}));
 };
 
