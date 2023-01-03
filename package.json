@@ -68,7 +68,7 @@
     "eslint": "8.31.0",
     "eslint-config-prettier": "8.6.0",
     "eslint-plugin-prettier": "4.2.1",
-    "husky": "8.0.2",
+    "husky": "8.0.3",
     "lerna": "6.3.0",
     "lint-staged": "13.1.0",
     "node-notifier": "10.0.1",
