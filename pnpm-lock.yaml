@@ -84,15 +84,15 @@ importers:
     specifiers:
       '@types/node': 18.11.18
       next: ^13.0.6
-      nextra: 2.0.3
-      nextra-theme-docs: 2.0.3
+      nextra: 2.1.0
+      nextra-theme-docs: 2.1.0
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.9.3
     dependencies:
       next: 13.1.1_biqbaboplfbrettd7655fr4n2y
-      nextra: 2.0.3_q76c2b4vyoegvsbrcwkfvimnai
-      nextra-theme-docs: 2.0.3_q76c2b4vyoegvsbrcwkfvimnai
+      nextra: 2.1.0_q76c2b4vyoegvsbrcwkfvimnai
+      nextra-theme-docs: 2.1.0_q76c2b4vyoegvsbrcwkfvimnai
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -7532,8 +7532,8 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs/2.0.3_q76c2b4vyoegvsbrcwkfvimnai:
-    resolution: {integrity: sha512-BN0NOzYNMQNLU8PMRKVtgOitLC2jFubMA9O8b3gNhr+5/Uny6MTDwuSAVO7G7z830b6dNaRqrMA84iVRS+2LaQ==}
+  /nextra-theme-docs/2.1.0_q76c2b4vyoegvsbrcwkfvimnai:
+    resolution: {integrity: sha512-0Fn0EsGaKa9We2+CkN9LPtT6F21w4wbihuv0/Vg2YowpAdu5nslsDIhtg66CRET5U5007xE5GG8NLwWaCHQhhg==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
@@ -7555,10 +7555,11 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       scroll-into-view-if-needed: 3.0.3
+      zod: 3.20.2
     dev: false
 
-  /nextra/2.0.3_q76c2b4vyoegvsbrcwkfvimnai:
-    resolution: {integrity: sha512-GttZMwfHiVcrnVMnN2PKq2mS6YoQ0zrbzRYS838WYfzUpjIPCR6L8rJbAEd00kcrJNM1MvSCxONOTqGDDjW7YA==}
+  /nextra/2.1.0_q76c2b4vyoegvsbrcwkfvimnai:
+    resolution: {integrity: sha512-8bq/TW8wv8H8D6UAokb9WKhnYeoxKG7c8ikWF1n6k3kOO9m0PLG+guTwqkWre28jJyziljc3i/Fnr3k4HiB9Ow==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
@@ -10643,6 +10644,10 @@ packages:
   /yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+  /zod/3.20.2:
+    resolution: {integrity: sha512-1MzNQdAvO+54H+EaK5YpyEy0T+Ejo/7YLHS93G3RnYWh5gaotGHwGeN/ZO687qEDU2y4CdStQYXVHIgrUl5UVQ==}
+    dev: false
 
   /zwitch/2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
