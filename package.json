@@ -16,7 +16,7 @@
   "engines": {
     "node": ">=14.0.0"
   },
-  "packageManager": "pnpm@7.23.0",
+  "packageManager": "pnpm@7.24.2",
   "scripts": {
     "build": "lerna run build",
     "clean": "pnpm run clean:build && pnpm run clean:packages",
