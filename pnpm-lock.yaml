@@ -273,10 +273,10 @@ importers:
     specifiers:
       '@node-minify/types': workspace:*
       '@node-minify/utils': workspace:*
-      terser: 5.16.2
+      terser: 5.16.3
     dependencies:
       '@node-minify/utils': link:../utils
-      terser: 5.16.2
+      terser: 5.16.3
     devDependencies:
       '@node-minify/types': link:../types
 
@@ -9832,8 +9832,8 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /terser/5.16.2:
-    resolution: {integrity: sha512-JKuM+KvvWVqT7muHVyrwv7FVRPnmHDwF6XwoIxdbF5Witi0vu99RYpxDexpJndXt3jbZZmmWr2/mQa6HvSNdSg==}
+  /terser/5.16.3:
+    resolution: {integrity: sha512-v8wWLaS/xt3nE9dgKEWhNUFP6q4kngO5B8eYFUuebsu7Dw/UNAnpUod6UHo04jSSkv8TzKHjZDSd7EXdDQAl8Q==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
