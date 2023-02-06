@@ -602,8 +602,8 @@ packages:
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
     dev: true
 
-  /@headlessui/react/1.7.9_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-Bobh/+mDciu8kEE2hvdukFYjbfaG4MEkK/6TjWOgqcODLKYpRhWPKPE+dCcCSz/YrwjFVrEAMOiWtfk6sW20/w==}
+  /@headlessui/react/1.7.10_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-1m66h/5eayTEZVT2PI13/2PG3EVC7a9XalmUtVSC8X76pcyKYMuyX1XAL2RUtCr8WhoMa/KrDEyoeU5v+kSQOw==}
     engines: {node: '>=10'}
     peerDependencies:
       react: ^16 || ^17 || ^18
@@ -1416,7 +1416,7 @@ packages:
       estree-util-is-identifier-name: 2.1.0
       estree-util-to-js: 1.1.1
       estree-walker: 3.0.3
-      hast-util-to-estree: 2.2.1
+      hast-util-to-estree: 2.3.0
       markdown-extensions: 1.1.1
       periscopic: 3.1.0
       remark-mdx: 2.2.1
@@ -3489,7 +3489,7 @@ packages:
     dependencies:
       caniuse-lite: 1.0.30001450
       electron-to-chromium: 1.4.286
-      node-releases: 2.0.9
+      node-releases: 2.0.10
       update-browserslist-db: 1.0.10_browserslist@4.21.5
     dev: false
 
@@ -3589,8 +3589,8 @@ packages:
     engines: {node: '>=14.16'}
     dev: false
 
-  /cacheable-request/10.2.6:
-    resolution: {integrity: sha512-fhVLoXIFHvTizxQkAVohKPToSzdwzjrhL5SsjHT0umeSCxWeqJOS0oPqHg+yO1FPFST3VE5rxaqUvseyH9JHtg==}
+  /cacheable-request/10.2.7:
+    resolution: {integrity: sha512-I4SA6mKgDxcxVbSt/UmIkb9Ny8qSkg6ReBHtAAXnZHk7KOSx5g3DTiAOaYzcHCs6oOdHn+bip9T48E6tMvK9hw==}
     engines: {node: '>=14.16'}
     dependencies:
       '@types/http-cache-semantics': 4.0.1
@@ -5431,7 +5431,7 @@ packages:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.1.2
+      minimatch: 3.0.5
       once: 1.4.0
       path-is-absolute: 1.0.1
     dev: true
@@ -5521,7 +5521,7 @@ packages:
       '@sindresorhus/is': 5.3.0
       '@szmarczak/http-timer': 5.0.1
       cacheable-lookup: 7.0.0
-      cacheable-request: 10.2.6
+      cacheable-request: 10.2.7
       decompress-response: 6.0.0
       form-data-encoder: 2.1.4
       get-stream: 6.0.1
@@ -5648,8 +5648,8 @@ packages:
       '@types/hast': 2.3.4
     dev: false
 
-  /hast-util-to-estree/2.2.1:
-    resolution: {integrity: sha512-kiGD9WIW3gRKK8Gao3n1f+ahUeTMeJUJILnIT2QNrPigDNdH7rJxzhEbh81UajGeAdAHFecT1a+fLVOCTq9B4Q==}
+  /hast-util-to-estree/2.3.0:
+    resolution: {integrity: sha512-FCFA4GhTQqRO9n8dDDj9IlSWiVxDEY7jEOmTWocMpF5IiQ2BADVYf72AWB1hsZmJJPDsf5VTvYZnXHS/52HA4w==}
     dependencies:
       '@types/estree': 1.0.0
       '@types/estree-jsx': 1.0.0
@@ -7609,7 +7609,7 @@ packages:
       react: '>=16.13.1'
       react-dom: '>=16.13.1'
     dependencies:
-      '@headlessui/react': 1.7.9_biqbaboplfbrettd7655fr4n2y
+      '@headlessui/react': 1.7.10_biqbaboplfbrettd7655fr4n2y
       '@popperjs/core': 2.11.6
       clsx: 1.2.1
       flexsearch: 0.7.31
@@ -7719,8 +7719,8 @@ packages:
       which: 2.0.2
     dev: true
 
-  /node-releases/2.0.9:
-    resolution: {integrity: sha512-2xfmOrRkGogbTK9R6Leda0DGiXeY3p2NJpy4+gNCffdUvV6mdEJnaDEic1i3Ec2djAo8jWYoJMR5PB0MSMpxUA==}
+  /node-releases/2.0.10:
+    resolution: {integrity: sha512-5GFldHPXVG/YZmFzJvKK2zDSzPKhEp0+ZR5SVaoSag9fsL5YgHbUHDfnG5494ISANDcK4KwPXAx2xqVEydmd7w==}
     dev: false
 
   /noms/0.0.0:
