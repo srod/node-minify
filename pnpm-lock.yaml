@@ -84,15 +84,15 @@ importers:
     specifiers:
       '@types/node': 18.13.0
       next: ^13.0.6
-      nextra: 2.2.12
-      nextra-theme-docs: 2.2.12
+      nextra: 2.2.14
+      nextra-theme-docs: 2.2.14
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.9.3
     dependencies:
       next: 13.1.6_biqbaboplfbrettd7655fr4n2y
-      nextra: 2.2.12_3vryta7zmbcsw4rrqf4axjqggm
-      nextra-theme-docs: 2.2.12_3get2v4hiihtvxtj3efiyufd2u
+      nextra: 2.2.14_3vryta7zmbcsw4rrqf4axjqggm
+      nextra-theme-docs: 2.2.14_u6qwm625rg3t7ll2t4ybomvrai
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -7601,11 +7601,11 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs/2.2.12_3get2v4hiihtvxtj3efiyufd2u:
-    resolution: {integrity: sha512-CiBrDQmwWObJult9SxOL6JFLdGolkdcpUpdcdK+NfzK9lUdyZVuNHqW+SLiLdztf17lE5U9AKa15E0UzoqBXbA==}
+  /nextra-theme-docs/2.2.14_u6qwm625rg3t7ll2t4ybomvrai:
+    resolution: {integrity: sha512-QQcHOcAXSfrpbSX3FqXgcQ2favKLnBAczqKWbSDVEtgHiUG6s7pVpxclpKm5F1c/fP47v19USRq3BL/SZ4JEIQ==}
     peerDependencies:
       next: '>=9.5.3'
-      nextra: 2.2.12
+      nextra: 2.2.14
       react: '>=16.13.1'
       react-dom: '>=16.13.1'
     dependencies:
@@ -7620,15 +7620,15 @@ packages:
       next: 13.1.6_biqbaboplfbrettd7655fr4n2y
       next-seo: 5.15.0_3vryta7zmbcsw4rrqf4axjqggm
       next-themes: 0.2.1_3vryta7zmbcsw4rrqf4axjqggm
-      nextra: 2.2.12_3vryta7zmbcsw4rrqf4axjqggm
+      nextra: 2.2.14_3vryta7zmbcsw4rrqf4axjqggm
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       scroll-into-view-if-needed: 3.0.4
       zod: 3.20.2
     dev: false
 
-  /nextra/2.2.12_3vryta7zmbcsw4rrqf4axjqggm:
-    resolution: {integrity: sha512-p2yjiRr6NKFiwEkSYdxIga0JMv51J4lVyObhwfqIQgi665rgNgqeiNvBzEgAOhV9LyzbjCTSZaTCBsg3OgcDtA==}
+  /nextra/2.2.14_3vryta7zmbcsw4rrqf4axjqggm:
+    resolution: {integrity: sha512-kToTiTiE4qrQsQ9snFRqCGLLSjKSFgFV/BJm3yp/SRmkmCr1WaWrlmUTAuXlxM7PREbNaZouNSOJ0hGS92rM8A==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
