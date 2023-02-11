@@ -1,4 +1,4 @@
-<p align="center"><img src="/static/node-minify.png" width="348" alt="node-minify"></p>
+<p align="center"><img src="/static/node-minify.svg" width="348" alt="node-minify"></p>
 
 <p align="center">A very light minifier Node.js module.</p>
 
@@ -16,29 +16,29 @@ It allow you to compress JavaScript, CSS and HTML files.
 
 **JavaScript:**
 
-- [babel-minify](https://node-minify.2clics.net/compressors/babel-minify.html)
-- [Google Closure Compiler](https://node-minify.2clics.net/compressors/gcc.html)
-- [terser](https://node-minify.2clics.net/compressors/terser.html)
-- [uglify-js](https://node-minify.2clics.net/compressors/uglify-js.html)
-- [uglify-es](https://node-minify.2clics.net/compressors/uglify-es.html)
-- [YUI Compressor](https://node-minify.2clics.net/compressors/yui.html)
+- [babel-minify](https://node-minify.2clics.net/compressors/babel-minify)
+- [Google Closure Compiler](https://node-minify.2clics.net/compressors/gcc)
+- [terser](https://node-minify.2clics.net/compressors/terser)
+- [uglify-js](https://node-minify.2clics.net/compressors/uglify-js)
+- [uglify-es](https://node-minify.2clics.net/compressors/uglify-es)
+- [YUI Compressor](https://node-minify.2clics.net/compressors/yui)
 
 **CSS:**
 
-- [clean-css](https://node-minify.2clics.net/compressors/clean-css.html)
-- [crass](https://node-minify.2clics.net/compressors/crass.html)
-- [cssnano](https://node-minify.2clics.net/compressors/cssnano.html)
-- [CSSO](https://node-minify.2clics.net/compressors/csso.html)
-- [sqwish](https://node-minify.2clics.net/compressors/sqwish.html)
-- [YUI Compressor](https://node-minify.2clics.net/compressors/yui.html)
+- [clean-css](https://node-minify.2clics.net/compressors/clean-css)
+- [crass](https://node-minify.2clics.net/compressors/crass)
+- [cssnano](https://node-minify.2clics.net/compressors/cssnano)
+- [CSSO](https://node-minify.2clics.net/compressors/csso)
+- [sqwish](https://node-minify.2clics.net/compressors/sqwish)
+- [YUI Compressor](https://node-minify.2clics.net/compressors/yui)
 
 **HTML:**
 
-- [html-minifier](https://node-minify.2clics.net/compressors/html-minifier.html)
+- [html-minifier](https://node-minify.2clics.net/compressors/html-minifier)
 
 **Command Line Interface:**
 
-- [CLI](https://node-minify.2clics.net/cli.html)
+- [CLI](https://node-minify.2clics.net/cli)
 
 ## Installation
 
