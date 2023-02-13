@@ -38,7 +38,7 @@ importers:
       node-notifier: 10.0.1
       prettier: 2.8.4
       rimraf: 3.0.2
-      tsup: 6.6.0
+      tsup: 6.6.2
       typescript: 4.9.5
       vitest: 0.28.4
     devDependencies:
@@ -76,7 +76,7 @@ importers:
       node-notifier: 10.0.1
       prettier: 2.8.4
       rimraf: 3.0.2
-      tsup: 6.6.0_typescript@4.9.5
+      tsup: 6.6.2_typescript@4.9.5
       typescript: 4.9.5
       vitest: 0.28.4
 
@@ -9755,8 +9755,8 @@ packages:
   /tslib/2.5.0:
     resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
 
-  /tsup/6.6.0_typescript@4.9.5:
-    resolution: {integrity: sha512-HxZE7Hj5yNxLFftCXdcJ+Jsax8dI4oKb0bt8fIvd1g/W0FZ46sU1pFBVo15WpOERFcEMH7Hykey/Q+hKO4s9RQ==}
+  /tsup/6.6.2_typescript@4.9.5:
+    resolution: {integrity: sha512-+yQ6SI4rVtp1+YpcYOePumJLEVQ896CDNRt9dJ2L/DeMnLf1+FTOCVw5eioLBH0xLdHgogO9NQ6vPNF5MfkSJw==}
     engines: {node: '>=14'}
     hasBin: true
     peerDependencies:
