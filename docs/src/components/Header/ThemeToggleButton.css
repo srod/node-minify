@@ -1,0 +1,4 @@
+.toggleButton {
+  cursor: pointer;
+  background-color: var(--theme-code-inline-bg);
+}

@@ -1,32 +1,22 @@
 {
-  "name": "nextra-docs-template",
-  "version": "8.0.1-beta.0",
-  "description": "Nextra docs template",
+  "name": "@node-minify/docs",
+  "type": "module",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shuding/nextra-docs-template.git"
-  },
-  "author": "Shu Ding <g@shud.in>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/shuding/nextra-docs-template/issues"
-  },
-  "homepage": "https://github.com/shuding/nextra-docs-template#readme",
   "dependencies": {
-    "next": "^13.0.6",
-    "nextra": "2.2.12",
-    "nextra-theme-docs": "2.2.12",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@astrojs/preact": "^2.0.2",
+    "@types/node": "^18.0.0",
+    "astro": "^2.0.8",
+    "preact": "^10.7.3"
   },
   "devDependencies": {
-    "@types/node": "18.13.0",
-    "typescript": "^4.9.3"
+    "html-escaper": "^3.0.3"
   }
 }

@@ -20,7 +20,7 @@
   "scripts": {
     "build": "lerna run build",
     "clean": "pnpm run clean:build && pnpm run clean:packages",
-    "clean:build": "pnpm dlx rimraf packages/*/dist docs/.next",
+    "clean:build": "pnpm dlx rimraf packages/*/dist",
     "clean:packages": "pnpm run lerna clean -y",
     "clean:test": "pnpm dlx rimraf tests/tmp/*.{js,js.map,css,html,json}",
     "clean:git":"git restore --source=HEAD --staged --worktree -- tests/fixtures",
