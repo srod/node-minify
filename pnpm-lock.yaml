@@ -23,7 +23,7 @@ importers:
       '@node-minify/uglify-js': workspace:*
       '@node-minify/utils': workspace:*
       '@node-minify/yui': workspace:*
-      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.3
       '@types/node': 18.13.0
       '@typescript-eslint/eslint-plugin': 5.51.0
       '@typescript-eslint/parser': 5.51.0
@@ -61,7 +61,7 @@ importers:
       '@node-minify/uglify-js': link:packages/uglify-js
       '@node-minify/utils': link:packages/utils
       '@node-minify/yui': link:packages/yui
-      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.3
       '@types/node': 18.13.0
       '@typescript-eslint/eslint-plugin': 5.51.0_z4swst3wuuqk4hlme4ajzslgh4
       '@typescript-eslint/parser': 5.51.0_7kw3g6rralp5ps6mg3uyzz6azm
@@ -2279,8 +2279,8 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: false
 
-  /@tsconfig/node14/1.0.3:
-    resolution: {integrity: sha512-ysT8mhdixWK6Hw3i1V2AeRqZ5WfXg1G43mqoYlM2nc6388Fq5jcXyr5mRsqViLx/GJYdoL0bfXD8nmF+Zn/Iow==}
+  /@tsconfig/node16/1.0.3:
+    resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
     dev: true
 
   /@types/babel-core/6.25.7:

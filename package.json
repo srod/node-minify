@@ -14,7 +14,7 @@
     "url": "https://github.com/srod/node-minify.git"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "packageManager": "pnpm@7.27.0",
   "scripts": {
@@ -23,7 +23,7 @@
     "clean:build": "pnpm dlx rimraf packages/*/dist",
     "clean:packages": "pnpm run lerna clean -y",
     "clean:test": "pnpm dlx rimraf tests/tmp/*.{js,js.map,css,html,json}",
-    "clean:git":"git restore --source=HEAD --staged --worktree -- tests/fixtures",
+    "clean:git": "git restore --source=HEAD --staged --worktree -- tests/fixtures",
     "coverage": "vitest run --coverage",
     "precoverage:ci": "pnpm run build && pnpm run eslint",
     "coverage:ci": "vitest run --coverage",
@@ -59,7 +59,7 @@
     "@node-minify/uglify-js": "workspace:*",
     "@node-minify/utils": "workspace:*",
     "@node-minify/yui": "workspace:*",
-    "@tsconfig/node14": "1.0.3",
+    "@tsconfig/node16": "1.0.3",
     "@types/node": "18.13.0",
     "@typescript-eslint/eslint-plugin": "5.51.0",
     "@typescript-eslint/parser": "5.51.0",
