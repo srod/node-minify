@@ -14,7 +14,7 @@
     "node-minify": "dist/cli.mjs"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "directories": {
     "lib": "dist",
