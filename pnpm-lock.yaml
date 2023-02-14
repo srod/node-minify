@@ -82,13 +82,17 @@ importers:
 
   docs:
     specifiers:
+      '@astrojs/partytown': 1.0.3
       '@astrojs/preact': ^2.0.2
+      '@astrolib/analytics': 0.3.0
       '@types/node': ^18.0.0
-      astro: ^2.0.8
+      astro: ^2.0.10
       html-escaper: ^3.0.3
       preact: ^10.7.3
     dependencies:
+      '@astrojs/partytown': 1.0.3
       '@astrojs/preact': 2.0.2_preact@10.12.1
+      '@astrolib/analytics': 0.3.0_astro@2.0.10
       '@types/node': 18.13.0
       astro: 2.0.10_@types+node@18.13.0
       preact: 10.12.1
@@ -386,6 +390,13 @@ packages:
       - supports-color
     dev: false
 
+  /@astrojs/partytown/1.0.3:
+    resolution: {integrity: sha512-u2/pG9owRipICz/PksLUUqUat98sm0/YODvv3/IKKJ0JCwF7+0olbMvyyvoj7kJooIXh0XowcOjEs5vhCYFo5g==}
+    dependencies:
+      '@builder.io/partytown': 0.7.5
+      mrmime: 1.0.1
+    dev: false
+
   /@astrojs/preact/2.0.2_preact@10.12.1:
     resolution: {integrity: sha512-lXmVaftxVwCj2a4R2OI4NeT7SHTKOOk68K9ZGi0/s4bYjR1nGUAMeaAP0akK8t4ij6dDjPxeHQZnJyfMP6oBWg==}
     engines: {node: '>=16.12.0'}
@@ -429,6 +440,14 @@ packages:
     resolution: {integrity: sha512-gziwy+XvY+/B9mq/eurgJMZ4iFnkcqg1wb0tA8BsVfiUPwl7yQKAFrBxrs2rWfKMXyWlVaTFc8rAYcB5VXQEuw==}
     dependencies:
       undici: 5.19.1
+    dev: false
+
+  /@astrolib/analytics/0.3.0_astro@2.0.10:
+    resolution: {integrity: sha512-nwGiH7D6c+fnETlP/Gj51iirReo/9ftn8hYtKi5luiBpKDdUksDRDGh5Ni3PR2XPoHPRk5ah/Pk4IXyxUlR0Xg==}
+    peerDependencies:
+      astro: ^1.2.1 || ^2.0.0
+    dependencies:
+      astro: 2.0.10_@types+node@18.13.0
     dev: false
 
   /@babel/code-frame/7.18.6:
@@ -661,6 +680,11 @@ packages:
   /@bcoe/v8-coverage/0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
+
+  /@builder.io/partytown/0.7.5:
+    resolution: {integrity: sha512-Zbr2Eo0AQ4yzmQr/36/h+6LKjmdVBB3Q5cGzO6rtlIKB/IOpbQVUZW+XAnhpJmJr9sIF97OZjgbhG9k7Sjn4yw==}
+    hasBin: true
+    dev: false
 
   /@emmetio/abbreviation/2.2.3:
     resolution: {integrity: sha512-87pltuCPt99aL+y9xS6GPZ+Wmmyhll2WXH73gG/xpGcQ84DRnptBsI2r0BeIQ0EB/SQTOe2ANPqFqj3Rj5FOGA==}
@@ -6786,6 +6810,11 @@ packages:
   /mri/1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
     engines: {node: '>=4'}
+    dev: false
+
+  /mrmime/1.0.1:
+    resolution: {integrity: sha512-hzzEagAgDyoU1Q6yg5uI+AorQgdvMCur3FcKf7NhMKWsaYg+RnbTyHRa/9IlLF9rf455MOCtcqqrQQ83pPP7Uw==}
+    engines: {node: '>=10'}
     dev: false
 
   /ms/2.0.0:

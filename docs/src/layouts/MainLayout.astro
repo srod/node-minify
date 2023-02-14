@@ -1,6 +1,7 @@
 ---
 import type { MarkdownHeading } from 'astro';
 import type { CollectionEntry } from 'astro:content';
+import { GoogleAnalytics } from '@astrolib/analytics';
 import HeadCommon from '../components/HeadCommon.astro';
 import HeadSEO from '../components/HeadSEO.astro';
 import Header from '../components/Header/Header.astro';
@@ -25,6 +26,7 @@ const currentPage = Astro.url.pathname;
     <title>
       {`${data.title} 🚀 ${SITE.title}`}
     </title>
+    <GoogleAnalytics id="G-FEML1Q9P7B" partytown />
     <style>
       body {
         width: 100%;
