@@ -1,26 +1,34 @@
 ---
-title: "Getting Started"
-description: "Getting Started for node-minify"
+title: 'Getting Started'
+description: 'Getting Started for node-minify'
 ---
 
 ## Installation
 
 ```bash
-npm install @node-minify/core # OR yarn add @node-minify/core OR pnpm add @node-minify/core
+npm install @node-minify/core
+yarn add @node-minify/core
+pnpm add @node-minify/core
 ```
 
 And install the compressor you want
 
 ```bash
-npm install @node-minify/uglify-js # OR yarn add @node-minify/uglify-js OR pnpm add @node-minify/uglify-js
+npm install @node-minify/core
+# Or Yarn
+yarn add @node-minify/core
+# Or pnpm
+pnpm add @node-minify/core
 ```
 
 ## Quick Start
 
 ```js
-const minify = require('@node-minify/core');
-const gcc = require('@node-minify/google-closure-compiler');
-const uglifyjs = require('@node-minify/uglify-js');
+npm install @node-minify/uglify-js
+# Or Yarn
+yarn add @node-minify/uglify-js
+# Or pnpm
+pnpm add @node-minify/uglify-js
 
 // Using Google Closure Compiler
 minify({
@@ -53,24 +61,10 @@ async function doMinify() {
 }
 ```
 
-### ES2015+
-
-```js
-import minify from '@node-minify/core';
-import gcc from '@node-minify/google-closure-compiler';
-
-minify({
-  compressor: gcc,
-  input: 'foo.js',
-  output: 'bar.js',
-  callback: function (err, min) {}
-});
-```
-
 ### In memory
 
 ```js
-const htmlMinifier = require('@node-minify/html-minifier');
+import htmlMinifier from '@node-minify/html-minifier';
 
 const html = `
 <!doctype html>
