@@ -20,45 +20,43 @@ let silence = false;
 /**
  * Run one compressor.
  */
-const runOne = (cli: Settings): Promise<Result> => {
-  return new Promise<Result>((resolve, reject) => {
-    /* eslint-disable  @typescript-eslint/no-var-requires */
-    const compressor =
-      typeof cli.compressor === 'string' ? require(`@node-minify/${cli.compressor}`).default : cli.compressor;
-    /* eslint-enable  @typescript-eslint/no-var-requires */
+const runOne = async (cli: Settings) => {
+  /* eslint-disable  @typescript-eslint/no-var-requires */
+  const compressor =
+    typeof cli.compressor === 'string' ? await import(`@node-minify/${cli.compressor}`) : cli.compressor;
+  /* eslint-enable  @typescript-eslint/no-var-requires */
 
-    const compressorName =
-      typeof cli.compressor === 'string' ? cli.compressor : cli.compressor ? cli.compressor.name : 'unknownCompressor';
+  const compressorName =
+    typeof cli.compressor === 'string' ? cli.compressor : cli.compressor ? cli.compressor.name : 'unknownCompressor';
 
-    const options: Settings = {
-      compressorLabel: compressorName,
-      compressor,
-      input: typeof cli.input === 'string' ? cli.input.split(',') : '',
-      output: cli.output
-    };
+  const options: Settings = {
+    compressorLabel: compressorName,
+    compressor: compressor.default,
+    input: typeof cli.input === 'string' ? cli.input.split(',') : '',
+    output: cli.output
+  };
 
-    if (cli.option) {
-      options.options = JSON.parse(cli.option);
-    }
+  if (cli.option) {
+    options.options = JSON.parse(cli.option);
+  }
 
-    if (!silence) {
-      spinnerStart(options);
-    }
+  if (!silence) {
+    spinnerStart(options);
+  }
 
-    return compress(options)
-      .then((result: Result) => {
-        if (!silence) {
-          spinnerStop(result);
-        }
-        resolve(result);
-      })
-      .catch((err: Error) => {
-        if (!silence) {
-          spinnerError(options);
-        }
-        reject(err);
-      });
-  });
+  return compress(options)
+    .then((result: Result) => {
+      if (!silence) {
+        spinnerStop(result);
+      }
+      return result;
+    })
+    .catch((err: Error) => {
+      if (!silence) {
+        spinnerError(options);
+      }
+      throw err;
+    });
 };
 
 /**
