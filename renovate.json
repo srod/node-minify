@@ -9,6 +9,10 @@
       "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
+    },
+    {
+      "matchPackageNames": ["globby"],
+      "enabled": false
     }
   ],
   "lockFileMaintenance": {
