@@ -1,7 +1,7 @@
 {
   "name": "@node-minify/docs",
   "type": "module",
-  "version": "1.0.0",
+  "version": "8.0.3-beta.0",
   "private": true,
   "scripts": {
     "dev": "astro dev",
