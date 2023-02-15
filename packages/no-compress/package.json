@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/no-compress",
-  "version": "8.0.3-beta.0",
+  "version": "8.0.5-beta.0",
   "description": "no compress plugin for @node-minify, only concatenate",
   "keywords": [
     "concatenate"
