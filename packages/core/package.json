@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/core",
-  "version": "8.0.3-beta.0",
+  "version": "8.0.4-beta.0",
   "description": "core of @node-minify",
   "keywords": [
     "compressor",
