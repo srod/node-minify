@@ -5,10 +5,12 @@ import htmlMinifier from '@node-minify/html-minifier';
 import babelMinify from '@node-minify/babel-minify';
 import gcc from '@node-minify/google-closure-compiler';
 import uglifyjs from '@node-minify/uglify-js';
+import uglifyes from '@node-minify/uglify-es';
 import noCompress from '@node-minify/no-compress';
 import sqwish from '@node-minify/sqwish';
 import crass from '@node-minify/crass';
 import cssnano from '@node-minify/cssnano';
+import csso from '@node-minify/csso';
 import cleanCSS from '@node-minify/clean-css';
 import jsonminify from '@node-minify/jsonminify';
 
@@ -186,6 +188,17 @@ minify({
 });
 
 minify({
+  compressor: uglifyes,
+  input: 'public/js/**/*.js',
+  output: 'public/js-dist/uglifyes-wildcards.js',
+  callback: function (err, min) {
+    console.log('wildcards Uglifyes');
+    console.log(err);
+    //console.log(min);
+  }
+});
+
+minify({
   compressor: uglifyjs,
   input: 'public/js/**/*.js',
   output: 'public/js-dist/uglifyjs-wildcards.js',
@@ -346,6 +359,18 @@ minify({
   output: 'public/css-dist/cssnano-concat.css',
   callback: function (err, min) {
     console.log('cssnano concat');
+    console.log(err);
+    //console.log(min);
+  }
+});
+
+// Using csso
+minify({
+  compressor: csso,
+  input: ['public/css/sample.css', 'public/css/sample2.css'],
+  output: 'public/css-dist/csso-concat.css',
+  callback: function (err, min) {
+    console.log('csso concat');
     console.log(err);
     //console.log(min);
   }

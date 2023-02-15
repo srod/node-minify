@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@node-minify/utils": "workspace:*",
-    "globby": "13.1.3",
+    "globby": "11.1.0",
     "mkdirp": "1.0.4"
   },
   "devDependencies": {
