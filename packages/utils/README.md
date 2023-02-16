@@ -1,4 +1,4 @@
-<p align="center"><img src="/static/node-minify.png" width="348" alt="node-minify"></p>
+<p align="center"><img src="/static/node-minify.svg" width="348" alt="node-minify"></p>
 
 <p align="center">A very light minifier Node.js module.</p>
 

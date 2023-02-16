@@ -1,25 +1,33 @@
 {
   "name": "@node-minify/run",
-  "version": "7.1.0",
+  "version": "8.0.5-beta.0",
   "description": "exec commands for @node-minify",
   "keywords": [
     "compressor",
     "minify",
-    "minifier"
+    "minifier",
+    "run"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
   "homepage": "https://github.com/srod/node-minify/tree/master/packages/run#readme",
   "license": "MIT",
-  "main": "lib/run.js",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "directories": {
-    "lib": "lib",
+    "lib": "dist",
     "test": "__tests__"
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  },
   "files": [
-    "lib"
+    "dist/**/*"
   ],
   "publishConfig": {
     "access": "public"
@@ -30,5 +38,13 @@
   },
   "bugs": {
     "url": "https://github.com/srod/node-minify/issues"
+  },
+  "scripts": {
+    "clean": "pnpm dlx rimraf dist",
+    "build": "pnpm clean && tsup src/index.ts --format cjs,esm --dts --clean --sourcemap",
+    "prepublishOnly": "pnpm build"
+  },
+  "devDependencies": {
+    "@node-minify/types": "workspace:*"
   }
 }

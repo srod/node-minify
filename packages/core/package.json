@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/core",
-  "version": "7.1.0",
+  "version": "8.0.5-beta.0",
   "description": "core of @node-minify",
   "keywords": [
     "compressor",
@@ -10,16 +10,23 @@
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
   "homepage": "https://github.com/srod/node-minify/tree/master/packages/core#readme",
   "license": "MIT",
-  "main": "lib/core.js",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "directories": {
-    "lib": "lib",
+    "lib": "dist",
     "test": "__tests__"
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  },
   "files": [
-    "lib"
+    "dist/**/*"
   ],
   "publishConfig": {
     "access": "public"
@@ -31,9 +38,18 @@
   "bugs": {
     "url": "https://github.com/srod/node-minify/issues"
   },
+  "scripts": {
+    "clean": "pnpm dlx rimraf dist",
+    "build": "pnpm clean && tsup src/index.ts --format cjs,esm --dts --clean --sourcemap",
+    "prepublishOnly": "pnpm build"
+  },
   "dependencies": {
-    "@node-minify/utils": "^7.1.0",
-    "globby": "11.0.4",
+    "@node-minify/utils": "workspace:*",
+    "globby": "11.1.0",
     "mkdirp": "1.0.4"
+  },
+  "devDependencies": {
+    "@node-minify/types": "workspace:*",
+    "@types/mkdirp": "^1.0.2"
   }
 }
