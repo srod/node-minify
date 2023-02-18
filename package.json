@@ -60,7 +60,7 @@
     "@node-minify/utils": "workspace:*",
     "@node-minify/yui": "workspace:*",
     "@tsconfig/node16": "1.0.3",
-    "@types/node": "18.13.0",
+    "@types/node": "18.14.0",
     "@typescript-eslint/eslint-plugin": "5.52.0",
     "@typescript-eslint/parser": "5.52.0",
     "@vitest/coverage-c8": "0.28.5",
