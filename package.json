@@ -26,16 +26,15 @@
     "clean:git": "git restore --source=HEAD --staged --worktree -- tests/fixtures",
     "eslint": "eslint --ext .ts .",
     "lerna": "lerna",
-    "lint": "pnpm run eslint || true",
     "publish-latest": "NPM_CONFIG_OTP=xxx pnpm lerna publish --tag-version-prefix ''",
     "publish-next": "NPM_CONFIG_OTP=xxx pnpm lerna publish --tag-version-prefix '' --preid beta --npm-tag next",
     "prettier-project": "prettier --write './packages/**/{bin,src,__tests__}/**/*.js'",
     "showpack": "pnpm lerna pack --dry",
-    "pretest": "pnpm run build && pnpm run eslint",
+    "pretest": "pnpm run eslint",
     "test": "vitest --run",
     "posttest": "pnpm run clean:test && pnpm run clean:git",
     "test:watch": "vitest",
-    "pretest:ci": "pnpm run build && pnpm run eslint",
+    "pretest:ci": "pnpm run eslint",
     "test:ci": "vitest run --coverage",
     "test:ui": "vitest --ui"
   },
@@ -77,6 +76,7 @@
     "rimraf": "3.0.2",
     "tsup": "6.6.3",
     "typescript": "4.9.5",
+    "vite-tsconfig-paths": "4.0.5",
     "vitest": "0.28.5"
   },
   "lint-staged": {
