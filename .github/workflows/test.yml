@@ -48,7 +48,7 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       - name: Run tests
-        run: pnpm coverage:ci
+        run: pnpm test:ci
         env:
           CI: true
 
