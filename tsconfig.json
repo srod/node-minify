@@ -3,7 +3,29 @@
   "compilerOptions": {
     "declaration": true,
     "removeComments": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@node-minify/babel-minify": ["packages/babel-minify/src"],
+      "@node-minify/clean-css": ["packages/clean-css/src"],
+      "@node-minify/cli": ["packages/cli/src"],
+      "@node-minify/core": ["packages/core/src"],
+      "@node-minify/crass": ["packages/crass/src"],
+      "@node-minify/cssnano": ["packages/cssnano/src"],
+      "@node-minify/csso": ["packages/csso/src"],
+      "@node-minify/google-closure-compiler": ["packages/google-closure-compiler/src"],
+      "@node-minify/html-minifier": ["packages/html-minifier/src"],
+      "@node-minify/jsonminify": ["packages/jsonminify/src"],
+      "@node-minify/no-compress": ["packages/no-compress/src"],
+      "@node-minify/run": ["packages/run/src"],
+      "@node-minify/sqwish": ["packages/sqwish/src"],
+      "@node-minify/terser": ["packages/terser/src"],
+      "@node-minify/types": ["packages/types/src"],
+      "@node-minify/uglify-es": ["packages/uglify-es/src"],
+      "@node-minify/uglify-js": ["packages/uglify-js/src"],
+      "@node-minify/utils": ["packages/utils/src"],
+      "@node-minify/yui": ["packages/yui/src"]
+    }
   },
   "exclude": ["node_modules", "**/__tests__/**", "**/dist/**"]
 }
