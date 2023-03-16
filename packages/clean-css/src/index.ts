@@ -17,17 +17,18 @@ import { MinifierOptions } from '@node-minify/types';
  * @param {Object} settings
  * @param {String} content
  * @param {Function} callback
+ * @param {Number} index
  */
 const minifyCleanCSS = ({ settings, content, callback, index }: MinifierOptions) => {
-  if (settings && settings.options && settings.options.sourceMap) {
+  if (settings?.options?.sourceMap) {
     settings.options._sourceMap = settings.options.sourceMap;
     settings.options.sourceMap = true;
   }
-  const _cleanCSS = new CleanCSS(settings && settings.options).minify(content || '');
+  const _cleanCSS = new CleanCSS(settings && { returnPromise: false, ...settings.options }).minify(content ?? '');
   const contentMinified = _cleanCSS.styles;
-  if (_cleanCSS.sourceMap && settings && settings.options && typeof settings.options._sourceMap === 'object') {
+  if (_cleanCSS.sourceMap && typeof settings?.options?._sourceMap === 'object') {
     utils.writeFile({
-      file: settings.options._sourceMap.url ? settings.options._sourceMap.url : '',
+      file: typeof settings.options._sourceMap.url === 'string' ? settings.options._sourceMap.url : '',
       content: _cleanCSS.sourceMap.toString(),
       index
     });

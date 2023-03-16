@@ -26,7 +26,7 @@ const start = (options: Settings) => {
 /**
  * Stop spinner.
  *
- * @param {Object} result
+ * @param result {Object}
  */
 const stop = (result: Result) => {
   spinner.text =
@@ -43,7 +43,7 @@ const stop = (result: Result) => {
 /**
  * Mark spinner as failed.
  *
- * @param {Object} options
+ * @param options {Object}
  */
 const error = (options: Settings) => {
   spinner.text = 'Error - file(s) not compressed with ' + chalk.red(options.compressorLabel);
