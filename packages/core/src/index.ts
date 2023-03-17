@@ -36,9 +36,9 @@ const minify = (settings: Settings) => {
           reject(err);
         });
     } else {
-      const minified = method(settings);
+      const minified: string = method(settings);
       if (settings.callback) {
-        settings.callback(null, typeof minified === 'string' ? minified : '');
+        settings.callback(null, minified);
       }
       resolve(minified);
     }

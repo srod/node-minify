@@ -19,6 +19,7 @@
   "packageManager": "pnpm@7.29.3",
   "scripts": {
     "build": "lerna run build",
+    "build:reset-cache": "pnpm dlx nx reset",
     "clean": "pnpm run clean:build && pnpm run clean:packages",
     "clean:build": "pnpm dlx rimraf packages/*/dist docs/dist docs/.astro",
     "clean:packages": "pnpm run lerna clean -y",

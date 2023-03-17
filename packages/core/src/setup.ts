@@ -28,7 +28,7 @@ const defaultSettings = {
  * @param {Object} inputSettings
  * @return {Object}
  */
-const setup = (inputSettings: object) => {
+const setup = (inputSettings: Settings) => {
   let settings: Settings = Object.assign(utils.clone(defaultSettings), inputSettings);
 
   // In memory
@@ -39,12 +39,18 @@ const setup = (inputSettings: object) => {
 
   checkMandatories(inputSettings);
 
-  settings = Object.assign(settings, wildcards(settings.input, settings.publicFolder));
-  settings = Object.assign(
-    settings,
-    checkOutput(settings.input, settings.output, settings.publicFolder, settings.replaceInPlace)
-  );
-  settings = Object.assign(settings, setPublicFolder(settings.input, settings.publicFolder));
+  if (settings.input) {
+    settings = Object.assign(settings, wildcards(settings.input, settings.publicFolder));
+  }
+  if (settings.input && settings.output) {
+    settings = Object.assign(
+      settings,
+      checkOutput(settings.input, settings.output, settings.publicFolder, settings.replaceInPlace)
+    );
+  }
+  if (settings.input && settings.publicFolder) {
+    settings = Object.assign(settings, setPublicFolder(settings.input, settings.publicFolder));
+  }
 
   return settings;
 };
@@ -59,16 +65,16 @@ const setup = (inputSettings: object) => {
  * @param {Boolean} replaceInPlace - True to replace file in same folder
  * @return {Object}
  */
-const checkOutput = (input: string | string[], output: string, publicFolder: string, replaceInPlace: boolean) => {
+const checkOutput = (input: string | string[], output: string, publicFolder?: string, replaceInPlace?: boolean) => {
   const reg = new RegExp('\\$1');
   if (reg.test(output)) {
     if (Array.isArray(input)) {
       const outputMin = input.map(file =>
-        utils.setFileNameMin(file, output, replaceInPlace ? null : publicFolder, replaceInPlace)
+        utils.setFileNameMin(file, output, replaceInPlace ? undefined : publicFolder, replaceInPlace)
       );
       return { output: outputMin };
     } else {
-      return { output: utils.setFileNameMin(input, output, replaceInPlace ? null : publicFolder, replaceInPlace) };
+      return { output: utils.setFileNameMin(input, output, replaceInPlace ? undefined : publicFolder, replaceInPlace) };
     }
   }
 };
@@ -80,7 +86,7 @@ const checkOutput = (input: string | string[], output: string, publicFolder: str
  * @param {String} publicFolder - Path to the public folder
  * @return {Object}
  */
-const wildcards = (input: string | string[], publicFolder: string) => {
+const wildcards = (input: string | string[], publicFolder?: string) => {
   // If it's a string
   if (!Array.isArray(input)) {
     return wildcardsString(input, publicFolder);
@@ -96,7 +102,7 @@ const wildcards = (input: string | string[], publicFolder: string) => {
  * @param {String} publicFolder - Path to the public folder
  * @return {Object}
  */
-const wildcardsString = (input: string, publicFolder: string) => {
+const wildcardsString = (input: string, publicFolder?: string) => {
   const output: { input?: string[] } = {};
 
   if (input.indexOf('*') > -1) {
@@ -113,7 +119,7 @@ const wildcardsString = (input: string, publicFolder: string) => {
  * @param {String} publicFolder - Path to the public folder
  * @return {Object}
  */
-const wildcardsArray = (input: string[], publicFolder: string) => {
+const wildcardsArray = (input: string[], publicFolder?: string) => {
   const output: { input?: string[] } = {};
   let isWildcardsPresent = false;
 
@@ -150,7 +156,7 @@ const wildcardsArray = (input: string[], publicFolder: string) => {
  * @param {String} publicFolder - Path to the public folder
  * @return {Object}
  */
-const getFilesFromWildcards = (input: string, publicFolder: string) => {
+const getFilesFromWildcards = (input: string, publicFolder?: string) => {
   let output: string[] = [];
 
   if (input.indexOf('*') > -1) {
@@ -224,7 +230,7 @@ const checkMandatoriesMemoryContent = (settings: Settings) => {
  * @param {String} setting
  * @param {Object} settings
  */
-const mandatory = (setting: string, settings: Settings) => {
+const mandatory = (setting: string, settings: { [key: string]: any }) => {
   if (!settings[setting]) {
     throw new Error(setting + ' is mandatory.');
   }

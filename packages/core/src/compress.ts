@@ -22,7 +22,9 @@ const compress = (settings: Settings): Promise<string> | string => {
     throw new Error(`compressor should be a function, maybe you forgot to install the compressor`);
   }
 
-  createDirectory(settings.output);
+  if (settings.output) {
+    createDirectory(settings.output);
+  }
 
   if (Array.isArray(settings.output)) {
     return settings.sync ? compressArrayOfFilesSync(settings) : compressArrayOfFilesAsync(settings);

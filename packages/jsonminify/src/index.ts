@@ -19,7 +19,7 @@ import { MinifierOptions } from '@node-minify/types';
  * @param {Function} callback
  */
 const minifyJsonMinify = ({ settings, content, callback, index }: MinifierOptions) => {
-  const contentMinified = jsonminify(content || '');
+  const contentMinified = jsonminify(content ?? '');
   if (settings && !settings.content && settings.output) {
     settings.output && utils.writeFile({ file: settings.output, content: contentMinified, index });
   }

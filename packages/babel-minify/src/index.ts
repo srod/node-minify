@@ -12,9 +12,21 @@ import minify from 'babel-preset-minify';
 import { utils } from '@node-minify/utils';
 import { MinifierOptions } from '@node-minify/types';
 
-interface BabelOptions {
+type BabelOptions = {
   presets: string[];
-}
+};
+
+type OptionsBabel = {
+  babelrc?: string;
+};
+
+type SettingsBabel = {
+  options: OptionsBabel;
+};
+
+type MinifierOptionsBabel = {
+  settings: SettingsBabel;
+};
 
 /**
  * Run babel-minify.
@@ -22,26 +34,29 @@ interface BabelOptions {
  * @param {Object} settings
  * @param {String} content
  * @param {Function} callback
+ * @param {Number} index
  */
-const minifyBabel = ({ settings, content, callback, index }: MinifierOptions) => {
+const minifyBabel = ({ settings, content, callback, index }: MinifierOptions & MinifierOptionsBabel) => {
   let babelOptions: BabelOptions = {
     presets: []
   };
 
-  if (settings && settings.options && settings.options.babelrc) {
+  if (settings?.options?.babelrc) {
     babelOptions = JSON.parse(utils.readFile(settings.options.babelrc));
   }
 
-  if (settings && settings.options && settings.options.presets) {
+  if (settings?.options?.presets) {
     const babelrcPresets = babelOptions.presets || [];
-    babelOptions.presets = babelrcPresets.concat(settings.options.presets);
+    babelOptions.presets = babelrcPresets.concat(
+      Array.isArray(settings.options.presets) ? settings.options.presets : []
+    );
   }
 
   if (babelOptions.presets.indexOf('minify') === -1) {
     babelOptions.presets = babelOptions.presets.concat([minify]);
   }
 
-  const contentMinified = transform(content || '', babelOptions);
+  const contentMinified = transform(content ?? '', babelOptions);
   if (settings && !settings.content && settings.output) {
     settings.output && utils.writeFile({ file: settings.output, content: contentMinified.code, index });
   }

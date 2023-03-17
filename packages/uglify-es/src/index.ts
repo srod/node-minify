@@ -9,19 +9,19 @@
  */
 import uglifyES from 'uglify-es';
 import { utils } from '@node-minify/utils';
-import { MinifierOptions, Options, Settings, Dictionary } from '@node-minify/types';
+import { MinifierOptions, Dictionary } from '@node-minify/types';
 
-interface OptionsUglifyES extends Omit<Options, 'sourceMap'> {
+type OptionsUglifyES = {
   sourceMap?: { filename: string };
-}
+};
 
-interface SettingsUglifyES extends Omit<Settings, 'options'> {
+type SettingsUglifyES = {
   options: OptionsUglifyES;
-}
+};
 
-interface MinifierOptionsUglifyES extends Omit<MinifierOptions, 'settings'> {
+type MinifierOptionsUglifyES = {
   settings: SettingsUglifyES;
-}
+};
 
 /**
  * Run uglifyES.
@@ -30,18 +30,18 @@ interface MinifierOptionsUglifyES extends Omit<MinifierOptions, 'settings'> {
  * @param {String} content
  * @param {Function} callback
  */
-const minifyUglifyES = ({ settings, content, callback, index }: MinifierOptionsUglifyES) => {
-  let content2: string | Dictionary<string> = content || '';
-  if (settings && typeof settings.options.sourceMap === 'object') {
-    content2 = { [settings.options.sourceMap.filename || '']: content || '' };
+const minifyUglifyES = ({ settings, content, callback, index }: MinifierOptions & MinifierOptionsUglifyES) => {
+  let content2: string | Dictionary<string> = content ?? '';
+  if (typeof settings.options.sourceMap === 'object') {
+    content2 = { [settings.options.sourceMap.filename ?? '']: content ?? '' };
   }
-  const contentMinified = uglifyES.minify(content2, settings && settings.options);
+  const contentMinified = uglifyES.minify(content2, settings.options);
   if (contentMinified.error) {
     if (callback) {
       return callback(contentMinified.error);
     }
   }
-  if (contentMinified.map && settings && settings.options.sourceMap) {
+  if (contentMinified.map && settings.options.sourceMap) {
     utils.writeFile({ file: `${settings.output}.map`, content: contentMinified.map, index });
   }
   if (settings && !settings.content && settings.output) {

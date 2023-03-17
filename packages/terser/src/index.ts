@@ -9,19 +9,19 @@
  */
 import { minify } from 'terser';
 import { utils } from '@node-minify/utils';
-import { MinifierOptions, Options, Settings } from '@node-minify/types';
+import { MinifierOptions } from '@node-minify/types';
 
-interface OptionsTerser extends Omit<Options, 'sourceMap'> {
+type OptionsTerser = {
   sourceMap?: { url: string };
-}
+};
 
-interface SettingsTerser extends Omit<Settings, 'options'> {
+type SettingsTerser = {
   options: OptionsTerser;
-}
+};
 
-interface MinifierOptionsTerser extends Omit<MinifierOptions, 'settings'> {
+type MinifierOptionsTerser = {
   settings: SettingsTerser;
-}
+};
 
 /**
  * Run terser.
@@ -30,16 +30,10 @@ interface MinifierOptionsTerser extends Omit<MinifierOptions, 'settings'> {
  * @param {String} content
  * @param {Function} callback
  */
-const minifyTerser = async ({ settings, content, callback, index }: MinifierOptionsTerser) => {
+const minifyTerser = async ({ settings, content, callback, index }: MinifierOptions & MinifierOptionsTerser) => {
   try {
-    const contentMinified = await minify(content || '', settings && settings.options);
-    if (
-      contentMinified.map &&
-      settings &&
-      settings.options &&
-      typeof settings.options.sourceMap === 'object' &&
-      typeof settings.options.sourceMap.url === 'string'
-    ) {
+    const contentMinified = await minify(content ?? '', settings?.options);
+    if (contentMinified.map && typeof settings?.options?.sourceMap?.url === 'string') {
       utils.writeFile({ file: settings.options.sourceMap.url, content: contentMinified.map, index });
     }
     if (settings && !settings.content && settings.output) {
