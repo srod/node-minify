@@ -6,6 +6,7 @@
 
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import childProcess from 'child_process';
+import { Options } from '@node-minify/types';
 import minify from '../src';
 import gcc from '../../google-closure-compiler/src';
 import noCompress from '../../no-compress/src';
@@ -14,7 +15,6 @@ import uglifyes from '../../uglify-es/src';
 import htmlMinifier from '../../html-minifier/src';
 import { filesJS } from '../../../tests/files-path';
 import { runOneTest, tests } from '../../../tests/fixtures';
-import { Options } from '../../../tests/types';
 
 const compressorLabel = 'uglify-es';
 const compressor = uglifyes;

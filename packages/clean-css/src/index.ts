@@ -11,6 +11,22 @@ import CleanCSS from 'clean-css';
 import { utils } from '@node-minify/utils';
 import { MinifierOptions } from '@node-minify/types';
 
+// type OptionsPossibleCleanCSS = string | boolean | Record<string, string> | { url: string };
+
+// type OptionsCleanCSS = {
+//   // _sourceMap: boolean | { url: string };
+//   // sourceMap: boolean | { url: string };
+//   [Key: string]: OptionsPossibleCleanCSS | Record<string, OptionsPossibleCleanCSS>;
+// };
+
+// type SettingsCleanCSS = {
+//   options: OptionsCleanCSS;
+// };
+
+// type MinifierOptionsCleanCSS = {
+//   settings: SettingsCleanCSS;
+// };
+
 /**
  * Run clean-css.
  *

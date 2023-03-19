@@ -5,11 +5,11 @@
  */
 
 import { describe, expect, test } from 'vitest';
+import { Options } from '@node-minify/types';
 import minify from '../../core/src';
 import cleanCss from '../src';
 import { filesCSS } from '../../../tests/files-path';
 import { runOneTest, tests } from '../../../tests/fixtures';
-import { Options } from '../../../tests/types';
 
 const compressorLabel = 'clean-css';
 const compressor = cleanCss;

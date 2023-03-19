@@ -6,11 +6,11 @@
 
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import childProcess from 'child_process';
+import { Options } from '@node-minify/types';
 import minify from '../../core/src';
 import yui from '../src';
 import { filesJS } from '../../../tests/files-path';
 import { runOneTest, tests } from '../../../tests/fixtures';
-import { Options } from '../../../tests/types';
 
 const compressorLabel = 'yui';
 const compressor = yui;
