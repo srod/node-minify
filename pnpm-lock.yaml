@@ -34,7 +34,7 @@ importers:
       eslint-config-prettier: 8.8.0
       eslint-plugin-prettier: 4.2.1
       husky: 8.0.3
-      lerna: 6.6.0
+      lerna: 6.6.1
       lint-staged: 13.2.0
       node-notifier: 10.0.1
       prettier: 2.8.7
@@ -74,7 +74,7 @@ importers:
       eslint-config-prettier: 8.8.0_eslint@8.36.0
       eslint-plugin-prettier: 4.2.1_ywlv3zveqg2kxfq44lflihh5mm
       husky: 8.0.3
-      lerna: 6.6.0
+      lerna: 6.6.1
       lint-staged: 13.2.0
       node-notifier: 10.0.1
       prettier: 2.8.7
@@ -1008,8 +1008,8 @@ packages:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.14
 
-  /@lerna/child-process/6.6.0:
-    resolution: {integrity: sha512-Y1elVHYKBLvdseKu74ud+pWqQi0I81AeWBKLRs0ehnD2EZsmy/f5ILkRcNU9aUp4GPF1TMUPAq2/+0By97gb1g==}
+  /@lerna/child-process/6.6.1:
+    resolution: {integrity: sha512-yUCDCcRNNbI9UUsUB6FYEmDHpo5Tn/f0q5D7vhDP4i6Or8kBj82y7+e31hwfLvK2ykOYlDVs2MxAluH/+QUBOQ==}
     engines: {node: ^14.15.0 || >=16.0.0}
     dependencies:
       chalk: 4.1.2
@@ -1017,11 +1017,11 @@ packages:
       strong-log-transformer: 2.1.0
     dev: true
 
-  /@lerna/create/6.6.0:
-    resolution: {integrity: sha512-F1Q4bB9QzePSnIPd2ZY6a+3l/aZiYYmN1J0ednr8O+xMOyZsumX29c4XvnS7rgovz4aFqi+XdXiL35vmvrSfjA==}
+  /@lerna/create/6.6.1:
+    resolution: {integrity: sha512-GDmHFhQ0mr0RcXWXrsLyfMV6ch/dZV/Ped1e6sFVQhsLL9P+FFXX1ZWxa/dQQ90VWF2qWcmK0+S/L3kUz2xvTA==}
     engines: {node: ^14.15.0 || >=16.0.0}
     dependencies:
-      '@lerna/child-process': 6.6.0
+      '@lerna/child-process': 6.6.1
       dedent: 0.7.0
       fs-extra: 9.1.0
       init-package-json: 3.0.2
@@ -1039,8 +1039,8 @@ packages:
       - supports-color
     dev: true
 
-  /@lerna/legacy-package-management/6.6.0_nx@15.8.7+typescript@4.9.5:
-    resolution: {integrity: sha512-vGkQv7nuZNhjs1+Arm1m+CKyBblig4oSv/PakyNnqTnRNryIgdXqYFn8DGGkUsA3qXLlouY41Sz5xEY/7hjNEA==}
+  /@lerna/legacy-package-management/6.6.1_nx@15.8.7+typescript@4.9.5:
+    resolution: {integrity: sha512-0EYxSFr34VgeudA5rvjGJSY7s4seITMVB7AJ9LRFv9QDUk6jpvapV13ZAaKnhDTxX5vNCfnJuWHXXWq0KyPF/Q==}
     engines: {node: ^14.15.0 || >=16.0.0}
     dependencies:
       '@npmcli/arborist': 6.2.3
@@ -1087,7 +1087,6 @@ packages:
       p-queue: 6.6.2
       p-waterfall: 2.1.1
       pacote: 13.6.2
-      path-exists: 4.0.0
       pify: 5.0.0
       pretty-format: 29.4.3
       read-cmd-shim: 3.0.0
@@ -6007,14 +6006,14 @@ packages:
       package-json: 8.1.0
     dev: false
 
-  /lerna/6.6.0:
-    resolution: {integrity: sha512-E1uxpcKVkXPL7IZd8jXmoGlES878M7ConEpkX1o+KTs99ir9c3StIOnrhULYHP3VacUyjtxAPyPCCSg6rIipaw==}
+  /lerna/6.6.1:
+    resolution: {integrity: sha512-WJtrvmbmR+6hMB9b5pvsxJzew0lRL6hARgW/My9BM4vYaxwPIA2I0riv3qQu5Zd7lYse7FEqJkTnl9Kn1bXhLA==}
     engines: {node: ^14.15.0 || >=16.0.0}
     hasBin: true
     dependencies:
-      '@lerna/child-process': 6.6.0
-      '@lerna/create': 6.6.0
-      '@lerna/legacy-package-management': 6.6.0_nx@15.8.7+typescript@4.9.5
+      '@lerna/child-process': 6.6.1
+      '@lerna/create': 6.6.1
+      '@lerna/legacy-package-management': 6.6.1_nx@15.8.7+typescript@4.9.5
       '@npmcli/arborist': 6.2.3
       '@npmcli/run-script': 4.1.7
       '@nrwl/devkit': 15.8.7_nx@15.8.7+typescript@4.9.5
@@ -6067,12 +6066,11 @@ packages:
       p-reduce: 2.1.0
       p-waterfall: 2.1.1
       pacote: 13.6.2
-      path-exists: 4.0.0
       pify: 5.0.0
       read-cmd-shim: 3.0.0
       read-package-json: 5.0.1
       resolve-from: 5.0.0
-      rimraf: 3.0.2
+      rimraf: 4.4.1
       semver: 7.3.8
       signal-exit: 3.0.7
       slash: 3.0.0
@@ -8866,6 +8864,14 @@ packages:
     hasBin: true
     dependencies:
       glob: 7.2.3
+    dev: true
+
+  /rimraf/4.4.1:
+    resolution: {integrity: sha512-Gk8NlF062+T9CqNGn6h4tls3k6T1+/nXdOcSZVikNVtlRdYpA7wRJJMoXmuvOnLW844rPjdQ7JgXCYM6PPC/og==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dependencies:
+      glob: 9.3.2
     dev: true
 
   /rollup/3.20.0:
