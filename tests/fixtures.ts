@@ -3,7 +3,17 @@ import { Settings } from '@node-minify/types';
 import minify from '../packages/core/src';
 import { filesJS, filesCSS, filesHTML, filesJSON } from './files-path';
 
-const runOneTest = ({ options, compressorLabel, compressor, sync }: Settings) => {
+// type SettingsTests = {
+//   options: {
+//     it: string;
+//     minify: Settings;
+//   };
+//   compressorLabel: string;
+//   compressor: any;
+//   sync: boolean;
+// };
+
+const runOneTest = ({ options, compressorLabel, compressor, sync }: Settings /* & SettingsTests */) => {
   if (!options) {
     return false;
   }
