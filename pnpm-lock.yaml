@@ -86,7 +86,7 @@ importers:
 
   docs:
     specifiers:
-      '@astrojs/partytown': 1.1.1
+      '@astrojs/partytown': 1.2.0
       '@astrojs/preact': ^2.0.2
       '@astrolib/analytics': 0.3.0
       '@types/node': ^18.0.0
@@ -94,7 +94,7 @@ importers:
       html-escaper: ^3.0.3
       preact: ^10.7.3
     dependencies:
-      '@astrojs/partytown': 1.1.1
+      '@astrojs/partytown': 1.2.0
       '@astrojs/preact': 2.1.0_preact@10.13.1
       '@astrolib/analytics': 0.3.0_astro@2.1.7
       '@types/node': 18.15.10
@@ -394,8 +394,8 @@ packages:
       - supports-color
     dev: false
 
-  /@astrojs/partytown/1.1.1:
-    resolution: {integrity: sha512-IaKzYieiuxnSRGSuAivV92kDTa0ENbei4Y0yEAowhyzV6MxJJImYEUKycSo/HUJwPQQmsPmBbp/IA4pyoL1Wxg==}
+  /@astrojs/partytown/1.2.0:
+    resolution: {integrity: sha512-AjrroKpBJR4rs0CLlmLqZ82Dfa3fFvN9mQZ3cfOXQYo85Rc/85R01MZiS1S1G5IzqWi2TDWIMH6R1cm12aGKDg==}
     dependencies:
       '@builder.io/partytown': 0.7.6
       mrmime: 1.0.1
