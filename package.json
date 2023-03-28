@@ -63,8 +63,8 @@
     "@types/node": "18.15.10",
     "@typescript-eslint/eslint-plugin": "5.57.0",
     "@typescript-eslint/parser": "5.57.0",
-    "@vitest/coverage-c8": "0.29.7",
-    "@vitest/ui": "0.29.7",
+    "@vitest/coverage-c8": "0.29.8",
+    "@vitest/ui": "0.29.8",
     "copyfiles": "2.4.1",
     "eslint": "8.36.0",
     "eslint-config-prettier": "8.8.0",
@@ -78,7 +78,7 @@
     "tsup": "6.7.0",
     "typescript": "4.9.5",
     "vite-tsconfig-paths": "4.0.7",
-    "vitest": "0.29.7"
+    "vitest": "0.29.8"
   },
   "lint-staged": {
     "*.ts": [
