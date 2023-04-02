@@ -161,11 +161,11 @@ importers:
       '@node-minify/types': workspace:*
       '@node-minify/utils': workspace:*
       '@types/mkdirp': ^1.0.2
-      glob: 9.3.2
+      glob: 9.3.4
       mkdirp: 1.0.4
     dependencies:
       '@node-minify/utils': link:../utils
-      glob: 9.3.2
+      glob: 9.3.4
       mkdirp: 1.0.4
     devDependencies:
       '@node-minify/types': link:../types
@@ -1248,7 +1248,7 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       '@npmcli/name-from-folder': 2.0.0
-      glob: 9.3.2
+      glob: 9.3.4
       minimatch: 7.4.3
       read-package-json-fast: 3.0.2
     dev: true
@@ -3371,7 +3371,7 @@ packages:
     dependencies:
       '@npmcli/fs': 3.1.0
       fs-minipass: 3.0.1
-      glob: 9.3.2
+      glob: 9.3.4
       lru-cache: 7.18.3
       minipass: 4.2.5
       minipass-collect: 1.0.2
@@ -5092,12 +5092,12 @@ packages:
       minimatch: 5.1.6
       once: 1.4.0
 
-  /glob/9.3.2:
-    resolution: {integrity: sha512-BTv/JhKXFEHsErMte/AnfiSv8yYOLLiyH2lTg8vn02O21zWFgHPTfxtgn1QRe7NRgggUhC8hacR2Re94svHqeA==}
+  /glob/9.3.4:
+    resolution: {integrity: sha512-qaSc49hojMOv1EPM4EuyITjDSgSKI0rthoHnvE81tcOi1SCVndHko7auqxdQ14eiQG2NDBJBE86+2xIrbIvrbA==}
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
       fs.realpath: 1.0.0
-      minimatch: 7.4.3
+      minimatch: 8.0.2
       minipass: 4.2.5
       path-scurry: 1.6.3
 
@@ -6915,6 +6915,13 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       brace-expansion: 2.0.1
+    dev: true
+
+  /minimatch/8.0.2:
+    resolution: {integrity: sha512-ikHGF67ODxj7vS5NKU2wvTsFLbExee+KXVCnBWh8Cg2hVJfBMQIrlo50qru/09E0EifjnU8dZhJ/iHhyXJM6Mw==}
+    engines: {node: '>=16 || 14 >=14.17'}
+    dependencies:
+      brace-expansion: 2.0.1
 
   /minimist-options/4.1.0:
     resolution: {integrity: sha512-Q4r8ghd80yhO/0j1O3B2BjweX3fiHg9cdOwjJd2J76Q135c+NDxGCqdYKQ1SKBuFfgWbAUzBfvYjPUEeNgqN1A==}
@@ -8490,7 +8497,7 @@ packages:
     resolution: {integrity: sha512-AaHqXxfAVa+fNL07x8iAghfKOds/XXsu7zoouIVsbm7PEbQ3nMWXlvjcbrNLjElnUHWQtAo4QEa0RXuvD4XlpA==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      glob: 9.3.2
+      glob: 9.3.4
       json-parse-even-better-errors: 3.0.0
       normalize-package-data: 5.0.0
       npm-normalize-package-bin: 3.0.0
@@ -8845,7 +8852,7 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
-      glob: 9.3.2
+      glob: 9.3.4
     dev: true
 
   /rollup/3.20.2:
