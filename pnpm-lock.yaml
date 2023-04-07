@@ -35,7 +35,7 @@ importers:
       eslint-plugin-prettier: 4.2.1
       husky: 8.0.3
       lerna: 6.6.1
-      lint-staged: 13.2.0
+      lint-staged: 13.2.1
       node-notifier: 10.0.1
       prettier: 2.8.7
       rimraf: 3.0.2
@@ -75,7 +75,7 @@ importers:
       eslint-plugin-prettier: 4.2.1_ybb3aapb7235womryl2tm5ze2u
       husky: 8.0.3
       lerna: 6.6.1
-      lint-staged: 13.2.0
+      lint-staged: 13.2.1
       node-notifier: 10.0.1
       prettier: 2.8.7
       rimraf: 3.0.2
@@ -1012,7 +1012,7 @@ packages:
     engines: {node: ^14.15.0 || >=16.0.0}
     dependencies:
       chalk: 4.1.2
-      execa: 5.0.0
+      execa: 5.1.1
       strong-log-transformer: 2.1.0
     dev: true
 
@@ -4601,9 +4601,9 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       cross-spawn: 7.0.3
-      get-stream: 6.0.0
+      get-stream: 6.0.1
       human-signals: 2.1.0
-      is-stream: 2.0.0
+      is-stream: 2.0.1
       merge-stream: 2.0.0
       npm-run-path: 4.0.1
       onetime: 5.1.2
@@ -6120,8 +6120,8 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dev: true
 
-  /lint-staged/13.2.0:
-    resolution: {integrity: sha512-GbyK5iWinax5Dfw5obm2g2ccUiZXNGtAS4mCbJ0Lv4rq6iEtfBSjOYdcbOtAIFtM114t0vdpViDDetjVTSd8Vw==}
+  /lint-staged/13.2.1:
+    resolution: {integrity: sha512-8gfzinVXoPfga5Dz/ZOn8I2GOhf81Wvs+KwbEXQn/oWZAvCVS2PivrXfVbFJc93zD16uC0neS47RXHIjXKYZQw==}
     engines: {node: ^14.13.1 || >=16.0.0}
     hasBin: true
     dependencies:
@@ -9446,7 +9446,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       del: 6.1.1
-      is-stream: 2.0.0
+      is-stream: 2.0.1
       temp-dir: 2.0.0
       type-fest: 0.16.0
       unique-string: 2.0.0
