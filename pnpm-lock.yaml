@@ -161,11 +161,11 @@ importers:
       '@node-minify/types': workspace:*
       '@node-minify/utils': workspace:*
       '@types/mkdirp': ^1.0.2
-      glob: 9.3.4
+      glob: 9.3.5
       mkdirp: 1.0.4
     dependencies:
       '@node-minify/utils': link:../utils
-      glob: 9.3.4
+      glob: 9.3.5
       mkdirp: 1.0.4
     devDependencies:
       '@node-minify/types': link:../types
@@ -1247,7 +1247,7 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       '@npmcli/name-from-folder': 2.0.0
-      glob: 9.3.4
+      glob: 9.3.5
       minimatch: 7.4.4
       read-package-json-fast: 3.0.2
     dev: true
@@ -3354,7 +3354,7 @@ packages:
     dependencies:
       '@npmcli/fs': 3.1.0
       fs-minipass: 3.0.1
-      glob: 9.3.4
+      glob: 9.3.5
       lru-cache: 7.18.3
       minipass: 4.2.5
       minipass-collect: 1.0.2
@@ -5070,8 +5070,8 @@ packages:
       minimatch: 5.1.6
       once: 1.4.0
 
-  /glob/9.3.4:
-    resolution: {integrity: sha512-qaSc49hojMOv1EPM4EuyITjDSgSKI0rthoHnvE81tcOi1SCVndHko7auqxdQ14eiQG2NDBJBE86+2xIrbIvrbA==}
+  /glob/9.3.5:
+    resolution: {integrity: sha512-e1LleDykUz2Iu+MTYdkSsuWX8lvAjAcs0Xef0lNIu0S2wOAzuTxCJtcd9S3cijlwYF18EsU3rzb8jPVobxDh9Q==}
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
       fs.realpath: 1.0.0
@@ -8475,7 +8475,7 @@ packages:
     resolution: {integrity: sha512-AaHqXxfAVa+fNL07x8iAghfKOds/XXsu7zoouIVsbm7PEbQ3nMWXlvjcbrNLjElnUHWQtAo4QEa0RXuvD4XlpA==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      glob: 9.3.4
+      glob: 9.3.5
       json-parse-even-better-errors: 3.0.0
       normalize-package-data: 5.0.0
       npm-normalize-package-bin: 3.0.0
@@ -8830,7 +8830,7 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
-      glob: 9.3.4
+      glob: 9.3.5
     dev: true
 
   /rollup/3.20.2:

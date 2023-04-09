@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@node-minify/utils": "workspace:*",
-    "glob": "9.3.4",
+    "glob": "9.3.5",
     "mkdirp": "1.0.4"
   },
   "devDependencies": {
