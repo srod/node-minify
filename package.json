@@ -16,7 +16,7 @@
   "engines": {
     "node": ">=16.0.0"
   },
-  "packageManager": "pnpm@7.31.0",
+  "packageManager": "pnpm@7.32.0",
   "scripts": {
     "build": "lerna run build",
     "build:reset-cache": "pnpm dlx nx reset",
