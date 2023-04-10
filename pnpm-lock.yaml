@@ -41,7 +41,7 @@ importers:
       rimraf: 3.0.2
       tsup: 6.7.0
       typescript: 4.9.5
-      vite-tsconfig-paths: 4.0.8
+      vite-tsconfig-paths: 4.0.9
       vitest: 0.29.8
     devDependencies:
       '@node-minify/babel-minify': link:packages/babel-minify
@@ -81,7 +81,7 @@ importers:
       rimraf: 3.0.2
       tsup: 6.7.0_typescript@4.9.5
       typescript: 4.9.5
-      vite-tsconfig-paths: 4.0.8_typescript@4.9.5
+      vite-tsconfig-paths: 4.0.9_typescript@4.9.5
       vitest: 0.29.8_@vitest+ui@0.29.8
 
   docs:
@@ -10090,8 +10090,8 @@ packages:
       - terser
     dev: true
 
-  /vite-tsconfig-paths/4.0.8_typescript@4.9.5:
-    resolution: {integrity: sha512-p04zH+Ey+NT78571x0pdX7nVRIJSlmKVvYryFglSWOK3Hc72eDL0+JJfbyQiugaIBApJkaEqbBQvqpsFZOSVGg==}
+  /vite-tsconfig-paths/4.0.9_typescript@4.9.5:
+    resolution: {integrity: sha512-qtjwLELs7AEtvZGWbv5aXNda0vyaU8MDjvohMS05sePdUNqBZbBk670Rpfoe0GguF4R1G/DT7yBTPSHdF4h9kA==}
     peerDependencies:
       vite: '*'
     peerDependenciesMeta:
