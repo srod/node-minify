@@ -8,7 +8,7 @@ description: "uglify-js for node-minify"
 [https://github.com/mishoo/UglifyJS2](https://github.com/mishoo/UglifyJS2)
 
 ::: warning
-`UglifyJS` only supports JavaScript ECMAScript 5, please use [`uglify-es`](/compressors/uglify-es.md) instead.
+`UglifyJS` only supports JavaScript ECMAScript 5, please use [`uglify-es`](/compressors/uglify-es/) instead.
 :::
 
 ## Usage
