@@ -3,22 +3,36 @@ import { Settings } from '@node-minify/types';
 import minify from '../packages/core/src';
 import { filesJS, filesCSS, filesHTML, filesJSON } from './files-path';
 
-const runOneTest = ({ options, compressorLabel, compressor, sync }: Settings) => {
-  options = JSON.parse(JSON.stringify(options));
+// type SettingsTests = {
+//   options: {
+//     it: string;
+//     minify: Settings;
+//   };
+//   compressorLabel: string;
+//   compressor: any;
+//   sync: boolean;
+// };
 
-  options.minify.compressor = compressor;
-
-  if (sync) {
-    options.minify.sync = true;
+const runOneTest = ({ options, compressorLabel, compressor, sync }: Settings /* & SettingsTests */) => {
+  if (!options) {
+    return false;
   }
 
-  test(options.it.replace('{compressor}', compressorLabel), (): Promise<void> => {
+  const clonedOptions = JSON.parse(JSON.stringify(options));
+
+  clonedOptions.minify.compressor = compressor;
+
+  if (sync) {
+    clonedOptions.minify.sync = true;
+  }
+
+  test(clonedOptions.it.replace('{compressor}', compressorLabel), (): Promise<void> => {
     return new Promise<{ err: Error; min: string }>(resolve => {
-      options.minify.callback = (err: Error, min: string) => {
+      clonedOptions.minify.callback = (err: Error, min: string) => {
         resolve({ err, min });
       };
 
-      minify(options.minify);
+      minify(clonedOptions.minify);
     }).then(({ err, min }) => {
       expect(err).toBeNull();
       expect(min).not.toBeNull();
@@ -26,7 +40,9 @@ const runOneTest = ({ options, compressorLabel, compressor, sync }: Settings) =>
   });
 };
 
-const tests = {
+export type Tests = Record<string, { it: string; minify: Settings }[]>;
+
+const tests: Tests = {
   concat: [
     {
       it: 'should concat javascript and no compress and an array of file',

@@ -9,19 +9,7 @@
  */
 import uglifyJS from 'uglify-js';
 import { utils } from '@node-minify/utils';
-import { MinifierOptions, Options, Settings } from '@node-minify/types';
-
-interface OptionsUglifyJS extends Omit<Options, 'sourceMap'> {
-  sourceMap?: { filename: string };
-}
-
-interface SettingsUglifyJS extends Omit<Settings, 'options'> {
-  options: OptionsUglifyJS;
-}
-
-interface MinifierOptionsUglifyJS extends Omit<MinifierOptions, 'settings'> {
-  settings: SettingsUglifyJS;
-}
+import { MinifierOptions } from '@node-minify/types';
 
 /**
  * Run uglifyJS.
@@ -29,17 +17,21 @@ interface MinifierOptionsUglifyJS extends Omit<MinifierOptions, 'settings'> {
  * @param {Object} settings
  * @param {String} content
  * @param {Function} callback
+ * @param {Number} index
  */
-const minifyUglifyJS = ({ settings, content, callback, index }: MinifierOptionsUglifyJS) => {
-  const contentMinified = uglifyJS.minify(typeof content === 'string' ? content : '', settings && settings.options);
+const minifyUglifyJS = ({ settings, content, callback, index }: MinifierOptions) => {
+  const contentMinified = uglifyJS.minify(content ?? '', settings?.options);
   if (contentMinified.error) {
     if (callback) {
       return callback(contentMinified.error);
     }
   }
-  if (contentMinified.map && settings && typeof settings.options.sourceMap === 'object') {
-    // TODO
-    utils.writeFile({ file: settings.options.sourceMap.filename, content: contentMinified.map, index });
+  if (contentMinified.map && typeof settings?.options?.sourceMap === 'object') {
+    utils.writeFile({
+      file: typeof settings.options.sourceMap.filename === 'string' ? settings.options.sourceMap.filename : '',
+      content: contentMinified.map,
+      index
+    });
   }
   if (settings && !settings.content && settings.output) {
     utils.writeFile({ file: settings.output, content: contentMinified.code, index });

@@ -10,7 +10,7 @@
 import compilerPath from 'google-closure-compiler-java';
 import { utils } from '@node-minify/utils';
 import { runCommandLine } from '@node-minify/run';
-import { MinifierOptions, Options, Dictionary } from '@node-minify/types';
+import { MinifierOptions, Options, OptionsPossible } from '@node-minify/types';
 
 // the allowed flags, taken from https://github.com/google/closure-compiler/wiki/Flags-and-Options
 const allowedFlags = [
@@ -43,7 +43,7 @@ const allowedFlags = [
  * @param {Function} callback
  */
 const minifyGCC = ({ settings, content, callback, index }: MinifierOptions) => {
-  const options = applyOptions({}, (settings && settings.options) || {});
+  const options = applyOptions({}, settings?.options ?? {});
   return runCommandLine({
     args: gccCommand(options),
     data: content,
@@ -73,16 +73,16 @@ const minifyGCC = ({ settings, content, callback, index }: MinifierOptions) => {
  * @param {Object} options
  * @returns {Object} flags
  */
-const applyOptions = (
-  flags: Dictionary<string | boolean | [] | { url: string } | { filename: string } | undefined>,
-  options: Options
-) => {
+type Flags = {
+  [key: string]: boolean | Record<string, OptionsPossible>;
+};
+const applyOptions = (flags: Flags, options?: Options): Flags => {
   if (!options || Object.keys(options).length === 0) {
     return flags;
   }
   Object.keys(options)
     .filter(option => allowedFlags.indexOf(option) > -1)
-    .forEach(option => (flags[option] = options[option]));
+    .forEach(option => (flags[option] = options[option] ?? false));
   return flags;
 };
 
@@ -90,10 +90,8 @@ const applyOptions = (
  * GCC command line.
  */
 
-const gccCommand = (
-  options: Dictionary<string | boolean | [] | { url: string } | { filename: string } | undefined>
-) => {
-  return ['-jar', compilerPath].concat(utils.buildArgs(options || {}));
+const gccCommand = (options: Record<string, OptionsPossible>) => {
+  return ['-jar', compilerPath].concat(utils.buildArgs(options ?? {}));
 };
 
 /**

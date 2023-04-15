@@ -52,7 +52,7 @@
     "@node-minify/utils": "workspace:*",
     "chalk": "5.2.0",
     "commander": "9.5.0",
-    "ora": "6.1.2",
+    "ora": "6.3.0",
     "update-notifier": "6.0.2"
   },
   "devDependencies": {

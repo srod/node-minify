@@ -20,11 +20,18 @@ const compress = (options: Settings): Promise<Result> => {
   return new Promise<Result>((resolve, reject) => {
     minify(options)
       .then(() => {
-        if (options.output.includes('$1')) {
-          // TODO handle $1 output
+        if (options?.output?.includes('$1')) {
           // npx node-minify --compressor uglify-js --input 'source/**/*.js' --output 'source/$1.min.js' --option '{"warnings": true, "mangle": false}'
           return resolve({
-            compressorLabel: options.compressorLabel || '',
+            compressorLabel: options.compressorLabel ?? '',
+            compressor: options.compressor,
+            size: '0',
+            sizeGzip: '0'
+          });
+        }
+        if (!options.output) {
+          return resolve({
+            compressorLabel: options.compressorLabel ?? '',
             compressor: options.compressor,
             size: '0',
             sizeGzip: '0'
@@ -34,9 +41,9 @@ const compress = (options: Settings): Promise<Result> => {
           .getFilesizeGzippedInBytes(options.output)
           .then((sizeGzip: string) => {
             resolve({
-              compressorLabel: options.compressorLabel || '',
+              compressorLabel: options.compressorLabel ?? '',
               compressor: options.compressor,
-              size: utils.getFilesizeInBytes(options.output),
+              size: options.output ? utils.getFilesizeInBytes(options.output) : '0',
               sizeGzip: sizeGzip
             });
           })

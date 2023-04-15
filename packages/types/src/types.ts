@@ -1,13 +1,10 @@
-export interface Options {
-  [key: string]: string | boolean | [] | { url: string } | { filename: string } | undefined;
-  sourceMap?: boolean;
-  _sourceMap?: { url: string } | boolean;
-  babelrc?: string;
-  presets?: [];
-  strict?: boolean;
-}
+export type OptionsPossible = string | boolean | Record<string, string> | object;
 
-export interface Settings {
+export type Options = {
+  [Key: string]: boolean | Record<string, OptionsPossible>;
+};
+
+export type Settings = {
   compressorLabel?: string;
   compressor?: string | ((arg0: MinifierOptions) => string);
   sync?: boolean;
@@ -22,9 +19,9 @@ export interface Settings {
   silence?: boolean;
   publicFolder?: string;
   replaceInPlace?: boolean;
-}
+};
 
-export interface MinifierOptions {
+export type MinifierOptions = {
   settings?: Settings;
   content?: string;
   callback?: null | ((err?: unknown | null, result?: string) => void);
@@ -35,15 +32,15 @@ export interface MinifierOptions {
   sync?: boolean;
   input?: string | string[];
   output?: string;
-}
+};
 
-export interface Result {
+export type Result = {
   compressor?: string | ((arg0: MinifierOptions) => void);
   compressorLabel: string | (() => void);
   size: string;
   sizeGzip: string;
-}
+};
 
-export interface Dictionary<T> {
+export type Dictionary<T> = {
   [Key: string]: T;
-}
+};

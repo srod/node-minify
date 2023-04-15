@@ -5,9 +5,9 @@
  */
 
 import { describe } from 'vitest';
+// import { Options } from '@node-minify/types';
 import sqwish from '../src';
 import { runOneTest, tests } from '../../../tests/fixtures';
-// import { Options } from '../../../tests/types';
 
 // export interface Result {
 //   compressor?: string | Function;

@@ -19,7 +19,7 @@ import { MinifierOptions } from '@node-minify/types';
  * @param {Function} callback
  */
 const runCommandLine = ({ args, data, settings, callback }: MinifierOptions) => {
-  if (settings && settings.sync) {
+  if (settings?.sync) {
     return runSync({ settings, data, args, callback });
   }
 
@@ -48,10 +48,10 @@ const runAsync = ({ data, args, callback }: MinifierOptions) => {
 
   child.on('exit', code => {
     if (code !== 0) {
-      return callback && callback(new Error(stderr));
+      return callback?.(new Error(stderr));
     }
 
-    return callback && callback(null, stdout);
+    return callback?.(null, stdout);
   });
 
   child.stdout.on('data', chunk => {
@@ -77,19 +77,19 @@ const runSync = ({ settings, data, args, callback }: MinifierOptions) => {
     const child = childProcess.spawnSync('java', args, {
       input: data,
       stdio: 'pipe',
-      maxBuffer: settings && settings.buffer
+      maxBuffer: settings?.buffer
     });
     const stdout = child.stdout.toString();
     const stderr = child.stderr.toString();
     const code = child.status;
 
     if (code !== 0) {
-      return callback && callback(new Error(stderr));
+      return callback?.(new Error(stderr));
     }
 
-    return callback && callback(null, stdout);
+    return callback?.(null, stdout);
   } catch (err: unknown) {
-    return callback && callback(err);
+    return callback?.(err);
   }
 };
 

@@ -9,31 +9,29 @@
  */
 import { readFileSync, lstatSync, statSync, existsSync, writeFileSync, unlinkSync, createReadStream } from 'node:fs';
 import gzipSize from 'gzip-size';
-import { Dictionary, MinifierOptions, Settings, Options } from '@node-minify/types';
+import { MinifierOptions, Settings, OptionsPossible } from '@node-minify/types';
 
-interface Utils {
+type Utils = {
   readFile: (file: string) => string;
   writeFile: ({ file, content, index }: WriteFile) => string;
   deleteFile: (file: string) => void;
-  buildArgs: (
-    options: Options & Dictionary<string | boolean | [] | { url: string } | { filename: string } | undefined>
-  ) => any;
+  buildArgs: (options: Record<string, OptionsPossible>) => any;
   clone: (obj: object) => object;
   getFilesizeInBytes: (file: string) => string;
   getFilesizeGzippedInBytes: (file: string) => Promise<string>;
   prettyBytes: (num: number) => string;
-  setFileNameMin: (file: string, output: string, publicFolder: string, replaceInPlace: boolean) => string;
+  setFileNameMin: (file: string, output: string, publicFolder?: string, replaceInPlace?: boolean) => string;
   compressSingleFile: (settings: Settings) => string | Promise<string>;
   getContentFromFiles: (input: string | string[]) => string;
   runSync: ({ settings, content, index }: MinifierOptions) => string;
   runAsync: ({ settings, content, index }: MinifierOptions) => Promise<string>;
-}
+};
 
-interface WriteFile {
+type WriteFile = {
   file: string;
   content: any;
   index?: number;
-}
+};
 
 const utils = {} as Utils;
 
@@ -43,7 +41,7 @@ const utils = {} as Utils;
  * @param {String} file
  * @returns {String}
  */
-utils.readFile = (file: string) => readFileSync(file, 'utf8');
+utils.readFile = (file: string): string => readFileSync(file, 'utf8');
 
 /**
  * Write content into file.
@@ -53,7 +51,7 @@ utils.readFile = (file: string) => readFileSync(file, 'utf8');
  * @param {Number} index - index of the file being processed
  * @returns {String}
  */
-utils.writeFile = ({ file, content, index }: WriteFile) => {
+utils.writeFile = ({ file, content, index }: WriteFile): string => {
   const _file = index !== undefined ? file[index] : file;
   if (!existsSync(_file) || (existsSync(_file) && !lstatSync(_file).isDirectory())) {
     writeFileSync(_file, content, 'utf8');
@@ -66,7 +64,6 @@ utils.writeFile = ({ file, content, index }: WriteFile) => {
  * Delete file.
  *
  * @param {String} file
- * @returns {String}
  */
 utils.deleteFile = (file: string) => unlinkSync(file);
 
@@ -76,8 +73,8 @@ utils.deleteFile = (file: string) => unlinkSync(file);
  * @param {Object} options
  * @returns {Array}
  */
-utils.buildArgs = (options: Dictionary<string | boolean | [] | { url: string } | { filename: string } | undefined>) => {
-  const args: (string | boolean | [] | { url: string } | { filename: string } | undefined)[] = [];
+utils.buildArgs = (options: Record<string, OptionsPossible>): OptionsPossible[] => {
+  const args: OptionsPossible[] = [];
   Object.keys(options).forEach((key: string) => {
     if (options[key] && options[key] !== false) {
       args.push('--' + key);
@@ -97,14 +94,14 @@ utils.buildArgs = (options: Dictionary<string | boolean | [] | { url: string } |
  * @param {Object} obj
  * @returns {Object}
  */
-utils.clone = (obj: object) => JSON.parse(JSON.stringify(obj));
+utils.clone = (obj: object): object => JSON.parse(JSON.stringify(obj));
 
 /**
  * Get the file size in bytes.
  *
  * @returns {String}
  */
-utils.getFilesizeInBytes = (file: string) => {
+utils.getFilesizeInBytes = (file: string): string => {
   const stats = statSync(file);
   const fileSizeInBytes = stats.size;
   return utils.prettyBytes(fileSizeInBytes);
@@ -115,7 +112,7 @@ utils.getFilesizeInBytes = (file: string) => {
  *
  * @returns {Promise.<String>}
  */
-utils.getFilesizeGzippedInBytes = (file: string) => {
+utils.getFilesizeGzippedInBytes = (file: string): Promise<string> => {
   return new Promise(resolve => {
     const source = createReadStream(file);
     source.pipe(gzipSize.stream()).on('gzip-size', size => {
@@ -130,7 +127,7 @@ utils.getFilesizeGzippedInBytes = (file: string) => {
  *
  * @returns {String}
  */
-utils.prettyBytes = (num: number) => {
+utils.prettyBytes = (num: number): string => {
   const UNITS = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
   if (!Number.isFinite(num)) {
@@ -164,7 +161,7 @@ utils.prettyBytes = (num: number) => {
  * @param {Boolean} replaceInPlace
  * @returns {String}
  */
-utils.setFileNameMin = (file: string, output: string, publicFolder: string, replaceInPlace: boolean) => {
+utils.setFileNameMin = (file: string, output: string, publicFolder?: string, replaceInPlace?: boolean): string => {
   const filePath = file.substr(0, file.lastIndexOf('/') + 1);
   const fileWithoutPath = file.substr(file.lastIndexOf('/') + 1);
   let fileWithoutExtension = fileWithoutPath.substr(0, fileWithoutPath.lastIndexOf('.'));
@@ -193,7 +190,7 @@ utils.compressSingleFile = (settings: Settings): Promise<string> | string => {
  * @param {String|Array} input
  * @return {String}
  */
-utils.getContentFromFiles = (input: string | string[]) => {
+utils.getContentFromFiles = (input: string | string[]): string => {
   if (!Array.isArray(input)) {
     return readFileSync(input, 'utf8');
   }
