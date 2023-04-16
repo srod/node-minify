@@ -47,7 +47,7 @@
   "dependencies": {
     "@node-minify/utils": "workspace:*",
     "cssnano": "^6.0.0",
-    "postcss": "8.4.21"
+    "postcss": "8.4.22"
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*"
