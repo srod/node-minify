@@ -73,7 +73,7 @@
     "lerna": "6.6.1",
     "lint-staged": "13.2.1",
     "node-notifier": "10.0.1",
-    "prettier": "2.8.7",
+    "prettier": "2.8.8",
     "rimraf": "5.0.0",
     "tsup": "6.7.0",
     "typescript": "5.0.4",
