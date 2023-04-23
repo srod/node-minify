@@ -222,8 +222,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       glob:
-        specifier: 10.2.1
-        version: 10.2.1
+        specifier: 10.2.2
+        version: 10.2.2
       mkdirp:
         specifier: 3.0.0
         version: 3.0.0
@@ -5161,13 +5161,12 @@ packages:
       is-glob: 4.0.3
     dev: true
 
-  /glob@10.2.1:
-    resolution: {integrity: sha512-ngom3wq2UhjdbmRE/krgkD8BQyi1KZ5l+D2dVm4+Yj+jJIBp74/ZGunL6gNGc/CYuQmvUBiavWEXIotRiv5R6A==}
+  /glob@10.2.2:
+    resolution: {integrity: sha512-Xsa0BcxIC6th9UwNjZkhrMtNo/MnyRL8jGCP+uEwhA5oFOCY1f2s1/oNKY47xQ0Bg5nkjsfAEIej1VeH62bDDQ==}
     engines: {node: '>=16 || 14 >=14.17'}
     hasBin: true
     dependencies:
       foreground-child: 3.1.1
-      fs.realpath: 1.0.0
       jackspeak: 2.0.3
       minimatch: 9.0.0
       minipass: 5.0.0
@@ -9049,7 +9048,7 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
-      glob: 10.2.1
+      glob: 10.2.2
     dev: true
 
   /rollup@3.20.3:
