@@ -125,8 +125,8 @@ importers:
   docs:
     dependencies:
       '@astrojs/partytown':
-        specifier: 1.2.0
-        version: 1.2.0
+        specifier: 1.2.1
+        version: 1.2.1
       '@astrojs/preact':
         specifier: ^2.0.2
         version: 2.0.2(preact@10.7.3)
@@ -488,8 +488,8 @@ packages:
       - supports-color
     dev: false
 
-  /@astrojs/partytown@1.2.0:
-    resolution: {integrity: sha512-AjrroKpBJR4rs0CLlmLqZ82Dfa3fFvN9mQZ3cfOXQYo85Rc/85R01MZiS1S1G5IzqWi2TDWIMH6R1cm12aGKDg==}
+  /@astrojs/partytown@1.2.1:
+    resolution: {integrity: sha512-sFs4RKaahYOrHKy5rM6xf5xDavKpUICVxS0P0tQec5z3+FRq1Eo57MDTCx2QJoIhOHd3+/GgXDRHKWpbFI4RCw==}
     dependencies:
       '@builder.io/partytown': 0.7.6
       mrmime: 1.0.1
