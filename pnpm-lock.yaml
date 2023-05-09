@@ -363,8 +363,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       terser:
-        specifier: 5.17.2
-        version: 5.17.2
+        specifier: 5.17.3
+        version: 5.17.3
     devDependencies:
       '@node-minify/types':
         specifier: workspace:*
@@ -9673,8 +9673,8 @@ packages:
       unique-string: 2.0.0
     dev: true
 
-  /terser@5.17.2:
-    resolution: {integrity: sha512-1D1aGbOF1Mnayq5PvfMc0amAR1y5Z1nrZaGCvI5xsdEfZEVte8okonk02OiaK5fw5hG1GWuuVsakOnpZW8y25A==}
+  /terser@5.17.3:
+    resolution: {integrity: sha512-AudpAZKmZHkG9jueayypz4duuCFJMMNGRMwaPvQKWfxKedh8Z2x3OCoDqIIi1xx5+iwx1u6Au8XQcc9Lke65Yg==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
