@@ -62,8 +62,8 @@ importers:
         specifier: workspace:*
         version: link:packages/yui
       '@tsconfig/node16':
-        specifier: 1.0.3
-        version: 1.0.3
+        specifier: 1.0.4
+        version: 1.0.4
       '@types/node':
         specifier: 18.16.8
         version: 18.16.8
@@ -1768,8 +1768,8 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: false
 
-  /@tsconfig/node16@1.0.3:
-    resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
+  /@tsconfig/node16@1.0.4:
+    resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: true
 
   /@tufjs/canonical-json@1.0.0:
