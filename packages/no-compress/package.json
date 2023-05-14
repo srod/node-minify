@@ -39,7 +39,11 @@
   "scripts": {
     "clean": "pnpm dlx rimraf dist",
     "build": "pnpm clean && tsup src/index.ts --format cjs,esm --dts --clean --sourcemap",
-    "prepublishOnly": "pnpm build"
+    "lint": "eslint . --ext .ts",
+    "prepublishOnly": "pnpm build",
+    "test": "vitest run",
+    "test:ci": "vitest run --coverage",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@node-minify/utils": "workspace:*"
