@@ -71,7 +71,7 @@
     "prettier": "2.8.8",
     "rimraf": "5.0.0",
     "tsup": "6.7.0",
-    "turbo": "1.9.4",
+    "turbo": "1.9.5",
     "typescript": "5.0.4",
     "vite-tsconfig-paths": "4.2.0",
     "vitest": "0.31.0"
