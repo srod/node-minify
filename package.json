@@ -58,8 +58,8 @@
     "@types/node": "18.16.12",
     "@typescript-eslint/eslint-plugin": "5.59.6",
     "@typescript-eslint/parser": "5.59.6",
-    "@vitest/coverage-c8": "0.31.0",
-    "@vitest/ui": "0.31.0",
+    "@vitest/coverage-c8": "0.31.1",
+    "@vitest/ui": "0.31.1",
     "copyfiles": "2.4.1",
     "eslint": "8.40.0",
     "eslint-config-prettier": "8.8.0",
@@ -74,7 +74,7 @@
     "turbo": "1.9.6",
     "typescript": "5.0.4",
     "vite-tsconfig-paths": "4.2.0",
-    "vitest": "0.31.0"
+    "vitest": "0.31.1"
   },
   "lint-staged": {
     "*.ts": [
