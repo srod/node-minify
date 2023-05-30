@@ -12,7 +12,7 @@
     "lint": "eslint . --ext .ts"
   },
   "dependencies": {
-    "@astrojs/partytown": "1.2.2",
+    "@astrojs/partytown": "1.2.3",
     "@astrojs/preact": "^2.0.2",
     "@astrolib/analytics": "0.3.0",
     "@types/node": "^18.0.0",
