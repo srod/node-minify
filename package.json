@@ -61,7 +61,7 @@
     "@vitest/coverage-c8": "0.31.4",
     "@vitest/ui": "0.31.4",
     "copyfiles": "2.4.1",
-    "eslint": "8.41.0",
+    "eslint": "8.42.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-config-turbo": "1.10.1",
     "eslint-plugin-prettier": "4.2.1",
