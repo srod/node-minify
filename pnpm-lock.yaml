@@ -229,8 +229,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       glob:
-        specifier: 10.2.7
-        version: 10.2.7
+        specifier: 10.3.0
+        version: 10.3.0
       mkdirp:
         specifier: 3.0.1
         version: 3.0.1
@@ -3881,8 +3881,8 @@ packages:
       is-glob: 4.0.3
     dev: false
 
-  /glob@10.2.7:
-    resolution: {integrity: sha512-jTKehsravOJo8IJxUGfZILnkvVJM/MOfHRs8QcXolVef2zNI9Tqyy5+SeuOAZd3upViEZQLyFpQhYiHLrMUNmA==}
+  /glob@10.3.0:
+    resolution: {integrity: sha512-AQ1/SB9HH0yCx1jXAT4vmCbTOPe5RQ+kCurjbel5xSCGhebumUv+GJZfa1rEqor3XIViqwSEmlkZCQD43RWrBg==}
     engines: {node: '>=16 || 14 >=14.17'}
     hasBin: true
     dependencies:
@@ -6368,7 +6368,7 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
-      glob: 10.2.7
+      glob: 10.3.0
     dev: false
 
   /rollup@3.25.1:
