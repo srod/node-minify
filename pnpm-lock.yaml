@@ -138,8 +138,8 @@ importers:
         specifier: ^2.0.2
         version: 2.2.2(preact@10.19.3)
       '@astrolib/analytics':
-        specifier: 0.4.2
-        version: 0.4.2(astro@2.10.15)
+        specifier: 0.5.0
+        version: 0.5.0(astro@2.10.15)
       '@types/node':
         specifier: ^18.0.0
         version: 18.19.3
@@ -554,10 +554,10 @@ packages:
       undici: 5.28.2
     dev: false
 
-  /@astrolib/analytics@0.4.2(astro@2.10.15):
-    resolution: {integrity: sha512-YAL1ubEKpN+IFNuM0SGGvN1jUX00ZmFtL2QuKDDCqq8nZzgREhl6IKSGyPOZ3haTbXVO71Rp/rjG9mmEt+RV4g==}
+  /@astrolib/analytics@0.5.0(astro@2.10.15):
+    resolution: {integrity: sha512-NlTFTUtsjVEAb2ZzYXZ5XBvak7JH3ixaQTq5r+q5PZtealHajUSPzaY1UrcJOJDJrOFHf5pvxBnYmCEzE9fIjw==}
     peerDependencies:
-      astro: ^1.2.1 || ^2.0.0 || ^3.0.0-beta.0 || ^3.0.0
+      astro: ^1.2.1 || ^2.0.0 || ^3.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
       astro: 2.10.15(@types/node@18.19.3)
     dev: false

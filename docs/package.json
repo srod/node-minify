@@ -14,7 +14,7 @@
   "dependencies": {
     "@astrojs/partytown": "1.2.3",
     "@astrojs/preact": "^2.0.2",
-    "@astrolib/analytics": "0.4.2",
+    "@astrolib/analytics": "0.5.0",
     "@types/node": "^18.0.0",
     "astro": "^2.0.10",
     "preact": "^10.7.3"
