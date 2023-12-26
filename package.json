@@ -16,7 +16,7 @@
   "engines": {
     "node": ">=16.0.0"
   },
-  "packageManager": "pnpm@8.12.1",
+  "packageManager": "pnpm@8.13.1",
   "scripts": {
     "build": "turbo --filter \"./packages/*\" build",
     "clean": "pnpm run clean:build && pnpm run clean:packages",
