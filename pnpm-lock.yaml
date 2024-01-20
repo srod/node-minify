@@ -65,9 +65,9 @@ importers:
       '@node-minify/yui':
         specifier: workspace:*
         version: link:packages/yui
-      '@tsconfig/node16':
-        specifier: 1.0.4
-        version: 1.0.4
+      '@tsconfig/node18':
+        specifier: 18.2.2
+        version: 18.2.2
       '@types/node':
         specifier: 18.19.8
         version: 18.19.8
@@ -1414,8 +1414,8 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: false
 
-  /@tsconfig/node16@1.0.4:
-    resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
+  /@tsconfig/node18@18.2.2:
+    resolution: {integrity: sha512-d6McJeGsuoRlwWZmVIeE8CUA27lu6jLjvv1JzqmpsytOYYbVi1tHZEnwCNVOXnj4pyLvneZlFlpXUK+X9wBWyw==}
     dev: false
 
   /@types/babel-core@6.25.10:
