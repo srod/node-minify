@@ -17,9 +17,11 @@ const compressor = yui;
 
 describe("Package: YUI", () => {
     tests.commonjs.forEach((options) => {
+        options.minify.type = "js";
         runOneTest({ options, compressorLabel, compressor });
     });
     tests.commonjs.forEach((options) => {
+        options.minify.type = "js";
         runOneTest({ options, compressorLabel, compressor, sync: true });
     });
     tests.commoncss.forEach((options) => {
@@ -34,6 +36,7 @@ describe("Package: YUI", () => {
             const options: Options = {
                 minify: {
                     compressor: yui,
+                    type: "js",
                     input: filesJS.oneFileWithWildcards,
                     output: filesJS.fileJSOut,
                     options: {
