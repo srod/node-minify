@@ -16,13 +16,14 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "packageManager": "pnpm@8.14.1",
+  "workspaces": ["docs", "packages/*"],
+  "packageManager": "bun@1.0.24",
   "scripts": {
     "build": "turbo --filter \"./packages/*\" build",
-    "clean": "pnpm run clean:build && pnpm run clean:packages",
-    "clean:build": "pnpm dlx rimraf packages/*/dist docs/dist docs/.astro",
-    "clean:packages": "pnpm run lerna clean -y",
-    "clean:test": "pnpm dlx rimraf tests/tmp/*.{js,js.map,css,html,json}",
+    "clean": "bun run clean:build && bun run clean:packages",
+    "clean:build": "bunx rimraf packages/*/dist docs/dist docs/.astro",
+    "clean:packages": "bun run lerna clean -y",
+    "clean:test": "bunx rimraf tests/tmp/*.{js,js.map,css,html,json}",
     "clean:git": "git restore --source=HEAD --staged --worktree -- tests/fixtures",
     "dev": "turbo dev --concurrency 30",
     "lint": "turbo lint",
