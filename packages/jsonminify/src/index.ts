@@ -7,9 +7,9 @@
 /**
  * Module dependencies.
  */
-import jsonminify from 'jsonminify';
-import { utils } from '@node-minify/utils';
-import { MinifierOptions } from '@node-minify/types';
+import { MinifierOptions } from "@node-minify/types";
+import { utils } from "@node-minify/utils";
+import jsonminify from "jsonminify";
 
 /**
  * Run jsonminify.
@@ -18,15 +18,25 @@ import { MinifierOptions } from '@node-minify/types';
  * @param {String} content
  * @param {Function} callback
  */
-const minifyJsonMinify = ({ settings, content, callback, index }: MinifierOptions) => {
-  const contentMinified = jsonminify(content ?? '');
-  if (settings && !settings.content && settings.output) {
-    settings.output && utils.writeFile({ file: settings.output, content: contentMinified, index });
-  }
-  if (callback) {
-    return callback(null, contentMinified);
-  }
-  return contentMinified;
+const minifyJsonMinify = ({
+    settings,
+    content,
+    callback,
+    index,
+}: MinifierOptions) => {
+    const contentMinified = jsonminify(content ?? "");
+    if (settings && !settings.content && settings.output) {
+        settings.output &&
+            utils.writeFile({
+                file: settings.output,
+                content: contentMinified,
+                index,
+            });
+    }
+    if (callback) {
+        return callback(null, contentMinified);
+    }
+    return contentMinified;
 };
 
 /**

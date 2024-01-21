@@ -4,11 +4,11 @@
  * MIT Licensed
  */
 
+import { Settings } from "@node-minify/types";
 /**
  * Module dependencies.
  */
-import { utils } from '@node-minify/utils';
-import { Settings } from '@node-minify/types';
+import { utils } from "@node-minify/utils";
 
 /**
  * Run compressor.
@@ -16,11 +16,13 @@ import { Settings } from '@node-minify/types';
  * @param {Object} settings
  */
 const compressInMemory = (settings: Settings): Promise<string> | string => {
-  if (typeof settings.compressor !== 'function') {
-    throw new Error(`compressor should be a function, maybe you forgot to install the compressor`);
-  }
+    if (typeof settings.compressor !== "function") {
+        throw new Error(
+            "compressor should be a function, maybe you forgot to install the compressor"
+        );
+    }
 
-  return utils.compressSingleFile(settings);
+    return utils.compressSingleFile(settings);
 };
 
 /**

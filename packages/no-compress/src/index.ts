@@ -7,8 +7,8 @@
 /**
  * Module dependencies.
  */
-import { utils } from '@node-minify/utils';
-import { MinifierOptions } from '@node-minify/types';
+import { MinifierOptions } from "@node-minify/types";
+import { utils } from "@node-minify/utils";
 
 /**
  * Just merge, no compression.
@@ -17,14 +17,19 @@ import { MinifierOptions } from '@node-minify/types';
  * @param {String} content
  * @param {Function} callback
  */
-const noCompress = ({ settings, content, callback, index }: MinifierOptions) => {
-  if (settings && !settings.content && settings.output) {
-    utils.writeFile({ file: settings.output, content, index });
-  }
-  if (callback) {
-    return callback(null, content);
-  }
-  return content;
+const noCompress = ({
+    settings,
+    content,
+    callback,
+    index,
+}: MinifierOptions) => {
+    if (settings && !settings.content && settings.output) {
+        utils.writeFile({ file: settings.output, content, index });
+    }
+    if (callback) {
+        return callback(null, content);
+    }
+    return content;
 };
 
 /**
