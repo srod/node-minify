@@ -43,10 +43,10 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "scripts": {
-    "clean": "pnpm dlx rimraf dist",
-    "build": "pnpm clean && tsup src/index.ts --format cjs,esm --dts --sourcemap && tsup src/bin/cli.ts --format esm --dts --sourcemap",
+    "clean": "bunx rimraf dist",
+    "build": "bun clean && tsup src/index.ts --format cjs,esm --dts --sourcemap && tsup src/bin/cli.ts --format esm --dts --sourcemap",
     "lint": "eslint . --ext .ts",
-    "prepublishOnly": "pnpm build",
+    "prepublishOnly": "bun run build",
     "test": "vitest run",
     "test:ci": "vitest run --coverage",
     "test:watch": "vitest"

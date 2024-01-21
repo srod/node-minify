@@ -48,6 +48,8 @@ npm install @node-minify/core
 yarn add @node-minify/core
 # Or pnpm
 pnpm add @node-minify/core
+# Or bun
+bun add @node-minify/core
 ```
 
 And install the compressor you want
@@ -58,6 +60,8 @@ npm install @node-minify/uglify-js
 yarn add @node-minify/uglify-js
 # Or pnpm
 pnpm add @node-minify/uglify-js
+# Or bun
+bun add @node-minify/uglify-js
 ```
 
 ## Quick Start
