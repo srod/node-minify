@@ -136,7 +136,7 @@ importers:
         version: 2.0.4
       '@astrojs/preact':
         specifier: ^3.0.0
-        version: 3.1.0(@babel/core@7.23.7)(preact@10.19.3)(vite@4.5.1)
+        version: 3.1.0(@babel/core@7.23.7)(preact@10.19.3)(vite@5.0.12)
       '@astrolib/analytics':
         specifier: 0.5.0
         version: 0.5.0(astro@4.2.1)
@@ -296,8 +296,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       google-closure-compiler-java:
-        specifier: 20230411.0.0
-        version: 20230411.0.0
+        specifier: 20230802.0.0
+        version: 20230802.0.0
     devDependencies:
       '@node-minify/types':
         specifier: workspace:*
@@ -488,7 +488,7 @@ packages:
       mrmime: 1.0.1
     dev: false
 
-  /@astrojs/preact@3.1.0(@babel/core@7.23.7)(preact@10.19.3)(vite@4.5.1):
+  /@astrojs/preact@3.1.0(@babel/core@7.23.7)(preact@10.19.3)(vite@5.0.12):
     resolution: {integrity: sha512-17Eo+H3fTgcmKUa7v6aAt2BIkffdTZGR4aC0K2jO4nyNhgLRAEuaoXXJwzAG1x0UHnCw7bTQ2Vv3vuJFRy1PTg==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
@@ -496,7 +496,7 @@ packages:
     dependencies:
       '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.23.7)
       '@babel/plugin-transform-react-jsx-development': 7.22.5(@babel/core@7.23.7)
-      '@preact/preset-vite': 2.8.1(@babel/core@7.23.7)(preact@10.19.3)(vite@4.5.1)
+      '@preact/preset-vite': 2.8.1(@babel/core@7.23.7)(preact@10.19.3)(vite@5.0.12)
       '@preact/signals': 1.2.2(preact@10.19.3)
       babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.23.7)
       preact: 10.19.3
@@ -1354,7 +1354,7 @@ packages:
     resolution: {integrity: sha512-2LuNTFBIO0m7kKIQvvPHN6UE63VjpmL9rnEEaOOaiSPbZK+zUOYIzBAWcED+3XYzhYsd/0mD57VdxAEqqV52CQ==}
     dev: false
 
-  /@preact/preset-vite@2.8.1(@babel/core@7.23.7)(preact@10.19.3)(vite@4.5.1):
+  /@preact/preset-vite@2.8.1(@babel/core@7.23.7)(preact@10.19.3)(vite@5.0.12):
     resolution: {integrity: sha512-a9KV4opdj17X2gOFuGup0aE+sXYABX/tJi/QDptOrleX4FlnoZgDWvz45tHOdVfrZX+3uvVsIYPHxRsTerkDNA==}
     peerDependencies:
       '@babel/core': 7.x
@@ -1363,7 +1363,7 @@ packages:
       '@babel/core': 7.23.7
       '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.23.7)
       '@babel/plugin-transform-react-jsx-development': 7.22.5(@babel/core@7.23.7)
-      '@prefresh/vite': 2.4.5(preact@10.19.3)(vite@4.5.1)
+      '@prefresh/vite': 2.4.5(preact@10.19.3)(vite@5.0.12)
       '@rollup/pluginutils': 4.2.1
       babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.23.7)
       debug: 4.3.4
@@ -1371,7 +1371,7 @@ packages:
       magic-string: 0.30.5
       node-html-parser: 6.1.12
       resolve: 1.22.8
-      vite: 4.5.1(@types/node@18.19.6)
+      vite: 5.0.12(@types/node@18.19.6)
     transitivePeerDependencies:
       - preact
       - supports-color
@@ -1406,7 +1406,7 @@ packages:
     resolution: {integrity: sha512-KtC/fZw+oqtwOLUFM9UtiitB0JsVX0zLKNyRTA332sqREqSALIIQQxdUCS1P3xR/jT1e2e8/5rwH6gdcMLEmsQ==}
     dev: false
 
-  /@prefresh/vite@2.4.5(preact@10.19.3)(vite@4.5.1):
+  /@prefresh/vite@2.4.5(preact@10.19.3)(vite@5.0.12):
     resolution: {integrity: sha512-iForDVJ2M8gQYnm5pHumvTEJjGGc7YNYC0GVKnHFL+GvFfKHfH9Rpq67nUAzNbjuLEpqEOUuQVQajMazWu2ZNQ==}
     peerDependencies:
       preact: ^10.4.0
@@ -1418,7 +1418,7 @@ packages:
       '@prefresh/utils': 1.2.0
       '@rollup/pluginutils': 4.2.1
       preact: 10.19.3
-      vite: 4.5.1(@types/node@18.19.6)
+      vite: 5.0.12(@types/node@18.19.6)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -4313,8 +4313,8 @@ packages:
     resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
     dev: false
 
-  /google-closure-compiler-java@20230411.0.0:
-    resolution: {integrity: sha512-OBSmLWXNlZoSuFN4QEQs9zoqgIVUvNiQW0Ktt5RjBK5nxIV38Ty5C8ObDrk/PR/PR8a6QiKZACJ09Hkx9IWLqQ==}
+  /google-closure-compiler-java@20230802.0.0:
+    resolution: {integrity: sha512-PWKLMLwj7pR/U0yYbiy649LLqAscu+F1gyY4Y/jK6CmSLb8cIJbL8BTJd00828TzTNfWnYwxbkcQw0y9C2YsGw==}
     dev: false
 
   /got@12.6.1:
@@ -7906,42 +7906,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
       - typescript
-    dev: false
-
-  /vite@4.5.1(@types/node@18.19.6):
-    resolution: {integrity: sha512-AXXFaAJ8yebyqzoNB9fu2pHoo/nWX+xZlaRwoeYUxEqBO+Zj4msE5G+BhGBll9lYEKv9Hfks52PAF2X7qDYXQA==}
-    engines: {node: ^14.18.0 || >=16.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': '>= 14'
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      '@types/node': 18.19.6
-      esbuild: 0.18.20
-      postcss: 8.4.33
-      rollup: 3.29.4
-    optionalDependencies:
-      fsevents: 2.3.3
     dev: false
 
   /vite@4.5.1(@types/node@18.19.8):
