@@ -42,7 +42,7 @@
   "scripts": {
     "clean": "pnpm dlx rimraf dist",
     "build": "pnpm clean && tsup src/index.ts --format cjs,esm --dts --clean --sourcemap",
-    "lint": "eslint . --ext .ts",
+    "lint": "biome lint .",
     "postbuild": "pnpm dlx copyfiles -u 1 src/binaries/*.jar dist/",
     "prepublishOnly": "pnpm build",
     "test": "vitest run",

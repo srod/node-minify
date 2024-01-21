@@ -7,9 +7,9 @@
 /**
  * Module dependencies.
  */
-import chalk from 'chalk';
-import ora from 'ora';
-import { Settings, Result } from '@node-minify/types';
+import { Result, Settings } from "@node-minify/types";
+import chalk from "chalk";
+import ora from "ora";
 
 const spinner = ora();
 
@@ -19,8 +19,10 @@ const spinner = ora();
  * @param {Object} options
  */
 const start = (options: Settings) => {
-  spinner.text = 'Compressing file(s) with ' + chalk.green(options.compressorLabel) + '...';
-  spinner.start();
+    spinner.text = `Compressing file(s) with ${chalk.green(
+        options.compressorLabel
+    )}...`;
+    spinner.start();
 };
 
 /**
@@ -29,15 +31,12 @@ const start = (options: Settings) => {
  * @param result {Object}
  */
 const stop = (result: Result) => {
-  spinner.text =
-    'File(s) compressed successfully with ' +
-    chalk.green(result.compressorLabel) +
-    ' (' +
-    chalk.green(result.size) +
-    ' minified, ' +
-    chalk.green(result.sizeGzip) +
-    ' gzipped)';
-  spinner.succeed();
+    spinner.text = `File(s) compressed successfully with ${chalk.green(
+        result.compressorLabel
+    )} (${chalk.green(result.size)} minified, ${chalk.green(
+        result.sizeGzip
+    )} gzipped)`;
+    spinner.succeed();
 };
 
 /**
@@ -46,8 +45,10 @@ const stop = (result: Result) => {
  * @param options {Object}
  */
 const error = (options: Settings) => {
-  spinner.text = 'Error - file(s) not compressed with ' + chalk.red(options.compressorLabel);
-  spinner.fail();
+    spinner.text = `Error - file(s) not compressed with ${chalk.red(
+        options.compressorLabel
+    )}`;
+    spinner.fail();
 };
 
 /**

@@ -7,10 +7,10 @@
 /**
  * Module dependencies.
  */
-import postcss from 'postcss';
-import cssnano from 'cssnano';
-import { utils } from '@node-minify/utils';
-import { MinifierOptions } from '@node-minify/types';
+import { MinifierOptions } from "@node-minify/types";
+import { utils } from "@node-minify/utils";
+import cssnano from "cssnano";
+import postcss from "postcss";
 
 /**
  * Run cssnano.
@@ -19,22 +19,34 @@ import { MinifierOptions } from '@node-minify/types';
  * @param {String} content
  * @param {Function} callback
  */
-const minifyCssnano = async ({ settings, content, callback, index }: MinifierOptions) => {
-  let contentMinified = { css: '' };
-  try {
-    contentMinified = await postcss([cssnano]).process(content || '', { from: undefined });
-  } catch (e) {
-    if (callback) {
-      return callback(e);
+const minifyCssnano = async ({
+    settings,
+    content,
+    callback,
+    index,
+}: MinifierOptions) => {
+    let contentMinified = { css: "" };
+    try {
+        contentMinified = await postcss([cssnano]).process(content || "", {
+            from: undefined,
+        });
+    } catch (e) {
+        if (callback) {
+            return callback(e);
+        }
     }
-  }
-  if (settings && !settings.content && settings.output) {
-    settings.output && utils.writeFile({ file: settings.output, content: contentMinified.css, index });
-  }
-  if (callback) {
-    return callback(null, contentMinified.css);
-  }
-  return contentMinified.css;
+    if (settings && !settings.content && settings.output) {
+        settings.output &&
+            utils.writeFile({
+                file: settings.output,
+                content: contentMinified.css,
+                index,
+            });
+    }
+    if (callback) {
+        return callback(null, contentMinified.css);
+    }
+    return contentMinified.css;
 };
 
 /**

@@ -41,7 +41,7 @@
   "scripts": {
     "clean": "pnpm dlx rimraf dist",
     "build": "pnpm clean && tsup src/index.ts --format cjs,esm --dts --clean --sourcemap",
-    "lint": "eslint . --ext .ts",
+    "lint": "biome lint .",
     "prepublishOnly": "pnpm build",
     "test": "vitest run",
     "test:ci": "vitest run --coverage",

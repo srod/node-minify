@@ -7,9 +7,9 @@
 /**
  * Module dependencies.
  */
-import { minify } from 'csso';
-import { utils } from '@node-minify/utils';
-import { MinifierOptions } from '@node-minify/types';
+import { MinifierOptions } from "@node-minify/types";
+import { utils } from "@node-minify/utils";
+import { minify } from "csso";
 
 /**
  * Run csso.
@@ -18,15 +18,25 @@ import { MinifierOptions } from '@node-minify/types';
  * @param {String} content
  * @param {Function} callback
  */
-const minifyCSSO = ({ settings, content, callback, index }: MinifierOptions) => {
-  const contentMinified = minify(content ?? '', settings?.options);
-  if (settings && !settings.content && settings.output) {
-    settings.output && utils.writeFile({ file: settings.output, content: contentMinified.css, index });
-  }
-  if (callback) {
-    return callback(null, contentMinified.css);
-  }
-  return contentMinified.css;
+const minifyCSSO = ({
+    settings,
+    content,
+    callback,
+    index,
+}: MinifierOptions) => {
+    const contentMinified = minify(content ?? "", settings?.options);
+    if (settings && !settings.content && settings.output) {
+        settings.output &&
+            utils.writeFile({
+                file: settings.output,
+                content: contentMinified.css,
+                index,
+            });
+    }
+    if (callback) {
+        return callback(null, contentMinified.css);
+    }
+    return contentMinified.css;
 };
 
 /**

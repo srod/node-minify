@@ -4,18 +4,18 @@
  * MIT Licensed
  */
 
-import { describe } from 'vitest';
-import csso from '../src';
-import { runOneTest, tests } from '../../../tests/fixtures';
+import { describe } from "vitest";
+import { runOneTest, tests } from "../../../tests/fixtures";
+import csso from "../src";
 
-const compressorLabel = 'csso';
+const compressorLabel = "csso";
 const compressor = csso;
 
-describe('Package: csso', () => {
-  tests.commoncss.forEach(options => {
-    runOneTest({ options, compressorLabel, compressor });
-  });
-  tests.commoncss.forEach(options => {
-    runOneTest({ options, compressorLabel, compressor, sync: true });
-  });
+describe("Package: csso", () => {
+    tests.commoncss.forEach((options) => {
+        runOneTest({ options, compressorLabel, compressor });
+    });
+    tests.commoncss.forEach((options) => {
+        runOneTest({ options, compressorLabel, compressor, sync: true });
+    });
 });

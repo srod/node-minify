@@ -7,20 +7,20 @@
 /**
  * Module dependencies.
  */
-import uglifyES from 'uglify-es';
-import { utils } from '@node-minify/utils';
-import { MinifierOptions, Dictionary } from '@node-minify/types';
+import { Dictionary, MinifierOptions } from "@node-minify/types";
+import { utils } from "@node-minify/utils";
+import uglifyES from "uglify-es";
 
 type OptionsUglifyES = {
-  sourceMap?: { filename: string };
+    sourceMap?: { filename: string };
 };
 
 type SettingsUglifyES = {
-  options: OptionsUglifyES;
+    options: OptionsUglifyES;
 };
 
 type MinifierOptionsUglifyES = {
-  settings: SettingsUglifyES;
+    settings: SettingsUglifyES;
 };
 
 /**
@@ -30,27 +30,42 @@ type MinifierOptionsUglifyES = {
  * @param {String} content
  * @param {Function} callback
  */
-const minifyUglifyES = ({ settings, content, callback, index }: MinifierOptions & MinifierOptionsUglifyES) => {
-  let content2: string | Dictionary<string> = content ?? '';
-  if (typeof settings.options.sourceMap === 'object') {
-    content2 = { [settings.options.sourceMap.filename ?? '']: content ?? '' };
-  }
-  const contentMinified = uglifyES.minify(content2, settings.options);
-  if (contentMinified.error) {
-    if (callback) {
-      return callback(contentMinified.error);
+const minifyUglifyES = ({
+    settings,
+    content,
+    callback,
+    index,
+}: MinifierOptions & MinifierOptionsUglifyES) => {
+    let content2: string | Dictionary<string> = content ?? "";
+    if (typeof settings.options.sourceMap === "object") {
+        content2 = {
+            [settings.options.sourceMap.filename ?? ""]: content ?? "",
+        };
     }
-  }
-  if (contentMinified.map && settings.options.sourceMap) {
-    utils.writeFile({ file: `${settings.output}.map`, content: contentMinified.map, index });
-  }
-  if (settings && !settings.content && settings.output) {
-    utils.writeFile({ file: settings.output, content: contentMinified.code, index });
-  }
-  if (callback) {
-    return callback(null, contentMinified.code);
-  }
-  return contentMinified.code;
+    const contentMinified = uglifyES.minify(content2, settings.options);
+    if (contentMinified.error) {
+        if (callback) {
+            return callback(contentMinified.error);
+        }
+    }
+    if (contentMinified.map && settings.options.sourceMap) {
+        utils.writeFile({
+            file: `${settings.output}.map`,
+            content: contentMinified.map,
+            index,
+        });
+    }
+    if (settings && !settings.content && settings.output) {
+        utils.writeFile({
+            file: settings.output,
+            content: contentMinified.code,
+            index,
+        });
+    }
+    if (callback) {
+        return callback(null, contentMinified.code);
+    }
+    return contentMinified.code;
 };
 
 /**

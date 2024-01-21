@@ -7,30 +7,30 @@
 /**
  * Module dependencies.
  */
-import minifier from 'html-minifier';
-import { utils } from '@node-minify/utils';
-import { MinifierOptions } from '@node-minify/types';
+import { MinifierOptions } from "@node-minify/types";
+import { utils } from "@node-minify/utils";
+import minifier from "html-minifier";
 
 /**
  * Module variables.
  */
 const HTMLMinifier = minifier.minify;
 const defaultOptions = {
-  collapseBooleanAttributes: true,
-  collapseInlineTagWhitespace: true,
-  collapseWhitespace: true,
-  minifyCSS: true,
-  minifyJS: true,
-  removeAttributeQuotes: true,
-  removeCDATASectionsFromCDATA: true,
-  removeComments: true,
-  removeCommentsFromCDATA: true,
-  removeEmptyAttributes: true,
-  removeOptionalTags: true,
-  removeRedundantAttributes: true,
-  removeScriptTypeAttributes: true,
-  removeStyleLinkTypeAttributes: true,
-  useShortDoctype: true
+    collapseBooleanAttributes: true,
+    collapseInlineTagWhitespace: true,
+    collapseWhitespace: true,
+    minifyCSS: true,
+    minifyJS: true,
+    removeAttributeQuotes: true,
+    removeCDATASectionsFromCDATA: true,
+    removeComments: true,
+    removeCommentsFromCDATA: true,
+    removeEmptyAttributes: true,
+    removeOptionalTags: true,
+    removeRedundantAttributes: true,
+    removeScriptTypeAttributes: true,
+    removeStyleLinkTypeAttributes: true,
+    useShortDoctype: true,
 };
 
 /**
@@ -40,16 +40,26 @@ const defaultOptions = {
  * @param {String} content
  * @param {Function} callback
  */
-const minifyHTMLMinifier = ({ settings, content, callback, index }: MinifierOptions) => {
-  const options = Object.assign({}, defaultOptions, settings?.options);
-  const contentMinified = HTMLMinifier(content ?? '', options);
-  if (settings && !settings.content && settings.output) {
-    settings.output && utils.writeFile({ file: settings.output, content: contentMinified, index });
-  }
-  if (callback) {
-    return callback(null, contentMinified);
-  }
-  return contentMinified;
+const minifyHTMLMinifier = ({
+    settings,
+    content,
+    callback,
+    index,
+}: MinifierOptions) => {
+    const options = Object.assign({}, defaultOptions, settings?.options);
+    const contentMinified = HTMLMinifier(content ?? "", options);
+    if (settings && !settings.content && settings.output) {
+        settings.output &&
+            utils.writeFile({
+                file: settings.output,
+                content: contentMinified,
+                index,
+            });
+    }
+    if (callback) {
+        return callback(null, contentMinified);
+    }
+    return contentMinified;
 };
 
 /**

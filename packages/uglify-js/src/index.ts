@@ -7,9 +7,9 @@
 /**
  * Module dependencies.
  */
-import uglifyJS from 'uglify-js';
-import { utils } from '@node-minify/utils';
-import { MinifierOptions } from '@node-minify/types';
+import { MinifierOptions } from "@node-minify/types";
+import { utils } from "@node-minify/utils";
+import uglifyJS from "uglify-js";
 
 /**
  * Run uglifyJS.
@@ -19,27 +19,42 @@ import { MinifierOptions } from '@node-minify/types';
  * @param {Function} callback
  * @param {Number} index
  */
-const minifyUglifyJS = ({ settings, content, callback, index }: MinifierOptions) => {
-  const contentMinified = uglifyJS.minify(content ?? '', settings?.options);
-  if (contentMinified.error) {
-    if (callback) {
-      return callback(contentMinified.error);
+const minifyUglifyJS = ({
+    settings,
+    content,
+    callback,
+    index,
+}: MinifierOptions) => {
+    const contentMinified = uglifyJS.minify(content ?? "", settings?.options);
+    if (contentMinified.error) {
+        if (callback) {
+            return callback(contentMinified.error);
+        }
     }
-  }
-  if (contentMinified.map && typeof settings?.options?.sourceMap === 'object') {
-    utils.writeFile({
-      file: typeof settings.options.sourceMap.filename === 'string' ? settings.options.sourceMap.filename : '',
-      content: contentMinified.map,
-      index
-    });
-  }
-  if (settings && !settings.content && settings.output) {
-    utils.writeFile({ file: settings.output, content: contentMinified.code, index });
-  }
-  if (callback) {
-    return callback(null, contentMinified.code);
-  }
-  return contentMinified.code;
+    if (
+        contentMinified.map &&
+        typeof settings?.options?.sourceMap === "object"
+    ) {
+        utils.writeFile({
+            file:
+                typeof settings.options.sourceMap.filename === "string"
+                    ? settings.options.sourceMap.filename
+                    : "",
+            content: contentMinified.map,
+            index,
+        });
+    }
+    if (settings && !settings.content && settings.output) {
+        utils.writeFile({
+            file: settings.output,
+            content: contentMinified.code,
+            index,
+        });
+    }
+    if (callback) {
+        return callback(null, contentMinified.code);
+    }
+    return contentMinified.code;
 };
 
 /**

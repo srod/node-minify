@@ -9,7 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "lint": "eslint . --ext .ts"
+    "lint": "biome lint ."
   },
   "dependencies": {
     "@astrojs/partytown": "2.0.4",
