@@ -19,7 +19,7 @@ export type Settings = {
     options?: Options;
     option?: string;
     buffer?: number;
-    type?: string;
+    type?: "js" | "css";
     silence?: boolean;
     publicFolder?: string;
     replaceInPlace?: boolean;

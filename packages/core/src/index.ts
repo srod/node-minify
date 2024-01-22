@@ -14,8 +14,7 @@ import { setup } from "./setup";
 
 /**
  * Run node-minify.
- *
- * @param {Object} settings - Settings from user input
+ * @param settings Settings from user input
  */
 const minify = (settings: Settings) => {
     return new Promise((resolve, reject) => {

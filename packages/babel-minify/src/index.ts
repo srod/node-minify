@@ -30,11 +30,11 @@ type MinifierOptionsBabel = {
 
 /**
  * Run babel-minify.
- *
- * @param {Object} settings
- * @param {String} content
- * @param {Function} callback
- * @param {Number} index
+ * @param settings Babel-minify options
+ * @param content Content to minify
+ * @param callback Callback
+ * @param index Index of current file in array
+ * @returns Minified content
  */
 const minifyBabel = ({
     settings,

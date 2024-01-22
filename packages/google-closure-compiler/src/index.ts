@@ -37,10 +37,11 @@ const allowedFlags = [
 
 /**
  * Run Google Closure Compiler.
- *
- * @param {Object} settings
- * @param {String} content
- * @param {Function} callback
+ * @param settings GCC options
+ * @param content Content to minify
+ * @param callback Callback
+ * @param index Index of current file in array
+ * @returns Minified content
  */
 const minifyGCC = ({ settings, content, callback, index }: MinifierOptions) => {
     const options = applyOptions({}, settings?.options ?? {});
@@ -68,9 +69,9 @@ const minifyGCC = ({ settings, content, callback, index }: MinifierOptions) => {
 
 /**
  * Adds any valid options passed in the options parameters to the flags parameter and returns the flags object.
- * @param {Object} flags
- * @param {Object} options
- * @returns {Object} flags
+ * @param flags the flags object to add options to
+ * @param options the options object to add to the flags object
+ * @returns the flags object with the options added
  */
 type Flags = {
     [key: string]: boolean | Record<string, OptionsPossible>;
@@ -87,6 +88,8 @@ const applyOptions = (flags: Flags, options?: Options): Flags => {
 
 /**
  * GCC command line.
+ * @param options the options to pass to GCC
+ * @returns the command line arguments to pass to GCC
  */
 
 const gccCommand = (options: Record<string, OptionsPossible>) => {

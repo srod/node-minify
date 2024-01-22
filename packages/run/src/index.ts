@@ -12,11 +12,11 @@ import { MinifierOptions } from "@node-minify/types";
 
 /**
  * Run the command line with spawn.
- *
- * @param {Array} args
- * @param {String} data
- * @param {Object} settings
- * @param {Function} callback
+ * @param args Arguments
+ * @param data Data to minify
+ * @param settings Settings
+ * @param callback Callback
+ * @returns Minified content
  */
 const runCommandLine = ({
     args,
@@ -33,10 +33,10 @@ const runCommandLine = ({
 
 /**
  * Exec command as async.
- *
- * @param {String} data
- * @param {Array} args
- * @param {Function} callback
+ * @param data Data to minify
+ * @param args Arguments
+ * @param callback Callback
+ * @returns Minified content
  */
 const runAsync = ({ data, args, callback }: MinifierOptions) => {
     let stdout = "";
@@ -72,10 +72,11 @@ const runAsync = ({ data, args, callback }: MinifierOptions) => {
 /**
  * Exec command as sync.
  *
- * @param {Object} settings
- * @param {String} data
- * @param {Array} args
- * @param {Function} callback
+ * @param settings Settings
+ * @param data Data to minify
+ * @param args Arguments
+ * @param callback Callback
+ * @returns Minified content
  */
 const runSync = ({ settings, data, args, callback }: MinifierOptions) => {
     try {

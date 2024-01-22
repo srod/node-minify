@@ -29,11 +29,11 @@ import CleanCSS from "clean-css";
 
 /**
  * Run clean-css.
- *
- * @param {Object} settings
- * @param {String} content
- * @param {Function} callback
- * @param {Number} index
+ * @param settings Clean-css options
+ * @param content Content to minify
+ * @param callback Callback
+ * @param index Index of current file in array
+ * @returns Minified content
  */
 const minifyCleanCSS = ({
     settings,

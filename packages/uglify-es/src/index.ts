@@ -25,10 +25,11 @@ type MinifierOptionsUglifyES = {
 
 /**
  * Run uglifyES.
- *
- * @param {Object} settings
- * @param {String} content
- * @param {Function} callback
+ * @param settings UglifyES options
+ * @param content Content to minify
+ * @param callback Callback
+ * @param index Index of current file in array
+ * @returns Minified content
  */
 const minifyUglifyES = ({
     settings,
