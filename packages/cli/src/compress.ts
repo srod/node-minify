@@ -13,8 +13,7 @@ import { utils } from "@node-minify/utils";
 
 /**
  * Run compression.
- *
- * @param {Object} options
+ * @param options Settings
  */
 const compress = (options: Settings): Promise<Result> => {
     return new Promise<Result>((resolve, reject) => {

@@ -9,9 +9,8 @@
  */
 
 import { runCommandLine } from "@node-minify/run";
-import { MinifierOptions } from "@node-minify/types";
+import { MinifierOptions, Options } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
-// import path from 'path';
 import dirname from "es-dirname";
 
 /**
@@ -21,14 +20,18 @@ const binYui = `${dirname()}/binaries/yuicompressor-2.4.7.jar`;
 
 /**
  * Run YUI Compressor.
- *
- * @param {Object} settings
- * @param {String} content
- * @param {Function} callback
+ * @param settings YUI Compressor options
+ * @param content Content to minify
+ * @param callback Callback
+ * @param index Index of current file in array
+ * @returns Minified content
  */
 const minifyYUI = ({ settings, content, callback, index }: MinifierOptions) => {
+    if (!settings?.type) {
+        throw new Error("You must specify a type: js or css");
+    }
     return runCommandLine({
-        args: yuiCommand(settings?.type, settings?.options),
+        args: yuiCommand(settings.type, settings?.options ?? {}),
         data: content,
         settings,
         callback: (err: unknown, content?: string) => {
@@ -52,9 +55,9 @@ const minifyYUI = ({ settings, content, callback, index }: MinifierOptions) => {
 /**
  * YUI Compressor CSS command line.
  */
-const yuiCommand = (type, options: any) => {
+const yuiCommand = (type: "js" | "css", options: Options) => {
     return ["-jar", "-Xss2048k", binYui, "--type", type].concat(
-        utils.buildArgs(options ?? {})
+        utils.buildArgs(options)
     );
 };
 

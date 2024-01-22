@@ -13,10 +13,11 @@ import jsonminify from "jsonminify";
 
 /**
  * Run jsonminify.
- *
- * @param {Object} settings
- * @param {String} content
- * @param {Function} callback
+ * @param settings JsonMinify options
+ * @param content Content to minify
+ * @param callback Callback
+ * @param index Index of current file in array
+ * @returns Minified content
  */
 const minifyJsonMinify = ({
     settings,

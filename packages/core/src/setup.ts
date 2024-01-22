@@ -24,9 +24,7 @@ const defaultSettings = {
 
 /**
  * Run setup.
- *
- * @param {Object} inputSettings
- * @return {Object}
+ * @param inputSettings Settings from user input
  */
 const setup = (inputSettings: Settings) => {
     let settings: Settings = Object.assign(
@@ -71,13 +69,11 @@ const setup = (inputSettings: Settings) => {
 
 /**
  * Check the output path, searching for $1
- * if exist, returns the path remplacing $1 by file name
- *
- * @param {String|Array} input - Path file
- * @param {String} output - Path to the output file
- * @param {String} publicFolder - Path to the public folder
- * @param {Boolean} replaceInPlace - True to replace file in same folder
- * @return {Object}
+ * if exist, returns the path replacing $1 by file name
+ * @param input Path file
+ * @param output Path to the output file
+ * @param publicFolder Path to the public folder
+ * @param replaceInPlace True to replace file in same folder
  */
 const checkOutput = (
     input: string | string[],
@@ -111,10 +107,8 @@ const checkOutput = (
 
 /**
  * Handle wildcards in a path, get the real path of each files.
- *
- * @param {String|Array} input - Path with wildcards
- * @param {String} publicFolder - Path to the public folder
- * @return {Object}
+ * @param input Path with wildcards
+ * @param publicFolder Path to the public folder
  */
 const wildcards = (input: string | string[], publicFolder?: string) => {
     // If it's a string
@@ -127,10 +121,8 @@ const wildcards = (input: string | string[], publicFolder?: string) => {
 
 /**
  * Handle wildcards in a path (string only), get the real path of each files.
- *
- * @param {String} input - Path with wildcards
- * @param {String} publicFolder - Path to the public folder
- * @return {Object}
+ * @param input Path with wildcards
+ * @param publicFolder Path to the public folder
  */
 const wildcardsString = (input: string, publicFolder?: string) => {
     const output: { input?: string[] } = {};
@@ -144,10 +136,8 @@ const wildcardsString = (input: string, publicFolder?: string) => {
 
 /**
  * Handle wildcards in a path (array only), get the real path of each files.
- *
- * @param {Array} input - Path with wildcards
- * @param {String} publicFolder - Path to the public folder
- * @return {Object}
+ * @param input Path with wildcards
+ * @param publicFolder Path to the public folder
  */
 const wildcardsArray = (input: string[], publicFolder?: string) => {
     const output: { input?: string[] } = {};
@@ -181,10 +171,8 @@ const wildcardsArray = (input: string[], publicFolder?: string) => {
 
 /**
  * Get the real path of each files.
- *
- * @param {String} input - Path with wildcards
- * @param {String} publicFolder - Path to the public folder
- * @return {Object}
+ * @param input Path with wildcards
+ * @param publicFolder Path to the public folder
  */
 const getFilesFromWildcards = (input: string, publicFolder?: string) => {
     let output: string[] = [];
@@ -198,10 +186,8 @@ const getFilesFromWildcards = (input: string, publicFolder?: string) => {
 
 /**
  * Prepend the public folder to each file.
- *
- * @param {String|Array} input - Path to file(s)
- * @param {String} publicFolder - Path to the public folder
- * @return {Object}
+ * @param input Path to file(s)
+ * @param publicFolder Path to the public folder
  */
 const setPublicFolder = (input: string | string[], publicFolder: string) => {
     const output: { input?: string | string[] } = {};
@@ -238,8 +224,7 @@ const setPublicFolder = (input: string | string[], publicFolder: string) => {
 
 /**
  * Check if some settings are here.
- *
- * @param {Object} settings
+ * @param settings Settings
  */
 const checkMandatories = (settings: Settings) => {
     ["compressor", "input", "output"].forEach((item: string) =>
@@ -249,8 +234,7 @@ const checkMandatories = (settings: Settings) => {
 
 /**
  * Check if some settings are here for memory content.
- *
- * @param {Object} settings
+ * @param settings Settings
  */
 const checkMandatoriesMemoryContent = (settings: Settings) => {
     ["compressor", "content"].forEach((item: string) =>
@@ -260,9 +244,8 @@ const checkMandatoriesMemoryContent = (settings: Settings) => {
 
 /**
  * Check if the setting exist.
- *
- * @param {String} setting
- * @param {Object} settings
+ * @param setting Setting
+ * @param settings Settings
  */
 const mandatory = (setting: string, settings: { [key: string]: any }) => {
     if (!settings[setting]) {

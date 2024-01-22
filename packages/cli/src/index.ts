@@ -19,6 +19,7 @@ let silence = false;
 
 /**
  * Run one compressor.
+ * @param cli Settings
  */
 const runOne = async (cli: Settings) => {
     const compressor =
@@ -65,6 +66,7 @@ const runOne = async (cli: Settings) => {
 
 /**
  * Run cli.
+ * @param cli Settings
  */
 const run = (cli: Settings) => {
     silence = !!cli.silence;

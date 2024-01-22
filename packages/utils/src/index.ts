@@ -54,19 +54,15 @@ const utils = {} as Utils;
 
 /**
  * Read content from file.
- *
- * @param {String} file
- * @returns {String}
+ * @param file File name
  */
 utils.readFile = (file: string): string => readFileSync(file, "utf8");
 
 /**
  * Write content into file.
- *
- * @param {String} file
- * @param {String} content
- * @param {Number} index - index of the file being processed
- * @returns {String}
+ * @param file File name
+ * @param content Content to write
+ * @param index Index of the file being processed
  */
 utils.writeFile = ({ file, content, index }: WriteFile): string => {
     const _file = index !== undefined ? file[index] : file;
@@ -82,16 +78,13 @@ utils.writeFile = ({ file, content, index }: WriteFile): string => {
 
 /**
  * Delete file.
- *
- * @param {String} file
+ * @param file File name
  */
 utils.deleteFile = (file: string) => unlinkSync(file);
 
 /**
  * Builds arguments array based on an object.
- *
- * @param {Object} options
- * @returns {Array}
+ * @param options
  */
 utils.buildArgs = (
     options: Record<string, OptionsPossible>
@@ -112,16 +105,13 @@ utils.buildArgs = (
 
 /**
  * Clone an object.
- *
- * @param {Object} obj
- * @returns {Object}
+ * @param obj Object
  */
 utils.clone = (obj: object): object => JSON.parse(JSON.stringify(obj));
 
 /**
  * Get the file size in bytes.
- *
- * @returns {String}
+ * @param file File name
  */
 utils.getFilesizeInBytes = (file: string): string => {
     const stats = statSync(file);
@@ -131,8 +121,7 @@ utils.getFilesizeInBytes = (file: string): string => {
 
 /**
  * Get the gzipped file size in bytes.
- *
- * @returns {Promise.<String>}
+ * @param file File name
  */
 utils.getFilesizeGzippedInBytes = (file: string): Promise<string> => {
     return new Promise((resolve) => {
@@ -146,8 +135,7 @@ utils.getFilesizeGzippedInBytes = (file: string): Promise<string> => {
 /**
  * Get the size in human readable.
  * From https://github.com/sindresorhus/pretty-bytes
- *
- * @returns {String}
+ * @param num Number
  */
 utils.prettyBytes = (num: number): string => {
     const UNITS = ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
@@ -181,12 +169,10 @@ utils.prettyBytes = (num: number): string => {
 /**
  * Set the file name as minified.
  * eg. file.js returns file.min.js
- *
- * @param {String} file
- * @param {String} output
- * @param {String} publicFolder
- * @param {Boolean} replaceInPlace
- * @returns {String}
+ * @param file File name
+ * @param output Output file name
+ * @param publicFolder Public folder
+ * @param replaceInPlace Replace in place
  */
 utils.setFileNameMin = (
     file: string,
@@ -211,8 +197,7 @@ utils.setFileNameMin = (
 
 /**
  * Compress a single file.
- *
- * @param {Object} settings
+ * @param settings Settings
  */
 utils.compressSingleFile = (settings: Settings): Promise<string> | string => {
     const content = settings.content
@@ -227,9 +212,7 @@ utils.compressSingleFile = (settings: Settings): Promise<string> | string => {
 
 /**
  * Concatenate all input files and get the data.
- *
- * @param {String|Array} input
- * @return {String}
+ * @param input Input files
  */
 utils.getContentFromFiles = (input: string | string[]): string => {
     if (!Array.isArray(input)) {
@@ -248,11 +231,9 @@ utils.getContentFromFiles = (input: string | string[]): string => {
 
 /**
  * Run compressor in sync.
- *
- * @param {Object} settings
- * @param {String} content
- * @param {Number} index - index of the file being processed
- * @return {String}
+ * @param settings Settings
+ * @param content Content to minify
+ * @param index Index of the file being processed
  */
 utils.runSync = ({ settings, content, index }: MinifierOptions): string =>
     settings && typeof settings.compressor !== "string"
@@ -263,11 +244,9 @@ utils.runSync = ({ settings, content, index }: MinifierOptions): string =>
 
 /**
  * Run compressor in async.
- *
- * @param {Object} settings
- * @param {String} content
- * @param {Number} index - index of the file being processed
- * @return {Promise}
+ * @param settings Settings
+ * @param content Content to minify
+ * @param index Index of the file being processed
  */
 utils.runAsync = ({
     settings,

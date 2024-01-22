@@ -13,10 +13,11 @@ import crass from "crass";
 
 /**
  * Run crass.
- *
- * @param {Object} settings
- * @param {String} content
- * @param {Function} callback
+ * @param settings Crass options
+ * @param content Content to minify
+ * @param callback Callback
+ * @param index Index of current file in array
+ * @returns Minified content
  */
 const minifyCrass = ({
     settings,

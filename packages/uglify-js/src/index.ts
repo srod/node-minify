@@ -13,11 +13,11 @@ import uglifyJS from "uglify-js";
 
 /**
  * Run uglifyJS.
- *
- * @param {Object} settings
- * @param {String} content
- * @param {Function} callback
- * @param {Number} index
+ * @param settings UglifyJS options
+ * @param content Content to minify
+ * @param callback Callback
+ * @param index Index of current file in array
+ * @returns Minified content
  */
 const minifyUglifyJS = ({
     settings,

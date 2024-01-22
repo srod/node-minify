@@ -14,8 +14,7 @@ import mkdirp from "mkdirp";
 
 /**
  * Run compressor.
- *
- * @param {Object} settings
+ * @param settings Settings
  */
 const compress = (settings: Settings): Promise<string> | string => {
     if (typeof settings.compressor !== "function") {
@@ -38,8 +37,7 @@ const compress = (settings: Settings): Promise<string> | string => {
 
 /**
  * Compress an array of files in sync.
- *
- * @param {Object} settings
+ * @param settings Settings
  */
 const compressArrayOfFilesSync = (settings: Settings): any => {
     return (
@@ -53,8 +51,7 @@ const compressArrayOfFilesSync = (settings: Settings): any => {
 
 /**
  * Compress an array of files in async.
- *
- * @param {Object} settings
+ * @param settings Settings
  */
 const compressArrayOfFilesAsync = (
     settings: Settings
@@ -72,8 +69,7 @@ const compressArrayOfFilesAsync = (
 
 /**
  * Create folder of the target file.
- *
- * @param {String} file - Full path of the file
+ * @param file Full path of the file
  */
 const createDirectory = (file: string) => {
     if (Array.isArray(file)) {

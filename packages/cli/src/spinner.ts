@@ -15,8 +15,7 @@ const spinner = ora();
 
 /**
  * Start spinner.
- *
- * @param {Object} options
+ * @param options Settings
  */
 const start = (options: Settings) => {
     spinner.text = `Compressing file(s) with ${chalk.green(
@@ -27,8 +26,7 @@ const start = (options: Settings) => {
 
 /**
  * Stop spinner.
- *
- * @param result {Object}
+ * @param result
  */
 const stop = (result: Result) => {
     spinner.text = `File(s) compressed successfully with ${chalk.green(
@@ -41,8 +39,7 @@ const stop = (result: Result) => {
 
 /**
  * Mark spinner as failed.
- *
- * @param options {Object}
+ * @param options Settings
  */
 const error = (options: Settings) => {
     spinner.text = `Error - file(s) not compressed with ${chalk.red(

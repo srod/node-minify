@@ -13,10 +13,11 @@ import { minify } from "csso";
 
 /**
  * Run csso.
- *
- * @param {Object} settings
- * @param {String} content
- * @param {Function} callback
+ * @param settings Csso options
+ * @param content Content to minify
+ * @param callback Callback
+ * @param index Index of current file in array
+ * @returns Minified content
  */
 const minifyCSSO = ({
     settings,
