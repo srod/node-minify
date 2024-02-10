@@ -93,8 +93,8 @@ importers:
         specifier: 5.0.5
         version: 5.0.5
       tsup:
-        specifier: 8.0.1
-        version: 8.0.1(typescript@5.3.3)
+        specifier: 8.0.2
+        version: 8.0.2(typescript@5.3.3)
       turbo:
         specifier: 1.12.3
         version: 1.12.3
@@ -7056,8 +7056,8 @@ packages:
       typescript: 5.3.3
     dev: false
 
-  /tsup@8.0.1(typescript@5.3.3):
-    resolution: {integrity: sha512-hvW7gUSG96j53ZTSlT4j/KL0q1Q2l6TqGBFc6/mu/L46IoNWqLLUzLRLP1R8Q7xrJTmkDxxDoojV5uCVs1sVOg==}
+  /tsup@8.0.2(typescript@5.3.3):
+    resolution: {integrity: sha512-NY8xtQXdH7hDUAZwcQdY/Vzlw9johQsaqf7iwZ6g1DOUlFYQ5/AtVAjTvihhEyeRlGo4dLRVHtrRaL35M1daqQ==}
     engines: {node: '>=18'}
     hasBin: true
     peerDependencies:
