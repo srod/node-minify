@@ -54,7 +54,7 @@
     "@node-minify/utils": "workspace:*",
     "@node-minify/yui": "workspace:*",
     "@tsconfig/node18": "18.2.2",
-    "@types/node": "18.19.15",
+    "@types/node": "18.19.16",
     "@vitest/coverage-c8": "0.31.4",
     "@vitest/ui": "0.31.4",
     "copyfiles": "2.4.1",
