@@ -17,8 +17,8 @@ export type OptionsTest = Options & {
 };
 
 type Compressor = (
-    arg0: MinifierOptions
-) => void | string | Promise<void | string>;
+    args: MinifierOptions
+) => void | string | Promise<void | string | undefined>;
 
 export type Settings = {
     compressorLabel?: string;
@@ -48,7 +48,6 @@ export type MinifierOptions = {
     sync?: boolean;
     input?: string | string[];
     output?: string;
-    // options?: Options;
 };
 
 export type Result = {

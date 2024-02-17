@@ -36,7 +36,7 @@ describe("Package: terser", () => {
             },
         };
 
-        return minify(options.minify).catch((err) => {
+        return minify(options.minify).catch((err: Error) => {
             return expect(err).not.toBeNull();
         });
     });
