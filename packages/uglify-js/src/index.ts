@@ -33,7 +33,8 @@ const minifyUglifyJS = ({
     }
     if (
         contentMinified.map &&
-        typeof settings?.options?.sourceMap === "object"
+        typeof settings?.options?.sourceMap === "object" &&
+        "filename" in settings.options.sourceMap
     ) {
         utils.writeFile({
             file:

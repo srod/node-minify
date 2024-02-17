@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { Options } from "@node-minify/types";
+import { OptionsTest } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
 import { filesCSS } from "../../../tests/files-path";
 import { runOneTest, tests } from "../../../tests/fixtures";
@@ -22,7 +22,7 @@ describe("Package: cssnano", () => {
         runOneTest({ options, compressorLabel, compressor, sync: true });
     });
     test("should be ok with no callback", () => {
-        const options: Options = {
+        const options: OptionsTest = {
             minify: {
                 compressor: cssnano,
                 input: filesCSS.fileCSS,
@@ -35,7 +35,7 @@ describe("Package: cssnano", () => {
         });
     });
     test("should throw an error", () => {
-        const options: Options = {
+        const options: OptionsTest = {
             minify: {
                 compressor: cssnano,
                 input: filesCSS.fileCSSErrors,

@@ -13,14 +13,17 @@ import { filesCSS, filesHTML, filesJS, filesJSON } from "./files-path";
 //   sync: boolean;
 // };
 
-const runOneTest = (
-    {
-        options,
-        compressorLabel,
-        compressor,
-        sync,
-    }: Settings /* & SettingsTests */
-) => {
+const runOneTest = ({
+    options,
+    compressorLabel,
+    compressor,
+    sync,
+}: {
+    options: { it: string; minify: Settings };
+    compressorLabel: string;
+    compressor: any;
+    sync?: boolean;
+}) => {
     if (!options) {
         return false;
     }

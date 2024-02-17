@@ -51,7 +51,8 @@ const minifyCleanCSS = ({
     const contentMinified = _cleanCSS.styles;
     if (
         _cleanCSS.sourceMap &&
-        typeof settings?.options?._sourceMap === "object"
+        typeof settings?.options?._sourceMap === "object" &&
+        "url" in settings.options._sourceMap
     ) {
         utils.writeFile({
             file:

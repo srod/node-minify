@@ -5,7 +5,7 @@
  */
 
 import childProcess from "child_process";
-import { Options } from "@node-minify/types";
+import { OptionsTest } from "@node-minify/types";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import { filesJS } from "../../../tests/files-path";
 import { runOneTest, tests } from "../../../tests/fixtures";
@@ -33,7 +33,7 @@ describe("Package: YUI", () => {
     test("should compress with some options", (): Promise<void> =>
         new Promise<void>((done) => {
             // const options: { minify: { callback?: Function } } = {};
-            const options: Options = {
+            const options: OptionsTest = {
                 minify: {
                     compressor: yui,
                     type: "js",
@@ -56,7 +56,7 @@ describe("Package: YUI", () => {
         }));
 
     test("should catch an error if yui with bad options", () => {
-        const options: Options = {
+        const options: OptionsTest = {
             minify: {
                 compressor: yui,
                 type: "js",
@@ -81,7 +81,7 @@ describe("Package: YUI", () => {
             });
         });
         test("should callback an error on spawnSync", () => {
-            const options: Options = {
+            const options: OptionsTest = {
                 minify: {
                     compressor: yui,
                     input: filesJS.oneFile,
@@ -108,7 +108,7 @@ describe("Package: YUI", () => {
         });
         test("should callback an error on spawn", (): Promise<void> =>
             new Promise<void>((done) => {
-                const options: Options = {
+                const options: OptionsTest = {
                     minify: {
                         compressor: yui,
                         input: filesJS.oneFile,

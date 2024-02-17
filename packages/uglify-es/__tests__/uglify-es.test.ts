@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { Options } from "@node-minify/types";
+import { OptionsTest } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
 import { filesJS } from "../../../tests/files-path";
 import { runOneTest, tests } from "../../../tests/fixtures";
@@ -28,7 +28,7 @@ describe("Package: uglify-es", () => {
         runOneTest({ options, compressorLabel, compressor, sync: true });
     });
     test("should throw an error", () => {
-        const options: Options = {
+        const options: OptionsTest = {
             minify: {
                 compressor: uglifyes,
                 input: filesJS.errors,
