@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { Options } from "@node-minify/types";
+import { OptionsTest } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
 import { filesJS } from "../../../tests/files-path";
 import { runOneTest, tests } from "../../../tests/fixtures";
@@ -23,7 +23,7 @@ describe("Package: google-closure-compiler", () => {
     });
     test("should compress with some options", (): Promise<void> =>
         new Promise<void>((done) => {
-            const options: Options = {
+            const options: OptionsTest = {
                 minify: {
                     compressor: gcc,
                     input: filesJS.oneFileWithWildcards,
@@ -44,7 +44,7 @@ describe("Package: google-closure-compiler", () => {
             minify(options.minify);
         }));
     test("should throw an error", () => {
-        const options: Options = {
+        const options: OptionsTest = {
             minify: {
                 compressor: gcc,
                 input: filesJS.errors,

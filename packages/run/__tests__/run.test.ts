@@ -20,10 +20,10 @@ describe("Package: run", () => {
                     settings: {
                         sync: false,
                     },
-                    callback: (err, min) => {
+                    callback: (err?: unknown, result?: string) => {
                         expect(spy).toHaveBeenCalled();
                         expect(err).toBeNull();
-                        expect(min).toBeDefined();
+                        expect(result).toBeDefined();
                         done();
                     },
                 };
@@ -38,10 +38,10 @@ describe("Package: run", () => {
                     settings: {
                         sync: false,
                     },
-                    callback: (err, min) => {
+                    callback: (err?: unknown, result?: string) => {
                         expect(spy).toHaveBeenCalled();
                         expect(err).toBeDefined();
-                        expect(min).toBeUndefined();
+                        expect(result).toBeUndefined();
                         done();
                     },
                 };

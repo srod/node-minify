@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { Options } from "@node-minify/types";
+import { OptionsTest } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
 import { filesCSS } from "../../../tests/files-path";
 import { runOneTest, tests } from "../../../tests/fixtures";
@@ -23,7 +23,7 @@ describe("Package: clean-css", () => {
     });
     test("should compress with some options", (): Promise<void> =>
         new Promise<void>((done) => {
-            const options: Options = {
+            const options: OptionsTest = {
                 minify: {
                     compressor,
                     input: filesCSS.fileCSS,

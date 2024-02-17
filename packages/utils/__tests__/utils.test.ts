@@ -61,6 +61,7 @@ describe("Package: utils", () => {
 
     describe("pretty bytes", () => {
         test("should throw when not a number", () => {
+            // @ts-expect-error
             expect(() => utils.prettyBytes("a")).toThrow();
         });
 

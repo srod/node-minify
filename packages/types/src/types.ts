@@ -5,12 +5,24 @@ export type OptionsPossible =
     | object;
 
 export type Options = {
-    [Key: string]: boolean | Record<string, OptionsPossible>;
+    [Key: string]:
+        | string
+        | string[]
+        | boolean
+        | Record<string, OptionsPossible>;
 };
+
+export type OptionsTest = Options & {
+    minify: Settings;
+};
+
+type Compressor = (
+    args: MinifierOptions
+) => void | string | Promise<void | string | undefined>;
 
 export type Settings = {
     compressorLabel?: string;
-    compressor?: string | ((arg0: MinifierOptions) => string);
+    compressor?: string | Compressor;
     sync?: boolean;
     callback?: (err: unknown, minified?: string) => void;
     content?: string;
@@ -19,7 +31,7 @@ export type Settings = {
     options?: Options;
     option?: string;
     buffer?: number;
-    type?: "js" | "css";
+    type?: "js" | "css" | "uglifyjs";
     silence?: boolean;
     publicFolder?: string;
     replaceInPlace?: boolean;
@@ -29,7 +41,7 @@ export type MinifierOptions = {
     settings?: Settings;
     content?: string;
     callback?: null | ((err?: unknown | null, result?: string) => void);
-    compressor?: string | ((arg0: MinifierOptions) => void);
+    compressor?: string | Compressor;
     index?: number;
     args?: string[];
     data?: string;
@@ -39,7 +51,7 @@ export type MinifierOptions = {
 };
 
 export type Result = {
-    compressor?: string | ((arg0: MinifierOptions) => void);
+    compressor?: string | Compressor;
     compressorLabel: string | (() => void);
     size: string;
     sizeGzip: string;

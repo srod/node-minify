@@ -5,7 +5,7 @@
  */
 
 import childProcess from "child_process";
-import { Options } from "@node-minify/types";
+import { OptionsTest } from "@node-minify/types";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import { filesJS } from "../../../tests/files-path";
 import { runOneTest, tests } from "../../../tests/fixtures";
@@ -28,7 +28,7 @@ describe("Package: core", () => {
     });
     describe("Fake binary", () => {
         test("should throw an error if binary does not exist", () => {
-            const options: Options = {
+            const options: OptionsTest = {
                 minify: {
                     compressor: "fake",
                     input: filesJS.oneFileWithWildcards,
@@ -46,7 +46,7 @@ describe("Package: core", () => {
 
     describe("No mandatories", () => {
         test("should throw an error if no compressor", () => {
-            const options: Options = {
+            const options: OptionsTest = {
                 minify: {
                     input: filesJS.oneFileWithWildcards,
                     output: filesJS.fileJSOut,
@@ -61,7 +61,7 @@ describe("Package: core", () => {
         });
 
         test("should throw an error if no input", () => {
-            const options: Options = {
+            const options: OptionsTest = {
                 minify: {
                     compressor: noCompress,
                     output: filesJS.fileJSOut,
@@ -76,7 +76,7 @@ describe("Package: core", () => {
         });
 
         test("should throw an error if no output", () => {
-            const options: Options = {
+            const options: OptionsTest = {
                 minify: {
                     compressor: noCompress,
                     input: filesJS.oneFileWithWildcards,
@@ -93,7 +93,7 @@ describe("Package: core", () => {
 
     describe("Create errors", () => {
         test("should catch an error if yui with bad options", () => {
-            const options: Options = {
+            const options: OptionsTest = {
                 minify: {
                     compressor: yui,
                     type: "js",
@@ -110,7 +110,7 @@ describe("Package: core", () => {
             });
         });
         test("should catch an error if yui with bad options and sync", () => {
-            const options: Options = {
+            const options: OptionsTest = {
                 minify: {
                     compressor: yui,
                     type: "js",
@@ -137,7 +137,7 @@ describe("Package: core", () => {
             });
         });
         test("should callback an error on spawnSync", () => {
-            const options: Options = {
+            const options: OptionsTest = {
                 minify: {
                     compressor: yui,
                     input: filesJS.oneFile,
@@ -165,7 +165,7 @@ describe("Package: core", () => {
         });
         test("should callback an error on spawn", () =>
             new Promise<void>((done) => {
-                const options: Options = {
+                const options: OptionsTest = {
                     minify: {
                         compressor: yui,
                         input: filesJS.oneFile,
@@ -194,7 +194,7 @@ describe("Package: core", () => {
 
     describe("Mandatory", () => {
         test("should show throw on type option", () => {
-            const options: Options = {
+            const options: OptionsTest = {
                 minify: {
                     type: "uglifyjs",
                     input: filesJS.oneFileWithWildcards,
@@ -216,7 +216,7 @@ describe("Package: core", () => {
     describe("Should be OK", () => {
         test("should be OK with GCC and async", (): Promise<void> =>
             new Promise<void>((done) => {
-                const options: Options = {
+                const options: OptionsTest = {
                     minify: {
                         compressor: gcc,
                         input: filesJS.oneFile,
@@ -236,7 +236,7 @@ describe("Package: core", () => {
             }));
         test("should be OK with GCC and sync", () =>
             new Promise<void>((done) => {
-                const options: Options = {
+                const options: OptionsTest = {
                     minify: {
                         compressor: gcc,
                         input: filesJS.oneFile,
@@ -259,10 +259,11 @@ describe("Package: core", () => {
     describe("In Memory", () => {
         test("should be OK with html minifier and async", () =>
             new Promise<void>((done) => {
-                const options: Options = {
+                const options: OptionsTest = {
                     minify: {
                         compressor: htmlMinifier,
-                        content: "<html><body><div>content</div></body></html>",
+                        content:
+                            "<html lang='en'><body><div>content</div></body></html>",
                         callback: (): void => {
                             return;
                         },
@@ -279,10 +280,11 @@ describe("Package: core", () => {
 
         test("should be OK with GCC and sync", (): Promise<void> =>
             new Promise<void>((done) => {
-                const options: Options = {
+                const options: OptionsTest = {
                     minify: {
                         compressor: htmlMinifier,
-                        content: "<html><body><div>content</div></body></html>",
+                        content:
+                            "<html lang='en'><body><div>content</div></body></html>",
                         sync: true,
                         callback: (): void => {
                             return;
@@ -299,10 +301,11 @@ describe("Package: core", () => {
             }));
 
         test("should throw an error if binary does not exist", () => {
-            const options: Options = {
+            const options: OptionsTest = {
                 minify: {
                     compressor: "fake",
-                    content: "<html><body><div>content</div></body></html>",
+                    content:
+                        "<html lang='en'><body><div>content</div></body></html>",
                 },
             };
 
