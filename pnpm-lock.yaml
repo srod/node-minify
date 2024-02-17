@@ -279,8 +279,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       google-closure-compiler-java:
-        specifier: 20230802.0.0
-        version: 20230802.0.0
+        specifier: 20231112.0.0
+        version: 20231112.0.0
     devDependencies:
       '@node-minify/types':
         specifier: workspace:*
@@ -3994,8 +3994,8 @@ packages:
     resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
     dev: false
 
-  /google-closure-compiler-java@20230802.0.0:
-    resolution: {integrity: sha512-PWKLMLwj7pR/U0yYbiy649LLqAscu+F1gyY4Y/jK6CmSLb8cIJbL8BTJd00828TzTNfWnYwxbkcQw0y9C2YsGw==}
+  /google-closure-compiler-java@20231112.0.0:
+    resolution: {integrity: sha512-E45cJD6/xLJlL8pL6HEoxu8nEKp87CnrojUK0UuHiT7ZjCsrJfR4WhZwNNCq2+/6gYD9unGgMsunV4DDtBbvaA==}
     dev: false
 
   /got@12.6.1:

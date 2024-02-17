@@ -52,7 +52,7 @@
   "dependencies": {
     "@node-minify/run": "workspace:*",
     "@node-minify/utils": "workspace:*",
-    "google-closure-compiler-java": "20230802.0.0"
+    "google-closure-compiler-java": "20231112.0.0"
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*"
