@@ -122,13 +122,13 @@ importers:
         version: 3.1.1(@babel/core@7.24.0)(preact@10.19.6)(vite@5.1.5)
       '@astrolib/analytics':
         specifier: 0.5.0
-        version: 0.5.0(astro@4.4.14)
+        version: 0.5.0(astro@4.4.15)
       '@types/node':
         specifier: ^18.0.0
         version: 18.19.22
       astro:
         specifier: ^4.0.0
-        version: 4.4.14(@types/node@18.19.22)(typescript@5.4.2)
+        version: 4.4.15(@types/node@18.19.22)(typescript@5.4.2)
       preact:
         specifier: ^10.7.3
         version: 10.19.6
@@ -508,12 +508,12 @@ packages:
       - supports-color
     dev: false
 
-  /@astrolib/analytics@0.5.0(astro@4.4.14):
+  /@astrolib/analytics@0.5.0(astro@4.4.15):
     resolution: {integrity: sha512-NlTFTUtsjVEAb2ZzYXZ5XBvak7JH3ixaQTq5r+q5PZtealHajUSPzaY1UrcJOJDJrOFHf5pvxBnYmCEzE9fIjw==}
     peerDependencies:
       astro: ^1.2.1 || ^2.0.0 || ^3.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.4.14(@types/node@18.19.22)(typescript@5.4.2)
+      astro: 4.4.15(@types/node@18.19.22)(typescript@5.4.2)
     dev: false
 
   /@babel/code-frame@7.23.5:
@@ -1866,8 +1866,8 @@ packages:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
     dev: false
 
-  /astro@4.4.14(@types/node@18.19.22)(typescript@5.4.2):
-    resolution: {integrity: sha512-b8l8NyUP38sWDkCSx9PKTX8aISIXhEGCnsx5FugOTyMisYeeY2hwyaiUpL11WvNJafq28RY0RMO+HWBR6te6fA==}
+  /astro@4.4.15(@types/node@18.19.22)(typescript@5.4.2):
+    resolution: {integrity: sha512-RTiAnlO8hDp6GqMVvaeJxyuCJhHNEho09lHshMNQBqgRabYPOJGW0HZZrbLRGNOqN9I14ivhZIunYGgAaGQpWw==}
     engines: {node: '>=18.14.1', npm: '>=6.14.0'}
     hasBin: true
     dependencies:
@@ -2753,7 +2753,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001596
-      electron-to-chromium: 1.4.695
+      electron-to-chromium: 1.4.698
     dev: true
 
   /browserslist@4.23.0:
@@ -2762,7 +2762,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001596
-      electron-to-chromium: 1.4.695
+      electron-to-chromium: 1.4.698
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.23.0)
     dev: false
@@ -3448,8 +3448,8 @@ packages:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: false
 
-  /electron-to-chromium@1.4.695:
-    resolution: {integrity: sha512-eMijZmeqPtm774pCZIOrfUHMs/7ls++W1sLhxwqgu8KQ8E2WmMtzwyqOMt0XXUJ3HTIPfuwlfwF+I5cwnfItBA==}
+  /electron-to-chromium@1.4.698:
+    resolution: {integrity: sha512-f9iZD1t3CLy1AS6vzM5EKGa6p9pRcOeEFXRFbaG2Ta+Oe7MkfRQ3fsvPYidzHe1h4i0JvIvpcY55C+B6BZNGtQ==}
 
   /emoji-regex@10.3.0:
     resolution: {integrity: sha512-QpLs9D9v9kArv4lfDEgg1X/gN5XLnf/A6l9cs8SPZLRZR3ZkY9+kwIQTxm+fsSej5UMYGE8fdoaZVIBlqG0XTw==}
