@@ -122,13 +122,13 @@ importers:
         version: 3.1.1(@babel/core@7.24.0)(preact@10.19.6)(vite@5.1.6)
       '@astrolib/analytics':
         specifier: 0.5.0
-        version: 0.5.0(astro@4.5.4)
+        version: 0.5.0(astro@4.5.5)
       '@types/node':
         specifier: ^18.0.0
         version: 18.19.24
       astro:
         specifier: ^4.0.0
-        version: 4.5.4(@types/node@18.19.24)(typescript@5.4.2)
+        version: 4.5.5(@types/node@18.19.24)(typescript@5.4.2)
       preact:
         specifier: ^10.7.3
         version: 10.19.6
@@ -453,7 +453,7 @@ packages:
       remark-parse: 11.0.0
       remark-rehype: 11.1.0
       remark-smartypants: 2.1.0
-      shiki: 1.1.7
+      shiki: 1.2.0
       unified: 11.0.4
       unist-util-remove-position: 5.0.0
       unist-util-visit: 5.0.0
@@ -512,12 +512,12 @@ packages:
       - supports-color
     dev: false
 
-  /@astrolib/analytics@0.5.0(astro@4.5.4):
+  /@astrolib/analytics@0.5.0(astro@4.5.5):
     resolution: {integrity: sha512-NlTFTUtsjVEAb2ZzYXZ5XBvak7JH3ixaQTq5r+q5PZtealHajUSPzaY1UrcJOJDJrOFHf5pvxBnYmCEzE9fIjw==}
     peerDependencies:
       astro: ^1.2.1 || ^2.0.0 || ^3.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.5.4(@types/node@18.19.24)(typescript@5.4.2)
+      astro: 4.5.5(@types/node@18.19.24)(typescript@5.4.2)
     dev: false
 
   /@babel/code-frame@7.23.5:
@@ -1461,8 +1461,8 @@ packages:
     dev: false
     optional: true
 
-  /@shikijs/core@1.1.7:
-    resolution: {integrity: sha512-gTYLUIuD1UbZp/11qozD3fWpUTuMqPSf3svDMMrL0UmlGU7D9dPw/V1FonwAorCUJBltaaESxq90jrSjQyGixg==}
+  /@shikijs/core@1.2.0:
+    resolution: {integrity: sha512-OlFvx+nyr5C8zpcMBnSGir0YPD6K11uYhouqhNmm1qLiis4GA7SsGtu07r9gKS9omks8RtQqHrJL4S+lqWK01A==}
     dev: false
 
   /@sinclair/typebox@0.27.8:
@@ -1871,8 +1871,8 @@ packages:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
     dev: false
 
-  /astro@4.5.4(@types/node@18.19.24)(typescript@5.4.2):
-    resolution: {integrity: sha512-qwMyBn36wXvaCzdCmdbyCxLQGG5hTa3saNdHdqS20Yn1b7Z7oqqcWOb2UjFuq6O8dFqZxU8Hq0/pGFscvsYtJA==}
+  /astro@4.5.5(@types/node@18.19.24)(typescript@5.4.2):
+    resolution: {integrity: sha512-gZ3jR06dLmY9/SMkKMr+3pRSrUjhuwjnXt+9abFJV3WGwhCnLZbSNsTBrLMsaFHpAS1ReJChcTWyKRCvs/jCIQ==}
     engines: {node: '>=18.14.1', npm: '>=6.14.0'}
     hasBin: true
     dependencies:
@@ -1926,7 +1926,7 @@ packages:
       rehype: 13.0.1
       resolve: 1.22.8
       semver: 7.6.0
-      shiki: 1.1.7
+      shiki: 1.2.0
       string-width: 7.1.0
       strip-ansi: 7.1.0
       tsconfck: 3.0.3(typescript@5.4.2)
@@ -2690,8 +2690,8 @@ packages:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
     dev: false
 
-  /binary-extensions@2.2.0:
-    resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
+  /binary-extensions@2.3.0:
+    resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
     dev: false
 
@@ -2765,7 +2765,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001597
-      electron-to-chromium: 1.4.705
+      electron-to-chromium: 1.4.708
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.23.0)
     dev: false
@@ -3453,6 +3453,11 @@ packages:
 
   /electron-to-chromium@1.4.705:
     resolution: {integrity: sha512-LKqhpwJCLhYId2VVwEzFXWrqQI5n5zBppz1W9ehhTlfYU8CUUW6kClbN8LHF/v7flMgRdETS772nqywJ+ckVAw==}
+    dev: true
+
+  /electron-to-chromium@1.4.708:
+    resolution: {integrity: sha512-iWgEEvREL4GTXXHKohhh33+6Y8XkPI5eHihDmm8zUk5Zo7HICEW+wI/j5kJ2tbuNUCXJ/sNXa03ajW635DiJXA==}
+    dev: false
 
   /emoji-regex@10.3.0:
     resolution: {integrity: sha512-QpLs9D9v9kArv4lfDEgg1X/gN5XLnf/A6l9cs8SPZLRZR3ZkY9+kwIQTxm+fsSej5UMYGE8fdoaZVIBlqG0XTw==}
@@ -4132,7 +4137,7 @@ packages:
     resolution: {integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==}
     engines: {node: '>=8'}
     dependencies:
-      binary-extensions: 2.2.0
+      binary-extensions: 2.3.0
     dev: false
 
   /is-buffer@2.0.5:
@@ -6377,10 +6382,10 @@ packages:
     resolution: {integrity: sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==}
     dev: false
 
-  /shiki@1.1.7:
-    resolution: {integrity: sha512-9kUTMjZtcPH3i7vHunA6EraTPpPOITYTdA5uMrvsJRexktqP0s7P3s9HVK80b4pP42FRVe03D7fT3NmJv2yYhw==}
+  /shiki@1.2.0:
+    resolution: {integrity: sha512-xLhiTMOIUXCv5DqJ4I70GgQCtdlzsTqFLZWcMHHG3TAieBUbvEGthdrlPDlX4mL/Wszx9C6rEcxU6kMlg4YlxA==}
     dependencies:
-      '@shikijs/core': 1.1.7
+      '@shikijs/core': 1.2.0
     dev: false
 
   /siginfo@2.0.0:
