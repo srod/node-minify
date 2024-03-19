@@ -69,8 +69,8 @@ importers:
         specifier: 18.2.2
         version: 18.2.2
       '@types/node':
-        specifier: 18.19.24
-        version: 18.19.24
+        specifier: 18.19.26
+        version: 18.19.26
       '@vitest/coverage-v8':
         specifier: 1.4.0
         version: 1.4.0(vitest@1.4.0)
@@ -106,7 +106,7 @@ importers:
         version: 4.3.2(typescript@5.4.2)
       vitest:
         specifier: 1.4.0
-        version: 1.4.0(@types/node@18.19.24)(@vitest/ui@1.4.0)
+        version: 1.4.0(@types/node@18.19.26)(@vitest/ui@1.4.0)
     devDependencies:
       '@biomejs/biome':
         specifier: 1.5.3
@@ -1664,12 +1664,6 @@ packages:
       '@types/unist': 2.0.10
     dev: false
 
-  /@types/node@18.19.24:
-    resolution: {integrity: sha512-eghAz3gnbQbvnHqB+mgB2ZR3aH6RhdEmHGS48BnV75KceQPHqabkxKI0BbUSsqhqy2Ddhc2xD/VAR9ySZd57Lw==}
-    dependencies:
-      undici-types: 5.26.5
-    dev: false
-
   /@types/node@18.19.26:
     resolution: {integrity: sha512-+wiMJsIwLOYCvUqSdKTrfkS8mpTp+MPINe6+Np4TAGFWWRWiBQ5kSq9nZGCSPkzx9mvT+uEukzpX4MOSCydcvw==}
     dependencies:
@@ -1736,7 +1730,7 @@ packages:
       strip-literal: 2.0.0
       test-exclude: 6.0.0
       v8-to-istanbul: 9.2.0
-      vitest: 1.4.0(@types/node@18.19.24)(@vitest/ui@1.4.0)
+      vitest: 1.4.0(@types/node@18.19.26)(@vitest/ui@1.4.0)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -1783,7 +1777,7 @@ packages:
       pathe: 1.1.2
       picocolors: 1.0.0
       sirv: 2.0.4
-      vitest: 1.4.0(@types/node@18.19.24)(@vitest/ui@1.4.0)
+      vitest: 1.4.0(@types/node@18.19.26)(@vitest/ui@1.4.0)
     dev: false
 
   /@vitest/utils@1.4.0:
@@ -7299,7 +7293,7 @@ packages:
       vfile-message: 4.0.2
     dev: false
 
-  /vite-node@1.4.0(@types/node@18.19.24):
+  /vite-node@1.4.0(@types/node@18.19.26):
     resolution: {integrity: sha512-VZDAseqjrHgNd4Kh8icYHWzTKSCZMhia7GyHfhtzLW33fZlG9SwsB6CEhgyVOWkJfJ2pFLrp/Gj1FSfAiqH9Lw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -7308,7 +7302,7 @@ packages:
       debug: 4.3.4
       pathe: 1.1.2
       picocolors: 1.0.0
-      vite: 5.1.6(@types/node@18.19.24)
+      vite: 5.1.6(@types/node@18.19.26)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -7334,42 +7328,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
       - typescript
-    dev: false
-
-  /vite@5.1.6(@types/node@18.19.24):
-    resolution: {integrity: sha512-yYIAZs9nVfRJ/AiOLCA91zzhjsHUgMjB+EigzFb6W2XTLO8JixBCKCjvhKZaye+NKYHCrkv3Oh50dH9EdLU2RA==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || >=20.0.0
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      '@types/node': 18.19.24
-      esbuild: 0.19.12
-      postcss: 8.4.37
-      rollup: 4.13.0
-    optionalDependencies:
-      fsevents: 2.3.3
     dev: false
 
   /vite@5.1.6(@types/node@18.19.26):
@@ -7419,7 +7377,7 @@ packages:
       vite: 5.1.6(@types/node@18.19.26)
     dev: false
 
-  /vitest@1.4.0(@types/node@18.19.24)(@vitest/ui@1.4.0):
+  /vitest@1.4.0(@types/node@18.19.26)(@vitest/ui@1.4.0):
     resolution: {integrity: sha512-gujzn0g7fmwf83/WzrDTnncZt2UiXP41mHuFYFrdwaLRVQ6JYQEiME2IfEjU3vcFL3VKa75XhI3lFgn+hfVsQw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -7444,7 +7402,7 @@ packages:
       jsdom:
         optional: true
     dependencies:
-      '@types/node': 18.19.24
+      '@types/node': 18.19.26
       '@vitest/expect': 1.4.0
       '@vitest/runner': 1.4.0
       '@vitest/snapshot': 1.4.0
@@ -7463,8 +7421,8 @@ packages:
       strip-literal: 2.0.0
       tinybench: 2.6.0
       tinypool: 0.8.2
-      vite: 5.1.6(@types/node@18.19.24)
-      vite-node: 1.4.0(@types/node@18.19.24)
+      vite: 5.1.6(@types/node@18.19.26)
+      vite-node: 1.4.0(@types/node@18.19.26)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less
