@@ -119,7 +119,7 @@ importers:
         version: 2.0.4
       '@astrojs/preact':
         specifier: ^3.0.0
-        version: 3.1.1(@babel/core@7.24.1)(preact@10.19.7)(vite@5.2.0)
+        version: 3.1.1(@babel/core@7.24.3)(preact@10.20.0)(vite@5.2.0)
       '@astrolib/analytics':
         specifier: 0.5.0
         version: 0.5.0(astro@4.5.7)
@@ -131,7 +131,7 @@ importers:
         version: 4.5.7(@types/node@18.19.26)(typescript@5.4.2)
       preact:
         specifier: ^10.7.3
-        version: 10.19.7
+        version: 10.20.0
     devDependencies:
       html-escaper:
         specifier: ^3.0.3
@@ -470,20 +470,20 @@ packages:
       mrmime: 1.0.1
     dev: false
 
-  /@astrojs/preact@3.1.1(@babel/core@7.24.1)(preact@10.19.7)(vite@5.2.0):
+  /@astrojs/preact@3.1.1(@babel/core@7.24.3)(preact@10.20.0)(vite@5.2.0):
     resolution: {integrity: sha512-ASgmVzh4wLyIyynp5CIfDwE45Vg/tIP+Y+5SnQtURmCP1qZpjdUbsw+bGQ0wCSXtjIbzCBa7Kw7Qn0g6WE2W2w==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
       preact: ^10.6.5
     dependencies:
-      '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.24.1)
-      '@babel/plugin-transform-react-jsx-development': 7.22.5(@babel/core@7.24.1)
-      '@preact/preset-vite': 2.8.2(@babel/core@7.24.1)(preact@10.19.7)(vite@5.2.0)
-      '@preact/signals': 1.2.2(preact@10.19.7)
-      babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.24.1)
-      preact: 10.19.7
-      preact-render-to-string: 6.3.1(preact@10.19.7)
-      preact-ssr-prepass: 1.2.1(preact@10.19.7)
+      '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.24.3)
+      '@babel/plugin-transform-react-jsx-development': 7.22.5(@babel/core@7.24.3)
+      '@preact/preset-vite': 2.8.2(@babel/core@7.24.3)(preact@10.20.0)(vite@5.2.0)
+      '@preact/signals': 1.2.2(preact@10.20.0)
+      babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.24.3)
+      preact: 10.20.0
+      preact-render-to-string: 6.3.1(preact@10.20.0)
+      preact-ssr-prepass: 1.2.1(preact@10.20.0)
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
@@ -573,6 +573,29 @@ packages:
       '@babel/generator': 7.24.1
       '@babel/helper-compilation-targets': 7.23.6
       '@babel/helper-module-transforms': 7.23.3(@babel/core@7.24.1)
+      '@babel/helpers': 7.24.1
+      '@babel/parser': 7.24.1
+      '@babel/template': 7.24.0
+      '@babel/traverse': 7.24.1
+      '@babel/types': 7.24.0
+      convert-source-map: 2.0.0
+      debug: 4.3.4
+      gensync: 1.0.0-beta.2
+      json5: 2.2.3
+      semver: 6.3.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /@babel/core@7.24.3:
+    resolution: {integrity: sha512-5FcvN1JHw2sHJChotgx8Ek0lyuh4kCKelgMTTqhYJJtloNvUfpAFMeNQUtdlIaktwrSV9LtCdqwk48wL2wBacQ==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      '@ampproject/remapping': 2.3.0
+      '@babel/code-frame': 7.24.2
+      '@babel/generator': 7.24.1
+      '@babel/helper-compilation-targets': 7.23.6
+      '@babel/helper-module-transforms': 7.23.3(@babel/core@7.24.3)
       '@babel/helpers': 7.24.1
       '@babel/parser': 7.24.1
       '@babel/template': 7.24.0
@@ -680,6 +703,20 @@ packages:
       '@babel/helper-validator-identifier': 7.22.20
     dev: false
 
+  /@babel/helper-module-transforms@7.23.3(@babel/core@7.24.3):
+    resolution: {integrity: sha512-7bBs4ED9OmswdfDzpz4MpWgSrV7FXlc3zIagvLFjS5H+Mk7Snr21vQ6QwrsoCGMfNC4e4LQPdoULEt4ykz0SRQ==}
+    engines: {node: '>=6.9.0'}
+    peerDependencies:
+      '@babel/core': ^7.0.0
+    dependencies:
+      '@babel/core': 7.24.3
+      '@babel/helper-environment-visitor': 7.22.20
+      '@babel/helper-module-imports': 7.24.1
+      '@babel/helper-simple-access': 7.22.5
+      '@babel/helper-split-export-declaration': 7.22.6
+      '@babel/helper-validator-identifier': 7.22.20
+    dev: false
+
   /@babel/helper-plugin-utils@7.24.0:
     resolution: {integrity: sha512-9cUznXMG0+FxRuJfvL82QlTqIzhVW9sL0KjMPHhAOOvpQGL8QtdxnBKILjBqxlHyliz0yCa1G903ZXI/FuHy2w==}
     engines: {node: '>=6.9.0'}
@@ -772,14 +809,24 @@ packages:
       '@babel/helper-plugin-utils': 7.24.0
     dev: false
 
-  /@babel/plugin-transform-react-jsx-development@7.22.5(@babel/core@7.24.1):
+  /@babel/plugin-syntax-jsx@7.24.1(@babel/core@7.24.3):
+    resolution: {integrity: sha512-2eCtxZXf+kbkMIsXS4poTvT4Yu5rXiRa+9xGVT56raghjmBTKMpFNc9R4IDiB4emao9eO22Ox7CxuJG7BgExqA==}
+    engines: {node: '>=6.9.0'}
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+    dependencies:
+      '@babel/core': 7.24.3
+      '@babel/helper-plugin-utils': 7.24.0
+    dev: false
+
+  /@babel/plugin-transform-react-jsx-development@7.22.5(@babel/core@7.24.3):
     resolution: {integrity: sha512-bDhuzwWMuInwCYeDeMzyi7TaBgRQei6DqxhbyniL7/VG4RSS7HtSL2QbY4eESy1KJqlWt8g3xeEBGPuo+XqC8A==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
-      '@babel/core': 7.24.1
-      '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.24.1)
+      '@babel/core': 7.24.3
+      '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.24.3)
     dev: false
 
   /@babel/plugin-transform-react-jsx@7.23.4(@babel/core@7.24.1):
@@ -793,6 +840,20 @@ packages:
       '@babel/helper-module-imports': 7.24.1
       '@babel/helper-plugin-utils': 7.24.0
       '@babel/plugin-syntax-jsx': 7.24.1(@babel/core@7.24.1)
+      '@babel/types': 7.24.0
+    dev: false
+
+  /@babel/plugin-transform-react-jsx@7.23.4(@babel/core@7.24.3):
+    resolution: {integrity: sha512-5xOpoPguCZCRbo/JeHlloSkTA8Bld1J/E1/kLfD1nsuiW1m8tduTA1ERCgIZokDflX/IBzKcqR3l7VlRgiIfHA==}
+    engines: {node: '>=6.9.0'}
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+    dependencies:
+      '@babel/core': 7.24.3
+      '@babel/helper-annotate-as-pure': 7.22.5
+      '@babel/helper-module-imports': 7.24.1
+      '@babel/helper-plugin-utils': 7.24.0
+      '@babel/plugin-syntax-jsx': 7.24.1(@babel/core@7.24.3)
       '@babel/types': 7.24.0
     dev: false
 
@@ -1476,18 +1537,18 @@ packages:
     resolution: {integrity: sha512-j7P6Rgr3mmtdkeDGTe0E/aYyWEWVtc5yFXtHCRHs28/jptDEWfaVOc5T7cblqy1XKPPfCxJc/8DwQ5YgLOZOVQ==}
     dev: false
 
-  /@preact/preset-vite@2.8.2(@babel/core@7.24.1)(preact@10.19.7)(vite@5.2.0):
+  /@preact/preset-vite@2.8.2(@babel/core@7.24.3)(preact@10.20.0)(vite@5.2.0):
     resolution: {integrity: sha512-m3tl+M8IO8jgiHnk+7LSTFl8axdPXloewi7iGVLdmCwf34XOzEUur0bZVewW4DUbUipFjTS2CXu27+5f/oexBA==}
     peerDependencies:
       '@babel/core': 7.x
       vite: 2.x || 3.x || 4.x || 5.x
     dependencies:
-      '@babel/core': 7.24.1
-      '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.24.1)
-      '@babel/plugin-transform-react-jsx-development': 7.22.5(@babel/core@7.24.1)
-      '@prefresh/vite': 2.4.5(preact@10.19.7)(vite@5.2.0)
+      '@babel/core': 7.24.3
+      '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.24.3)
+      '@babel/plugin-transform-react-jsx-development': 7.22.5(@babel/core@7.24.3)
+      '@prefresh/vite': 2.4.5(preact@10.20.0)(vite@5.2.0)
       '@rollup/pluginutils': 4.2.1
-      babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.24.1)
+      babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.24.3)
       debug: 4.3.4
       kolorist: 1.8.0
       magic-string: 0.30.5
@@ -1505,32 +1566,32 @@ packages:
     resolution: {integrity: sha512-dE6f+WCX5ZUDwXzUIWNMhhglmuLpqJhuy3X3xHrhZYI0Hm2LyQwOu0l9mdPiWrVNsE+Q7txOnJPgtIqHCYoBVA==}
     dev: false
 
-  /@preact/signals@1.2.2(preact@10.19.7):
+  /@preact/signals@1.2.2(preact@10.20.0):
     resolution: {integrity: sha512-ColCqdo4cRP18bAuIR4Oik5rDpiyFtPIJIygaYPMEAwTnl4buWkBOflGBSzhYyPyJfKpkwlekrvK+1pzQ2ldWw==}
     peerDependencies:
       preact: 10.x
     dependencies:
       '@preact/signals-core': 1.5.1
-      preact: 10.19.7
+      preact: 10.20.0
     dev: false
 
   /@prefresh/babel-plugin@0.5.1:
     resolution: {integrity: sha512-uG3jGEAysxWoyG3XkYfjYHgaySFrSsaEb4GagLzYaxlydbuREtaX+FTxuIidp241RaLl85XoHg9Ej6E4+V1pcg==}
     dev: false
 
-  /@prefresh/core@1.5.2(preact@10.19.7):
+  /@prefresh/core@1.5.2(preact@10.20.0):
     resolution: {integrity: sha512-A/08vkaM1FogrCII5PZKCrygxSsc11obExBScm3JF1CryK2uDS3ZXeni7FeKCx1nYdUkj4UcJxzPzc1WliMzZA==}
     peerDependencies:
       preact: ^10.0.0
     dependencies:
-      preact: 10.19.7
+      preact: 10.20.0
     dev: false
 
   /@prefresh/utils@1.2.0:
     resolution: {integrity: sha512-KtC/fZw+oqtwOLUFM9UtiitB0JsVX0zLKNyRTA332sqREqSALIIQQxdUCS1P3xR/jT1e2e8/5rwH6gdcMLEmsQ==}
     dev: false
 
-  /@prefresh/vite@2.4.5(preact@10.19.7)(vite@5.2.0):
+  /@prefresh/vite@2.4.5(preact@10.20.0)(vite@5.2.0):
     resolution: {integrity: sha512-iForDVJ2M8gQYnm5pHumvTEJjGGc7YNYC0GVKnHFL+GvFfKHfH9Rpq67nUAzNbjuLEpqEOUuQVQajMazWu2ZNQ==}
     peerDependencies:
       preact: ^10.4.0
@@ -1538,10 +1599,10 @@ packages:
     dependencies:
       '@babel/core': 7.24.0
       '@prefresh/babel-plugin': 0.5.1
-      '@prefresh/core': 1.5.2(preact@10.19.7)
+      '@prefresh/core': 1.5.2(preact@10.20.0)
       '@prefresh/utils': 1.2.0
       '@rollup/pluginutils': 4.2.1
-      preact: 10.19.7
+      preact: 10.20.0
       vite: 5.2.0(@types/node@18.19.26)
     transitivePeerDependencies:
       - supports-color
@@ -2649,12 +2710,12 @@ packages:
       - supports-color
     dev: true
 
-  /babel-plugin-transform-hook-names@1.0.2(@babel/core@7.24.1):
+  /babel-plugin-transform-hook-names@1.0.2(@babel/core@7.24.3):
     resolution: {integrity: sha512-5gafyjyyBTTdX/tQQ0hRgu4AhNHG/hqWi0ZZmg2xvs2FgRkJXzDNKBZCyoYqgFkovfDrgM8OoKg8karoUvWeCw==}
     peerDependencies:
       '@babel/core': ^7.12.10
     dependencies:
-      '@babel/core': 7.24.1
+      '@babel/core': 7.24.3
     dev: false
 
   /babel-plugin-transform-inline-consecutive-adds@0.4.3:
@@ -6057,25 +6118,25 @@ packages:
       source-map-js: 1.2.0
     dev: false
 
-  /preact-render-to-string@6.3.1(preact@10.19.7):
+  /preact-render-to-string@6.3.1(preact@10.20.0):
     resolution: {integrity: sha512-NQ28WrjLtWY6lKDlTxnFpKHZdpjfF+oE6V4tZ0rTrunHrtZp6Dm0oFrcJalt/5PNeqJz4j1DuZDS0Y6rCBoqDA==}
     peerDependencies:
       preact: '>=10'
     dependencies:
-      preact: 10.19.7
+      preact: 10.20.0
       pretty-format: 3.8.0
     dev: false
 
-  /preact-ssr-prepass@1.2.1(preact@10.19.7):
+  /preact-ssr-prepass@1.2.1(preact@10.20.0):
     resolution: {integrity: sha512-bLgbUfy8nL+PZghAPpyk9MF+cmXjdwEnxYPaJBmwbzFQqzIz8dQVBqjwB60RqZ9So/vIf6BRfHCiwFGuMCyfbQ==}
     peerDependencies:
       preact: '>=10 || ^10.0.0-beta.0 || ^10.0.0-alpha.0'
     dependencies:
-      preact: 10.19.7
+      preact: 10.20.0
     dev: false
 
-  /preact@10.19.7:
-    resolution: {integrity: sha512-IJOW6cQN1fwfC17HfNOqUtAGyB8wAYshuC+jG1JiL/1+sC4yVyuA3IcF0N9vdodMJjW/lbuEF5qFsJqGNcbHbw==}
+  /preact@10.20.0:
+    resolution: {integrity: sha512-wU7iZw2BjsaKDal3pDRDy/HpPB6cuFOnVUCcw9aIPKG98+ZrXx3F+szkos8BVME5bquyKDKvRlOJFG8kMkcAbg==}
     dev: false
 
   /prebuild-install@7.1.2:
