@@ -122,13 +122,13 @@ importers:
         version: 3.1.1(@babel/core@7.24.3)(preact@10.20.1)(vite@5.2.6)
       '@astrolib/analytics':
         specifier: 0.5.0
-        version: 0.5.0(astro@4.5.11)
+        version: 0.5.0(astro@4.5.12)
       '@types/node':
         specifier: ^18.0.0
         version: 18.19.26
       astro:
         specifier: ^4.0.0
-        version: 4.5.11(@types/node@18.19.26)(typescript@5.4.3)
+        version: 4.5.12(@types/node@18.19.26)(typescript@5.4.3)
       preact:
         specifier: ^10.7.3
         version: 10.20.1
@@ -434,8 +434,8 @@ packages:
     resolution: {integrity: sha512-XpC8MAaWjD1ff6/IfkRq/5k1EFj6zhCNqXRd5J43SVJEBj/Bsmizkm8N0xOYscGcDFQkRgEw6/eKnI5x/1l6aA==}
     dev: false
 
-  /@astrojs/internal-helpers@0.3.0:
-    resolution: {integrity: sha512-tGmHvrhpzuz0JBHaJX8GywN9g4rldVNHtkoVDC3m/DdzBO70jGoVuc0uuNVglRYnsdwkbG0K02Iw3nOOR3/Y4g==}
+  /@astrojs/internal-helpers@0.4.0:
+    resolution: {integrity: sha512-6B13lz5n6BrbTqCTwhXjJXuR1sqiX/H6rTxzlXx+lN1NnV4jgnq/KJldCQaUWJzPL5SiWahQyinxAbxQtwgPHA==}
     dev: false
 
   /@astrojs/markdown-remark@4.3.2:
@@ -512,12 +512,12 @@ packages:
       - supports-color
     dev: false
 
-  /@astrolib/analytics@0.5.0(astro@4.5.11):
+  /@astrolib/analytics@0.5.0(astro@4.5.12):
     resolution: {integrity: sha512-NlTFTUtsjVEAb2ZzYXZ5XBvak7JH3ixaQTq5r+q5PZtealHajUSPzaY1UrcJOJDJrOFHf5pvxBnYmCEzE9fIjw==}
     peerDependencies:
       astro: ^1.2.1 || ^2.0.0 || ^3.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.5.11(@types/node@18.19.26)(typescript@5.4.3)
+      astro: 4.5.12(@types/node@18.19.26)(typescript@5.4.3)
     dev: false
 
   /@babel/code-frame@7.24.2:
@@ -2088,13 +2088,13 @@ packages:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
     dev: false
 
-  /astro@4.5.11(@types/node@18.19.26)(typescript@5.4.3):
-    resolution: {integrity: sha512-PS3b4VvGmY3Z5V+3fHGZF2g2cZEd9TRDQzgq9mO9RkA3Gcp/K/O0vl3Ffkj4jg+RFGhunTpvv1knkSsbE0f+rw==}
+  /astro@4.5.12(@types/node@18.19.26)(typescript@5.4.3):
+    resolution: {integrity: sha512-xIJcFI2hbyV8+h5pWjL7SKD1jIP0K01fYVAH+gdAt0mJaXy+u8Mj+goD0cPlK6sEaykR+7zxQLYGKJ44U4qarg==}
     engines: {node: '>=18.14.1', npm: '>=6.14.0'}
     hasBin: true
     dependencies:
       '@astrojs/compiler': 2.7.0
-      '@astrojs/internal-helpers': 0.3.0
+      '@astrojs/internal-helpers': 0.4.0
       '@astrojs/markdown-remark': 4.3.2
       '@astrojs/telemetry': 3.0.4
       '@babel/core': 7.24.3
