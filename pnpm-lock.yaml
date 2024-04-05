@@ -94,16 +94,16 @@ importers:
         version: 5.0.5
       tsup:
         specifier: 8.0.2
-        version: 8.0.2(typescript@5.4.3)
+        version: 8.0.2(typescript@5.4.4)
       turbo:
         specifier: 1.13.2
         version: 1.13.2
       typescript:
-        specifier: 5.4.3
-        version: 5.4.3
+        specifier: 5.4.4
+        version: 5.4.4
       vite-tsconfig-paths:
         specifier: 4.3.2
-        version: 4.3.2(typescript@5.4.3)
+        version: 4.3.2(typescript@5.4.4)
       vitest:
         specifier: 1.4.0
         version: 1.4.0(@types/node@18.19.29)(@vitest/ui@1.4.0)
@@ -128,7 +128,7 @@ importers:
         version: 18.19.29
       astro:
         specifier: ^4.0.0
-        version: 4.5.16(@types/node@18.19.29)(typescript@5.4.3)
+        version: 4.5.16(@types/node@18.19.29)(typescript@5.4.4)
       preact:
         specifier: ^10.7.3
         version: 10.20.1
@@ -517,7 +517,7 @@ packages:
     peerDependencies:
       astro: ^1.2.1 || ^2.0.0 || ^3.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.5.16(@types/node@18.19.29)(typescript@5.4.3)
+      astro: 4.5.16(@types/node@18.19.29)(typescript@5.4.4)
     dev: false
 
   /@babel/code-frame@7.24.2:
@@ -2111,7 +2111,7 @@ packages:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
     dev: false
 
-  /astro@4.5.16(@types/node@18.19.29)(typescript@5.4.3):
+  /astro@4.5.16(@types/node@18.19.29)(typescript@5.4.4):
     resolution: {integrity: sha512-1nOVsMq2OJiXnG6gO0Y77vTAboGN9nLQSy/8SGazq4h6x+alzbsMbQbArBgvaLzOSUXD0m91XLs3D8bOSuavrQ==}
     engines: {node: '>=18.14.1', npm: '>=6.14.0'}
     hasBin: true
@@ -2169,7 +2169,7 @@ packages:
       shiki: 1.2.4
       string-width: 7.1.0
       strip-ansi: 7.1.0
-      tsconfck: 3.0.3(typescript@5.4.3)
+      tsconfck: 3.0.3(typescript@5.4.4)
       unist-util-visit: 5.0.0
       vfile: 6.0.1
       vite: 5.2.8(@types/node@18.19.29)
@@ -7182,7 +7182,7 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: false
 
-  /tsconfck@3.0.3(typescript@5.4.3):
+  /tsconfck@3.0.3(typescript@5.4.4):
     resolution: {integrity: sha512-4t0noZX9t6GcPTfBAbIbbIU4pfpCwh0ueq3S4O/5qXI1VwK1outmxhe9dOiEWqMz3MW2LKgDTpqWV+37IWuVbA==}
     engines: {node: ^18 || >=20}
     hasBin: true
@@ -7192,10 +7192,10 @@ packages:
       typescript:
         optional: true
     dependencies:
-      typescript: 5.4.3
+      typescript: 5.4.4
     dev: false
 
-  /tsup@8.0.2(typescript@5.4.3):
+  /tsup@8.0.2(typescript@5.4.4):
     resolution: {integrity: sha512-NY8xtQXdH7hDUAZwcQdY/Vzlw9johQsaqf7iwZ6g1DOUlFYQ5/AtVAjTvihhEyeRlGo4dLRVHtrRaL35M1daqQ==}
     engines: {node: '>=18'}
     hasBin: true
@@ -7228,7 +7228,7 @@ packages:
       source-map: 0.8.0-beta.0
       sucrase: 3.35.0
       tree-kill: 1.2.2
-      typescript: 5.4.3
+      typescript: 5.4.4
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -7323,8 +7323,8 @@ packages:
       is-typedarray: 1.0.0
     dev: false
 
-  /typescript@5.4.3:
-    resolution: {integrity: sha512-KrPd3PKaCLr78MalgiwJnA25Nm8HAmdwN3mYUYZgG/wizIo9EainNVQI9/yDavtVFRN2h3k8uf3GLHuhDMgEHg==}
+  /typescript@5.4.4:
+    resolution: {integrity: sha512-dGE2Vv8cpVvw28v8HCPqyb08EzbBURxDpuhJvTrusShUfGnhHBafDsLdS1EhhxyL6BJQE+2cT3dDPAv+MQ6oLw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: false
@@ -7589,7 +7589,7 @@ packages:
       - terser
     dev: false
 
-  /vite-tsconfig-paths@4.3.2(typescript@5.4.3):
+  /vite-tsconfig-paths@4.3.2(typescript@5.4.4):
     resolution: {integrity: sha512-0Vd/a6po6Q+86rPlntHye7F31zA2URZMbH8M3saAZ/xR9QoGN/L21bxEGfXdWmFdNkqPpRdxFT7nmNe12e9/uA==}
     peerDependencies:
       vite: '*'
@@ -7599,7 +7599,7 @@ packages:
     dependencies:
       debug: 4.3.4
       globrex: 0.1.2
-      tsconfck: 3.0.3(typescript@5.4.3)
+      tsconfck: 3.0.3(typescript@5.4.4)
     transitivePeerDependencies:
       - supports-color
       - typescript
