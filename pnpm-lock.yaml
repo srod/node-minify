@@ -122,13 +122,13 @@ importers:
         version: 3.3.0(@babel/core@7.24.5)(preact@10.21.0)(vite@5.2.11)
       '@astrolib/analytics':
         specifier: 0.5.0
-        version: 0.5.0(astro@4.8.0)
+        version: 0.5.0(astro@4.8.2)
       '@types/node':
         specifier: ^18.0.0
         version: 18.19.33
       astro:
         specifier: ^4.0.0
-        version: 4.8.0(@types/node@18.19.33)(typescript@5.4.5)
+        version: 4.8.2(@types/node@18.19.33)(typescript@5.4.5)
       preact:
         specifier: ^10.7.3
         version: 10.21.0
@@ -512,12 +512,12 @@ packages:
       - supports-color
     dev: false
 
-  /@astrolib/analytics@0.5.0(astro@4.8.0):
+  /@astrolib/analytics@0.5.0(astro@4.8.2):
     resolution: {integrity: sha512-NlTFTUtsjVEAb2ZzYXZ5XBvak7JH3ixaQTq5r+q5PZtealHajUSPzaY1UrcJOJDJrOFHf5pvxBnYmCEzE9fIjw==}
     peerDependencies:
       astro: ^1.2.1 || ^2.0.0 || ^3.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.8.0(@types/node@18.19.33)(typescript@5.4.5)
+      astro: 4.8.2(@types/node@18.19.33)(typescript@5.4.5)
     dev: false
 
   /@babel/code-frame@7.24.2:
@@ -2401,8 +2401,8 @@ packages:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
     dev: false
 
-  /astro@4.8.0(@types/node@18.19.33)(typescript@5.4.5):
-    resolution: {integrity: sha512-JRGxesSdLPyXfo2E5JhT6jK8LQRlBRDtazNmZk0qEemVWqxijuETym1XPEZUOUA5pUSZUJjv0mYqlJ1RBtLTGA==}
+  /astro@4.8.2(@types/node@18.19.33)(typescript@5.4.5):
+    resolution: {integrity: sha512-WBrnNePQ03cF5c+9sjD3TeyJodWMuPCwygDOUo7r+7LbKDN9TJK+KxIxo01AOX4HcexhxcLiTVVCBLSsi+OX9A==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
     dependencies:
@@ -2456,7 +2456,7 @@ packages:
       prompts: 2.4.2
       rehype: 13.0.1
       resolve: 1.22.8
-      semver: 7.6.1
+      semver: 7.6.2
       shiki: 1.5.1
       string-width: 7.1.0
       strip-ansi: 7.1.0
@@ -5110,7 +5110,7 @@ packages:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
     engines: {node: '>=10'}
     dependencies:
-      semver: 7.6.1
+      semver: 7.6.2
     dev: false
 
   /markdown-table@3.0.3:
@@ -6691,8 +6691,8 @@ packages:
       lru-cache: 6.0.0
     dev: false
 
-  /semver@7.6.1:
-    resolution: {integrity: sha512-f/vbBsu+fOiYt+lmwZV0rVwJScl46HppnOA1ZvIuBWKOTlllpyJ3bfVax76/OrhCH38dyxoDIA8K7uB963IYgA==}
+  /semver@7.6.2:
+    resolution: {integrity: sha512-FNAIBWCx9qcRhoHcgcJ0gvU7SN1lYU2ZXuSfl04bSC5OpvDHFyJCjdNHomPXxjQlCBU67YW64PzY7/VIEH7F2w==}
     engines: {node: '>=10'}
     hasBin: true
     dev: false
@@ -6704,7 +6704,7 @@ packages:
     dependencies:
       color: 4.2.3
       detect-libc: 2.0.3
-      semver: 7.6.1
+      semver: 7.6.2
     optionalDependencies:
       '@img/sharp-darwin-arm64': 0.33.3
       '@img/sharp-darwin-x64': 0.33.3
