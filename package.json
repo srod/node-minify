@@ -61,7 +61,7 @@
     "husky": "9.0.11",
     "lint-staged": "15.2.2",
     "node-notifier": "10.0.1",
-    "rimraf": "5.0.6",
+    "rimraf": "5.0.7",
     "tsup": "8.0.2",
     "turbo": "1.13.3",
     "typescript": "5.4.5",
