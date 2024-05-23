@@ -122,13 +122,13 @@ importers:
         version: 3.3.0(@babel/core@7.24.5)(preact@10.22.0)(vite@5.2.11)
       '@astrolib/analytics':
         specifier: 0.5.0
-        version: 0.5.0(astro@4.8.7)
+        version: 0.5.0(astro@4.9.0)
       '@types/node':
         specifier: ^18.0.0
         version: 18.19.33
       astro:
         specifier: ^4.0.0
-        version: 4.8.7(@types/node@18.19.33)(typescript@5.4.5)
+        version: 4.9.0(@types/node@18.19.33)(typescript@5.4.5)
       preact:
         specifier: ^10.7.3
         version: 10.22.0
@@ -512,12 +512,12 @@ packages:
       - supports-color
     dev: false
 
-  /@astrolib/analytics@0.5.0(astro@4.8.7):
+  /@astrolib/analytics@0.5.0(astro@4.9.0):
     resolution: {integrity: sha512-NlTFTUtsjVEAb2ZzYXZ5XBvak7JH3ixaQTq5r+q5PZtealHajUSPzaY1UrcJOJDJrOFHf5pvxBnYmCEzE9fIjw==}
     peerDependencies:
       astro: ^1.2.1 || ^2.0.0 || ^3.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.8.7(@types/node@18.19.33)(typescript@5.4.5)
+      astro: 4.9.0(@types/node@18.19.33)(typescript@5.4.5)
     dev: false
 
   /@babel/code-frame@7.24.2:
@@ -2522,8 +2522,8 @@ packages:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
     dev: false
 
-  /astro@4.8.7(@types/node@18.19.33)(typescript@5.4.5):
-    resolution: {integrity: sha512-bTtv6zv94+U5cQdwy89LWTnocEfJ2Tfy6vpYYSUthfj12HtOpk0ykGW7YBe9a69NHqPwivSOvRjXOxGKigL9qA==}
+  /astro@4.9.0(@types/node@18.19.33)(typescript@5.4.5):
+    resolution: {integrity: sha512-beb3go5Oh5QDjns7YVxG1r40Flt/cuXB+YFTnVRqbh2NuMpYRoXZqIT+ZNaorleEfrLjLFXfsn1AAKVP+XZ2KA==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
     dependencies:
@@ -3348,8 +3348,8 @@ packages:
     resolution: {integrity: sha512-WHVocJYavUwVgVViC0ORikPHQquXwVh939TaelZ4WDqpWgTX/FsGhl/+P4qBUAGcRvtOgDgC+xftNWWp2RUTAQ==}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001620
-      electron-to-chromium: 1.4.773
+      caniuse-lite: 1.0.30001621
+      electron-to-chromium: 1.4.779
     dev: true
 
   /browserslist@4.23.0:
@@ -3357,8 +3357,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001620
-      electron-to-chromium: 1.4.773
+      caniuse-lite: 1.0.30001621
+      electron-to-chromium: 1.4.779
       node-releases: 2.0.14
       update-browserslist-db: 1.0.16(browserslist@4.23.0)
     dev: false
@@ -3421,12 +3421,8 @@ packages:
       lodash.uniq: 4.5.0
     dev: false
 
-  /caniuse-lite@1.0.30001620:
-    resolution: {integrity: sha512-WJvYsOjd1/BYUY6SNGUosK9DUidBPDTnOARHp3fSmFO1ekdxaY6nKRttEVrfMmYi80ctS0kz1wiWmm14fVc3ew==}
-
   /caniuse-lite@1.0.30001621:
     resolution: {integrity: sha512-+NLXZiviFFKX0fk8Piwv3PfLPGtRqJeq2TiNoUff/qB5KJgwecJTvCXDpmlyP/eCI/GUEmp/h/y5j0yckiiZrA==}
-    dev: false
 
   /ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
@@ -4019,8 +4015,8 @@ packages:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: false
 
-  /electron-to-chromium@1.4.773:
-    resolution: {integrity: sha512-87eHF+h3PlCRwbxVEAw9KtK3v7lWfc/sUDr0W76955AdYTG4bV/k0zrl585Qnj/skRMH2qOSiE+kqMeOQ+LOpw==}
+  /electron-to-chromium@1.4.779:
+    resolution: {integrity: sha512-oaTiIcszNfySXVJzKcjxd2YjPxziAd+GmXyb2HbidCeFo6Z88ygOT7EimlrEQhM2U08VhSrbKhLOXP0kKUCZ6g==}
 
   /emoji-regex@10.3.0:
     resolution: {integrity: sha512-QpLs9D9v9kArv4lfDEgg1X/gN5XLnf/A6l9cs8SPZLRZR3ZkY9+kwIQTxm+fsSej5UMYGE8fdoaZVIBlqG0XTw==}
