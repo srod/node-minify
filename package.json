@@ -62,7 +62,7 @@
     "lint-staged": "15.2.5",
     "node-notifier": "10.0.1",
     "rimraf": "5.0.7",
-    "tsup": "8.0.2",
+    "tsup": "8.1.0",
     "turbo": "1.13.3",
     "typescript": "5.4.5",
     "vite-tsconfig-paths": "4.3.2",
