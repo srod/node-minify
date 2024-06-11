@@ -115,20 +115,20 @@ importers:
   docs:
     dependencies:
       '@astrojs/partytown':
-        specifier: 2.1.0
-        version: 2.1.0
+        specifier: 2.1.1
+        version: 2.1.1
       '@astrojs/preact':
         specifier: ^3.0.0
         version: 3.4.0(@babel/core@7.24.7)(preact@10.22.0)(vite@5.2.13)
       '@astrolib/analytics':
         specifier: 0.5.0
-        version: 0.5.0(astro@4.10.1)
+        version: 0.5.0(astro@4.10.2)
       '@types/node':
         specifier: ^18.0.0
         version: 18.19.34
       astro:
         specifier: ^4.0.0
-        version: 4.10.1(@types/node@18.19.34)(typescript@5.4.5)
+        version: 4.10.2(@types/node@18.19.34)(typescript@5.4.5)
       preact:
         specifier: ^10.7.3
         version: 10.22.0
@@ -453,7 +453,7 @@ packages:
       remark-parse: 11.0.0
       remark-rehype: 11.1.0
       remark-smartypants: 2.1.0
-      shiki: 1.6.3
+      shiki: 1.6.4
       unified: 11.0.4
       unist-util-remove-position: 5.0.0
       unist-util-visit: 5.0.0
@@ -463,8 +463,8 @@ packages:
       - supports-color
     dev: false
 
-  /@astrojs/partytown@2.1.0:
-    resolution: {integrity: sha512-9fjvTx2hTQpirUh1HnZZtFQaBz2R5ixrrmU/Zam3VZ9CoR3frqtnqg/Dt/i5C3UAlwiN0i8VuKxPx5cHP8yY5A==}
+  /@astrojs/partytown@2.1.1:
+    resolution: {integrity: sha512-KvecQuGGgrDrdTjC5awmtoQXqJFinChfeizKBJyr7F5EGQPx62xq8SIWkcXamLr5xZyNw0lryKeLtIzbxRH/zw==}
     dependencies:
       '@builder.io/partytown': 0.10.2
       mrmime: 2.0.0
@@ -512,12 +512,12 @@ packages:
       - supports-color
     dev: false
 
-  /@astrolib/analytics@0.5.0(astro@4.10.1):
+  /@astrolib/analytics@0.5.0(astro@4.10.2):
     resolution: {integrity: sha512-NlTFTUtsjVEAb2ZzYXZ5XBvak7JH3ixaQTq5r+q5PZtealHajUSPzaY1UrcJOJDJrOFHf5pvxBnYmCEzE9fIjw==}
     peerDependencies:
       astro: ^1.2.1 || ^2.0.0 || ^3.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.10.1(@types/node@18.19.34)(typescript@5.4.5)
+      astro: 4.10.2(@types/node@18.19.34)(typescript@5.4.5)
     dev: false
 
   /@babel/code-frame@7.24.7:
@@ -1798,8 +1798,8 @@ packages:
     dev: false
     optional: true
 
-  /@shikijs/core@1.6.3:
-    resolution: {integrity: sha512-QnJKHFUW95GnlJLJGP6QLx4M69HM0KlXk+R2Y8lr/x4nAx1Yb/lsuxq4XwybuUjTxbJk+BT0g/kvn0bcsjGGHg==}
+  /@shikijs/core@1.6.4:
+    resolution: {integrity: sha512-WTU9rzZae1p2v6LOxMf6LhtmZOkIHYYW160IuahUyJy7YXPPjyWZLR1ag+SgD22ZMxZtz1gfU6Tccc8t0Il/XA==}
     dev: false
 
   /@sinclair/typebox@0.27.8:
@@ -2198,8 +2198,8 @@ packages:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
     dev: false
 
-  /astro@4.10.1(@types/node@18.19.34)(typescript@5.4.5):
-    resolution: {integrity: sha512-7bbnUX1CW+12suz0Do8ef1CihqVjDyUW/H/0piNHZyBE3W/VFt5GP5ZxlPzzJLoGtaXif0aXJ4iPurEem2LpdA==}
+  /astro@4.10.2(@types/node@18.19.34)(typescript@5.4.5):
+    resolution: {integrity: sha512-SBdkoOanPsxKlKVU4uu/XG0G7NYAFoqmfBtq9SPMJ34B7Hr1MxVdEugERs8IwYN6UaxdDVcqA++9PvH6Onq2cg==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
     dependencies:
@@ -2254,7 +2254,7 @@ packages:
       rehype: 13.0.1
       resolve: 1.22.8
       semver: 7.6.2
-      shiki: 1.6.3
+      shiki: 1.6.4
       string-width: 7.1.0
       strip-ansi: 7.1.0
       tsconfck: 3.1.0(typescript@5.4.5)
@@ -6486,10 +6486,10 @@ packages:
     resolution: {integrity: sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==}
     dev: false
 
-  /shiki@1.6.3:
-    resolution: {integrity: sha512-lE1/YGlzFY0hQSyEfsZj18xGrTWxyhFQkaiILALqTBZPbJeYFWpbUhlmTGPOupYB/qC+H6sV4UznJzcEh3WMHQ==}
+  /shiki@1.6.4:
+    resolution: {integrity: sha512-X88chM7w8jnadoZtjPTi5ahCJx9pc9f8GfEkZAEYUTlcUZIEw2D/RY86HI/LkkE7Nj8TQWkiBfaFTJ3VJT6ESg==}
     dependencies:
-      '@shikijs/core': 1.6.3
+      '@shikijs/core': 1.6.4
     dev: false
 
   /siginfo@2.0.0:

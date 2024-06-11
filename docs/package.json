@@ -12,7 +12,7 @@
     "lint": "biome lint ."
   },
   "dependencies": {
-    "@astrojs/partytown": "2.1.0",
+    "@astrojs/partytown": "2.1.1",
     "@astrojs/preact": "^3.0.0",
     "@astrolib/analytics": "0.5.0",
     "@types/node": "^18.0.0",
