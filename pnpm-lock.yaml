@@ -122,13 +122,13 @@ importers:
         version: 3.5.0(@babel/core@7.24.7)(preact@10.22.1)(vite@5.3.3)
       '@astrolib/analytics':
         specifier: 0.5.0
-        version: 0.5.0(astro@4.11.4)
+        version: 0.5.0(astro@4.11.5)
       '@types/node':
         specifier: ^18.0.0
         version: 18.19.39
       astro:
         specifier: ^4.0.0
-        version: 4.11.4(@types/node@18.19.39)(typescript@5.5.3)
+        version: 4.11.5(@types/node@18.19.39)(typescript@5.5.3)
       preact:
         specifier: ^10.7.3
         version: 10.22.1
@@ -512,12 +512,12 @@ packages:
       - supports-color
     dev: false
 
-  /@astrolib/analytics@0.5.0(astro@4.11.4):
+  /@astrolib/analytics@0.5.0(astro@4.11.5):
     resolution: {integrity: sha512-NlTFTUtsjVEAb2ZzYXZ5XBvak7JH3ixaQTq5r+q5PZtealHajUSPzaY1UrcJOJDJrOFHf5pvxBnYmCEzE9fIjw==}
     peerDependencies:
       astro: ^1.2.1 || ^2.0.0 || ^3.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.11.4(@types/node@18.19.39)(typescript@5.5.3)
+      astro: 4.11.5(@types/node@18.19.39)(typescript@5.5.3)
     dev: false
 
   /@babel/code-frame@7.24.7:
@@ -1996,8 +1996,8 @@ packages:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
     dev: false
 
-  /astro@4.11.4(@types/node@18.19.39)(typescript@5.5.3):
-    resolution: {integrity: sha512-jSCnPD+r4MO5Pxl04XfCydzZiL/p70q1ddYind02JDGQDLlps4d2s/AfT/7be12gf1PpR13ACcvO6aJFUIVQXA==}
+  /astro@4.11.5(@types/node@18.19.39)(typescript@5.5.3):
+    resolution: {integrity: sha512-TCRhuaLwrxwMhS8S1GG+ZTdrAXigX9C8E/YUTs/r2t+owHxDgwl86IV9xH1IHrCPoqhK6civyAQNOT+GKmkb0A==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
     dependencies:
