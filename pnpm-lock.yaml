@@ -93,8 +93,8 @@ importers:
         specifier: 5.0.9
         version: 5.0.9
       tsup:
-        specifier: 8.1.1
-        version: 8.1.1(typescript@5.5.3)
+        specifier: 8.1.2
+        version: 8.1.2(typescript@5.5.3)
       turbo:
         specifier: 1.13.4
         version: 1.13.4
@@ -6835,8 +6835,8 @@ packages:
     dev: false
     optional: true
 
-  /tsup@8.1.1(typescript@5.5.3):
-    resolution: {integrity: sha512-lLXP3BshJ6y/32b3tPZUB2siD2mkJ6mLzhbPOShfjogSc3aRw8MhbBV4cPKbqkbXuhsJR+c9B0W9RHMbtbXLMQ==}
+  /tsup@8.1.2(typescript@5.5.3):
+    resolution: {integrity: sha512-Gzw/PXSX/z0aYMNmkcI54bKKFVFJQbLne+EqTJZeQ3lNT3QpumjtMU4rl+ZwTTp8oRF3ahMbEAxT2sZPJLFSrg==}
     engines: {node: '>=18'}
     hasBin: true
     peerDependencies:
