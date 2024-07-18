@@ -384,8 +384,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       uglify-js:
-        specifier: 3.18.0
-        version: 3.18.0
+        specifier: 3.19.0
+        version: 3.19.0
     devDependencies:
       '@node-minify/types':
         specifier: workspace:*
@@ -6985,6 +6985,12 @@ packages:
 
   /uglify-js@3.18.0:
     resolution: {integrity: sha512-SyVVbcNBCk0dzr9XL/R/ySrmYf0s372K6/hFklzgcp2lBFyXtw4I7BOdDjlLhE1aVqaI/SHWXWmYdlZxuyF38A==}
+    engines: {node: '>=0.8.0'}
+    hasBin: true
+    dev: false
+
+  /uglify-js@3.19.0:
+    resolution: {integrity: sha512-wNKHUY2hYYkf6oSFfhwwiHo4WCHzHmzcXsqXYTN9ja3iApYIFbb2U6ics9hBcYLHcYGQoAlwnZlTrf3oF+BL/Q==}
     engines: {node: '>=0.8.0'}
     hasBin: true
     dev: false
