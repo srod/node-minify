@@ -122,13 +122,13 @@ importers:
         version: 3.5.1(@babel/core@7.24.9)(preact@10.22.1)(vite@5.3.4)
       '@astrolib/analytics':
         specifier: 0.5.0
-        version: 0.5.0(astro@4.12.1)
+        version: 0.5.0(astro@4.12.2)
       '@types/node':
         specifier: ^18.0.0
         version: 18.19.41
       astro:
         specifier: ^4.0.0
-        version: 4.12.1(@types/node@18.19.41)(typescript@5.5.3)
+        version: 4.12.2(@types/node@18.19.41)(typescript@5.5.3)
       preact:
         specifier: ^10.7.3
         version: 10.22.1
@@ -511,12 +511,12 @@ packages:
       - supports-color
     dev: false
 
-  /@astrolib/analytics@0.5.0(astro@4.12.1):
+  /@astrolib/analytics@0.5.0(astro@4.12.2):
     resolution: {integrity: sha512-NlTFTUtsjVEAb2ZzYXZ5XBvak7JH3ixaQTq5r+q5PZtealHajUSPzaY1UrcJOJDJrOFHf5pvxBnYmCEzE9fIjw==}
     peerDependencies:
       astro: ^1.2.1 || ^2.0.0 || ^3.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.12.1(@types/node@18.19.41)(typescript@5.5.3)
+      astro: 4.12.2(@types/node@18.19.41)(typescript@5.5.3)
     dev: false
 
   /@babel/code-frame@7.24.7:
@@ -2197,8 +2197,8 @@ packages:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
     dev: false
 
-  /astro@4.12.1(@types/node@18.19.41)(typescript@5.5.3):
-    resolution: {integrity: sha512-KwBoXYL4L1XLTTjoj4z6q1g/tZfWDKR1pKSTAshVqt5FH2eu82pnGW737SxcT/Ssg/hLlb9KnWiclXmqWpcbCQ==}
+  /astro@4.12.2(@types/node@18.19.41)(typescript@5.5.3):
+    resolution: {integrity: sha512-l6OmqlL+FiuSi9x6F+EGZitteOznq1JffOil7st7cdqeMCTEIym4oagI1a6zp6QekliKWEEZWdplGhgh1k1f7Q==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
     dependencies:
@@ -3031,7 +3031,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001642
-      electron-to-chromium: 1.4.829
+      electron-to-chromium: 1.4.830
       node-releases: 2.0.17
       update-browserslist-db: 1.1.0(browserslist@4.23.2)
     dev: false
@@ -3665,6 +3665,11 @@ packages:
 
   /electron-to-chromium@1.4.829:
     resolution: {integrity: sha512-5qp1N2POAfW0u1qGAxXEtz6P7bO1m6gpZr5hdf5ve6lxpLM7MpiM4jIPz7xcrNlClQMafbyUDDWjlIQZ1Mw0Rw==}
+    dev: true
+
+  /electron-to-chromium@1.4.830:
+    resolution: {integrity: sha512-TrPKKH20HeN0J1LHzsYLs2qwXrp8TF4nHdu4sq61ozGbzMpWhI7iIOPYPPkxeq1azMT9PZ8enPFcftbs/Npcjg==}
+    dev: false
 
   /emoji-regex@10.3.0:
     resolution: {integrity: sha512-QpLs9D9v9kArv4lfDEgg1X/gN5XLnf/A6l9cs8SPZLRZR3ZkY9+kwIQTxm+fsSej5UMYGE8fdoaZVIBlqG0XTw==}
