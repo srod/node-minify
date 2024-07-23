@@ -94,16 +94,16 @@ importers:
         version: 5.0.9
       tsup:
         specifier: 8.2.2
-        version: 8.2.2(typescript@5.5.3)
+        version: 8.2.2(typescript@5.5.4)
       turbo:
         specifier: 1.13.4
         version: 1.13.4
       typescript:
-        specifier: 5.5.3
-        version: 5.5.3
+        specifier: 5.5.4
+        version: 5.5.4
       vite-tsconfig-paths:
         specifier: 4.3.2
-        version: 4.3.2(typescript@5.5.3)
+        version: 4.3.2(typescript@5.5.4)
       vitest:
         specifier: 1.6.0
         version: 1.6.0(@types/node@18.19.41)(@vitest/ui@1.6.0)
@@ -128,7 +128,7 @@ importers:
         version: 18.19.41
       astro:
         specifier: ^4.0.0
-        version: 4.12.2(@types/node@18.19.41)(typescript@5.5.3)
+        version: 4.12.2(@types/node@18.19.41)(typescript@5.5.4)
       preact:
         specifier: ^10.7.3
         version: 10.22.1
@@ -516,7 +516,7 @@ packages:
     peerDependencies:
       astro: ^1.2.1 || ^2.0.0 || ^3.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.12.2(@types/node@18.19.41)(typescript@5.5.3)
+      astro: 4.12.2(@types/node@18.19.41)(typescript@5.5.4)
     dev: false
 
   /@babel/code-frame@7.24.7:
@@ -2190,7 +2190,7 @@ packages:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
     dev: false
 
-  /astro@4.12.2(@types/node@18.19.41)(typescript@5.5.3):
+  /astro@4.12.2(@types/node@18.19.41)(typescript@5.5.4):
     resolution: {integrity: sha512-l6OmqlL+FiuSi9x6F+EGZitteOznq1JffOil7st7cdqeMCTEIym4oagI1a6zp6QekliKWEEZWdplGhgh1k1f7Q==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
@@ -2248,7 +2248,7 @@ packages:
       shiki: 1.11.0
       string-width: 7.2.0
       strip-ansi: 7.1.0
-      tsconfck: 3.1.1(typescript@5.5.3)
+      tsconfck: 3.1.1(typescript@5.5.4)
       unist-util-visit: 5.0.0
       vfile: 6.0.2
       vite: 5.3.4(@types/node@18.19.41)
@@ -6779,7 +6779,7 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: false
 
-  /tsconfck@3.1.1(typescript@5.5.3):
+  /tsconfck@3.1.1(typescript@5.5.4):
     resolution: {integrity: sha512-00eoI6WY57SvZEVjm13stEVE90VkEdJAFGgpFLTsZbJyW/LwFQ7uQxJHWpZ2hzSWgCPKc9AnBnNP+0X7o3hAmQ==}
     engines: {node: ^18 || >=20}
     hasBin: true
@@ -6789,7 +6789,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      typescript: 5.5.3
+      typescript: 5.5.4
     dev: false
 
   /tslib@2.6.3:
@@ -6798,7 +6798,7 @@ packages:
     dev: false
     optional: true
 
-  /tsup@8.2.2(typescript@5.5.3):
+  /tsup@8.2.2(typescript@5.5.4):
     resolution: {integrity: sha512-MufIuzdSt6HYPOeOtjUXLR4rqRJySi6XsRNZdwvjC2XR+xghsu2L3vSmYmX+k4S1mO6j0OlUEyVQ3Fc0H66XcA==}
     engines: {node: '>=18'}
     hasBin: true
@@ -6833,7 +6833,7 @@ packages:
       source-map: 0.8.0-beta.0
       sucrase: 3.35.0
       tree-kill: 1.2.2
-      typescript: 5.5.3
+      typescript: 5.5.4
     transitivePeerDependencies:
       - jiti
       - supports-color
@@ -6922,8 +6922,8 @@ packages:
       is-typedarray: 1.0.0
     dev: false
 
-  /typescript@5.5.3:
-    resolution: {integrity: sha512-/hreyEujaB0w76zKo6717l3L0o/qEUtRgdvUBvlkhoWeOVMjMuHNHk0BRBzikzuGDqNmPQbg5ifMEqsHLiIUcQ==}
+  /typescript@5.5.4:
+    resolution: {integrity: sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: false
@@ -7120,7 +7120,7 @@ packages:
       - terser
     dev: false
 
-  /vite-tsconfig-paths@4.3.2(typescript@5.5.3):
+  /vite-tsconfig-paths@4.3.2(typescript@5.5.4):
     resolution: {integrity: sha512-0Vd/a6po6Q+86rPlntHye7F31zA2URZMbH8M3saAZ/xR9QoGN/L21bxEGfXdWmFdNkqPpRdxFT7nmNe12e9/uA==}
     peerDependencies:
       vite: '*'
@@ -7130,7 +7130,7 @@ packages:
     dependencies:
       debug: 4.3.5
       globrex: 0.1.2
-      tsconfck: 3.1.1(typescript@5.5.3)
+      tsconfck: 3.1.1(typescript@5.5.4)
     transitivePeerDependencies:
       - supports-color
       - typescript
