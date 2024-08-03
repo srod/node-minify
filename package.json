@@ -59,7 +59,7 @@
     "@vitest/ui": "1.6.0",
     "copyfiles": "2.4.1",
     "husky": "9.1.4",
-    "lint-staged": "15.2.7",
+    "lint-staged": "15.2.8",
     "node-notifier": "10.0.1",
     "rimraf": "5.0.10",
     "tsup": "8.2.4",
