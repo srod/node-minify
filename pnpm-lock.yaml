@@ -353,8 +353,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       terser:
-        specifier: 5.31.5
-        version: 5.31.5
+        specifier: 5.31.6
+        version: 5.31.6
     devDependencies:
       '@node-minify/types':
         specifier: workspace:*
@@ -6680,8 +6680,8 @@ packages:
       picocolors: 1.0.1
     dev: false
 
-  /terser@5.31.5:
-    resolution: {integrity: sha512-YPmas0L0rE1UyLL/llTWA0SiDOqIcAQYLeUj7cJYzXHlRTAnMSg9pPe4VJ5PlKvTrPQsdVFuiRiwyeNlYgwh2Q==}
+  /terser@5.31.6:
+    resolution: {integrity: sha512-PQ4DAriWzKj+qgehQ7LK5bQqCFNMmlhjR2PFFLuqGCpuCAauxemVBWwWOxo3UIwWQx8+Pr61Df++r76wDmkQBg==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
