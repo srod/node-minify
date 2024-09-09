@@ -193,8 +193,8 @@ importers:
         specifier: 8.1.0
         version: 8.1.0
       update-notifier:
-        specifier: 7.3.0
-        version: 7.3.0
+        specifier: 7.3.1
+        version: 7.3.1
     devDependencies:
       '@node-minify/types':
         specifier: workspace:*
@@ -7044,8 +7044,8 @@ packages:
       picocolors: 1.1.0
     dev: false
 
-  /update-notifier@7.3.0:
-    resolution: {integrity: sha512-nA5Zoy3rahYd/Lx1s6jZYHfrKKYOgw0kThkLdwgJtXEFsXqEbMnwdVNPT9D+HELlEXqTR7Iq8rjg/NjenGLIvg==}
+  /update-notifier@7.3.1:
+    resolution: {integrity: sha512-+dwUY4L35XFYEzE+OAL3sarJdUioVovq+8f7lcIJ7wnmnYQV5UD1Y/lcwaMSyaQ6Bj3JMj1XSTjZbNLHn/19yA==}
     engines: {node: '>=18'}
     dependencies:
       boxen: 8.0.1
