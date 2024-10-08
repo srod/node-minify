@@ -7,7 +7,7 @@
 /**
  * Module dependencies.
  */
-import { MinifierOptions } from "@node-minify/types";
+import type { MinifierOptions } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
 import { transform } from "babel-core";
 import minify from "babel-preset-minify";

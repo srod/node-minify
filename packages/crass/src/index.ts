@@ -7,7 +7,7 @@
 /**
  * Module dependencies.
  */
-import { MinifierOptions } from "@node-minify/types";
+import type { MinifierOptions } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
 import crass from "crass";
 

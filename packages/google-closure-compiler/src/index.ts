@@ -8,7 +8,11 @@
  * Module dependencies.
  */
 import { runCommandLine } from "@node-minify/run";
-import { MinifierOptions, Options, OptionsPossible } from "@node-minify/types";
+import type {
+    MinifierOptions,
+    Options,
+    OptionsPossible,
+} from "@node-minify/types";
 import { utils } from "@node-minify/utils";
 import compilerPath from "google-closure-compiler-java";
 

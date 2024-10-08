@@ -9,7 +9,7 @@
 import { Command } from "commander";
 import updateNotifier from "update-notifier";
 const program = new Command();
-import { Settings } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import { run } from "../";
 import packageJson from "../../package.json";
 

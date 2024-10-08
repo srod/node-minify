@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import childProcess from "child_process";
+import childProcess from "node:child_process";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import { runCommandLine } from "../src";
 

@@ -16,7 +16,11 @@ import {
     unlinkSync,
     writeFileSync,
 } from "node:fs";
-import { MinifierOptions, OptionsPossible, Settings } from "@node-minify/types";
+import type {
+    MinifierOptions,
+    OptionsPossible,
+    Settings,
+} from "@node-minify/types";
 import gzipSize from "gzip-size";
 
 type Utils = {

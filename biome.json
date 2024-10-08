@@ -12,7 +12,8 @@
             "**/dist/**",
             "**/.turbo/**",
             "**/.astro/**",
-            "pnpm-lock.yaml"
+            "pnpm-lock.yaml",
+            "package.json"
         ]
     },
     "organizeImports": {
@@ -48,7 +49,7 @@
         "formatter": {
             "quoteStyle": "double",
             "semicolons": "always",
-            "trailingComma": "es5"
+            "trailingCommas": "es5"
         }
     }
 }

@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import minify from "@node-minify/core";
-import { Result, Settings } from "@node-minify/types";
+import type { Result, Settings } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
 
 /**

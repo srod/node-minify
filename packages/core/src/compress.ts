@@ -7,8 +7,8 @@
 /**
  * Module dependencies.
  */
-import fs from "fs";
-import { Settings } from "@node-minify/types";
+import fs from "node:fs";
+import type { Settings } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
 import mkdirp from "mkdirp";
 

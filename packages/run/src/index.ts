@@ -7,8 +7,8 @@
 /**
  * Module dependencies.
  */
-import childProcess from "child_process";
-import { MinifierOptions } from "@node-minify/types";
+import childProcess from "node:child_process";
+import type { MinifierOptions } from "@node-minify/types";
 
 /**
  * Run the command line with spawn.

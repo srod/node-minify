@@ -7,7 +7,7 @@
 /**
  * Module dependencies.
  */
-import { Result, Settings } from "@node-minify/types";
+import type { Result, Settings } from "@node-minify/types";
 import chalk from "chalk";
 import { compress } from "./compress";
 import { spinnerError, spinnerStart, spinnerStop } from "./spinner";

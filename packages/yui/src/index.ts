@@ -9,7 +9,7 @@
  */
 
 import { runCommandLine } from "@node-minify/run";
-import { MinifierOptions, Options } from "@node-minify/types";
+import type { MinifierOptions, Options } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
 import dirname from "es-dirname";
 

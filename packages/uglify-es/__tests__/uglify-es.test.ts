@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { OptionsTest } from "@node-minify/types";
+import type { OptionsTest } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
 import { filesJS } from "../../../tests/files-path";
 import { runOneTest, tests } from "../../../tests/fixtures";

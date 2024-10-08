@@ -7,7 +7,7 @@
 /**
  * Module dependencies.
  */
-import { Settings } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import { compress } from "./compress";
 import { compressInMemory } from "./compressInMemory";
 import { setup } from "./setup";

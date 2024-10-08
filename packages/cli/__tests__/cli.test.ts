@@ -4,8 +4,8 @@
  * MIT Licensed
  */
 
-import childProcess from "child_process";
-import { Settings } from "@node-minify/types";
+import childProcess from "node:child_process";
+import type { Settings } from "@node-minify/types";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import { filesJS } from "../../../tests/files-path";
 import * as cli from "../src";
