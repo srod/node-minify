@@ -122,13 +122,13 @@ importers:
         version: 3.5.3(@babel/core@7.25.8)(preact@10.24.3)(vite@5.4.9)
       '@astrolib/analytics':
         specifier: 0.6.1
-        version: 0.6.1(astro@4.16.4)
+        version: 0.6.1(astro@4.16.5)
       '@types/node':
         specifier: ^18.0.0
         version: 18.19.55
       astro:
         specifier: ^4.0.0
-        version: 4.16.4(@types/node@18.19.55)(typescript@5.6.3)
+        version: 4.16.5(@types/node@18.19.55)(typescript@5.6.3)
       preact:
         specifier: ^10.7.3
         version: 10.24.3
@@ -511,12 +511,12 @@ packages:
       - supports-color
     dev: false
 
-  /@astrolib/analytics@0.6.1(astro@4.16.4):
+  /@astrolib/analytics@0.6.1(astro@4.16.5):
     resolution: {integrity: sha512-BrOGe88JuprEXhvLg1eJxaGcR9ZzuYPZE00QwcvQ1EBAucODxbg4FJG57G5yoAYjyXjr7GsPy4+46X2jB+64hg==}
     peerDependencies:
       astro: ^1.2.1 || ^2.0.0 || ^3.0.0-beta.0 || ^3.0.0 || ^4.0.0 || ^5.0.0-beta.0 || ^5.0.0
     dependencies:
-      astro: 4.16.4(@types/node@18.19.55)(typescript@5.6.3)
+      astro: 4.16.5(@types/node@18.19.55)(typescript@5.6.3)
     dev: false
 
   /@babel/code-frame@7.25.7:
@@ -837,7 +837,7 @@ packages:
     resolution: {integrity: sha512-kEBmG8KyqtxJZv+ygbEim+KCGtIq1fC22Ms3S4ziXmYKm8uyoLX0MHONVKwp+9opg390VaKRNt4a7A9NwmpNhw==}
     requiresBuild: true
     dependencies:
-      tslib: 2.7.0
+      tslib: 2.8.0
     dev: false
     optional: true
 
@@ -2194,8 +2194,8 @@ packages:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
     dev: false
 
-  /astro@4.16.4(@types/node@18.19.55)(typescript@5.6.3):
-    resolution: {integrity: sha512-W/ETxHRkt9iEAj1RVSqV3bjSGaGXEFJHqeNpPhvJIj720hC3V/ZBDAd6FpMW291eiZPtxhGh+c/VDtkD6avPXQ==}
+  /astro@4.16.5(@types/node@18.19.55)(typescript@5.6.3):
+    resolution: {integrity: sha512-v8mKWcEPN7hkfyVsMFWV0F8UgL4GUJKT172KTB7dePO3yJb64HBwCckC0QnA60QQh3jK6+2xwyWEc5QvCeqjtg==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
     dependencies:
@@ -6799,8 +6799,8 @@ packages:
       typescript: 5.6.3
     dev: false
 
-  /tslib@2.7.0:
-    resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
+  /tslib@2.8.0:
+    resolution: {integrity: sha512-jWVzBLplnCmoaTr13V9dYbiQ99wvZRd0vNWaDRg+aVYRcjDF3nDksxFDE/+fkXnKhpnUUkmx5pK/v8mCtLVqZA==}
     requiresBuild: true
     dev: false
     optional: true
