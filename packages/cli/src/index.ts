@@ -8,6 +8,7 @@
  * Module dependencies.
  */
 import type { Result, Settings } from "@node-minify/types";
+// @ts-expect-error moduleResolution:nodenext issue 54523
 import chalk from "chalk";
 import { compress } from "./compress";
 import { spinnerError, spinnerStart, spinnerStop } from "./spinner";

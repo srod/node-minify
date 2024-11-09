@@ -27,7 +27,10 @@ const binYui = `${dirname()}/binaries/yuicompressor-2.4.7.jar`;
  * @returns Minified content
  */
 const minifyYUI = ({ settings, content, callback, index }: MinifierOptions) => {
-    if (!settings?.type) {
+    if (
+        !settings?.type ||
+        (settings.type !== "js" && settings.type !== "css")
+    ) {
         throw new Error("You must specify a type: js or css");
     }
     return runCommandLine({

@@ -95,7 +95,7 @@ utils.buildArgs = (
 ): OptionsPossible[] => {
     const args: OptionsPossible[] = [];
     Object.keys(options).forEach((key: string) => {
-        if (options[key] && options[key] !== false) {
+        if (options[key] && (options[key] as unknown) !== false) {
             args.push(`--${key}`);
         }
 
@@ -242,7 +242,14 @@ utils.getContentFromFiles = (input: string | string[]): string => {
 utils.runSync = ({ settings, content, index }: MinifierOptions): string =>
     settings && typeof settings.compressor !== "string"
         ? typeof settings.compressor === "function"
-            ? settings.compressor({ settings, content, callback: null, index })
+            ? String(
+                  settings.compressor({
+                      settings,
+                      content,
+                      callback: null,
+                      index,
+                  }) || ""
+              )
             : ""
         : "";
 

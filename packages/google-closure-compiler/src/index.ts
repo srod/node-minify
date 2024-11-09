@@ -86,7 +86,17 @@ const applyOptions = (flags: Flags, options?: Options): Flags => {
     }
     Object.keys(options)
         .filter((option) => allowedFlags.indexOf(option) > -1)
-        .forEach((option) => (flags[option] = options[option] ?? false));
+        .forEach((option) => {
+            const value = options[option];
+            if (
+                typeof value === "boolean" ||
+                (typeof value === "object" && !Array.isArray(value))
+            ) {
+                flags[option] = value as
+                    | boolean
+                    | Record<string, OptionsPossible>;
+            }
+        });
     return flags;
 };
 
