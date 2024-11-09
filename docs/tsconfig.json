@@ -1,8 +1,16 @@
 {
   "extends": "astro/tsconfigs/base",
   "compilerOptions": {
-    "jsx": "preserve",
+    "lib": ["dom", "dom.iterable"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
     "skipLibCheck": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "verbatimModuleSyntax": true,
+    "plugins": [
+      {
+        "name": "@astrojs/ts-plugin"
+      },
+    ],
   }
 }

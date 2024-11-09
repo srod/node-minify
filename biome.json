@@ -51,5 +51,18 @@
             "semicolons": "always",
             "trailingCommas": "es5"
         }
-    }
+    },
+    "overrides": [
+        {
+            "include": ["*.astro"],
+            "linter": {
+                "rules": {
+                    "style": {
+                        "useConst": "off",
+                        "useImportType": "off"
+                    }
+                }
+            }
+        }
+    ]
 }

@@ -1,17 +1,17 @@
 ---
-import type { MarkdownHeading } from 'astro';
-import type { CollectionEntry } from 'astro:content';
-import { GoogleAnalytics } from '@astrolib/analytics';
-import HeadCommon from '../components/HeadCommon.astro';
-import HeadSEO from '../components/HeadSEO.astro';
-import Header from '../components/Header/Header.astro';
-import PageContent from '../components/PageContent/PageContent.astro';
-import LeftSidebar from '../components/LeftSidebar/LeftSidebar.astro';
+import type { CollectionEntry } from "astro:content";
+import { GoogleAnalytics } from "@astrolib/analytics";
+import type { MarkdownHeading } from "astro";
+import HeadCommon from "../components/HeadCommon.astro";
+import HeadSEO from "../components/HeadSEO.astro";
+import Header from "../components/Header/Header.astro";
+import LeftSidebar from "../components/LeftSidebar/LeftSidebar.astro";
+import PageContent from "../components/PageContent/PageContent.astro";
 // import RightSidebar from '../components/RightSidebar/RightSidebar.astro';
-import { SITE } from '../consts';
+import { SITE } from "../consts";
 
-type Props = CollectionEntry<'docs'>['data'] & {
-  headings: MarkdownHeading[];
+type Props = CollectionEntry<"docs">["data"] & {
+    headings: MarkdownHeading[];
 };
 
 const { headings, ...data } = Astro.props;
@@ -109,7 +109,7 @@ const currentPage = Astro.url.pathname;
       }
 
       .mobile-sidebar-toggle #grid-left {
-        display: block;
+        display: block !important;
         top: 2rem;
       }
     </style>

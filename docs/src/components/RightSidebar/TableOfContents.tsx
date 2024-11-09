@@ -67,7 +67,7 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
 
         // Stop observing when the component is unmounted.
         return () => headingsObserver.disconnect();
-    }, [toc.current]);
+    }, []);
 
     const onLinkClick = (e) => {
         setCurrentID(e.target.getAttribute("href").replace("#", ""));
@@ -83,6 +83,7 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
                     .filter(({ depth }) => depth > 1 && depth < 4)
                     .map((heading) => (
                         <li
+                            key={heading.slug}
                             className={`header-link depth-${heading.depth} ${
                                 currentID === heading.slug
                                     ? "current-header-link"

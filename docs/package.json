@@ -12,13 +12,14 @@
   },
   "dependencies": {
     "@astrojs/partytown": "2.1.2",
-    "@astrojs/preact": "^3.0.0",
+    "@astrojs/preact": "^3.5.3",
     "@astrolib/analytics": "0.6.1",
-    "@types/node": "^18.0.0",
-    "astro": "^4.0.0",
-    "preact": "^10.7.3"
+    "@types/node": "^22.9.0",
+    "astro": "^4.16.10",
+    "preact": "^10.24.3"
   },
   "devDependencies": {
+    "@astrojs/ts-plugin": "1.10.4",
     "html-escaper": "^3.0.3"
   }
 }

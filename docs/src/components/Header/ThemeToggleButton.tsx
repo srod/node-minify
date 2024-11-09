@@ -6,6 +6,7 @@ const themes = ["light", "dark"];
 
 const icons = [
     <svg
+        key={themes[0]}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         width="24"
@@ -18,6 +19,7 @@ const icons = [
         />
     </svg>,
     <svg
+        key={themes[1]}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         width="24"
@@ -49,16 +51,9 @@ const ThemeToggle: FunctionalComponent = () => {
     });
 
     useEffect(() => {
-        const root = document.documentElement;
-        if (theme === "light") {
-            root.classList.remove("theme-dark");
-            // root.classList.add('theme-light');
-            // root.dataset.bsTheme = 'light';
-        } else {
-            root.classList.add("theme-dark");
-            // root.classList.remove('theme-light');
-            // root.dataset.bsTheme = 'dark';
-        }
+        document.documentElement.classList[theme === "dark" ? "add" : "remove"](
+            "theme-dark"
+        );
     }, [theme]);
 
     useEffect(() => {
@@ -69,7 +64,7 @@ const ThemeToggle: FunctionalComponent = () => {
         function activateLightTheme() {
             root.classList.remove("theme-dark");
         }
-        function activateTheme(theme) {
+        function activateTheme(theme: string) {
             theme === "dark" ? activateDarkTheme() : activateLightTheme();
             setTheme(theme);
         }
@@ -100,6 +95,10 @@ const ThemeToggle: FunctionalComponent = () => {
         };
     }, []);
 
+    if (import.meta.env.SSR) {
+        return null;
+    }
+
     return (
         <>
             <button
@@ -110,17 +109,13 @@ const ThemeToggle: FunctionalComponent = () => {
                 }}
                 className="toggleButton"
                 type="button"
-                title={`Switch between dark and light mode${
-                    theme !== undefined ? ` (currently ${theme} mode)` : ""
-                }`}
-                aria-label={`Switch between dark and light mode${
-                    theme !== undefined ? ` (currently ${theme} mode)` : ""
-                }`}
+                title={`Switch between dark and light mode${theme !== undefined ? ` (currently ${theme} mode)` : ""}`}
+                aria-label={`Switch between dark and light mode${theme !== undefined ? ` (currently ${theme} mode)` : ""}`}
                 aria-live="polite"
             >
                 {themes.map((t, i) => {
                     const icon = icons[i];
-                    return <>{t === theme && icon}</>;
+                    return t === theme ? icon : null;
                 })}
             </button>
         </>
