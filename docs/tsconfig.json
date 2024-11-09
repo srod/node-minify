@@ -1,6 +1,7 @@
 {
   "extends": "astro/tsconfigs/base",
   "compilerOptions": {
+    "types": ["@cloudflare/workers-types/2023-07-01"],
     "lib": ["dom", "dom.iterable"],
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
