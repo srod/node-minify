@@ -1,10 +1,13 @@
+comment:
+  behavior: new
+  require_changes: false
+
 coverage:
   parsers:
     javascript:
       enable_partials: yes
   status:
+    patch: off
     project:
       default:
-        target: "80%"
-    patch:
-      enabled: false
+        target: '80%'

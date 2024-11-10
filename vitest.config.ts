@@ -1,13 +1,13 @@
-import { defineConfig } from 'vitest/config';
-import tsconfigPaths from 'vite-tsconfig-paths';
+import tsconfigPaths from "vite-tsconfig-paths";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  plugins: [tsconfigPaths()],
-  test: {
-    reporters: 'dot',
-    coverage: {
-      reporter: ['text', 'json', 'html']
+    plugins: [tsconfigPaths()],
+    test: {
+        reporters: "dot",
+        coverage: {
+            reporter: ["text", "json", "html"],
+        },
+        testTimeout: 60000,
     },
-    testTimeout: 60000
-  }
 });

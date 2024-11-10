@@ -7,18 +7,27 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "preview": "astro build && wrangler pages dev",
+    "astro": "astro",
+    "deploy": "astro build && wrangler pages deploy",
+    "cf-typegen": "wrangler types",
+    "lint": "biome lint .",
+    "format:check": "biome check .",
+    "format": "biome check --write ."
   },
   "dependencies": {
-    "@astrojs/partytown": "1.2.0",
-    "@astrojs/preact": "^2.0.2",
-    "@astrolib/analytics": "0.3.0",
-    "@types/node": "^18.0.0",
-    "astro": "^2.0.10",
-    "preact": "^10.7.3"
+    "@astrojs/cloudflare": "^11.2.0",
+    "@astrojs/partytown": "2.1.2",
+    "@astrojs/preact": "^3.5.3",
+    "@astrolib/analytics": "0.6.1",
+    "@types/node": "^22.9.0",
+    "astro": "^4.16.10",
+    "preact": "^10.24.3"
   },
   "devDependencies": {
-    "html-escaper": "^3.0.3"
+    "@astrojs/ts-plugin": "1.10.4",
+    "@cloudflare/workers-types": "^4.20241106.0",
+    "html-escaper": "^3.0.3",
+    "wrangler": "^3.86.0"
   }
 }

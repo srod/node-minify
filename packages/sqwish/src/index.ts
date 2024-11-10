@@ -1,32 +1,42 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2023 Rodolphe Stoclin
+ * Copyright(c) 2011-2024 Rodolphe Stoclin
  * MIT Licensed
  */
 
 /**
  * Module dependencies.
  */
-import sqwish from 'sqwish';
-import { utils } from '@node-minify/utils';
-import { MinifierOptions } from '@node-minify/types';
+import type { MinifierOptions } from "@node-minify/types";
+import { utils } from "@node-minify/utils";
+import sqwish from "sqwish";
 
 /**
  * Run sqwish.
- *
- * @param {Object} settings
- * @param {String} content
- * @param {Function} callback
+ * @param settings Sqwish options
+ * @param content Content to minify
+ * @param callback Callback
+ * @param index Index of current file in array
+ * @returns Minified content
  */
-const minifySqwish = ({ settings, content, callback, index }: MinifierOptions) => {
-  const contentMinified = sqwish.minify(content, settings?.options?.strict);
-  if (settings && !settings.content && settings.output) {
-    utils.writeFile({ file: settings.output, content: contentMinified, index });
-  }
-  if (callback) {
-    return callback(null, contentMinified);
-  }
-  return contentMinified;
+const minifySqwish = ({
+    settings,
+    content,
+    callback,
+    index,
+}: MinifierOptions) => {
+    const contentMinified = sqwish.minify(content, settings?.options?.strict);
+    if (settings && !settings.content && settings.output) {
+        utils.writeFile({
+            file: settings.output,
+            content: contentMinified,
+            index,
+        });
+    }
+    if (callback) {
+        return callback(null, contentMinified);
+    }
+    return contentMinified;
 };
 
 /**

@@ -12,7 +12,7 @@
   "homepage": "https://github.com/srod/node-minify/tree/master/packages/clean-css#readme",
   "license": "MIT",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "directories": {
     "lib": "dist",
@@ -22,9 +22,11 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
-    "require": "./dist/index.js",
-    "import": "./dist/index.mjs",
-    "types": "./dist/index.d.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
   },
   "files": [
     "dist/**/*"
@@ -42,11 +44,15 @@
   "scripts": {
     "clean": "pnpm dlx rimraf dist",
     "build": "pnpm clean && tsup src/index.ts --format cjs,esm --dts --clean --sourcemap",
-    "prepublishOnly": "pnpm build"
+    "lint": "biome lint .",
+    "prepublishOnly": "pnpm build",
+    "test": "vitest run",
+    "test:ci": "vitest run --coverage",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@node-minify/utils": "workspace:*",
-    "clean-css": "5.3.2"
+    "clean-css": "5.3.3"
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*",

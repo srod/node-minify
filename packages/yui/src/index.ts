@@ -1,6 +1,6 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2023 Rodolphe Stoclin
+ * Copyright(c) 2011-2024 Rodolphe Stoclin
  * MIT Licensed
  */
 
@@ -8,11 +8,10 @@
  * Module dependencies.
  */
 
-// import path from 'path';
-import dirname from 'es-dirname';
-import { utils } from '@node-minify/utils';
-import { runCommandLine } from '@node-minify/run';
-import { MinifierOptions } from '@node-minify/types';
+import { runCommandLine } from "@node-minify/run";
+import type { MinifierOptions, Options } from "@node-minify/types";
+import { utils } from "@node-minify/utils";
+import dirname from "es-dirname";
 
 /**
  * Module variables.
@@ -21,40 +20,48 @@ const binYui = `${dirname()}/binaries/yuicompressor-2.4.7.jar`;
 
 /**
  * Run YUI Compressor.
- *
- * @param {Object} settings
- * @param {String} content
- * @param {Function} callback
+ * @param settings YUI Compressor options
+ * @param content Content to minify
+ * @param callback Callback
+ * @param index Index of current file in array
+ * @returns Minified content
  */
 const minifyYUI = ({ settings, content, callback, index }: MinifierOptions) => {
-  return runCommandLine({
-    args: yuiCommand(settings?.type, settings?.options),
-    data: content,
-    settings,
-    callback: (err: unknown, content?: string) => {
-      if (err) {
-        if (callback) {
-          return callback(err);
-        } else {
-          throw err;
-        }
-      }
-      if (settings && !settings.content && settings.output) {
-        utils.writeFile({ file: settings.output, content, index });
-      }
-      if (callback) {
-        return callback(null, content);
-      }
-      return content;
+    if (
+        !settings?.type ||
+        (settings.type !== "js" && settings.type !== "css")
+    ) {
+        throw new Error("You must specify a type: js or css");
     }
-  });
+    return runCommandLine({
+        args: yuiCommand(settings.type, settings?.options ?? {}),
+        data: content,
+        settings,
+        callback: (err: unknown, content?: string) => {
+            if (err) {
+                if (callback) {
+                    return callback(err);
+                }
+                throw err;
+            }
+            if (settings && !settings.content && settings.output) {
+                utils.writeFile({ file: settings.output, content, index });
+            }
+            if (callback) {
+                return callback(null, content);
+            }
+            return content;
+        },
+    });
 };
 
 /**
  * YUI Compressor CSS command line.
  */
-const yuiCommand = (type = 'js', options: any) => {
-  return ['-jar', '-Xss2048k', binYui, '--type', type].concat(utils.buildArgs(options ?? {}));
+const yuiCommand = (type: "js" | "css", options: Options) => {
+    return ["-jar", "-Xss2048k", binYui, "--type", type].concat(
+        utils.buildArgs(options)
+    );
 };
 
 /**

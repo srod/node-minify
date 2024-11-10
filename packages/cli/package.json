@@ -14,7 +14,7 @@
     "node-minify": "dist/cli.mjs"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "directories": {
     "lib": "dist",
@@ -24,9 +24,11 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
-    "require": "./dist/index.js",
-    "import": "./dist/index.mjs",
-    "types": "./dist/index.d.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
   },
   "files": [
     "bin",
@@ -45,15 +47,19 @@
   "scripts": {
     "clean": "pnpm dlx rimraf dist",
     "build": "pnpm clean && tsup src/index.ts --format cjs,esm --dts --sourcemap && tsup src/bin/cli.ts --format esm --dts --sourcemap",
-    "prepublishOnly": "pnpm build"
+    "lint": "biome lint .",
+    "prepublishOnly": "pnpm build",
+    "test": "vitest run",
+    "test:ci": "vitest run --coverage",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@node-minify/core": "workspace:*",
     "@node-minify/utils": "workspace:*",
-    "chalk": "5.2.0",
-    "commander": "9.5.0",
-    "ora": "6.3.0",
-    "update-notifier": "6.0.2"
+    "chalk": "5.3.0",
+    "commander": "12.1.0",
+    "ora": "8.1.1",
+    "update-notifier": "7.3.1"
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*",

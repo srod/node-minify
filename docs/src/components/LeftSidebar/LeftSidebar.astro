@@ -1,12 +1,14 @@
 ---
-import { SIDEBAR } from '../../consts';
+import { SIDEBAR } from "../../consts";
 
 type Props = {
-  currentPage: string;
+    currentPage: string;
 };
 
 const { currentPage } = Astro.props;
-const currentPageMatch = currentPage.endsWith('/') ? currentPage.slice(1, -1) : currentPage.slice(1);
+const currentPageMatch = currentPage.endsWith("/")
+    ? currentPage.slice(1, -1)
+    : currentPage.slice(1);
 const sidebar = SIDEBAR;
 ---
 
