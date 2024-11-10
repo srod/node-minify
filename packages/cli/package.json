@@ -8,7 +8,7 @@
     "minifier"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
-  "homepage": "https://github.com/srod/node-minify/tree/master/packages/cli#readme",
+  "homepage": "https://github.com/srod/node-minify/tree/main/packages/cli#readme",
   "license": "MIT",
   "bin": {
     "node-minify": "dist/cli.mjs"

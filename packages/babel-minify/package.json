@@ -9,7 +9,7 @@
     "babel-minify"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
-  "homepage": "https://github.com/srod/node-minify/tree/master/packages/babel-minify#readme",
+  "homepage": "https://github.com/srod/node-minify/tree/main/packages/babel-minify#readme",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"

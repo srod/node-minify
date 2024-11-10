@@ -83,4 +83,4 @@ minify({
 });
 ```
 
-[More examples](https://github.com/srod/node-minify/blob/master/examples/server.js)
+[More examples](https://github.com/srod/node-minify/blob/main/examples/server.js)

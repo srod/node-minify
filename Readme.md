@@ -120,7 +120,7 @@ minify({
 });
 ```
 
-[More examples](https://github.com/srod/node-minify/blob/master/examples/server.mjs)
+[More examples](https://github.com/srod/node-minify/blob/main/examples/server.mjs)
 
 ## Documentation
 

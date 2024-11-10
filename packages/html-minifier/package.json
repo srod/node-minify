@@ -9,7 +9,7 @@
     "html-minifier"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
-  "homepage": "https://github.com/srod/node-minify/tree/master/packages/html-minifier#readme",
+  "homepage": "https://github.com/srod/node-minify/tree/main/packages/html-minifier#readme",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"

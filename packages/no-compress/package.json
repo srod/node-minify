@@ -6,7 +6,7 @@
     "concatenate"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
-  "homepage": "https://github.com/srod/node-minify/tree/master/packages/no-compress#readme",
+  "homepage": "https://github.com/srod/node-minify/tree/main/packages/no-compress#readme",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"

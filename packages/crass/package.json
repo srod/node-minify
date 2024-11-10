@@ -9,7 +9,7 @@
     "crass"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
-  "homepage": "https://github.com/srod/node-minify/tree/master/packages/crass#readme",
+  "homepage": "https://github.com/srod/node-minify/tree/main/packages/crass#readme",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"

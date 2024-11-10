@@ -9,7 +9,7 @@
     "clean-css"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
-  "homepage": "https://github.com/srod/node-minify/tree/master/packages/clean-css#readme",
+  "homepage": "https://github.com/srod/node-minify/tree/main/packages/clean-css#readme",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"

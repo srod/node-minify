@@ -9,7 +9,7 @@
     "types"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
-  "homepage": "https://github.com/srod/node-minify/tree/master/packages/types#readme",
+  "homepage": "https://github.com/srod/node-minify/tree/main/packages/types#readme",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"
