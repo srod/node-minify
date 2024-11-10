@@ -31,7 +31,9 @@
     "test:ci": "turbo run test:ci",
     "changeset": "changeset",
     "changeset:version": "changeset version && bun install --no-frozen-lockfile",
-    "changeset:release": "bun run build && changeset publish"
+    "changeset:release": "bun run build && changeset publish",
+    "format:check": "biome check .",
+    "format": "biome check --write ."
   },
   "dependencies": {
     "@changesets/cli": "2.27.9",
