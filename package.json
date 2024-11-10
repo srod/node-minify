@@ -14,9 +14,9 @@
     "url": "https://github.com/srod/node-minify.git"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
-  "packageManager": "pnpm@8.15.9",
+  "packageManager": "pnpm@9.12.3",
   "scripts": {
     "build": "turbo --filter \"./packages/*\" build",
     "clean": "pnpm run clean:build",
@@ -54,7 +54,7 @@
     "@node-minify/uglify-js": "workspace:*",
     "@node-minify/utils": "workspace:*",
     "@node-minify/yui": "workspace:*",
-    "@tsconfig/node18": "18.2.4",
+    "@tsconfig/node20": "20.1.4",
     "@types/node": "18.19.64",
     "@vitest/coverage-v8": "1.6.0",
     "@vitest/ui": "1.6.0",
