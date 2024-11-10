@@ -73,4 +73,4 @@ const minifyUglifyES = ({
  * Expose `minifyUglifyES()`.
  */
 minifyUglifyES.default = minifyUglifyES;
-export = minifyUglifyES;
+export default minifyUglifyES;

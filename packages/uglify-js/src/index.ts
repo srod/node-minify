@@ -62,4 +62,4 @@ const minifyUglifyJS = ({
  * Expose `minifyUglifyJS()`.
  */
 minifyUglifyJS.default = minifyUglifyJS;
-export = minifyUglifyJS;
+export default minifyUglifyJS;

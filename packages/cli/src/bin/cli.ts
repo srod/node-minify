@@ -10,8 +10,8 @@ import { Command } from "commander";
 import updateNotifier from "update-notifier";
 const program = new Command();
 import type { Settings } from "@node-minify/types";
-import { run } from "../";
 import packageJson from "../../package.json";
+import { run } from "../index.ts";
 
 updateNotifier({ pkg: packageJson }).notify();
 

@@ -82,4 +82,4 @@ const minifyBabel = ({
  * Expose `minifyBabel()`.
  */
 minifyBabel.default = minifyBabel;
-export = minifyBabel;
+export default minifyBabel;

@@ -8,6 +8,7 @@
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
   "homepage": "https://github.com/srod/node-minify/tree/main/packages/no-compress#readme",
   "license": "MIT",
+  "type": "module",
   "engines": {
     "node": ">=20.0.0"
   },

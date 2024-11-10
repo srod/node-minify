@@ -68,4 +68,4 @@ const yuiCommand = (type: "js" | "css", options: Options) => {
  * Expose `minifyYUI()`.
  */
 minifyYUI.default = minifyYUI;
-export = minifyYUI;
+export default minifyYUI;

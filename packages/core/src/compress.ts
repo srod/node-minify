@@ -10,7 +10,7 @@
 import fs from "node:fs";
 import type { Settings } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
-import mkdirp from "mkdirp";
+import { mkdirp } from "mkdirp";
 
 /**
  * Run compressor.

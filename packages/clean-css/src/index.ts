@@ -81,4 +81,4 @@ const minifyCleanCSS = ({
  * Expose `minifyCleanCSS()`.
  */
 minifyCleanCSS.default = minifyCleanCSS;
-export = minifyCleanCSS;
+export default minifyCleanCSS;

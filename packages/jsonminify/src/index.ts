@@ -44,4 +44,4 @@ const minifyJsonMinify = ({
  * Expose `minifyJsonMinify()`.
  */
 minifyJsonMinify.default = minifyJsonMinify;
-export = minifyJsonMinify;
+export default minifyJsonMinify;

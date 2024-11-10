@@ -44,4 +44,4 @@ const minifyCrass = ({
  * Expose `minifyCrass()`.
  */
 minifyCrass.default = minifyCrass;
-export = minifyCrass;
+export default minifyCrass;

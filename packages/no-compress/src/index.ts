@@ -37,4 +37,4 @@ const noCompress = ({
  * Expose `noCompress()`.
  */
 noCompress.default = noCompress;
-export = noCompress;
+export default noCompress;

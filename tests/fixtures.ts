@@ -1,7 +1,7 @@
-import { Settings } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import { expect, test } from "vitest";
-import minify from "../packages/core/src";
-import { filesCSS, filesHTML, filesJS, filesJSON } from "./files-path";
+import minify from "../packages/core/src/index.ts";
+import { filesCSS, filesHTML, filesJS, filesJSON } from "./files-path.ts";
 
 const runOneTest = ({
     options,
@@ -26,21 +26,21 @@ const runOneTest = ({
         clonedOptions.minify.sync = true;
     }
 
-    test(
-        clonedOptions.it.replace("{compressor}", compressorLabel),
-        (): Promise<void> => {
-            return new Promise<{ err: Error; min: string }>((resolve) => {
-                clonedOptions.minify.callback = (err: Error, min: string) => {
-                    resolve({ err, min });
-                };
+    test(clonedOptions.it.replace(
+        "{compressor}",
+        compressorLabel
+    ), (): Promise<void> => {
+        return new Promise<{ err: Error; min: string }>((resolve) => {
+            clonedOptions.minify.callback = (err: Error, min: string) => {
+                resolve({ err, min });
+            };
 
-                minify(clonedOptions.minify);
-            }).then(({ err, min }) => {
-                expect(err).toBeNull();
-                expect(min).not.toBeNull();
-            });
-        }
-    );
+            minify(clonedOptions.minify);
+        }).then(({ err, min }) => {
+            expect(err).toBeNull();
+            expect(min).not.toBeNull();
+        });
+    });
 };
 
 export type Tests = Record<string, { it: string; minify: Settings }[]>;

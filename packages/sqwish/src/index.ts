@@ -43,4 +43,4 @@ const minifySqwish = ({
  * Expose `minifySqwish()`.
  */
 minifySqwish.default = minifySqwish;
-export = minifySqwish;
+export default minifySqwish;

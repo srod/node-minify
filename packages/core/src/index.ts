@@ -8,9 +8,9 @@
  * Module dependencies.
  */
 import type { Settings } from "@node-minify/types";
-import { compress } from "./compress";
-import { compressInMemory } from "./compressInMemory";
-import { setup } from "./setup";
+import { compress } from "./compress.ts";
+import { compressInMemory } from "./compressInMemory.ts";
+import { setup } from "./setup.ts";
 
 /**
  * Run node-minify.
@@ -48,4 +48,4 @@ const minify = (settings: Settings) => {
  * Expose `minify()`.
  */
 minify.default = minify;
-export = minify;
+export default minify;

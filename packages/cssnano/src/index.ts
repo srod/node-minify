@@ -54,4 +54,4 @@ const minifyCssnano = async ({
  * Expose `minifyCssnano()`.
  */
 minifyCssnano.default = minifyCssnano;
-export = minifyCssnano;
+export default minifyCssnano;

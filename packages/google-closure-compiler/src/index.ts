@@ -114,4 +114,4 @@ const gccCommand = (options: Record<string, OptionsPossible>) => {
  * Expose `minifyGCC()`.
  */
 minifyGCC.default = minifyGCC;
-export = minifyGCC;
+export default minifyGCC;

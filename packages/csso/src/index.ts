@@ -44,4 +44,4 @@ const minifyCSSO = ({
  * Expose `minifyCSSO()`.
  */
 minifyCSSO.default = minifyCSSO;
-export = minifyCSSO;
+export default minifyCSSO;

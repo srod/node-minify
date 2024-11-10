@@ -67,4 +67,4 @@ const minifyHTMLMinifier = ({
  * Expose `minifyHTMLMinifier()`.
  */
 minifyHTMLMinifier.default = minifyHTMLMinifier;
-export = minifyHTMLMinifier;
+export default minifyHTMLMinifier;

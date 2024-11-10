@@ -9,7 +9,6 @@
  */
 import type { MinifierOptions } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
-// @ts-expect-error moduleResolution:nodenext issue 54523
 import { minify } from "terser";
 
 type OptionsTerser = {
@@ -70,4 +69,4 @@ const minifyTerser = async ({
  * Expose `minifyTerser()`.
  */
 minifyTerser.default = minifyTerser;
-export = minifyTerser;
+export default minifyTerser;
