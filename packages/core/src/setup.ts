@@ -10,7 +10,7 @@
 import path from "node:path";
 import type { Settings } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
-import { globSync } from "glob";
+import { globSync } from "fast-glob";
 
 /**
  * Default settings.
