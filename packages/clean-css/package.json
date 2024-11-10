@@ -56,6 +56,6 @@
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*",
-    "@types/clean-css": "^4.2.6"
+    "@types/clean-css": "^4.2.11"
   }
 }

@@ -57,6 +57,6 @@
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*",
-    "@types/jsonminify": "^0.4.1"
+    "@types/jsonminify": "^0.4.3"
   }
 }

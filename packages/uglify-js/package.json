@@ -56,6 +56,6 @@
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*",
-    "@types/uglify-js": "^3.17.1"
+    "@types/uglify-js": "^3.17.5"
   }
 }

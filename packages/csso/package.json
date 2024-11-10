@@ -56,6 +56,6 @@
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*",
-    "@types/csso": "^5.0.0"
+    "@types/csso": "^5.0.4"
   }
 }
