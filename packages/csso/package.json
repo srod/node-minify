@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/csso",
-  "version": "8.0.6",
+  "version": "9.0.0",
   "description": "csso plugin for @node-minify",
   "keywords": [
     "compressor",
