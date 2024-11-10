@@ -17,23 +17,18 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: Create Release Pull Request or Publish to npm
         uses: changesets/action@v1
         id: changesets
         with:
-          publish: pnpm changeset:release
-          version: pnpm changeset:version
+          publish: bun changeset:release
+          version: bun changeset:version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -16,22 +16,21 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "packageManager": "pnpm@9.12.3",
+  "packageManager": "bun@1.1.34",
   "scripts": {
     "build": "turbo --filter \"./packages/*\" build",
-    "clean": "pnpm run clean:build",
-    "clean:build": "pnpm dlx rimraf packages/*/dist docs/dist docs/.astro",
-    "clean:test": "pnpm dlx rimraf tests/tmp/*.{js,js.map,css,html,json}",
+    "clean": "bun clean:build",
+    "clean:build": "bunx rimraf packages/*/dist docs/dist docs/.astro",
+    "clean:test": "bunx rimraf tests/tmp/*.{js,js.map,css,html,json}",
     "clean:git": "git restore --source=HEAD --staged --worktree -- tests/fixtures",
     "dev": "turbo dev --concurrency 30",
     "lint": "turbo lint",
-    "publish-latest": "NPM_CONFIG_OTP=xxx pnpm lerna publish --tag-version-prefix ''",
     "test": "turbo test",
     "test:watch": "turbo run test:watch",
     "test:ci": "turbo run test:ci",
     "changeset": "changeset",
-    "changeset:version": "changeset version && pnpm install --no-frozen-lockfile",
-    "changeset:release": "pnpm build && changeset publish"
+    "changeset:version": "changeset version && bun install --no-frozen-lockfile",
+    "changeset:release": "bun run build && changeset publish"
   },
   "dependencies": {
     "@changesets/cli": "2.27.9",
@@ -83,5 +82,9 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4"
-  }
+  },
+  "workspaces": [
+    "docs",
+    "packages/*"
+  ]
 }

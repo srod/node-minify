@@ -12,7 +12,6 @@
             "**/dist/**",
             "**/.turbo/**",
             "**/.astro/**",
-            "pnpm-lock.yaml",
             "package.json"
         ]
     },

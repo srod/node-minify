@@ -8,7 +8,7 @@ You can compress files using the command line.
 ## Installation
 
 ```bash
-npm install -g @node-minify/cli # OR yarn global add @node-minify/cli OR pnpm add -g @node-minify/cli
+npm install -g @node-minify/cli # OR yarn global add @node-minify/cli OR pnpm add -g @node-minify/cli OR bun add -g @node-minify/cli
 ```
 
 ## Usage
