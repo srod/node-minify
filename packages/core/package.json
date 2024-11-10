@@ -57,6 +57,6 @@
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*",
-    "@types/mkdirp": "^1.0.2"
+    "@types/mkdirp": "^2.0.0"
   }
 }
