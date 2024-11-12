@@ -11,11 +11,14 @@ import crass from "../src";
 const compressorLabel = "crass";
 const compressor = crass;
 
-describe("Package: crass", () => {
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
+describe("Package: crass", async () => {
+    // Run async tests
+    for (const options of tests.commoncss) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    // Run sync tests
+    for (const options of tests.commoncss) {
+        await runOneTest({ options, compressorLabel, compressor, sync: true });
+    }
 });

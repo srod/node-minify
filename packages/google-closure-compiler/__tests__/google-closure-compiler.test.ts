@@ -14,13 +14,17 @@ import gcc from "../src";
 const compressorLabel = "google-closure-compiler";
 const compressor = gcc;
 
-describe("Package: google-closure-compiler", () => {
-    tests.commonjs.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commonjs.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
+describe("Package: google-closure-compiler", async () => {
+    // Run async tests
+    for (const options of tests.commonjs) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    // Run sync tests
+    for (const options of tests.commonjs) {
+        await runOneTest({ options, compressorLabel, compressor, sync: true });
+    }
+
     test("should compress with some options", (): Promise<void> =>
         new Promise<void>((done) => {
             const options: OptionsTest = {
@@ -43,7 +47,7 @@ describe("Package: google-closure-compiler", () => {
 
             minify(options.minify);
         }));
-    test("should throw an error", () => {
+    test("should throw an error", async () => {
         const options: OptionsTest = {
             minify: {
                 compressor: gcc,
@@ -52,8 +56,10 @@ describe("Package: google-closure-compiler", () => {
             },
         };
 
-        return minify(options.minify).catch((err) => {
+        try {
+            return await minify(options.minify);
+        } catch (err) {
             return expect(err).not.toBeNull();
-        });
+        }
     });
 });

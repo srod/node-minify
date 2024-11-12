@@ -3,44 +3,83 @@ import { expect, test } from "vitest";
 import minify from "../packages/core/src/index.ts";
 import { filesCSS, filesHTML, filesJS, filesJSON } from "./files-path.ts";
 
-const runOneTest = ({
-    options,
-    compressorLabel,
-    compressor,
-    sync,
-}: {
-    options: { it: string; minify: Settings };
+interface TestOptions {
+    it: string;
+    minify: Settings;
+}
+
+interface TestConfig {
+    options: TestOptions;
     compressorLabel: string;
     compressor: any;
     sync?: boolean;
-}) => {
+}
+
+interface MinifyResult {
+    err: Error | null;
+    min: string;
+}
+
+const runOneTest = async ({
+    options,
+    compressorLabel,
+    compressor,
+    sync = false,
+}: TestConfig): Promise<void> => {
     if (!options) {
-        return false;
+        return Promise.resolve();
     }
 
-    const clonedOptions = JSON.parse(JSON.stringify(options));
+    const testOptions = createTestOptions(options, compressor, sync);
+    const testName = formatTestName(testOptions.it, compressorLabel);
 
-    clonedOptions.minify.compressor = compressor;
+    return test(testName, async () => await executeMinifyTest(testOptions));
+};
+
+const createTestOptions = (
+    options: TestOptions,
+    compressor: any,
+    sync: boolean
+): TestOptions => {
+    const testOptions = structuredClone(options);
+    testOptions.minify.compressor = compressor;
 
     if (sync) {
-        clonedOptions.minify.sync = true;
+        testOptions.minify.sync = true;
     }
 
-    test(clonedOptions.it.replace(
-        "{compressor}",
-        compressorLabel
-    ), (): Promise<void> => {
-        return new Promise<{ err: Error; min: string }>((resolve) => {
-            clonedOptions.minify.callback = (err: Error, min: string) => {
-                resolve({ err, min });
-            };
+    return testOptions;
+};
 
-            minify(clonedOptions.minify);
-        }).then(({ err, min }) => {
-            expect(err).toBeNull();
-            expect(min).not.toBeNull();
-        });
+const formatTestName = (
+    testString: string,
+    compressorLabel: string
+): string => {
+    return testString.replace("{compressor}", compressorLabel);
+};
+
+const executeMinifyTest = async (options: TestOptions): Promise<void> => {
+    const result = await runMinify(options);
+
+    validateMinifyResult(result);
+};
+
+const runMinify = (options: TestOptions): Promise<MinifyResult> => {
+    return new Promise<MinifyResult>((resolve) => {
+        options.minify.callback = (err: unknown, min?: string) => {
+            resolve({
+                err: err instanceof Error ? err : null,
+                min: min || "",
+            });
+        };
+
+        minify(options.minify);
     });
+};
+
+const validateMinifyResult = (result: MinifyResult): void => {
+    expect(result.err).toBeNull();
+    expect(result.min).not.toBeNull();
 };
 
 export type Tests = Record<string, { it: string; minify: Settings }[]>;

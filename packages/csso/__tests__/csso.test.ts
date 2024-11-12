@@ -11,11 +11,14 @@ import csso from "../src";
 const compressorLabel = "csso";
 const compressor = csso;
 
-describe("Package: csso", () => {
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
+describe("Package: csso", async () => {
+    // Run async tests
+    for (const options of tests.commoncss) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    // Run sync tests
+    for (const options of tests.commoncss) {
+        await runOneTest({ options, compressorLabel, compressor, sync: true });
+    }
 });

@@ -11,11 +11,14 @@ import jsonminify from "../src";
 const compressorLabel = "jsonminify";
 const compressor = jsonminify;
 
-describe("Package: jsonminify", () => {
-    tests.commonjson.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commonjson.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
+describe("Package: jsonminify", async () => {
+    // Run async tests
+    for (const options of tests.commonjson) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    // Run sync tests
+    for (const options of tests.commonjson) {
+        await runOneTest({ options, compressorLabel, compressor, sync: true });
+    }
 });

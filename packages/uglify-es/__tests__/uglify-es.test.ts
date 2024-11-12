@@ -14,20 +14,26 @@ import uglifyes from "../src";
 const compressorLabel = "uglify-es";
 const compressor = uglifyes;
 
-describe("Package: uglify-es", () => {
-    tests.commonjs.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.uglifyjs.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commonjs.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
-    tests.uglifyjs.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
-    test("should throw an error", () => {
+describe("Package: uglify-es", async () => {
+    // Run async tests
+    for (const options of tests.commonjs) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    for (const options of tests.uglifyjs) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    // Run sync tests
+    for (const options of tests.commonjs) {
+        await runOneTest({ options, compressorLabel, compressor, sync: true });
+    }
+
+    for (const options of tests.uglifyjs) {
+        await runOneTest({ options, compressorLabel, compressor, sync: true });
+    }
+
+    test("should throw an error", async () => {
         const options: OptionsTest = {
             minify: {
                 compressor: uglifyes,
@@ -36,8 +42,10 @@ describe("Package: uglify-es", () => {
             },
         };
 
-        return minify(options.minify).catch((err) => {
+        try {
+            return await minify(options.minify);
+        } catch (err) {
             return expect(err).not.toBeNull();
-        });
+        }
     });
 });

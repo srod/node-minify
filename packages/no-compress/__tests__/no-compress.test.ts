@@ -11,11 +11,14 @@ import noCompress from "../src";
 const compressorLabel = "no-compress";
 const compressor = noCompress;
 
-describe("Package: no-compress", () => {
-    tests.concat.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.concat.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
+describe("Package: no-compress", async () => {
+    // Run async tests
+    for (const options of tests.concat) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    // Run sync tests
+    for (const options of tests.concat) {
+        await runOneTest({ options, compressorLabel, compressor, sync: true });
+    }
 });

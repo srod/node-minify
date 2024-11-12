@@ -11,11 +11,14 @@ import htmlMinifier from "../src";
 const compressorLabel = "html-minifier";
 const compressor = htmlMinifier;
 
-describe("Package: html-minifier", () => {
-    tests.commonhtml.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commonhtml.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
+describe("Package: html-minifier", async () => {
+    // Run async tests
+    for (const options of tests.commonhtml) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    // Run sync tests
+    for (const options of tests.commonhtml) {
+        await runOneTest({ options, compressorLabel, compressor, sync: true });
+    }
 });

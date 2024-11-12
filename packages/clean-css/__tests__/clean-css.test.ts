@@ -14,13 +14,17 @@ import cleanCss from "../src";
 const compressorLabel = "clean-css";
 const compressor = cleanCss;
 
-describe("Package: clean-css", () => {
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
+describe("Package: clean-css", async () => {
+    // Run async tests
+    for (const options of tests.commoncss) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    // Run sync tests
+    for (const options of tests.commoncss) {
+        await runOneTest({ options, compressorLabel, compressor, sync: true });
+    }
+
     test("should compress with some options", (): Promise<void> =>
         new Promise<void>((done) => {
             const options: OptionsTest = {

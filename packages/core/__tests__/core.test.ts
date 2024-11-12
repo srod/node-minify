@@ -19,15 +19,19 @@ import minify from "../src";
 const compressorLabel = "uglify-es";
 const compressor = uglifyes;
 
-describe("Package: core", () => {
-    tests.commonjs.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commonjs.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
+describe("Package: core", async () => {
+    // Run async tests
+    for (const options of tests.commonjs) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    // Run sync tests
+    for (const options of tests.commonjs) {
+        await runOneTest({ options, compressorLabel, compressor, sync: true });
+    }
+
     describe("Fake binary", () => {
-        test("should throw an error if binary does not exist", () => {
+        test("should throw an error if binary does not exist", async () => {
             const options: OptionsTest = {
                 minify: {
                     compressor: "fake",
@@ -36,16 +40,18 @@ describe("Package: core", () => {
                 },
             };
 
-            return minify(options.minify).catch((err) => {
+            try {
+                return await minify(options.minify);
+            } catch (err) {
                 return expect(err.toString()).toEqual(
                     "Error: compressor should be a function, maybe you forgot to install the compressor"
                 );
-            });
+            }
         });
     });
 
     describe("No mandatories", () => {
-        test("should throw an error if no compressor", () => {
+        test("should throw an error if no compressor", async () => {
             const options: OptionsTest = {
                 minify: {
                     input: filesJS.oneFileWithWildcards,
@@ -53,14 +59,16 @@ describe("Package: core", () => {
                 },
             };
 
-            return minify(options.minify).catch((err) => {
+            try {
+                return await minify(options.minify);
+            } catch (err) {
                 return expect(err.toString()).toEqual(
                     "Error: compressor is mandatory."
                 );
-            });
+            }
         });
 
-        test("should throw an error if no input", () => {
+        test("should throw an error if no input", async () => {
             const options: OptionsTest = {
                 minify: {
                     compressor: noCompress,
@@ -68,14 +76,16 @@ describe("Package: core", () => {
                 },
             };
 
-            return minify(options.minify).catch((err) => {
+            try {
+                return await minify(options.minify);
+            } catch (err) {
                 return expect(err.toString()).toEqual(
                     "Error: input is mandatory."
                 );
-            });
+            }
         });
 
-        test("should throw an error if no output", () => {
+        test("should throw an error if no output", async () => {
             const options: OptionsTest = {
                 minify: {
                     compressor: noCompress,
@@ -83,16 +93,18 @@ describe("Package: core", () => {
                 },
             };
 
-            return minify(options.minify).catch((err) => {
+            try {
+                return await minify(options.minify);
+            } catch (err) {
                 return expect(err.toString()).toEqual(
                     "Error: output is mandatory."
                 );
-            });
+            }
         });
     });
 
     describe("Create errors", () => {
-        test("should catch an error if yui with bad options", () => {
+        test("should catch an error if yui with bad options", async () => {
             const options: OptionsTest = {
                 minify: {
                     compressor: yui,
@@ -105,11 +117,13 @@ describe("Package: core", () => {
                 },
             };
 
-            return minify(options.minify).catch((err) => {
+            try {
+                return await minify(options.minify);
+            } catch (err) {
                 return expect(err.toString()).toMatch("Error");
-            });
+            }
         });
-        test("should catch an error if yui with bad options and sync", () => {
+        test("should catch an error if yui with bad options and sync", async () => {
             const options: OptionsTest = {
                 minify: {
                     compressor: yui,
@@ -123,9 +137,11 @@ describe("Package: core", () => {
                 },
             };
 
-            return minify(options.minify).catch((err) => {
+            try {
+                return await minify(options.minify);
+            } catch (err) {
                 return expect(err.toString()).toMatch("Error");
-            });
+            }
         });
     });
 
@@ -163,37 +179,35 @@ describe("Package: core", () => {
                 throw new Error();
             });
         });
-        test("should callback an error on spawn", () =>
-            new Promise<void>((done) => {
-                const options: OptionsTest = {
-                    minify: {
-                        compressor: yui,
-                        input: filesJS.oneFile,
-                        output: filesJS.fileJSOut,
-                        sync: false,
-                        options: {
-                            fake: true,
-                        },
-                        callback: (): void => {
-                            return;
-                        },
+        test("should callback an error on spawn", async () => {
+            const options: OptionsTest = {
+                minify: {
+                    compressor: yui,
+                    input: filesJS.oneFile,
+                    output: filesJS.fileJSOut,
+                    sync: false,
+                    options: {
+                        fake: true,
                     },
-                };
-                const spy = vi.spyOn(options.minify, "callback");
+                    callback: (): void => {
+                        return;
+                    },
+                },
+            };
+            const spy = vi.spyOn(options.minify, "callback");
 
-                expect(minify(options.minify)).rejects.toThrow();
-                done();
-                return minify(options.minify).catch(() =>
-                    expect(spy).toHaveBeenCalled()
-                );
-            }));
+            expect(minify(options.minify)).rejects.toThrow();
+            await minify(options.minify).catch(() =>
+                expect(spy).toHaveBeenCalled()
+            );
+        });
         afterAll(() => {
             vi.restoreAllMocks();
         });
     });
 
     describe("Mandatory", () => {
-        test("should show throw on type option", () => {
+        test("should show throw on type option", async () => {
             const options: OptionsTest = {
                 minify: {
                     type: "uglifyjs",
@@ -205,102 +219,93 @@ describe("Package: core", () => {
                 },
             };
 
-            return minify(options.minify).catch((err) => {
+            try {
+                return await minify(options.minify);
+            } catch (err) {
                 return expect(err.toString()).toEqual(
                     "Error: compressor is mandatory."
                 );
-            });
+            }
         });
     });
 
     describe("Should be OK", () => {
-        test("should be OK with GCC and async", (): Promise<void> =>
-            new Promise<void>((done) => {
-                const options: OptionsTest = {
-                    minify: {
-                        compressor: gcc,
-                        input: filesJS.oneFile,
-                        output: filesJS.fileJSOut,
-                        callback: (): void => {
-                            return;
-                        },
+        test("should be OK with GCC and async", async () => {
+            const options: OptionsTest = {
+                minify: {
+                    compressor: gcc,
+                    input: filesJS.oneFile,
+                    output: filesJS.fileJSOut,
+                    callback: (): void => {
+                        return;
                     },
-                };
-                const spy = vi.spyOn(options.minify, "callback");
+                },
+            };
+            const spy = vi.spyOn(options.minify, "callback");
 
-                return minify(options.minify).then((min) => {
-                    expect(spy).toHaveBeenCalled();
-                    done();
-                    return expect(min).toBeDefined();
-                });
-            }));
-        test("should be OK with GCC and sync", () =>
-            new Promise<void>((done) => {
-                const options: OptionsTest = {
-                    minify: {
-                        compressor: gcc,
-                        input: filesJS.oneFile,
-                        output: filesJS.fileJSOut,
-                        sync: true,
-                        callback: (): void => {
-                            done();
-                        },
+            const min = await minify(options.minify);
+            expect(spy).toHaveBeenCalled();
+            expect(min).toBeDefined();
+        });
+        test("should be OK with GCC and sync", async () => {
+            const options: OptionsTest = {
+                minify: {
+                    compressor: gcc,
+                    input: filesJS.oneFile,
+                    output: filesJS.fileJSOut,
+                    sync: true,
+                    callback: (): void => {
+                        return;
                     },
-                };
-                const spy = vi.spyOn(options.minify, "callback");
+                },
+            };
+            const spy = vi.spyOn(options.minify, "callback");
 
-                return minify(options.minify).then((min) => {
-                    expect(spy).toHaveBeenCalled();
-                    return expect(min).toBeDefined();
-                });
-            }));
+            const min = await minify(options.minify);
+            expect(spy).toHaveBeenCalled();
+            expect(min).toBeDefined();
+        });
     });
 
     describe("In Memory", () => {
-        test("should be OK with html minifier and async", () =>
-            new Promise<void>((done) => {
-                const options: OptionsTest = {
-                    minify: {
-                        compressor: htmlMinifier,
-                        content:
-                            "<html lang='en'><body><div>content</div></body></html>",
-                        callback: (): void => {
-                            return;
-                        },
+        test("should be OK with html minifier and async", async () => {
+            const options: OptionsTest = {
+                minify: {
+                    compressor: htmlMinifier,
+                    content:
+                        "<html lang='en'><body><div>content</div></body></html>",
+                    callback: (): void => {
+                        return;
                     },
-                };
-                const spy = vi.spyOn(options.minify, "callback");
+                },
+            };
+            const spy = vi.spyOn(options.minify, "callback");
 
-                return minify(options.minify).then((min) => {
-                    expect(spy).toHaveBeenCalled();
-                    done();
-                    return expect(min).toBeDefined();
-                });
-            }));
+            const min = await minify(options.minify);
+            expect(spy).toHaveBeenCalled();
+            expect(min).toBeDefined();
+        });
 
-        test("should be OK with GCC and sync", (): Promise<void> =>
-            new Promise<void>((done) => {
-                const options: OptionsTest = {
-                    minify: {
-                        compressor: htmlMinifier,
-                        content:
-                            "<html lang='en'><body><div>content</div></body></html>",
-                        sync: true,
-                        callback: (): void => {
-                            return;
-                        },
+        test("should be OK with GCC and sync", async () => {
+            const options: OptionsTest = {
+                minify: {
+                    compressor: htmlMinifier,
+                    content:
+                        "<html lang='en'><body><div>content</div></body></html>",
+                    sync: true,
+                    callback: (): void => {
+                        return;
                     },
-                };
-                const spy = vi.spyOn(options.minify, "callback");
+                },
+            };
+            const spy = vi.spyOn(options.minify, "callback");
 
-                return minify(options.minify).then((min) => {
-                    done();
-                    expect(spy).toHaveBeenCalled();
-                    return expect(min).toBeDefined();
-                });
-            }));
+            const min = await minify(options.minify);
+            expect(spy).toHaveBeenCalled();
+            expect(min).toBeDefined();
+        });
 
-        test("should throw an error if binary does not exist", () => {
+        test("should throw an error if binary does not exist", async () => {
             const options: OptionsTest = {
                 minify: {
                     compressor: "fake",
@@ -309,11 +314,13 @@ describe("Package: core", () => {
                 },
             };
 
-            return minify(options.minify).catch((err) => {
+            try {
+                return await minify(options.minify);
+            } catch (err) {
                 return expect(err.toString()).toEqual(
                     "Error: compressor should be a function, maybe you forgot to install the compressor"
                 );
-            });
+            }
         });
     });
 });

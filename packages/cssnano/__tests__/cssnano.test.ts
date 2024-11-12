@@ -14,14 +14,17 @@ import cssnano from "../src";
 const compressorLabel = "cssnano";
 const compressor = cssnano;
 
-describe("Package: cssnano", () => {
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
-    test("should be ok with no callback", () => {
+describe("Package: cssnano", async () => {
+    // Run async tests
+    for (const options of tests.commoncss) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    // Run sync tests
+    for (const options of tests.commoncss) {
+        await runOneTest({ options, compressorLabel, compressor, sync: true });
+    }
+    test("should be ok with no callback", async () => {
         const options: OptionsTest = {
             minify: {
                 compressor: cssnano,
@@ -30,11 +33,10 @@ describe("Package: cssnano", () => {
             },
         };
 
-        return minify(options.minify).then((min) => {
-            return expect(min).not.toBeNull();
-        });
+        const min = await minify(options.minify);
+        return expect(min).not.toBeNull();
     });
-    test("should throw an error", () => {
+    test("should throw an error", async () => {
         const options: OptionsTest = {
             minify: {
                 compressor: cssnano,
@@ -46,8 +48,10 @@ describe("Package: cssnano", () => {
             },
         };
 
-        return minify(options.minify).catch((err) => {
+        try {
+            return await minify(options.minify);
+        } catch (err) {
             return expect(err).not.toBeNull();
-        });
+        }
     });
 });

@@ -58,8 +58,8 @@
     "@node-minify/yui": "workspace:*",
     "@tsconfig/node22": "^22.0.0",
     "@types/node": "22.9.0",
-    "@vitest/coverage-v8": "2.1.4",
-    "@vitest/ui": "2.1.4",
+    "@vitest/coverage-v8": "1.6.0",
+    "@vitest/ui": "1.6.0",
     "copyfiles": "2.4.1",
     "husky": "9.1.6",
     "lint-staged": "15.2.10",
@@ -69,7 +69,7 @@
     "turbo": "2.2.3",
     "typescript": "5.6.3",
     "vite-tsconfig-paths": "5.1.2",
-    "vitest": "2.1.4"
+    "vitest": "1.6.0"
   },
   "lint-staged": {
     "*.ts": [

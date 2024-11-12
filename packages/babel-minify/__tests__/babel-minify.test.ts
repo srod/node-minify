@@ -11,17 +11,34 @@ import babelMinify from "../src";
 const compressorLabel = "babel-minify";
 const compressor = babelMinify;
 
-describe("Package: babel-minify", () => {
-    tests.commonjs.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.babelMinify.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commonjs.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
-    tests.babelMinify.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
+describe("Package: babel-minify", async () => {
+    // Run commonjs async tests
+    for (const options of tests.commonjs) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    // Run babelMinify async tests
+    for (const options of tests.babelMinify) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    // Run commonjs sync tests
+    for (const options of tests.commonjs) {
+        await runOneTest({
+            options,
+            compressorLabel,
+            compressor,
+            sync: true,
+        });
+    }
+
+    // Run babelMinify sync tests
+    for (const options of tests.babelMinify) {
+        await runOneTest({
+            options,
+            compressorLabel,
+            compressor,
+            sync: true,
+        });
+    }
 });

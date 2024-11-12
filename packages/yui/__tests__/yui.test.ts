@@ -15,21 +15,29 @@ import yui from "../src";
 const compressorLabel = "yui";
 const compressor = yui;
 
-describe("Package: YUI", () => {
-    tests.commonjs.forEach((options) => {
+describe("Package: YUI", async () => {
+    // Run JS async tests
+    for (const options of tests.commonjs) {
         options.minify.type = "js";
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commonjs.forEach((options) => {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    // Run JS sync tests
+    for (const options of tests.commonjs) {
         options.minify.type = "js";
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
+        await runOneTest({ options, compressorLabel, compressor, sync: true });
+    }
+
+    // Run CSS async tests
+    for (const options of tests.commoncss) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    // Run CSS sync tests
+    for (const options of tests.commoncss) {
+        await runOneTest({ options, compressorLabel, compressor, sync: true });
+    }
+
     test("should compress with some options", (): Promise<void> =>
         new Promise<void>((done) => {
             // const options: { minify: { callback?: Function } } = {};
@@ -55,7 +63,7 @@ describe("Package: YUI", () => {
             minify(options.minify);
         }));
 
-    test("should catch an error if yui with bad options", () => {
+    test("should catch an error if yui with bad options", async () => {
         const options: OptionsTest = {
             minify: {
                 compressor: yui,
@@ -68,9 +76,11 @@ describe("Package: YUI", () => {
             },
         };
 
-        return minify(options.minify).catch((err) => {
+        try {
+            return await minify(options.minify);
+        } catch (err) {
             return expect(err.toString()).toMatch("Error");
-        });
+        }
     });
 
     describe("Create sync errors", () => {
@@ -106,29 +116,27 @@ describe("Package: YUI", () => {
                 throw new Error();
             });
         });
-        test("should callback an error on spawn", (): Promise<void> =>
-            new Promise<void>((done) => {
-                const options: OptionsTest = {
-                    minify: {
-                        compressor: yui,
-                        input: filesJS.oneFile,
-                        output: filesJS.fileJSOut,
-                        sync: false,
-                        options: {
-                            fake: true,
-                        },
-                        callback: (): void => {
-                            return;
-                        },
+        test("should callback an error on spawn", async () => {
+            const options: OptionsTest = {
+                minify: {
+                    compressor: yui,
+                    input: filesJS.oneFile,
+                    output: filesJS.fileJSOut,
+                    sync: false,
+                    options: {
+                        fake: true,
                     },
-                };
-                const spy = vi.spyOn(options.minify, "callback");
-                expect(minify(options.minify)).rejects.toThrow();
-                done();
-                return minify(options.minify).catch(() =>
-                    expect(spy).toHaveBeenCalled()
-                );
-            }));
+                    callback: (): void => {
+                        return;
+                    },
+                },
+            };
+            const spy = vi.spyOn(options.minify, "callback");
+            expect(minify(options.minify)).rejects.toThrow();
+            await minify(options.minify).catch(() =>
+                expect(spy).toHaveBeenCalled()
+            );
+        });
     });
     afterAll(() => {
         vi.restoreAllMocks();
