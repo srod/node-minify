@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/crass",
-  "version": "9.0.0",
+  "version": "9.0.1",
   "description": "crass plugin for @node-minify",
   "keywords": [
     "compressor",
