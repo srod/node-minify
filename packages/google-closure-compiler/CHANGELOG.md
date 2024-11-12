@@ -1,5 +1,14 @@
 # @node-minify/google-closure-compiler
 
+## 9.0.1
+
+### Patch Changes
+
+- c4fcf63: Fixing packages exports and mkdirp import
+- Updated dependencies [c4fcf63]
+  - @node-minify/utils@9.0.1
+  - @node-minify/run@9.0.1
+
 ## 9.0.0
 
 ### Major Changes

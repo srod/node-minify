@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/core",
-  "version": "9.0.0",
+  "version": "9.0.2",
   "description": "core of @node-minify",
   "keywords": [
     "compressor",
@@ -25,7 +25,7 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.js"
     }
   },
   "files": [
@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@node-minify/utils": "workspace:*",
-    "fast-glob": "3.3.2",
+    "glob": "10.3.3",
     "mkdirp": "3.0.1"
   },
   "devDependencies": {

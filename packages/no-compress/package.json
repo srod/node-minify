@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/no-compress",
-  "version": "9.0.0",
+  "version": "9.0.1",
   "description": "no compress plugin for @node-minify, only concatenate",
   "keywords": [
     "concatenate"
@@ -23,7 +23,7 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.js"
     }
   },
   "files": [

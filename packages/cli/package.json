@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/cli",
-  "version": "9.0.0",
+  "version": "9.0.2",
   "description": "CLI - command line interface for @node-minify",
   "keywords": [
     "compressor",
@@ -28,7 +28,7 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.js"
     }
   },
   "files": [

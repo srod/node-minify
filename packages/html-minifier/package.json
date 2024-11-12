@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/html-minifier",
-  "version": "9.0.0",
+  "version": "9.0.1",
   "description": "html-minifier plugin for @node-minify",
   "keywords": [
     "compressor",
@@ -26,7 +26,7 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.js"
     }
   },
   "files": [
