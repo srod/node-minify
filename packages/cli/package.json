@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/cli",
-  "version": "9.0.1",
+  "version": "9.0.2",
   "description": "CLI - command line interface for @node-minify",
   "keywords": [
     "compressor",

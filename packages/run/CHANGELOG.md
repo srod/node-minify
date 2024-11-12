@@ -1,5 +1,11 @@
 # @node-minify/run
 
+## 9.0.1
+
+### Patch Changes
+
+- c4fcf63: Fixing packages exports and mkdirp import
+
 ## 9.0.0
 
 ### Major Changes
