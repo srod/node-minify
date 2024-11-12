@@ -1,5 +1,12 @@
 # @node-minify/cli
 
+## 9.0.1
+
+### Patch Changes
+
+- Updated dependencies [ffe20b0]
+  - @node-minify/core@9.0.1
+
 ## 9.0.0
 
 ### Major Changes

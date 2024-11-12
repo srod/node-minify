@@ -1,5 +1,11 @@
 # @node-minify/core
 
+## 9.0.1
+
+### Patch Changes
+
+- ffe20b0: feat(glob): replace glob with fast-glob
+
 ## 9.0.0
 
 ### Major Changes
