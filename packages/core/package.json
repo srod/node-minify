@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "@node-minify/utils": "workspace:*",
+    "fast-glob": "^3.3.2",
     "glob": "10.3.3",
     "mkdirp": "3.0.1"
   },

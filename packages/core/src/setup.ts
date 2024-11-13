@@ -10,7 +10,7 @@
 import path from "node:path";
 import type { Settings } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
-import { globSync } from "glob";
+import fg from "fast-glob";
 
 /**
  * Default settings.
@@ -154,7 +154,7 @@ const wildcardsArray = (input: string[], publicFolder?: string) => {
     });
 
     if (isWildcardsPresent) {
-        output.input = globSync(inputWithPublicFolder);
+        output.input = fg.globSync(inputWithPublicFolder);
     }
 
     // Remove all wildcards from array
@@ -178,7 +178,7 @@ const getFilesFromWildcards = (input: string, publicFolder?: string) => {
     let output: string[] = [];
 
     if (input.indexOf("*") > -1) {
-        output = globSync((publicFolder || "") + input);
+        output = fg.globSync((publicFolder || "") + input);
     }
 
     return output;
