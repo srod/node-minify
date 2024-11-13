@@ -20,13 +20,16 @@
   "packageManager": "bun@1.1.34",
   "scripts": {
     "build": "turbo --filter \"./packages/*\" build",
+    "check-exports": "turbo check-exports",
+    "ci": "bun run build && bun run format:check && bun run check-exports && bun run lint && bun run test:ci",
     "clean": "bun clean:build",
     "clean:build": "bunx rimraf packages/*/dist docs/dist docs/.astro",
     "clean:test": "bunx rimraf tests/tmp/*.{js,js.map,css,html,json}",
     "clean:git": "git restore --source=HEAD --staged --worktree -- tests/fixtures",
     "dev": "turbo dev --concurrency 30",
     "lint": "turbo lint",
-    "test": "turbo test",
+    "local-release": "bun run changeset:version && bun run changeset:release",
+    "test": "turbo test && bun run clean:git",
     "test:watch": "turbo run test:watch",
     "test:ci": "turbo run test:ci",
     "changeset": "changeset",
@@ -36,6 +39,7 @@
     "format": "biome check --write ."
   },
   "dependencies": {
+    "@arethetypeswrong/cli": "^0.17.0",
     "@changesets/cli": "2.27.9",
     "@node-minify/babel-minify": "workspace:*",
     "@node-minify/clean-css": "workspace:*",

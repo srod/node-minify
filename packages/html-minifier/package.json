@@ -41,8 +41,9 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "scripts": {
-    "clean": "bunx rimraf dist",
-    "build": "bun clean && tsup src/index.ts --format cjs,esm --dts --clean --sourcemap",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "check-exports": "attw --pack .",
+    "format:check": "biome check .",
     "lint": "biome lint .",
     "prepublishOnly": "bun run build",
     "test": "vitest run",

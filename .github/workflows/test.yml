@@ -31,7 +31,7 @@ jobs:
         run: bun install
 
       - name: Run tests
-        run: bun test:ci
+        run: bun run ci
 
       - run: |
           if [ "$RUNNER_OS" == "Linux" ]; then
