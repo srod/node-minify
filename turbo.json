@@ -9,6 +9,8 @@
             "dependsOn": ["^build"],
             "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
         },
+        "check-exports": {},
+        "format:check": {},
         "lint": {},
         "test": {
             "dependsOn": ["^lint"],

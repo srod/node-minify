@@ -11,8 +11,8 @@
     "astro": "astro",
     "deploy": "astro build && wrangler pages deploy",
     "cf-typegen": "wrangler types",
-    "lint": "biome lint .",
     "format:check": "biome check .",
+    "lint": "biome lint .",
     "format": "biome check --write ."
   },
   "dependencies": {
