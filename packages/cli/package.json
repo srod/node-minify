@@ -12,7 +12,7 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "node-minify": "dist/cli.mjs"
+    "node-minify": "dist/cli.js"
   },
   "engines": {
     "node": ">=22.0.0"
@@ -21,14 +21,12 @@
     "lib": "dist",
     "test": "__tests__"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.cjs",
   "exports": {
+    "./package.json": "./package.json",
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.cjs"
     }
   },
   "files": [
