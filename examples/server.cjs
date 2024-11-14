@@ -1,18 +1,18 @@
-import babelMinify from "@node-minify/babel-minify";
-import cleanCSS from "@node-minify/clean-css";
-import minify from "@node-minify/core";
-import crass from "@node-minify/crass";
-import cssnano from "@node-minify/cssnano";
-import csso from "@node-minify/csso";
-import gcc from "@node-minify/google-closure-compiler";
-import htmlMinifier from "@node-minify/html-minifier";
-import jsonminify from "@node-minify/jsonminify";
-import noCompress from "@node-minify/no-compress";
-import sqwish from "@node-minify/sqwish";
-import terser from "@node-minify/terser";
-import uglifyes from "@node-minify/uglify-es";
-import uglifyjs from "@node-minify/uglify-js";
-import yui from "@node-minify/yui";
+const minify = require("@node-minify/core");
+const yui = require("@node-minify/yui");
+const terser = require("@node-minify/terser");
+const htmlMinifier = require("@node-minify/html-minifier");
+const babelMinify = require("@node-minify/babel-minify");
+const gcc = require("@node-minify/google-closure-compiler");
+const uglifyjs = require("@node-minify/uglify-js");
+const uglifyes = require("@node-minify/uglify-es");
+const noCompress = require("@node-minify/no-compress");
+const sqwish = require("@node-minify/sqwish");
+const crass = require("@node-minify/crass");
+const cssnano = require("@node-minify/cssnano");
+const csso = require("@node-minify/csso");
+const cleanCSS = require("@node-minify/clean-css");
+const jsonminify = require("@node-minify/jsonminify");
 
 const contentJS = `var tools = true; if(tools){ console.log('true'); }`;
 
@@ -188,22 +188,22 @@ minify({
 });
 
 minify({
-    compressor: uglifyes,
+    compressor: uglifyjs,
     input: "public/js/**/*.js",
-    output: "public/js-dist/uglifyes-wildcards.js",
+    output: "public/js-dist/uglifyjs-wildcards.js",
     callback: (err, min) => {
-        console.log("wildcards Uglifyes");
+        console.log("wildcards Uglifyjs");
         console.log(err);
         //console.log(min);
     },
 });
 
 minify({
-    compressor: uglifyjs,
+    compressor: uglifyes,
     input: "public/js/**/*.js",
-    output: "public/js-dist/uglifyjs-wildcards.js",
+    output: "public/js-dist/uglifyes-wildcards.js",
     callback: (err, min) => {
-        console.log("wildcards Uglifyjs");
+        console.log("wildcards Uglifyes");
         console.log(err);
         //console.log(min);
     },

@@ -41,7 +41,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean && bunx fix-tsup-cjs",
     "check-exports": "attw --pack .",
     "format:check": "biome check .",
     "lint": "biome lint .",

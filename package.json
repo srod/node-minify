@@ -66,6 +66,7 @@
     "@vitest/coverage-v8": "1.6.0",
     "@vitest/ui": "1.6.0",
     "copyfiles": "2.4.1",
+    "fix-tsup-cjs": "^1.2.0",
     "husky": "9.1.6",
     "lint-staged": "15.2.10",
     "node-notifier": "10.0.1",
