@@ -20,6 +20,7 @@
   "packageManager": "bun@1.1.34",
   "scripts": {
     "build": "turbo --filter \"./packages/*\" build",
+    "build:docs": "turbo --filter \"./docs\" build",
     "check-exports": "turbo check-exports",
     "ci": "bun run build && bun run check-exports && bun run lint && bun run test:ci",
     "clean": "bun clean:build",
