@@ -21,7 +21,6 @@ import type {
     OptionsPossible,
     Settings,
 } from "@node-minify/types";
-import { gzipSizeStream } from "gzip-size";
 
 type Utils = {
     readFile: (file: string) => string;
@@ -127,7 +126,8 @@ utils.getFilesizeInBytes = (file: string): string => {
  * Get the gzipped file size in bytes.
  * @param file File name
  */
-utils.getFilesizeGzippedInBytes = (file: string): Promise<string> => {
+utils.getFilesizeGzippedInBytes = async (file: string): Promise<string> => {
+    const { gzipSizeStream } = await import("gzip-size");
     return new Promise((resolve) => {
         const source = createReadStream(file);
         source.pipe(gzipSizeStream()).on("gzip-size", (size: number) => {
