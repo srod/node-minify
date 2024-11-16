@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/jsonminify",
-  "version": "9.0.1",
+  "version": "10.0.0-next.0",
   "description": "jsonminify plugin for @node-minify",
   "keywords": [
     "compressor",

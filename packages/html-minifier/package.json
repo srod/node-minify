@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/html-minifier",
-  "version": "9.0.1",
+  "version": "10.0.0-next.0",
   "description": "html-minifier plugin for @node-minify",
   "keywords": [
     "compressor",

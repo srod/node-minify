@@ -1,5 +1,17 @@
 # @node-minify/yui
 
+## 10.0.0-next.0
+
+### Major Changes
+
+- 4406c0c: Bump version 10.0.0 next
+
+### Patch Changes
+
+- Updated dependencies [4406c0c]
+  - @node-minify/utils@10.0.0-next.0
+  - @node-minify/run@10.0.0-next.0
+
 ## 9.0.1
 
 ### Patch Changes

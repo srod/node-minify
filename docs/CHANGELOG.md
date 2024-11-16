@@ -1,5 +1,11 @@
 # @node-minify/docs
 
+## 10.0.0-next.0
+
+### Major Changes
+
+- 4406c0c: Bump version 10.0.0 next
+
 ## 9.0.0
 
 ### Major Changes
