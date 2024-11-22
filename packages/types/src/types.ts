@@ -16,13 +16,11 @@ export type OptionsTest = Options & {
     minify: Settings;
 };
 
-type Compressor = (
-    args: MinifierOptions
-) => void | string | Promise<void | string | undefined>;
+type Compressor = (args: MinifierOptions) => string;
 
 export type Settings = {
     compressorLabel?: string;
-    compressor?: string | Compressor;
+    compressor: Compressor;
     sync?: boolean;
     callback?: (err: unknown, minified?: string) => void;
     content?: string;
@@ -31,20 +29,17 @@ export type Settings = {
     options?: Options;
     option?: string;
     buffer?: number;
-    type?: "js" | "css" | "uglifyjs";
+    type?: "js" | "css";
     silence?: boolean;
     publicFolder?: string;
     replaceInPlace?: boolean;
 };
 
 export type MinifierOptions = {
-    settings?: Settings;
+    settings: Settings;
     content?: string;
-    callback?: null | ((err?: unknown | null, result?: string) => void);
-    compressor?: string | Compressor;
+    callback?: (err?: unknown, result?: string) => void;
     index?: number;
-    args?: string[];
-    data?: string;
     sync?: boolean;
     input?: string | string[];
     output?: string;
@@ -52,11 +47,7 @@ export type MinifierOptions = {
 
 export type Result = {
     compressor?: string | Compressor;
-    compressorLabel: string | (() => void);
+    compressorLabel: string;
     size: string;
     sizeGzip: string;
-};
-
-export type Dictionary<T> = {
-    [Key: string]: T;
 };
