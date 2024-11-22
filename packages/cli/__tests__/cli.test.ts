@@ -5,22 +5,21 @@
  */
 
 import childProcess from "node:child_process";
-import type { Settings } from "@node-minify/types";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import { filesJS } from "../../../tests/files-path";
 import * as cli from "../src";
+import type { SettingsWithCompressor } from "../src";
 
 describe("Package: cli", () => {
-    test("should minify to have been called with gcc", () => {
+    test("should minify to have been called with gcc", async () => {
         const spy = vi.spyOn(cli, "run");
-        return cli
-            .run({
-                compressor: "google-closure-compiler",
-                input: filesJS.oneFile,
-                output: filesJS.fileJSOut,
-                option: '{"createSourceMap": true}',
-            })
-            .then(() => expect(spy).toHaveBeenCalled());
+        await cli.run({
+            compressor: "google-closure-compiler",
+            input: filesJS.oneFile,
+            output: filesJS.fileJSOut,
+            option: '{"createSourceMap": true}',
+        });
+        return expect(spy).toHaveBeenCalled();
     });
 });
 
@@ -31,15 +30,19 @@ describe("cli error", () => {
             throw new Error();
         });
     });
-    test("should minify to throw with yui error", () => {
+    test("should minify to throw with yui error", async () => {
         const spy = vi.spyOn(cli, "run");
-        const options: Settings = {
+        const options: SettingsWithCompressor = {
             compressor: "yui",
             input: filesJS.oneFile,
             output: filesJS.fileJSOut,
         };
         expect(cli.run(options)).rejects.toThrow();
-        return cli.run(options).catch(() => expect(spy).toHaveBeenCalled());
+        try {
+            return await cli.run(options);
+        } catch {
+            return expect(spy).toHaveBeenCalled();
+        }
     });
     afterAll(() => {
         vi.restoreAllMocks();

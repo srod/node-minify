@@ -21,80 +21,71 @@ let silence = false;
  * Run one compressor.
  * @param cli Settings
  */
-const runOne = async (cli: Settings) => {
-    const compressor =
-        typeof cli.compressor === "string"
-            ? await import(`@node-minify/${cli.compressor}`)
-            : cli.compressor;
+async function runOne(cli: SettingsWithCompressor): Promise<Result> {
+    // Load compressor dynamically
+    const { default: compressorModule } = await import(
+        `@node-minify/${cli.compressor}`
+    );
 
-    const compressorName =
-        typeof cli.compressor === "string"
-            ? cli.compressor
-            : cli.compressor
-              ? cli.compressor.name
-              : "unknownCompressor";
-
-    const options: Settings = {
-        compressorLabel: compressorName,
-        compressor: compressor.default,
-        input: typeof cli.input === "string" ? cli.input.split(",") : "",
+    // Prepare settings
+    const settings: Settings = {
+        compressorLabel: cli.compressor,
+        compressor: compressorModule,
+        input: typeof cli.input === "string" ? cli.input.split(",") : cli.input,
         output: cli.output,
+        ...(cli.option && { options: JSON.parse(cli.option) }),
     };
 
-    if (cli.option) {
-        options.options = JSON.parse(cli.option);
-    }
+    if (!silence) spinnerStart(settings);
 
-    if (!silence) {
-        spinnerStart(options);
+    try {
+        const result = await compress(settings);
+        if (!silence) spinnerStop(result);
+        return result;
+    } catch (error) {
+        if (!silence) spinnerError(settings);
+        throw error;
     }
-
-    return compress(options)
-        .then((result: Result) => {
-            if (!silence) {
-                spinnerStop(result);
-            }
-            return result;
-        })
-        .catch((err: Error) => {
-            if (!silence) {
-                spinnerError(options);
-            }
-            throw err;
-        });
-};
+}
 
 /**
  * Run cli.
  * @param cli Settings
  */
-const run = (cli: Settings) => {
+export type SettingsWithCompressor = Settings & {
+    compressor: string;
+};
+export async function run(cli: SettingsWithCompressor) {
     silence = !!cli.silence;
 
     if (!silence) {
-        console.log("");
-        console.log(chalk.bgBlue.black(" INFO "), "Starting compression...");
-        console.log("");
+        logMessage("INFO", "Starting compression...", "bgBlue");
     }
 
-    return new Promise((resolve, reject) => {
-        runOne(cli)
-            .then(() => {
-                if (!silence) {
-                    console.log("");
-                    console.log(
-                        chalk.bgGreen.black(" DONE "),
-                        chalk.green("Done!")
-                    );
-                    console.log("");
-                }
-            })
-            .then(resolve)
-            .catch(reject);
-    });
-};
+    try {
+        await runOne(cli);
 
-/**
- * Expose `run()`.
- */
-export { run };
+        if (!silence) {
+            logMessage("DONE", "Done!", "bgGreen", "green");
+        }
+    } catch (error) {
+        const errorMessage =
+            error instanceof Error ? error.message : "Unknown error occurred";
+        throw new Error(`Compression failed: ${errorMessage}`);
+    }
+}
+
+// Helper function to handle consistent logging
+function logMessage(
+    badge: "INFO" | "DONE",
+    message: string,
+    badgeColor: "bgBlue" | "bgGreen",
+    messageColor?: "green"
+) {
+    console.log("");
+    console.log(
+        chalk[badgeColor].black(` ${badge} `),
+        messageColor ? chalk[messageColor](message) : message
+    );
+    console.log("");
+}
