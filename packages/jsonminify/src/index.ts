@@ -19,12 +19,12 @@ import jsonminify from "jsonminify";
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyJsonMinify = ({
+export function minifyJsonMinify({
     settings,
     content,
     callback,
     index,
-}: MinifierOptions) => {
+}: MinifierOptions) {
     const contentMinified = jsonminify(content ?? "");
     if (settings && !settings.content && settings.output) {
         settings.output &&
@@ -38,10 +38,4 @@ const minifyJsonMinify = ({
         return callback(null, contentMinified);
     }
     return contentMinified;
-};
-
-/**
- * Expose `minifyJsonMinify()`.
- */
-minifyJsonMinify.default = minifyJsonMinify;
-export default minifyJsonMinify;
+}
