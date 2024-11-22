@@ -19,12 +19,7 @@ import crass from "crass";
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyCrass = ({
-    settings,
-    content,
-    callback,
-    index,
-}: MinifierOptions) => {
+export function minifyCrass({ settings, content, callback, index }: MinifierOptions) {
     const contentMinified = crass.parse(content).optimize().toString();
     if (settings && !settings.content && settings.output) {
         settings.output &&
@@ -38,10 +33,4 @@ const minifyCrass = ({
         return callback(null, contentMinified);
     }
     return contentMinified;
-};
-
-/**
- * Expose `minifyCrass()`.
- */
-minifyCrass.default = minifyCrass;
-export default minifyCrass;
+}
