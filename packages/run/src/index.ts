@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import childProcess from "node:child_process";
-import type { MinifierOptions } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 
 /**
  * Run the command line with spawn.
@@ -18,18 +18,27 @@ import type { MinifierOptions } from "@node-minify/types";
  * @param callback Callback
  * @returns Minified content
  */
-const runCommandLine = ({
+type RunCommandLineParams = {
+    args: string[];
+    data: string;
+    settings: Settings;
+    callback?: (err: unknown, minified?: string) => void;
+};
+export function runCommandLine({
     args,
     data,
     settings,
     callback,
-}: MinifierOptions) => {
-    if (settings?.sync) {
-        return runSync({ settings, data, args, callback });
-    }
+}: RunCommandLineParams) {
+    const runner = settings?.sync ? runSync : runAsync;
 
-    return runAsync({ data, args, callback });
-};
+    return runner({
+        data,
+        args,
+        callback,
+        ...(settings && { settings }),
+    });
+}
 
 /**
  * Exec command as async.
@@ -38,7 +47,12 @@ const runCommandLine = ({
  * @param callback Callback
  * @returns Minified content
  */
-const runAsync = ({ data, args, callback }: MinifierOptions) => {
+type RunAsyncParams = {
+    data: string;
+    args: string[];
+    callback?: (err: unknown, minified?: string) => void;
+};
+function runAsync({ data, args, callback }: RunAsyncParams) {
     let stdout = "";
     let stderr = "";
 
@@ -67,7 +81,7 @@ const runAsync = ({ data, args, callback }: MinifierOptions) => {
     });
 
     child.stdin.end(data);
-};
+}
 
 /**
  * Exec command as sync.
@@ -78,15 +92,21 @@ const runAsync = ({ data, args, callback }: MinifierOptions) => {
  * @param callback Callback
  * @returns Minified content
  */
-const runSync = ({ settings, data, args, callback }: MinifierOptions) => {
+type RunSyncParams = {
+    settings: Settings;
+    data: string;
+    args: string[];
+    callback?: (err: unknown, minified?: string) => void;
+};
+function runSync({ settings, data, args, callback }: RunSyncParams) {
     try {
         const child = childProcess.spawnSync("java", args, {
             input: data,
             stdio: "pipe",
-            maxBuffer: settings?.buffer,
+            maxBuffer: settings?.buffer ?? 1000 * 1024, // Default 1MB if not specified
         });
-        const stdout = child.stdout.toString();
-        const stderr = child.stderr.toString();
+        const stdout = child.stdout?.toString() ?? "";
+        const stderr = child.stderr?.toString() ?? "";
         const code = child.status;
 
         if (code !== 0) {
@@ -95,11 +115,6 @@ const runSync = ({ settings, data, args, callback }: MinifierOptions) => {
 
         return callback?.(null, stdout);
     } catch (err: unknown) {
-        return callback?.(err);
+        return callback?.(err instanceof Error ? err : new Error(String(err)));
     }
-};
-
-/**
- * Expose `runCommandLine()`.
- */
-export { runCommandLine };
+}
