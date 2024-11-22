@@ -8,7 +8,7 @@ import type { OptionsTest } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
 import { filesJS } from "../../../tests/files-path";
 import { runOneTest, tests } from "../../../tests/fixtures";
-import minify from "../../core/src";
+import { minify } from "../../core/src";
 import uglifyes from "../src";
 
 const compressorLabel = "uglify-es";

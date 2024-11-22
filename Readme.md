@@ -67,7 +67,7 @@ bun add @node-minify/uglify-js
 ## Quick Start
 
 ```js
-import minify from '@node-minify/core';
+import { minify } from '@node-minify/core';
 import gcc from '@node-minify/google-closure-compiler';
 import uglifyjs from '@node-minify/uglify-js';
 

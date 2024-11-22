@@ -1,6 +1,6 @@
 import type { Settings } from "@node-minify/types";
 import { expect, test } from "vitest";
-import minify from "../packages/core/src/index.ts";
+import { minify } from "../packages/core/src/index.ts";
 import { filesCSS, filesHTML, filesJS, filesJSON } from "./files-path.ts";
 
 interface TestOptions {

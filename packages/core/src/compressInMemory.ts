@@ -14,7 +14,7 @@ import { utils } from "@node-minify/utils";
  * Run compressor.
  * @param settings Settings
  */
-const compressInMemory = (settings: Settings): Promise<string> | string => {
+function compressInMemory(settings: Settings): Promise<string> | string {
     if (typeof settings.compressor !== "function") {
         throw new Error(
             "compressor should be a function, maybe you forgot to install the compressor"
@@ -22,7 +22,7 @@ const compressInMemory = (settings: Settings): Promise<string> | string => {
     }
 
     return utils.compressSingleFile(settings);
-};
+}
 
 /**
  * Expose `compress()`.

@@ -9,7 +9,7 @@ import type { OptionsTest } from "@node-minify/types";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import { filesJS } from "../../../tests/files-path";
 import { runOneTest, tests } from "../../../tests/fixtures";
-import minify from "../../core/src";
+import { minify } from "../../core/src";
 import yui from "../src";
 
 const compressorLabel = "yui";
