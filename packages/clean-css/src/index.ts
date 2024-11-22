@@ -11,22 +11,6 @@ import type { MinifierOptions } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
 import CleanCSS from "clean-css";
 
-// type OptionsPossibleCleanCSS = string | boolean | Record<string, string> | { url: string };
-
-// type OptionsCleanCSS = {
-//   // _sourceMap: boolean | { url: string };
-//   // sourceMap: boolean | { url: string };
-//   [Key: string]: OptionsPossibleCleanCSS | Record<string, OptionsPossibleCleanCSS>;
-// };
-
-// type SettingsCleanCSS = {
-//   options: OptionsCleanCSS;
-// };
-
-// type MinifierOptionsCleanCSS = {
-//   settings: SettingsCleanCSS;
-// };
-
 /**
  * Run clean-css.
  * @param settings Clean-css options
@@ -35,12 +19,12 @@ import CleanCSS from "clean-css";
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyCleanCSS = ({
+export function minifyCleanCSS({
     settings,
     content,
     callback,
     index,
-}: MinifierOptions) => {
+}: MinifierOptions) {
     if (settings?.options?.sourceMap) {
         settings.options._sourceMap = settings.options.sourceMap;
         settings.options.sourceMap = true;
@@ -75,10 +59,4 @@ const minifyCleanCSS = ({
         return callback(null, contentMinified);
     }
     return contentMinified;
-};
-
-/**
- * Expose `minifyCleanCSS()`.
- */
-minifyCleanCSS.default = minifyCleanCSS;
-export default minifyCleanCSS;
+}
