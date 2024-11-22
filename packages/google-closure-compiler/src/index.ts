@@ -47,11 +47,11 @@ const allowedFlags = [
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyGCC = ({ settings, content, callback, index }: MinifierOptions) => {
+export function minifyGCC({ settings, content, callback, index }: MinifierOptions) {
     const options = applyOptions({}, settings?.options ?? {});
     return runCommandLine({
         args: gccCommand(options),
-        data: content,
+        data: content as string,
         settings,
         callback: (err: unknown, content?: string) => {
             if (err) {
@@ -69,7 +69,7 @@ const minifyGCC = ({ settings, content, callback, index }: MinifierOptions) => {
             return content;
         },
     });
-};
+}
 
 /**
  * Adds any valid options passed in the options parameters to the flags parameter and returns the flags object.
@@ -80,7 +80,7 @@ const minifyGCC = ({ settings, content, callback, index }: MinifierOptions) => {
 type Flags = {
     [key: string]: boolean | Record<string, OptionsPossible>;
 };
-const applyOptions = (flags: Flags, options?: Options): Flags => {
+function applyOptions(flags: Flags, options?: Options): Flags {
     if (!options || Object.keys(options).length === 0) {
         return flags;
     }
@@ -98,7 +98,7 @@ const applyOptions = (flags: Flags, options?: Options): Flags => {
             }
         });
     return flags;
-};
+}
 
 /**
  * GCC command line.
@@ -106,12 +106,6 @@ const applyOptions = (flags: Flags, options?: Options): Flags => {
  * @returns the command line arguments to pass to GCC
  */
 
-const gccCommand = (options: Record<string, OptionsPossible>) => {
+function gccCommand(options: Record<string, OptionsPossible>) {
     return ["-jar", compilerPath].concat(utils.buildArgs(options ?? {}));
-};
-
-/**
- * Expose `minifyGCC()`.
- */
-minifyGCC.default = minifyGCC;
-export default minifyGCC;
+}
