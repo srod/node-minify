@@ -18,23 +18,12 @@ import { utils } from "@node-minify/utils";
  * @param index Index of current file in array
  * @returns Minified content
  */
-const noCompress = ({
-    settings,
-    content,
-    callback,
-    index,
-}: MinifierOptions) => {
-    if (settings && !settings.content && settings.output) {
+export function noCompress({ settings, content, callback, index }: MinifierOptions) {
+    // If output path is specified and content setting is not present, write to file
+    if (settings?.output && !settings?.content) {
         utils.writeFile({ file: settings.output, content, index });
     }
-    if (callback) {
-        return callback(null, content);
-    }
-    return content;
-};
 
-/**
- * Expose `noCompress()`.
- */
-noCompress.default = noCompress;
-export default noCompress;
+    // Handle callback if provided, otherwise return content directly
+    return callback ? callback(null, content) : content;
+}
