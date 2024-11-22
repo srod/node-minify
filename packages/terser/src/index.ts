@@ -31,12 +31,12 @@ type MinifierOptionsTerser = {
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyTerser = async ({
+export async function minifyTerser({
     settings,
     content,
     callback,
     index,
-}: MinifierOptions & MinifierOptionsTerser) => {
+}: MinifierOptions & MinifierOptionsTerser) {
     try {
         const contentMinified = await minify(content ?? "", settings?.options);
         if (
@@ -63,10 +63,4 @@ const minifyTerser = async ({
     } catch (error) {
         return callback?.(error);
     }
-};
-
-/**
- * Expose `minifyTerser()`.
- */
-minifyTerser.default = minifyTerser;
-export default minifyTerser;
+}
