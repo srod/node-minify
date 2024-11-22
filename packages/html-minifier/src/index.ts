@@ -41,12 +41,12 @@ const defaultOptions = {
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyHTMLMinifier = ({
+export function minifyHTMLMinifier({
     settings,
     content,
     callback,
     index,
-}: MinifierOptions) => {
+}: MinifierOptions) {
     const options = Object.assign({}, defaultOptions, settings?.options);
     const contentMinified = HTMLMinifier(content ?? "", options);
     if (settings && !settings.content && settings.output) {
@@ -61,10 +61,4 @@ const minifyHTMLMinifier = ({
         return callback(null, contentMinified);
     }
     return contentMinified;
-};
-
-/**
- * Expose `minifyHTMLMinifier()`.
- */
-minifyHTMLMinifier.default = minifyHTMLMinifier;
-export default minifyHTMLMinifier;
+}
