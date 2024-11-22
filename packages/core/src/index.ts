@@ -16,36 +16,28 @@ import { setup } from "./setup.ts";
  * Run node-minify.
  * @param settings Settings from user input
  */
-const minify = (settings: Settings) => {
-    return new Promise((resolve, reject) => {
-        const method: any = settings.content ? compressInMemory : compress;
-        settings = setup(settings);
-        if (!settings.sync) {
-            method(settings)
-                .then((minified: string) => {
-                    if (settings.callback) {
-                        settings.callback(null, minified);
-                    }
-                    resolve(minified);
-                })
-                .catch((err: Error) => {
-                    if (settings.callback) {
-                        settings.callback(err);
-                    }
-                    reject(err);
-                });
-        } else {
-            const minified: string = method(settings);
-            if (settings.callback) {
-                settings.callback(null, minified);
-            }
-            resolve(minified);
-        }
-    });
-};
+export async function minify(settings: Settings): Promise<string> {
+    const method = settings.content ? compressInMemory : compress;
+    settings = setup(settings);
 
-/**
- * Expose `minify()`.
- */
-minify.default = minify;
-export default minify;
+    try {
+        let minified: string;
+
+        if (!settings.sync) {
+            minified = await method(settings);
+        } else {
+            minified = method(settings) as string;
+        }
+
+        if (settings.callback) {
+            settings.callback(null, minified);
+        }
+
+        return minified;
+    } catch (err) {
+        if (settings.callback) {
+            settings.callback(err as Error);
+        }
+        throw err;
+    }
+}

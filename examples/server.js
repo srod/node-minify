@@ -1,6 +1,6 @@
 import babelMinify from "@node-minify/babel-minify";
 import cleanCSS from "@node-minify/clean-css";
-import minify from "@node-minify/core";
+import { minify } from "@node-minify/core";
 import crass from "@node-minify/crass";
 import cssnano from "@node-minify/cssnano";
 import csso from "@node-minify/csso";

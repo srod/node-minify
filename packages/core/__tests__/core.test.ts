@@ -14,7 +14,7 @@ import htmlMinifier from "../../html-minifier/src";
 import noCompress from "../../no-compress/src";
 import uglifyes from "../../uglify-es/src";
 import yui from "../../yui/src";
-import minify from "../src";
+import { minify } from "../src";
 
 const compressorLabel = "uglify-es";
 const compressor = uglifyes;
