@@ -19,12 +19,7 @@ import { minify } from "csso";
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyCSSO = ({
-    settings,
-    content,
-    callback,
-    index,
-}: MinifierOptions) => {
+export function minifyCSSO({ settings, content, callback, index }: MinifierOptions) {
     const contentMinified = minify(content ?? "", settings?.options);
     if (settings && !settings.content && settings.output) {
         settings.output &&
@@ -38,10 +33,4 @@ const minifyCSSO = ({
         return callback(null, contentMinified.css);
     }
     return contentMinified.css;
-};
-
-/**
- * Expose `minifyCSSO()`.
- */
-minifyCSSO.default = minifyCSSO;
-export default minifyCSSO;
+}
