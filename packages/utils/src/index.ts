@@ -24,10 +24,9 @@ import type {
 
 type Utils = {
     readFile: (file: string) => string;
-    writeFile: ({ file, content, index }: WriteFile) => string;
+    writeFile: ({ file, content, index }: WriteFileParams) => string;
     deleteFile: (file: string) => void;
     buildArgs: (options: Record<string, OptionsPossible>) => any;
-    clone: (obj: object) => object;
     getFilesizeInBytes: (file: string) => string;
     getFilesizeGzippedInBytes: (file: string) => Promise<string>;
     prettyBytes: (num: number) => string;
@@ -47,12 +46,6 @@ type Utils = {
     }: MinifierOptions) => Promise<string>;
 };
 
-type WriteFile = {
-    file: string;
-    content: any;
-    index?: number;
-};
-
 const utils = {} as Utils;
 
 /**
@@ -67,13 +60,23 @@ utils.readFile = (file: string): string => readFileSync(file, "utf8");
  * @param content Content to write
  * @param index Index of the file being processed
  */
-utils.writeFile = ({ file, content, index }: WriteFile): string => {
-    const _file = index !== undefined ? file[index] : file;
-    if (
-        !existsSync(_file) ||
-        (existsSync(_file) && !lstatSync(_file).isDirectory())
-    ) {
-        writeFileSync(_file, content, "utf8");
+type WriteFileParams = {
+    file: string;
+    content: any;
+    index?: number;
+};
+utils.writeFile = ({ file, content, index }: WriteFileParams): string => {
+    const targetFile = index !== undefined ? file[index] : file;
+
+    if (!targetFile) {
+        throw new Error("No target file provided");
+    }
+
+    const shouldWrite =
+        !existsSync(targetFile) || !lstatSync(targetFile).isDirectory();
+
+    if (shouldWrite) {
+        writeFileSync(targetFile, content, "utf8");
     }
 
     return content;
@@ -107,12 +110,6 @@ utils.buildArgs = (
 };
 
 /**
- * Clone an object.
- * @param obj Object
- */
-utils.clone = (obj: object): object => JSON.parse(JSON.stringify(obj));
-
-/**
  * Get the file size in bytes.
  * @param file File name
  */
@@ -128,12 +125,11 @@ utils.getFilesizeInBytes = (file: string): string => {
  */
 utils.getFilesizeGzippedInBytes = async (file: string): Promise<string> => {
     const { gzipSizeStream } = await import("gzip-size");
-    return new Promise((resolve) => {
-        const source = createReadStream(file);
-        source.pipe(gzipSizeStream()).on("gzip-size", (size: number) => {
-            resolve(utils.prettyBytes(size));
-        });
+    const source = createReadStream(file);
+    const size = await new Promise<number>((resolve) => {
+        source.pipe(gzipSizeStream()).on("gzip-size", resolve);
     });
+    return utils.prettyBytes(size);
 };
 
 /**
@@ -184,9 +180,9 @@ utils.setFileNameMin = (
     publicFolder?: string,
     replaceInPlace?: boolean
 ): string => {
-    const filePath = file.substr(0, file.lastIndexOf("/") + 1);
-    const fileWithoutPath = file.substr(file.lastIndexOf("/") + 1);
-    let fileWithoutExtension = fileWithoutPath.substr(
+    const filePath = file.substring(0, file.lastIndexOf("/") + 1);
+    const fileWithoutPath = file.substring(file.lastIndexOf("/") + 1);
+    let fileWithoutExtension = fileWithoutPath.substring(
         0,
         fileWithoutPath.lastIndexOf(".")
     );
@@ -204,14 +200,62 @@ utils.setFileNameMin = (
  * @param settings Settings
  */
 utils.compressSingleFile = (settings: Settings): Promise<string> | string => {
-    const content = settings.content
-        ? settings.content
-        : settings.input
-          ? utils.getContentFromFiles(settings.input)
-          : "";
+    const content = determineContent(settings);
+    return executeCompression(settings, content);
+};
+
+/**
+ * Determine the content to minify.
+ * @param settings
+ * @returns
+ */
+const determineContent = (settings: Settings): string => {
+    if (settings.content) {
+        return settings.content;
+    }
+
+    if (settings.input) {
+        return utils.getContentFromFiles(settings.input);
+    }
+
+    return "";
+};
+
+/**
+ * Execute compression.
+ * @param settings
+ * @param content
+ * @returns
+ */
+const executeCompression = (
+    settings: Settings,
+    content: string
+): Promise<string> | string => {
     return settings.sync
         ? utils.runSync({ settings, content })
         : utils.runAsync({ settings, content });
+};
+
+/**
+ * Check if the path is a valid file.
+ * @param path
+ * @returns
+ */
+const isValidFile = (path: string): boolean => {
+    return existsSync(path) && !lstatSync(path).isDirectory();
+};
+
+/**
+ * Read file.
+ * @param path
+ * @returns
+ */
+const readFile = (path: string): string => {
+    console.log("path", path);
+    if (!existsSync(path) || isValidFile(path)) {
+        return readFileSync(path, "utf8");
+    }
+    return "";
 };
 
 /**
@@ -220,17 +264,10 @@ utils.compressSingleFile = (settings: Settings): Promise<string> | string => {
  */
 utils.getContentFromFiles = (input: string | string[]): string => {
     if (!Array.isArray(input)) {
-        return readFileSync(input, "utf8");
+        return readFile(input);
     }
 
-    return input
-        .map((path) =>
-            !existsSync(path) ||
-            (existsSync(path) && !lstatSync(path).isDirectory())
-                ? readFileSync(path, "utf8")
-                : ""
-        )
-        .join("\n");
+    return input.map(readFile).join("\n");
 };
 
 /**
@@ -239,19 +276,18 @@ utils.getContentFromFiles = (input: string | string[]): string => {
  * @param content Content to minify
  * @param index Index of the file being processed
  */
-utils.runSync = ({ settings, content, index }: MinifierOptions): string =>
-    settings && typeof settings.compressor !== "string"
-        ? typeof settings.compressor === "function"
-            ? String(
-                  settings.compressor({
-                      settings,
-                      content,
-                      callback: null,
-                      index,
-                  }) || ""
-              )
-            : ""
-        : "";
+type RunSyncParameters = {
+    settings: Settings;
+    content?: string;
+    index?: number;
+};
+utils.runSync = ({ settings, content, index }: RunSyncParameters): string =>
+    settings.compressor({
+        settings,
+        content,
+        callback: undefined,
+        index,
+    });
 
 /**
  * Run compressor in async.
@@ -259,25 +295,24 @@ utils.runSync = ({ settings, content, index }: MinifierOptions): string =>
  * @param content Content to minify
  * @param index Index of the file being processed
  */
-utils.runAsync = ({
+type RunAsyncParameters = {
+    settings: Settings;
+    content?: string;
+    index?: number;
+};
+utils.runAsync = async ({
     settings,
     content,
     index,
-}: MinifierOptions): Promise<string> => {
+}: RunAsyncParameters): Promise<string> => {
     return new Promise((resolve, reject) => {
-        settings?.compressor && typeof settings.compressor !== "string"
-            ? settings.compressor({
-                  settings,
-                  content,
-                  callback: (err: unknown, result?: string) => {
-                      if (err) {
-                          return reject(err);
-                      }
-                      resolve(result || "");
-                  },
-                  index,
-              })
-            : null;
+        settings.compressor({
+            settings,
+            content,
+            callback: (err: unknown, result?: string) =>
+                err ? reject(err) : resolve(result as string),
+            index,
+        });
     });
 };
 

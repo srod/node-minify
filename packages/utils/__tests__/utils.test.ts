@@ -36,12 +36,6 @@ describe("Package: utils", () => {
             ).toEqual(["--foo", "bar"]));
     });
 
-    describe("clone", () => {
-        const obj = { foo: "bar" };
-        test("should return the same object", () =>
-            expect(utils.clone(obj)).toEqual(obj));
-    });
-
     describe("getFilesizeInBytes", () => {
         test("should return file size", () =>
             expect(utils.getFilesizeInBytes(fixtureFile)).toMatch(
