@@ -7,7 +7,7 @@
 /**
  * Module dependencies.
  */
-import type { Dictionary, MinifierOptions } from "@node-minify/types";
+import type { MinifierOptions } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
 import uglifyES from "uglify-es";
 
@@ -31,13 +31,13 @@ type MinifierOptionsUglifyES = {
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyUglifyES = ({
+export function minifyUglifyES({
     settings,
     content,
     callback,
     index,
-}: MinifierOptions & MinifierOptionsUglifyES) => {
-    let content2: string | Dictionary<string> = content ?? "";
+}: MinifierOptions & MinifierOptionsUglifyES) {
+    let content2: string | Record<string, string> = content ?? "";
     if (typeof settings.options.sourceMap === "object") {
         content2 = {
             [settings.options.sourceMap.filename ?? ""]: content ?? "",
@@ -67,10 +67,4 @@ const minifyUglifyES = ({
         return callback(null, contentMinified.code);
     }
     return contentMinified.code;
-};
-
-/**
- * Expose `minifyUglifyES()`.
- */
-minifyUglifyES.default = minifyUglifyES;
-export default minifyUglifyES;
+}
