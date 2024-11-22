@@ -19,12 +19,12 @@ import uglifyJS from "uglify-js";
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyUglifyJS = ({
+export function minifyUglifyJS({
     settings,
     content,
     callback,
     index,
-}: MinifierOptions) => {
+}: MinifierOptions) {
     const contentMinified = uglifyJS.minify(content ?? "", settings?.options);
     if (contentMinified.error) {
         if (callback) {
@@ -56,10 +56,4 @@ const minifyUglifyJS = ({
         return callback(null, contentMinified.code);
     }
     return contentMinified.code;
-};
-
-/**
- * Expose `minifyUglifyJS()`.
- */
-minifyUglifyJS.default = minifyUglifyJS;
-export default minifyUglifyJS;
+}
