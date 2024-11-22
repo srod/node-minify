@@ -36,12 +36,12 @@ type MinifierOptionsBabel = {
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyBabel = ({
+export function minifyBabel({
     settings,
     content,
     callback,
     index,
-}: MinifierOptions & MinifierOptionsBabel) => {
+}: MinifierOptions & MinifierOptionsBabel) {
     let babelOptions: BabelOptions = {
         presets: [],
     };
@@ -52,11 +52,11 @@ const minifyBabel = ({
 
     if (settings?.options?.presets) {
         const babelrcPresets = babelOptions.presets || [];
-        babelOptions.presets = babelrcPresets.concat(
+        babelOptions.presets = (
             Array.isArray(settings.options.presets)
                 ? settings.options.presets
                 : []
-        );
+        ).concat(babelrcPresets);
     }
 
     if (babelOptions.presets.indexOf("minify") === -1) {
@@ -76,10 +76,4 @@ const minifyBabel = ({
         return callback(null, contentMinified.code);
     }
     return contentMinified.code;
-};
-
-/**
- * Expose `minifyBabel()`.
- */
-minifyBabel.default = minifyBabel;
-export default minifyBabel;
+}
