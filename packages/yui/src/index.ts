@@ -26,7 +26,7 @@ const binYui = `${dirname()}/binaries/yuicompressor-2.4.7.jar`;
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyYUI = ({ settings, content, callback, index }: MinifierOptions) => {
+export function minifyYUI({ settings, content, callback, index }: MinifierOptions) {
     if (
         !settings?.type ||
         (settings.type !== "js" && settings.type !== "css")
@@ -35,7 +35,7 @@ const minifyYUI = ({ settings, content, callback, index }: MinifierOptions) => {
     }
     return runCommandLine({
         args: yuiCommand(settings.type, settings?.options ?? {}),
-        data: content,
+        data: content as string,
         settings,
         callback: (err: unknown, content?: string) => {
             if (err) {
@@ -53,19 +53,13 @@ const minifyYUI = ({ settings, content, callback, index }: MinifierOptions) => {
             return content;
         },
     });
-};
+}
 
 /**
  * YUI Compressor CSS command line.
  */
-const yuiCommand = (type: "js" | "css", options: Options) => {
+function yuiCommand(type: "js" | "css", options: Options) {
     return ["-jar", "-Xss2048k", binYui, "--type", type].concat(
         utils.buildArgs(options)
     );
-};
-
-/**
- * Expose `minifyYUI()`.
- */
-minifyYUI.default = minifyYUI;
-export default minifyYUI;
+}
