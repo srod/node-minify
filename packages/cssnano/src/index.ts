@@ -20,12 +20,12 @@ import postcss from "postcss";
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyCssnano = async ({
+export async function minifyCssnano({
     settings,
     content,
     callback,
     index,
-}: MinifierOptions) => {
+}: MinifierOptions) {
     let contentMinified = { css: "" };
     try {
         contentMinified = await postcss([cssnano]).process(content || "", {
@@ -48,10 +48,4 @@ const minifyCssnano = async ({
         return callback(null, contentMinified.css);
     }
     return contentMinified.css;
-};
-
-/**
- * Expose `minifyCssnano()`.
- */
-minifyCssnano.default = minifyCssnano;
-export default minifyCssnano;
+}
