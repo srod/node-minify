@@ -6,13 +6,13 @@
 
 import type { OptionsTest } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
-import { filesJS } from "../../../tests/files-path";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import { minify } from "../../core/src";
-import uglifyjs from "../src";
+import { filesJS } from "../../../tests/files-path.ts";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { minify } from "../../core/src/index.ts";
+import { uglifyJs } from "../src/index.ts";
 
 const compressorLabel = "uglify-js";
-const compressor = uglifyjs;
+const compressor = uglifyJs;
 
 describe("Package: uglify-js", async () => {
     // Run async tests
@@ -36,7 +36,7 @@ describe("Package: uglify-js", async () => {
     test("should throw an error", async () => {
         const options: OptionsTest = {
             minify: {
-                compressor: uglifyjs,
+                compressor: uglifyJs,
                 input: filesJS.errors,
                 output: filesJS.fileJSOut,
             },

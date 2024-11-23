@@ -19,7 +19,7 @@ import uglifyJS from "uglify-js";
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function minifyUglifyJS({
+export function uglifyJs({
     settings,
     content,
     callback,

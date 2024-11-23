@@ -5,8 +5,8 @@
  */
 
 import { describe } from "vitest";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import babelMinify from "../src";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { babelMinify } from "../src/index.ts";
 
 const compressorLabel = "babel-minify";
 const compressor = babelMinify;

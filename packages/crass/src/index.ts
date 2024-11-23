@@ -9,7 +9,7 @@
  */
 import type { MinifierOptions } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
-import crass from "crass";
+import minify from "crass";
 
 /**
  * Run crass.
@@ -19,8 +19,8 @@ import crass from "crass";
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function minifyCrass({ settings, content, callback, index }: MinifierOptions) {
-    const contentMinified = crass.parse(content).optimize().toString();
+export function crass({ settings, content, callback, index }: MinifierOptions) {
+    const contentMinified = minify.parse(content).optimize().toString();
     if (settings && !settings.content && settings.output) {
         settings.output &&
             utils.writeFile({

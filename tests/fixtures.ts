@@ -82,7 +82,7 @@ const validateMinifyResult = (result: MinifyResult): void => {
     expect(result.min).not.toBeNull();
 };
 
-export type Tests = Record<string, { it: string; minify: Settings }[]>;
+export type Tests = Record<string, { it: string; minify: Partial<Settings> }[]>;
 
 const tests: Tests = {
     concat: [

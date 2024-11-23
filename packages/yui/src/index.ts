@@ -26,7 +26,7 @@ const binYui = `${dirname()}/binaries/yuicompressor-2.4.7.jar`;
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function minifyYUI({ settings, content, callback, index }: MinifierOptions) {
+export function yui({ settings, content, callback, index }: MinifierOptions) {
     if (
         !settings?.type ||
         (settings.type !== "js" && settings.type !== "css")

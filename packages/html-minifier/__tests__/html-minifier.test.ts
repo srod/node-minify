@@ -5,8 +5,8 @@
  */
 
 import { describe } from "vitest";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import htmlMinifier from "../src";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { htmlMinifier } from "../src/index.ts";
 
 const compressorLabel = "html-minifier";
 const compressor = htmlMinifier;

@@ -9,7 +9,7 @@
  */
 import type { MinifierOptions } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
-import cssnano from "cssnano";
+import minify from "cssnano";
 import postcss from "postcss";
 
 /**
@@ -20,7 +20,7 @@ import postcss from "postcss";
  * @param index Index of current file in array
  * @returns Minified content
  */
-export async function minifyCssnano({
+export async function cssnano({
     settings,
     content,
     callback,
@@ -28,7 +28,7 @@ export async function minifyCssnano({
 }: MinifierOptions) {
     let contentMinified = { css: "" };
     try {
-        contentMinified = await postcss([cssnano]).process(content || "", {
+        contentMinified = await postcss([minify]).process(content || "", {
             from: undefined,
         });
     } catch (e) {

@@ -7,17 +7,17 @@
 import childProcess from "node:child_process";
 import type { OptionsTest } from "@node-minify/types";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
-import { filesJS } from "../../../tests/files-path";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import gcc from "../../google-closure-compiler/src";
-import htmlMinifier from "../../html-minifier/src";
-import noCompress from "../../no-compress/src";
-import uglifyes from "../../uglify-es/src";
-import yui from "../../yui/src";
-import { minify } from "../src";
+import { filesJS } from "../../../tests/files-path.ts";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { gcc } from "../../google-closure-compiler/src/index.ts";
+import { htmlMinifier } from "../../html-minifier/src/index.ts";
+import { noCompress } from "../../no-compress/src/index.ts";
+import { uglifyEs } from "../../uglify-es/src/index.ts";
+import { yui } from "../../yui/src/index.ts";
+import { minify } from "../src/index.ts";
 
 const compressorLabel = "uglify-es";
-const compressor = uglifyes;
+const compressor = uglifyEs;
 
 describe("Package: core", async () => {
     // Run async tests

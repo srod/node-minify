@@ -5,7 +5,7 @@
  */
 
 import { describe, expect, test } from "vitest";
-import { utils } from "../src";
+import { utils } from "../src/index.ts";
 
 const fixtureFile = `${__dirname}/../../../tests/fixtures/fixture-content.js`;
 

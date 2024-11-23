@@ -6,10 +6,10 @@
 
 import type { OptionsTest } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
-import { filesJS } from "../../../tests/files-path";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import { minify } from "../../core/src";
-import terser from "../src";
+import { filesJS } from "../../../tests/files-path.ts";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { minify } from "../../core/src/index.ts";
+import { terser } from "../src/index.ts";
 
 const compressorLabel = "terser";
 const compressor = terser;

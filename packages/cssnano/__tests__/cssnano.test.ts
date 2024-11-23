@@ -6,10 +6,10 @@
 
 import type { OptionsTest } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
-import { filesCSS } from "../../../tests/files-path";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import { minify } from "../../core/src";
-import cssnano from "../src";
+import { filesCSS } from "../../../tests/files-path.ts";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { minify } from "../../core/src/index.ts";
+import { cssnano } from "../src/index.ts";
 
 const compressorLabel = "cssnano";
 const compressor = cssnano;

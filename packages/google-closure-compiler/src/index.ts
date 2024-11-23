@@ -47,7 +47,7 @@ const allowedFlags = [
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function minifyGCC({ settings, content, callback, index }: MinifierOptions) {
+export function gcc({ settings, content, callback, index }: MinifierOptions) {
     const options = applyOptions({}, settings?.options ?? {});
     return runCommandLine({
         args: gccCommand(options),

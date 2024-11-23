@@ -5,8 +5,8 @@
  */
 
 import { describe } from "vitest";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import crass from "../src";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { crass } from "../src/index.ts";
 
 const compressorLabel = "crass";
 const compressor = crass;
