@@ -11,16 +11,8 @@ import type { MinifierOptions } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
 import uglifyES from "uglify-es";
 
-type OptionsUglifyES = {
-    sourceMap?: { filename: string };
-};
-
-type SettingsUglifyES = {
-    options: OptionsUglifyES;
-};
-
 type MinifierOptionsUglifyES = {
-    settings: SettingsUglifyES;
+    settings: { options?: { sourceMap?: { filename: string } } };
 };
 
 /**
@@ -38,7 +30,7 @@ export function uglifyEs({
     index,
 }: MinifierOptions & MinifierOptionsUglifyES) {
     let content2: string | Record<string, string> = content ?? "";
-    if (typeof settings.options.sourceMap === "object") {
+    if (typeof settings.options?.sourceMap === "object") {
         content2 = {
             [settings.options.sourceMap.filename ?? ""]: content ?? "",
         };
@@ -49,7 +41,7 @@ export function uglifyEs({
             return callback(contentMinified.error);
         }
     }
-    if (contentMinified.map && settings.options.sourceMap) {
+    if (contentMinified.map && settings.options?.sourceMap) {
         utils.writeFile({
             file: `${settings.output}.map`,
             content: contentMinified.map,

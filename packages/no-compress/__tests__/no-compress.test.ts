@@ -12,6 +12,10 @@ const compressorLabel = "no-compress";
 const compressor = noCompress;
 
 describe("Package: no-compress", async () => {
+    if (!tests.concat) {
+        throw new Error("Tests not found");
+    }
+
     // Run async tests
     for (const options of tests.concat) {
         await runOneTest({ options, compressorLabel, compressor });

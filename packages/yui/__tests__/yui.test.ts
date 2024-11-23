@@ -5,7 +5,7 @@
  */
 
 import childProcess from "node:child_process";
-import type { OptionsTest } from "@node-minify/types";
+import type { OptionsTest, Settings } from "@node-minify/types";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import { filesJS } from "../../../tests/files-path.ts";
 import { runOneTest, tests } from "../../../tests/fixtures.ts";
@@ -16,6 +16,10 @@ const compressorLabel = "yui";
 const compressor = yui;
 
 describe("Package: YUI", async () => {
+    if (!tests.commonjs || !tests.commoncss) {
+        throw new Error("Tests not found");
+    }
+
     // Run JS async tests
     for (const options of tests.commonjs) {
         options.minify.type = "js";
@@ -60,7 +64,7 @@ describe("Package: YUI", async () => {
                 done();
             };
 
-            minify(options.minify);
+            minify(options.minify as Settings);
         }));
 
     test("should catch an error if yui with bad options", async () => {
@@ -77,7 +81,7 @@ describe("Package: YUI", async () => {
         };
 
         try {
-            return await minify(options.minify);
+            return await minify(options.minify as Settings);
         } catch (err) {
             return expect(err.toString()).toMatch("Error");
         }
@@ -102,7 +106,7 @@ describe("Package: YUI", async () => {
                     },
                 },
             };
-            return expect(minify(options.minify)).rejects.toThrow();
+            return expect(minify(options.minify as Settings)).rejects.toThrow();
         });
         afterAll(() => {
             vi.restoreAllMocks();
@@ -132,8 +136,8 @@ describe("Package: YUI", async () => {
                 },
             };
             const spy = vi.spyOn(options.minify, "callback");
-            expect(minify(options.minify)).rejects.toThrow();
-            await minify(options.minify).catch(() =>
+            expect(minify(options.minify as Settings)).rejects.toThrow();
+            await minify(options.minify as Settings).catch(() =>
                 expect(spy).toHaveBeenCalled()
             );
         });

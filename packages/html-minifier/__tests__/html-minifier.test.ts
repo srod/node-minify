@@ -12,6 +12,10 @@ const compressorLabel = "html-minifier";
 const compressor = htmlMinifier;
 
 describe("Package: html-minifier", async () => {
+    if (!tests.commonhtml) {
+        throw new Error("Tests not found");
+    }
+
     // Run async tests
     for (const options of tests.commonhtml) {
         await runOneTest({ options, compressorLabel, compressor });

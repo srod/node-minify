@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import type { OptionsTest } from "@node-minify/types";
+import type { OptionsTest, Settings } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
 import { filesCSS } from "../../../tests/files-path.ts";
 import { runOneTest, tests } from "../../../tests/fixtures.ts";
@@ -15,6 +15,10 @@ const compressorLabel = "cssnano";
 const compressor = cssnano;
 
 describe("Package: cssnano", async () => {
+    if (!tests.commoncss) {
+        throw new Error("Tests not found");
+    }
+
     // Run async tests
     for (const options of tests.commoncss) {
         await runOneTest({ options, compressorLabel, compressor });
@@ -33,7 +37,7 @@ describe("Package: cssnano", async () => {
             },
         };
 
-        const min = await minify(options.minify);
+        const min = await minify(options.minify as Settings);
         return expect(min).not.toBeNull();
     });
     test("should throw an error", async () => {
@@ -49,7 +53,7 @@ describe("Package: cssnano", async () => {
         };
 
         try {
-            return await minify(options.minify);
+            return await minify(options.minify as Settings);
         } catch (err) {
             return expect(err).not.toBeNull();
         }

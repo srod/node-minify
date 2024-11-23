@@ -12,6 +12,10 @@ const compressorLabel = "csso";
 const compressor = csso;
 
 describe("Package: csso", async () => {
+    if (!tests.commoncss) {
+        throw new Error("Tests not found");
+    }
+
     // Run async tests
     for (const options of tests.commoncss) {
         await runOneTest({ options, compressorLabel, compressor });

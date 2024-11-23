@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import type { OptionsTest } from "@node-minify/types";
+import type { OptionsTest, Settings } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
 import { filesJS } from "../../../tests/files-path.ts";
 import { runOneTest, tests } from "../../../tests/fixtures.ts";
@@ -15,6 +15,10 @@ const compressorLabel = "google-closure-compiler";
 const compressor = gcc;
 
 describe("Package: google-closure-compiler", async () => {
+    if (!tests.commonjs) {
+        throw new Error("Tests not found");
+    }
+
     // Run async tests
     for (const options of tests.commonjs) {
         await runOneTest({ options, compressorLabel, compressor });
@@ -45,8 +49,9 @@ describe("Package: google-closure-compiler", async () => {
                 done();
             };
 
-            minify(options.minify);
+            minify(options.minify as Settings);
         }));
+
     test("should throw an error", async () => {
         const options: OptionsTest = {
             minify: {
@@ -57,7 +62,7 @@ describe("Package: google-closure-compiler", async () => {
         };
 
         try {
-            return await minify(options.minify);
+            return await minify(options.minify as Settings);
         } catch (err) {
             return expect(err).not.toBeNull();
         }

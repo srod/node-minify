@@ -18,7 +18,7 @@ import type { Settings } from "@node-minify/types";
  * @param callback Callback
  * @returns Minified content
  */
-type RunCommandLineParams = {
+export type RunCommandLineParams = {
     args: string[];
     data: string;
     settings: Settings;
