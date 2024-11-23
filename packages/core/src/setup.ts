@@ -9,7 +9,7 @@
  */
 import path from "node:path";
 import type { Settings } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { setFileNameMin } from "@node-minify/utils";
 import fg from "fast-glob";
 
 /**
@@ -101,19 +101,14 @@ function checkOutput(
     // If array of files
     if (Array.isArray(input)) {
         const outputMin = input.map((file) =>
-            utils.setFileNameMin(
-                file,
-                output,
-                effectivePublicFolder,
-                replaceInPlace
-            )
+            setFileNameMin(file, output, effectivePublicFolder, replaceInPlace)
         );
         return { output: outputMin };
     }
 
     // Single file
     return {
-        output: utils.setFileNameMin(
+        output: setFileNameMin(
             input,
             output,
             effectivePublicFolder,

@@ -9,7 +9,10 @@
  */
 import { minify } from "@node-minify/core";
 import type { Result, Settings } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import {
+    getFilesizeGzippedInBytes,
+    getFilesizeInBytes,
+} from "@node-minify/utils";
 
 /**
  * Run compression.
@@ -33,8 +36,8 @@ async function compress(options: Settings): Promise<Result> {
         }
 
         // Get file sizes
-        const sizeGzip = await utils.getFilesizeGzippedInBytes(options.output);
-        const size = utils.getFilesizeInBytes(options.output);
+        const sizeGzip = await getFilesizeGzippedInBytes(options.output);
+        const size = getFilesizeInBytes(options.output);
 
         return {
             ...defaultResult,

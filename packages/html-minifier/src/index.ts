@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { writeFile } from "@node-minify/utils";
 import minifier from "html-minifier";
 
 /**
@@ -51,7 +51,7 @@ export function htmlMinifier({
     const contentMinified = HTMLMinifier(content ?? "", options);
     if (settings && !settings.content && settings.output) {
         settings.output &&
-            utils.writeFile({
+            writeFile({
                 file: settings.output,
                 content: contentMinified,
                 index,

@@ -10,7 +10,7 @@
 
 import { runCommandLine } from "@node-minify/run";
 import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { buildArgs, writeFile } from "@node-minify/utils";
 import dirname from "es-dirname";
 
 /**
@@ -45,7 +45,7 @@ export function yui({ settings, content, callback, index }: MinifierOptions) {
                 throw err;
             }
             if (settings && !settings.content && settings.output) {
-                utils.writeFile({ file: settings.output, content, index });
+                writeFile({ file: settings.output, content, index });
             }
             if (callback) {
                 return callback(null, content);
@@ -60,6 +60,6 @@ export function yui({ settings, content, callback, index }: MinifierOptions) {
  */
 function yuiCommand(type: "js" | "css", options: Record<string, unknown>) {
     return ["-jar", "-Xss2048k", binYui, "--type", type].concat(
-        utils.buildArgs(options)
+        buildArgs(options)
     );
 }

@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { readFile, writeFile } from "@node-minify/utils";
 import { transform } from "babel-core";
 import minify from "babel-preset-minify";
 
@@ -39,7 +39,7 @@ export function babelMinify({
     };
 
     if (settings?.options?.babelrc) {
-        babelOptions = JSON.parse(utils.readFile(settings.options.babelrc));
+        babelOptions = JSON.parse(readFile(settings.options.babelrc));
     }
 
     if (settings?.options?.presets) {
@@ -58,7 +58,7 @@ export function babelMinify({
     const contentMinified = transform(content ?? "", babelOptions);
     if (settings && !settings.content && settings.output) {
         settings.output &&
-            utils.writeFile({
+            writeFile({
                 file: settings.output,
                 content: contentMinified.code,
                 index,

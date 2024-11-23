@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { writeFile } from "@node-minify/utils";
 import uglifyES from "uglify-es";
 
 /**
@@ -42,14 +42,14 @@ export function uglifyEs({
         }
     }
     if (contentMinified.map && settings.options?.sourceMap) {
-        utils.writeFile({
+        writeFile({
             file: `${settings.output}.map`,
             content: contentMinified.map,
             index,
         });
     }
     if (settings && !settings.content && settings.output) {
-        utils.writeFile({
+        writeFile({
             file: settings.output,
             content: contentMinified.code,
             index,

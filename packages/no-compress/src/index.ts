@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { writeFile } from "@node-minify/utils";
 
 /**
  * Just merge, no compression.
@@ -18,10 +18,15 @@ import { utils } from "@node-minify/utils";
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function noCompress({ settings, content, callback, index }: MinifierOptions) {
+export function noCompress({
+    settings,
+    content,
+    callback,
+    index,
+}: MinifierOptions) {
     // If output path is specified and content setting is not present, write to file
     if (settings?.output && !settings?.content) {
-        utils.writeFile({ file: settings.output, content, index });
+        writeFile({ file: settings.output, content, index });
     }
 
     // Handle callback if provided, otherwise return content directly

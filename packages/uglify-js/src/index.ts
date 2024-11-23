@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { writeFile } from "@node-minify/utils";
 import uglifyJS from "uglify-js";
 
 /**
@@ -37,7 +37,7 @@ export function uglifyJs({
         typeof settings?.options?.sourceMap === "object" &&
         "filename" in settings.options.sourceMap
     ) {
-        utils.writeFile({
+        writeFile({
             file:
                 typeof settings.options.sourceMap.filename === "string"
                     ? settings.options.sourceMap.filename
@@ -47,7 +47,7 @@ export function uglifyJs({
         });
     }
     if (settings && !settings.content && settings.output) {
-        utils.writeFile({
+        writeFile({
             file: settings.output,
             content: contentMinified.code,
             index,
