@@ -9,7 +9,12 @@
  */
 import fs from "node:fs";
 import type { CompressorReturnType, Settings } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import {
+    compressSingleFile,
+    getContentFromFiles,
+    runAsync,
+    runSync,
+} from "@node-minify/utils";
 import { mkdirp } from "mkdirp";
 
 /**
@@ -32,7 +37,7 @@ function compress(settings: Settings): CompressorReturnType {
             ? compressArrayOfFilesSync(settings)
             : compressArrayOfFilesAsync(settings);
     }
-    return utils.compressSingleFile(settings);
+    return compressSingleFile(settings);
 }
 
 /**
@@ -43,8 +48,8 @@ function compressArrayOfFilesSync(settings: Settings): any {
     return (
         Array.isArray(settings.input) &&
         settings.input.forEach((input, index) => {
-            const content = utils.getContentFromFiles(input);
-            return utils.runSync({ settings, content, index });
+            const content = getContentFromFiles(input);
+            return runSync({ settings, content, index });
         })
     );
 }
@@ -57,9 +62,9 @@ function compressArrayOfFilesAsync(settings: Settings): Promise<string | void> {
     let sequence: Promise<string | void> = Promise.resolve();
     Array.isArray(settings.input) &&
         settings.input.forEach((input, index) => {
-            const content = utils.getContentFromFiles(input);
+            const content = getContentFromFiles(input);
             sequence = sequence.then(() =>
-                utils.runAsync({ settings, content, index })
+                runAsync({ settings, content, index })
             );
         });
     return sequence;

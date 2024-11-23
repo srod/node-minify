@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { writeFile } from "@node-minify/utils";
 import { minify } from "terser";
 
 /**
@@ -35,14 +35,14 @@ export async function terser({
             contentMinified.map &&
             typeof settings?.options?.sourceMap?.url === "string"
         ) {
-            utils.writeFile({
+            writeFile({
                 file: settings.options.sourceMap.url,
                 content: contentMinified.map,
                 index,
             });
         }
         if (settings && !settings.content && settings.output) {
-            utils.writeFile({
+            writeFile({
                 file: settings.output,
                 content: contentMinified.code,
                 index,

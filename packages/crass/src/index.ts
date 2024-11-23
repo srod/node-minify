@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { writeFile } from "@node-minify/utils";
 import minify from "crass";
 
 /**
@@ -23,7 +23,7 @@ export function crass({ settings, content, callback, index }: MinifierOptions) {
     const contentMinified = minify.parse(content).optimize().toString();
     if (settings && !settings.content && settings.output) {
         settings.output &&
-            utils.writeFile({
+            writeFile({
                 file: settings.output,
                 content: contentMinified,
                 index,

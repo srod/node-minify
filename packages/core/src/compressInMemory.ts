@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import type { CompressorReturnType, Settings } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { compressSingleFile } from "@node-minify/utils";
 
 /**
  * Run compressor.
@@ -21,7 +21,7 @@ function compressInMemory(settings: Settings): CompressorReturnType {
         );
     }
 
-    return utils.compressSingleFile(settings);
+    return compressSingleFile(settings);
 }
 
 /**

@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { writeFile } from "@node-minify/utils";
 import CleanCSS from "clean-css";
 
 /**
@@ -39,7 +39,7 @@ export function cleanCss({
         typeof settings?.options?._sourceMap === "object" &&
         "url" in settings.options._sourceMap
     ) {
-        utils.writeFile({
+        writeFile({
             file:
                 typeof settings.options._sourceMap.url === "string"
                     ? settings.options._sourceMap.url
@@ -50,7 +50,7 @@ export function cleanCss({
     }
     if (settings && !settings.content && settings.output) {
         settings.output &&
-            utils.writeFile({
+            writeFile({
                 file: settings.output,
                 content: contentMinified,
                 index,

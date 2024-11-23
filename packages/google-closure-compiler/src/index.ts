@@ -9,7 +9,7 @@
  */
 import { runCommandLine } from "@node-minify/run";
 import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { buildArgs, writeFile } from "@node-minify/utils";
 import compilerPath from "google-closure-compiler-java";
 
 // the allowed flags, taken from https://github.com/google/closure-compiler/wiki/Flags-and-Options
@@ -57,7 +57,7 @@ export function gcc({ settings, content, callback, index }: MinifierOptions) {
                 throw err;
             }
             if (settings && !settings.content && settings.output) {
-                utils.writeFile({ file: settings.output, content, index });
+                writeFile({ file: settings.output, content, index });
             }
             if (callback) {
                 return callback(null, content);
@@ -101,5 +101,5 @@ function applyOptions(flags: Flags, options?: Record<string, unknown>): Flags {
  */
 
 function gccCommand(options: Record<string, unknown>) {
-    return ["-jar", compilerPath].concat(utils.buildArgs(options ?? {}));
+    return ["-jar", compilerPath].concat(buildArgs(options ?? {}));
 }
