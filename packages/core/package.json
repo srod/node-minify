@@ -18,12 +18,19 @@
     "lib": "dist",
     "test": "__tests__"
   },
+  "types": "./dist/index.d.cts",
   "main": "./dist/index.cjs",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "import": "./dist/index.js",
-      "default": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     }
   },
   "files": [
