@@ -5,7 +5,7 @@ import { filesCSS, filesHTML, filesJS, filesJSON } from "./files-path.ts";
 
 interface TestOptions {
     it: string;
-    minify: Settings;
+    minify: Partial<Settings>;
 }
 
 interface TestConfig {
@@ -64,7 +64,7 @@ const executeMinifyTest = async (options: TestOptions): Promise<void> => {
     validateMinifyResult(result);
 };
 
-const runMinify = (options: TestOptions): Promise<MinifyResult> => {
+function runMinify(options: TestOptions): Promise<MinifyResult> {
     return new Promise<MinifyResult>((resolve) => {
         options.minify.callback = (err: unknown, min?: string) => {
             resolve({
@@ -73,9 +73,9 @@ const runMinify = (options: TestOptions): Promise<MinifyResult> => {
             });
         };
 
-        minify(options.minify);
+        minify(options.minify as Settings);
     });
-};
+}
 
 const validateMinifyResult = (result: MinifyResult): void => {
     expect(result.err).toBeNull();

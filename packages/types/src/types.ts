@@ -13,7 +13,7 @@ export type Options = {
 };
 
 export type OptionsTest = Options & {
-    minify: Settings;
+    minify: Partial<Settings>;
 };
 
 export type Compressor = (args: MinifierOptions) => string;

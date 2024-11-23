@@ -12,6 +12,10 @@ const compressorLabel = "jsonminify";
 const compressor = jsonMinify;
 
 describe("Package: jsonminify", async () => {
+    if (!tests.commonjson) {
+        throw new Error("Tests not found");
+    }
+
     // Run async tests
     for (const options of tests.commonjson) {
         await runOneTest({ options, compressorLabel, compressor });

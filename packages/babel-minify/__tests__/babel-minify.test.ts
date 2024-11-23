@@ -12,9 +12,17 @@ const compressorLabel = "babel-minify";
 const compressor = babelMinify;
 
 describe("Package: babel-minify", async () => {
+    if (!tests.commonjs || !tests.babelMinify) {
+        throw new Error("Tests not found");
+    }
+
     // Run commonjs async tests
     for (const options of tests.commonjs) {
-        await runOneTest({ options, compressorLabel, compressor });
+        await runOneTest({
+            options,
+            compressorLabel,
+            compressor,
+        });
     }
 
     // Run babelMinify async tests
