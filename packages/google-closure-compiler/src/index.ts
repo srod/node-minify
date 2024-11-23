@@ -8,11 +8,7 @@
  * Module dependencies.
  */
 import { runCommandLine } from "@node-minify/run";
-import type {
-    MinifierOptions,
-    Options,
-    OptionsPossible,
-} from "@node-minify/types";
+import type { MinifierOptions } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
 import compilerPath from "google-closure-compiler-java";
 
@@ -78,9 +74,9 @@ export function gcc({ settings, content, callback, index }: MinifierOptions) {
  * @returns the flags object with the options added
  */
 type Flags = {
-    [key: string]: boolean | Record<string, OptionsPossible>;
+    [key: string]: boolean | Record<string, unknown>;
 };
-function applyOptions(flags: Flags, options?: Options): Flags {
+function applyOptions(flags: Flags, options?: Record<string, unknown>): Flags {
     if (!options || Object.keys(options).length === 0) {
         return flags;
     }
@@ -92,9 +88,7 @@ function applyOptions(flags: Flags, options?: Options): Flags {
                 typeof value === "boolean" ||
                 (typeof value === "object" && !Array.isArray(value))
             ) {
-                flags[option] = value as
-                    | boolean
-                    | Record<string, OptionsPossible>;
+                flags[option] = value as boolean | Record<string, unknown>;
             }
         });
     return flags;
@@ -106,6 +100,6 @@ function applyOptions(flags: Flags, options?: Options): Flags {
  * @returns the command line arguments to pass to GCC
  */
 
-function gccCommand(options: Record<string, OptionsPossible>) {
+function gccCommand(options: Record<string, unknown>) {
     return ["-jar", compilerPath].concat(utils.buildArgs(options ?? {}));
 }

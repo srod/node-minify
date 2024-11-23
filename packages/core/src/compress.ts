@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import fs from "node:fs";
-import type { Settings } from "@node-minify/types";
+import type { CompressorReturnType, Settings } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
 import { mkdirp } from "mkdirp";
 
@@ -16,7 +16,7 @@ import { mkdirp } from "mkdirp";
  * Run compressor.
  * @param settings Settings
  */
-function compress(settings: Settings): Promise<string> | string {
+function compress(settings: Settings): CompressorReturnType {
     if (typeof settings.compressor !== "function") {
         throw new Error(
             "compressor should be a function, maybe you forgot to install the compressor"

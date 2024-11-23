@@ -11,10 +11,6 @@ import type { MinifierOptions } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
 import uglifyES from "uglify-es";
 
-type MinifierOptionsUglifyES = {
-    settings: { options?: { sourceMap?: { filename: string } } };
-};
-
 /**
  * Run uglifyES.
  * @param settings UglifyES options
@@ -28,7 +24,11 @@ export function uglifyEs({
     content,
     callback,
     index,
-}: MinifierOptions & MinifierOptionsUglifyES) {
+}: MinifierOptions & {
+    settings?: {
+        options?: { sourceMap?: { filename?: string } };
+    };
+}) {
     let content2: string | Record<string, string> = content ?? "";
     if (typeof settings.options?.sourceMap === "object") {
         content2 = {

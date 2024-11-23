@@ -35,6 +35,7 @@ export function cleanCss({
     const contentMinified = _cleanCSS.styles;
     if (
         _cleanCSS.sourceMap &&
+        settings?.options?._sourceMap &&
         typeof settings?.options?._sourceMap === "object" &&
         "url" in settings.options._sourceMap
     ) {

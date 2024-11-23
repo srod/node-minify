@@ -32,14 +32,14 @@ describe("cli error", () => {
     });
     test("should minify to throw with yui error", async () => {
         const spy = vi.spyOn(cli, "run");
-        const options: SettingsWithCompressor = {
+        const settings: SettingsWithCompressor = {
             compressor: "yui",
             input: filesJS.oneFile,
             output: filesJS.fileJSOut,
         };
-        expect(cli.run(options)).rejects.toThrow();
+        expect(cli.run(settings)).rejects.toThrow();
         try {
-            return await cli.run(options);
+            return await cli.run(settings);
         } catch {
             return expect(spy).toHaveBeenCalled();
         }

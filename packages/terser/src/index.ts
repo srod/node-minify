@@ -11,18 +11,6 @@ import type { MinifierOptions } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
 import { minify } from "terser";
 
-type OptionsTerser = {
-    sourceMap?: { url: string };
-};
-
-type SettingsTerser = {
-    options: OptionsTerser;
-};
-
-type MinifierOptionsTerser = {
-    settings: SettingsTerser;
-};
-
 /**
  * Run terser.
  * @param settings Terser options
@@ -36,7 +24,11 @@ export async function terser({
     content,
     callback,
     index,
-}: MinifierOptions & MinifierOptionsTerser) {
+}: MinifierOptions & {
+    settings?: {
+        options?: { sourceMap?: { url?: string } };
+    };
+}) {
     try {
         const contentMinified = await minify(content ?? "", settings?.options);
         if (

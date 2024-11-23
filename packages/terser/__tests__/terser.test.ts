@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import type { OptionsTest, Settings } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
 import { filesJS } from "../../../tests/files-path.ts";
 import { runOneTest, tests } from "../../../tests/fixtures.ts";
@@ -38,16 +38,18 @@ describe("Package: terser", async () => {
     }
 
     test("should throw an error", async () => {
-        const options: OptionsTest = {
-            minify: {
-                compressor: terser,
-                input: filesJS.errors,
-                output: filesJS.fileJSOut,
+        const settings: Settings = {
+            compressor: terser,
+            input: filesJS.errors,
+            output: filesJS.fileJSOut,
+            options: {
+                mangle: false,
+                compress: false,
             },
         };
 
         try {
-            return await minify(options.minify as Settings);
+            return await minify(settings);
         } catch (err) {
             return expect(err).not.toBeNull();
         }

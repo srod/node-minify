@@ -9,7 +9,7 @@
  */
 
 import { runCommandLine } from "@node-minify/run";
-import type { MinifierOptions, Options } from "@node-minify/types";
+import type { MinifierOptions } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
 import dirname from "es-dirname";
 
@@ -58,7 +58,7 @@ export function yui({ settings, content, callback, index }: MinifierOptions) {
 /**
  * YUI Compressor CSS command line.
  */
-function yuiCommand(type: "js" | "css", options: Options) {
+function yuiCommand(type: "js" | "css", options: Record<string, unknown>) {
     return ["-jar", "-Xss2048k", binYui, "--type", type].concat(
         utils.buildArgs(options)
     );

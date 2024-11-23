@@ -16,18 +16,6 @@ type BabelOptions = {
     presets: string[];
 };
 
-type OptionsBabel = {
-    babelrc?: string;
-};
-
-type SettingsBabel = {
-    options: OptionsBabel;
-};
-
-type MinifierOptionsBabel = {
-    settings: SettingsBabel;
-};
-
 /**
  * Run babel-minify.
  * @param settings Babel-minify options
@@ -41,7 +29,11 @@ export function babelMinify({
     content,
     callback,
     index,
-}: MinifierOptions & MinifierOptionsBabel) {
+}: MinifierOptions & {
+    settings?: {
+        options?: { babelrc?: string };
+    };
+}) {
     let babelOptions: BabelOptions = {
         presets: [],
     };

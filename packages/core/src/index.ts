@@ -7,7 +7,7 @@
 /**
  * Module dependencies.
  */
-import type { Settings } from "@node-minify/types";
+import type { CompressorReturnType, Settings } from "@node-minify/types";
 import { compress } from "./compress.ts";
 import { compressInMemory } from "./compressInMemory.ts";
 import { setup } from "./setup.ts";
@@ -21,7 +21,7 @@ export async function minify(settings: Settings): Promise<string> {
     settings = setup(settings);
 
     try {
-        let minified: string;
+        let minified: CompressorReturnType;
 
         if (!settings.sync) {
             minified = await method(settings);
@@ -33,11 +33,15 @@ export async function minify(settings: Settings): Promise<string> {
             settings.callback(null, minified);
         }
 
-        return minified;
+        return typeof minified === "string" ? minified : "";
     } catch (err) {
         if (settings.callback) {
             settings.callback(err as Error);
         }
         throw err;
     }
+}
+
+export function minifySync(settings: Settings): string {
+    return "";
 }

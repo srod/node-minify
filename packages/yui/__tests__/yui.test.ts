@@ -5,7 +5,7 @@
  */
 
 import childProcess from "node:child_process";
-import type { OptionsTest, Settings } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import { filesJS } from "../../../tests/files-path.ts";
 import { runOneTest, tests } from "../../../tests/fixtures.ts";
@@ -44,46 +44,43 @@ describe("Package: YUI", async () => {
 
     test("should compress with some options", (): Promise<void> =>
         new Promise<void>((done) => {
-            // const options: { minify: { callback?: Function } } = {};
-            const options: OptionsTest = {
-                minify: {
-                    compressor: yui,
-                    type: "js",
-                    input: filesJS.oneFileWithWildcards,
-                    output: filesJS.fileJSOut,
-                    options: {
-                        charset: "utf8",
-                    },
+            const settings: Settings = {
+                compressor: yui,
+                type: "js",
+                input: filesJS.oneFileWithWildcards,
+                output: filesJS.fileJSOut,
+                options: {
+                    charset: "utf8",
                 },
             };
 
-            options.minify.callback = (err, min) => {
+            settings.callback = (err, min) => {
                 expect(err).toBeNull();
                 expect(min).not.toBeNull();
 
                 done();
             };
 
-            minify(options.minify as Settings);
+            minify(settings);
         }));
 
     test("should catch an error if yui with bad options", async () => {
-        const options: OptionsTest = {
-            minify: {
-                compressor: yui,
-                type: "js",
-                input: filesJS.oneFile,
-                output: filesJS.fileJSOut,
-                options: {
-                    fake: true,
-                },
+        const settings: Settings = {
+            compressor: yui,
+            type: "js",
+            input: filesJS.oneFile,
+            output: filesJS.fileJSOut,
+            options: {
+                fake: true,
             },
         };
 
         try {
-            return await minify(options.minify as Settings);
-        } catch (err) {
-            return expect(err.toString()).toMatch("Error");
+            return await minify(settings);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                return expect(err.toString()).toMatch("Error");
+            }
         }
     });
 
@@ -95,18 +92,16 @@ describe("Package: YUI", async () => {
             });
         });
         test("should callback an error on spawnSync", () => {
-            const options: OptionsTest = {
-                minify: {
-                    compressor: yui,
-                    input: filesJS.oneFile,
-                    output: filesJS.fileJSOut,
-                    sync: true,
-                    options: {
-                        fake: true,
-                    },
+            const settings: Settings = {
+                compressor: yui,
+                input: filesJS.oneFile,
+                output: filesJS.fileJSOut,
+                sync: true,
+                options: {
+                    fake: true,
                 },
             };
-            return expect(minify(options.minify as Settings)).rejects.toThrow();
+            return expect(minify(settings)).rejects.toThrow();
         });
         afterAll(() => {
             vi.restoreAllMocks();
@@ -121,25 +116,21 @@ describe("Package: YUI", async () => {
             });
         });
         test("should callback an error on spawn", async () => {
-            const options: OptionsTest = {
-                minify: {
-                    compressor: yui,
-                    input: filesJS.oneFile,
-                    output: filesJS.fileJSOut,
-                    sync: false,
-                    options: {
-                        fake: true,
-                    },
-                    callback: (): void => {
-                        return;
-                    },
+            const settings: Settings = {
+                compressor: yui,
+                input: filesJS.oneFile,
+                output: filesJS.fileJSOut,
+                sync: false,
+                options: {
+                    fake: true,
+                },
+                callback: (): void => {
+                    return;
                 },
             };
-            const spy = vi.spyOn(options.minify, "callback");
-            expect(minify(options.minify as Settings)).rejects.toThrow();
-            await minify(options.minify as Settings).catch(() =>
-                expect(spy).toHaveBeenCalled()
-            );
+            const spy = vi.spyOn(settings, "callback");
+            expect(minify(settings)).rejects.toThrow();
+            await minify(settings).catch(() => expect(spy).toHaveBeenCalled());
         });
     });
     afterAll(() => {

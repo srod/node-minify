@@ -33,6 +33,7 @@ export function uglifyJs({
     }
     if (
         contentMinified.map &&
+        settings?.options?.sourceMap &&
         typeof settings?.options?.sourceMap === "object" &&
         "filename" in settings.options.sourceMap
     ) {
