@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import type { OptionsTest, Settings } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
 import { filesCSS } from "../../../tests/files-path.ts";
 import { runOneTest, tests } from "../../../tests/fixtures.ts";
@@ -29,31 +29,27 @@ describe("Package: cssnano", async () => {
         await runOneTest({ options, compressorLabel, compressor, sync: true });
     }
     test("should be ok with no callback", async () => {
-        const options: OptionsTest = {
-            minify: {
-                compressor: cssnano,
-                input: filesCSS.fileCSS,
-                output: filesCSS.fileCSSOut,
-            },
+        const settings: Settings = {
+            compressor: cssnano,
+            input: filesCSS.fileCSS,
+            output: filesCSS.fileCSSOut,
         };
 
-        const min = await minify(options.minify as Settings);
+        const min = await minify(settings);
         return expect(min).not.toBeNull();
     });
     test("should throw an error", async () => {
-        const options: OptionsTest = {
-            minify: {
-                compressor: cssnano,
-                input: filesCSS.fileCSSErrors,
-                output: filesCSS.fileCSSOut,
-                callback: (): void => {
-                    return;
-                },
+        const settings: Settings = {
+            compressor: cssnano,
+            input: filesCSS.fileCSSErrors,
+            output: filesCSS.fileCSSOut,
+            callback: (): void => {
+                return;
             },
         };
 
         try {
-            return await minify(options.minify as Settings);
+            return await minify(settings);
         } catch (err) {
             return expect(err).not.toBeNull();
         }

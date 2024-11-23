@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import type { OptionsTest, Settings } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
 import { filesJS } from "../../../tests/files-path.ts";
 import { runOneTest, tests } from "../../../tests/fixtures.ts";
@@ -31,38 +31,34 @@ describe("Package: google-closure-compiler", async () => {
 
     test("should compress with some options", (): Promise<void> =>
         new Promise<void>((done) => {
-            const options: OptionsTest = {
-                minify: {
-                    compressor: gcc,
-                    input: filesJS.oneFileWithWildcards,
-                    output: filesJS.fileJSOut,
-                    options: {
-                        language_in: "ECMASCRIPT5",
-                    },
+            const settings: Settings = {
+                compressor: gcc,
+                input: filesJS.oneFileWithWildcards,
+                output: filesJS.fileJSOut,
+                options: {
+                    language_in: "ECMASCRIPT5",
                 },
             };
 
-            options.minify.callback = (err, min) => {
+            settings.callback = (err, min) => {
                 expect(err).toBeNull();
                 expect(min).not.toBeNull();
 
                 done();
             };
 
-            minify(options.minify as Settings);
+            minify(settings);
         }));
 
     test("should throw an error", async () => {
-        const options: OptionsTest = {
-            minify: {
-                compressor: gcc,
-                input: filesJS.errors,
-                output: filesJS.fileJSOut,
-            },
+        const settings: Settings = {
+            compressor: gcc,
+            input: filesJS.errors,
+            output: filesJS.fileJSOut,
         };
 
         try {
-            return await minify(options.minify as Settings);
+            return await minify(settings);
         } catch (err) {
             return expect(err).not.toBeNull();
         }

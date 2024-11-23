@@ -7,14 +7,14 @@
 /**
  * Module dependencies.
  */
-import type { Settings } from "@node-minify/types";
+import type { CompressorReturnType, Settings } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
 
 /**
  * Run compressor.
  * @param settings Settings
  */
-function compressInMemory(settings: Settings): Promise<string> | string {
+function compressInMemory(settings: Settings): CompressorReturnType {
     if (typeof settings.compressor !== "function") {
         throw new Error(
             "compressor should be a function, maybe you forgot to install the compressor"

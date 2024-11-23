@@ -17,8 +17,8 @@ import {
     writeFileSync,
 } from "node:fs";
 import type {
+    CompressorReturnType,
     MinifierOptions,
-    OptionsPossible,
     Settings,
 } from "@node-minify/types";
 
@@ -26,7 +26,7 @@ type Utils = {
     readFile: (file: string) => string;
     writeFile: ({ file, content, index }: WriteFileParams) => string;
     deleteFile: (file: string) => void;
-    buildArgs: (options: Record<string, OptionsPossible>) => any;
+    buildArgs: (options: Record<string, unknown>) => any;
     getFilesizeInBytes: (file: string) => string;
     getFilesizeGzippedInBytes: (file: string) => Promise<string>;
     prettyBytes: (num: number) => string;
@@ -36,9 +36,13 @@ type Utils = {
         publicFolder?: string,
         replaceInPlace?: boolean
     ) => string;
-    compressSingleFile: (settings: Settings) => string | Promise<string>;
+    compressSingleFile: (settings: Settings) => CompressorReturnType;
     getContentFromFiles: (input: string | string[]) => string;
-    runSync: ({ settings, content, index }: MinifierOptions) => string;
+    runSync: ({
+        settings,
+        content,
+        index,
+    }: MinifierOptions) => CompressorReturnType;
     runAsync: ({
         settings,
         content,
@@ -92,10 +96,8 @@ utils.deleteFile = (file: string) => unlinkSync(file);
  * Builds arguments array based on an object.
  * @param options
  */
-utils.buildArgs = (
-    options: Record<string, OptionsPossible>
-): OptionsPossible[] => {
-    const args: OptionsPossible[] = [];
+utils.buildArgs = (options: Record<string, unknown>): unknown[] => {
+    const args: unknown[] = [];
     Object.keys(options).forEach((key: string) => {
         if (options[key] && (options[key] as unknown) !== false) {
             args.push(`--${key}`);
@@ -199,7 +201,7 @@ utils.setFileNameMin = (
  * Compress a single file.
  * @param settings Settings
  */
-utils.compressSingleFile = (settings: Settings): Promise<string> | string => {
+utils.compressSingleFile = (settings: Settings): CompressorReturnType => {
     const content = determineContent(settings);
     return executeCompression(settings, content);
 };
@@ -227,14 +229,14 @@ const determineContent = (settings: Settings): string => {
  * @param content
  * @returns
  */
-const executeCompression = (
+function executeCompression(
     settings: Settings,
     content: string
-): Promise<string> | string => {
+): CompressorReturnType {
     return settings.sync
         ? utils.runSync({ settings, content })
         : utils.runAsync({ settings, content });
-};
+}
 
 /**
  * Check if the path is a valid file.
@@ -280,7 +282,11 @@ type RunSyncParameters = {
     content?: string;
     index?: number;
 };
-utils.runSync = ({ settings, content, index }: RunSyncParameters): string =>
+utils.runSync = ({
+    settings,
+    content,
+    index,
+}: RunSyncParameters): CompressorReturnType =>
     settings.compressor({
         settings,
         content,

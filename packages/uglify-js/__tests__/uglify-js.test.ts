@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import type { OptionsTest, Settings } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
 import { filesJS } from "../../../tests/files-path.ts";
 import { runOneTest, tests } from "../../../tests/fixtures.ts";
@@ -38,16 +38,14 @@ describe("Package: uglify-js", async () => {
     }
 
     test("should throw an error", async () => {
-        const options: OptionsTest = {
-            minify: {
-                compressor: uglifyJs,
-                input: filesJS.errors,
-                output: filesJS.fileJSOut,
-            },
+        const settings: Settings = {
+            compressor: uglifyJs,
+            input: filesJS.errors,
+            output: filesJS.fileJSOut,
         };
 
         try {
-            return await minify(options.minify as Settings);
+            return await minify(settings);
         } catch (err) {
             return expect(err).not.toBeNull();
         }

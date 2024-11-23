@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import type { OptionsTest, Settings } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
 import { filesCSS } from "../../../tests/files-path.ts";
 import { runOneTest, tests } from "../../../tests/fixtures.ts";
@@ -31,26 +31,24 @@ describe("Package: clean-css", async () => {
 
     test("should compress with some options", (): Promise<void> =>
         new Promise<void>((done) => {
-            const options: OptionsTest = {
-                minify: {
-                    compressor,
-                    input: filesCSS.fileCSS,
-                    output: filesCSS.fileCSSOut,
-                    options: {
-                        sourceMap: {
-                            filename: filesCSS.fileCSSSourceMaps,
-                            url: filesCSS.fileCSSSourceMaps,
-                        },
+            const settings: Settings = {
+                compressor,
+                input: filesCSS.fileCSS,
+                output: filesCSS.fileCSSOut,
+                options: {
+                    sourceMap: {
+                        filename: filesCSS.fileCSSSourceMaps,
+                        url: filesCSS.fileCSSSourceMaps,
                     },
                 },
             };
-            options.minify.callback = (err, min) => {
+            settings.callback = (err, min) => {
                 expect(err).toBeNull();
                 expect(min).not.toBeNull();
 
                 done();
             };
 
-            minify(options.minify as Settings);
+            minify(settings);
         }));
 });

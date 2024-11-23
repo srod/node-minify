@@ -1,32 +1,15 @@
-export type OptionsPossible =
-    | string
-    | boolean
-    | Record<string, string>
-    | object;
-
-export type Options = {
-    [Key: string]:
-        | string
-        | string[]
-        | boolean
-        | Record<string, OptionsPossible>;
-};
-
-export type OptionsTest = Options & {
-    minify: Partial<Settings>;
-};
-
-export type Compressor = (args: MinifierOptions) => string;
+export type CompressorReturnType = string | void | Promise<string | void>;
+export type Compressor = (args: MinifierOptions) => CompressorReturnType;
 
 export type Settings = {
     compressorLabel?: string;
     compressor: Compressor;
     sync?: boolean;
-    callback?: (err: unknown, minified?: string) => void;
+    callback?: (err: unknown, minified?: CompressorReturnType) => void;
     content?: string;
     input?: string | string[];
     output?: string;
-    options?: Options;
+    options?: Record<string, unknown>;
     option?: string;
     buffer?: number;
     type?: "js" | "css";
@@ -40,9 +23,6 @@ export type MinifierOptions = {
     content?: string;
     callback?: (err?: unknown, result?: string) => void;
     index?: number;
-    sync?: boolean;
-    input?: string | string[];
-    output?: string;
 };
 
 export type Result = {
