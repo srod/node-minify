@@ -251,7 +251,6 @@ const isValidFile = (path: string): boolean => {
  * @returns
  */
 const readFile = (path: string): string => {
-    console.log("path", path);
     if (!existsSync(path) || isValidFile(path)) {
         return readFileSync(path, "utf8");
     }
