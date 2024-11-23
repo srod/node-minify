@@ -62,7 +62,7 @@
     "@node-minify/utils": "workspace:*",
     "@node-minify/yui": "workspace:*",
     "@tsconfig/node22": "^22.0.0",
-    "@types/node": "22.9.1",
+    "@types/node": "22.9.2",
     "@vitest/coverage-v8": "1.6.0",
     "@vitest/ui": "1.6.0",
     "copyfiles": "2.4.1",
