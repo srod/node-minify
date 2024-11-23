@@ -5,8 +5,8 @@
  */
 
 import { describe } from "vitest";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import noCompress from "../src";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { noCompress } from "../src/index.ts";
 
 const compressorLabel = "no-compress";
 const compressor = noCompress;

@@ -31,7 +31,7 @@ type MinifierOptionsTerser = {
  * @param index Index of current file in array
  * @returns Minified content
  */
-export async function minifyTerser({
+export async function terser({
     settings,
     content,
     callback,

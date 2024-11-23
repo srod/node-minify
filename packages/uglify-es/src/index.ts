@@ -31,7 +31,7 @@ type MinifierOptionsUglifyES = {
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function minifyUglifyES({
+export function uglifyEs({
     settings,
     content,
     callback,

@@ -7,10 +7,10 @@
 import childProcess from "node:child_process";
 import type { OptionsTest } from "@node-minify/types";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
-import { filesJS } from "../../../tests/files-path";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import { minify } from "../../core/src";
-import yui from "../src";
+import { filesJS } from "../../../tests/files-path.ts";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { minify } from "../../core/src/index.ts";
+import { yui } from "../src/index.ts";
 
 const compressorLabel = "yui";
 const compressor = yui;

@@ -36,7 +36,7 @@ type MinifierOptionsBabel = {
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function minifyBabel({
+export function babelMinify({
     settings,
     content,
     callback,

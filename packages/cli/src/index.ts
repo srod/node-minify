@@ -7,10 +7,15 @@
 /**
  * Module dependencies.
  */
-import type { Result, Settings } from "@node-minify/types";
+import type { Compressor, Result, Settings } from "@node-minify/types";
 import chalk from "chalk";
 import { compress } from "./compress.ts";
+import { AVAILABLE_MINIFIER } from "./config.ts";
 import { spinnerError, spinnerStart, spinnerStop } from "./spinner.ts";
+
+export type SettingsWithCompressor = Omit<Settings, "compressor"> & {
+    compressor: (typeof AVAILABLE_MINIFIER)[number]["name"];
+};
 
 /**
  * Module variables.
@@ -22,15 +27,37 @@ let silence = false;
  * @param cli Settings
  */
 async function runOne(cli: SettingsWithCompressor): Promise<Result> {
-    // Load compressor dynamically
-    const { default: compressorModule } = await import(
-        `@node-minify/${cli.compressor}`
+    // Find compressor
+    const minifierDefinition = AVAILABLE_MINIFIER.find(
+        (compressor) => compressor.name === cli.compressor
     );
+
+    if (!minifierDefinition) {
+        throw new Error(`Compressor '${cli.compressor}' not found.`);
+    }
+
+    // Load minifier implementation dynamically
+    const minifierPackage = (await import(
+        `@node-minify/${cli.compressor}`
+    )) as Record<string, Compressor>;
+
+    const minifierImplementation = minifierPackage[
+        minifierDefinition.export
+    ] as Compressor;
+
+    if (
+        !minifierImplementation ||
+        typeof minifierImplementation !== "function"
+    ) {
+        throw new Error(
+            `Invalid compressor implementation for '${cli.compressor}'.`
+        );
+    }
 
     // Prepare settings
     const settings: Settings = {
         compressorLabel: cli.compressor,
-        compressor: compressorModule,
+        compressor: minifierImplementation,
         input: typeof cli.input === "string" ? cli.input.split(",") : cli.input,
         output: cli.output,
         ...(cli.option && { options: JSON.parse(cli.option) }),
@@ -52,9 +79,6 @@ async function runOne(cli: SettingsWithCompressor): Promise<Result> {
  * Run cli.
  * @param cli Settings
  */
-export type SettingsWithCompressor = Settings & {
-    compressor: string;
-};
 export async function run(cli: SettingsWithCompressor) {
     silence = !!cli.silence;
 

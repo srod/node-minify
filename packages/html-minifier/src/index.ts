@@ -41,7 +41,7 @@ const defaultOptions = {
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function minifyHTMLMinifier({
+export function htmlMinifier({
     settings,
     content,
     callback,

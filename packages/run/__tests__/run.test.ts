@@ -6,7 +6,7 @@
 
 import childProcess from "node:child_process";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
-import { runCommandLine } from "../src";
+import { runCommandLine } from "../src/index.ts";
 
 const jar = `${__dirname}/../../yui/src/binaries/yuicompressor-2.4.7.jar`;
 

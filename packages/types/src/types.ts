@@ -16,7 +16,7 @@ export type OptionsTest = Options & {
     minify: Settings;
 };
 
-type Compressor = (args: MinifierOptions) => string;
+export type Compressor = (args: MinifierOptions) => string;
 
 export type Settings = {
     compressorLabel?: string;

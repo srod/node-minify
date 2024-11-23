@@ -5,8 +5,8 @@
  */
 
 import { describe } from "vitest";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import sqwish from "../src";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { sqwish } from "../src/index.ts";
 
 const compressorLabel = "sqwish";
 const compressor = sqwish;

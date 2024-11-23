@@ -19,7 +19,7 @@ import CleanCSS from "clean-css";
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function minifyCleanCSS({
+export function cleanCss({
     settings,
     content,
     callback,

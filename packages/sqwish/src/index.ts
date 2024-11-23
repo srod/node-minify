@@ -9,7 +9,7 @@
  */
 import type { MinifierOptions } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
-import sqwish from "sqwish";
+import minify from "sqwish";
 
 /**
  * Run sqwish.
@@ -19,8 +19,13 @@ import sqwish from "sqwish";
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function minifySqwish({ settings, content, callback, index }: MinifierOptions) {
-    const contentMinified = sqwish.minify(content, settings?.options?.strict);
+export function sqwish({
+    settings,
+    content,
+    callback,
+    index,
+}: MinifierOptions) {
+    const contentMinified = minify.minify(content, settings?.options?.strict);
     if (settings && !settings.content && settings.output) {
         utils.writeFile({
             file: settings.output,

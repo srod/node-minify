@@ -9,18 +9,9 @@
 import { Command } from "commander";
 import updateNotifier from "update-notifier";
 import packageJson from "../../package.json";
+import { AVAILABLE_MINIFIER } from "../config.ts";
 import { run } from "../index.ts";
 import type { SettingsWithCompressor } from "../index.ts";
-
-const SUPPORTED_COMPRESSORS = [
-    "babel-minify",
-    "gcc",
-    "html-minifier",
-    "terser",
-    "uglify-js",
-    "uglify-es",
-    "yui",
-] as const;
 
 const DEFAULT_COMPRESSOR = "uglify-js";
 
@@ -52,8 +43,8 @@ function setupProgram(): Command {
 function displayCompressorsList() {
     console.log("  List of compressors:");
     console.log("");
-    SUPPORTED_COMPRESSORS.forEach((compressor) => {
-        console.log(`    - ${compressor}`);
+    AVAILABLE_MINIFIER.forEach((compressor) => {
+        console.log(`    - ${compressor.name}`);
     });
     console.log("");
 }

@@ -5,8 +5,8 @@
  */
 
 import { describe } from "vitest";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import csso from "../src";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { csso } from "../src/index.ts";
 
 const compressorLabel = "csso";
 const compressor = csso;

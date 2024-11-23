@@ -19,7 +19,7 @@ import jsonminify from "jsonminify";
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function minifyJsonMinify({
+export function jsonMinify({
     settings,
     content,
     callback,
