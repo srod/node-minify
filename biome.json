@@ -10,9 +10,9 @@
             "tsconfig.json",
             "**/.DS_Store",
             "**/dist/**",
-            "**/.turbo/**",
             "**/.astro/**",
-            "package.json"
+            "package.json",
+            "**/.changeset/**"
         ]
     },
     "organizeImports": {
