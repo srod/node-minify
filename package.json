@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@arethetypeswrong/cli": "^0.17.0",
-    "@changesets/cli": "2.27.11",
+    "@changesets/cli": "2.27.12",
     "@node-minify/babel-minify": "workspace:*",
     "@node-minify/clean-css": "workspace:*",
     "@node-minify/cli": "workspace:*",
