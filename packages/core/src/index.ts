@@ -8,32 +8,31 @@
  * Module dependencies.
  */
 import type { CompressorReturnType, Settings } from "@node-minify/types";
-import { compress } from "./compress.ts";
-import { compressInMemory } from "./compressInMemory.ts";
+import {
+    compressSingleFileAsync,
+    compressSingleFileSync,
+} from "@node-minify/utils";
+import { compressAsync, compressSync } from "./compress.ts";
 import { setup } from "./setup.ts";
 
 /**
  * Run node-minify.
  * @param settings Settings from user input
  */
-export async function minify(settings: Settings): Promise<string> {
-    const method = settings.content ? compressInMemory : compress;
-    settings = setup(settings);
+export async function minify(
+    settings: Settings
+): Promise<CompressorReturnType> {
+    const compressorSettings = setup(settings);
+    const method = settings.content ? compressSingleFileAsync : compressAsync;
 
     try {
-        let minified: CompressorReturnType;
-
-        if (!settings.sync) {
-            minified = await method(settings);
-        } else {
-            minified = method(settings) as string;
-        }
+        const minified = await method(compressorSettings);
 
         if (settings.callback) {
             settings.callback(null, minified);
         }
 
-        return typeof minified === "string" ? minified : "";
+        return minified;
     } catch (err) {
         if (settings.callback) {
             settings.callback(err as Error);
@@ -43,5 +42,21 @@ export async function minify(settings: Settings): Promise<string> {
 }
 
 export function minifySync(settings: Settings): string {
-    return "";
+    const compressorSettings = setup(settings);
+    const method = settings.content ? compressSingleFileSync : compressSync;
+
+    try {
+        const minified = method(compressorSettings) as string;
+
+        if (settings.callback) {
+            settings.callback(null, minified);
+        }
+
+        return minified;
+    } catch (err) {
+        if (settings.callback) {
+            settings.callback(err as Error);
+        }
+        throw err;
+    }
 }

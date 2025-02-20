@@ -10,7 +10,8 @@
 import fs from "node:fs";
 import type { CompressorReturnType, Settings } from "@node-minify/types";
 import {
-    compressSingleFile,
+    compressSingleFileAsync,
+    compressSingleFileSync,
     getContentFromFiles,
     runAsync,
     runSync,
@@ -21,23 +22,26 @@ import { mkdirp } from "mkdirp";
  * Run compressor.
  * @param settings Settings
  */
-function compress(settings: Settings): CompressorReturnType {
-    if (typeof settings.compressor !== "function") {
-        throw new Error(
-            "compressor should be a function, maybe you forgot to install the compressor"
-        );
-    }
-
+export function compressSync(settings: Settings): CompressorReturnType {
     if (settings.output) {
         createDirectory(settings.output);
     }
 
     if (Array.isArray(settings.output)) {
-        return settings.sync
-            ? compressArrayOfFilesSync(settings)
-            : compressArrayOfFilesAsync(settings);
+        return compressArrayOfFilesSync(settings);
     }
-    return compressSingleFile(settings);
+    return compressSingleFileSync(settings);
+}
+
+export function compressAsync(settings: Settings): CompressorReturnType {
+    if (settings.output) {
+        createDirectory(settings.output);
+    }
+
+    if (Array.isArray(settings.output)) {
+        return compressArrayOfFilesAsync(settings);
+    }
+    return compressSingleFileAsync(settings);
 }
 
 /**
@@ -105,8 +109,3 @@ function directoryExists(path: string): boolean {
         return false;
     }
 }
-
-/**
- * Expose `compress()`.
- */
-export { compress };

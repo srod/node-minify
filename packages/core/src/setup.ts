@@ -16,7 +16,6 @@ import fg from "fast-glob";
  * Default settings.
  */
 const defaultSettings = {
-    sync: false,
     options: {},
     buffer: 1000 * 1024,
     callback: false,
@@ -34,11 +33,11 @@ function setup(inputSettings: Settings) {
 
     // In memory
     if (settings.content) {
-        checkMandatoriesMemoryContent(inputSettings);
+        checkMandatories(inputSettings, ["compressor", "content"]);
         return settings;
     }
 
-    checkMandatories(inputSettings);
+    checkMandatories(inputSettings, ["compressor", "input", "output"]);
 
     return enhanceSettings(settings);
 }
@@ -214,19 +213,15 @@ function setPublicFolder(input: string | string[], publicFolder: string) {
  * Check if some settings are here.
  * @param settings Settings
  */
-function checkMandatories(settings: Settings) {
-    for (const field of ["compressor", "input", "output"]) {
+function checkMandatories(settings: Settings, fields: string[]) {
+    for (const field of fields) {
         mandatory(field, settings);
     }
-}
 
-/**
- * Check if some settings are here for memory content.
- * @param settings Settings
- */
-function checkMandatoriesMemoryContent(settings: Settings) {
-    for (const field of ["compressor", "content"]) {
-        mandatory(field, settings);
+    if (typeof settings.compressor !== "function") {
+        throw new Error(
+            "compressor should be a function, maybe you forgot to install the compressor"
+        );
     }
 }
 

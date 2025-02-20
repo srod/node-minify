@@ -1,5 +1,8 @@
 import { buildArgs } from "./buildArgs.ts";
-import { compressSingleFile } from "./compressSingleFile.ts";
+import {
+    compressSingleFileAsync,
+    compressSingleFileSync,
+} from "./compressSingleFile.ts";
 import { deleteFile } from "./deleteFile.ts";
 import { getContentFromFiles } from "./getContentFromFiles.ts";
 import { getFilesizeGzippedInBytes } from "./getFilesizeGzippedInBytes.ts";
@@ -14,7 +17,8 @@ import { writeFile } from "./writeFile.ts";
 
 export {
     buildArgs,
-    compressSingleFile,
+    compressSingleFileSync,
+    compressSingleFileAsync,
     deleteFile,
     getContentFromFiles,
     getFilesizeGzippedInBytes,

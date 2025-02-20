@@ -13,9 +13,18 @@ import { runSync } from "./runSync.ts";
  * Compress a single file.
  * @param settings Settings
  */
-export function compressSingleFile(settings: Settings): CompressorReturnType {
+export function compressSingleFileSync(
+    settings: Settings
+): CompressorReturnType {
     const content = determineContent(settings);
-    return executeCompression(settings, content);
+    return runSync({ settings, content });
+}
+
+export function compressSingleFileAsync(
+    settings: Settings
+): CompressorReturnType {
+    const content = determineContent(settings);
+    return runAsync({ settings, content });
 }
 
 /**
@@ -33,19 +42,4 @@ function determineContent(settings: Settings): string {
     }
 
     return "";
-}
-
-/**
- * Execute compression.
- * @param settings
- * @param content
- * @returns
- */
-function executeCompression(
-    settings: Settings,
-    content: string
-): CompressorReturnType {
-    return settings.sync
-        ? runSync({ settings, content })
-        : runAsync({ settings, content });
 }

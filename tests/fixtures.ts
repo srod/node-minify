@@ -1,6 +1,6 @@
 import type { Settings } from "@node-minify/types";
 import { expect, test } from "vitest";
-import { minify } from "../packages/core/src/index.ts";
+import { minify, minifySync } from "../packages/core/src/index.ts";
 import { filesCSS, filesHTML, filesJS, filesJSON } from "./files-path.ts";
 
 interface TestOptions {
@@ -30,24 +30,19 @@ const runOneTest = async ({
         return Promise.resolve();
     }
 
-    const testOptions = createTestOptions(options, compressor, sync);
+    const testOptions = createTestOptions(options, compressor);
     const testName = formatTestName(testOptions.it, compressorLabel);
 
-    return test(testName, async () => await executeMinifyTest(testOptions));
+    return test(testName, async () =>
+        await executeMinifyTest(testOptions, sync));
 };
 
 const createTestOptions = (
     options: TestOptions,
-    compressor: any,
-    sync: boolean
+    compressor: any
 ): TestOptions => {
     const testOptions = structuredClone(options);
     testOptions.minify.compressor = compressor;
-
-    if (sync) {
-        testOptions.minify.sync = true;
-    }
-
     return testOptions;
 };
 
@@ -58,22 +53,30 @@ const formatTestName = (
     return testString.replace("{compressor}", compressorLabel);
 };
 
-const executeMinifyTest = async (options: TestOptions): Promise<void> => {
-    const result = await runMinify(options);
+const executeMinifyTest = async (
+    options: TestOptions,
+    sync?: boolean
+): Promise<void> => {
+    const result = await runMinify(options, sync);
 
     validateMinifyResult(result);
 };
 
-function runMinify(options: TestOptions): Promise<MinifyResult> {
+function runMinify(
+    options: TestOptions,
+    sync?: boolean
+): Promise<MinifyResult> {
     return new Promise<MinifyResult>((resolve) => {
-        options.minify.callback = (err: unknown, min?: string) => {
+        options.minify.callback = (err: unknown, minified?: unknown) => {
+            const min = minified as string | undefined;
             resolve({
                 err: err instanceof Error ? err : null,
                 min: min || "",
             });
         };
 
-        minify(options.minify as Settings);
+        const method = sync ? minifySync : minify;
+        method(options.minify as Settings);
     });
 }
 
