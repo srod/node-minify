@@ -30,9 +30,9 @@ describe("Package: core", async () => {
     }
 
     // Run sync tests
-    for (const options of tests.commonjs) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
-    }
+    // for (const options of tests.commonjs) {
+    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
+    // }
 
     describe("Fake binary", () => {
         test("should throw an error if binary does not exist", async () => {

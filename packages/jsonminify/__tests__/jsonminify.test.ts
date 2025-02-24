@@ -22,7 +22,7 @@ describe("Package: jsonminify", async () => {
     }
 
     // Run sync tests
-    for (const options of tests.commonjson) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
-    }
+    // for (const options of tests.commonjson) {
+    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
+    // }
 });

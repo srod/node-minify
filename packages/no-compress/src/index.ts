@@ -24,8 +24,11 @@ export function noCompress({
     callback,
     index,
 }: MinifierOptions) {
-    // If output path is specified and content setting is not present, write to file
+    if (typeof content !== "string") {
+        throw new Error("no-compress failed: empty result");
+    }
     if (settings?.output && !settings?.content) {
+        // If output path is specified and content setting is not present, write to file
         writeFile({ file: settings.output, content, index });
     }
 

@@ -33,13 +33,17 @@ export async function terser({
         const contentMinified = await minify(content ?? "", settings?.options);
         if (
             contentMinified.map &&
-            typeof settings?.options?.sourceMap?.url === "string"
+            typeof settings?.options?.sourceMap?.url === "string" &&
+            typeof contentMinified.map === "string"
         ) {
             writeFile({
                 file: settings.options.sourceMap.url,
                 content: contentMinified.map,
                 index,
             });
+        }
+        if (typeof contentMinified.code !== "string") {
+            throw new Error("Terser failed: empty result");
         }
         if (settings && !settings.content && settings.output) {
             writeFile({

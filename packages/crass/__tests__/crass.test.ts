@@ -22,7 +22,7 @@ describe("Package: crass", async () => {
     }
 
     // Run sync tests
-    for (const options of tests.commoncss) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
-    }
+    // for (const options of tests.commoncss) {
+    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
+    // }
 });

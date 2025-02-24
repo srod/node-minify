@@ -88,6 +88,44 @@ describe("Package: run", () => {
                 const spy = vi.spyOn(command, "callback");
                 runCommandLine(command as unknown as RunCommandLineParams);
             }));
+        test("should handle empty data input", (): Promise<void> =>
+            new Promise<void>((done) => {
+                const command: Command = {
+                    args: ["-jar", "-Xss2048k", jar, "--type", "js"],
+                    data: "",
+                    settings: {
+                        sync: false,
+                    },
+                    callback: (err?: unknown, result?: string) => {
+                        expect(spy).toHaveBeenCalled();
+                        expect(err).toBeNull();
+                        expect(result).toBe("");
+                        done();
+                    },
+                };
+                const spy = vi.spyOn(command, "callback");
+                runCommandLine(command as unknown as RunCommandLineParams);
+            }));
+
+        test("should handle maxBuffer setting in async mode", (): Promise<void> =>
+            new Promise<void>((done) => {
+                const command: Command = {
+                    args: ["-jar", "-Xss2048k", jar, "--type", "js"],
+                    data: 'console.log("foo");',
+                    settings: {
+                        sync: false,
+                        buffer: 2000 * 1024,
+                    },
+                    callback: (err?: unknown, result?: string) => {
+                        expect(spy).toHaveBeenCalled();
+                        expect(err).toBeNull();
+                        expect(result).toBeDefined();
+                        done();
+                    },
+                };
+                const spy = vi.spyOn(command, "callback");
+                runCommandLine(command as unknown as RunCommandLineParams);
+            }));
     });
 
     describe("Create sync errors", () => {

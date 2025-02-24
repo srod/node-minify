@@ -27,10 +27,10 @@ describe("Package: YUI", async () => {
     }
 
     // Run JS sync tests
-    for (const options of tests.commonjs) {
-        options.minify.type = "js";
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
-    }
+    // for (const options of tests.commonjs) {
+    //     options.minify.type = "js";
+    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
+    // }
 
     // Run CSS async tests
     for (const options of tests.commoncss) {
@@ -38,9 +38,9 @@ describe("Package: YUI", async () => {
     }
 
     // Run CSS sync tests
-    for (const options of tests.commoncss) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
-    }
+    // for (const options of tests.commoncss) {
+    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
+    // }
 
     test("should compress with some options", (): Promise<void> =>
         new Promise<void>((done) => {

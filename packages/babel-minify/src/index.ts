@@ -56,16 +56,22 @@ export function babelMinify({
     }
 
     const contentMinified = transform(content ?? "", babelOptions);
+    const code = contentMinified.code;
+
+    if (typeof code !== "string") {
+        throw new Error("Babel minification failed: empty result");
+    }
+
     if (settings && !settings.content && settings.output) {
         settings.output &&
             writeFile({
                 file: settings.output,
-                content: contentMinified.code,
+                content: code,
                 index,
             });
     }
     if (callback) {
-        return callback(null, contentMinified.code);
+        return callback(null, code);
     }
-    return contentMinified.code;
+    return code;
 }

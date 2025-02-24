@@ -11,6 +11,7 @@ import { runCommandLine } from "@node-minify/run";
 import type { MinifierOptions } from "@node-minify/types";
 import { buildArgs, writeFile } from "@node-minify/utils";
 import compilerPath from "google-closure-compiler-java";
+import type { BuildArgsOptions } from "../../utils/src/types.ts";
 
 // the allowed flags, taken from https://github.com/google/closure-compiler/wiki/Flags-and-Options
 const allowedFlags = [
@@ -55,6 +56,9 @@ export function gcc({ settings, content, callback, index }: MinifierOptions) {
                     return callback(err);
                 }
                 throw err;
+            }
+            if (typeof content !== "string") {
+                throw new Error("Google Closure Compiler failed: empty result");
             }
             if (settings && !settings.content && settings.output) {
                 writeFile({ file: settings.output, content, index });
@@ -101,5 +105,16 @@ function applyOptions(flags: Flags, options?: Record<string, unknown>): Flags {
  */
 
 function gccCommand(options: Record<string, unknown>) {
-    return ["-jar", compilerPath].concat(buildArgs(options ?? {}));
+    const buildArgsOptions: BuildArgsOptions = {};
+    Object.entries(options).forEach(([key, value]) => {
+        if (
+            typeof value === "string" ||
+            typeof value === "number" ||
+            typeof value === "boolean" ||
+            value === undefined
+        ) {
+            buildArgsOptions[key] = value;
+        }
+    });
+    return ["-jar", compilerPath].concat(buildArgs(buildArgsOptions));
 }

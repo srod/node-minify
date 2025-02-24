@@ -21,9 +21,10 @@ import type { Settings } from "@node-minify/types";
 export type RunCommandLineParams = {
     args: string[];
     data: string;
-    settings: Settings;
-    callback?: (err: unknown, minified?: string) => void;
+    settings?: Settings;
+    callback?: (err: Error | null, minified?: string) => void;
 };
+
 export function runCommandLine({
     args,
     data,
@@ -50,8 +51,9 @@ export function runCommandLine({
 type RunAsyncParams = {
     data: string;
     args: string[];
-    callback?: (err: unknown, minified?: string) => void;
+    callback?: (err: Error | null, minified?: string) => void;
 };
+
 function runAsync({ data, args, callback }: RunAsyncParams) {
     let stdout = "";
     let stderr = "";
@@ -60,27 +62,33 @@ function runAsync({ data, args, callback }: RunAsyncParams) {
         stdio: "pipe",
     });
 
-    child.on("error", console.log.bind(console, "child"));
-    child.stdin.on("error", console.log.bind(console, "child.stdin"));
-    child.stdout.on("error", console.log.bind(console, "child.stdout"));
-    child.stderr.on("error", console.log.bind(console, "child.stderr"));
+    const handleError = (source: string) => (error: Error) => {
+        console.error(`Error in ${source}:`, error);
+    };
 
-    child.on("exit", (code) => {
+    child.on("error", handleError("child"));
+    child.stdin?.on("error", handleError("child.stdin"));
+    child.stdout?.on("error", handleError("child.stdout"));
+    child.stderr?.on("error", handleError("child.stderr"));
+
+    child.on("exit", (code: number | null) => {
         if (code !== 0) {
-            return callback?.(new Error(stderr));
+            return callback?.(
+                new Error(stderr || `Process exited with code ${code}`)
+            );
         }
 
         return callback?.(null, stdout);
     });
 
-    child.stdout.on("data", (chunk) => {
+    child.stdout?.on("data", (chunk: Buffer) => {
         stdout += chunk;
     });
-    child.stderr.on("data", (chunk) => {
+    child.stderr?.on("data", (chunk: Buffer) => {
         stderr += chunk;
     });
 
-    child.stdin.end(data);
+    child.stdin?.end(data);
 }
 
 /**
@@ -93,11 +101,12 @@ function runAsync({ data, args, callback }: RunAsyncParams) {
  * @returns Minified content
  */
 type RunSyncParams = {
-    settings: Settings;
     data: string;
     args: string[];
-    callback?: (err: unknown, minified?: string) => void;
+    settings?: Settings;
+    callback?: (err: Error | null, minified?: string) => void;
 };
+
 function runSync({ settings, data, args, callback }: RunSyncParams) {
     try {
         const child = childProcess.spawnSync("java", args, {
@@ -110,7 +119,9 @@ function runSync({ settings, data, args, callback }: RunSyncParams) {
         const code = child.status;
 
         if (code !== 0) {
-            return callback?.(new Error(stderr));
+            return callback?.(
+                new Error(stderr || `Process exited with code ${code}`)
+            );
         }
 
         return callback?.(null, stdout);

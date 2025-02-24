@@ -4,19 +4,30 @@
  * MIT Licensed
  */
 
+import type { BuildArgsOptions } from "./types.ts";
+import { ValidationError } from "./types.ts";
+
 /**
  * Builds arguments array based on an object.
- * @param options
+ * @param options Object containing command line arguments
+ * @returns Array of command line arguments
+ * @throws {ValidationError} If options is null or undefined
+ * @example
+ * buildArgs({ compress: true, output: 'file.min.js' })
+ * // returns ['--compress', '--output', 'file.min.js']
  */
-export function buildArgs(options: Record<string, unknown>): any {
-    const args: unknown[] = [];
-    Object.keys(options).forEach((key: string) => {
-        if (options[key] && (options[key] as unknown) !== false) {
-            args.push(`--${key}`);
-        }
+export function buildArgs(options: BuildArgsOptions): string[] {
+    if (!options || typeof options !== 'object') {
+        throw new ValidationError('Options must be a valid object');
+    }
 
-        if (options[key] && options[key] !== true) {
-            args.push(options[key]);
+    const args: string[] = [];
+    Object.entries(options).forEach(([key, value]) => {
+        if (value !== undefined && value !== false) {
+            args.push(`--${key}`);
+            if (value !== true) {
+                args.push(String(value));
+            }
         }
     });
 

@@ -4,18 +4,42 @@
  * MIT Licensed
  */
 
-import { createReadStream } from "node:fs";
+import { createReadStream, existsSync } from "node:fs";
+import { FileOperationError } from "./types.ts";
 import { prettyBytes } from "./prettyBytes.ts";
+import { isValidFile } from "./isValidFile.ts";
 
 /**
  * Get the gzipped file size in bytes.
- * @param file File name
+ * @param file Path to the file
+ * @returns Formatted file size string
+ * @throws {FileOperationError} If file doesn't exist or operation fails
+ * @example
+ * const size = await getFilesizeGzippedInBytes('file.js')
+ * console.log(size) // '1.5 kB'
  */
 export async function getFilesizeGzippedInBytes(file: string): Promise<string> {
-    const { gzipSizeStream } = await import("gzip-size");
-    const source = createReadStream(file);
-    const size = await new Promise<number>((resolve) => {
-        source.pipe(gzipSizeStream()).on("gzip-size", resolve);
-    });
-    return prettyBytes(size);
+    try {
+        if (!existsSync(file)) {
+            throw new Error('File does not exist');
+        }
+        
+        if (!isValidFile(file)) {
+            throw new Error('Path is not a valid file');
+        }
+
+        const { gzipSizeStream } = await import("gzip-size");
+        const source = createReadStream(file);
+        
+        const size = await new Promise<number>((resolve, reject) => {
+            source
+                .pipe(gzipSizeStream())
+                .on("gzip-size", resolve)
+                .on("error", reject);
+        });
+
+        return prettyBytes(size);
+    } catch (error) {
+        throw new FileOperationError('get gzipped size of', file, error as Error);
+    }
 }

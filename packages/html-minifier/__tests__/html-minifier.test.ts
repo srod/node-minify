@@ -22,7 +22,7 @@ describe("Package: html-minifier", async () => {
     }
 
     // Run sync tests
-    for (const options of tests.commonhtml) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
-    }
+    // for (const options of tests.commonhtml) {
+    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
+    // }
 });

@@ -12,6 +12,7 @@ import { runCommandLine } from "@node-minify/run";
 import type { MinifierOptions } from "@node-minify/types";
 import { buildArgs, writeFile } from "@node-minify/utils";
 import dirname from "es-dirname";
+import type { BuildArgsOptions } from "../../utils/src/types.ts";
 
 /**
  * Module variables.
@@ -44,6 +45,9 @@ export function yui({ settings, content, callback, index }: MinifierOptions) {
                 }
                 throw err;
             }
+            if (typeof content !== "string") {
+                throw new Error("YUI Compressor failed: empty result");
+            }
             if (settings && !settings.content && settings.output) {
                 writeFile({ file: settings.output, content, index });
             }
@@ -59,7 +63,18 @@ export function yui({ settings, content, callback, index }: MinifierOptions) {
  * YUI Compressor CSS command line.
  */
 function yuiCommand(type: "js" | "css", options: Record<string, unknown>) {
+    const buildArgsOptions: BuildArgsOptions = {};
+    Object.entries(options).forEach(([key, value]) => {
+        if (
+            typeof value === "string" ||
+            typeof value === "number" ||
+            typeof value === "boolean" ||
+            value === undefined
+        ) {
+            buildArgsOptions[key] = value;
+        }
+    });
     return ["-jar", "-Xss2048k", binYui, "--type", type].concat(
-        buildArgs(options)
+        buildArgs(buildArgsOptions)
     );
 }

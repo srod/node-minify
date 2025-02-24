@@ -5,12 +5,22 @@
  */
 
 import { existsSync, lstatSync } from "node:fs";
+import { FileOperationError } from "./types.ts";
 
 /**
  * Check if the path is a valid file.
- * @param path
- * @returns
+ * @param path Path to check
+ * @returns true if path exists and is a file, false otherwise
+ * @throws {FileOperationError} If filesystem operations fail
+ * @example
+ * if (isValidFile('path/to/file.js')) {
+ *   // do something
+ * }
  */
 export function isValidFile(path: string): boolean {
-    return existsSync(path) && !lstatSync(path).isDirectory();
+    try {
+        return existsSync(path) && !lstatSync(path).isDirectory();
+    } catch (error) {
+        throw new FileOperationError('validate', path, error as Error);
+    }
 }

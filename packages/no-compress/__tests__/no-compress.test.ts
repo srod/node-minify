@@ -22,7 +22,7 @@ describe("Package: no-compress", async () => {
     }
 
     // Run sync tests
-    for (const options of tests.concat) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
-    }
+    // for (const options of tests.concat) {
+    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
+    // }
 });

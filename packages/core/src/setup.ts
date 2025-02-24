@@ -33,11 +33,11 @@ function setup(inputSettings: Settings) {
 
     // In memory
     if (settings.content) {
-        checkMandatories(inputSettings, ["compressor", "content"]);
+        validateMandatoryFields(inputSettings, ["compressor", "content"]);
         return settings;
     }
 
-    checkMandatories(inputSettings, ["compressor", "input", "output"]);
+    validateMandatoryFields(inputSettings, ["compressor", "input", "output"]);
 
     return enhanceSettings(settings);
 }
@@ -180,7 +180,9 @@ function wildcardsArray(input: string[], publicFolder?: string) {
  * @param publicFolder Path to the public folder
  */
 function getFilesFromWildcards(input: string, publicFolder?: string) {
-    return input.includes("*") ? fg.globSync(`${publicFolder}${input}`) : [];
+    return input.includes("*")
+        ? fg.globSync(`${publicFolder ?? ""}${input}`)
+        : [];
 }
 
 /**
@@ -213,7 +215,7 @@ function setPublicFolder(input: string | string[], publicFolder: string) {
  * Check if some settings are here.
  * @param settings Settings
  */
-function checkMandatories(settings: Settings, fields: string[]) {
+function validateMandatoryFields(settings: Settings, fields: string[]) {
     for (const field of fields) {
         mandatory(field, settings);
     }

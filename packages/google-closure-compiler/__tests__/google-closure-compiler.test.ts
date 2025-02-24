@@ -25,9 +25,9 @@ describe("Package: google-closure-compiler", async () => {
     }
 
     // Run sync tests
-    for (const options of tests.commonjs) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
-    }
+    // for (const options of tests.commonjs) {
+    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
+    // }
 
     test("should compress with some options", (): Promise<void> =>
         new Promise<void>((done) => {

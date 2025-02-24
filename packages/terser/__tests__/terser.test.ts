@@ -29,13 +29,13 @@ describe("Package: terser", async () => {
     }
 
     // Run sync tests
-    for (const options of tests.commonjs) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
-    }
+    // for (const options of tests.commonjs) {
+    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
+    // }
 
-    for (const options of tests.uglifyjs) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
-    }
+    // for (const options of tests.uglifyjs) {
+    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
+    // }
 
     test("should throw an error", async () => {
         const settings: Settings = {

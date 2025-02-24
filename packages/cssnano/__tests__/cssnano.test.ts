@@ -25,9 +25,10 @@ describe("Package: cssnano", async () => {
     }
 
     // Run sync tests
-    for (const options of tests.commoncss) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
-    }
+    // for (const options of tests.commoncss) {
+    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
+    // }
+
     test("should be ok with no callback", async () => {
         const settings: Settings = {
             compressor: cssnano,

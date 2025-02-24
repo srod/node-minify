@@ -16,6 +16,18 @@ import { compressAsync, compressSync } from "./compress.ts";
 import { setup } from "./setup.ts";
 
 /**
+ * Handle errors for callback and throw.
+ * @param err Error
+ * @param callback Callback function
+ */
+function handleError(err: unknown, callback?: (err: Error) => void) {
+    if (callback) {
+        callback(err as Error);
+    }
+    throw err;
+}
+
+/**
  * Run node-minify.
  * @param settings Settings from user input
  */
@@ -27,17 +39,12 @@ export async function minify(
 
     try {
         const minified = await method(compressorSettings);
-
         if (settings.callback) {
             settings.callback(null, minified);
         }
-
         return minified;
     } catch (err) {
-        if (settings.callback) {
-            settings.callback(err as Error);
-        }
-        throw err;
+        handleError(err, settings.callback);
     }
 }
 
@@ -47,16 +54,12 @@ export function minifySync(settings: Settings): string {
 
     try {
         const minified = method(compressorSettings) as string;
-
         if (settings.callback) {
             settings.callback(null, minified);
         }
-
         return minified;
     } catch (err) {
-        if (settings.callback) {
-            settings.callback(err as Error);
-        }
+        handleError(err, settings.callback);
         throw err;
     }
 }
