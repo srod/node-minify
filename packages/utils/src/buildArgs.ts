@@ -17,8 +17,8 @@ import { ValidationError } from "./types.ts";
  * // returns ['--compress', '--output', 'file.min.js']
  */
 export function buildArgs(options: BuildArgsOptions): string[] {
-    if (!options || typeof options !== 'object') {
-        throw new ValidationError('Options must be a valid object');
+    if (!options || typeof options !== "object") {
+        throw new ValidationError("Options must be a valid object");
     }
 
     const args: string[] = [];

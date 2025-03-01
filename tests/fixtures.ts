@@ -1,6 +1,6 @@
 import type { Settings } from "@node-minify/types";
 import { expect, test } from "vitest";
-import { minify, minifySync } from "../packages/core/src/index.ts";
+import { minify } from "../packages/core/src/index.ts";
 import { filesCSS, filesHTML, filesJS, filesJSON } from "./files-path.ts";
 
 interface TestOptions {
@@ -12,7 +12,6 @@ interface TestConfig {
     options: TestOptions;
     compressorLabel: string;
     compressor: any;
-    sync?: boolean;
 }
 
 interface MinifyResult {
@@ -24,7 +23,6 @@ const runOneTest = async ({
     options,
     compressorLabel,
     compressor,
-    sync = false,
 }: TestConfig): Promise<void> => {
     if (!options) {
         return Promise.resolve();
@@ -33,8 +31,7 @@ const runOneTest = async ({
     const testOptions = createTestOptions(options, compressor);
     const testName = formatTestName(testOptions.it, compressorLabel);
 
-    return test(testName, async () =>
-        await executeMinifyTest(testOptions, sync));
+    return test(testName, async () => await executeMinifyTest(testOptions));
 };
 
 const createTestOptions = (
@@ -53,19 +50,13 @@ const formatTestName = (
     return testString.replace("{compressor}", compressorLabel);
 };
 
-const executeMinifyTest = async (
-    options: TestOptions,
-    sync?: boolean
-): Promise<void> => {
-    const result = await runMinify(options, sync);
+const executeMinifyTest = async (options: TestOptions): Promise<void> => {
+    const result = await runMinify(options);
 
     validateMinifyResult(result);
 };
 
-function runMinify(
-    options: TestOptions,
-    sync?: boolean
-): Promise<MinifyResult> {
+function runMinify(options: TestOptions): Promise<MinifyResult> {
     return new Promise<MinifyResult>((resolve) => {
         options.minify.callback = (err: unknown, minified?: unknown) => {
             const min = minified as string | undefined;
@@ -75,8 +66,7 @@ function runMinify(
             });
         };
 
-        const method = sync ? minifySync : minify;
-        method(options.minify as Settings);
+        minify(options.minify as Settings);
     });
 }
 

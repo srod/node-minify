@@ -1,16 +1,13 @@
 {
   "extends": "@tsconfig/node22/tsconfig.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "verbatimModuleSyntax": true,
     "allowImportingTsExtensions": true,
     "noEmit": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
     "declaration": true,
     "declarationMap": true
   },
-  "include": ["**/packages/**/*.ts", "./types.d.ts"],
-  "exclude": ["node_modules", "**/__tests__/**", "**/dist/**"]
+  "exclude": ["node_modules", "dist", "__tests__"]
 }

@@ -6,25 +6,15 @@
 
 import type { CompressorReturnType, Settings } from "@node-minify/types";
 import { getContentFromFiles } from "./getContentFromFiles.ts";
-import { runAsync } from "./runAsync.ts";
-import { runSync } from "./runSync.ts";
+import { run } from "./run.ts";
 
 /**
  * Compress a single file.
  * @param settings Settings
  */
-export function compressSingleFileSync(
-    settings: Settings
-): CompressorReturnType {
+export function compressSingleFile(settings: Settings): CompressorReturnType {
     const content = determineContent(settings);
-    return runSync({ settings, content });
-}
-
-export function compressSingleFileAsync(
-    settings: Settings
-): CompressorReturnType {
-    const content = determineContent(settings);
-    return runAsync({ settings, content });
+    return run({ settings, content });
 }
 
 /**

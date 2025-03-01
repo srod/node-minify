@@ -20,27 +20,16 @@ describe("Package: YUI", async () => {
         throw new Error("Tests not found");
     }
 
-    // Run JS async tests
+    // Run JS tests
     for (const options of tests.commonjs) {
         options.minify.type = "js";
         await runOneTest({ options, compressorLabel, compressor });
     }
 
-    // Run JS sync tests
-    // for (const options of tests.commonjs) {
-    //     options.minify.type = "js";
-    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
-    // }
-
-    // Run CSS async tests
+    // Run CSS tests
     for (const options of tests.commoncss) {
         await runOneTest({ options, compressorLabel, compressor });
     }
-
-    // Run CSS sync tests
-    // for (const options of tests.commoncss) {
-    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
-    // }
 
     test("should compress with some options", (): Promise<void> =>
         new Promise<void>((done) => {
@@ -84,31 +73,7 @@ describe("Package: YUI", async () => {
         }
     });
 
-    describe("Create sync errors", () => {
-        beforeAll(() => {
-            const spy = vi.spyOn(childProcess, "spawnSync");
-            spy.mockImplementation(() => {
-                throw new Error();
-            });
-        });
-        test("should callback an error on spawnSync", () => {
-            const settings: Settings = {
-                compressor: yui,
-                input: filesJS.oneFile,
-                output: filesJS.fileJSOut,
-                sync: true,
-                options: {
-                    fake: true,
-                },
-            };
-            return expect(minify(settings)).rejects.toThrow();
-        });
-        afterAll(() => {
-            vi.restoreAllMocks();
-        });
-    });
-
-    describe("Create async errors", () => {
+    describe("Create errors", () => {
         beforeAll(() => {
             const spy = vi.spyOn(childProcess, "spawn");
             spy.mockImplementation(() => {
@@ -120,7 +85,6 @@ describe("Package: YUI", async () => {
                 compressor: yui,
                 input: filesJS.oneFile,
                 output: filesJS.fileJSOut,
-                sync: false,
                 options: {
                     fake: true,
                 },

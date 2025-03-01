@@ -7,7 +7,7 @@
 import type { Settings } from "@node-minify/types";
 import { ValidationError } from "./types.ts";
 
-interface RunAsyncParameters {
+interface RunParameters {
     settings: Settings;
     content?: string;
     index?: number;
@@ -25,11 +25,11 @@ interface RunAsyncParameters {
  *   content: 'function foo() {}'
  * })
  */
-export async function runAsync({
+export async function run({
     settings,
     content,
     index,
-}: RunAsyncParameters): Promise<string> {
+}: RunParameters): Promise<string> {
     if (!settings) {
         throw new ValidationError("Settings must be provided");
     }

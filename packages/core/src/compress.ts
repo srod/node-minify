@@ -10,11 +10,9 @@
 import fs from "node:fs";
 import type { CompressorReturnType, Settings } from "@node-minify/types";
 import {
-    compressSingleFileAsync,
-    compressSingleFileSync,
+    compressSingleFile,
     getContentFromFiles,
-    runAsync,
-    runSync,
+    run,
 } from "@node-minify/utils";
 import { mkdirp } from "mkdirp";
 
@@ -22,54 +20,27 @@ import { mkdirp } from "mkdirp";
  * Run compressor.
  * @param settings Settings
  */
-export function compressSync(settings: Settings): CompressorReturnType {
+export function compress(settings: Settings): CompressorReturnType {
     if (settings.output) {
         createDirectory(settings.output);
     }
 
     if (Array.isArray(settings.output)) {
-        return compressArrayOfFilesSync(settings);
+        return compressArrayOfFiles(settings);
     }
-    return compressSingleFileSync(settings);
-}
-
-export function compressAsync(settings: Settings): CompressorReturnType {
-    if (settings.output) {
-        createDirectory(settings.output);
-    }
-
-    if (Array.isArray(settings.output)) {
-        return compressArrayOfFilesAsync(settings);
-    }
-    return compressSingleFileAsync(settings);
+    return compressSingleFile(settings);
 }
 
 /**
- * Compress an array of files in sync.
+ * Compress an array of files.
  * @param settings Settings
  */
-function compressArrayOfFilesSync(settings: Settings): any {
-    return (
-        Array.isArray(settings.input) &&
-        settings.input.forEach((input, index) => {
-            const content = getContentFromFiles(input);
-            return runSync({ settings, content, index });
-        })
-    );
-}
-
-/**
- * Compress an array of files in async.
- * @param settings Settings
- */
-function compressArrayOfFilesAsync(settings: Settings): Promise<string | void> {
+function compressArrayOfFiles(settings: Settings): Promise<string | void> {
     let sequence: Promise<string | void> = Promise.resolve();
     Array.isArray(settings.input) &&
         settings.input.forEach((input, index) => {
             const content = getContentFromFiles(input);
-            sequence = sequence.then(() =>
-                runAsync({ settings, content, index })
-            );
+            sequence = sequence.then(() => run({ settings, content, index }));
         });
     return sequence;
 }

@@ -17,10 +17,10 @@ import { FileOperationError } from "./types.ts";
 export function deleteFile(file: string): void {
     try {
         if (!existsSync(file)) {
-            throw new Error('File does not exist');
+            throw new Error("File does not exist");
         }
         unlinkSync(file);
     } catch (error) {
-        throw new FileOperationError('delete', file, error as Error);
+        throw new FileOperationError("delete", file, error as Error);
     }
 }

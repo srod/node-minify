@@ -10,6 +10,13 @@
 import childProcess from "node:child_process";
 import type { Settings } from "@node-minify/types";
 
+export type RunCommandLineParams = {
+    args: string[];
+    data: string;
+    settings?: Settings;
+    callback?: (err: Error | null, minified?: string) => void;
+};
+
 /**
  * Run the command line with spawn.
  * @param args Arguments
@@ -18,22 +25,13 @@ import type { Settings } from "@node-minify/types";
  * @param callback Callback
  * @returns Minified content
  */
-export type RunCommandLineParams = {
-    args: string[];
-    data: string;
-    settings?: Settings;
-    callback?: (err: Error | null, minified?: string) => void;
-};
-
 export function runCommandLine({
     args,
     data,
     settings,
     callback,
 }: RunCommandLineParams) {
-    const runner = settings?.sync ? runSync : runAsync;
-
-    return runner({
+    return run({
         data,
         args,
         callback,
@@ -41,20 +39,20 @@ export function runCommandLine({
     });
 }
 
-/**
- * Exec command as async.
- * @param data Data to minify
- * @param args Arguments
- * @param callback Callback
- * @returns Minified content
- */
-type RunAsyncParams = {
+type RunParams = {
     data: string;
     args: string[];
     callback?: (err: Error | null, minified?: string) => void;
 };
 
-function runAsync({ data, args, callback }: RunAsyncParams) {
+/**
+ * Exec command.
+ * @param data Data to minify
+ * @param args Arguments
+ * @param callback Callback
+ * @returns Minified content
+ */
+function run({ data, args, callback }: RunParams) {
     let stdout = "";
     let stderr = "";
 
@@ -89,43 +87,4 @@ function runAsync({ data, args, callback }: RunAsyncParams) {
     });
 
     child.stdin?.end(data);
-}
-
-/**
- * Exec command as sync.
- *
- * @param settings Settings
- * @param data Data to minify
- * @param args Arguments
- * @param callback Callback
- * @returns Minified content
- */
-type RunSyncParams = {
-    data: string;
-    args: string[];
-    settings?: Settings;
-    callback?: (err: Error | null, minified?: string) => void;
-};
-
-function runSync({ settings, data, args, callback }: RunSyncParams) {
-    try {
-        const child = childProcess.spawnSync("java", args, {
-            input: data,
-            stdio: "pipe",
-            maxBuffer: settings?.buffer ?? 1000 * 1024, // Default 1MB if not specified
-        });
-        const stdout = child.stdout?.toString() ?? "";
-        const stderr = child.stderr?.toString() ?? "";
-        const code = child.status;
-
-        if (code !== 0) {
-            return callback?.(
-                new Error(stderr || `Process exited with code ${code}`)
-            );
-        }
-
-        return callback?.(null, stdout);
-    } catch (err: unknown) {
-        return callback?.(err instanceof Error ? err : new Error(String(err)));
-    }
 }

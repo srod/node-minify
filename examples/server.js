@@ -20,7 +20,6 @@ minify({
     compressor: gcc,
     content: contentJS,
     output: "public/js-dist/gcc-contentJS.js",
-    sync: true,
     callback: (err, min) => {
         console.log("contentJS GCC");
         console.log(err);
@@ -28,18 +27,17 @@ minify({
     },
 });
 
-console.log("sync 1");
 minify({
     compressor: yui,
     input: ["public/js/sample.js", "public/js/sample2.js"],
     output: "public/js-dist/yui-publicfolder-concat.js",
     type: "js",
-    sync: true,
-    callback: (err, value) => {
-        console.log("sync 2", value);
+    callback: (err, min) => {
+        console.log("yui concat");
+        console.log(err);
+        //console.log(min);
     },
 });
-console.log("sync 3");
 
 minify({
     compressor: terser,
@@ -167,7 +165,6 @@ minify({
     compressor: gcc,
     input: "public/js/**/*.js",
     output: "public/js-dist/gcc-wildcards.js",
-    sync: true,
     callback: (err, min) => {
         console.log("wildcards GCC");
         console.log(err);

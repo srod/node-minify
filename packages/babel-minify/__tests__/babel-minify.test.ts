@@ -29,24 +29,4 @@ describe("Package: babel-minify", async () => {
     for (const options of tests.babelMinify) {
         await runOneTest({ options, compressorLabel, compressor });
     }
-
-    // Run commonjs sync tests
-    for (const options of tests.commonjs) {
-        await runOneTest({
-            options,
-            compressorLabel,
-            compressor,
-            sync: true,
-        });
-    }
-
-    // Run babelMinify sync tests
-    for (const options of tests.babelMinify) {
-        await runOneTest({
-            options,
-            compressorLabel,
-            compressor,
-            sync: true,
-        });
-    }
 });

@@ -23,29 +23,36 @@ interface WriteFileParams {
  * writeFile({ file: 'output.js', content: 'console.log("Hello")' })
  * writeFile({ file: ['file1.js', 'file2.js'], content: 'shared content', index: 0 })
  */
-export function writeFile({ file, content, index }: WriteFileParams): string | Buffer {
+export function writeFile({
+    file,
+    content,
+    index,
+}: WriteFileParams): string | Buffer {
     try {
         if (!file) {
-            throw new ValidationError('No target file provided');
+            throw new ValidationError("No target file provided");
         }
 
         if (!content) {
-            throw new ValidationError('No content provided');
+            throw new ValidationError("No content provided");
         }
 
-        const targetFile = index !== undefined ? 
-            (Array.isArray(file) ? file[index] : file) : 
-            file;
+        const targetFile =
+            index !== undefined
+                ? Array.isArray(file)
+                    ? file[index]
+                    : file
+                : file;
 
-        if (typeof targetFile !== 'string') {
-            throw new ValidationError('Invalid target file path');
+        if (typeof targetFile !== "string") {
+            throw new ValidationError("Invalid target file path");
         }
 
         const shouldWrite =
             !existsSync(targetFile) || !lstatSync(targetFile).isDirectory();
 
         if (!shouldWrite) {
-            throw new Error('Target path exists and is a directory');
+            throw new Error("Target path exists and is a directory");
         }
 
         writeFileSync(targetFile, content, "utf8");
@@ -54,8 +61,9 @@ export function writeFile({ file, content, index }: WriteFileParams): string | B
         if (error instanceof ValidationError) {
             throw error;
         }
-        throw new FileOperationError('write to', 
-            typeof file === 'string' ? file : 'multiple files', 
+        throw new FileOperationError(
+            "write to",
+            typeof file === "string" ? file : "multiple files",
             error as Error
         );
     }

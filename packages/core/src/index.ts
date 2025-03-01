@@ -8,11 +8,8 @@
  * Module dependencies.
  */
 import type { CompressorReturnType, Settings } from "@node-minify/types";
-import {
-    compressSingleFileAsync,
-    compressSingleFileSync,
-} from "@node-minify/utils";
-import { compressAsync, compressSync } from "./compress.ts";
+import { compressSingleFile } from "@node-minify/utils";
+import { compress } from "./compress.ts";
 import { setup } from "./setup.ts";
 
 /**
@@ -35,7 +32,7 @@ export async function minify(
     settings: Settings
 ): Promise<CompressorReturnType> {
     const compressorSettings = setup(settings);
-    const method = settings.content ? compressSingleFileAsync : compressAsync;
+    const method = settings.content ? compressSingleFile : compress;
 
     try {
         const minified = await method(compressorSettings);
@@ -45,21 +42,5 @@ export async function minify(
         return minified;
     } catch (err) {
         handleError(err, settings.callback);
-    }
-}
-
-export function minifySync(settings: Settings): string {
-    const compressorSettings = setup(settings);
-    const method = settings.content ? compressSingleFileSync : compressSync;
-
-    try {
-        const minified = method(compressorSettings) as string;
-        if (settings.callback) {
-            settings.callback(null, minified);
-        }
-        return minified;
-    } catch (err) {
-        handleError(err, settings.callback);
-        throw err;
     }
 }

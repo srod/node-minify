@@ -11,8 +11,8 @@
 import { runCommandLine } from "@node-minify/run";
 import type { MinifierOptions } from "@node-minify/types";
 import { buildArgs, writeFile } from "@node-minify/utils";
+import type { BuildArgsOptions } from "@node-minify/utils";
 import dirname from "es-dirname";
-import type { BuildArgsOptions } from "../../utils/src/types.ts";
 
 /**
  * Module variables.

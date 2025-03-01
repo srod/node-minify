@@ -21,6 +21,6 @@ export function isValidFile(path: string): boolean {
     try {
         return existsSync(path) && !lstatSync(path).isDirectory();
     } catch (error) {
-        throw new FileOperationError('validate', path, error as Error);
+        throw new FileOperationError("validate", path, error as Error);
     }
 }
