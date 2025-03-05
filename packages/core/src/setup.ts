@@ -7,10 +7,16 @@
 /**
  * Module dependencies.
  */
+import os from "node:os";
 import path from "node:path";
 import type { Settings } from "@node-minify/types";
 import { setFileNameMin } from "@node-minify/utils";
 import fg from "fast-glob";
+
+/**
+ * Check if the platform is Windows
+ */
+const IS_WINDOWS_PLATFORM = os.platform() === "win32";
 
 /**
  * Default settings.
@@ -150,13 +156,15 @@ function wildcardsString(input: string, publicFolder?: string) {
  * @param publicFolder Path to the public folder
  */
 function wildcardsArray(input: string[], publicFolder?: string) {
-    // Initialize inputWithPublicFolder with default value
-    let inputWithPublicFolder = input;
-
-    if (publicFolder) {
-        // Add public folder prefix to all paths
-        inputWithPublicFolder = input.map((item) => publicFolder + item);
-    }
+    // Convert input paths to patterns with public folder prefix
+    const inputWithPublicFolder = input.map((item) => {
+        console.log(
+            1,
+            fg.convertPathToPattern(publicFolder ? publicFolder + item : item)
+        );
+        const input2 = publicFolder ? publicFolder + item : item;
+        return IS_WINDOWS_PLATFORM ? fg.convertPathToPattern(input2) : input2;
+    });
 
     // Check if any wildcards exist
     const hasWildcards = inputWithPublicFolder.some((item) =>
@@ -180,8 +188,18 @@ function wildcardsArray(input: string[], publicFolder?: string) {
  * @param publicFolder Path to the public folder
  */
 function getFilesFromWildcards(input: string, publicFolder?: string) {
+    console.log(
+        2,
+        fg.convertPathToPattern(
+            `${publicFolder ? publicFolder + input : input}`
+        )
+    );
+    const input2 = publicFolder ? publicFolder + input : input;
+    // IS_WINDOWS_PLATFORM;
     return input.includes("*")
-        ? fg.globSync(`${publicFolder ?? ""}${input}`)
+        ? fg.globSync(
+              IS_WINDOWS_PLATFORM ? fg.convertPathToPattern(input2) : input2
+          )
         : [];
 }
 
