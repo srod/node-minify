@@ -1,13 +1,7 @@
 {
-  "extends": "@tsconfig/node22/tsconfig.json",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    "declaration": true,
-    "declarationMap": true
-  },
-  "exclude": ["node_modules", "dist", "__tests__"]
+    "extends": "@total-typescript/tsconfig/tsc/no-dom/library-monorepo",
+    "compilerOptions": {
+        "allowImportingTsExtensions": true,
+        "composite": false
+    }
 }

@@ -7,7 +7,6 @@
             "tests/tmp/**",
             "examples/public/**",
             "**/node_modules/**",
-            "tsconfig.json",
             "**/.DS_Store",
             "**/dist/**",
             "**/.astro/**",

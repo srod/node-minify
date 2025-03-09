@@ -19,15 +19,13 @@
     "lib": "dist",
     "test": "__tests__"
   },
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.js",
   "module": "./dist/index.js",
   "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    }
+    "types": "./dist/index.d.ts",
+    "default": "./dist/index.js"
   },
+  "sideEffects": false,
   "files": [
     "dist/**/*"
   ],
@@ -42,8 +40,8 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean && bunx fix-tsup-cjs",
-    "check-exports": "attw --pack .",
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "check-exports": "attw --pack . --profile esm-only",
     "format:check": "biome check .",
     "lint": "biome lint .",
     "prepublishOnly": "bun run build",
