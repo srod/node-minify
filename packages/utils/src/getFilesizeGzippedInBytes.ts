@@ -5,9 +5,9 @@
  */
 
 import { createReadStream, existsSync } from "node:fs";
+import { FileOperationError } from "./error.ts";
 import { isValidFile } from "./isValidFile.ts";
 import { prettyBytes } from "./prettyBytes.ts";
-import { FileOperationError } from "./types.ts";
 
 /**
  * Get the gzipped file size in bytes.
@@ -21,11 +21,19 @@ import { FileOperationError } from "./types.ts";
 export async function getFilesizeGzippedInBytes(file: string): Promise<string> {
     try {
         if (!existsSync(file)) {
-            throw new Error("File does not exist");
+            throw new FileOperationError(
+                "access",
+                file,
+                new Error("File does not exist")
+            );
         }
 
         if (!isValidFile(file)) {
-            throw new Error("Path is not a valid file");
+            throw new FileOperationError(
+                "access",
+                file,
+                new Error("Path is not a valid file")
+            );
         }
 
         const { gzipSizeStream } = await import("gzip-size");

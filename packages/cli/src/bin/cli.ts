@@ -8,7 +8,7 @@
 
 import { Command } from "commander";
 import updateNotifier from "update-notifier";
-import packageJson from "../../package.json";
+import packageJson from "../../package.json" assert { type: "json" };
 import { AVAILABLE_MINIFIER } from "../config.ts";
 import { run } from "../index.ts";
 import type { SettingsWithCompressor } from "../index.ts";

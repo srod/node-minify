@@ -5,7 +5,7 @@
  */
 
 import { existsSync, unlinkSync } from "node:fs";
-import { FileOperationError } from "./types.ts";
+import { FileOperationError } from "./error.ts";
 
 /**
  * Delete file from the filesystem.

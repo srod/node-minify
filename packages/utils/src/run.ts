@@ -5,7 +5,7 @@
  */
 
 import type { Settings } from "@node-minify/types";
-import { ValidationError } from "./types.ts";
+import { ValidationError } from "./error.ts";
 
 interface RunParameters {
     settings: Settings;

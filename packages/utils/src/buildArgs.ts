@@ -4,8 +4,8 @@
  * MIT Licensed
  */
 
+import { ValidationError } from "./error.ts";
 import type { BuildArgsOptions } from "./types.ts";
-import { ValidationError } from "./types.ts";
 
 /**
  * Builds arguments array based on an object.

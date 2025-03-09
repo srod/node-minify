@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { ValidationError } from "./types.ts";
+import { ValidationError } from "./error.ts";
 
 /**
  * Set the file name as minified.

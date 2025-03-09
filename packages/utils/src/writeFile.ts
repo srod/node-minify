@@ -5,7 +5,7 @@
  */
 
 import { existsSync, lstatSync, writeFileSync } from "node:fs";
-import { FileOperationError, ValidationError } from "./types.ts";
+import { FileOperationError, ValidationError } from "./error.ts";
 
 interface WriteFileParams {
     file: string | string[];

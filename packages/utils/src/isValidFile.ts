@@ -5,7 +5,7 @@
  */
 
 import { existsSync, lstatSync } from "node:fs";
-import { FileOperationError } from "./types.ts";
+import { FileOperationError } from "./error.ts";
 
 /**
  * Check if the path is a valid file.

@@ -5,8 +5,8 @@
  */
 
 import { existsSync, readFileSync } from "node:fs";
+import { FileOperationError } from "./error.ts";
 import { isValidFile } from "./isValidFile.ts";
-import { FileOperationError } from "./types.ts";
 
 /**
  * Read content from a single file with error handling.
