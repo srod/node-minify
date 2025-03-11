@@ -37,14 +37,12 @@ const defaultOptions = {
  * Run html-minifier.
  * @param settings HTMLMinifier options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function htmlMinifier({
+export async function htmlMinifier({
     settings,
     content,
-    callback,
     index,
 }: MinifierOptions) {
     const options = Object.assign({}, defaultOptions, settings?.options);
@@ -56,9 +54,6 @@ export function htmlMinifier({
                 content: contentMinified,
                 index,
             });
-    }
-    if (callback) {
-        return callback(null, contentMinified);
     }
     return contentMinified;
 }

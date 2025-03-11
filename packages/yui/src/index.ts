@@ -29,40 +29,32 @@ const binYui = `${__dirname}/binaries/yuicompressor-2.4.7.jar`;
  * Run YUI Compressor.
  * @param settings YUI Compressor options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function yui({ settings, content, callback, index }: MinifierOptions) {
+export async function yui({ settings, content, index }: MinifierOptions) {
     if (
         !settings?.type ||
         (settings.type !== "js" && settings.type !== "css")
     ) {
         throw new Error("You must specify a type: js or css");
     }
-    return runCommandLine({
+
+    const result = await runCommandLine({
         args: yuiCommand(settings.type, settings?.options ?? {}),
         data: content as string,
         settings,
-        callback: (err: unknown, content?: string) => {
-            if (err) {
-                if (callback) {
-                    return callback(err);
-                }
-                throw err;
-            }
-            if (typeof content !== "string") {
-                throw new Error("YUI Compressor failed: empty result");
-            }
-            if (settings && !settings.content && settings.output) {
-                writeFile({ file: settings.output, content, index });
-            }
-            if (callback) {
-                return callback(null, content);
-            }
-            return content;
-        },
     });
+
+    if (typeof result !== "string") {
+        throw new Error("YUI Compressor failed: empty result");
+    }
+
+    if (settings && !settings.content && settings.output) {
+        writeFile({ file: settings.output, content: result, index });
+    }
+
+    return result;
 }
 
 /**

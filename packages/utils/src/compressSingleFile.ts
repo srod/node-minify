@@ -12,7 +12,9 @@ import { run } from "./run.ts";
  * Compress a single file.
  * @param settings Settings
  */
-export function compressSingleFile(settings: Settings): CompressorReturnType {
+export async function compressSingleFile(
+    settings: Settings
+): Promise<CompressorReturnType> {
     const content = determineContent(settings);
     return run({ settings, content });
 }

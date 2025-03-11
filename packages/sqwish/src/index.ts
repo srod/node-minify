@@ -15,16 +15,10 @@ import minify from "sqwish";
  * Run sqwish.
  * @param settings Sqwish options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function sqwish({
-    settings,
-    content,
-    callback,
-    index,
-}: MinifierOptions) {
+export async function sqwish({ settings, content, index }: MinifierOptions) {
     const contentMinified = minify.minify(content, settings?.options?.strict);
     if (settings && !settings.content && settings.output) {
         writeFile({
@@ -32,9 +26,6 @@ export function sqwish({
             content: contentMinified,
             index,
         });
-    }
-    if (callback) {
-        return callback(null, contentMinified);
     }
     return contentMinified;
 }

@@ -15,21 +15,13 @@ import uglifyJS from "uglify-js";
  * Run uglifyJS.
  * @param settings UglifyJS options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function uglifyJs({
-    settings,
-    content,
-    callback,
-    index,
-}: MinifierOptions) {
+export async function uglifyJs({ settings, content, index }: MinifierOptions) {
     const contentMinified = uglifyJS.minify(content ?? "", settings?.options);
     if (contentMinified.error) {
-        if (callback) {
-            return callback(contentMinified.error);
-        }
+        throw contentMinified.error;
     }
     if (
         contentMinified.map &&
@@ -52,9 +44,6 @@ export function uglifyJs({
             content: contentMinified.code,
             index,
         });
-    }
-    if (callback) {
-        return callback(null, contentMinified.code);
     }
     return contentMinified.code;
 }

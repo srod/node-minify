@@ -24,26 +24,19 @@ describe("Package: google-closure-compiler", async () => {
         await runOneTest({ options, compressorLabel, compressor });
     }
 
-    test("should compress with some options", (): Promise<void> =>
-        new Promise<void>((done) => {
-            const settings: Settings = {
-                compressor: gcc,
-                input: filesJS.oneFileWithWildcards,
-                output: filesJS.fileJSOut,
-                options: {
-                    language_in: "ECMASCRIPT5",
-                },
-            };
+    test("should compress with some options", async (): Promise<void> => {
+        const settings: Settings = {
+            compressor: gcc,
+            input: filesJS.oneFileWithWildcards,
+            output: filesJS.fileJSOut,
+            options: {
+                language_in: "ECMASCRIPT5",
+            },
+        };
 
-            settings.callback = (err, min) => {
-                expect(err).toBeNull();
-                expect(min).not.toBeNull();
-
-                done();
-            };
-
-            minify(settings);
-        }));
+        const result = await minify(settings);
+        expect(result).not.toBeNull();
+    });
 
     test("should throw an error", async () => {
         const settings: Settings = {

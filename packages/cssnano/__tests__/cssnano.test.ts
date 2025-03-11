@@ -24,7 +24,7 @@ describe("Package: cssnano", async () => {
         await runOneTest({ options, compressorLabel, compressor });
     }
 
-    test("should be ok with no callback", async () => {
+    test("should be ok", async () => {
         const settings: Settings = {
             compressor: cssnano,
             input: filesCSS.fileCSS,
@@ -39,9 +39,6 @@ describe("Package: cssnano", async () => {
             compressor: cssnano,
             input: filesCSS.fileCSSErrors,
             output: filesCSS.fileCSSOut,
-            callback: (): void => {
-                return;
-            },
         };
 
         try {

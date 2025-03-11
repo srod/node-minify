@@ -20,7 +20,9 @@ import { mkdirp } from "mkdirp";
  * Run compressor.
  * @param settings Settings
  */
-export function compress(settings: Settings): CompressorReturnType {
+export async function compress(
+    settings: Settings
+): Promise<CompressorReturnType> {
     if (settings.output) {
         createDirectory(settings.output);
     }
@@ -28,6 +30,7 @@ export function compress(settings: Settings): CompressorReturnType {
     if (Array.isArray(settings.output)) {
         return compressArrayOfFiles(settings);
     }
+
     return compressSingleFile(settings);
 }
 
@@ -35,8 +38,8 @@ export function compress(settings: Settings): CompressorReturnType {
  * Compress an array of files.
  * @param settings Settings
  */
-function compressArrayOfFiles(settings: Settings): Promise<string | void> {
-    let sequence: Promise<string | void> = Promise.resolve();
+function compressArrayOfFiles(settings: Settings): Promise<string> {
+    let sequence: Promise<string> = Promise.resolve("");
     Array.isArray(settings.input) &&
         settings.input.forEach((input, index) => {
             const content = getContentFromFiles(input);

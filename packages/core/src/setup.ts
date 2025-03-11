@@ -24,7 +24,6 @@ const IS_WINDOWS_PLATFORM = os.platform() === "win32";
 const defaultSettings = {
     options: {},
     buffer: 1000 * 1024,
-    callback: false,
 };
 
 /**

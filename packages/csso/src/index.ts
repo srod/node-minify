@@ -15,22 +15,19 @@ import { minify } from "csso";
  * Run csso.
  * @param settings Csso options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function csso({ settings, content, callback, index }: MinifierOptions) {
-    const contentMinified = minify(content ?? "", settings?.options);
+export async function csso({ settings, content, index }: MinifierOptions) {
+    const { css } = await minify(content ?? "", settings?.options);
+    console.log(css);
     if (settings && !settings.content && settings.output) {
         settings.output &&
             writeFile({
                 file: settings.output,
-                content: contentMinified.css,
+                content: css,
                 index,
             });
     }
-    if (callback) {
-        return callback(null, contentMinified.css);
-    }
-    return contentMinified.css;
+    return css;
 }

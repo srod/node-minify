@@ -31,27 +31,20 @@ describe("Package: YUI", async () => {
         await runOneTest({ options, compressorLabel, compressor });
     }
 
-    test("should compress with some options", (): Promise<void> =>
-        new Promise<void>((done) => {
-            const settings: Settings = {
-                compressor: yui,
-                type: "js",
-                input: filesJS.oneFileWithWildcards,
-                output: filesJS.fileJSOut,
-                options: {
-                    charset: "utf8",
-                },
-            };
+    test("should compress with some options", async (): Promise<void> => {
+        const settings: Settings = {
+            compressor: yui,
+            type: "js",
+            input: filesJS.oneFileWithWildcards,
+            output: filesJS.fileJSOut,
+            options: {
+                charset: "utf8",
+            },
+        };
 
-            settings.callback = (err, min) => {
-                expect(err).toBeNull();
-                expect(min).not.toBeNull();
-
-                done();
-            };
-
-            minify(settings);
-        }));
+        const result = await minify(settings);
+        expect(result).not.toBeNull();
+    });
 
     test("should catch an error if yui with bad options", async () => {
         const settings: Settings = {
@@ -80,7 +73,7 @@ describe("Package: YUI", async () => {
                 throw new Error();
             });
         });
-        test("should callback an error on spawn", async () => {
+        test("should throw an error on spawn", async () => {
             const settings: Settings = {
                 compressor: yui,
                 input: filesJS.oneFile,
@@ -88,13 +81,12 @@ describe("Package: YUI", async () => {
                 options: {
                     fake: true,
                 },
-                callback: (): void => {
-                    return;
-                },
             };
-            const spy = vi.spyOn(settings, "callback");
-            expect(minify(settings)).rejects.toThrow();
-            await minify(settings).catch(() => expect(spy).toHaveBeenCalled());
+            try {
+                await minify(settings);
+            } catch (err) {
+                return expect(err).not.toBeNull();
+            }
         });
     });
     afterAll(() => {

@@ -15,78 +15,62 @@ type Command = {
     args: string[];
     data: string;
     settings: Partial<Settings>;
-    callback: (err?: unknown, result?: string) => void;
 };
 
 describe("Package: run", () => {
     describe("Base", () => {
-        test("should be OK with YUI", (): Promise<void> =>
-            new Promise<void>((done) => {
-                const command: Command = {
-                    args: ["-jar", "-Xss2048k", jar, "--type", "js"],
-                    data: 'console.log("foo");',
-                    settings: {},
-                    callback: (err?: unknown, result?: string) => {
-                        expect(spy).toHaveBeenCalled();
-                        expect(err).toBeNull();
-                        expect(result).toBeDefined();
-                        done();
-                    },
-                };
-                const spy = vi.spyOn(command, "callback");
-                runCommandLine(command as unknown as RunCommandLineParams);
-            }));
-        test("should not be OK with YUI, fake arg", (): Promise<void> =>
-            new Promise<void>((done) => {
-                const command = {
-                    args: ["-jar", "-Xss2048k", jar, "--type", "js", "--fake"],
-                    data: 'console.log("foo");',
-                    settings: {},
-                    callback: (err?: unknown, result?: string) => {
-                        expect(spy).toHaveBeenCalled();
-                        expect(err).toBeDefined();
-                        expect(result).toBeUndefined();
-                        done();
-                    },
-                };
-                const spy = vi.spyOn(command, "callback");
-                runCommandLine(command as unknown as RunCommandLineParams);
-            }));
-        test("should handle empty data input", (): Promise<void> =>
-            new Promise<void>((done) => {
-                const command: Command = {
-                    args: ["-jar", "-Xss2048k", jar, "--type", "js"],
-                    data: "",
-                    settings: {},
-                    callback: (err?: unknown, result?: string) => {
-                        expect(spy).toHaveBeenCalled();
-                        expect(err).toBeNull();
-                        expect(result).toBe("");
-                        done();
-                    },
-                };
-                const spy = vi.spyOn(command, "callback");
-                runCommandLine(command as unknown as RunCommandLineParams);
-            }));
+        test("should be OK with YUI", async () => {
+            const command: Command = {
+                args: ["-jar", "-Xss2048k", jar, "--type", "js"],
+                data: 'console.log("foo");',
+                settings: {},
+            };
 
-        test("should handle maxBuffer setting", (): Promise<void> =>
-            new Promise<void>((done) => {
-                const command: Command = {
-                    args: ["-jar", "-Xss2048k", jar, "--type", "js"],
-                    data: 'console.log("foo");',
-                    settings: {
-                        buffer: 2000 * 1024,
-                    },
-                    callback: (err?: unknown, result?: string) => {
-                        expect(spy).toHaveBeenCalled();
-                        expect(err).toBeNull();
-                        expect(result).toBeDefined();
-                        done();
-                    },
-                };
-                const spy = vi.spyOn(command, "callback");
-                runCommandLine(command as unknown as RunCommandLineParams);
-            }));
+            const result = await runCommandLine(
+                command as unknown as RunCommandLineParams
+            );
+            expect(result).toBeDefined();
+        });
+
+        test("should not be OK with YUI, fake arg", async () => {
+            const command = {
+                args: ["-jar", "-Xss2048k", jar, "--type", "js", "--fake"],
+                data: 'console.log("foo");',
+                settings: {},
+            };
+
+            await expect(
+                runCommandLine(command as unknown as RunCommandLineParams)
+            ).rejects.toThrow();
+        });
+
+        test("should handle empty data input", async () => {
+            const command: Command = {
+                args: ["-jar", "-Xss2048k", jar, "--type", "js"],
+                data: "",
+                settings: {},
+            };
+
+            const result = await runCommandLine(
+                command as unknown as RunCommandLineParams
+            );
+            expect(result).toBe("");
+        });
+
+        test("should handle maxBuffer setting", async () => {
+            const command: Command = {
+                args: ["-jar", "-Xss2048k", jar, "--type", "js"],
+                data: 'console.log("foo");',
+                settings: {
+                    buffer: 2000 * 1024,
+                },
+            };
+
+            const result = await runCommandLine(
+                command as unknown as RunCommandLineParams
+            );
+            expect(result).toBeDefined();
+        });
     });
 
     // describe("Create errors", () => {
@@ -96,32 +80,25 @@ describe("Package: run", () => {
     //             throw new Error();
     //         });
     //     });
-    //     test("should not be OK with YUI", (): Promise<void> =>
-    //         new Promise<void>((done, reject) => {
-    //             try {
-    //                 const command = {
-    //                     args: [
-    //                         "-jar",
-    //                         "-Xss2048k",
-    //                         "foo.jar",
-    //                         "--type",
-    //                         "js",
-    //                         "--fake",
-    //                     ],
-    //                     data: 'console.log("foo");',
-    //                     settings: {},
-    //                     callback: () => {
-    //                         expect(spy).toHaveBeenCalled();
-    //                         done();
-    //                     },
-    //                 };
-    //                 const spy = vi.spyOn(command, "callback");
-    //                 runCommandLine(command as unknown as RunCommandLineParams);
-    //             } catch (error) {
-    //                 reject(error);
-    //             }
-    //         }));
+    //     test("should not be OK with YUI", async () => {
+    //         const command = {
+    //             args: [
+    //                 "-jar",
+    //                 "-Xss2048k",
+    //                 "foo.jar",
+    //                 "--type",
+    //                 "js",
+    //                 "--fake",
+    //             ],
+    //             data: 'console.log("foo");',
+    //             settings: {},
+    //         };
+    //
+    //         await expect(runCommandLine(command as unknown as RunCommandLineParams))
+    //             .rejects.toThrow();
+    //     });
     // });
+
     afterAll(() => {
         vi.restoreAllMocks();
     });

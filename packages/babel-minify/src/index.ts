@@ -20,14 +20,12 @@ type BabelOptions = {
  * Run babel-minify.
  * @param settings Babel-minify options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function babelMinify({
+export async function babelMinify({
     settings,
     content,
-    callback,
     index,
 }: MinifierOptions & {
     settings?: {
@@ -69,9 +67,6 @@ export function babelMinify({
                 content: code,
                 index,
             });
-    }
-    if (callback) {
-        return callback(null, code);
     }
     return code;
 }

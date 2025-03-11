@@ -14,10 +14,7 @@ interface TestConfig {
     compressor: any;
 }
 
-interface MinifyResult {
-    err: Error | null;
-    min: string;
-}
+type MinifyResult = string;
 
 const runOneTest = async ({
     options,
@@ -56,23 +53,12 @@ const executeMinifyTest = async (options: TestOptions): Promise<void> => {
     validateMinifyResult(result);
 };
 
-function runMinify(options: TestOptions): Promise<MinifyResult> {
-    return new Promise<MinifyResult>((resolve) => {
-        options.minify.callback = (err: unknown, minified?: unknown) => {
-            const min = minified as string | undefined;
-            resolve({
-                err: err instanceof Error ? err : null,
-                min: min || "",
-            });
-        };
-
-        minify(options.minify as Settings);
-    });
+async function runMinify(options: TestOptions): Promise<MinifyResult> {
+    return await minify(options.minify as Settings);
 }
 
 const validateMinifyResult = (result: MinifyResult): void => {
-    expect(result.err).toBeNull();
-    expect(result.min).not.toBeNull();
+    expect(result).not.toBeNull();
 };
 
 export type Tests = Record<string, { it: string; minify: Partial<Settings> }[]>;

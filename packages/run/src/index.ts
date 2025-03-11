@@ -14,7 +14,6 @@ export type RunCommandLineParams = {
     args: string[];
     data: string;
     settings?: Settings;
-    callback?: (err: Error | null, minified?: string) => void;
 };
 
 /**
@@ -22,19 +21,16 @@ export type RunCommandLineParams = {
  * @param args Arguments
  * @param data Data to minify
  * @param settings Settings
- * @param callback Callback
- * @returns Minified content
+ * @returns Promise with minified content
  */
-export function runCommandLine({
+export async function runCommandLine({
     args,
     data,
     settings,
-    callback,
-}: RunCommandLineParams) {
+}: RunCommandLineParams): Promise<string> {
     return run({
         data,
         args,
-        callback,
         ...(settings && { settings }),
     });
 }
@@ -42,49 +38,54 @@ export function runCommandLine({
 type RunParams = {
     data: string;
     args: string[];
-    callback?: (err: Error | null, minified?: string) => void;
+    settings?: Settings;
 };
 
 /**
  * Exec command.
  * @param data Data to minify
  * @param args Arguments
- * @param callback Callback
- * @returns Minified content
+ * @returns Promise with minified content
  */
-function run({ data, args, callback }: RunParams) {
-    let stdout = "";
-    let stderr = "";
+export async function run({ data, args }: RunParams): Promise<string> {
+    return new Promise((resolve, reject) => {
+        let stdout = "";
+        let stderr = "";
 
-    const child = childProcess.spawn("java", args, {
-        stdio: "pipe",
+        const child = childProcess.spawn("java", args, {
+            stdio: "pipe",
+        });
+
+        const handleError = (source: string) => (error: Error) => {
+            console.error(`Error in ${source}:`, error);
+        };
+
+        child.on("error", (error) => {
+            handleError("child")(error);
+            reject(new Error(`Process error: ${error.message}`));
+        });
+
+        child.stdin?.on("error", handleError("child.stdin"));
+        child.stdout?.on("error", handleError("child.stdout"));
+        child.stderr?.on("error", handleError("child.stderr"));
+
+        child.on("exit", (code: number | null) => {
+            if (code !== 0) {
+                reject(new Error(stderr || `Process exited with code ${code}`));
+                return;
+            }
+
+            resolve(stdout);
+        });
+
+        child.stdout?.on("data", (chunk: Buffer) => {
+            stdout += chunk;
+        });
+
+        child.stderr?.on("data", (chunk: Buffer) => {
+            stderr += chunk;
+        });
+
+        child.stdin?.end(data);
     });
-
-    const handleError = (source: string) => (error: Error) => {
-        console.error(`Error in ${source}:`, error);
-    };
-
-    child.on("error", handleError("child"));
-    child.stdin?.on("error", handleError("child.stdin"));
-    child.stdout?.on("error", handleError("child.stdout"));
-    child.stderr?.on("error", handleError("child.stderr"));
-
-    child.on("exit", (code: number | null) => {
-        if (code !== 0) {
-            return callback?.(
-                new Error(stderr || `Process exited with code ${code}`)
-            );
-        }
-
-        return callback?.(null, stdout);
-    });
-
-    child.stdout?.on("data", (chunk: Buffer) => {
-        stdout += chunk;
-    });
-    child.stderr?.on("data", (chunk: Buffer) => {
-        stderr += chunk;
-    });
-
-    child.stdin?.end(data);
 }

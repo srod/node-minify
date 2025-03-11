@@ -38,28 +38,11 @@ export async function run({
         throw new ValidationError("Compressor must be provided in settings");
     }
 
-    return new Promise((resolve, reject) => {
-        try {
-            settings.compressor({
-                settings,
-                content,
-                callback: (err: unknown, result?: string) => {
-                    if (err) {
-                        reject(new Error(`Compression failed: ${String(err)}`));
-                    } else if (typeof result !== "string") {
-                        reject(new Error("Compressor returned invalid result"));
-                    } else {
-                        resolve(result);
-                    }
-                },
-                index,
-            });
-        } catch (error: unknown) {
-            reject(
-                new Error(
-                    `Compression failed: ${error instanceof Error ? error.message : String(error)}`
-                )
-            );
-        }
+    const result = await settings.compressor({
+        settings,
+        content,
+        index,
     });
+
+    return result;
 }

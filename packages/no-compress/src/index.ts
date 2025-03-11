@@ -14,14 +14,12 @@ import { writeFile } from "@node-minify/utils";
  * Just merge, no compression.
  * @param settings NoCompress options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function noCompress({
+export async function noCompress({
     settings,
     content,
-    callback,
     index,
 }: MinifierOptions) {
     if (typeof content !== "string") {
@@ -31,7 +29,5 @@ export function noCompress({
         // If output path is specified and content setting is not present, write to file
         writeFile({ file: settings.output, content, index });
     }
-
-    // Handle callback if provided, otherwise return content directly
-    return callback ? callback(null, content) : content;
+    return content;
 }

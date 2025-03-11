@@ -15,14 +15,12 @@ import jsonminify from "jsonminify";
  * Run jsonminify.
  * @param settings JsonMinify options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function jsonMinify({
+export async function jsonMinify({
     settings,
     content,
-    callback,
     index,
 }: MinifierOptions) {
     const contentMinified = jsonminify(content ?? "");
@@ -33,9 +31,6 @@ export function jsonMinify({
                 content: contentMinified,
                 index,
             });
-    }
-    if (callback) {
-        return callback(null, contentMinified);
     }
     return contentMinified;
 }

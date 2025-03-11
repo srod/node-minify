@@ -15,16 +15,10 @@ import CleanCSS from "clean-css";
  * Run clean-css.
  * @param settings Clean-css options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function cleanCss({
-    settings,
-    content,
-    callback,
-    index,
-}: MinifierOptions) {
+export async function cleanCss({ settings, content, index }: MinifierOptions) {
     if (settings?.options?.sourceMap) {
         settings.options._sourceMap = settings.options.sourceMap;
         settings.options.sourceMap = true;
@@ -55,9 +49,6 @@ export function cleanCss({
                 content: contentMinified,
                 index,
             });
-    }
-    if (callback) {
-        return callback(null, contentMinified);
     }
     return contentMinified;
 }

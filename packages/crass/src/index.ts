@@ -15,11 +15,10 @@ import minify from "crass";
  * Run crass.
  * @param settings Crass options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function crass({ settings, content, callback, index }: MinifierOptions) {
+export async function crass({ settings, content, index }: MinifierOptions) {
     const contentMinified = minify.parse(content).optimize().toString();
     if (settings && !settings.content && settings.output) {
         settings.output &&
@@ -28,9 +27,6 @@ export function crass({ settings, content, callback, index }: MinifierOptions) {
                 content: contentMinified,
                 index,
             });
-    }
-    if (callback) {
-        return callback(null, contentMinified);
     }
     return contentMinified;
 }

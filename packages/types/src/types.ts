@@ -1,11 +1,11 @@
-export type CompressorReturnType = string | void | Promise<string | void>;
-export type Compressor = (args: MinifierOptions) => CompressorReturnType;
+export type CompressorReturnType = string;
+export type Compressor = (
+    args: MinifierOptions
+) => Promise<CompressorReturnType>;
 
 export type Settings = {
     compressorLabel?: string;
     compressor: Compressor;
-    sync?: boolean;
-    callback?: (err: unknown, minified?: CompressorReturnType) => void;
     content?: string;
     input?: string | string[];
     output?: string;
@@ -21,7 +21,6 @@ export type Settings = {
 export type MinifierOptions = {
     settings: Settings;
     content?: string;
-    callback?: (err?: unknown, result?: string) => void;
     index?: number;
 };
 

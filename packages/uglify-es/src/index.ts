@@ -15,14 +15,12 @@ import uglifyES from "uglify-es";
  * Run uglifyES.
  * @param settings UglifyES options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-export function uglifyEs({
+export async function uglifyEs({
     settings,
     content,
-    callback,
     index,
 }: MinifierOptions & {
     settings?: {
@@ -37,9 +35,7 @@ export function uglifyEs({
     }
     const contentMinified = uglifyES.minify(content2, settings.options);
     if (contentMinified.error) {
-        if (callback) {
-            return callback(contentMinified.error);
-        }
+        throw contentMinified.error;
     }
     if (contentMinified.map && settings.options?.sourceMap) {
         writeFile({
@@ -54,9 +50,6 @@ export function uglifyEs({
             content: contentMinified.code,
             index,
         });
-    }
-    if (callback) {
-        return callback(null, contentMinified.code);
     }
     return contentMinified.code;
 }

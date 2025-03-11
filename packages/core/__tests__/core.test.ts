@@ -131,7 +131,7 @@ describe("Package: core", async () => {
                 throw new Error();
             });
         });
-        test("should callback an error on spawn", async () => {
+        test("should throw an error on spawn", async () => {
             const settings: Settings = {
                 compressor: yui,
                 input: filesJS.oneFile,
@@ -139,14 +139,9 @@ describe("Package: core", async () => {
                 options: {
                     fake: true,
                 },
-                callback: (): void => {
-                    return;
-                },
             };
-            const spy = vi.spyOn(settings, "callback");
 
             expect(minify(settings)).rejects.toThrow();
-            await minify(settings).catch(() => expect(spy).toHaveBeenCalled());
         });
         afterAll(() => {
             vi.restoreAllMocks();
@@ -159,9 +154,6 @@ describe("Package: core", async () => {
                 type: "uglifyjs" as unknown as "js",
                 input: filesJS.oneFileWithWildcards,
                 output: filesJS.fileJSOut,
-                callback: (): void => {
-                    return;
-                },
             };
 
             try {
@@ -182,14 +174,9 @@ describe("Package: core", async () => {
                 compressor: gcc,
                 input: filesJS.oneFile,
                 output: filesJS.fileJSOut,
-                callback: (): void => {
-                    return;
-                },
             };
-            const spy = vi.spyOn(settings, "callback");
 
             const min = await minify(settings);
-            expect(spy).toHaveBeenCalled();
             expect(min).toBeDefined();
         });
     });
@@ -200,14 +187,9 @@ describe("Package: core", async () => {
                 compressor: htmlMinifier,
                 content:
                     "<html lang='en'><body><div>content</div></body></html>",
-                callback: (): void => {
-                    return;
-                },
             };
-            const spy = vi.spyOn(settings, "callback");
 
             const min = await minify(settings);
-            expect(spy).toHaveBeenCalled();
             expect(min).toBeDefined();
         });
 

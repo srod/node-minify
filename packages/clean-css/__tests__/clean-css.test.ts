@@ -24,26 +24,20 @@ describe("Package: clean-css", async () => {
         await runOneTest({ options, compressorLabel, compressor });
     }
 
-    test("should compress with some options", (): Promise<void> =>
-        new Promise<void>((done) => {
-            const settings: Settings = {
-                compressor,
-                input: filesCSS.fileCSS,
-                output: filesCSS.fileCSSOut,
-                options: {
-                    sourceMap: {
-                        filename: filesCSS.fileCSSSourceMaps,
-                        url: filesCSS.fileCSSSourceMaps,
-                    },
+    test("should compress with some options", async (): Promise<void> => {
+        const settings: Settings = {
+            compressor,
+            input: filesCSS.fileCSS,
+            output: filesCSS.fileCSSOut,
+            options: {
+                sourceMap: {
+                    filename: filesCSS.fileCSSSourceMaps,
+                    url: filesCSS.fileCSSSourceMaps,
                 },
-            };
-            settings.callback = (err, min) => {
-                expect(err).toBeNull();
-                expect(min).not.toBeNull();
+            },
+        };
 
-                done();
-            };
-
-            minify(settings);
-        }));
+        const result = await minify(settings);
+        expect(result).not.toBeNull();
+    });
 });
