@@ -158,10 +158,6 @@ function wildcardsString(input: string, publicFolder?: string) {
 function wildcardsArray(input: string[], publicFolder?: string) {
     // Convert input paths to patterns with public folder prefix
     const inputWithPublicFolder = input.map((item) => {
-        console.log(
-            1,
-            fg.convertPathToPattern(publicFolder ? publicFolder + item : item)
-        );
         const input2 = publicFolder ? publicFolder + item : item;
         return IS_WINDOWS_PLATFORM ? fg.convertPathToPattern(input2) : input2;
     });
@@ -188,17 +184,10 @@ function wildcardsArray(input: string[], publicFolder?: string) {
  * @param publicFolder Path to the public folder
  */
 function getFilesFromWildcards(input: string, publicFolder?: string) {
-    console.log(
-        2,
-        fg.convertPathToPattern(
-            `${publicFolder ? publicFolder + input : input}`
-        )
-    );
-    const input2 = publicFolder ? publicFolder + input : input;
-    // IS_WINDOWS_PLATFORM;
+    const fullPath = publicFolder ? `${publicFolder}${input}` : input;
     return input.includes("*")
         ? fg.globSync(
-              IS_WINDOWS_PLATFORM ? fg.convertPathToPattern(input2) : input2
+              IS_WINDOWS_PLATFORM ? fg.convertPathToPattern(fullPath) : fullPath
           )
         : [];
 }

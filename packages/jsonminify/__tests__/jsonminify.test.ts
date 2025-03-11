@@ -16,13 +16,8 @@ describe("Package: jsonminify", async () => {
         throw new Error("Tests not found");
     }
 
-    // Run async tests
+    // Run commonjson tests
     for (const options of tests.commonjson) {
         await runOneTest({ options, compressorLabel, compressor });
     }
-
-    // Run sync tests
-    // for (const options of tests.commonjson) {
-    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
-    // }
 });

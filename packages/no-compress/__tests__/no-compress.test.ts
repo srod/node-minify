@@ -16,13 +16,8 @@ describe("Package: no-compress", async () => {
         throw new Error("Tests not found");
     }
 
-    // Run async tests
+    // Run concat tests
     for (const options of tests.concat) {
         await runOneTest({ options, compressorLabel, compressor });
     }
-
-    // Run sync tests
-    // for (const options of tests.concat) {
-    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
-    // }
 });

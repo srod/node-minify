@@ -53,8 +53,7 @@
   },
   "dependencies": {
     "@node-minify/run": "workspace:*",
-    "@node-minify/utils": "workspace:*",
-    "es-dirname": "0.1.0"
+    "@node-minify/utils": "workspace:*"
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*"

@@ -2,6 +2,7 @@
     "extends": "@total-typescript/tsconfig/tsc/no-dom/library-monorepo",
     "compilerOptions": {
         "allowImportingTsExtensions": true,
+        "noEmit": true,
         "composite": false
     }
 }

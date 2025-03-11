@@ -24,15 +24,10 @@ describe("Package: core", async () => {
         throw new Error("Tests not found");
     }
 
-    // Run async tests
+    // Run commonjs tests
     for (const options of tests.commonjs) {
         await runOneTest({ options, compressorLabel, compressor });
     }
-
-    // Run sync tests
-    // for (const options of tests.commonjs) {
-    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
-    // }
 
     describe("Fake binary", () => {
         test("should throw an error if binary does not exist", async () => {
@@ -127,54 +122,9 @@ describe("Package: core", async () => {
                 }
             }
         });
-        test("should catch an error if yui with bad options and sync", async () => {
-            const settings: Settings = {
-                compressor: yui,
-                type: "js",
-                input: filesJS.oneFile,
-                output: filesJS.fileJSOut,
-                sync: true,
-                options: {
-                    fake: true,
-                },
-            };
-
-            try {
-                return await minify(settings);
-            } catch (err: unknown) {
-                if (err instanceof Error) {
-                    return expect(err.toString()).toMatch("Error");
-                }
-            }
-        });
     });
 
-    describe("Create sync errors", () => {
-        beforeAll(() => {
-            const spy = vi.spyOn(childProcess, "spawnSync");
-            spy.mockImplementation(() => {
-                throw new Error();
-            });
-        });
-        test("should callback an error on spawnSync", () => {
-            const settings: Settings = {
-                compressor: yui,
-                input: filesJS.oneFile,
-                output: filesJS.fileJSOut,
-                sync: true,
-                options: {
-                    fake: true,
-                },
-            };
-
-            return expect(minify(settings)).rejects.toThrow();
-        });
-        afterAll(() => {
-            vi.restoreAllMocks();
-        });
-    });
-
-    describe("Create async errors", () => {
+    describe("Create errors", () => {
         beforeAll(() => {
             const spy = vi.spyOn(childProcess, "spawn");
             spy.mockImplementation(() => {
@@ -186,7 +136,6 @@ describe("Package: core", async () => {
                 compressor: yui,
                 input: filesJS.oneFile,
                 output: filesJS.fileJSOut,
-                sync: false,
                 options: {
                     fake: true,
                 },
@@ -228,27 +177,11 @@ describe("Package: core", async () => {
     });
 
     describe("Should be OK", () => {
-        test("should be OK with GCC and async", async () => {
+        test("should be OK with GCC", async () => {
             const settings: Settings = {
                 compressor: gcc,
                 input: filesJS.oneFile,
                 output: filesJS.fileJSOut,
-                callback: (): void => {
-                    return;
-                },
-            };
-            const spy = vi.spyOn(settings, "callback");
-
-            const min = await minify(settings);
-            expect(spy).toHaveBeenCalled();
-            expect(min).toBeDefined();
-        });
-        test("should be OK with GCC and sync", async () => {
-            const settings: Settings = {
-                compressor: gcc,
-                input: filesJS.oneFile,
-                output: filesJS.fileJSOut,
-                sync: true,
                 callback: (): void => {
                     return;
                 },
@@ -262,28 +195,11 @@ describe("Package: core", async () => {
     });
 
     describe("In Memory", () => {
-        test("should be OK with html minifier and async", async () => {
+        test("should be OK with html minifier", async () => {
             const settings: Settings = {
                 compressor: htmlMinifier,
                 content:
                     "<html lang='en'><body><div>content</div></body></html>",
-                callback: (): void => {
-                    return;
-                },
-            };
-            const spy = vi.spyOn(settings, "callback");
-
-            const min = await minify(settings);
-            expect(spy).toHaveBeenCalled();
-            expect(min).toBeDefined();
-        });
-
-        test("should be OK with GCC and sync", async () => {
-            const settings: Settings = {
-                compressor: htmlMinifier,
-                content:
-                    "<html lang='en'><body><div>content</div></body></html>",
-                sync: true,
                 callback: (): void => {
                     return;
                 },

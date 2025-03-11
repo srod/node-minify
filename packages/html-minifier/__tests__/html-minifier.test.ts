@@ -16,13 +16,8 @@ describe("Package: html-minifier", async () => {
         throw new Error("Tests not found");
     }
 
-    // Run async tests
+    // Run commonhtml tests
     for (const options of tests.commonhtml) {
         await runOneTest({ options, compressorLabel, compressor });
     }
-
-    // Run sync tests
-    // for (const options of tests.commonhtml) {
-    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
-    // }
 });

@@ -19,15 +19,10 @@ describe("Package: clean-css", async () => {
         throw new Error("Tests not found");
     }
 
-    // Run async tests
+    // Run commoncss tests
     for (const options of tests.commoncss) {
         await runOneTest({ options, compressorLabel, compressor });
     }
-
-    // Run sync tests
-    // for (const options of tests.commoncss) {
-    //     await runOneTest({ options, compressorLabel, compressor, sync: true });
-    // }
 
     test("should compress with some options", (): Promise<void> =>
         new Promise<void>((done) => {

@@ -16,7 +16,7 @@ describe("Package: babel-minify", async () => {
         throw new Error("Tests not found");
     }
 
-    // Run commonjs async tests
+    // Run commonjs tests
     for (const options of tests.commonjs) {
         await runOneTest({
             options,
@@ -25,7 +25,7 @@ describe("Package: babel-minify", async () => {
         });
     }
 
-    // Run babelMinify async tests
+    // Run babelMinify tests
     for (const options of tests.babelMinify) {
         await runOneTest({ options, compressorLabel, compressor });
     }

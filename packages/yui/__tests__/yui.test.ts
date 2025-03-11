@@ -20,13 +20,13 @@ describe("Package: YUI", async () => {
         throw new Error("Tests not found");
     }
 
-    // Run JS tests
+    // Run commonjs tests
     for (const options of tests.commonjs) {
         options.minify.type = "js";
         await runOneTest({ options, compressorLabel, compressor });
     }
 
-    // Run CSS tests
+    // Run commoncss tests
     for (const options of tests.commoncss) {
         await runOneTest({ options, compressorLabel, compressor });
     }

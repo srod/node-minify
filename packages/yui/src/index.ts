@@ -8,16 +8,22 @@
  * Module dependencies.
  */
 
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { runCommandLine } from "@node-minify/run";
 import type { MinifierOptions } from "@node-minify/types";
 import { buildArgs, writeFile } from "@node-minify/utils";
 import type { BuildArgsOptions } from "@node-minify/utils";
-import dirname from "es-dirname";
 
 /**
  * Module variables.
  */
-const binYui = `${dirname()}/binaries/yuicompressor-2.4.7.jar`;
+
+// Get the directory name of the current module
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Get the path to the YUI Compressor binary
+const binYui = `${__dirname}/binaries/yuicompressor-2.4.7.jar`;
 
 /**
  * Run YUI Compressor.
