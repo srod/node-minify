@@ -8,83 +8,78 @@
  * Module dependencies.
  */
 import fs from "node:fs";
-import type { Settings } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import type { CompressorReturnType, Settings } from "@node-minify/types";
+import {
+    compressSingleFile,
+    getContentFromFiles,
+    run,
+} from "@node-minify/utils";
 import { mkdirp } from "mkdirp";
 
 /**
  * Run compressor.
  * @param settings Settings
  */
-const compress = (settings: Settings): Promise<string> | string => {
-    if (typeof settings.compressor !== "function") {
-        throw new Error(
-            "compressor should be a function, maybe you forgot to install the compressor"
-        );
-    }
-
+export async function compress(
+    settings: Settings
+): Promise<CompressorReturnType> {
     if (settings.output) {
         createDirectory(settings.output);
     }
 
     if (Array.isArray(settings.output)) {
-        return settings.sync
-            ? compressArrayOfFilesSync(settings)
-            : compressArrayOfFilesAsync(settings);
+        return compressArrayOfFiles(settings);
     }
-    return utils.compressSingleFile(settings);
-};
+
+    return compressSingleFile(settings);
+}
 
 /**
- * Compress an array of files in sync.
+ * Compress an array of files.
  * @param settings Settings
  */
-const compressArrayOfFilesSync = (settings: Settings): any => {
-    return (
-        Array.isArray(settings.input) &&
-        settings.input.forEach((input, index) => {
-            const content = utils.getContentFromFiles(input);
-            return utils.runSync({ settings, content, index });
-        })
-    );
-};
-
-/**
- * Compress an array of files in async.
- * @param settings Settings
- */
-const compressArrayOfFilesAsync = (
-    settings: Settings
-): Promise<string | void> => {
-    let sequence: Promise<string | void> = Promise.resolve();
+function compressArrayOfFiles(settings: Settings): Promise<string> {
+    let sequence: Promise<string> = Promise.resolve("");
     Array.isArray(settings.input) &&
         settings.input.forEach((input, index) => {
-            const content = utils.getContentFromFiles(input);
-            sequence = sequence.then(() =>
-                utils.runAsync({ settings, content, index })
-            );
+            const content = getContentFromFiles(input);
+            sequence = sequence.then(() => run({ settings, content, index }));
         });
     return sequence;
-};
+}
 
 /**
  * Create folder of the target file.
- * @param file Full path of the file
+ * @param filePath Full path of the file
  */
-const createDirectory = (file: string) => {
-    if (Array.isArray(file)) {
-        file = file[0];
-    }
-    const dir = file?.substr(0, file.lastIndexOf("/"));
-    if (!dir) {
+function createDirectory(filePath: string | string[]) {
+    // Early return if no file path provided
+    if (!filePath) {
         return;
     }
-    if (!fs.statSync(dir).isDirectory()) {
-        mkdirp.sync(dir);
-    }
-};
 
-/**
- * Expose `compress()`.
- */
-export { compress };
+    // Get single path if array
+    const path = Array.isArray(filePath) ? filePath[0] : filePath;
+
+    // Extract directory path
+    const dirPath = path?.substring(0, path.lastIndexOf("/"));
+
+    // Early return if no directory path
+    if (!dirPath) {
+        return;
+    }
+
+    // Create directory if it doesn't exist
+    if (!directoryExists(dirPath)) {
+        mkdirp.sync(dirPath);
+    }
+}
+
+// Helper function to check if directory exists
+function directoryExists(path: string): boolean {
+    try {
+        return fs.statSync(path).isDirectory();
+    } catch (error) {
+        return false;
+    }
+}

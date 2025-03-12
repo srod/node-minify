@@ -5,20 +5,19 @@
  */
 
 import { describe } from "vitest";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import csso from "../src";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { csso } from "../src/index.ts";
 
 const compressorLabel = "csso";
 const compressor = csso;
 
 describe("Package: csso", async () => {
-    // Run async tests
-    for (const options of tests.commoncss) {
-        await runOneTest({ options, compressorLabel, compressor });
+    if (!tests.commoncss) {
+        throw new Error("Tests not found");
     }
 
-    // Run sync tests
+    // Run commoncss tests
     for (const options of tests.commoncss) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
+        await runOneTest({ options, compressorLabel, compressor });
     }
 });

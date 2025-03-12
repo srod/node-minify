@@ -19,78 +19,41 @@
   },
   "packageManager": "bun@1.1.34",
   "scripts": {
-    "build": "turbo --filter \"./packages/*\" build",
-    "build:docs": "turbo --filter \"./docs\" build",
-    "check-exports": "turbo check-exports",
-    "ci": "bun run build && bun run check-exports && bun run lint && bun run test:ci",
+    "build": "node ./scripts/build-packages.js",
+    "build:docs": "bun run --filter './docs' build",
+    "check-exports": "bun run --filter '*' check-exports",
+    "ci": "bun run build && bun run check-exports && bun run lint && bun run typecheck && bun run test:ci",
     "clean": "bun clean:build",
     "clean:build": "bunx rimraf packages/*/dist docs/dist docs/.astro",
     "clean:test": "bunx rimraf tests/tmp/*.{js,js.map,css,html,json}",
     "clean:git": "git restore --source=HEAD --staged --worktree -- tests/fixtures",
-    "dev": "turbo dev --concurrency 30",
-    "lint": "turbo lint",
+    "dev": "bun run --filter '*' dev",
+    "lint": "bun run --filter '*' lint",
     "local-release": "bun run changeset:version && bun run changeset:release",
-    "test": "turbo test && bun run clean:git",
-    "test:watch": "turbo run test:watch",
-    "test:ci": "turbo run test:ci",
+    "test": "bun run --filter '*' test && bun run clean:git",
+    "test:watch": "bun run --filter '*' test:watch",
+    "test:ci": "bun run --filter '*' test:ci",
     "changeset": "changeset",
     "changeset:version": "changeset version && bun install --no-frozen-lockfile",
     "changeset:release": "bun run build && changeset publish",
-    "format:check": "turbo run format:check",
-    "format": "biome check --write ."
+    "format:check": "bun run --filter '*' format:check",
+    "format": "biome check --write .",
+    "typecheck": "bun run --filter '*' typecheck"
   },
-  "dependencies": {
+  "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.0",
+    "@biomejs/biome": "1.9.4",
     "@changesets/cli": "2.28.1",
-    "@node-minify/babel-minify": "workspace:*",
-    "@node-minify/clean-css": "workspace:*",
-    "@node-minify/cli": "workspace:*",
-    "@node-minify/core": "workspace:*",
-    "@node-minify/crass": "workspace:*",
-    "@node-minify/cssnano": "workspace:*",
-    "@node-minify/csso": "workspace:*",
-    "@node-minify/google-closure-compiler": "workspace:*",
-    "@node-minify/html-minifier": "workspace:*",
-    "@node-minify/jsonminify": "workspace:*",
-    "@node-minify/no-compress": "workspace:*",
-    "@node-minify/run": "workspace:*",
-    "@node-minify/sqwish": "workspace:*",
-    "@node-minify/terser": "workspace:*",
-    "@node-minify/types": "workspace:*",
-    "@node-minify/uglify-es": "workspace:*",
-    "@node-minify/uglify-js": "workspace:*",
-    "@node-minify/utils": "workspace:*",
-    "@node-minify/yui": "workspace:*",
-    "@tsconfig/node22": "^22.0.0",
+    "@total-typescript/tsconfig": "^1.0.4",
     "@types/node": "22.13.10",
     "@vitest/coverage-v8": "1.6.1",
     "@vitest/ui": "1.6.1",
     "copyfiles": "2.4.1",
-    "fix-tsup-cjs": "^1.2.0",
-    "husky": "9.1.7",
-    "lint-staged": "15.4.3",
-    "node-notifier": "10.0.1",
     "rimraf": "6.0.1",
     "tsup": "8.4.0",
-    "turbo": "2.4.4",
     "typescript": "5.8.2",
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "1.6.1"
-  },
-  "lint-staged": {
-    "*.ts": [
-      "biome format --write",
-      "biome check --apply",
-      "git add"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.9.4"
   },
   "workspaces": [
     "docs",

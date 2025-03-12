@@ -8,50 +8,28 @@
  * Module dependencies.
  */
 import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
-import cssnano from "cssnano";
+import { writeFile } from "@node-minify/utils";
+import minify from "cssnano";
 import postcss from "postcss";
 
 /**
  * Run cssnano.
  * @param settings Cssnano options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyCssnano = async ({
-    settings,
-    content,
-    callback,
-    index,
-}: MinifierOptions) => {
-    let contentMinified = { css: "" };
-    try {
-        contentMinified = await postcss([cssnano]).process(content || "", {
-            from: undefined,
-        });
-    } catch (e) {
-        if (callback) {
-            return callback(e);
-        }
-    }
+export async function cssnano({ settings, content, index }: MinifierOptions) {
+    const contentMinified = await postcss([minify]).process(content || "", {
+        from: undefined,
+    });
     if (settings && !settings.content && settings.output) {
         settings.output &&
-            utils.writeFile({
+            writeFile({
                 file: settings.output,
                 content: contentMinified.css,
                 index,
             });
     }
-    if (callback) {
-        return callback(null, contentMinified.css);
-    }
     return contentMinified.css;
-};
-
-/**
- * Expose `minifyCssnano()`.
- */
-minifyCssnano.default = minifyCssnano;
-export default minifyCssnano;
+}

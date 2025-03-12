@@ -5,20 +5,19 @@
  */
 
 import { describe } from "vitest";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import htmlMinifier from "../src";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { htmlMinifier } from "../src/index.ts";
 
 const compressorLabel = "html-minifier";
 const compressor = htmlMinifier;
 
 describe("Package: html-minifier", async () => {
-    // Run async tests
-    for (const options of tests.commonhtml) {
-        await runOneTest({ options, compressorLabel, compressor });
+    if (!tests.commonhtml) {
+        throw new Error("Tests not found");
     }
 
-    // Run sync tests
+    // Run commonhtml tests
     for (const options of tests.commonhtml) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
+        await runOneTest({ options, compressorLabel, compressor });
     }
 });

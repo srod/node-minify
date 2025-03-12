@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { writeFile } from "@node-minify/utils";
 import minifier from "html-minifier";
 
 /**
@@ -37,34 +37,23 @@ const defaultOptions = {
  * Run html-minifier.
  * @param settings HTMLMinifier options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyHTMLMinifier = ({
+export async function htmlMinifier({
     settings,
     content,
-    callback,
     index,
-}: MinifierOptions) => {
+}: MinifierOptions) {
     const options = Object.assign({}, defaultOptions, settings?.options);
     const contentMinified = HTMLMinifier(content ?? "", options);
     if (settings && !settings.content && settings.output) {
         settings.output &&
-            utils.writeFile({
+            writeFile({
                 file: settings.output,
                 content: contentMinified,
                 index,
             });
     }
-    if (callback) {
-        return callback(null, contentMinified);
-    }
     return contentMinified;
-};
-
-/**
- * Expose `minifyHTMLMinifier()`.
- */
-minifyHTMLMinifier.default = minifyHTMLMinifier;
-export default minifyHTMLMinifier;
+}

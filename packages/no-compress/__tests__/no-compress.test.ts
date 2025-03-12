@@ -5,20 +5,19 @@
  */
 
 import { describe } from "vitest";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import noCompress from "../src";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { noCompress } from "../src/index.ts";
 
 const compressorLabel = "no-compress";
 const compressor = noCompress;
 
 describe("Package: no-compress", async () => {
-    // Run async tests
-    for (const options of tests.concat) {
-        await runOneTest({ options, compressorLabel, compressor });
+    if (!tests.concat) {
+        throw new Error("Tests not found");
     }
 
-    // Run sync tests
+    // Run concat tests
     for (const options of tests.concat) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
+        await runOneTest({ options, compressorLabel, compressor });
     }
 });

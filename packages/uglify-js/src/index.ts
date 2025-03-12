@@ -8,35 +8,28 @@
  * Module dependencies.
  */
 import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { writeFile } from "@node-minify/utils";
 import uglifyJS from "uglify-js";
 
 /**
  * Run uglifyJS.
  * @param settings UglifyJS options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyUglifyJS = ({
-    settings,
-    content,
-    callback,
-    index,
-}: MinifierOptions) => {
+export async function uglifyJs({ settings, content, index }: MinifierOptions) {
     const contentMinified = uglifyJS.minify(content ?? "", settings?.options);
     if (contentMinified.error) {
-        if (callback) {
-            return callback(contentMinified.error);
-        }
+        throw contentMinified.error;
     }
     if (
         contentMinified.map &&
+        settings?.options?.sourceMap &&
         typeof settings?.options?.sourceMap === "object" &&
         "filename" in settings.options.sourceMap
     ) {
-        utils.writeFile({
+        writeFile({
             file:
                 typeof settings.options.sourceMap.filename === "string"
                     ? settings.options.sourceMap.filename
@@ -46,20 +39,11 @@ const minifyUglifyJS = ({
         });
     }
     if (settings && !settings.content && settings.output) {
-        utils.writeFile({
+        writeFile({
             file: settings.output,
             content: contentMinified.code,
             index,
         });
     }
-    if (callback) {
-        return callback(null, contentMinified.code);
-    }
     return contentMinified.code;
-};
-
-/**
- * Expose `minifyUglifyJS()`.
- */
-minifyUglifyJS.default = minifyUglifyJS;
-export default minifyUglifyJS;
+}

@@ -4,49 +4,40 @@
  * MIT Licensed
  */
 
-import type { OptionsTest } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
-import { filesCSS } from "../../../tests/files-path";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import minify from "../../core/src";
-import cleanCss from "../src";
+import { filesCSS } from "../../../tests/files-path.ts";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { minify } from "../../core/src/index.ts";
+import { cleanCss } from "../src/index.ts";
 
 const compressorLabel = "clean-css";
 const compressor = cleanCss;
 
 describe("Package: clean-css", async () => {
-    // Run async tests
+    if (!tests.commoncss) {
+        throw new Error("Tests not found");
+    }
+
+    // Run commoncss tests
     for (const options of tests.commoncss) {
         await runOneTest({ options, compressorLabel, compressor });
     }
 
-    // Run sync tests
-    for (const options of tests.commoncss) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
-    }
-
-    test("should compress with some options", (): Promise<void> =>
-        new Promise<void>((done) => {
-            const options: OptionsTest = {
-                minify: {
-                    compressor,
-                    input: filesCSS.fileCSS,
-                    output: filesCSS.fileCSSOut,
-                    options: {
-                        sourceMap: {
-                            filename: filesCSS.fileCSSSourceMaps,
-                            url: filesCSS.fileCSSSourceMaps,
-                        },
-                    },
+    test("should compress with some options", async (): Promise<void> => {
+        const settings: Settings = {
+            compressor,
+            input: filesCSS.fileCSS,
+            output: filesCSS.fileCSSOut,
+            options: {
+                sourceMap: {
+                    filename: filesCSS.fileCSSSourceMaps,
+                    url: filesCSS.fileCSSSourceMaps,
                 },
-            };
-            options.minify.callback = (err, min) => {
-                expect(err).toBeNull();
-                expect(min).not.toBeNull();
+            },
+        };
 
-                done();
-            };
-
-            minify(options.minify);
-        }));
+        const result = await minify(settings);
+        expect(result).not.toBeNull();
+    });
 });

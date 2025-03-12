@@ -8,12 +8,9 @@
  * Module dependencies.
  */
 import { runCommandLine } from "@node-minify/run";
-import type {
-    MinifierOptions,
-    Options,
-    OptionsPossible,
-} from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import type { MinifierOptions } from "@node-minify/types";
+import { buildArgs, writeFile } from "@node-minify/utils";
+import type { BuildArgsOptions } from "@node-minify/utils";
 import compilerPath from "google-closure-compiler-java";
 
 // the allowed flags, taken from https://github.com/google/closure-compiler/wiki/Flags-and-Options
@@ -43,33 +40,28 @@ const allowedFlags = [
  * Run Google Closure Compiler.
  * @param settings GCC options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyGCC = ({ settings, content, callback, index }: MinifierOptions) => {
+export async function gcc({ settings, content, index }: MinifierOptions) {
     const options = applyOptions({}, settings?.options ?? {});
-    return runCommandLine({
+
+    const result = await runCommandLine({
         args: gccCommand(options),
-        data: content,
+        data: content as string,
         settings,
-        callback: (err: unknown, content?: string) => {
-            if (err) {
-                if (callback) {
-                    return callback(err);
-                }
-                throw err;
-            }
-            if (settings && !settings.content && settings.output) {
-                utils.writeFile({ file: settings.output, content, index });
-            }
-            if (callback) {
-                return callback(null, content);
-            }
-            return content;
-        },
     });
-};
+
+    if (typeof result !== "string") {
+        throw new Error("Google Closure Compiler failed: empty result");
+    }
+
+    if (settings && !settings.content && settings.output) {
+        writeFile({ file: settings.output, content: result, index });
+    }
+
+    return result;
+}
 
 /**
  * Adds any valid options passed in the options parameters to the flags parameter and returns the flags object.
@@ -78,9 +70,9 @@ const minifyGCC = ({ settings, content, callback, index }: MinifierOptions) => {
  * @returns the flags object with the options added
  */
 type Flags = {
-    [key: string]: boolean | Record<string, OptionsPossible>;
+    [key: string]: boolean | Record<string, unknown>;
 };
-const applyOptions = (flags: Flags, options?: Options): Flags => {
+function applyOptions(flags: Flags, options?: Record<string, unknown>): Flags {
     if (!options || Object.keys(options).length === 0) {
         return flags;
     }
@@ -92,13 +84,11 @@ const applyOptions = (flags: Flags, options?: Options): Flags => {
                 typeof value === "boolean" ||
                 (typeof value === "object" && !Array.isArray(value))
             ) {
-                flags[option] = value as
-                    | boolean
-                    | Record<string, OptionsPossible>;
+                flags[option] = value as boolean | Record<string, unknown>;
             }
         });
     return flags;
-};
+}
 
 /**
  * GCC command line.
@@ -106,12 +96,17 @@ const applyOptions = (flags: Flags, options?: Options): Flags => {
  * @returns the command line arguments to pass to GCC
  */
 
-const gccCommand = (options: Record<string, OptionsPossible>) => {
-    return ["-jar", compilerPath].concat(utils.buildArgs(options ?? {}));
-};
-
-/**
- * Expose `minifyGCC()`.
- */
-minifyGCC.default = minifyGCC;
-export default minifyGCC;
+function gccCommand(options: Record<string, unknown>) {
+    const buildArgsOptions: BuildArgsOptions = {};
+    Object.entries(options).forEach(([key, value]) => {
+        if (
+            typeof value === "string" ||
+            typeof value === "number" ||
+            typeof value === "boolean" ||
+            value === undefined
+        ) {
+            buildArgsOptions[key] = value;
+        }
+    });
+    return ["-jar", compilerPath].concat(buildArgs(buildArgsOptions));
+}

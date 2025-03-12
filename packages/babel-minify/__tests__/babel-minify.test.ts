@@ -5,40 +5,28 @@
  */
 
 import { describe } from "vitest";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import babelMinify from "../src";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { babelMinify } from "../src/index.ts";
 
 const compressorLabel = "babel-minify";
 const compressor = babelMinify;
 
 describe("Package: babel-minify", async () => {
-    // Run commonjs async tests
-    for (const options of tests.commonjs) {
-        await runOneTest({ options, compressorLabel, compressor });
+    if (!tests.commonjs || !tests.babelMinify) {
+        throw new Error("Tests not found");
     }
 
-    // Run babelMinify async tests
-    for (const options of tests.babelMinify) {
-        await runOneTest({ options, compressorLabel, compressor });
-    }
-
-    // Run commonjs sync tests
+    // Run commonjs tests
     for (const options of tests.commonjs) {
         await runOneTest({
             options,
             compressorLabel,
             compressor,
-            sync: true,
         });
     }
 
-    // Run babelMinify sync tests
+    // Run babelMinify tests
     for (const options of tests.babelMinify) {
-        await runOneTest({
-            options,
-            compressorLabel,
-            compressor,
-            sync: true,
-        });
+        await runOneTest({ options, compressorLabel, compressor });
     }
 });

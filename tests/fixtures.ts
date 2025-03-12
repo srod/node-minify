@@ -1,36 +1,31 @@
 import type { Settings } from "@node-minify/types";
 import { expect, test } from "vitest";
-import minify from "../packages/core/src/index.ts";
+import { minify } from "../packages/core/src/index.ts";
 import { filesCSS, filesHTML, filesJS, filesJSON } from "./files-path.ts";
 
 interface TestOptions {
     it: string;
-    minify: Settings;
+    minify: Partial<Settings>;
 }
 
 interface TestConfig {
     options: TestOptions;
     compressorLabel: string;
     compressor: any;
-    sync?: boolean;
 }
 
-interface MinifyResult {
-    err: Error | null;
-    min: string;
-}
+type MinifyResult = string;
 
 const runOneTest = async ({
     options,
     compressorLabel,
     compressor,
-    sync = false,
 }: TestConfig): Promise<void> => {
     if (!options) {
         return Promise.resolve();
     }
 
-    const testOptions = createTestOptions(options, compressor, sync);
+    const testOptions = createTestOptions(options, compressor);
     const testName = formatTestName(testOptions.it, compressorLabel);
 
     return test(testName, async () => await executeMinifyTest(testOptions));
@@ -38,16 +33,10 @@ const runOneTest = async ({
 
 const createTestOptions = (
     options: TestOptions,
-    compressor: any,
-    sync: boolean
+    compressor: any
 ): TestOptions => {
     const testOptions = structuredClone(options);
     testOptions.minify.compressor = compressor;
-
-    if (sync) {
-        testOptions.minify.sync = true;
-    }
-
     return testOptions;
 };
 
@@ -64,25 +53,15 @@ const executeMinifyTest = async (options: TestOptions): Promise<void> => {
     validateMinifyResult(result);
 };
 
-const runMinify = (options: TestOptions): Promise<MinifyResult> => {
-    return new Promise<MinifyResult>((resolve) => {
-        options.minify.callback = (err: unknown, min?: string) => {
-            resolve({
-                err: err instanceof Error ? err : null,
-                min: min || "",
-            });
-        };
-
-        minify(options.minify);
-    });
-};
+async function runMinify(options: TestOptions): Promise<MinifyResult> {
+    return await minify(options.minify as Settings);
+}
 
 const validateMinifyResult = (result: MinifyResult): void => {
-    expect(result.err).toBeNull();
-    expect(result.min).not.toBeNull();
+    expect(result).not.toBeNull();
 };
 
-export type Tests = Record<string, { it: string; minify: Settings }[]>;
+export type Tests = Record<string, { it: string; minify: Partial<Settings> }[]>;
 
 const tests: Tests = {
     concat: [

@@ -8,40 +8,26 @@
  * Module dependencies.
  */
 import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { writeFile } from "@node-minify/utils";
 import { minify } from "csso";
 
 /**
  * Run csso.
  * @param settings Csso options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyCSSO = ({
-    settings,
-    content,
-    callback,
-    index,
-}: MinifierOptions) => {
-    const contentMinified = minify(content ?? "", settings?.options);
+export async function csso({ settings, content, index }: MinifierOptions) {
+    const { css } = await minify(content ?? "", settings?.options);
+    console.log(css);
     if (settings && !settings.content && settings.output) {
         settings.output &&
-            utils.writeFile({
+            writeFile({
                 file: settings.output,
-                content: contentMinified.css,
+                content: css,
                 index,
             });
     }
-    if (callback) {
-        return callback(null, contentMinified.css);
-    }
-    return contentMinified.css;
-};
-
-/**
- * Expose `minifyCSSO()`.
- */
-minifyCSSO.default = minifyCSSO;
-export default minifyCSSO;
+    return css;
+}

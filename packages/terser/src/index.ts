@@ -8,65 +8,46 @@
  * Module dependencies.
  */
 import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import { writeFile } from "@node-minify/utils";
 import { minify } from "terser";
-
-type OptionsTerser = {
-    sourceMap?: { url: string };
-};
-
-type SettingsTerser = {
-    options: OptionsTerser;
-};
-
-type MinifierOptionsTerser = {
-    settings: SettingsTerser;
-};
 
 /**
  * Run terser.
  * @param settings Terser options
  * @param content Content to minify
- * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyTerser = async ({
+export async function terser({
     settings,
     content,
-    callback,
     index,
-}: MinifierOptions & MinifierOptionsTerser) => {
-    try {
-        const contentMinified = await minify(content ?? "", settings?.options);
-        if (
-            contentMinified.map &&
-            typeof settings?.options?.sourceMap?.url === "string"
-        ) {
-            utils.writeFile({
-                file: settings.options.sourceMap.url,
-                content: contentMinified.map,
-                index,
-            });
-        }
-        if (settings && !settings.content && settings.output) {
-            utils.writeFile({
-                file: settings.output,
-                content: contentMinified.code,
-                index,
-            });
-        }
-        if (callback) {
-            return callback(null, contentMinified.code);
-        }
-        return contentMinified.code;
-    } catch (error) {
-        return callback?.(error);
+}: MinifierOptions & {
+    settings?: {
+        options?: { sourceMap?: { url?: string } };
+    };
+}) {
+    const contentMinified = await minify(content ?? "", settings?.options);
+    if (
+        contentMinified.map &&
+        typeof settings?.options?.sourceMap?.url === "string" &&
+        typeof contentMinified.map === "string"
+    ) {
+        writeFile({
+            file: settings.options.sourceMap.url,
+            content: contentMinified.map,
+            index,
+        });
     }
-};
-
-/**
- * Expose `minifyTerser()`.
- */
-minifyTerser.default = minifyTerser;
-export default minifyTerser;
+    if (typeof contentMinified.code !== "string") {
+        throw new Error("Terser failed: empty result");
+    }
+    if (settings && !settings.content && settings.output) {
+        writeFile({
+            file: settings.output,
+            content: contentMinified.code,
+            index,
+        });
+    }
+    return contentMinified.code;
+}

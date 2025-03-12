@@ -1,18 +1,18 @@
-import babelMinify from "@node-minify/babel-minify";
-import cleanCSS from "@node-minify/clean-css";
-import minify from "@node-minify/core";
-import crass from "@node-minify/crass";
-import cssnano from "@node-minify/cssnano";
-import csso from "@node-minify/csso";
-import gcc from "@node-minify/google-closure-compiler";
-import htmlMinifier from "@node-minify/html-minifier";
-import jsonminify from "@node-minify/jsonminify";
-import noCompress from "@node-minify/no-compress";
-import sqwish from "@node-minify/sqwish";
-import terser from "@node-minify/terser";
-import uglifyes from "@node-minify/uglify-es";
-import uglifyjs from "@node-minify/uglify-js";
-import yui from "@node-minify/yui";
+import { babelMinify } from "@node-minify/babel-minify";
+import { cleanCss } from "@node-minify/clean-css";
+import { minify } from "@node-minify/core";
+import { crass } from "@node-minify/crass";
+import { cssnano } from "@node-minify/cssnano";
+import { csso } from "@node-minify/csso";
+import { gcc } from "@node-minify/google-closure-compiler";
+import { htmlMinifier } from "@node-minify/html-minifier";
+import { jsonMinify } from "@node-minify/jsonminify";
+import { noCompress } from "@node-minify/no-compress";
+import { sqwish } from "@node-minify/sqwish";
+import { terser } from "@node-minify/terser";
+import { uglifyEs } from "@node-minify/uglify-es";
+import { uglifyJs } from "@node-minify/uglify-js";
+import { yui } from "@node-minify/yui";
 
 const contentJS = `var tools = true; if(tools){ console.log('true'); }`;
 
@@ -20,7 +20,6 @@ minify({
     compressor: gcc,
     content: contentJS,
     output: "public/js-dist/gcc-contentJS.js",
-    sync: true,
     callback: (err, min) => {
         console.log("contentJS GCC");
         console.log(err);
@@ -28,18 +27,17 @@ minify({
     },
 });
 
-console.log("sync 1");
 minify({
     compressor: yui,
     input: ["public/js/sample.js", "public/js/sample2.js"],
     output: "public/js-dist/yui-publicfolder-concat.js",
     type: "js",
-    sync: true,
-    callback: (err, value) => {
-        console.log("sync 2", value);
+    callback: (err, min) => {
+        console.log("yui concat");
+        console.log(err);
+        //console.log(min);
     },
 });
-console.log("sync 3");
 
 minify({
     compressor: terser,
@@ -136,7 +134,7 @@ const json = `
 `;
 
 minify({
-    compressor: jsonminify,
+    compressor: jsonMinify,
     content: json,
     callback: (err, min) => {
         console.log("callback min");
@@ -167,7 +165,6 @@ minify({
     compressor: gcc,
     input: "public/js/**/*.js",
     output: "public/js-dist/gcc-wildcards.js",
-    sync: true,
     callback: (err, min) => {
         console.log("wildcards GCC");
         console.log(err);
@@ -188,7 +185,7 @@ minify({
 });
 
 minify({
-    compressor: uglifyes,
+    compressor: uglifyEs,
     input: "public/js/**/*.js",
     output: "public/js-dist/uglifyes-wildcards.js",
     callback: (err, min) => {
@@ -199,7 +196,7 @@ minify({
 });
 
 minify({
-    compressor: uglifyjs,
+    compressor: uglifyJs,
     input: "public/js/**/*.js",
     output: "public/js-dist/uglifyjs-wildcards.js",
     callback: (err, min) => {
@@ -269,7 +266,7 @@ minify({
 
 // Using UglifyJS
 minify({
-    compressor: uglifyjs,
+    compressor: uglifyJs,
     input: "public/js/sample.js",
     output: "public/js-dist/uglify-onefile.js",
     callback: (err, min) => {
@@ -280,7 +277,7 @@ minify({
 });
 
 minify({
-    compressor: uglifyjs,
+    compressor: uglifyJs,
     input: ["public/js/sample.js", "public/js/sample2.js"],
     output: "public/js-dist/uglify-concat.js",
     callback: (err, min) => {
@@ -378,7 +375,7 @@ minify({
 
 // Using cleancss
 minify({
-    compressor: cleanCSS,
+    compressor: cleanCss,
     input: ["public/css/sample.css", "public/css/sample2.css"],
     output: "public/css-dist/cleancss-concat.css",
     callback: (err, min) => {

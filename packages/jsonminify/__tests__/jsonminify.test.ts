@@ -5,20 +5,19 @@
  */
 
 import { describe } from "vitest";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import jsonminify from "../src";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { jsonMinify } from "../src/index.ts";
 
 const compressorLabel = "jsonminify";
-const compressor = jsonminify;
+const compressor = jsonMinify;
 
 describe("Package: jsonminify", async () => {
-    // Run async tests
-    for (const options of tests.commonjson) {
-        await runOneTest({ options, compressorLabel, compressor });
+    if (!tests.commonjson) {
+        throw new Error("Tests not found");
     }
 
-    // Run sync tests
+    // Run commonjson tests
     for (const options of tests.commonjson) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
+        await runOneTest({ options, compressorLabel, compressor });
     }
 });

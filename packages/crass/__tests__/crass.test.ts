@@ -5,20 +5,19 @@
  */
 
 import { describe } from "vitest";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import crass from "../src";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { crass } from "../src/index.ts";
 
 const compressorLabel = "crass";
 const compressor = crass;
 
 describe("Package: crass", async () => {
-    // Run async tests
-    for (const options of tests.commoncss) {
-        await runOneTest({ options, compressorLabel, compressor });
+    if (!tests.commoncss) {
+        throw new Error("Tests not found");
     }
 
-    // Run sync tests
+    // Run commoncss tests
     for (const options of tests.commoncss) {
-        await runOneTest({ options, compressorLabel, compressor, sync: true });
+        await runOneTest({ options, compressorLabel, compressor });
     }
 });
