@@ -50,7 +50,7 @@
     "@vitest/ui": "1.6.1",
     "copyfiles": "2.4.1",
     "rimraf": "6.0.1",
-    "tsup": "8.4.0",
+    "tsup": "8.5.0",
     "typescript": "5.8.3",
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "1.6.1"
