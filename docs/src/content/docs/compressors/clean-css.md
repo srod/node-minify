@@ -5,36 +5,39 @@ description: "clean-css for node-minify"
 
 `clean-css` can compress only CSS files.
 
-[https://github.com/GoalSmashers/clean-css](https://github.com/GoalSmashers/clean-css)
+[https://github.com/clean-css/clean-css](https://github.com/clean-css/clean-css)
+
+## Installation
+
+```bash
+npm install @node-minify/core @node-minify/clean-css
+```
 
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const cleanCSS = require('@node-minify/clean-css');
+import { minify } from '@node-minify/core';
+import { cleanCss } from '@node-minify/clean-css';
 
-minify({
-  compressor: cleanCSS,
+const result = await minify({
+  compressor: cleanCss,
   input: 'foo.css',
-  output: 'bar.css',
-  callback: function(err, min) {}
+  output: 'bar.css'
 });
 ```
 
 ## Options
 
 ```js
-minify({
-  compressor: cleanCSS,
+const result = await minify({
+  compressor: cleanCss,
   input: 'foo.css',
   output: 'bar.css',
   options: {
-    advanced: false, // set to false to disable advanced optimizations - selector & property merging, reduction, etc.
-    aggressiveMerging: false // set to false to disable aggressive merging of properties.
-    ... // See more information link below
-  },
-  callback: function (err, min) {}
+    level: 2,
+    sourceMap: true
+  }
 });
 ```
 
-[Check all options](https://github.com/jakubpawlowicz/clean-css/tree/3.4)
+[Check all options](https://github.com/clean-css/clean-css#constructor-options)

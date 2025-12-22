@@ -7,16 +7,23 @@ description: "crass for node-minify"
 
 [https://github.com/mattbasta/crass](https://github.com/mattbasta/crass)
 
+## Installation
+
+```bash
+npm install @node-minify/core @node-minify/crass
+```
+
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const crass = require('@node-minify/crass');
+import { minify } from '@node-minify/core';
+import { crass } from '@node-minify/crass';
 
-minify({
+const result = await minify({
   compressor: crass,
   input: 'foo.css',
-  output: 'bar.css',
-  callback: function(err, min) {}
+  output: 'bar.css'
 });
 ```
+
+[Check all options](https://github.com/mattbasta/crass)

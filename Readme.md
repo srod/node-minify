@@ -68,44 +68,38 @@ bun add @node-minify/uglify-js
 
 ```js
 import { minify } from '@node-minify/core';
-import gcc from '@node-minify/google-closure-compiler';
-import uglifyjs from '@node-minify/uglify-js';
+import { gcc } from '@node-minify/google-closure-compiler';
+import { terser } from '@node-minify/terser';
 
 // Using Google Closure Compiler
-minify({
+const result = await minify({
   compressor: gcc,
   input: 'foo.js',
-  output: 'bar.js',
-  callback: function (err, min) {}
-});
-
-// Using UglifyJS
-minify({
-  compressor: uglifyjs,
-  input: './**/*.js',
-  output: 'bar.js',
-  callback: function (err, min) {}
-});
-
-// Using Promise
-var promise = minify({
-  compressor: uglifyjs,
-  input: './**/*.js',
   output: 'bar.js'
 });
 
-promise.then(function (min) {});
+// Using terser with wildcards
+const min = await minify({
+  compressor: terser,
+  input: 'src/**/*.js',
+  output: 'dist/bundle.js'
+});
 
-// Async/Await
-async function doMinify() {
-  const min = await minify({ compressor: uglifyjs, input: 'foo.js', output: 'bar.js' });
-}
+// Using Promise
+minify({
+  compressor: terser,
+  input: 'src/**/*.js',
+  output: 'dist/bundle.js'
+}).then((min) => {
+  console.log(min);
+});
 ```
 
 ### In memory
 
 ```js
-import htmlMinifier from '@node-minify/html-minifier';
+import { minify } from '@node-minify/core';
+import { htmlMinifier } from '@node-minify/html-minifier';
 
 const html = `
 <!doctype html>
@@ -115,16 +109,14 @@ const html = `
     </head>
 </html>`;
 
-minify({
+const min = await minify({
   compressor: htmlMinifier,
   content: html
-}).then(function (min) {
-  console.log('html min');
-  console.log(min);
 });
+console.log(min);
 ```
 
-[More examples](https://github.com/srod/node-minify/blob/main/examples/server.js)
+[More examples](https://github.com/srod/node-minify/blob/develop/examples/server.js)
 
 ## Documentation
 

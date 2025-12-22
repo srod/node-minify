@@ -3,16 +3,12 @@ title: 'Getting Started'
 description: 'Getting Started for node-minify'
 ---
 
+## Requirements
+
+- **Node.js**: 20 or higher (Node 22 recommended)
+- **Module System**: ESM only (`"type": "module"` in package.json)
+
 ## Installation
-
-```bash
-npm install @node-minify/core
-yarn add @node-minify/core
-pnpm add @node-minify/core
-bun add @node-minify/core
-```
-
-And install the compressor you want
 
 ```bash
 npm install @node-minify/core
@@ -22,54 +18,72 @@ yarn add @node-minify/core
 pnpm add @node-minify/core
 # Or Bun
 bun add @node-minify/core
+```
+
+And install the compressor you want:
+
+```bash
+npm install @node-minify/terser
+# Or Yarn
+yarn add @node-minify/terser
+# Or pnpm
+pnpm add @node-minify/terser
+# Or Bun
+bun add @node-minify/terser
 ```
 
 ## Quick Start
 
 ```js
-npm install @node-minify/uglify-js
-# Or Yarn
-yarn add @node-minify/uglify-js
-# Or pnpm
-pnpm add @node-minify/uglify-js
-# Or Bun
-bun add @node-minify/uglify-js
+import { minify } from '@node-minify/core';
+import { terser } from '@node-minify/terser';
 
-// Using Google Closure Compiler
-minify({
-  compressor: gcc,
-  input: 'foo.js',
-  output: 'bar.js',
-  callback: function (err, min) {}
+// Basic usage with async/await
+const result = await minify({
+  compressor: terser,
+  input: 'src/js/main.js',
+  output: 'dist/main.min.js'
 });
 
-// Using UglifyJS
-minify({
-  compressor: uglifyjs,
-  input: './**/*.js',
-  output: 'bar.js',
-  callback: function (err, min) {}
-});
-
-// Using Promise
-var promise = minify({
-  compressor: uglifyjs,
-  input: './**/*.js',
-  output: 'bar.js'
-});
-
-promise.then(function (min) {});
-
-// Async/Await
-async function doMinify() {
-  const min = await minify({ compressor: uglifyjs, input: 'foo.js', output: 'bar.js' });
-}
+console.log(result);
 ```
 
-### In memory
+### Using Wildcards
 
 ```js
-import htmlMinifier from '@node-minify/html-minifier';
+import { minify } from '@node-minify/core';
+import { terser } from '@node-minify/terser';
+
+// Concatenate and minify all JS files
+const result = await minify({
+  compressor: terser,
+  input: 'src/**/*.js',
+  output: 'dist/bundle.min.js'
+});
+```
+
+### Using Promises
+
+```js
+import { minify } from '@node-minify/core';
+import { terser } from '@node-minify/terser';
+
+minify({
+  compressor: terser,
+  input: 'src/**/*.js',
+  output: 'dist/bundle.min.js'
+}).then((min) => {
+  console.log('Minified:', min);
+}).catch((err) => {
+  console.error('Error:', err);
+});
+```
+
+### In Memory (No File Output)
+
+```js
+import { minify } from '@node-minify/core';
+import { htmlMinifier } from '@node-minify/html-minifier';
 
 const html = `
 <!doctype html>
@@ -79,13 +93,67 @@ const html = `
     </head>
 </html>`;
 
-minify({
+const min = await minify({
   compressor: htmlMinifier,
   content: html
-}).then(function (min) {
-  console.log('html min');
-  console.log(min);
+});
+
+console.log(min);
+```
+
+### With Options
+
+```js
+import { minify } from '@node-minify/core';
+import { terser } from '@node-minify/terser';
+
+const result = await minify({
+  compressor: terser,
+  input: 'src/**/*.js',
+  output: 'dist/bundle.min.js',
+  options: {
+    mangle: true,
+    compress: {
+      drop_console: true
+    }
+  }
 });
 ```
 
-[More examples](https://github.com/srod/node-minify/blob/main/examples/server.js)
+## Available Compressors
+
+### JavaScript
+
+```js
+import { babelMinify } from '@node-minify/babel-minify';
+import { gcc } from '@node-minify/google-closure-compiler';
+import { terser } from '@node-minify/terser';
+import { uglifyjs } from '@node-minify/uglify-js';
+import { uglifyes } from '@node-minify/uglify-es';
+import { yui } from '@node-minify/yui';
+```
+
+### CSS
+
+```js
+import { cleanCss } from '@node-minify/clean-css';
+import { crass } from '@node-minify/crass';
+import { cssnano } from '@node-minify/cssnano';
+import { csso } from '@node-minify/csso';
+import { sqwish } from '@node-minify/sqwish';
+import { yui } from '@node-minify/yui'; // with type: 'css'
+```
+
+### HTML
+
+```js
+import { htmlMinifier } from '@node-minify/html-minifier';
+```
+
+### JSON
+
+```js
+import { jsonminify } from '@node-minify/jsonminify';
+```
+
+[More examples](https://github.com/srod/node-minify/blob/develop/examples/server.js)

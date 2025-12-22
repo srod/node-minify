@@ -7,32 +7,36 @@ description: "babel-minify for node-minify"
 
 [https://github.com/babel/minify](https://github.com/babel/minify)
 
+## Installation
+
+```bash
+npm install @node-minify/core @node-minify/babel-minify
+```
+
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const babelMinify = require('@node-minify/babel-minify');
+import { minify } from '@node-minify/core';
+import { babelMinify } from '@node-minify/babel-minify';
 
-minify({
+const result = await minify({
   compressor: babelMinify,
   input: 'foo.js',
-  output: 'bar.js',
-  callback: function(err, min) {}
+  output: 'bar.js'
 });
 ```
 
 ## Options
 
 ```js
-minify({
+const result = await minify({
   compressor: babelMinify,
   input: 'foo.js',
   output: 'bar.js',
   options: {
     babelrc: 'public/.babelrc',
     presets: ['env']
-  },
-  callback: function(err, min) {}
+  }
 });
 ```
 

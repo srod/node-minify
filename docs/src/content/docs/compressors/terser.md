@@ -7,34 +7,39 @@ description: "terser for node-minify"
 
 [https://github.com/terser-js/terser](https://github.com/terser-js/terser)
 
+## Installation
+
+```bash
+npm install @node-minify/core @node-minify/terser
+```
+
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const terser = require('@node-minify/terser');
+import { minify } from '@node-minify/core';
+import { terser } from '@node-minify/terser';
 
-minify({
+const result = await minify({
   compressor: terser,
   input: 'foo.js',
-  output: 'bar.js',
-  callback: function(err, min) {}
+  output: 'bar.js'
 });
 ```
 
 ## Options
 
 ```js
-minify({
+const result = await minify({
   compressor: terser,
   input: 'foo.js',
   output: 'bar.js',
   options: {
-    warnings: true, // pass true to display compressor warnings.
-    mangle: false // pass false to skip mangling names.
-    output: {} // pass an object if you wish to specify additional output options. The defaults are optimized for best compression.
-    compress: false // pass false to skip compressing entirely. Pass an object to specify custom compressor options.
-  },
-  callback: function (err, min) {}
+    mangle: false,
+    output: {},
+    compress: {
+      drop_console: true
+    }
+  }
 });
 ```
 
