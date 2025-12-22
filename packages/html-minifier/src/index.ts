@@ -9,7 +9,6 @@
  */
 import type { MinifierOptions } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
-import { minify } from "html-minifier-next";
 
 /**
  * Module variables.
@@ -44,6 +43,7 @@ const minifyHTMLMinifier = async ({
     callback,
     index,
 }: MinifierOptions) => {
+    const { minify } = await import("html-minifier-next");
     const options = Object.assign({}, defaultOptions, settings?.options);
     const contentMinified = await minify(content ?? "", options);
     if (settings && !settings.content && settings.output) {
