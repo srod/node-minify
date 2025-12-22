@@ -1,5 +1,11 @@
 # @node-minify/html-minifier
 
+## 9.0.2
+
+### Patch Changes
+
+- e5a9ccb: Replace html-minifier with html-minifier-next to fix security vulnerability (CVE in upstream html-minifier)
+
 ## 9.0.1
 
 ### Patch Changes
