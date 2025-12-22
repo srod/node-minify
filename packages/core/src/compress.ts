@@ -36,14 +36,18 @@ export async function compress(settings: Settings): Promise<string> {
  * Compress an array of files.
  * @param settings Settings
  */
-function compressArrayOfFiles(settings: Settings): Promise<string> {
-    let sequence: Promise<string> = Promise.resolve("");
-    Array.isArray(settings.input) &&
-        settings.input.forEach((input, index) => {
-            const content = getContentFromFiles(input);
-            sequence = sequence.then(() => run({ settings, content, index }));
-        });
-    return sequence;
+async function compressArrayOfFiles(settings: Settings): Promise<string> {
+    let result = "";
+    if (Array.isArray(settings.input)) {
+        for (let index = 0; index < settings.input.length; index++) {
+            const input = settings.input[index];
+            if (input) {
+                const content = getContentFromFiles(input);
+                result = await run({ settings, content, index });
+            }
+        }
+    }
+    return result;
 }
 
 /**

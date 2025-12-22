@@ -61,12 +61,11 @@ export async function babelMinify({
     }
 
     if (settings && !settings.content && settings.output) {
-        settings.output &&
-            writeFile({
-                file: settings.output,
-                content: code,
-                index,
-            });
+        writeFile({
+            file: settings.output,
+            content: code,
+            index,
+        });
     }
     return code;
 }

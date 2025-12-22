@@ -20,14 +20,12 @@ import { minify } from "csso";
  */
 export async function csso({ settings, content, index }: MinifierOptions) {
     const { css } = await minify(content ?? "", settings?.options);
-    console.log(css);
     if (settings && !settings.content && settings.output) {
-        settings.output &&
-            writeFile({
-                file: settings.output,
-                content: css,
-                index,
-            });
+        writeFile({
+            file: settings.output,
+            content: css,
+            index,
+        });
     }
     return css;
 }

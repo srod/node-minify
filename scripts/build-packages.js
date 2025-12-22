@@ -60,11 +60,13 @@ const buildPromises = packages.map((pkg) => {
 });
 
 // Run all builds in parallel and wait for them to complete
-Promise.all(buildPromises)
-    .then(() => {
-        console.log("✨ All packages built successfully!");
-    })
-    .catch((error) => {
-        console.error("❌ Some packages failed to build:", error.message);
-        process.exit(1);
-    });
+try {
+    await Promise.all(buildPromises);
+    console.log("✨ All packages built successfully!");
+} catch (error) {
+    console.error(
+        "❌ Some packages failed to build:",
+        error instanceof Error ? error.message : error
+    );
+    process.exit(1);
+}

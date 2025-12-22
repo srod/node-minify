@@ -43,12 +43,11 @@ export async function cleanCss({ settings, content, index }: MinifierOptions) {
         });
     }
     if (settings && !settings.content && settings.output) {
-        settings.output &&
-            writeFile({
-                file: settings.output,
-                content: contentMinified,
-                index,
-            });
+        writeFile({
+            file: settings.output,
+            content: contentMinified,
+            index,
+        });
     }
     return contentMinified;
 }
