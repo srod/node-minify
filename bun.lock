@@ -40,6 +40,27 @@
         "wrangler": "^4.0.0",
       },
     },
+    "examples": {
+      "name": "@node-minify/examples",
+      "version": "0.0.0",
+      "dependencies": {
+        "@node-minify/babel-minify": "workspace:*",
+        "@node-minify/clean-css": "workspace:*",
+        "@node-minify/core": "workspace:*",
+        "@node-minify/crass": "workspace:*",
+        "@node-minify/cssnano": "workspace:*",
+        "@node-minify/csso": "workspace:*",
+        "@node-minify/google-closure-compiler": "workspace:*",
+        "@node-minify/html-minifier": "workspace:*",
+        "@node-minify/jsonminify": "workspace:*",
+        "@node-minify/no-compress": "workspace:*",
+        "@node-minify/sqwish": "workspace:*",
+        "@node-minify/terser": "workspace:*",
+        "@node-minify/uglify-es": "workspace:*",
+        "@node-minify/uglify-js": "workspace:*",
+        "@node-minify/yui": "workspace:*",
+      },
+    },
     "packages/babel-minify": {
       "name": "@node-minify/babel-minify",
       "version": "10.0.0-next.0",
@@ -553,6 +574,8 @@
     "@node-minify/csso": ["@node-minify/csso@workspace:packages/csso"],
 
     "@node-minify/docs": ["@node-minify/docs@workspace:docs"],
+
+    "@node-minify/examples": ["@node-minify/examples@workspace:examples"],
 
     "@node-minify/google-closure-compiler": ["@node-minify/google-closure-compiler@workspace:packages/google-closure-compiler"],
 

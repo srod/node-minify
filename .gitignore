@@ -12,3 +12,5 @@ lib
 .history
 tests/tmp
 *.tsbuildinfo
+examples/public/**/*-dist
+examples/public/**/*.min.html

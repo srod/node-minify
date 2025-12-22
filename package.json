@@ -58,6 +58,7 @@
   },
   "workspaces": [
     "docs",
-    "packages/*"
+    "packages/*",
+    "examples"
   ]
 }
