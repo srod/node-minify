@@ -48,6 +48,7 @@
     "@types/node": "^24.0.0",
     "@vitest/coverage-v8": "^4.0.16",
     "@vitest/ui": "^4.0.16",
+    "babel-preset-minify": "0.5.2",
     "copyfiles": "2.4.1",
     "rimraf": "6.1.2",
     "tsup": "8.5.1",

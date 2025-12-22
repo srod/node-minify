@@ -7,6 +7,14 @@ export default defineConfig({
         reporters: "dot",
         coverage: {
             reporter: ["text", "json", "html"],
+            exclude: [
+                "**/dist/**",
+                "**/node_modules/**",
+                "**/__tests__/**",
+                "**/tests/**",
+                "**/*.config.ts",
+                "**/types/**",
+            ],
         },
         testTimeout: 240000,
     },
