@@ -48,7 +48,6 @@ export async function gcc({
     const result = await runCommandLine({
         args: gccCommand(options),
         data: content as string,
-        settings,
     });
 
     if (typeof result !== "string") {

@@ -41,7 +41,6 @@ export async function yui({
     const result = await runCommandLine({
         args: yuiCommand(settings.type, settings?.options ?? {}),
         data: content as string,
-        settings,
     });
 
     if (typeof result !== "string") {

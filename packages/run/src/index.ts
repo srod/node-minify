@@ -4,41 +4,29 @@
  * MIT Licensed
  */
 
-/**
- * Module dependencies.
- */
 import childProcess from "node:child_process";
-import type { Settings } from "@node-minify/types";
 
 export type RunCommandLineParams = {
     args: string[];
     data: string;
-    settings?: Settings;
 };
 
 /**
  * Run the command line with spawn.
- * @param args Arguments
- * @param data Data to minify
- * @param settings Settings
- * @returns Promise with minified content
+ * @param args - Command line arguments for the Java process
+ * @param data - Data to minify (piped to stdin)
+ * @returns Promise with minified content from stdout
  */
 export async function runCommandLine({
     args,
     data,
-    settings,
 }: RunCommandLineParams): Promise<string> {
-    return run({
-        data,
-        args,
-        ...(settings && { settings }),
-    });
+    return run({ data, args });
 }
 
 type RunParams = {
     data: string;
     args: string[];
-    settings?: Settings;
 };
 
 /**

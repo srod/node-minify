@@ -4,7 +4,6 @@
  * MIT Licensed
  */
 
-import type { Settings } from "@node-minify/types";
 import { afterAll, describe, expect, test, vi } from "vitest";
 import { type RunCommandLineParams, runCommandLine } from "../src/index.ts";
 
@@ -13,7 +12,6 @@ const jar = `${__dirname}/../../yui/src/binaries/yuicompressor-2.4.7.jar`;
 type Command = {
     args: string[];
     data: string;
-    settings: Partial<Settings>;
 };
 
 describe("Package: run", () => {
@@ -22,7 +20,6 @@ describe("Package: run", () => {
             const command: Command = {
                 args: ["-jar", "-Xss2048k", jar, "--type", "js"],
                 data: 'console.log("foo");',
-                settings: {},
             };
 
             const result = await runCommandLine(
@@ -32,10 +29,9 @@ describe("Package: run", () => {
         });
 
         test("should not be OK with YUI, fake arg", async () => {
-            const command = {
+            const command: Command = {
                 args: ["-jar", "-Xss2048k", jar, "--type", "js", "--fake"],
                 data: 'console.log("foo");',
-                settings: {},
             };
 
             await expect(
@@ -47,7 +43,6 @@ describe("Package: run", () => {
             const command: Command = {
                 args: ["-jar", "-Xss2048k", jar, "--type", "js"],
                 data: "",
-                settings: {},
             };
 
             const result = await runCommandLine(
@@ -56,13 +51,10 @@ describe("Package: run", () => {
             expect(result).toBe("");
         });
 
-        test("should handle maxBuffer setting", async () => {
+        test("should minify JavaScript input", async () => {
             const command: Command = {
                 args: ["-jar", "-Xss2048k", jar, "--type", "js"],
                 data: 'console.log("foo");',
-                settings: {
-                    buffer: 2000 * 1024,
-                },
             };
 
             const result = await runCommandLine(
