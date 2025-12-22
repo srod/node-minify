@@ -8,6 +8,29 @@ import { ValidationError } from "./error.ts";
 import type { BuildArgsOptions } from "./types.ts";
 
 /**
+ * Converts a generic options object to BuildArgsOptions by filtering out non-primitive values.
+ * Only keeps string, number, boolean, and undefined values.
+ * @param options - Generic options object
+ * @returns Filtered options compatible with buildArgs
+ */
+export function toBuildArgsOptions(
+    options: Record<string, unknown>
+): BuildArgsOptions {
+    const result: BuildArgsOptions = {};
+    for (const [key, value] of Object.entries(options)) {
+        if (
+            typeof value === "string" ||
+            typeof value === "number" ||
+            typeof value === "boolean" ||
+            value === undefined
+        ) {
+            result[key] = value;
+        }
+    }
+    return result;
+}
+
+/**
  * Builds arguments array based on an object.
  * @param options Object containing command line arguments
  * @returns Array of command line arguments

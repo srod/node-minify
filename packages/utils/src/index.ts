@@ -1,4 +1,4 @@
-import { buildArgs } from "./buildArgs.ts";
+import { buildArgs, toBuildArgsOptions } from "./buildArgs.ts";
 import { compressSingleFile } from "./compressSingleFile.ts";
 import { deleteFile } from "./deleteFile.ts";
 import { resetDeprecationWarnings, warnDeprecation } from "./deprecation.ts";
@@ -26,6 +26,7 @@ export {
     resetDeprecationWarnings,
     run,
     setFileNameMin,
+    toBuildArgsOptions,
     warnDeprecation,
     writeFile,
 };

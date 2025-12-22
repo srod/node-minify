@@ -6,8 +6,7 @@
 
 import { runCommandLine } from "@node-minify/run";
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import type { BuildArgsOptions } from "@node-minify/utils";
-import { buildArgs } from "@node-minify/utils";
+import { buildArgs, toBuildArgsOptions } from "@node-minify/utils";
 import compilerPath from "google-closure-compiler-java";
 
 // the allowed flags, taken from https://github.com/google/closure-compiler/wiki/Flags-and-Options
@@ -91,16 +90,7 @@ function applyOptions(flags: Flags, options?: Record<string, unknown>): Flags {
  */
 
 function gccCommand(options: Record<string, unknown>) {
-    const buildArgsOptions: BuildArgsOptions = {};
-    Object.entries(options).forEach(([key, value]) => {
-        if (
-            typeof value === "string" ||
-            typeof value === "number" ||
-            typeof value === "boolean" ||
-            value === undefined
-        ) {
-            buildArgsOptions[key] = value;
-        }
-    });
-    return ["-jar", compilerPath].concat(buildArgs(buildArgsOptions));
+    return ["-jar", compilerPath].concat(
+        buildArgs(toBuildArgsOptions(options))
+    );
 }

@@ -8,8 +8,11 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { runCommandLine } from "@node-minify/run";
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import type { BuildArgsOptions } from "@node-minify/utils";
-import { buildArgs, warnDeprecation } from "@node-minify/utils";
+import {
+    buildArgs,
+    toBuildArgsOptions,
+    warnDeprecation,
+} from "@node-minify/utils";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const binYui = `${__dirname}/binaries/yuicompressor-2.4.7.jar`;
@@ -54,18 +57,7 @@ export async function yui({
  * YUI Compressor CSS command line.
  */
 function yuiCommand(type: "js" | "css", options: Record<string, unknown>) {
-    const buildArgsOptions: BuildArgsOptions = {};
-    Object.entries(options).forEach(([key, value]) => {
-        if (
-            typeof value === "string" ||
-            typeof value === "number" ||
-            typeof value === "boolean" ||
-            value === undefined
-        ) {
-            buildArgsOptions[key] = value;
-        }
-    });
     return ["-jar", "-Xss2048k", binYui, "--type", type].concat(
-        buildArgs(buildArgsOptions)
+        buildArgs(toBuildArgsOptions(options))
     );
 }
