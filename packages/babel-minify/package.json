@@ -57,6 +57,7 @@
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*",
-    "@types/babel-core": "^6.25.10"
+    "@types/babel-core": "^6.25.10",
+    "babel-preset-env": "1.7.0"
   }
 }
