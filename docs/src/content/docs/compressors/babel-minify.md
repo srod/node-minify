@@ -1,10 +1,12 @@
 ---
-title: "babel-minify"
-description: "babel-minify for node-minify"
+title: "babel-minify (Deprecated)"
+description: "babel-minify for node-minify - DEPRECATED"
 ---
 
-:::caution[Deprecation Notice]
-This package uses Babel 6 which is no longer maintained. Consider using [terser](/compressors/terser) instead for actively maintained JavaScript minification.
+:::danger[Deprecated]
+**This package is deprecated.** `babel-minify` uses Babel 6 which is no longer maintained.
+
+Please migrate to [`terser`](/compressors/terser) instead, which is actively maintained and supports modern JavaScript.
 :::
 
 `babel-minify` can compress only JavaScript files.

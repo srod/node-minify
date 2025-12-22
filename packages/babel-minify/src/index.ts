@@ -12,6 +12,8 @@ import { readFile, writeFile } from "@node-minify/utils";
 import { transform } from "babel-core";
 import minify from "babel-preset-minify";
 
+let deprecationWarned = false;
+
 type BabelOptions = {
     presets: string[];
 };
@@ -32,6 +34,13 @@ export async function babelMinify({
         options?: { babelrc?: string };
     };
 }) {
+    if (!deprecationWarned) {
+        console.warn(
+            "[@node-minify/babel-minify] DEPRECATED: babel-minify uses Babel 6 which is no longer maintained. " +
+                "Please migrate to @node-minify/terser for continued support and modern JavaScript features."
+        );
+        deprecationWarned = true;
+    }
     let babelOptions: BabelOptions = {
         presets: [],
     };
