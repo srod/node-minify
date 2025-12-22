@@ -12,6 +12,11 @@ import { writeFile } from "@node-minify/utils";
 import uglifyES from "uglify-es";
 
 /**
+ * @deprecated uglify-es is no longer maintained. Please use @node-minify/terser instead.
+ */
+let deprecationWarned = false;
+
+/**
  * Run uglifyES.
  * @param settings UglifyES options
  * @param content Content to minify
@@ -27,6 +32,13 @@ export async function uglifyEs({
         options?: { sourceMap?: { filename?: string } };
     };
 }) {
+    if (!deprecationWarned) {
+        console.warn(
+            "[@node-minify/uglify-es] DEPRECATED: uglify-es is no longer maintained. " +
+                "Please migrate to @node-minify/terser for continued support and modern JavaScript features."
+        );
+        deprecationWarned = true;
+    }
     let content2: string | Record<string, string> = content ?? "";
     if (typeof settings.options?.sourceMap === "object") {
         content2 = {

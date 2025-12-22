@@ -96,7 +96,6 @@
       },
       "devDependencies": {
         "@node-minify/types": "workspace:*",
-        "@types/mkdirp": "^2.0.0",
       },
     },
     "packages/crass": {
@@ -720,8 +719,6 @@
     "@types/jsonminify": ["@types/jsonminify@0.4.3", "", {}, "sha512-+oz7EbPz1Nwmn/sr3UztgXpRhdFpvFrjGi5ictEYxUri5ZvQMTcdTi36MTfD/gCb1A5xhJKdH8Hwz2uz5k6s9A=="],
 
     "@types/mdast": ["@types/mdast@4.0.4", "", { "dependencies": { "@types/unist": "*" } }, "sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA=="],
-
-    "@types/mkdirp": ["@types/mkdirp@2.0.0", "", { "dependencies": { "mkdirp": "*" } }, "sha512-c/iUqMymAlxLAyIK3u5SzrwkrkyOdv1XDc91T+b5FsY7Jr6ERhUD19jJHOhPW4GD6tmN6mFEorfSdks525pwdQ=="],
 
     "@types/ms": ["@types/ms@2.1.0", "", {}, "sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA=="],
 

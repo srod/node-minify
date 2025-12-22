@@ -12,6 +12,9 @@
 
 # uglify-es
 
+> **DEPRECATED**: This package is deprecated because `uglify-es` is no longer maintained upstream.
+> Please use [`@node-minify/terser`](https://github.com/srod/node-minify/tree/develop/packages/terser) instead, which is actively maintained and supports modern JavaScript.
+
 `uglify-es` is a plugin for [`node-minify`](https://github.com/srod/node-minify)
 
 It allow you to compress JavaScript files.
