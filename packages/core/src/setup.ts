@@ -245,7 +245,7 @@ function validateMandatoryFields(settings: Settings, fields: string[]) {
  * @param setting - Setting key to check
  * @param settings - Settings object
  */
-function mandatory(setting: string, settings: { [key: string]: any }) {
+function mandatory(setting: string, settings: Record<string, unknown>) {
     if (!settings[setting]) {
         throw new Error(`${setting} is mandatory.`);
     }
