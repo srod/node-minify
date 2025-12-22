@@ -12,6 +12,8 @@
 
 # babel-minify
 
+> **⚠️ Deprecation Notice**: This package uses Babel 6 which is no longer maintained. Consider using [`@node-minify/terser`](https://github.com/srod/node-minify/tree/main/packages/terser) instead for actively maintained JavaScript minification.
+
 `babel-minify` is a plugin for [`node-minify`](https://github.com/srod/node-minify)
 
 It allow you to compress JavaScript files.
