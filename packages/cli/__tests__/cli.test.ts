@@ -37,7 +37,7 @@ describe("cli error", () => {
             input: filesJS.oneFile,
             output: filesJS.fileJSOut,
         };
-        expect(cli.run(settings)).rejects.toThrow();
+        await expect(cli.run(settings)).rejects.toThrow();
         try {
             return await cli.run(settings);
         } catch {
