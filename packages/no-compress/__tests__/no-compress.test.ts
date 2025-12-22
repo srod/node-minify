@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { describe } from "vitest";
+import { describe, expect, test } from "vitest";
 import { runOneTest, tests } from "../../../tests/fixtures.ts";
 import { noCompress } from "../src/index.ts";
 
@@ -16,8 +16,19 @@ describe("Package: no-compress", async () => {
         throw new Error("Tests not found");
     }
 
-    // Run concat tests
     for (const options of tests.concat) {
         await runOneTest({ options, compressorLabel, compressor });
     }
+
+    test("should throw when content is undefined", async () => {
+        await expect(
+            noCompress({ settings: {} as any, content: undefined })
+        ).rejects.toThrow("no-compress failed: empty result");
+    });
+
+    test("should throw when content is not a string", async () => {
+        await expect(
+            noCompress({ settings: {} as any, content: 123 as any })
+        ).rejects.toThrow("no-compress failed: empty result");
+    });
 });

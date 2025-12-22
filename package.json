@@ -33,6 +33,7 @@
     "test": "bun run --filter '*' test && bun run clean:git",
     "test:watch": "bun run --filter '*' test:watch",
     "test:ci": "bun run --filter '*' test:ci",
+    "test:coverage": "vitest run --coverage",
     "changeset": "changeset",
     "changeset:version": "changeset version && bun install --no-frozen-lockfile",
     "changeset:release": "bun run build && changeset publish",

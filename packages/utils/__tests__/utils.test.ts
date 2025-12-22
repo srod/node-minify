@@ -5,7 +5,7 @@
  */
 
 import { lstatSync, unlinkSync } from "node:fs";
-import { describe, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 vi.mock("node:fs", async (importOriginal) => {
     const actual = await importOriginal<typeof import("node:fs")>();
@@ -27,8 +27,11 @@ import {
     isValidFile,
     prettyBytes,
     readFile,
+    resetDeprecationWarnings,
     run,
     setFileNameMin,
+    toBuildArgsOptions,
+    warnDeprecation,
     writeFile,
 } from "../src/index.ts";
 
@@ -307,6 +310,261 @@ describe("Package: utils", () => {
             expect(compressor).toHaveBeenCalledWith(
                 expect.objectContaining({ content: "" })
             );
+        });
+    });
+
+    describe("warnDeprecation", () => {
+        beforeEach(() => {
+            resetDeprecationWarnings();
+            vi.spyOn(console, "warn").mockImplementation(() => {});
+        });
+
+        afterEach(() => {
+            vi.restoreAllMocks();
+        });
+
+        test("should warn once for a package", () => {
+            warnDeprecation("test-package", "This is deprecated");
+            expect(console.warn).toHaveBeenCalledTimes(1);
+            expect(console.warn).toHaveBeenCalledWith(
+                "[@node-minify/test-package] DEPRECATED: This is deprecated"
+            );
+        });
+
+        test("should not warn twice for the same package", () => {
+            warnDeprecation("test-package", "This is deprecated");
+            warnDeprecation("test-package", "This is deprecated");
+            expect(console.warn).toHaveBeenCalledTimes(1);
+        });
+
+        test("should warn separately for different packages", () => {
+            warnDeprecation("package-a", "Deprecated A");
+            warnDeprecation("package-b", "Deprecated B");
+            expect(console.warn).toHaveBeenCalledTimes(2);
+        });
+    });
+
+    describe("resetDeprecationWarnings", () => {
+        beforeEach(() => {
+            vi.spyOn(console, "warn").mockImplementation(() => {});
+        });
+
+        afterEach(() => {
+            resetDeprecationWarnings();
+            vi.restoreAllMocks();
+        });
+
+        test("should allow warning again after reset", () => {
+            warnDeprecation("test-package", "First warning");
+            expect(console.warn).toHaveBeenCalledTimes(1);
+
+            resetDeprecationWarnings();
+
+            warnDeprecation("test-package", "Second warning");
+            expect(console.warn).toHaveBeenCalledTimes(2);
+        });
+    });
+
+    describe("toBuildArgsOptions", () => {
+        test("should keep string values", () => {
+            expect(toBuildArgsOptions({ foo: "bar" })).toEqual({ foo: "bar" });
+        });
+
+        test("should keep number values", () => {
+            expect(toBuildArgsOptions({ count: 42 })).toEqual({ count: 42 });
+        });
+
+        test("should keep boolean values", () => {
+            expect(toBuildArgsOptions({ enabled: true })).toEqual({
+                enabled: true,
+            });
+        });
+
+        test("should keep undefined values", () => {
+            expect(toBuildArgsOptions({ opt: undefined })).toEqual({
+                opt: undefined,
+            });
+        });
+
+        test("should filter out object values", () => {
+            expect(toBuildArgsOptions({ nested: { a: 1 } })).toEqual({});
+        });
+
+        test("should filter out array values", () => {
+            expect(toBuildArgsOptions({ list: [1, 2, 3] })).toEqual({});
+        });
+
+        test("should filter out null values", () => {
+            expect(toBuildArgsOptions({ empty: null })).toEqual({});
+        });
+
+        test("should handle mixed values", () => {
+            const input = {
+                str: "value",
+                num: 123,
+                bool: false,
+                obj: { nested: true },
+                arr: [1, 2],
+                undef: undefined,
+            };
+            expect(toBuildArgsOptions(input)).toEqual({
+                str: "value",
+                num: 123,
+                bool: false,
+                undef: undefined,
+            });
+        });
+    });
+
+    describe("run with file output", () => {
+        const tmpDir = `${__dirname}/../../../tests/tmp`;
+
+        test("should write output file when output is specified", async () => {
+            const outputFile = `${tmpDir}/run-output.js`;
+            const compressor = vi.fn().mockResolvedValue({ code: "minified" });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+            } as any;
+
+            await run({ settings, content: "content" });
+
+            expect(readFile(outputFile)).toBe("minified");
+            deleteFile(outputFile);
+        });
+
+        test("should write source map when result includes map", async () => {
+            const outputFile = `${tmpDir}/run-output-map.js`;
+            const mapFile = `${tmpDir}/run-output-map.js.map`;
+            const compressor = vi.fn().mockResolvedValue({
+                code: "minified",
+                map: '{"version":3}',
+            });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+                options: {
+                    sourceMap: { url: mapFile },
+                },
+            } as any;
+
+            await run({ settings, content: "content" });
+
+            expect(readFile(outputFile)).toBe("minified");
+            expect(readFile(mapFile)).toBe('{"version":3}');
+            deleteFile(outputFile);
+            deleteFile(mapFile);
+        });
+
+        test("should use sourceMap.filename if url not present", async () => {
+            const outputFile = `${tmpDir}/run-output-filename.js`;
+            const mapFile = `${tmpDir}/run-output-filename.js.map`;
+            const compressor = vi.fn().mockResolvedValue({
+                code: "minified",
+                map: '{"version":3}',
+            });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+                options: {
+                    sourceMap: { filename: mapFile },
+                },
+            } as any;
+
+            await run({ settings, content: "content" });
+
+            expect(readFile(mapFile)).toBe('{"version":3}');
+            deleteFile(outputFile);
+            deleteFile(mapFile);
+        });
+
+        test("should use _sourceMap.url as fallback", async () => {
+            const outputFile = `${tmpDir}/run-output-underscore.js`;
+            const mapFile = `${tmpDir}/run-output-underscore.js.map`;
+            const compressor = vi.fn().mockResolvedValue({
+                code: "minified",
+                map: '{"version":3}',
+            });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+                options: {
+                    _sourceMap: { url: mapFile },
+                },
+            } as any;
+
+            await run({ settings, content: "content" });
+
+            expect(readFile(mapFile)).toBe('{"version":3}');
+            deleteFile(outputFile);
+            deleteFile(mapFile);
+        });
+
+        test("should not write source map if no url found", async () => {
+            const outputFile = `${tmpDir}/run-output-nomap.js`;
+            const compressor = vi.fn().mockResolvedValue({
+                code: "minified",
+                map: '{"version":3}',
+            });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+                options: {
+                    sourceMap: { inline: true },
+                },
+            } as any;
+
+            await run({ settings, content: "content" });
+
+            expect(readFile(outputFile)).toBe("minified");
+            deleteFile(outputFile);
+        });
+
+        test("should not write files in memory mode", async () => {
+            const compressor = vi.fn().mockResolvedValue({ code: "minified" });
+            const settings = {
+                compressor,
+                content: "source content",
+            } as any;
+
+            const result = await run({ settings, content: "source content" });
+
+            expect(result).toBe("minified");
+        });
+
+        test("should not write files when no output specified", async () => {
+            const compressor = vi.fn().mockResolvedValue({ code: "minified" });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+            } as any;
+
+            const result = await run({ settings, content: "content" });
+
+            expect(result).toBe("minified");
+        });
+
+        test("should not write source map when options is undefined", async () => {
+            const outputFile = `${tmpDir}/run-output-no-options.js`;
+            const compressor = vi.fn().mockResolvedValue({
+                code: "minified",
+                map: '{"version":3}',
+            });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+            } as any;
+
+            await run({ settings, content: "content" });
+
+            expect(readFile(outputFile)).toBe("minified");
+            deleteFile(outputFile);
         });
     });
 });
