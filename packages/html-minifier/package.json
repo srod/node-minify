@@ -52,10 +52,9 @@
   },
   "dependencies": {
     "@node-minify/utils": "workspace:*",
-    "html-minifier": "4.0.0"
+    "html-minifier-next": "^4.14.3"
   },
   "devDependencies": {
-    "@node-minify/types": "workspace:*",
-    "@types/html-minifier": "^4.0.5"
+    "@node-minify/types": "workspace:*"
   }
 }
