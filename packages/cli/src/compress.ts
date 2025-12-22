@@ -22,10 +22,8 @@ async function compress(options: Settings): Promise<Result> {
     try {
         await minify(options);
 
-        // Default result object when no output or using pattern
         const defaultResult: Result = {
             compressorLabel: options.compressorLabel ?? "",
-            compressor: options.compressor,
             size: "0",
             sizeGzip: "0",
         };

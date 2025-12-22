@@ -1,32 +1,181 @@
-export type CompressorReturnType = string;
-export type Compressor = (
-    args: MinifierOptions
-) => Promise<CompressorReturnType>;
+/*!
+ * node-minify
+ * Copyright(c) 2011-2024 Rodolphe Stoclin
+ * MIT Licensed
+ */
 
-export type Settings = {
+/**
+ * The return type of a compressor function.
+ */
+export type CompressorReturnType = string;
+
+/**
+ * Base options that all compressors can accept.
+ * Specific compressors may extend this with their own options.
+ */
+export type CompressorOptions = Record<string, unknown>;
+
+/**
+ * A compressor function that minifies content.
+ * @param args - The minifier options including settings and content
+ * @returns A promise resolving to the minified content
+ */
+export type Compressor<TOptions extends CompressorOptions = CompressorOptions> =
+    (args: MinifierOptions<TOptions>) => Promise<CompressorReturnType>;
+
+/**
+ * File type for compressors that support multiple types (e.g., YUI).
+ */
+export type FileType = "js" | "css";
+
+/**
+ * User-facing settings for the minify function.
+ * This is what users pass when calling minify().
+ *
+ * @example
+ * ```ts
+ * import { minify } from '@node-minify/core';
+ * import { terser } from '@node-minify/terser';
+ *
+ * await minify({
+ *   compressor: terser,
+ *   input: 'src/*.js',
+ *   output: 'dist/bundle.min.js',
+ *   options: { mangle: true }
+ * });
+ * ```
+ */
+export type Settings<TOptions extends CompressorOptions = CompressorOptions> = {
+    /**
+     * The compressor function to use for minification.
+     */
+    compressor: Compressor<TOptions>;
+
+    /**
+     * Optional label for the compressor (used in logging).
+     */
     compressorLabel?: string;
-    compressor: Compressor;
+
+    /**
+     * Content to minify (for in-memory minification).
+     * If provided, input/output are not required.
+     */
     content?: string;
+
+    /**
+     * Input file path(s) or glob pattern.
+     * Can be a single file, array of files, or wildcard pattern.
+     *
+     * @example
+     * - 'src/app.js'
+     * - ['src/a.js', 'src/b.js']
+     * - 'src/**\/*.js'
+     */
     input?: string | string[];
+
+    /**
+     * Output file path.
+     * Use $1 as placeholder for input filename in multi-file scenarios.
+     *
+     * @example
+     * - 'dist/bundle.min.js'
+     * - '$1.min.js' (creates app.min.js from app.js)
+     */
     output?: string;
-    options?: Record<string, unknown>;
+
+    /**
+     * Compressor-specific options.
+     * See individual compressor documentation for available options.
+     */
+    options?: TOptions;
+
+    /**
+     * CLI option string (used by CLI only).
+     * @internal
+     */
     option?: string;
+
+    /**
+     * Buffer size for file operations (in bytes).
+     * @default 1024000 (1MB)
+     */
     buffer?: number;
-    type?: "js" | "css";
+
+    /**
+     * File type for compressors that support multiple types.
+     * Required for YUI compressor.
+     */
+    type?: FileType;
+
+    /**
+     * Suppress console output.
+     * @default false
+     */
     silence?: boolean;
+
+    /**
+     * Public folder to prepend to input paths.
+     *
+     * @example
+     * With publicFolder: 'public/js/' and input: 'app.js',
+     * the actual path becomes 'public/js/app.js'
+     */
     publicFolder?: string;
+
+    /**
+     * Replace files in place instead of creating new output files.
+     * @default false
+     */
     replaceInPlace?: boolean;
 };
 
-export type MinifierOptions = {
-    settings: Settings;
+/**
+ * Options passed to compressor functions internally.
+ * This is what compressors receive, not what users pass.
+ */
+export type MinifierOptions<
+    TOptions extends CompressorOptions = CompressorOptions,
+> = {
+    /**
+     * The full settings object.
+     */
+    settings: Settings<TOptions>;
+
+    /**
+     * The content to minify.
+     */
     content?: string;
+
+    /**
+     * Index of current file when processing multiple files.
+     */
     index?: number;
 };
 
+/**
+ * Result returned after compression (used by CLI).
+ */
 export type Result = {
-    compressor?: string | Compressor;
+    /**
+     * Label of the compressor used.
+     */
     compressorLabel: string;
+
+    /**
+     * Size of minified content (formatted string, e.g., "1.5 KB").
+     */
     size: string;
+
+    /**
+     * Gzipped size of minified content (formatted string).
+     */
     sizeGzip: string;
 };
+
+/**
+ * Type alias for user convenience.
+ * Use this when you need to type the options parameter.
+ */
+export type MinifyOptions<
+    TOptions extends CompressorOptions = CompressorOptions,
+> = Settings<TOptions>;
