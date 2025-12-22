@@ -25,14 +25,13 @@ npm install @node-minify/core @node-minify/uglify-js
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const uglifyJS = require('@node-minify/uglify-js');
+import { minify } from '@node-minify/core';
+import { uglifyJs } from '@node-minify/uglify-js';
 
-minify({
-  compressor: uglifyJS,
+await minify({
+  compressor: uglifyJs,
   input: 'foo.js',
-  output: 'bar.js',
-  callback: function (err, min) {}
+  output: 'bar.js'
 });
 ```
 

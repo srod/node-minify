@@ -25,14 +25,13 @@ npm install @node-minify/core @node-minify/sqwish
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const sqwish = require('@node-minify/sqwish');
+import { minify } from '@node-minify/core';
+import { sqwish } from '@node-minify/sqwish';
 
-minify({
+await minify({
   compressor: sqwish,
   input: 'foo.css',
-  output: 'bar.css',
-  callback: function (err, min) {}
+  output: 'bar.css'
 });
 ```
 

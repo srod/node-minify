@@ -25,14 +25,13 @@ npm install @node-minify/core @node-minify/crass
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const crass = require('@node-minify/crass');
+import { minify } from '@node-minify/core';
+import { crass } from '@node-minify/crass';
 
-minify({
+await minify({
   compressor: crass,
   input: 'foo.css',
-  output: 'bar.css',
-  callback: function (err, min) {}
+  output: 'bar.css'
 });
 ```
 

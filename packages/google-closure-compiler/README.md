@@ -25,14 +25,13 @@ npm install @node-minify/core @node-minify/google-closure-compiler
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const gcc = require('@node-minify/google-closure-compiler');
+import { minify } from '@node-minify/core';
+import { gcc } from '@node-minify/google-closure-compiler';
 
-minify({
+await minify({
   compressor: gcc,
   input: 'foo.js',
-  output: 'bar.js',
-  callback: function (err, min) {}
+  output: 'bar.js'
 });
 ```
 

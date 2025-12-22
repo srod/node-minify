@@ -25,14 +25,13 @@ npm install @node-minify/core @node-minify/html-minifier
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const htmlMinifier = require('@node-minify/html-minifier');
+import { minify } from '@node-minify/core';
+import { htmlMinifier } from '@node-minify/html-minifier';
 
-minify({
+await minify({
   compressor: htmlMinifier,
-  input: 'foo.js',
-  output: 'bar.js',
-  callback: function (err, min) {}
+  input: 'foo.html',
+  output: 'bar.html'
 });
 ```
 

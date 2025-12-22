@@ -25,14 +25,13 @@ npm install @node-minify/core @node-minify/csso
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const csso = require('@node-minify/csso');
+import { minify } from '@node-minify/core';
+import { csso } from '@node-minify/csso';
 
-minify({
+await minify({
   compressor: csso,
   input: 'foo.css',
-  output: 'bar.css',
-  callback: function (err, min) {}
+  output: 'bar.css'
 });
 ```
 

@@ -25,14 +25,13 @@ npm install @node-minify/core @node-minify/cssnano
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const cssnano = require('@node-minify/cssnano');
+import { minify } from '@node-minify/core';
+import { cssnano } from '@node-minify/cssnano';
 
-minify({
+await minify({
   compressor: cssnano,
-  input: 'foo.js',
-  output: 'bar.js',
-  callback: function (err, min) {}
+  input: 'foo.css',
+  output: 'bar.css'
 });
 ```
 

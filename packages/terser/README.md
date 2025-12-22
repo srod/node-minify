@@ -25,14 +25,13 @@ npm install @node-minify/core @node-minify/terser
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const terser = require('@node-minify/terser');
+import { minify } from '@node-minify/core';
+import { terser } from '@node-minify/terser';
 
-minify({
+await minify({
   compressor: terser,
   input: 'foo.js',
-  output: 'bar.js',
-  callback: function (err, min) {}
+  output: 'bar.js'
 });
 ```
 

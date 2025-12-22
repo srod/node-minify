@@ -25,23 +25,21 @@ npm install @node-minify/core @node-minify/yui
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const yui = require('@node-minify/yui');
+import { minify } from '@node-minify/core';
+import { yui } from '@node-minify/yui';
 
-minify({
+await minify({
   compressor: yui,
   type: 'js',
   input: 'foo.js',
-  output: 'bar.js',
-  callback: function (err, min) {}
+  output: 'bar.js'
 });
 
-minify({
+await minify({
   compressor: yui,
   type: 'css',
   input: 'foo.css',
-  output: 'bar.css',
-  callback: function (err, min) {}
+  output: 'bar.css'
 });
 ```
 

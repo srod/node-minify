@@ -25,14 +25,13 @@ npm install @node-minify/core @node-minify/clean-css
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const cleanCSS = require('@node-minify/clean-css');
+import { minify } from '@node-minify/core';
+import { cleanCss } from '@node-minify/clean-css';
 
-minify({
-  compressor: cleanCSS,
+await minify({
+  compressor: cleanCss,
   input: 'foo.css',
-  output: 'bar.css',
-  callback: function (err, min) {}
+  output: 'bar.css'
 });
 ```
 
