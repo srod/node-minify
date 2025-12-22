@@ -5,9 +5,8 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { warnDeprecation } from "@node-minify/utils";
 import minify from "sqwish";
-
-let deprecationWarned = false;
 
 /**
  * Run sqwish.
@@ -20,13 +19,11 @@ export async function sqwish({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (!deprecationWarned) {
-        console.warn(
-            "[@node-minify/sqwish] DEPRECATED: sqwish is no longer maintained. " +
-                "Please migrate to @node-minify/cssnano or @node-minify/clean-css."
-        );
-        deprecationWarned = true;
-    }
+    warnDeprecation(
+        "sqwish",
+        "sqwish is no longer maintained. " +
+            "Please migrate to @node-minify/cssnano or @node-minify/clean-css."
+    );
 
     const strict = settings?.options?.strict as boolean | undefined;
     const code = minify.minify(content, strict);

@@ -9,9 +9,7 @@ import { fileURLToPath } from "node:url";
 import { runCommandLine } from "@node-minify/run";
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import type { BuildArgsOptions } from "@node-minify/utils";
-import { buildArgs } from "@node-minify/utils";
-
-let deprecationWarned = false;
+import { buildArgs, warnDeprecation } from "@node-minify/utils";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const binYui = `${__dirname}/binaries/yuicompressor-2.4.7.jar`;
@@ -27,13 +25,11 @@ export async function yui({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (!deprecationWarned) {
-        console.warn(
-            "[@node-minify/yui] DEPRECATED: YUI Compressor was deprecated by Yahoo in 2013. " +
-                "Please migrate to @node-minify/terser for JS or @node-minify/cssnano for CSS."
-        );
-        deprecationWarned = true;
-    }
+    warnDeprecation(
+        "yui",
+        "YUI Compressor was deprecated by Yahoo in 2013. " +
+            "Please migrate to @node-minify/terser for JS or @node-minify/cssnano for CSS."
+    );
 
     if (
         !settings?.type ||

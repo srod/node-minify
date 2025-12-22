@@ -5,9 +5,8 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { warnDeprecation } from "@node-minify/utils";
 import uglifyES from "uglify-es";
-
-let deprecationWarned = false;
 
 /**
  * Run uglify-es.
@@ -20,13 +19,11 @@ export async function uglifyEs({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (!deprecationWarned) {
-        console.warn(
-            "[@node-minify/uglify-es] DEPRECATED: uglify-es is no longer maintained. " +
-                "Please migrate to @node-minify/terser for continued support and modern JavaScript features."
-        );
-        deprecationWarned = true;
-    }
+    warnDeprecation(
+        "uglify-es",
+        "uglify-es is no longer maintained. " +
+            "Please migrate to @node-minify/terser for continued support and modern JavaScript features."
+    );
 
     let inputContent: string | Record<string, string> = content ?? "";
     const sourceMapOptions = settings.options?.sourceMap as

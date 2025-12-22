@@ -5,11 +5,9 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { readFile } from "@node-minify/utils";
+import { readFile, warnDeprecation } from "@node-minify/utils";
 import { transform } from "babel-core";
 import minify from "babel-preset-minify";
-
-let deprecationWarned = false;
 
 type BabelOptions = {
     presets: (string | typeof minify)[];
@@ -26,13 +24,11 @@ export async function babelMinify({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (!deprecationWarned) {
-        console.warn(
-            "[@node-minify/babel-minify] DEPRECATED: babel-minify uses Babel 6 which is no longer maintained. " +
-                "Please migrate to @node-minify/terser for continued support and modern JavaScript features."
-        );
-        deprecationWarned = true;
-    }
+    warnDeprecation(
+        "babel-minify",
+        "babel-minify uses Babel 6 which is no longer maintained. " +
+            "Please migrate to @node-minify/terser for continued support and modern JavaScript features."
+    );
 
     let babelOptions: BabelOptions = { presets: [] };
     const babelrc = settings?.options?.babelrc as string | undefined;

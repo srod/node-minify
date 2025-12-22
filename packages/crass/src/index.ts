@@ -5,9 +5,8 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { warnDeprecation } from "@node-minify/utils";
 import minify from "crass";
-
-let deprecationWarned = false;
 
 /**
  * Run crass.
@@ -18,13 +17,11 @@ let deprecationWarned = false;
 export async function crass({
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (!deprecationWarned) {
-        console.warn(
-            "[@node-minify/crass] DEPRECATED: crass is no longer maintained. " +
-                "Please migrate to @node-minify/cssnano or @node-minify/clean-css."
-        );
-        deprecationWarned = true;
-    }
+    warnDeprecation(
+        "crass",
+        "crass is no longer maintained. " +
+            "Please migrate to @node-minify/cssnano or @node-minify/clean-css."
+    );
 
     const code = minify.parse(content).optimize().toString();
 
