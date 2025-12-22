@@ -21,10 +21,24 @@ import { mkdirp } from "mkdirp";
  * @param settings Settings
  */
 export async function compress(settings: Settings): Promise<string> {
+    if (Array.isArray(settings.output)) {
+        if (!Array.isArray(settings.input)) {
+            throw new Error(
+                "When output is an array, input must also be an array"
+            );
+        }
+        if (settings.input.length !== settings.output.length) {
+            throw new Error(
+                `Input and output arrays must have the same length (input: ${settings.input.length}, output: ${settings.output.length})`
+            );
+        }
+    }
+
     if (settings.output) {
         createDirectory(settings.output);
     }
 
+    // Handle array outputs (from user input or created internally by checkOutput when processing $1 pattern)
     if (Array.isArray(settings.output)) {
         return compressArrayOfFiles(settings);
     }
@@ -52,7 +66,7 @@ async function compressArrayOfFiles(settings: Settings): Promise<string> {
 
 /**
  * Create folder of the target file.
- * @param filePath Full path of the file
+ * @param filePath Full path of the file (can be string or array when $1 pattern is used)
  */
 function createDirectory(filePath: string | string[]) {
     // Early return if no file path provided
@@ -60,20 +74,26 @@ function createDirectory(filePath: string | string[]) {
         return;
     }
 
-    // Get single path if array
-    const path = Array.isArray(filePath) ? filePath[0] : filePath;
+    // Handle array (created internally by checkOutput when processing $1 pattern)
+    const paths = Array.isArray(filePath) ? filePath : [filePath];
 
-    // Extract directory path
-    const dirPath = path?.substring(0, path.lastIndexOf("/"));
+    for (const path of paths) {
+        if (typeof path !== "string") {
+            continue;
+        }
 
-    // Early return if no directory path
-    if (!dirPath) {
-        return;
-    }
+        // Extract directory path
+        const dirPath = path.substring(0, path.lastIndexOf("/"));
 
-    // Create directory if it doesn't exist
-    if (!directoryExists(dirPath)) {
-        mkdirp.sync(dirPath);
+        // Early return if no directory path
+        if (!dirPath) {
+            continue;
+        }
+
+        // Create directory if it doesn't exist
+        if (!directoryExists(dirPath)) {
+            mkdirp.sync(dirPath);
+        }
     }
 }
 

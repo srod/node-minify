@@ -211,4 +211,94 @@ describe("Package: core", async () => {
             }
         });
     });
+
+    describe("Compress Array of Files", () => {
+        test("should compress an array of files", async () => {
+            const settings: Settings = {
+                compressor: noCompress,
+                input: [filesJS.oneFile, filesJS.oneFile],
+                output: [filesJS.fileJSOut, filesJS.fileJSOut],
+            };
+
+            const min = await minify(settings);
+            expect(min).toBeDefined();
+        });
+
+        test("should throw when output is array but input is not", async () => {
+            const settings: Settings = {
+                compressor: noCompress,
+                input: filesJS.oneFile,
+                output: [filesJS.fileJSOut, filesJS.fileJSOut],
+            };
+
+            await expect(minify(settings)).rejects.toThrow(
+                "When output is an array, input must also be an array"
+            );
+        });
+
+        test("should throw when input and output arrays have different lengths", async () => {
+            const settings: Settings = {
+                compressor: noCompress,
+                input: [filesJS.oneFile, filesJS.oneFile, filesJS.oneFile],
+                output: [filesJS.fileJSOut, filesJS.fileJSOut],
+            };
+
+            await expect(minify(settings)).rejects.toThrow(
+                "Input and output arrays must have the same length (input: 3, output: 2)"
+            );
+        });
+    });
+
+    describe("Create Directory", () => {
+        test("should create directory if it does not exist", async () => {
+            const settings: Settings = {
+                compressor: noCompress,
+                input: filesJS.oneFile,
+                output: `${__dirname}/../../../tests/tmp/new-dir/out.js`,
+            };
+
+            const min = await minify(settings);
+            expect(min).toBeDefined();
+        });
+    });
+
+    describe("Wildcards", () => {
+        test("should handle wildcards with publicFolder", async () => {
+            const settings: Settings = {
+                compressor: noCompress,
+                input: "*.js",
+                output: filesJS.fileJSOut,
+                publicFolder: `${__dirname}/../../../tests/fixtures/`,
+            };
+
+            const min = await minify(settings);
+            expect(min).toBeDefined();
+        });
+
+        test("should handle array of wildcards", async () => {
+            const settings: Settings = {
+                compressor: noCompress,
+                input: ["*.js"],
+                output: filesJS.fileJSOut,
+                publicFolder: `${__dirname}/../../../tests/fixtures/`,
+            };
+
+            const min = await minify(settings);
+            expect(min).toBeDefined();
+        });
+    });
+
+    describe("setup functions", () => {
+        test("should handle publicFolder as non-string", async () => {
+            const settings: any = {
+                compressor: noCompress,
+                input: filesJS.oneFile,
+                output: filesJS.fileJSOut,
+                publicFolder: 123,
+            };
+
+            const min = await minify(settings);
+            expect(min).toBeDefined();
+        });
+    });
 });

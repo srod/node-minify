@@ -59,7 +59,7 @@ function enhanceSettings(settings: Settings): Settings {
             wildcards(settings.input, settings.publicFolder)
         );
     }
-    if (settings.input && settings.output) {
+    if (settings.input && settings.output && !Array.isArray(settings.output)) {
         enhancedSettings = Object.assign(
             settings,
             checkOutput(
@@ -87,13 +87,19 @@ function enhanceSettings(settings: Settings): Settings {
  * @param output Path to the output file
  * @param publicFolder Path to the public folder
  * @param replaceInPlace True to replace file in same folder
+ * @returns Enhanced settings with processed output, or undefined if no processing needed
  */
 function checkOutput(
     input: string | string[],
-    output: string,
+    output: string | string[],
     publicFolder?: string,
     replaceInPlace?: boolean
-) {
+): { output: string | string[] } | undefined {
+    // Arrays don't use the $1 placeholder pattern - they're handled directly in compress()
+    if (Array.isArray(output)) {
+        return undefined;
+    }
+
     const PLACEHOLDER_PATTERN = /\$1/;
 
     if (!PLACEHOLDER_PATTERN.test(output)) {

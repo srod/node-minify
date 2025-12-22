@@ -77,12 +77,14 @@ export type Settings<TOptions extends CompressorOptions = CompressorOptions> = {
     /**
      * Output file path.
      * Use $1 as placeholder for input filename in multi-file scenarios.
+     * Can be a single file, array of files, or pattern with $1.
      *
      * @example
      * - 'dist/bundle.min.js'
+     * - ['file1.min.js', 'file2.min.js']
      * - '$1.min.js' (creates app.min.js from app.js)
      */
-    output?: string;
+    output?: string | string[];
 
     /**
      * Compressor-specific options.

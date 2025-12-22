@@ -28,8 +28,13 @@ async function compress(options: Settings): Promise<Result> {
             sizeGzip: "0",
         };
 
-        // Return default result if output contains pattern or is undefined
-        if (!options.output || options.output.includes("$1")) {
+        // Return default result if output contains pattern, is an array, or is undefined
+        // Arrays and $1 patterns produce multiple files, so we can't calculate a single size
+        if (
+            !options.output ||
+            Array.isArray(options.output) ||
+            options.output.includes("$1")
+        ) {
             return defaultResult;
         }
 
