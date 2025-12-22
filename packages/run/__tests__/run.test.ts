@@ -4,7 +4,17 @@
  * MIT Licensed
  */
 
-import { afterAll, describe, expect, test, vi } from "vitest";
+import childProcess from "node:child_process";
+import { EventEmitter } from "node:events";
+import {
+    afterAll,
+    beforeAll,
+    describe,
+    expect,
+    type MockInstance,
+    test,
+    vi,
+} from "vitest";
 import { type RunCommandLineParams, runCommandLine } from "../src/index.ts";
 
 const jar = `${__dirname}/../../yui/src/binaries/yuicompressor-2.4.7.jar`;
@@ -64,31 +74,102 @@ describe("Package: run", () => {
         });
     });
 
-    // describe("Create errors", () => {
-    //     beforeAll(() => {
-    //         const spy = vi.spyOn(childProcess, "spawn");
-    //         spy.mockImplementation(() => {
-    //             throw new Error();
-    //         });
-    //     });
-    //     test("should not be OK with YUI", async () => {
-    //         const command = {
-    //             args: [
-    //                 "-jar",
-    //                 "-Xss2048k",
-    //                 "foo.jar",
-    //                 "--type",
-    //                 "js",
-    //                 "--fake",
-    //             ],
-    //             data: 'console.log("foo");',
-    //             settings: {},
-    //         };
-    //
-    //         await expect(runCommandLine(command as unknown as RunCommandLineParams))
-    //             .rejects.toThrow();
-    //     });
-    // });
+    describe("Process error handling", () => {
+        let spy: MockInstance;
+
+        beforeAll(() => {
+            spy = vi.spyOn(childProcess, "spawn");
+        });
+
+        afterAll(() => {
+            vi.restoreAllMocks();
+        });
+
+        test("should reject when child process emits error", async () => {
+            const mockChild = new EventEmitter() as ReturnType<
+                typeof childProcess.spawn
+            >;
+            const mockStdin = new EventEmitter();
+            const mockStdout = new EventEmitter();
+            const mockStderr = new EventEmitter();
+
+            Object.assign(mockChild, {
+                stdin: Object.assign(mockStdin, {
+                    end: vi.fn(),
+                }),
+                stdout: mockStdout,
+                stderr: mockStderr,
+            });
+
+            spy.mockReturnValue(mockChild);
+
+            const command: Command = {
+                args: ["-jar", "fake.jar"],
+                data: "test",
+            };
+
+            const promise = runCommandLine(
+                command as unknown as RunCommandLineParams
+            );
+
+            // Emit process error
+            setImmediate(() => {
+                mockChild.emit("error", new Error("spawn ENOENT"));
+            });
+
+            await expect(promise).rejects.toThrow(
+                "Process error: spawn ENOENT"
+            );
+        });
+
+        test("should handle stream errors gracefully", async () => {
+            const consoleSpy = vi
+                .spyOn(console, "error")
+                .mockImplementation(() => {});
+
+            const mockChild = new EventEmitter() as ReturnType<
+                typeof childProcess.spawn
+            >;
+            const mockStdin = new EventEmitter();
+            const mockStdout = new EventEmitter();
+            const mockStderr = new EventEmitter();
+
+            Object.assign(mockChild, {
+                stdin: Object.assign(mockStdin, {
+                    end: vi.fn(),
+                }),
+                stdout: mockStdout,
+                stderr: mockStderr,
+            });
+
+            spy.mockReturnValue(mockChild);
+
+            const command: Command = {
+                args: ["-jar", "fake.jar"],
+                data: "test",
+            };
+
+            const promise = runCommandLine(
+                command as unknown as RunCommandLineParams
+            );
+
+            // Emit stream error and then exit successfully
+            setImmediate(() => {
+                mockStdin.emit("error", new Error("stdin error"));
+                mockStdout.emit("data", Buffer.from("output"));
+                mockChild.emit("exit", 0);
+            });
+
+            const result = await promise;
+            expect(result).toBe("output");
+            expect(consoleSpy).toHaveBeenCalledWith(
+                "Error in child.stdin:",
+                expect.any(Error)
+            );
+
+            consoleSpy.mockRestore();
+        });
+    });
 
     afterAll(() => {
         vi.restoreAllMocks();
