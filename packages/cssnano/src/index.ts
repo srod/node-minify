@@ -4,32 +4,21 @@
  * MIT Licensed
  */
 
-/**
- * Module dependencies.
- */
-import type { MinifierOptions } from "@node-minify/types";
-import { writeFile } from "@node-minify/utils";
+import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import minify from "cssnano";
 import postcss from "postcss";
 
 /**
  * Run cssnano.
- * @param settings Cssnano options
- * @param content Content to minify
- * @param index Index of current file in array
+ * @param content - Content to minify
  * @returns Minified content
  */
-export async function cssnano({ settings, content, index }: MinifierOptions) {
-    const contentMinified = await postcss([minify]).process(content || "", {
+export async function cssnano({
+    content,
+}: MinifierOptions): Promise<CompressorResult> {
+    const result = await postcss([minify]).process(content || "", {
         from: undefined,
     });
-    if (settings && !settings.content && settings.output) {
-        settings.output &&
-            writeFile({
-                file: settings.output,
-                content: contentMinified.css,
-                index,
-            });
-    }
-    return contentMinified.css;
+
+    return { code: result.css };
 }

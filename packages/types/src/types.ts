@@ -6,9 +6,17 @@
 
 /**
  * The return type of a compressor function.
- * @deprecated Use `string` directly. Will be removed in v11.
+ * @deprecated Use `CompressorResult` instead. Will be removed in v11.
  */
 export type CompressorReturnType = string;
+
+/**
+ * Result returned by a compressor function.
+ */
+export type CompressorResult = {
+    code: string;
+    map?: string;
+};
 
 /**
  * Base options that all compressors can accept.
@@ -19,10 +27,10 @@ export type CompressorOptions = Record<string, unknown>;
 /**
  * A compressor function that minifies content.
  * @param args - The minifier options including settings and content
- * @returns A promise resolving to the minified content
+ * @returns A promise resolving to the compression result
  */
 export type Compressor<TOptions extends CompressorOptions = CompressorOptions> =
-    (args: MinifierOptions<TOptions>) => Promise<CompressorReturnType>;
+    (args: MinifierOptions<TOptions>) => Promise<CompressorResult>;
 
 /**
  * File type for compressors that support multiple types (e.g., YUI).

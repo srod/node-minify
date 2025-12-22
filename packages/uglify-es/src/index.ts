@@ -4,34 +4,22 @@
  * MIT Licensed
  */
 
-/**
- * Module dependencies.
- */
-import type { MinifierOptions } from "@node-minify/types";
-import { writeFile } from "@node-minify/utils";
+import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import uglifyES from "uglify-es";
 
-/**
- * @deprecated uglify-es is no longer maintained. Please use @node-minify/terser instead.
- */
 let deprecationWarned = false;
 
 /**
- * Run uglifyES.
- * @param settings UglifyES options
- * @param content Content to minify
- * @param index Index of current file in array
- * @returns Minified content
+ * Run uglify-es.
+ * @deprecated uglify-es is no longer maintained. Use @node-minify/terser instead.
+ * @param settings - UglifyES options
+ * @param content - Content to minify
+ * @returns Minified content and optional source map
  */
 export async function uglifyEs({
     settings,
     content,
-    index,
-}: MinifierOptions & {
-    settings?: {
-        options?: { sourceMap?: { filename?: string } };
-    };
-}) {
+}: MinifierOptions): Promise<CompressorResult> {
     if (!deprecationWarned) {
         console.warn(
             "[@node-minify/uglify-es] DEPRECATED: uglify-es is no longer maintained. " +
@@ -39,29 +27,26 @@ export async function uglifyEs({
         );
         deprecationWarned = true;
     }
-    let content2: string | Record<string, string> = content ?? "";
-    if (typeof settings.options?.sourceMap === "object") {
-        content2 = {
-            [settings.options.sourceMap.filename ?? ""]: content ?? "",
+
+    let inputContent: string | Record<string, string> = content ?? "";
+    const sourceMapOptions = settings.options?.sourceMap as
+        | { filename?: string }
+        | undefined;
+
+    if (typeof sourceMapOptions === "object") {
+        inputContent = {
+            [sourceMapOptions.filename ?? ""]: content ?? "",
         };
     }
-    const contentMinified = uglifyES.minify(content2, settings.options);
-    if (contentMinified.error) {
-        throw contentMinified.error;
+
+    const result = uglifyES.minify(inputContent, settings.options);
+
+    if (result.error) {
+        throw result.error;
     }
-    if (contentMinified.map && settings.options?.sourceMap) {
-        writeFile({
-            file: `${settings.output}.map`,
-            content: contentMinified.map,
-            index,
-        });
-    }
-    if (settings && !settings.content && settings.output) {
-        writeFile({
-            file: settings.output,
-            content: contentMinified.code,
-            index,
-        });
-    }
-    return contentMinified.code;
+
+    return {
+        code: result.code,
+        map: result.map,
+    };
 }

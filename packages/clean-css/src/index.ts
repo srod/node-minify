@@ -4,50 +4,32 @@
  * MIT Licensed
  */
 
-/**
- * Module dependencies.
- */
-import type { MinifierOptions } from "@node-minify/types";
-import { writeFile } from "@node-minify/utils";
+import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import CleanCSS from "clean-css";
 
 /**
  * Run clean-css.
- * @param settings Clean-css options
- * @param content Content to minify
- * @param index Index of current file in array
- * @returns Minified content
+ * @param settings - Clean-css options
+ * @param content - Content to minify
+ * @returns Minified content and optional source map
  */
-export async function cleanCss({ settings, content, index }: MinifierOptions) {
-    if (settings?.options?.sourceMap) {
-        settings.options._sourceMap = settings.options.sourceMap;
-        settings.options.sourceMap = true;
+export async function cleanCss({
+    settings,
+    content,
+}: MinifierOptions): Promise<CompressorResult> {
+    const options = settings?.options ? { ...settings.options } : {};
+
+    if (options.sourceMap && typeof options.sourceMap === "object") {
+        options._sourceMap = options.sourceMap;
+        options.sourceMap = true;
     }
-    const _cleanCSS = new CleanCSS(
-        settings && { returnPromise: false, ...settings.options }
-    ).minify(content ?? "");
-    const contentMinified = _cleanCSS.styles;
-    if (
-        _cleanCSS.sourceMap &&
-        settings?.options?._sourceMap &&
-        typeof settings?.options?._sourceMap === "object" &&
-        "url" in settings.options._sourceMap
-    ) {
-        writeFile({
-            file:
-                typeof settings.options._sourceMap.url === "string"
-                    ? settings.options._sourceMap.url
-                    : "",
-            content: _cleanCSS.sourceMap.toString(),
-            index,
-        });
-    }
-    if (settings && !settings.content && settings.output) {
-        writeFile({
-            file: settings.output,
-            content: contentMinified,
-            index,
-        });
-    }
-    return contentMinified;
+
+    const result = new CleanCSS({ returnPromise: false, ...options }).minify(
+        content ?? ""
+    );
+
+    return {
+        code: result.styles,
+        map: result.sourceMap?.toString(),
+    };
 }

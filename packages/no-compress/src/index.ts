@@ -4,30 +4,19 @@
  * MIT Licensed
  */
 
-/**
- * Module dependencies.
- */
-import type { MinifierOptions } from "@node-minify/types";
-import { writeFile } from "@node-minify/utils";
+import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 
 /**
- * Just merge, no compression.
- * @param settings NoCompress options
- * @param content Content to minify
- * @param index Index of current file in array
- * @returns Minified content
+ * No compression, just concatenation.
+ * @param content - Content to pass through
+ * @returns Unmodified content
  */
 export async function noCompress({
-    settings,
     content,
-    index,
-}: MinifierOptions) {
+}: MinifierOptions): Promise<CompressorResult> {
     if (typeof content !== "string") {
         throw new Error("no-compress failed: empty result");
     }
-    if (settings?.output && !settings?.content) {
-        // If output path is specified and content setting is not present, write to file
-        writeFile({ file: settings.output, content, index });
-    }
-    return content;
+
+    return { code: content };
 }

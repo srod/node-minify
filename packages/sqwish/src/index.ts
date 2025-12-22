@@ -4,23 +4,22 @@
  * MIT Licensed
  */
 
-/**
- * Module dependencies.
- */
-import type { MinifierOptions } from "@node-minify/types";
-import { writeFile } from "@node-minify/utils";
+import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import minify from "sqwish";
 
 let deprecationWarned = false;
 
 /**
  * Run sqwish.
- * @param settings Sqwish options
- * @param content Content to minify
- * @param index Index of current file in array
+ * @deprecated sqwish is no longer maintained. Use @node-minify/cssnano or @node-minify/clean-css instead.
+ * @param settings - Sqwish options
+ * @param content - Content to minify
  * @returns Minified content
  */
-export async function sqwish({ settings, content, index }: MinifierOptions) {
+export async function sqwish({
+    settings,
+    content,
+}: MinifierOptions): Promise<CompressorResult> {
     if (!deprecationWarned) {
         console.warn(
             "[@node-minify/sqwish] DEPRECATED: sqwish is no longer maintained. " +
@@ -28,13 +27,9 @@ export async function sqwish({ settings, content, index }: MinifierOptions) {
         );
         deprecationWarned = true;
     }
-    const contentMinified = minify.minify(content, settings?.options?.strict);
-    if (settings && !settings.content && settings.output) {
-        writeFile({
-            file: settings.output,
-            content: contentMinified,
-            index,
-        });
-    }
-    return contentMinified;
+
+    const strict = settings?.options?.strict as boolean | undefined;
+    const code = minify.minify(content, strict);
+
+    return { code };
 }

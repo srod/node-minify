@@ -4,8 +4,9 @@
  * MIT Licensed
  */
 
-import type { Settings } from "@node-minify/types";
+import type { CompressorResult, Settings } from "@node-minify/types";
 import { ValidationError } from "./error.ts";
+import { writeFile } from "./writeFile.ts";
 
 interface RunParameters {
     settings: Settings;
@@ -13,18 +14,6 @@ interface RunParameters {
     index?: number;
 }
 
-/**
- * Run compressor in async mode.
- * @param params Object containing settings, content, and optional index
- * @returns Promise resolving to the compressed content
- * @throws {ValidationError} If settings or compressor are not provided
- * @throws {Error} If compression fails
- * @example
- * const result = await runAsync({
- *   settings: { compressor: myCompressor },
- *   content: 'function foo() {}'
- * })
- */
 export async function run({
     settings,
     content,
@@ -44,5 +33,53 @@ export async function run({
         index,
     });
 
-    return result;
+    writeOutput(result, settings, index);
+
+    return result.code;
+}
+
+function writeOutput(
+    result: CompressorResult,
+    settings: Settings,
+    index?: number
+): void {
+    const isInMemoryMode = Boolean(settings.content);
+    if (isInMemoryMode || !settings.output) {
+        return;
+    }
+
+    writeFile({ file: settings.output, content: result.code, index });
+
+    if (result.map) {
+        const sourceMapUrl = getSourceMapUrl(settings);
+        if (sourceMapUrl) {
+            writeFile({ file: sourceMapUrl, content: result.map, index });
+        }
+    }
+}
+
+function getSourceMapUrl(settings: Settings): string | undefined {
+    const options = settings.options as Record<string, unknown> | undefined;
+    if (!options) {
+        return undefined;
+    }
+
+    const sourceMap = options.sourceMap as Record<string, unknown> | undefined;
+    if (sourceMap) {
+        if (typeof sourceMap.url === "string") {
+            return sourceMap.url;
+        }
+        if (typeof sourceMap.filename === "string") {
+            return sourceMap.filename;
+        }
+    }
+
+    const _sourceMap = options._sourceMap as
+        | Record<string, unknown>
+        | undefined;
+    if (_sourceMap && typeof _sourceMap.url === "string") {
+        return _sourceMap.url;
+    }
+
+    return undefined;
 }

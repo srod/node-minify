@@ -4,13 +4,10 @@
  * MIT Licensed
  */
 
-/**
- * Module dependencies.
- */
 import { runCommandLine } from "@node-minify/run";
-import type { MinifierOptions } from "@node-minify/types";
+import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import type { BuildArgsOptions } from "@node-minify/utils";
-import { buildArgs, writeFile } from "@node-minify/utils";
+import { buildArgs } from "@node-minify/utils";
 import compilerPath from "google-closure-compiler-java";
 
 // the allowed flags, taken from https://github.com/google/closure-compiler/wiki/Flags-and-Options
@@ -38,12 +35,14 @@ const allowedFlags = [
 
 /**
  * Run Google Closure Compiler.
- * @param settings GCC options
- * @param content Content to minify
- * @param index Index of current file in array
+ * @param settings - GCC options
+ * @param content - Content to minify
  * @returns Minified content
  */
-export async function gcc({ settings, content, index }: MinifierOptions) {
+export async function gcc({
+    settings,
+    content,
+}: MinifierOptions): Promise<CompressorResult> {
     const options = applyOptions({}, settings?.options ?? {});
 
     const result = await runCommandLine({
@@ -56,11 +55,7 @@ export async function gcc({ settings, content, index }: MinifierOptions) {
         throw new Error("Google Closure Compiler failed: empty result");
     }
 
-    if (settings && !settings.content && settings.output) {
-        writeFile({ file: settings.output, content: result, index });
-    }
-
-    return result;
+    return { code: result };
 }
 
 /**

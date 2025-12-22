@@ -67,7 +67,7 @@ describe("Package: utils", () => {
 
     describe("run", () => {
         test("should run the compressor", async () => {
-            const compressor = vi.fn().mockResolvedValue("minified");
+            const compressor = vi.fn().mockResolvedValue({ code: "minified" });
             const result = await run({
                 settings: { compressor } as any,
                 content: "content",
@@ -279,7 +279,7 @@ describe("Package: utils", () => {
 
     describe("compressSingleFile", () => {
         test("should compress with content", async () => {
-            const compressor = vi.fn().mockResolvedValue("minified");
+            const compressor = vi.fn().mockResolvedValue({ code: "minified" });
             const settings = {
                 compressor,
                 content: "content",
@@ -289,7 +289,7 @@ describe("Package: utils", () => {
         });
 
         test("should compress with input file", async () => {
-            const compressor = vi.fn().mockResolvedValue("minified");
+            const compressor = vi.fn().mockResolvedValue({ code: "minified" });
             const settings = {
                 compressor,
                 input: fixtureFile,
@@ -299,7 +299,7 @@ describe("Package: utils", () => {
         });
 
         test("should return empty string if no content or input", async () => {
-            const compressor = vi.fn().mockResolvedValue("minified");
+            const compressor = vi.fn().mockResolvedValue({ code: "minified" });
             const settings = {
                 compressor,
             } as any;

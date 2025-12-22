@@ -4,36 +4,28 @@
  * MIT Licensed
  */
 
-/**
- * Module dependencies.
- */
-import type { MinifierOptions } from "@node-minify/types";
-import { readFile, writeFile } from "@node-minify/utils";
+import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { readFile } from "@node-minify/utils";
 import { transform } from "babel-core";
 import minify from "babel-preset-minify";
 
 let deprecationWarned = false;
 
 type BabelOptions = {
-    presets: string[];
+    presets: (string | typeof minify)[];
 };
 
 /**
  * Run babel-minify.
- * @param settings Babel-minify options
- * @param content Content to minify
- * @param index Index of current file in array
+ * @deprecated babel-minify uses Babel 6 which is no longer maintained. Use @node-minify/terser instead.
+ * @param settings - Babel-minify options
+ * @param content - Content to minify
  * @returns Minified content
  */
 export async function babelMinify({
     settings,
     content,
-    index,
-}: MinifierOptions & {
-    settings?: {
-        options?: { babelrc?: string };
-    };
-}) {
+}: MinifierOptions): Promise<CompressorResult> {
     if (!deprecationWarned) {
         console.warn(
             "[@node-minify/babel-minify] DEPRECATED: babel-minify uses Babel 6 which is no longer maintained. " +
@@ -41,40 +33,29 @@ export async function babelMinify({
         );
         deprecationWarned = true;
     }
-    let babelOptions: BabelOptions = {
-        presets: [],
-    };
 
-    if (settings?.options?.babelrc) {
-        babelOptions = JSON.parse(readFile(settings.options.babelrc));
+    let babelOptions: BabelOptions = { presets: [] };
+    const babelrc = settings?.options?.babelrc as string | undefined;
+    const presets = settings?.options?.presets as string[] | undefined;
+
+    if (babelrc) {
+        babelOptions = JSON.parse(readFile(babelrc));
     }
 
-    if (settings?.options?.presets) {
+    if (presets && Array.isArray(presets)) {
         const babelrcPresets = babelOptions.presets || [];
-        babelOptions.presets = (
-            Array.isArray(settings.options.presets)
-                ? settings.options.presets
-                : []
-        ).concat(babelrcPresets);
+        babelOptions.presets = presets.concat(babelrcPresets);
     }
 
-    if (babelOptions.presets.indexOf("minify") === -1) {
+    if (!babelOptions.presets.includes("minify")) {
         babelOptions.presets = babelOptions.presets.concat([minify]);
     }
 
-    const contentMinified = transform(content ?? "", babelOptions);
-    const code = contentMinified.code;
+    const result = transform(content ?? "", babelOptions);
 
-    if (typeof code !== "string") {
+    if (typeof result.code !== "string") {
         throw new Error("Babel minification failed: empty result");
     }
 
-    if (settings && !settings.content && settings.output) {
-        writeFile({
-            file: settings.output,
-            content: code,
-            index,
-        });
-    }
-    return code;
+    return { code: result.code };
 }

@@ -4,23 +4,20 @@
  * MIT Licensed
  */
 
-/**
- * Module dependencies.
- */
-import type { MinifierOptions } from "@node-minify/types";
-import { writeFile } from "@node-minify/utils";
+import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import minify from "crass";
 
 let deprecationWarned = false;
 
 /**
  * Run crass.
- * @param settings Crass options
- * @param content Content to minify
- * @param index Index of current file in array
+ * @deprecated crass is no longer maintained. Use @node-minify/cssnano or @node-minify/clean-css instead.
+ * @param content - Content to minify
  * @returns Minified content
  */
-export async function crass({ settings, content, index }: MinifierOptions) {
+export async function crass({
+    content,
+}: MinifierOptions): Promise<CompressorResult> {
     if (!deprecationWarned) {
         console.warn(
             "[@node-minify/crass] DEPRECATED: crass is no longer maintained. " +
@@ -28,14 +25,8 @@ export async function crass({ settings, content, index }: MinifierOptions) {
         );
         deprecationWarned = true;
     }
-    const contentMinified = minify.parse(content).optimize().toString();
-    if (settings && !settings.content && settings.output) {
-        settings.output &&
-            writeFile({
-                file: settings.output,
-                content: contentMinified,
-                index,
-            });
-    }
-    return contentMinified;
+
+    const code = minify.parse(content).optimize().toString();
+
+    return { code };
 }

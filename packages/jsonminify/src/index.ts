@@ -4,33 +4,18 @@
  * MIT Licensed
  */
 
-/**
- * Module dependencies.
- */
-import type { MinifierOptions } from "@node-minify/types";
-import { writeFile } from "@node-minify/utils";
+import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import jsonminify from "jsonminify";
 
 /**
  * Run jsonminify.
- * @param settings JsonMinify options
- * @param content Content to minify
- * @param index Index of current file in array
+ * @param content - Content to minify
  * @returns Minified content
  */
 export async function jsonMinify({
-    settings,
     content,
-    index,
-}: MinifierOptions) {
-    const contentMinified = jsonminify(content ?? "");
-    if (settings && !settings.content && settings.output) {
-        settings.output &&
-            writeFile({
-                file: settings.output,
-                content: contentMinified,
-                index,
-            });
-    }
-    return contentMinified;
+}: MinifierOptions): Promise<CompressorResult> {
+    const code = jsonminify(content ?? "");
+
+    return { code };
 }
