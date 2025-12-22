@@ -54,7 +54,10 @@ export async function yui({
 }
 
 /**
- * YUI Compressor CSS command line.
+ * Build YUI Compressor command line arguments.
+ * @param type - File type (js or css)
+ * @param options - Compressor options
+ * @returns Command line arguments array
  */
 function yuiCommand(type: "js" | "css", options: Record<string, unknown>) {
     return ["-jar", "-Xss2048k", binYui, "--type", type].concat(

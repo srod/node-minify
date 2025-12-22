@@ -54,7 +54,4 @@ async function compress(options: Settings): Promise<Result> {
     }
 }
 
-/**
- * Expose `compress()`.
- */
 export { compress };

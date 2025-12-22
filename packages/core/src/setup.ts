@@ -128,9 +128,9 @@ function checkOutput(
 }
 
 /**
- * Handle wildcards in a path, get the real path of each files.
- * @param input Path with wildcards
- * @param publicFolder Path to the public folder
+ * Handle wildcards in a path, get the real path of each file.
+ * @param input - Path with wildcards
+ * @param publicFolder - Path to the public folder
  */
 function wildcards(input: string | string[], publicFolder?: string) {
     if (Array.isArray(input)) {
@@ -141,9 +141,9 @@ function wildcards(input: string | string[], publicFolder?: string) {
 }
 
 /**
- * Handle wildcards in a path (string only), get the real path of each files.
- * @param input Path with wildcards
- * @param publicFolder Path to the public folder
+ * Handle wildcards in a path (string only), get the real path of each file.
+ * @param input - Path with wildcards
+ * @param publicFolder - Path to the public folder
  */
 function wildcardsString(input: string, publicFolder?: string) {
     if (!input.includes("*")) {
@@ -156,9 +156,9 @@ function wildcardsString(input: string, publicFolder?: string) {
 }
 
 /**
- * Handle wildcards in a path (array only), get the real path of each files.
- * @param input Path with wildcards
- * @param publicFolder Path to the public folder
+ * Handle wildcards in a path (array only), get the real path of each file.
+ * @param input - Array of paths with wildcards
+ * @param publicFolder - Path to the public folder
  */
 function wildcardsArray(input: string[], publicFolder?: string) {
     // Convert input paths to patterns with public folder prefix
@@ -184,9 +184,9 @@ function wildcardsArray(input: string[], publicFolder?: string) {
 }
 
 /**
- * Get the real path of each files.
- * @param input Path with wildcards
- * @param publicFolder Path to the public folder
+ * Get the real path of each file.
+ * @param input - Path with wildcards
+ * @param publicFolder - Path to the public folder
  */
 function getFilesFromWildcards(input: string, publicFolder?: string) {
     const fullPath = publicFolder ? `${publicFolder}${input}` : input;
@@ -224,8 +224,9 @@ function setPublicFolder(input: string | string[], publicFolder: string) {
 }
 
 /**
- * Check if some settings are here.
- * @param settings Settings
+ * Validate that mandatory fields are present in settings.
+ * @param settings - Settings object to validate
+ * @param fields - Array of required field names
  */
 function validateMandatoryFields(settings: Settings, fields: string[]) {
     for (const field of fields) {
@@ -240,9 +241,9 @@ function validateMandatoryFields(settings: Settings, fields: string[]) {
 }
 
 /**
- * Check if the setting exist.
- * @param setting Setting
- * @param settings Settings
+ * Check if the setting exists.
+ * @param setting - Setting key to check
+ * @param settings - Settings object
  */
 function mandatory(setting: string, settings: { [key: string]: any }) {
     if (!settings[setting]) {
@@ -250,7 +251,4 @@ function mandatory(setting: string, settings: { [key: string]: any }) {
     }
 }
 
-/**
- * Expose `setup()`.
- */
 export { setup };

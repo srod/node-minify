@@ -10,9 +10,9 @@ import { isValidFile } from "./isValidFile.ts";
 import { prettyBytes } from "./prettyBytes.ts";
 
 /**
- * Get the gzipped file size in bytes.
- * @param file Path to the file
- * @returns Formatted file size string
+ * Get the gzipped file size as a human-readable string.
+ * @param file - Path to the file
+ * @returns Formatted gzipped file size string (e.g., "1.5 kB")
  * @throws {FileOperationError} If file doesn't exist or operation fails
  * @example
  * const size = await getFilesizeGzippedInBytes('file.js')

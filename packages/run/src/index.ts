@@ -30,10 +30,10 @@ type RunParams = {
 };
 
 /**
- * Exec command.
- * @param data Data to minify
- * @param args Arguments
- * @returns Promise with minified content
+ * Execute command with Java process.
+ * @param data - Data to minify (piped to stdin)
+ * @param args - Command line arguments
+ * @returns Promise with minified content from stdout
  */
 export async function run({ data, args }: RunParams): Promise<string> {
     return new Promise((resolve, reject) => {

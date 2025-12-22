@@ -8,7 +8,8 @@ import { readFileSync } from "node:fs";
 
 /**
  * Read content from file.
- * @param file File name
+ * @param file - Path to file
+ * @returns File content as string
  */
 export function readFile(file: string): string {
     return readFileSync(file, "utf8");

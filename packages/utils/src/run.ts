@@ -14,6 +14,12 @@ interface RunParameters {
     index?: number;
 }
 
+/**
+ * Execute the compressor and write output.
+ * @param params - Run parameters containing settings, content, and index
+ * @returns Minified content string
+ * @throws {ValidationError} If settings or compressor is missing
+ */
 export async function run({
     settings,
     content,

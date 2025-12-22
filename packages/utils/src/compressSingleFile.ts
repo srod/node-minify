@@ -19,8 +19,8 @@ export async function compressSingleFile(settings: Settings): Promise<string> {
 
 /**
  * Determine the content to minify.
- * @param settings
- * @returns
+ * @param settings - Minification settings
+ * @returns Content string to minify
  */
 function determineContent(settings: Settings): string {
     if (settings.content) {

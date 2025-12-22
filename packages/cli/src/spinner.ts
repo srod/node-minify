@@ -58,7 +58,4 @@ function error({ compressorLabel }: Settings): void {
     spinner.fail();
 }
 
-/**
- * Expose `start(), stop() and error()`.
- */
 export { start as spinnerStart, stop as spinnerStop, error as spinnerError };
