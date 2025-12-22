@@ -46,14 +46,14 @@
     "@changesets/cli": "2.29.8",
     "@total-typescript/tsconfig": "^1.0.4",
     "@types/node": "22.19.3",
-    "@vitest/coverage-v8": "1.6.1",
-    "@vitest/ui": "1.6.1",
+    "@vitest/coverage-v8": "^4.0.16",
+    "@vitest/ui": "^4.0.16",
     "copyfiles": "2.4.1",
     "rimraf": "6.1.2",
     "tsup": "8.5.1",
     "typescript": "5.9.3",
-    "vite-tsconfig-paths": "5.1.4",
-    "vitest": "1.6.1"
+    "vite-tsconfig-paths": "^6.0.3",
+    "vitest": "^4.0.16"
   },
   "workspaces": [
     "docs",
