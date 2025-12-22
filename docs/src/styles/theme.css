@@ -110,7 +110,10 @@ body {
     /* --theme-navbar-bg: hsla(215, 28%, 17%, 1); */
     --theme-navbar-bg: hsla(var(--color-gray-10), 1);
     --theme-selection-color: hsla(var(--color-base-white), 100%, 1);
-    --theme-selection-bg: hsla(var(--color-purple), var(--theme-accent-opacity));
+    --theme-selection-bg: hsla(
+        var(--color-purple),
+        var(--theme-accent-opacity)
+    );
 }
 
 ::selection {

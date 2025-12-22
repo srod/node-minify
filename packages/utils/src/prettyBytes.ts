@@ -7,7 +7,6 @@
 import { ValidationError } from "./error.ts";
 
 const UNITS = ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"] as const;
-type Unit = (typeof UNITS)[number];
 
 /**
  * Get the size in human readable format.

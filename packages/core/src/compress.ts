@@ -81,7 +81,7 @@ function createDirectory(filePath: string | string[]) {
 function directoryExists(path: string): boolean {
     try {
         return fs.statSync(path).isDirectory();
-    } catch (error) {
+    } catch {
         return false;
     }
 }

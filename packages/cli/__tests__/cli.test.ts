@@ -7,8 +7,8 @@
 import childProcess from "node:child_process";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import { filesJS } from "../../../tests/files-path.ts";
-import * as cli from "../src/index.ts";
 import type { SettingsWithCompressor } from "../src/index.ts";
+import * as cli from "../src/index.ts";
 
 describe("Package: cli", () => {
     test("should minify to have been called with gcc", async () => {

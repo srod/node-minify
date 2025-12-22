@@ -9,8 +9,8 @@
  */
 import { runCommandLine } from "@node-minify/run";
 import type { MinifierOptions } from "@node-minify/types";
-import { buildArgs, writeFile } from "@node-minify/utils";
 import type { BuildArgsOptions } from "@node-minify/utils";
+import { buildArgs, writeFile } from "@node-minify/utils";
 import compilerPath from "google-closure-compiler-java";
 
 // the allowed flags, taken from https://github.com/google/closure-compiler/wiki/Flags-and-Options

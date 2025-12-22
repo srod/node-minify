@@ -1,22 +1,21 @@
 {
     "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
     "files": {
-        "ignore": [
-            "**/coverage/**",
-            "tests/fixtures/**",
-            "tests/tmp/**",
-            "examples/public/**",
-            "**/node_modules/**",
-            "**/.DS_Store",
-            "**/dist/**",
-            "**/.astro/**",
-            "package.json",
-            "**/.changeset/**"
+        "includes": [
+            "**",
+            "!**/coverage",
+            "!**/tests/fixtures",
+            "!**/tests/tmp",
+            "!**/examples/public",
+            "!**/node_modules",
+            "!**/.DS_Store",
+            "!**/dist",
+            "!**/.astro",
+            "!**/package.json",
+            "!**/.changeset"
         ]
     },
-    "organizeImports": {
-        "enabled": true
-    },
+    "assist": { "actions": { "source": { "organizeImports": "on" } } },
     "linter": {
         "enabled": true,
         "rules": {
@@ -52,12 +51,26 @@
     },
     "overrides": [
         {
-            "include": ["*.astro"],
+            "includes": ["**/*.astro"],
             "linter": {
                 "rules": {
+                    "correctness": {
+                        "noUnusedImports": "off",
+                        "noUnusedVariables": "off"
+                    },
                     "style": {
                         "useConst": "off",
                         "useImportType": "off"
+                    }
+                }
+            }
+        },
+        {
+            "includes": ["docs/**/*.tsx"],
+            "linter": {
+                "rules": {
+                    "complexity": {
+                        "noUselessFragments": "off"
                     }
                 }
             }

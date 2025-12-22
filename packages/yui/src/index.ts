@@ -12,8 +12,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { runCommandLine } from "@node-minify/run";
 import type { MinifierOptions } from "@node-minify/types";
-import { buildArgs, writeFile } from "@node-minify/utils";
 import type { BuildArgsOptions } from "@node-minify/utils";
+import { buildArgs, writeFile } from "@node-minify/utils";
 
 /**
  * Module variables.

@@ -4,9 +4,8 @@
  * MIT Licensed
  */
 
-import childProcess from "node:child_process";
 import type { Settings } from "@node-minify/types";
-import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
+import { afterAll, describe, expect, test, vi } from "vitest";
 import { type RunCommandLineParams, runCommandLine } from "../src/index.ts";
 
 const jar = `${__dirname}/../../yui/src/binaries/yuicompressor-2.4.7.jar`;
