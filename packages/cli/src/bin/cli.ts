@@ -67,8 +67,8 @@ async function main(): Promise<void> {
     try {
         await run(options);
         process.exit(0);
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error(error);
         process.exit(1);
     }
 }
