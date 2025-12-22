@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import fs from "node:fs";
-import type { CompressorReturnType, Settings } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import {
     compressSingleFile,
     getContentFromFiles,
@@ -20,9 +20,7 @@ import { mkdirp } from "mkdirp";
  * Run compressor.
  * @param settings Settings
  */
-export async function compress(
-    settings: Settings
-): Promise<CompressorReturnType> {
+export async function compress(settings: Settings): Promise<string> {
     if (settings.output) {
         createDirectory(settings.output);
     }

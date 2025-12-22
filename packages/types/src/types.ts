@@ -6,6 +6,7 @@
 
 /**
  * The return type of a compressor function.
+ * @deprecated Use `string` directly. Will be removed in v11.
  */
 export type CompressorReturnType = string;
 
@@ -174,7 +175,7 @@ export type Result = {
 
 /**
  * Type alias for user convenience.
- * Use this when you need to type the options parameter.
+ * @deprecated Use `Settings` instead. Will be removed in v11.
  */
 export type MinifyOptions<
     TOptions extends CompressorOptions = CompressorOptions,

@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import type { CompressorReturnType, Settings } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import { getContentFromFiles } from "./getContentFromFiles.ts";
 import { run } from "./run.ts";
 
@@ -12,9 +12,7 @@ import { run } from "./run.ts";
  * Compress a single file.
  * @param settings Settings
  */
-export async function compressSingleFile(
-    settings: Settings
-): Promise<CompressorReturnType> {
+export async function compressSingleFile(settings: Settings): Promise<string> {
     const content = determineContent(settings);
     return run({ settings, content });
 }
