@@ -1,7 +1,13 @@
 ---
-title: "crass"
-description: "crass for node-minify"
+title: "crass (Deprecated)"
+description: "crass for node-minify - DEPRECATED"
 ---
+
+:::danger[Deprecated]
+**This package is deprecated.** `crass` is no longer maintained (last update ~2018).
+
+Please migrate to [`cssnano`](/compressors/cssnano) or [`clean-css`](/compressors/clean-css) instead.
+:::
 
 `crass` can compress only CSS files.
 

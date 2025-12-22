@@ -1,7 +1,8 @@
 {
   "name": "@node-minify/crass",
   "version": "10.0.0-next.0",
-  "description": "crass plugin for @node-minify",
+  "deprecated": "crass is no longer maintained. Please use @node-minify/cssnano or @node-minify/clean-css instead.",
+  "description": "crass plugin for @node-minify (DEPRECATED - use @node-minify/cssnano)",
   "keywords": [
     "compressor",
     "minify",

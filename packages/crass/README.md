@@ -12,6 +12,9 @@
 
 # crass
 
+> **DEPRECATED**: crass is no longer maintained (last update ~2018).
+> Please use [`@node-minify/cssnano`](https://github.com/srod/node-minify/tree/develop/packages/cssnano) or [`@node-minify/clean-css`](https://github.com/srod/node-minify/tree/develop/packages/clean-css) instead.
+
 `crass` is a plugin for [`node-minify`](https://github.com/srod/node-minify)
 
 It allow you to compress CSS files.

@@ -15,6 +15,8 @@ import type { MinifierOptions } from "@node-minify/types";
 import type { BuildArgsOptions } from "@node-minify/utils";
 import { buildArgs, writeFile } from "@node-minify/utils";
 
+let deprecationWarned = false;
+
 /**
  * Module variables.
  */
@@ -33,6 +35,13 @@ const binYui = `${__dirname}/binaries/yuicompressor-2.4.7.jar`;
  * @returns Minified content
  */
 export async function yui({ settings, content, index }: MinifierOptions) {
+    if (!deprecationWarned) {
+        console.warn(
+            "[@node-minify/yui] DEPRECATED: YUI Compressor was deprecated by Yahoo in 2013. " +
+                "Please migrate to @node-minify/terser for JS or @node-minify/cssnano for CSS."
+        );
+        deprecationWarned = true;
+    }
     if (
         !settings?.type ||
         (settings.type !== "js" && settings.type !== "css")

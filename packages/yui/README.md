@@ -12,6 +12,9 @@
 
 # YUI Compressor
 
+> **DEPRECATED**: YUI Compressor was deprecated by Yahoo in 2013 and is no longer maintained.
+> Please use [`@node-minify/terser`](https://github.com/srod/node-minify/tree/develop/packages/terser) for JavaScript or [`@node-minify/cssnano`](https://github.com/srod/node-minify/tree/develop/packages/cssnano) for CSS instead.
+
 `Yahoo Compressor` is a plugin for [`node-minify`](https://github.com/srod/node-minify)
 
 It allow you to compress both JavaScript and CSS files.

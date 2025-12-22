@@ -12,6 +12,9 @@
 
 # sqwish
 
+> **DEPRECATED**: sqwish is no longer maintained (last update ~2014).
+> Please use [`@node-minify/cssnano`](https://github.com/srod/node-minify/tree/develop/packages/cssnano) or [`@node-minify/clean-css`](https://github.com/srod/node-minify/tree/develop/packages/clean-css) instead.
+
 `sqwish` is a plugin for [`node-minify`](https://github.com/srod/node-minify)
 
 It allow you to compress CSS files.

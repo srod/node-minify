@@ -1,7 +1,13 @@
 ---
-title: "sqwish"
-description: "sqwish for node-minify"
+title: "sqwish (Deprecated)"
+description: "sqwish for node-minify - DEPRECATED"
 ---
+
+:::danger[Deprecated]
+**This package is deprecated.** `sqwish` is no longer maintained (last update ~2014).
+
+Please migrate to [`cssnano`](/compressors/cssnano) or [`clean-css`](/compressors/clean-css) instead.
+:::
 
 `sqwish` can compress only CSS files.
 
