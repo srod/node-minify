@@ -9,12 +9,11 @@
  */
 import type { MinifierOptions } from "@node-minify/types";
 import { utils } from "@node-minify/utils";
-import minifier from "html-minifier";
+import { minify } from "html-minifier-next";
 
 /**
  * Module variables.
  */
-const HTMLMinifier = minifier.minify;
 const defaultOptions = {
     collapseBooleanAttributes: true,
     collapseInlineTagWhitespace: true,
@@ -22,9 +21,7 @@ const defaultOptions = {
     minifyCSS: true,
     minifyJS: true,
     removeAttributeQuotes: true,
-    removeCDATASectionsFromCDATA: true,
     removeComments: true,
-    removeCommentsFromCDATA: true,
     removeEmptyAttributes: true,
     removeOptionalTags: true,
     removeRedundantAttributes: true,
@@ -34,21 +31,21 @@ const defaultOptions = {
 };
 
 /**
- * Run html-minifier.
+ * Run html-minifier-next.
  * @param settings HTMLMinifier options
  * @param content Content to minify
  * @param callback Callback
  * @param index Index of current file in array
  * @returns Minified content
  */
-const minifyHTMLMinifier = ({
+const minifyHTMLMinifier = async ({
     settings,
     content,
     callback,
     index,
 }: MinifierOptions) => {
     const options = Object.assign({}, defaultOptions, settings?.options);
-    const contentMinified = HTMLMinifier(content ?? "", options);
+    const contentMinified = await minify(content ?? "", options);
     if (settings && !settings.content && settings.output) {
         settings.output &&
             utils.writeFile({
