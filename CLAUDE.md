@@ -67,4 +67,4 @@ packages/<name>/
 └── tsconfig.json
 ```
 
-Build: `tsup src/index.ts --format esm --dts --clean`
+Build: `tsdown` (configured via `tsdown.config.ts`)

@@ -43,7 +43,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/bin/cli.ts --format esm --dts",
+    "build": "tsdown src/index.ts src/bin/cli.ts",
     "check-exports": "attw --pack . --profile esm-only",
     "format:check": "biome check .",
     "lint": "biome lint .",
