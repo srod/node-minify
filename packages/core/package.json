@@ -47,7 +47,8 @@
     "test": "vitest run",
     "test:ci": "vitest run --coverage",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "dev": "tsdown src/index.ts --watch"
   },
   "dependencies": {
     "@node-minify/utils": "workspace:*",
