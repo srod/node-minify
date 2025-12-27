@@ -82,5 +82,7 @@ function wildcardsArray(input: string[], publicFolder?: string) {
  */
 function getFilesFromWildcards(input: string, publicFolder?: string) {
     const fullPath = publicFolder ? `${publicFolder}${input}` : input;
-    return fg.globSync(isWindows() ? fg.convertPathToPattern(fullPath) : fullPath);
+    return fg.globSync(
+        isWindows() ? fg.convertPathToPattern(fullPath) : fullPath
+    );
 }

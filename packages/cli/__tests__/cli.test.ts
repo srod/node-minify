@@ -7,6 +7,7 @@
 import childProcess from "node:child_process";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import { filesJS } from "../../../tests/files-path.ts";
+import { compress } from "../src/compress.ts";
 import type { SettingsWithCompressor } from "../src/index.ts";
 import * as cli from "../src/index.ts";
 
@@ -46,5 +47,43 @@ describe("cli error", () => {
     });
     afterAll(() => {
         vi.restoreAllMocks();
+    });
+});
+
+describe("CLI Coverage", () => {
+    describe("run dynamic import", () => {
+        test("should throw if compressor not found", async () => {
+            const settings = {
+                compressor: "invalid-compressor" as any,
+                input: "foo.js",
+                output: "bar.js",
+                silence: true,
+            };
+            await expect(cli.run(settings)).rejects.toThrow(
+                "Compressor 'invalid-compressor' not found."
+            );
+        });
+    });
+
+    describe("compress default results", () => {
+        test("should return default result if output is an array", async () => {
+            const settings = {
+                compressor: () => ({ code: "minified" }),
+                content: "foo",
+                output: ["bar.js"],
+            };
+            const result = await compress(settings as any);
+            expect(result.size).toBe("0");
+        });
+
+        test("should return default result if output contains $1", async () => {
+            const settings = {
+                compressor: () => ({ code: "minified" }),
+                content: "foo",
+                output: "$1.min.js",
+            };
+            const result = await compress(settings as any);
+            expect(result.size).toBe("0");
+        });
     });
 });

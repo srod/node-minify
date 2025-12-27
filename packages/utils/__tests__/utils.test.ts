@@ -161,6 +161,16 @@ describe("Package: utils", () => {
                 })
             ).toThrow();
         });
+
+        test("should throw if targetFile is not a string", () => {
+            expect(() =>
+                writeFile({
+                    file: [null as any],
+                    content: "content",
+                    index: 0,
+                })
+            ).toThrow(ValidationError);
+        });
     });
 
     describe("buildArgs", () => {
@@ -170,6 +180,10 @@ describe("Package: utils", () => {
                     foo: "bar",
                 })
             ).toEqual(["--foo", "bar"]));
+
+        test("should throw if options is null", () => {
+            expect(() => buildArgs(null as any)).toThrow(ValidationError);
+        });
     });
 
     describe("getFilesizeInBytes", () => {
@@ -229,6 +243,24 @@ describe("Package: utils", () => {
             expect(() => setFileNameMin("foo", "$1.min.js")).toThrow(
                 ValidationError
             );
+        });
+
+        test("should throw if publicFolder is not a string", () => {
+            expect(() =>
+                setFileNameMin("foo.js", "$1.min.js", 123 as any)
+            ).toThrow(ValidationError);
+        });
+
+        test("should throw generic error if something unexpected happens", () => {
+            const spy = vi
+                .spyOn(String.prototype, "lastIndexOf")
+                .mockImplementation(() => {
+                    throw new Error("Unexpected error");
+                });
+            expect(() => setFileNameMin("foo.js", "$1.min.js")).toThrow(
+                ValidationError
+            );
+            spy.mockRestore();
         });
     });
 

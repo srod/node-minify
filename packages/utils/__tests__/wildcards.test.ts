@@ -66,10 +66,15 @@ describe("wildcards", () => {
     test("should handle array with windows paths", async () => {
         const os = await import("node:os");
         vi.spyOn(os.default, "platform").mockReturnValue("win32");
-        vi.mocked(fg.globSync).mockReturnValue(["win\\expanded1.js", "win\\expanded2.js"]);
+        vi.mocked(fg.globSync).mockReturnValue([
+            "win\\expanded1.js",
+            "win\\expanded2.js",
+        ]);
 
         const result = wildcards(["*.js"], "win\\");
-        expect(result).toEqual({ input: ["win\\expanded1.js", "win\\expanded2.js"] });
+        expect(result).toEqual({
+            input: ["win\\expanded1.js", "win\\expanded2.js"],
+        });
         expect(fg.convertPathToPattern).toHaveBeenCalled();
     });
 

@@ -89,6 +89,18 @@ describe("Package: YUI", async () => {
             }
         });
     });
+    describe("yui coverage", () => {
+        test("should throw if runCommandLine returns non-string", async () => {
+            const run = await import("@node-minify/run");
+            const spy = vi
+                .spyOn(run, "runCommandLine")
+                .mockResolvedValueOnce(null as any);
+            await expect(
+                yui({ settings: { type: "js" }, content: "code" } as any)
+            ).rejects.toThrow("YUI Compressor failed: empty result");
+            spy.mockRestore();
+        });
+    });
     afterAll(() => {
         vi.restoreAllMocks();
     });

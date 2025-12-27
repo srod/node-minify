@@ -15,6 +15,7 @@ import { noCompress } from "../../no-compress/src/index.ts";
 import { uglifyEs } from "../../uglify-es/src/index.ts";
 import { yui } from "../../yui/src/index.ts";
 import { minify } from "../src/index.ts";
+import { setup } from "../src/setup.ts";
 
 const compressorLabel = "uglify-es";
 const compressor = uglifyEs;
@@ -260,6 +261,35 @@ describe("Package: core", async () => {
             const min = await minify(settings);
             expect(min).toBeDefined();
         });
+
+        test("should handle missing directory path", async () => {
+            const settings = {
+                compressor: () => ({ code: "minified" }),
+                content: "foo",
+                output: "bar.js",
+            };
+            await minify(settings as any);
+        });
+
+        test("should handle missing filePath", async () => {
+            const settings = {
+                compressor: () => ({ code: "minified" }),
+                content: "foo",
+                output: "",
+            };
+            await minify(settings as any);
+        });
+
+        test("should skip non-string paths in array", async () => {
+            const settings = {
+                compressor: () => ({ code: "minified" }),
+                input: [filesJS.oneFile],
+                output: [123 as any],
+            };
+            await expect(minify(settings as any)).rejects.toThrow(
+                "Invalid target file path"
+            );
+        });
     });
 
     describe("Wildcards", () => {
@@ -289,6 +319,15 @@ describe("Package: core", async () => {
     });
 
     describe("setup functions", () => {
+        test("should return undefined if output is an array (checkOutput)", () => {
+            const result = setup({
+                compressor: noCompress,
+                input: ["foo.js"],
+                output: ["bar.js"],
+            } as any);
+            expect(result.output).toEqual(["bar.js"]);
+        });
+
         test("should handle publicFolder as non-string", async () => {
             const settings: any = {
                 compressor: noCompress,
