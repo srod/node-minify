@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { describe } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { runOneTest, tests } from "../../../tests/fixtures.ts";
 import { babelMinify } from "../src/index.ts";
 
@@ -29,4 +29,17 @@ describe("Package: babel-minify", async () => {
     for (const options of tests.babelMinify) {
         await runOneTest({ options, compressorLabel, compressor });
     }
+
+    describe("babel-minify coverage", () => {
+        test("should throw if babel-core returns non-string code", async () => {
+            const babel = await import("babel-core");
+            const spy = vi
+                .spyOn(babel, "transform")
+                .mockReturnValueOnce({ code: null } as any);
+            await expect(
+                babelMinify({ content: "code" } as any)
+            ).rejects.toThrow("Babel minification failed: empty result");
+            spy.mockRestore();
+        });
+    });
 });

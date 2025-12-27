@@ -5,8 +5,19 @@
  */
 
 import childProcess from "node:child_process";
+import { statSync } from "node:fs";
 import type { Compressor, Settings } from "@node-minify/types";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
+
+vi.mock("node:fs", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("node:fs")>();
+    return {
+        ...actual,
+        statSync: vi.fn(actual.statSync),
+        lstatSync: vi.fn(actual.lstatSync),
+    };
+});
+
 import { filesJS } from "../../../tests/files-path.ts";
 import { runOneTest, tests } from "../../../tests/fixtures.ts";
 import { gcc } from "../../google-closure-compiler/src/index.ts";
@@ -25,7 +36,6 @@ describe("Package: core", async () => {
         throw new Error("Tests not found");
     }
 
-    // Run commonjs tests
     for (const options of tests.commonjs) {
         await runOneTest({ options, compressorLabel, compressor });
     }
@@ -248,6 +258,17 @@ describe("Package: core", async () => {
                 "Input and output arrays must have the same length (input: 3, output: 2)"
             );
         });
+
+        test("should skip non-string paths in array", async () => {
+            const settings = {
+                compressor: () => ({ code: "minified" }),
+                input: [filesJS.oneFile],
+                output: [123 as any],
+            };
+            await expect(minify(settings as any)).rejects.toThrow(
+                "Invalid target file path"
+            );
+        });
     });
 
     describe("Create Directory", () => {
@@ -280,15 +301,28 @@ describe("Package: core", async () => {
             await minify(settings as any);
         });
 
-        test("should skip non-string paths in array", async () => {
+        test("should handle directoryExists returning false (catch block)", async () => {
+            vi.mocked(statSync).mockImplementationOnce(() => {
+                throw new Error("Not found");
+            });
             const settings = {
                 compressor: () => ({ code: "minified" }),
-                input: [filesJS.oneFile],
-                output: [123 as any],
+                content: "foo",
+                output: "newdir/bar.js", // Must have a slash
             };
-            await expect(minify(settings as any)).rejects.toThrow(
-                "Invalid target file path"
-            );
+            await minify(settings as any);
+        });
+
+        test("should handle directoryExists returning false (isDirectory false)", async () => {
+            vi.mocked(statSync).mockImplementationOnce(() => {
+                return { isDirectory: () => false } as any;
+            });
+            const settings = {
+                compressor: () => ({ code: "minified" }),
+                content: "foo",
+                output: "notadir/bar.js", // Must have a slash
+            };
+            await minify(settings as any);
         });
     });
 

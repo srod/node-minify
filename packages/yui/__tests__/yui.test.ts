@@ -89,6 +89,7 @@ describe("Package: YUI", async () => {
             }
         });
     });
+
     describe("yui coverage", () => {
         test("should throw if runCommandLine returns non-string", async () => {
             const run = await import("@node-minify/run");
@@ -101,6 +102,7 @@ describe("Package: YUI", async () => {
             spy.mockRestore();
         });
     });
+
     afterAll(() => {
         vi.restoreAllMocks();
     });

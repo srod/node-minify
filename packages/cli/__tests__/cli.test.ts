@@ -63,6 +63,19 @@ describe("CLI Coverage", () => {
                 "Compressor 'invalid-compressor' not found."
             );
         });
+
+        test("should throw if implementation is invalid", async () => {
+            vi.mock("@node-minify/csso", () => ({ csso: "not-a-function" }));
+            const settings = {
+                compressor: "csso" as any,
+                input: "foo.js",
+                output: "bar.js",
+                silence: true,
+            };
+            await expect(cli.run(settings)).rejects.toThrow(
+                "Invalid compressor implementation for 'csso'."
+            );
+        });
     });
 
     describe("compress default results", () => {
@@ -84,6 +97,19 @@ describe("CLI Coverage", () => {
             };
             const result = await compress(settings as any);
             expect(result.size).toBe("0");
+        });
+
+        test("should throw if minify fails", async () => {
+            const settings = {
+                compressor: () => {
+                    throw new Error("Minify failed");
+                },
+                content: "foo",
+                output: "bar.js",
+            };
+            await expect(compress(settings as any)).rejects.toThrow(
+                "Compression failed: Minify failed"
+            );
         });
     });
 });

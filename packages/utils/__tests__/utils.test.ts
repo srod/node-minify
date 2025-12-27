@@ -162,6 +162,18 @@ describe("Package: utils", () => {
             ).toThrow();
         });
 
+        test("should handle index with non-array file", () => {
+            const file = `${__dirname}/../../../tests/tmp/temp-index.js`;
+            expect(
+                writeFile({
+                    file,
+                    content: "content",
+                    index: 0,
+                })
+            ).toBe("content");
+            expect(readFile(file)).toBe("content");
+        });
+
         test("should throw if targetFile is not a string", () => {
             expect(() =>
                 writeFile({
@@ -170,6 +182,16 @@ describe("Package: utils", () => {
                     index: 0,
                 })
             ).toThrow(ValidationError);
+        });
+
+        test("should throw FileOperationError on multi-file failure", () => {
+            expect(() =>
+                writeFile({
+                    file: [__dirname],
+                    content: "content",
+                    index: 0,
+                })
+            ).toThrow();
         });
     });
 
@@ -183,6 +205,16 @@ describe("Package: utils", () => {
 
         test("should throw if options is null", () => {
             expect(() => buildArgs(null as any)).toThrow(ValidationError);
+        });
+
+        test("should filter out undefined and false values", () => {
+            expect(
+                buildArgs({
+                    foo: undefined,
+                    bar: false,
+                    baz: true,
+                })
+            ).toEqual(["--baz"]);
         });
     });
 
