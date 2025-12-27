@@ -15,8 +15,8 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "main": "src/types.ts",
-  "types": "src/types.ts",
+  "main": "src/types.d.ts",
+  "types": "src/types.d.ts",
   "publishConfig": {
     "access": "public"
   },

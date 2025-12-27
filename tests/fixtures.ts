@@ -1,3 +1,6 @@
+import crypto from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
 import type { Settings } from "@node-minify/types";
 import { expect, test } from "vitest";
 import { minify } from "../packages/core/src/index.ts";
@@ -48,7 +51,9 @@ const formatTestName = (
 };
 
 const executeMinifyTest = async (options: TestOptions): Promise<void> => {
-    const result = await runMinify(options);
+    const normalizedOptions =
+        isolatePublicFolderIfTestWouldOverwriteFixtures(options);
+    const result = await runMinify(normalizedOptions);
 
     validateMinifyResult(result);
 };
@@ -62,6 +67,116 @@ const validateMinifyResult = (result: MinifyResult): void => {
 };
 
 export type Tests = Record<string, { it: string; minify: Partial<Settings> }[]>;
+
+function isolatePublicFolderIfTestWouldOverwriteFixtures(
+    options: TestOptions
+): TestOptions {
+    const publicFolder = options.minify.publicFolder;
+    const output = options.minify.output;
+    const replaceInPlace = options.minify.replaceInPlace;
+
+    if (typeof publicFolder !== "string") {
+        return options;
+    }
+
+    // Only isolate when the test is likely to overwrite tracked fixtures
+    // (e.g. output is "$1.ext" combined with publicFolder, or replaceInPlace is enabled).
+    const isOutputDollarOne =
+        typeof output === "string" && output.trimStart().startsWith("$1");
+    const isDangerous = Boolean(replaceInPlace) || isOutputDollarOne;
+    if (!isDangerous) {
+        return options;
+    }
+
+    // We only need to isolate for the tracked fixtures folder used by tests.
+    const normalizedPublicFolder = path.resolve(publicFolder);
+    const normalizedFixturesRoot = path.resolve(__dirname, "fixtures");
+    if (!normalizedPublicFolder.startsWith(normalizedFixturesRoot)) {
+        return options;
+    }
+
+    const isolatedPublicFolder = createIsolatedPublicFolder(publicFolder);
+
+    // Avoid structuredClone() here: at this point `options.minify.compressor` is a function,
+    // which causes a DataCloneError under Bun.
+    return {
+        ...options,
+        minify: {
+            ...options.minify,
+            publicFolder: isolatedPublicFolder,
+            input: rewriteInputToIsolatedFolder(
+                options.minify.input,
+                publicFolder,
+                isolatedPublicFolder
+            ),
+        },
+    };
+}
+
+function createIsolatedPublicFolder(originalPublicFolder: string): string {
+    const originalResolved = path.resolve(originalPublicFolder);
+    const folderName = path.basename(path.normalize(originalResolved));
+
+    const isolatedBase = path.resolve(
+        __dirname,
+        "tmp",
+        "isolated-public-folders",
+        crypto.randomUUID()
+    );
+    const isolatedPublicFolder = path.join(isolatedBase, folderName);
+
+    fs.mkdirSync(isolatedPublicFolder, { recursive: true });
+    fs.cpSync(originalResolved, isolatedPublicFolder, {
+        recursive: true,
+        force: true,
+    });
+
+    // Keep the trailing separator for consistency with existing publicFolder values.
+    return `${isolatedPublicFolder}${path.sep}`;
+}
+
+function rewriteInputToIsolatedFolder(
+    input: string | string[] | undefined,
+    originalPublicFolder: string,
+    isolatedPublicFolder: string
+): string | string[] | undefined {
+    if (typeof input === "string") {
+        return rewritePathIfUnderPublicFolder(
+            input,
+            originalPublicFolder,
+            isolatedPublicFolder
+        );
+    }
+
+    if (Array.isArray(input)) {
+        return input.map((item) =>
+            rewritePathIfUnderPublicFolder(
+                item,
+                originalPublicFolder,
+                isolatedPublicFolder
+            )
+        );
+    }
+
+    return input;
+}
+
+function rewritePathIfUnderPublicFolder(
+    maybePath: string,
+    originalPublicFolder: string,
+    isolatedPublicFolder: string
+): string {
+    const originalResolved = path.resolve(originalPublicFolder);
+    const isolatedResolved = path.resolve(isolatedPublicFolder);
+    const valueResolved = path.resolve(maybePath);
+
+    if (valueResolved.startsWith(originalResolved)) {
+        const relative = path.relative(originalResolved, valueResolved);
+        return path.join(isolatedResolved, relative);
+    }
+
+    return maybePath;
+}
 
 const tests: Tests = {
     concat: [
