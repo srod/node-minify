@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Package Manager
 
-This branch (`develop`) uses **Bun** as the package manager and runtime. The `main` branch uses pnpm.
+This branch (`main`) uses **Bun** as the package manager and runtime.
 
 ## Commands
 - **Install**: `bun install`

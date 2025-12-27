@@ -156,4 +156,4 @@ import { htmlMinifier } from '@node-minify/html-minifier';
 import { jsonminify } from '@node-minify/jsonminify';
 ```
 
-[More examples](https://github.com/srod/node-minify/blob/develop/examples/server.js)
+[More examples](https://github.com/srod/node-minify/blob/main/examples/server.js)

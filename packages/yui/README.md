@@ -6,14 +6,14 @@
   <br>
   <a href="https://npmjs.org/package/@node-minify/yui"><img src="https://img.shields.io/npm/v/@node-minify/yui.svg"></a>
   <a href="https://npmjs.org/package/@node-minify/yui"><img src="https://img.shields.io/npm/dm/@node-minify/yui.svg"></a>
-  <a href="https://github.com/srod/node-minify/actions"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fsrod%2Fnode-minify%2Fbadge%3Fref%3Ddevelop&style=flat" /></a>
-  <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/develop/graph/badge.svg"></a>
+  <a href="https://github.com/srod/node-minify/actions"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fsrod%2Fnode-minify%2Fbadge%3Fref%3Dmain&style=flat" /></a>
+  <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/main/graph/badge.svg"></a>
 </p>
 
 # YUI Compressor
 
 > **DEPRECATED**: YUI Compressor was deprecated by Yahoo in 2013 and is no longer maintained.
-> Please use [`@node-minify/terser`](https://github.com/srod/node-minify/tree/develop/packages/terser) for JavaScript or [`@node-minify/cssnano`](https://github.com/srod/node-minify/tree/develop/packages/cssnano) for CSS instead.
+> Please use [`@node-minify/terser`](https://github.com/srod/node-minify/tree/main/packages/terser) for JavaScript or [`@node-minify/cssnano`](https://github.com/srod/node-minify/tree/main/packages/cssnano) for CSS instead.
 
 `Yahoo Compressor` is a plugin for [`node-minify`](https://github.com/srod/node-minify)
 
@@ -52,4 +52,4 @@ Visit https://node-minify.2clics.net/compressors/yui.html for full documentation
 
 ## License
 
-[MIT](https://github.com/srod/node-minify/blob/develop/LICENSE)
+[MIT](https://github.com/srod/node-minify/blob/main/LICENSE)

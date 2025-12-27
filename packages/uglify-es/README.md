@@ -6,14 +6,14 @@
   <br>
   <a href="https://npmjs.org/package/@node-minify/uglify-es"><img src="https://img.shields.io/npm/v/@node-minify/uglify-es.svg"></a>
   <a href="https://npmjs.org/package/@node-minify/uglify-es"><img src="https://img.shields.io/npm/dm/@node-minify/uglify-es.svg"></a>
-  <a href="https://github.com/srod/node-minify/actions"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fsrod%2Fnode-minify%2Fbadge%3Fref%3Ddevelop&style=flat" /></a>
-  <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/develop/graph/badge.svg"></a>
+  <a href="https://github.com/srod/node-minify/actions"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fsrod%2Fnode-minify%2Fbadge%3Fref%3Dmain&style=flat" /></a>
+  <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/main/graph/badge.svg"></a>
 </p>
 
 # uglify-es
 
 > **DEPRECATED**: This package is deprecated because `uglify-es` is no longer maintained upstream.
-> Please use [`@node-minify/terser`](https://github.com/srod/node-minify/tree/develop/packages/terser) instead, which is actively maintained and supports modern JavaScript.
+> Please use [`@node-minify/terser`](https://github.com/srod/node-minify/tree/main/packages/terser) instead, which is actively maintained and supports modern JavaScript.
 
 `uglify-es` is a plugin for [`node-minify`](https://github.com/srod/node-minify)
 
@@ -44,4 +44,4 @@ Visit https://node-minify.2clics.net/compressors/uglify-es.html for full documen
 
 ## License
 
-[MIT](https://github.com/srod/node-minify/blob/develop/LICENSE)
+[MIT](https://github.com/srod/node-minify/blob/main/LICENSE)
