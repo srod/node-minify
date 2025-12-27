@@ -104,10 +104,13 @@ function isolatePublicFolderIfTestWouldOverwriteFixtures(
         minify: {
             ...options.minify,
             publicFolder: isolatedPublicFolder,
-            input: rewriteInputToIsolatedFolder(
+            // Important for Windows: keep inputs relative when using publicFolder + "$1" outputs.
+            // If input is absolute, some output-path logic will embed the drive path into "$1"
+            // and then join it under publicFolder, producing invalid paths like:
+            //   ...\\es5\\D:\\a\\...\\fixture-1.js
+            input: rewriteInputToIsolatedPublicFolder(
                 options.minify.input,
-                publicFolder,
-                isolatedPublicFolder
+                publicFolder
             ),
         },
     };
@@ -135,25 +138,22 @@ function createIsolatedPublicFolder(originalPublicFolder: string): string {
     return `${isolatedPublicFolder}${path.sep}`;
 }
 
-function rewriteInputToIsolatedFolder(
+function rewriteInputToIsolatedPublicFolder(
     input: string | string[] | undefined,
-    originalPublicFolder: string,
-    isolatedPublicFolder: string
+    originalPublicFolder: string
 ): string | string[] | undefined {
     if (typeof input === "string") {
-        return rewritePathIfUnderPublicFolder(
+        return rewriteInputPathToBeRelativeToPublicFolder(
             input,
-            originalPublicFolder,
-            isolatedPublicFolder
+            originalPublicFolder
         );
     }
 
     if (Array.isArray(input)) {
         return input.map((item) =>
-            rewritePathIfUnderPublicFolder(
+            rewriteInputPathToBeRelativeToPublicFolder(
                 item,
-                originalPublicFolder,
-                isolatedPublicFolder
+                originalPublicFolder
             )
         );
     }
@@ -161,21 +161,23 @@ function rewriteInputToIsolatedFolder(
     return input;
 }
 
-function rewritePathIfUnderPublicFolder(
-    maybePath: string,
-    originalPublicFolder: string,
-    isolatedPublicFolder: string
+function rewriteInputPathToBeRelativeToPublicFolder(
+    value: string,
+    originalPublicFolder: string
 ): string {
-    const originalResolved = path.resolve(originalPublicFolder);
-    const isolatedResolved = path.resolve(isolatedPublicFolder);
-    const valueResolved = path.resolve(maybePath);
-
-    if (valueResolved.startsWith(originalResolved)) {
-        const relative = path.relative(originalResolved, valueResolved);
-        return path.join(isolatedResolved, relative);
+    // Keep wildcards / already-relative inputs as-is.
+    if (!path.isAbsolute(value)) {
+        return value;
     }
 
-    return maybePath;
+    const originalResolved = path.resolve(originalPublicFolder);
+    const valueResolved = path.resolve(value);
+
+    if (valueResolved.startsWith(originalResolved)) {
+        return path.relative(originalResolved, valueResolved);
+    }
+
+    return value;
 }
 
 const tests: Tests = {
