@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/clean-css",
-  "version": "10.0.0-next.0",
+  "version": "10.0.0",
   "description": "clean-css plugin for @node-minify",
   "keywords": [
     "compressor",
