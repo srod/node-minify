@@ -60,8 +60,8 @@ import { minify } from '@node-minify/core';
 import { babelMinify } from '@node-minify/babel-minify';
 import { gcc } from '@node-minify/google-closure-compiler';
 import { terser } from '@node-minify/terser';
-import { uglifyjs } from '@node-minify/uglify-js';
-import { uglifyes } from '@node-minify/uglify-es';
+import { uglifyJs } from '@node-minify/uglify-js';
+import { uglifyEs } from '@node-minify/uglify-es';
 
 // CSS compressors
 import { cleanCss } from '@node-minify/clean-css';
@@ -75,7 +75,7 @@ import { htmlMinifier } from '@node-minify/html-minifier';
 
 // Other
 import { yui } from '@node-minify/yui';
-import { jsonminify } from '@node-minify/jsonminify';
+import { jsonMinify } from '@node-minify/jsonminify';
 import { noCompress } from '@node-minify/no-compress';
 ```
 

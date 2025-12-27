@@ -128,8 +128,8 @@ const result = await minify({
 import { babelMinify } from '@node-minify/babel-minify';
 import { gcc } from '@node-minify/google-closure-compiler';
 import { terser } from '@node-minify/terser';
-import { uglifyjs } from '@node-minify/uglify-js';
-import { uglifyes } from '@node-minify/uglify-es';
+import { uglifyJs } from '@node-minify/uglify-js';
+import { uglifyEs } from '@node-minify/uglify-es';
 import { yui } from '@node-minify/yui';
 ```
 
@@ -153,7 +153,7 @@ import { htmlMinifier } from '@node-minify/html-minifier';
 ### JSON
 
 ```js
-import { jsonminify } from '@node-minify/jsonminify';
+import { jsonMinify } from '@node-minify/jsonminify';
 ```
 
 [More examples](https://github.com/srod/node-minify/blob/main/examples/server.js)

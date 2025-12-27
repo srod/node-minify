@@ -26,10 +26,10 @@ npm install @node-minify/core @node-minify/jsonminify
 
 ```js
 import { minify } from '@node-minify/core';
-import { jsonminify } from '@node-minify/jsonminify';
+import { jsonMinify } from '@node-minify/jsonminify';
 
 await minify({
-  compressor: jsonminify,
+  compressor: jsonMinify,
   input: 'foo.json',
   output: 'bar.json'
 });
