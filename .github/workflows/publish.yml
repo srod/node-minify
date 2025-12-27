@@ -25,7 +25,7 @@ jobs:
       - name: 📥 Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: 🚀 Create Release Pull Request or Publish to npm
+      - name: 🚀 Create Release Pull Request or Publish to NPM
         uses: changesets/action@v1
         id: changesets
         with:
