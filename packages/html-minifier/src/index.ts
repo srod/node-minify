@@ -1,9 +1,3 @@
-/*!
- * node-minify
- * Copyright(c) 2011-2025 Rodolphe Stoclin
- * MIT Licensed
- */
-
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 
 const defaultOptions = {
@@ -22,12 +16,6 @@ const defaultOptions = {
     useShortDoctype: true,
 };
 
-/**
- * Run html-minifier.
- * @param settings - HTMLMinifier options
- * @param content - Content to minify
- * @returns Minified content
- */
 export async function htmlMinifier({
     settings,
     content,
