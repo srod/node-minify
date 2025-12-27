@@ -54,7 +54,7 @@
     "@node-minify/uglify-js": "workspace:*",
     "@node-minify/utils": "workspace:*",
     "@node-minify/yui": "workspace:*",
-    "@tsconfig/node18": "18.2.4",
+    "@tsconfig/node20": "20.1.0",
     "@types/node": "18.19.64",
     "@vitest/coverage-v8": "1.6.0",
     "@vitest/ui": "1.6.0",
