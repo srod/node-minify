@@ -7,16 +7,8 @@
 /**
  * Module dependencies.
  */
-import os from "node:os";
-import path from "node:path";
 import type { Settings } from "@node-minify/types";
-import { setFileNameMin } from "@node-minify/utils";
-import fg from "fast-glob";
-
-/**
- * Check if the platform is Windows
- */
-const IS_WINDOWS_PLATFORM = os.platform() === "win32";
+import { setFileNameMin, setPublicFolder, wildcards } from "@node-minify/utils";
 
 /**
  * Default settings.
@@ -31,10 +23,10 @@ const defaultSettings = {
  * @param inputSettings Settings from user input
  */
 function setup(inputSettings: Settings) {
-    const settings: Settings = Object.assign(
-        structuredClone(defaultSettings),
-        inputSettings
-    );
+    const settings: Settings = {
+        ...structuredClone(defaultSettings),
+        ...inputSettings,
+    };
 
     // In memory
     if (settings.content) {
@@ -53,28 +45,35 @@ function setup(inputSettings: Settings) {
 function enhanceSettings(settings: Settings): Settings {
     let enhancedSettings = settings;
 
-    if (settings.input) {
-        enhancedSettings = Object.assign(
-            settings,
-            wildcards(settings.input, settings.publicFolder)
-        );
+    if (enhancedSettings.input) {
+        enhancedSettings = {
+            ...enhancedSettings,
+            ...wildcards(enhancedSettings.input, enhancedSettings.publicFolder),
+        };
     }
-    if (settings.input && settings.output && !Array.isArray(settings.output)) {
-        enhancedSettings = Object.assign(
-            settings,
-            checkOutput(
-                settings.input,
-                settings.output,
-                settings.publicFolder,
-                settings.replaceInPlace
-            )
-        );
+    if (
+        enhancedSettings.input &&
+        enhancedSettings.output &&
+        !Array.isArray(enhancedSettings.output)
+    ) {
+        enhancedSettings = {
+            ...enhancedSettings,
+            ...checkOutput(
+                enhancedSettings.input,
+                enhancedSettings.output,
+                enhancedSettings.publicFolder,
+                enhancedSettings.replaceInPlace
+            ),
+        };
     }
-    if (settings.input && settings.publicFolder) {
-        enhancedSettings = Object.assign(
-            settings,
-            setPublicFolder(settings.input, settings.publicFolder)
-        );
+    if (enhancedSettings.input && enhancedSettings.publicFolder) {
+        enhancedSettings = {
+            ...enhancedSettings,
+            ...setPublicFolder(
+                enhancedSettings.input,
+                enhancedSettings.publicFolder
+            ),
+        };
     }
 
     return enhancedSettings;
@@ -124,102 +123,6 @@ function checkOutput(
             effectivePublicFolder,
             replaceInPlace
         ),
-    };
-}
-
-/**
- * Handle wildcards in a path, get the real path of each file.
- * @param input - Path with wildcards
- * @param publicFolder - Path to the public folder
- */
-function wildcards(input: string | string[], publicFolder?: string) {
-    if (Array.isArray(input)) {
-        return wildcardsArray(input, publicFolder);
-    }
-
-    return wildcardsString(input, publicFolder);
-}
-
-/**
- * Handle wildcards in a path (string only), get the real path of each file.
- * @param input - Path with wildcards
- * @param publicFolder - Path to the public folder
- */
-function wildcardsString(input: string, publicFolder?: string) {
-    if (!input.includes("*")) {
-        return {};
-    }
-
-    return {
-        input: getFilesFromWildcards(input, publicFolder),
-    };
-}
-
-/**
- * Handle wildcards in a path (array only), get the real path of each file.
- * @param input - Array of paths with wildcards
- * @param publicFolder - Path to the public folder
- */
-function wildcardsArray(input: string[], publicFolder?: string) {
-    // Convert input paths to patterns with public folder prefix
-    const inputWithPublicFolder = input.map((item) => {
-        const input2 = publicFolder ? publicFolder + item : item;
-        return IS_WINDOWS_PLATFORM ? fg.convertPathToPattern(input2) : input2;
-    });
-
-    // Check if any wildcards exist
-    const hasWildcards = inputWithPublicFolder.some((item) =>
-        item.includes("*")
-    );
-
-    // Process paths based on whether wildcards exist
-    const processedPaths = hasWildcards
-        ? fg.globSync(inputWithPublicFolder)
-        : input;
-
-    // Filter out any remaining paths with wildcards
-    const finalPaths = processedPaths.filter((path) => !path.includes("*"));
-
-    return { input: finalPaths };
-}
-
-/**
- * Get the real path of each file.
- * @param input - Path with wildcards
- * @param publicFolder - Path to the public folder
- */
-function getFilesFromWildcards(input: string, publicFolder?: string) {
-    const fullPath = publicFolder ? `${publicFolder}${input}` : input;
-    return input.includes("*")
-        ? fg.globSync(
-              IS_WINDOWS_PLATFORM ? fg.convertPathToPattern(fullPath) : fullPath
-          )
-        : [];
-}
-
-/**
- * Prepend the public folder to each file.
- * @param input Path to file(s)
- * @param publicFolder Path to the public folder
- */
-function setPublicFolder(input: string | string[], publicFolder: string) {
-    if (typeof publicFolder !== "string") {
-        return {};
-    }
-
-    const normalizedPublicFolder = path.normalize(publicFolder);
-
-    const addPublicFolder = (item: string) => {
-        const normalizedPath = path.normalize(item);
-        return normalizedPath.includes(normalizedPublicFolder)
-            ? normalizedPath
-            : path.normalize(normalizedPublicFolder + item);
-    };
-
-    return {
-        input: Array.isArray(input)
-            ? input.map(addPublicFolder)
-            : addPublicFolder(input),
     };
 }
 

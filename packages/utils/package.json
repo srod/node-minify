@@ -52,6 +52,7 @@
     "dev": "tsdown src/index.ts --watch"
   },
   "dependencies": {
+    "fast-glob": "^3.3.3",
     "gzip-size": "7.0.0"
   },
   "devDependencies": {
