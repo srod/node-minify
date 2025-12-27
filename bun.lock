@@ -112,7 +112,6 @@
       "version": "10.0.0-next.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
-        "fast-glob": "^3.3.2",
         "mkdirp": "3.0.1",
       },
       "devDependencies": {
@@ -260,6 +259,7 @@
       "name": "@node-minify/utils",
       "version": "10.0.0-next.0",
       "dependencies": {
+        "fast-glob": "^3.3.3",
         "gzip-size": "7.0.0",
       },
       "devDependencies": {

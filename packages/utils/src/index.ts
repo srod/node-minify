@@ -10,7 +10,9 @@ import { prettyBytes } from "./prettyBytes.ts";
 import { readFile } from "./readFile.ts";
 import { run } from "./run.ts";
 import { setFileNameMin } from "./setFileNameMin.ts";
+import { setPublicFolder } from "./setPublicFolder.ts";
 import type { BuildArgsOptions } from "./types.ts";
+import { wildcards } from "./wildcards.ts";
 import { writeFile } from "./writeFile.ts";
 
 export {
@@ -26,8 +28,10 @@ export {
     resetDeprecationWarnings,
     run,
     setFileNameMin,
+    setPublicFolder,
     toBuildArgsOptions,
     warnDeprecation,
+    wildcards,
     writeFile,
 };
 
