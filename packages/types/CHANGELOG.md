@@ -1,5 +1,7 @@
 # @node-minify/types
 
+## 10.1.0
+
 ## 10.0.2
 
 ### Patch Changes

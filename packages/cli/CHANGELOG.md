@@ -1,5 +1,12 @@
 # @node-minify/cli
 
+## 10.1.0
+
+### Patch Changes
+
+- @node-minify/core@10.1.0
+- @node-minify/utils@10.1.0
+
 ## 10.0.2
 
 ### Patch Changes
