@@ -1,6 +1,6 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2024 Rodolphe Stoclin
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
  * MIT Licensed
  */
 
@@ -9,82 +9,99 @@
  */
 import fs from "node:fs";
 import type { Settings } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import {
+    compressSingleFile,
+    getContentFromFiles,
+    run,
+} from "@node-minify/utils";
 import { mkdirp } from "mkdirp";
 
 /**
  * Run compressor.
  * @param settings Settings
  */
-const compress = (settings: Settings): Promise<string> | string => {
-    if (typeof settings.compressor !== "function") {
-        throw new Error(
-            "compressor should be a function, maybe you forgot to install the compressor"
-        );
+export async function compress(settings: Settings): Promise<string> {
+    if (Array.isArray(settings.output)) {
+        if (!Array.isArray(settings.input)) {
+            throw new Error(
+                "When output is an array, input must also be an array"
+            );
+        }
+        if (settings.input.length !== settings.output.length) {
+            throw new Error(
+                `Input and output arrays must have the same length (input: ${settings.input.length}, output: ${settings.output.length})`
+            );
+        }
     }
 
     if (settings.output) {
         createDirectory(settings.output);
     }
 
+    // Handle array outputs (from user input or created internally by checkOutput when processing $1 pattern)
     if (Array.isArray(settings.output)) {
-        return settings.sync
-            ? compressArrayOfFilesSync(settings)
-            : compressArrayOfFilesAsync(settings);
+        return compressArrayOfFiles(settings);
     }
-    return utils.compressSingleFile(settings);
-};
+
+    return compressSingleFile(settings);
+}
 
 /**
- * Compress an array of files in sync.
+ * Compress an array of files.
  * @param settings Settings
  */
-const compressArrayOfFilesSync = (settings: Settings): any => {
-    return (
-        Array.isArray(settings.input) &&
-        settings.input.forEach((input, index) => {
-            const content = utils.getContentFromFiles(input);
-            return utils.runSync({ settings, content, index });
-        })
-    );
-};
-
-/**
- * Compress an array of files in async.
- * @param settings Settings
- */
-const compressArrayOfFilesAsync = (
-    settings: Settings
-): Promise<string | void> => {
-    let sequence: Promise<string | void> = Promise.resolve();
-    Array.isArray(settings.input) &&
-        settings.input.forEach((input, index) => {
-            const content = utils.getContentFromFiles(input);
-            sequence = sequence.then(() =>
-                utils.runAsync({ settings, content, index })
-            );
-        });
-    return sequence;
-};
+async function compressArrayOfFiles(settings: Settings): Promise<string> {
+    let result = "";
+    if (Array.isArray(settings.input)) {
+        for (let index = 0; index < settings.input.length; index++) {
+            const input = settings.input[index];
+            if (input) {
+                const content = getContentFromFiles(input);
+                result = await run({ settings, content, index });
+            }
+        }
+    }
+    return result;
+}
 
 /**
  * Create folder of the target file.
- * @param file Full path of the file
+ * @param filePath Full path of the file (can be string or array when $1 pattern is used)
  */
-const createDirectory = (file: string) => {
-    if (Array.isArray(file)) {
-        file = file[0];
-    }
-    const dir = file?.substr(0, file.lastIndexOf("/"));
-    if (!dir) {
+function createDirectory(filePath: string | string[]) {
+    // Early return if no file path provided
+    if (!filePath) {
         return;
     }
-    if (!fs.statSync(dir).isDirectory()) {
-        mkdirp.sync(dir);
-    }
-};
 
-/**
- * Expose `compress()`.
- */
-export { compress };
+    // Handle array (created internally by checkOutput when processing $1 pattern)
+    const paths = Array.isArray(filePath) ? filePath : [filePath];
+
+    for (const path of paths) {
+        if (typeof path !== "string") {
+            continue;
+        }
+
+        // Extract directory path
+        const dirPath = path.substring(0, path.lastIndexOf("/"));
+
+        // Early return if no directory path
+        if (!dirPath) {
+            continue;
+        }
+
+        // Create directory if it doesn't exist
+        if (!directoryExists(dirPath)) {
+            mkdirp.sync(dirPath);
+        }
+    }
+}
+
+// Helper function to check if directory exists
+function directoryExists(path: string): boolean {
+    try {
+        return fs.statSync(path).isDirectory();
+    } catch {
+        return false;
+    }
+}

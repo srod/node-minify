@@ -1,41 +1,50 @@
 ---
-title: "uglify-es"
-description: "uglify-es for node-minify"
+title: "uglify-es (Deprecated)"
+description: "uglify-es for node-minify - DEPRECATED"
 ---
+
+:::danger[Deprecated]
+**This package is deprecated.** `uglify-es` is no longer maintained upstream (last release: 2017).
+
+Please migrate to [`terser`](/compressors/terser) instead, which is actively maintained and supports modern JavaScript.
+:::
 
 `uglify-es` can compress only JavaScript files.
 
-[https://github.com/mishoo/UglifyJS2/tree/harmony](https://github.com/mishoo/UglifyJS2/tree/harmony)
+[https://github.com/mishoo/UglifyJS](https://github.com/mishoo/UglifyJS)
+
+## Installation
+
+```bash
+npm install @node-minify/core @node-minify/uglify-es
+```
 
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const uglifyES = require('@node-minify/uglify-es');
+import { minify } from '@node-minify/core';
+import { uglifyes } from '@node-minify/uglify-es';
 
-minify({
-  compressor: uglifyES,
+const result = await minify({
+  compressor: uglifyes,
   input: 'foo.js',
-  output: 'bar.js',
-  callback: function(err, min) {}
+  output: 'bar.js'
 });
 ```
 
 ## Options
 
 ```js
-minify({
-  compressor: uglifyES,
+const result = await minify({
+  compressor: uglifyes,
   input: 'foo.js',
   output: 'bar.js',
   options: {
-    warnings: true, // pass true to display compressor warnings.
-    mangle: false // pass false to skip mangling names.
-    output: {} // pass an object if you wish to specify additional output options. The defaults are optimized for best compression.
-    compress: false // pass false to skip compressing entirely. Pass an object to specify custom compressor options.
-  },
-  callback: function (err, min) {}
+    mangle: false,
+    output: {},
+    compress: false
+  }
 });
 ```
 
-[Check all options](https://github.com/mishoo/UglifyJS2/tree/harmony)
+[Check all options](https://github.com/mishoo/UglifyJS)

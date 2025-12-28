@@ -1,135 +1,108 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2024 Rodolphe Stoclin
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
  * MIT Licensed
  */
 
 import childProcess from "node:child_process";
-import type { OptionsTest } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
-import { filesJS } from "../../../tests/files-path";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import minify from "../../core/src";
-import yui from "../src";
+import { filesJS } from "../../../tests/files-path.ts";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { minify } from "../../core/src/index.ts";
+import { yui } from "../src/index.ts";
 
 const compressorLabel = "yui";
 const compressor = yui;
 
-describe("Package: YUI", () => {
-    tests.commonjs.forEach((options) => {
+describe("Package: YUI", async () => {
+    if (!tests.commonjs || !tests.commoncss) {
+        throw new Error("Tests not found");
+    }
+
+    // Run commonjs tests
+    for (const options of tests.commonjs) {
         options.minify.type = "js";
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commonjs.forEach((options) => {
-        options.minify.type = "js";
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
-    test("should compress with some options", (): Promise<void> =>
-        new Promise<void>((done) => {
-            // const options: { minify: { callback?: Function } } = {};
-            const options: OptionsTest = {
-                minify: {
-                    compressor: yui,
-                    type: "js",
-                    input: filesJS.oneFileWithWildcards,
-                    output: filesJS.fileJSOut,
-                    options: {
-                        charset: "utf8",
-                    },
-                },
-            };
+        await runOneTest({ options, compressorLabel, compressor });
+    }
 
-            options.minify.callback = (err, min) => {
-                expect(err).toBeNull();
-                expect(min).not.toBeNull();
+    // Run commoncss tests
+    for (const options of tests.commoncss) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
 
-                done();
-            };
-
-            minify(options.minify);
-        }));
-
-    test("should catch an error if yui with bad options", () => {
-        const options: OptionsTest = {
-            minify: {
-                compressor: yui,
-                type: "js",
-                input: filesJS.oneFile,
-                output: filesJS.fileJSOut,
-                options: {
-                    fake: true,
-                },
+    test("should compress with some options", async (): Promise<void> => {
+        const settings: Settings = {
+            compressor: yui,
+            type: "js",
+            input: filesJS.oneFileWithWildcards,
+            output: filesJS.fileJSOut,
+            options: {
+                charset: "utf8",
             },
         };
 
-        return minify(options.minify).catch((err) => {
-            return expect(err.toString()).toMatch("Error");
-        });
+        const result = await minify(settings);
+        expect(result).not.toBeNull();
     });
 
-    describe("Create sync errors", () => {
-        beforeAll(() => {
-            const spy = vi.spyOn(childProcess, "spawnSync");
-            spy.mockImplementation(() => {
-                throw new Error();
-            });
-        });
-        test("should callback an error on spawnSync", () => {
-            const options: OptionsTest = {
-                minify: {
-                    compressor: yui,
-                    input: filesJS.oneFile,
-                    output: filesJS.fileJSOut,
-                    sync: true,
-                    options: {
-                        fake: true,
-                    },
-                },
-            };
-            return expect(minify(options.minify)).rejects.toThrow();
-        });
-        afterAll(() => {
-            vi.restoreAllMocks();
-        });
+    test("should catch an error if yui with bad options", async () => {
+        const settings: Settings = {
+            compressor: yui,
+            type: "js",
+            input: filesJS.oneFile,
+            output: filesJS.fileJSOut,
+            options: {
+                fake: true,
+            },
+        };
+
+        try {
+            return await minify(settings);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                return expect(err.toString()).toMatch("Error");
+            }
+        }
     });
 
-    describe("Create async errors", () => {
+    describe("Create errors", () => {
         beforeAll(() => {
             const spy = vi.spyOn(childProcess, "spawn");
             spy.mockImplementation(() => {
                 throw new Error();
             });
         });
-        test("should callback an error on spawn", (): Promise<void> =>
-            new Promise<void>((done) => {
-                const options: OptionsTest = {
-                    minify: {
-                        compressor: yui,
-                        input: filesJS.oneFile,
-                        output: filesJS.fileJSOut,
-                        sync: false,
-                        options: {
-                            fake: true,
-                        },
-                        callback: (): void => {
-                            return;
-                        },
-                    },
-                };
-                const spy = vi.spyOn(options.minify, "callback");
-                expect(minify(options.minify)).rejects.toThrow();
-                done();
-                return minify(options.minify).catch(() =>
-                    expect(spy).toHaveBeenCalled()
-                );
-            }));
+        test("should throw an error on spawn", async () => {
+            const settings: Settings = {
+                compressor: yui,
+                input: filesJS.oneFile,
+                output: filesJS.fileJSOut,
+                options: {
+                    fake: true,
+                },
+            };
+            try {
+                await minify(settings);
+            } catch (err) {
+                return expect(err).not.toBeNull();
+            }
+        });
     });
+
+    describe("yui coverage", () => {
+        test("should throw if runCommandLine returns non-string", async () => {
+            const run = await import("@node-minify/run");
+            const spy = vi
+                .spyOn(run, "runCommandLine")
+                .mockResolvedValueOnce(null as any);
+            await expect(
+                yui({ settings: { type: "js" }, content: "code" } as any)
+            ).rejects.toThrow("YUI Compressor failed: empty result");
+            spy.mockRestore();
+        });
+    });
+
     afterAll(() => {
         vi.restoreAllMocks();
     });

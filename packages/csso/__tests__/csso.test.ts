@@ -1,21 +1,23 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2024 Rodolphe Stoclin
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
  * MIT Licensed
  */
 
 import { describe } from "vitest";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import csso from "../src";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { csso } from "../src/index.ts";
 
 const compressorLabel = "csso";
 const compressor = csso;
 
-describe("Package: csso", () => {
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
+describe("Package: csso", async () => {
+    if (!tests.commoncss) {
+        throw new Error("Tests not found");
+    }
+
+    // Run commoncss tests
+    for (const options of tests.commoncss) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
 });

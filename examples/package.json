@@ -1,0 +1,26 @@
+{
+    "name": "@node-minify/examples",
+    "version": "0.0.1",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "@node-minify/babel-minify": "workspace:*",
+        "@node-minify/clean-css": "workspace:*",
+        "@node-minify/core": "workspace:*",
+        "@node-minify/crass": "workspace:*",
+        "@node-minify/cssnano": "workspace:*",
+        "@node-minify/csso": "workspace:*",
+        "@node-minify/google-closure-compiler": "workspace:*",
+        "@node-minify/html-minifier": "workspace:*",
+        "@node-minify/jsonminify": "workspace:*",
+        "@node-minify/no-compress": "workspace:*",
+        "@node-minify/sqwish": "workspace:*",
+        "@node-minify/terser": "workspace:*",
+        "@node-minify/uglify-es": "workspace:*",
+        "@node-minify/uglify-js": "workspace:*",
+        "@node-minify/yui": "workspace:*"
+    }
+}

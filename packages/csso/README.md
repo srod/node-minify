@@ -6,8 +6,8 @@
   <br>
   <a href="https://npmjs.org/package/@node-minify/csso"><img src="https://img.shields.io/npm/v/@node-minify/csso.svg"></a>
   <a href="https://npmjs.org/package/@node-minify/csso"><img src="https://img.shields.io/npm/dm/@node-minify/csso.svg"></a>
-  <a href="https://github.com/srod/node-minify/actions"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fsrod%2Fnode-minify%2Fbadge%3Fref%3Ddevelop&style=flat" /></a>
-  <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/develop/graph/badge.svg"></a>
+  <a href="https://github.com/srod/node-minify/actions"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fsrod%2Fnode-minify%2Fbadge%3Fref%3Dmain&style=flat" /></a>
+  <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/main/graph/badge.svg"></a>
 </p>
 
 # csso
@@ -25,14 +25,13 @@ npm install @node-minify/core @node-minify/csso
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const csso = require('@node-minify/csso');
+import { minify } from '@node-minify/core';
+import { csso } from '@node-minify/csso';
 
-minify({
+await minify({
   compressor: csso,
   input: 'foo.css',
-  output: 'bar.css',
-  callback: function (err, min) {}
+  output: 'bar.css'
 });
 ```
 
@@ -42,4 +41,4 @@ Visit https://node-minify.2clics.net/compressors/csso.html for full documentatio
 
 ## License
 
-[MIT](https://github.com/srod/node-minify/blob/develop/LICENSE)
+[MIT](https://github.com/srod/node-minify/blob/main/LICENSE)

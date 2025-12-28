@@ -1,118 +1,176 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2024 Rodolphe Stoclin
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
  * MIT Licensed
  */
 
 import childProcess from "node:child_process";
-import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
-import { runCommandLine } from "../src";
+import { EventEmitter } from "node:events";
+import {
+    afterAll,
+    beforeAll,
+    describe,
+    expect,
+    type MockInstance,
+    test,
+    vi,
+} from "vitest";
+import { type RunCommandLineParams, runCommandLine } from "../src/index.ts";
 
 const jar = `${__dirname}/../../yui/src/binaries/yuicompressor-2.4.7.jar`;
 
+type Command = {
+    args: string[];
+    data: string;
+};
+
 describe("Package: run", () => {
     describe("Base", () => {
-        test("should be OK with YUI and async", (): Promise<void> =>
-            new Promise<void>((done) => {
-                const command = {
-                    args: ["-jar", "-Xss2048k", jar, "--type", "js"],
-                    data: 'console.log("foo");',
-                    settings: {
-                        sync: false,
-                    },
-                    callback: (err?: unknown, result?: string) => {
-                        expect(spy).toHaveBeenCalled();
-                        expect(err).toBeNull();
-                        expect(result).toBeDefined();
-                        done();
-                    },
-                };
-                const spy = vi.spyOn(command, "callback");
-                runCommandLine(command);
-            }));
-        test("should not be OK with YUI and sync, fake arg", (): Promise<void> =>
-            new Promise<void>((done) => {
-                const command = {
-                    args: ["-jar", "-Xss2048k", jar, "--type", "js", "--fake"],
-                    data: 'console.log("foo");',
-                    settings: {
-                        sync: false,
-                    },
-                    callback: (err?: unknown, result?: string) => {
-                        expect(spy).toHaveBeenCalled();
-                        expect(err).toBeDefined();
-                        expect(result).toBeUndefined();
-                        done();
-                    },
-                };
-                const spy = vi.spyOn(command, "callback");
-                runCommandLine(command);
-            }));
-        test("should be OK with YUI and sync", (): Promise<void> =>
-            new Promise<void>((done) => {
-                const command = {
-                    args: ["-jar", "-Xss2048k", jar, "--type", "js"],
-                    data: 'console.log("foo");',
-                    settings: {
-                        sync: true,
-                    },
-                    callback: () => {
-                        expect(spy).toHaveBeenCalled();
-                        done();
-                    },
-                };
-                const spy = vi.spyOn(command, "callback");
-                runCommandLine(command);
-            }));
-        test("should not be OK with YUI and sync, fake arg", (): Promise<void> =>
-            new Promise<void>((done) => {
-                const command = {
-                    args: ["-jar", "-Xss2048k", jar, "--type", "js", "--fake"],
-                    data: 'console.log("foo");',
-                    settings: {
-                        sync: true,
-                    },
-                    callback: () => {
-                        expect(spy).toHaveBeenCalled();
-                        done();
-                    },
-                };
-                const spy = vi.spyOn(command, "callback");
-                runCommandLine(command);
-            }));
+        test("should be OK with YUI", async () => {
+            const command: Command = {
+                args: ["-jar", "-Xss2048k", jar, "--type", "js"],
+                data: 'console.log("foo");',
+            };
+
+            const result = await runCommandLine(
+                command as unknown as RunCommandLineParams
+            );
+            expect(result).toBeDefined();
+        });
+
+        test("should not be OK with YUI, fake arg", async () => {
+            const command: Command = {
+                args: ["-jar", "-Xss2048k", jar, "--type", "js", "--fake"],
+                data: 'console.log("foo");',
+            };
+
+            await expect(
+                runCommandLine(command as unknown as RunCommandLineParams)
+            ).rejects.toThrow();
+        });
+
+        test("should handle empty data input", async () => {
+            const command: Command = {
+                args: ["-jar", "-Xss2048k", jar, "--type", "js"],
+                data: "",
+            };
+
+            const result = await runCommandLine(
+                command as unknown as RunCommandLineParams
+            );
+            expect(result).toBe("");
+        });
+
+        test("should minify JavaScript input", async () => {
+            const command: Command = {
+                args: ["-jar", "-Xss2048k", jar, "--type", "js"],
+                data: 'console.log("foo");',
+            };
+
+            const result = await runCommandLine(
+                command as unknown as RunCommandLineParams
+            );
+            expect(result).toBeDefined();
+        });
     });
 
-    describe("Create sync errors", () => {
+    describe("Process error handling", () => {
+        let spy: MockInstance;
+
         beforeAll(() => {
-            const spy = vi.spyOn(childProcess, "spawnSync");
-            spy.mockImplementation(() => {
-                throw new Error();
-            });
+            spy = vi.spyOn(childProcess, "spawn");
         });
-        test("should not be OK with YUI and sync", (): Promise<void> =>
-            new Promise<void>((done) => {
-                const command = {
-                    args: [
-                        "-jar",
-                        "-Xss2048k",
-                        "foo.jar",
-                        "--type",
-                        "js",
-                        "--fake",
-                    ],
-                    data: 'console.log("foo");',
-                    settings: {
-                        sync: true,
-                    },
-                    callback: () => {
-                        expect(spy).toHaveBeenCalled();
-                        done();
-                    },
-                };
-                const spy = vi.spyOn(command, "callback");
-                runCommandLine(command);
-            }));
+
+        afterAll(() => {
+            vi.restoreAllMocks();
+        });
+
+        test("should reject when child process emits error", async () => {
+            const mockChild = new EventEmitter() as ReturnType<
+                typeof childProcess.spawn
+            >;
+            const mockStdin = new EventEmitter();
+            const mockStdout = new EventEmitter();
+            const mockStderr = new EventEmitter();
+
+            Object.assign(mockChild, {
+                stdin: Object.assign(mockStdin, {
+                    end: vi.fn(),
+                }),
+                stdout: mockStdout,
+                stderr: mockStderr,
+            });
+
+            spy.mockReturnValue(mockChild);
+
+            const command: Command = {
+                args: ["-jar", "fake.jar"],
+                data: "test",
+            };
+
+            const promise = runCommandLine(
+                command as unknown as RunCommandLineParams
+            );
+
+            // Emit process error
+            setImmediate(() => {
+                mockChild.emit("error", new Error("spawn ENOENT"));
+            });
+
+            await expect(promise).rejects.toThrow(
+                "Process error: spawn ENOENT"
+            );
+        });
+
+        test("should handle stream errors gracefully", async () => {
+            const consoleSpy = vi
+                .spyOn(console, "error")
+                .mockImplementation(() => {});
+
+            const mockChild = new EventEmitter() as ReturnType<
+                typeof childProcess.spawn
+            >;
+            const mockStdin = new EventEmitter();
+            const mockStdout = new EventEmitter();
+            const mockStderr = new EventEmitter();
+
+            Object.assign(mockChild, {
+                stdin: Object.assign(mockStdin, {
+                    end: vi.fn(),
+                }),
+                stdout: mockStdout,
+                stderr: mockStderr,
+            });
+
+            spy.mockReturnValue(mockChild);
+
+            const command: Command = {
+                args: ["-jar", "fake.jar"],
+                data: "test",
+            };
+
+            const promise = runCommandLine(
+                command as unknown as RunCommandLineParams
+            );
+
+            // Emit stream error and then exit successfully
+            setImmediate(() => {
+                mockStdin.emit("error", new Error("stdin error"));
+                mockStdout.emit("data", Buffer.from("output"));
+                mockChild.emit("exit", 0);
+            });
+
+            const result = await promise;
+            expect(result).toBe("output");
+            expect(consoleSpy).toHaveBeenCalledWith(
+                "Error in child.stdin:",
+                expect.any(Error)
+            );
+
+            consoleSpy.mockRestore();
+        });
     });
+
     afterAll(() => {
         vi.restoreAllMocks();
     });

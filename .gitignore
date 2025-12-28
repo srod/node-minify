@@ -11,4 +11,6 @@ html-dist
 lib
 .history
 tests/tmp
-.turbo
+*.tsbuildinfo
+examples/public/**/*-dist
+examples/public/**/*.min.html

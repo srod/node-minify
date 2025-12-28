@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/types",
-  "version": "9.0.0",
+  "version": "10.0.0",
   "description": "types for @node-minify",
   "keywords": [
     "compressor",
@@ -9,13 +9,14 @@
     "types"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
-  "homepage": "https://github.com/srod/node-minify/tree/master/packages/types#readme",
+  "homepage": "https://github.com/srod/node-minify/tree/main/packages/types#readme",
   "license": "MIT",
+  "type": "module",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
-  "main": "src/types.ts",
-  "types": "src/types.ts",
+  "main": "src/types.d.ts",
+  "types": "src/types.d.ts",
   "publishConfig": {
     "access": "public"
   },

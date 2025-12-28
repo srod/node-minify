@@ -1,71 +1,83 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2024 Rodolphe Stoclin
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
  * MIT Licensed
  */
 
 /**
  * Module dependencies.
  */
-import path from "node:path";
 import type { Settings } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
-import { globSync } from "glob";
+import { setFileNameMin, setPublicFolder, wildcards } from "@node-minify/utils";
 
 /**
  * Default settings.
  */
 const defaultSettings = {
-    sync: false,
     options: {},
     buffer: 1000 * 1024,
-    callback: false,
 };
 
 /**
  * Run setup.
  * @param inputSettings Settings from user input
  */
-const setup = (inputSettings: Settings) => {
-    let settings: Settings = Object.assign(
-        utils.clone(defaultSettings),
-        inputSettings
-    );
+function setup(inputSettings: Settings) {
+    const settings: Settings = {
+        ...structuredClone(defaultSettings),
+        ...inputSettings,
+    };
 
     // In memory
     if (settings.content) {
-        checkMandatoriesMemoryContent(inputSettings);
+        validateMandatoryFields(inputSettings, ["compressor", "content"]);
         return settings;
     }
 
-    checkMandatories(inputSettings);
+    validateMandatoryFields(inputSettings, ["compressor", "input", "output"]);
 
-    if (settings.input) {
-        settings = Object.assign(
-            settings,
-            wildcards(settings.input, settings.publicFolder)
-        );
+    return enhanceSettings(settings);
+}
+
+/**
+ * Enhance settings.
+ */
+function enhanceSettings(settings: Settings): Settings {
+    let enhancedSettings = settings;
+
+    if (enhancedSettings.input) {
+        enhancedSettings = {
+            ...enhancedSettings,
+            ...wildcards(enhancedSettings.input, enhancedSettings.publicFolder),
+        };
     }
-    if (settings.input && settings.output) {
-        settings = Object.assign(
-            settings,
-            checkOutput(
-                settings.input,
-                settings.output,
-                settings.publicFolder,
-                settings.replaceInPlace
-            )
-        );
+    if (
+        enhancedSettings.input &&
+        enhancedSettings.output &&
+        !Array.isArray(enhancedSettings.output)
+    ) {
+        enhancedSettings = {
+            ...enhancedSettings,
+            ...checkOutput(
+                enhancedSettings.input,
+                enhancedSettings.output,
+                enhancedSettings.publicFolder,
+                enhancedSettings.replaceInPlace
+            ),
+        };
     }
-    if (settings.input && settings.publicFolder) {
-        settings = Object.assign(
-            settings,
-            setPublicFolder(settings.input, settings.publicFolder)
-        );
+    if (enhancedSettings.input && enhancedSettings.publicFolder) {
+        enhancedSettings = {
+            ...enhancedSettings,
+            ...setPublicFolder(
+                enhancedSettings.input,
+                enhancedSettings.publicFolder
+            ),
+        };
     }
 
-    return settings;
-};
+    return enhancedSettings;
+}
 
 /**
  * Check the output path, searching for $1
@@ -74,186 +86,72 @@ const setup = (inputSettings: Settings) => {
  * @param output Path to the output file
  * @param publicFolder Path to the public folder
  * @param replaceInPlace True to replace file in same folder
+ * @returns Enhanced settings with processed output, or undefined if no processing needed
  */
-const checkOutput = (
+function checkOutput(
     input: string | string[],
-    output: string,
+    output: string | string[],
     publicFolder?: string,
     replaceInPlace?: boolean
-) => {
-    const reg = /\$1/;
-    if (reg.test(output)) {
-        if (Array.isArray(input)) {
-            const outputMin = input.map((file) =>
-                utils.setFileNameMin(
-                    file,
-                    output,
-                    replaceInPlace ? undefined : publicFolder,
-                    replaceInPlace
-                )
-            );
-            return { output: outputMin };
-        }
-        return {
-            output: utils.setFileNameMin(
-                input,
-                output,
-                replaceInPlace ? undefined : publicFolder,
-                replaceInPlace
-            ),
-        };
-    }
-};
-
-/**
- * Handle wildcards in a path, get the real path of each files.
- * @param input Path with wildcards
- * @param publicFolder Path to the public folder
- */
-const wildcards = (input: string | string[], publicFolder?: string) => {
-    // If it's a string
-    if (!Array.isArray(input)) {
-        return wildcardsString(input, publicFolder);
+): { output: string | string[] } | undefined {
+    // Arrays don't use the $1 placeholder pattern - they're handled directly in compress()
+    if (Array.isArray(output)) {
+        return undefined;
     }
 
-    return wildcardsArray(input, publicFolder);
-};
+    const PLACEHOLDER_PATTERN = /\$1/;
 
-/**
- * Handle wildcards in a path (string only), get the real path of each files.
- * @param input Path with wildcards
- * @param publicFolder Path to the public folder
- */
-const wildcardsString = (input: string, publicFolder?: string) => {
-    const output: { input?: string[] } = {};
-
-    if (input.indexOf("*") > -1) {
-        output.input = getFilesFromWildcards(input, publicFolder);
+    if (!PLACEHOLDER_PATTERN.test(output)) {
+        return undefined;
     }
 
-    return output;
-};
+    const effectivePublicFolder = replaceInPlace ? undefined : publicFolder;
 
-/**
- * Handle wildcards in a path (array only), get the real path of each files.
- * @param input Path with wildcards
- * @param publicFolder Path to the public folder
- */
-const wildcardsArray = (input: string[], publicFolder?: string) => {
-    const output: { input?: string[] } = {};
-    let isWildcardsPresent = false;
-
-    output.input = input;
-
-    // Transform all wildcards to path file
-    const inputWithPublicFolder = input.map((item) => {
-        if (item.indexOf("*") > -1) {
-            isWildcardsPresent = true;
-        }
-        return (publicFolder || "") + item;
-    });
-
-    if (isWildcardsPresent) {
-        output.input = globSync(inputWithPublicFolder);
-    }
-
-    // Remove all wildcards from array
-    for (let i = 0; i < output.input.length; i++) {
-        if (output.input[i].indexOf("*") > -1) {
-            output.input.splice(i, 1);
-
-            i--;
-        }
-    }
-
-    return output;
-};
-
-/**
- * Get the real path of each files.
- * @param input Path with wildcards
- * @param publicFolder Path to the public folder
- */
-const getFilesFromWildcards = (input: string, publicFolder?: string) => {
-    let output: string[] = [];
-
-    if (input.indexOf("*") > -1) {
-        output = globSync((publicFolder || "") + input);
-    }
-
-    return output;
-};
-
-/**
- * Prepend the public folder to each file.
- * @param input Path to file(s)
- * @param publicFolder Path to the public folder
- */
-const setPublicFolder = (input: string | string[], publicFolder: string) => {
-    const output: { input?: string | string[] } = {};
-
-    if (typeof publicFolder !== "string") {
-        return output;
-    }
-
-    publicFolder = path.normalize(publicFolder);
-
+    // If array of files
     if (Array.isArray(input)) {
-        output.input = input.map((item) => {
-            // Check if publicFolder is already in path
-            if (path.normalize(item).indexOf(publicFolder) > -1) {
-                return item;
-            }
-            return path.normalize(publicFolder + item);
-        });
-        return output;
+        const outputMin = input.map((file) =>
+            setFileNameMin(file, output, effectivePublicFolder, replaceInPlace)
+        );
+        return { output: outputMin };
     }
 
-    input = path.normalize(input);
+    // Single file
+    return {
+        output: setFileNameMin(
+            input,
+            output,
+            effectivePublicFolder,
+            replaceInPlace
+        ),
+    };
+}
 
-    // Check if publicFolder is already in path
-    if (input.indexOf(publicFolder) > -1) {
-        output.input = input;
-        return output;
+/**
+ * Validate that mandatory fields are present in settings.
+ * @param settings - Settings object to validate
+ * @param fields - Array of required field names
+ */
+function validateMandatoryFields(settings: Settings, fields: string[]) {
+    for (const field of fields) {
+        mandatory(field, settings);
     }
 
-    output.input = path.normalize(publicFolder + input);
-
-    return output;
-};
-
-/**
- * Check if some settings are here.
- * @param settings Settings
- */
-const checkMandatories = (settings: Settings) => {
-    ["compressor", "input", "output"].forEach((item: string) =>
-        mandatory(item, settings)
-    );
-};
+    if (typeof settings.compressor !== "function") {
+        throw new Error(
+            "compressor should be a function, maybe you forgot to install the compressor"
+        );
+    }
+}
 
 /**
- * Check if some settings are here for memory content.
- * @param settings Settings
+ * Check if the setting exists.
+ * @param setting - Setting key to check
+ * @param settings - Settings object
  */
-const checkMandatoriesMemoryContent = (settings: Settings) => {
-    ["compressor", "content"].forEach((item: string) =>
-        mandatory(item, settings)
-    );
-};
-
-/**
- * Check if the setting exist.
- * @param setting Setting
- * @param settings Settings
- */
-const mandatory = (setting: string, settings: { [key: string]: any }) => {
+function mandatory(setting: string, settings: Record<string, unknown>) {
     if (!settings[setting]) {
         throw new Error(`${setting} is mandatory.`);
     }
-};
+}
 
-/**
- * Expose `setup()`.
- */
 export { setup };

@@ -1,0 +1,10 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "baseUrl": "..",
+        "paths": {
+            "@node-minify/types": ["./packages/types/src/types.d.ts"]
+        }
+    },
+    "include": ["./**/*.ts"]
+}

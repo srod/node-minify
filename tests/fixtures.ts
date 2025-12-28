@@ -1,49 +1,184 @@
-import { Settings } from "@node-minify/types";
+import crypto from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
+import type { Settings } from "@node-minify/types";
 import { expect, test } from "vitest";
-import minify from "../packages/core/src";
-import { filesCSS, filesHTML, filesJS, filesJSON } from "./files-path";
+import { minify } from "../packages/core/src/index.ts";
+import { filesCSS, filesHTML, filesJS, filesJSON } from "./files-path.ts";
 
-const runOneTest = ({
+interface TestOptions {
+    it: string;
+    minify: Partial<Settings>;
+}
+
+interface TestConfig {
+    options: TestOptions;
+    compressorLabel: string;
+    compressor: any;
+}
+
+type MinifyResult = string;
+
+const runOneTest = async ({
     options,
     compressorLabel,
     compressor,
-    sync,
-}: {
-    options: { it: string; minify: Settings };
-    compressorLabel: string;
-    compressor: any;
-    sync?: boolean;
-}) => {
+}: TestConfig): Promise<void> => {
     if (!options) {
-        return false;
+        return Promise.resolve();
     }
 
-    const clonedOptions = JSON.parse(JSON.stringify(options));
+    const testOptions = createTestOptions(options, compressor);
+    const testName = formatTestName(testOptions.it, compressorLabel);
 
-    clonedOptions.minify.compressor = compressor;
-
-    if (sync) {
-        clonedOptions.minify.sync = true;
-    }
-
-    test(
-        clonedOptions.it.replace("{compressor}", compressorLabel),
-        (): Promise<void> => {
-            return new Promise<{ err: Error; min: string }>((resolve) => {
-                clonedOptions.minify.callback = (err: Error, min: string) => {
-                    resolve({ err, min });
-                };
-
-                minify(clonedOptions.minify);
-            }).then(({ err, min }) => {
-                expect(err).toBeNull();
-                expect(min).not.toBeNull();
-            });
-        }
-    );
+    return test(testName, async () => await executeMinifyTest(testOptions));
 };
 
-export type Tests = Record<string, { it: string; minify: Settings }[]>;
+const createTestOptions = (
+    options: TestOptions,
+    compressor: any
+): TestOptions => {
+    const testOptions = structuredClone(options);
+    testOptions.minify.compressor = compressor;
+    return testOptions;
+};
+
+const formatTestName = (
+    testString: string,
+    compressorLabel: string
+): string => {
+    return testString.replace("{compressor}", compressorLabel);
+};
+
+const executeMinifyTest = async (options: TestOptions): Promise<void> => {
+    const normalizedOptions =
+        isolatePublicFolderIfTestWouldOverwriteFixtures(options);
+    const result = await runMinify(normalizedOptions);
+
+    validateMinifyResult(result);
+};
+
+async function runMinify(options: TestOptions): Promise<MinifyResult> {
+    return await minify(options.minify as Settings);
+}
+
+const validateMinifyResult = (result: MinifyResult): void => {
+    expect(result).not.toBeNull();
+};
+
+export type Tests = Record<string, { it: string; minify: Partial<Settings> }[]>;
+
+function isolatePublicFolderIfTestWouldOverwriteFixtures(
+    options: TestOptions
+): TestOptions {
+    const publicFolder = options.minify.publicFolder;
+    const output = options.minify.output;
+    const replaceInPlace = options.minify.replaceInPlace;
+
+    if (typeof publicFolder !== "string") {
+        return options;
+    }
+
+    // Only isolate when the test is likely to overwrite tracked fixtures
+    // (e.g. output is "$1.ext" combined with publicFolder, or replaceInPlace is enabled).
+    const isOutputDollarOne =
+        typeof output === "string" && output.trimStart().startsWith("$1");
+    const isDangerous = Boolean(replaceInPlace) || isOutputDollarOne;
+    if (!isDangerous) {
+        return options;
+    }
+
+    // We only need to isolate for the tracked fixtures folder used by tests.
+    const normalizedPublicFolder = path.resolve(publicFolder);
+    const normalizedFixturesRoot = path.resolve(__dirname, "fixtures");
+    if (!normalizedPublicFolder.startsWith(normalizedFixturesRoot)) {
+        return options;
+    }
+
+    const isolatedPublicFolder = createIsolatedPublicFolder(publicFolder);
+
+    // Avoid structuredClone() here: at this point `options.minify.compressor` is a function,
+    // which causes a DataCloneError under Bun.
+    return {
+        ...options,
+        minify: {
+            ...options.minify,
+            publicFolder: isolatedPublicFolder,
+            // Important for Windows: keep inputs relative when using publicFolder + "$1" outputs.
+            // If input is absolute, some output-path logic will embed the drive path into "$1"
+            // and then join it under publicFolder, producing invalid paths like:
+            //   ...\\es5\\D:\\a\\...\\fixture-1.js
+            input: rewriteInputToIsolatedPublicFolder(
+                options.minify.input,
+                publicFolder
+            ),
+        },
+    };
+}
+
+function createIsolatedPublicFolder(originalPublicFolder: string): string {
+    const originalResolved = path.resolve(originalPublicFolder);
+    const folderName = path.basename(path.normalize(originalResolved));
+
+    const isolatedBase = path.resolve(
+        __dirname,
+        "tmp",
+        "isolated-public-folders",
+        crypto.randomUUID()
+    );
+    const isolatedPublicFolder = path.join(isolatedBase, folderName);
+
+    fs.mkdirSync(isolatedPublicFolder, { recursive: true });
+    fs.cpSync(originalResolved, isolatedPublicFolder, {
+        recursive: true,
+        force: true,
+    });
+
+    // Keep the trailing separator for consistency with existing publicFolder values.
+    return `${isolatedPublicFolder}${path.sep}`;
+}
+
+function rewriteInputToIsolatedPublicFolder(
+    input: string | string[] | undefined,
+    originalPublicFolder: string
+): string | string[] | undefined {
+    if (typeof input === "string") {
+        return rewriteInputPathToBeRelativeToPublicFolder(
+            input,
+            originalPublicFolder
+        );
+    }
+
+    if (Array.isArray(input)) {
+        return input.map((item) =>
+            rewriteInputPathToBeRelativeToPublicFolder(
+                item,
+                originalPublicFolder
+            )
+        );
+    }
+
+    return input;
+}
+
+function rewriteInputPathToBeRelativeToPublicFolder(
+    value: string,
+    originalPublicFolder: string
+): string {
+    // Keep wildcards / already-relative inputs as-is.
+    if (!path.isAbsolute(value)) {
+        return value;
+    }
+
+    const originalResolved = path.resolve(originalPublicFolder);
+    const valueResolved = path.resolve(value);
+
+    if (valueResolved.startsWith(originalResolved)) {
+        return path.relative(originalResolved, valueResolved);
+    }
+
+    return value;
+}
 
 const tests: Tests = {
     concat: [

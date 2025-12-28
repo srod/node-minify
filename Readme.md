@@ -6,8 +6,8 @@
   <br>
   <a href="https://npmjs.org/package/@node-minify/core"><img src="https://img.shields.io/npm/v/@node-minify/core.svg"></a>
   <a href="https://npmjs.org/package/@node-minify/core"><img src="https://img.shields.io/npm/dm/@node-minify/core.svg"></a>
-  <a href="https://github.com/srod/node-minify/actions"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fsrod%2Fnode-minify%2Fbadge%3Fref%3Ddevelop&style=flat" /></a>
-  <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/develop/graph/badge.svg"></a>
+  <a href="https://github.com/srod/node-minify/actions"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fsrod%2Fnode-minify%2Fbadge%3Fref%3Dmain&style=flat" /></a>
+  <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/main/graph/badge.svg"></a>
 </p>
 
 # Features
@@ -48,6 +48,8 @@ npm install @node-minify/core
 yarn add @node-minify/core
 # Or pnpm
 pnpm add @node-minify/core
+# Or Bun
+bun add @node-minify/core
 ```
 
 And install the compressor you want
@@ -58,50 +60,46 @@ npm install @node-minify/uglify-js
 yarn add @node-minify/uglify-js
 # Or pnpm
 pnpm add @node-minify/uglify-js
+# Or Bun
+bun add @node-minify/uglify-js
 ```
 
 ## Quick Start
 
 ```js
-import minify from '@node-minify/core';
-import gcc from '@node-minify/google-closure-compiler';
-import uglifyjs from '@node-minify/uglify-js';
+import { minify } from '@node-minify/core';
+import { gcc } from '@node-minify/google-closure-compiler';
+import { terser } from '@node-minify/terser';
 
 // Using Google Closure Compiler
-minify({
+const result = await minify({
   compressor: gcc,
   input: 'foo.js',
-  output: 'bar.js',
-  callback: function (err, min) {}
-});
-
-// Using UglifyJS
-minify({
-  compressor: uglifyjs,
-  input: './**/*.js',
-  output: 'bar.js',
-  callback: function (err, min) {}
-});
-
-// Using Promise
-var promise = minify({
-  compressor: uglifyjs,
-  input: './**/*.js',
   output: 'bar.js'
 });
 
-promise.then(function (min) {});
+// Using terser with wildcards
+const min = await minify({
+  compressor: terser,
+  input: 'src/**/*.js',
+  output: 'dist/bundle.js'
+});
 
-// Async/Await
-async function doMinify() {
-  const min = await minify({ compressor: uglifyjs, input: 'foo.js', output: 'bar.js' });
-}
+// Using Promise
+minify({
+  compressor: terser,
+  input: 'src/**/*.js',
+  output: 'dist/bundle.js'
+}).then((min) => {
+  console.log(min);
+});
 ```
 
 ### In memory
 
 ```js
-import htmlMinifier from '@node-minify/html-minifier';
+import { minify } from '@node-minify/core';
+import { htmlMinifier } from '@node-minify/html-minifier';
 
 const html = `
 <!doctype html>
@@ -111,16 +109,14 @@ const html = `
     </head>
 </html>`;
 
-minify({
+const min = await minify({
   compressor: htmlMinifier,
   content: html
-}).then(function (min) {
-  console.log('html min');
-  console.log(min);
 });
+console.log(min);
 ```
 
-[More examples](https://github.com/srod/node-minify/blob/master/examples/server.mjs)
+[More examples](https://github.com/srod/node-minify/blob/main/examples/server.js)
 
 ## Documentation
 

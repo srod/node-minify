@@ -1,19 +1,12 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2024 Rodolphe Stoclin
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
  * MIT Licensed
  */
 
-/**
- * Module dependencies.
- */
 import { runCommandLine } from "@node-minify/run";
-import type {
-    MinifierOptions,
-    Options,
-    OptionsPossible,
-} from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { buildArgs, toBuildArgsOptions } from "@node-minify/utils";
 import compilerPath from "google-closure-compiler-java";
 
 // the allowed flags, taken from https://github.com/google/closure-compiler/wiki/Flags-and-Options
@@ -41,35 +34,27 @@ const allowedFlags = [
 
 /**
  * Run Google Closure Compiler.
- * @param settings GCC options
- * @param content Content to minify
- * @param callback Callback
- * @param index Index of current file in array
+ * @param settings - GCC options
+ * @param content - Content to minify
  * @returns Minified content
  */
-const minifyGCC = ({ settings, content, callback, index }: MinifierOptions) => {
+export async function gcc({
+    settings,
+    content,
+}: MinifierOptions): Promise<CompressorResult> {
     const options = applyOptions({}, settings?.options ?? {});
-    return runCommandLine({
+
+    const result = await runCommandLine({
         args: gccCommand(options),
-        data: content,
-        settings,
-        callback: (err: unknown, content?: string) => {
-            if (err) {
-                if (callback) {
-                    return callback(err);
-                }
-                throw err;
-            }
-            if (settings && !settings.content && settings.output) {
-                utils.writeFile({ file: settings.output, content, index });
-            }
-            if (callback) {
-                return callback(null, content);
-            }
-            return content;
-        },
+        data: content as string,
     });
-};
+
+    if (typeof result !== "string") {
+        throw new Error("Google Closure Compiler failed: empty result");
+    }
+
+    return { code: result };
+}
 
 /**
  * Adds any valid options passed in the options parameters to the flags parameter and returns the flags object.
@@ -78,9 +63,9 @@ const minifyGCC = ({ settings, content, callback, index }: MinifierOptions) => {
  * @returns the flags object with the options added
  */
 type Flags = {
-    [key: string]: boolean | Record<string, OptionsPossible>;
+    [key: string]: boolean | Record<string, unknown>;
 };
-const applyOptions = (flags: Flags, options?: Options): Flags => {
+function applyOptions(flags: Flags, options?: Record<string, unknown>): Flags {
     if (!options || Object.keys(options).length === 0) {
         return flags;
     }
@@ -92,13 +77,11 @@ const applyOptions = (flags: Flags, options?: Options): Flags => {
                 typeof value === "boolean" ||
                 (typeof value === "object" && !Array.isArray(value))
             ) {
-                flags[option] = value as
-                    | boolean
-                    | Record<string, OptionsPossible>;
+                flags[option] = value as boolean | Record<string, unknown>;
             }
         });
     return flags;
-};
+}
 
 /**
  * GCC command line.
@@ -106,12 +89,8 @@ const applyOptions = (flags: Flags, options?: Options): Flags => {
  * @returns the command line arguments to pass to GCC
  */
 
-const gccCommand = (options: Record<string, OptionsPossible>) => {
-    return ["-jar", compilerPath].concat(utils.buildArgs(options ?? {}));
-};
-
-/**
- * Expose `minifyGCC()`.
- */
-minifyGCC.default = minifyGCC;
-export = minifyGCC;
+function gccCommand(options: Record<string, unknown>) {
+    return ["-jar", compilerPath].concat(
+        buildArgs(toBuildArgsOptions(options))
+    );
+}

@@ -1,28 +1,23 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2024 Rodolphe Stoclin
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
  * MIT Licensed
  */
 
 import { describe } from "vitest";
-import { runOneTest, tests } from "../../../tests/fixtures";
-// import { Options } from '@node-minify/types';
-import sqwish from "../src";
-
-// export interface Result {
-//   compressor?: string | Function;
-//   compressorLabel: string | Function;
-//   options: {};
-// }
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { sqwish } from "../src/index.ts";
 
 const compressorLabel = "sqwish";
 const compressor = sqwish;
 
-describe("Package: sqwish", () => {
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commoncss.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
+describe("Package: sqwish", async () => {
+    if (!tests.commoncss) {
+        throw new Error("Tests not found");
+    }
+
+    // Run commoncss tests
+    for (const options of tests.commoncss) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
 });

@@ -1,6 +1,6 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2024 Rodolphe Stoclin
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
  * MIT Licensed
  */
 
@@ -14,41 +14,48 @@ import ora from "ora";
 const spinner = ora();
 
 /**
- * Start spinner.
- * @param options Settings
+ * Formats a compression message with the compressor label
  */
-const start = (options: Settings) => {
-    spinner.text = `Compressing file(s) with ${chalk.green(
-        options.compressorLabel
-    )}...`;
+function formatCompressionMessage(
+    status: string,
+    compressorLabel?: string
+): string {
+    return `${status} with ${chalk.green(compressorLabel)}`;
+}
+
+/**
+ * Start spinner for compression process
+ */
+function start({ compressorLabel }: Settings): void {
+    spinner.text = `Compressing file(s) ${formatCompressionMessage(
+        "...",
+        compressorLabel
+    )}`;
     spinner.start();
-};
+}
 
 /**
- * Stop spinner.
- * @param result
+ * Stop spinner with success message
  */
-const stop = (result: Result) => {
-    spinner.text = `File(s) compressed successfully with ${chalk.green(
-        result.compressorLabel
-    )} (${chalk.green(result.size)} minified, ${chalk.green(
-        result.sizeGzip
-    )} gzipped)`;
+function stop({ compressorLabel, size, sizeGzip }: Result): void {
+    spinner.text = [
+        "File(s) compressed successfully",
+        formatCompressionMessage("", compressorLabel),
+        `(${chalk.green(size)} minified,`,
+        `${chalk.green(sizeGzip)} gzipped)`,
+    ].join(" ");
     spinner.succeed();
-};
+}
 
 /**
- * Mark spinner as failed.
- * @param options Settings
+ * Stop spinner with error message
  */
-const error = (options: Settings) => {
-    spinner.text = `Error - file(s) not compressed with ${chalk.red(
-        options.compressorLabel
+function error({ compressorLabel }: Settings): void {
+    spinner.text = `Error - file(s) not compressed ${formatCompressionMessage(
+        "",
+        compressorLabel
     )}`;
     spinner.fail();
-};
+}
 
-/**
- * Expose `start(), stop() and error()`.
- */
 export { start as spinnerStart, stop as spinnerStop, error as spinnerError };

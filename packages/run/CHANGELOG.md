@@ -1,5 +1,44 @@
 # @node-minify/run
 
+## 10.0.0
+
+### Major Changes
+
+- 4406c0c: ## v10.0.0
+
+  ### Breaking Changes
+
+  - **ESM Only**: The package is now pure ESM. Requires Node.js 20+.
+  - **Async API**: Callback support has been removed. All `minify()` calls must use `await` or `.then()`.
+  - **Named Exports**: All packages now use named exports (e.g., `import { minify } from '@node-minify/core'`).
+  - **Sync/Async Split**: Sync functions have been removed or split.
+  - **Deprecations**:
+    - `@node-minify/babel-minify` (deprecated)
+    - `@node-minify/uglify-es` (deprecated)
+    - `@node-minify/yui` (deprecated)
+    - `@node-minify/sqwish` (deprecated)
+    - `@node-minify/crass` (deprecated)
+
+  ### Features & Improvements
+
+  - **Build System**: Switched from `tsup` to `tsdown` for faster and more reliable builds.
+  - **Core**: Moved file I/O operations from compressors to core for better consistency.
+  - **Output**: Support for array output with input/output validation.
+  - **Security**: Replaced `html-minifier` with `html-minifier-next`.
+  - **Typings**: Improved TypeScript definitions and coverage.
+  - **Dependencies**: Updated all dependencies.
+
+  ### Bug Fixes
+
+  - Fixed various import issues and build warnings.
+  - Corrected explicit file extensions in imports.
+
+## 10.0.0-next.0
+
+### Major Changes
+
+- 4406c0c: Bump version 10.0.0 next
+
 ## 9.0.1
 
 ### Patch Changes

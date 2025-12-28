@@ -7,16 +7,37 @@ description: "CSSO for node-minify"
 
 [https://github.com/css/csso](https://github.com/css/csso)
 
+## Installation
+
+```bash
+npm install @node-minify/core @node-minify/csso
+```
+
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const csso = require('@node-minify/csso');
+import { minify } from '@node-minify/core';
+import { csso } from '@node-minify/csso';
 
-minify({
+const result = await minify({
+  compressor: csso,
+  input: 'foo.css',
+  output: 'bar.css'
+});
+```
+
+## Options
+
+```js
+const result = await minify({
   compressor: csso,
   input: 'foo.css',
   output: 'bar.css',
-  callback: function(err, min) {}
+  options: {
+    restructure: false,
+    sourceMap: true
+  }
 });
 ```
+
+[Check all options](https://github.com/css/csso#minifysource-options)

@@ -1,76 +1,49 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2024 Rodolphe Stoclin
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
  * MIT Licensed
  */
 
-/**
- * Module dependencies.
- */
-import type { Dictionary, MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { warnDeprecation } from "@node-minify/utils";
 import uglifyES from "uglify-es";
 
-type OptionsUglifyES = {
-    sourceMap?: { filename: string };
-};
-
-type SettingsUglifyES = {
-    options: OptionsUglifyES;
-};
-
-type MinifierOptionsUglifyES = {
-    settings: SettingsUglifyES;
-};
-
 /**
- * Run uglifyES.
- * @param settings UglifyES options
- * @param content Content to minify
- * @param callback Callback
- * @param index Index of current file in array
- * @returns Minified content
+ * Run uglify-es.
+ * @deprecated uglify-es is no longer maintained. Use @node-minify/terser instead.
+ * @param settings - UglifyES options
+ * @param content - Content to minify
+ * @returns Minified content and optional source map
  */
-const minifyUglifyES = ({
+export async function uglifyEs({
     settings,
     content,
-    callback,
-    index,
-}: MinifierOptions & MinifierOptionsUglifyES) => {
-    let content2: string | Dictionary<string> = content ?? "";
-    if (typeof settings.options.sourceMap === "object") {
-        content2 = {
-            [settings.options.sourceMap.filename ?? ""]: content ?? "",
+}: MinifierOptions): Promise<CompressorResult> {
+    warnDeprecation(
+        "uglify-es",
+        "uglify-es is no longer maintained. " +
+            "Please migrate to @node-minify/terser for continued support and modern JavaScript features."
+    );
+
+    let inputContent: string | Record<string, string> = content ?? "";
+    const sourceMapOptions = settings.options?.sourceMap as
+        | { filename?: string }
+        | undefined;
+
+    if (typeof sourceMapOptions === "object") {
+        inputContent = {
+            [sourceMapOptions.filename ?? ""]: content ?? "",
         };
     }
-    const contentMinified = uglifyES.minify(content2, settings.options);
-    if (contentMinified.error) {
-        if (callback) {
-            return callback(contentMinified.error);
-        }
-    }
-    if (contentMinified.map && settings.options.sourceMap) {
-        utils.writeFile({
-            file: `${settings.output}.map`,
-            content: contentMinified.map,
-            index,
-        });
-    }
-    if (settings && !settings.content && settings.output) {
-        utils.writeFile({
-            file: settings.output,
-            content: contentMinified.code,
-            index,
-        });
-    }
-    if (callback) {
-        return callback(null, contentMinified.code);
-    }
-    return contentMinified.code;
-};
 
-/**
- * Expose `minifyUglifyES()`.
- */
-minifyUglifyES.default = minifyUglifyES;
-export = minifyUglifyES;
+    const result = uglifyES.minify(inputContent, settings.options);
+
+    if (result.error) {
+        throw result.error;
+    }
+
+    return {
+        code: result.code,
+        map: result.map,
+    };
+}

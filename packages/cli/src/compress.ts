@@ -1,60 +1,57 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2024 Rodolphe Stoclin
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
  * MIT Licensed
  */
 
 /**
  * Module dependencies.
  */
-import minify from "@node-minify/core";
+import { minify } from "@node-minify/core";
 import type { Result, Settings } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import {
+    getFilesizeGzippedInBytes,
+    getFilesizeInBytes,
+} from "@node-minify/utils";
 
 /**
  * Run compression.
  * @param options Settings
  */
-const compress = (options: Settings): Promise<Result> => {
-    return new Promise<Result>((resolve, reject) => {
-        minify(options)
-            .then(() => {
-                if (options?.output?.includes("$1")) {
-                    // npx node-minify --compressor uglify-js --input 'source/**/*.js' --output 'source/$1.min.js' --option '{"warnings": true, "mangle": false}'
-                    return resolve({
-                        compressorLabel: options.compressorLabel ?? "",
-                        compressor: options.compressor,
-                        size: "0",
-                        sizeGzip: "0",
-                    });
-                }
-                if (!options.output) {
-                    return resolve({
-                        compressorLabel: options.compressorLabel ?? "",
-                        compressor: options.compressor,
-                        size: "0",
-                        sizeGzip: "0",
-                    });
-                }
-                utils
-                    .getFilesizeGzippedInBytes(options.output)
-                    .then((sizeGzip: string) => {
-                        resolve({
-                            compressorLabel: options.compressorLabel ?? "",
-                            compressor: options.compressor,
-                            size: options.output
-                                ? utils.getFilesizeInBytes(options.output)
-                                : "0",
-                            sizeGzip: sizeGzip,
-                        });
-                    })
-                    .catch(reject);
-            })
-            .catch(reject);
-    });
-};
+async function compress(options: Settings): Promise<Result> {
+    try {
+        await minify(options);
 
-/**
- * Expose `compress()`.
- */
+        const defaultResult: Result = {
+            compressorLabel: options.compressorLabel ?? "",
+            size: "0",
+            sizeGzip: "0",
+        };
+
+        // Return default result if output contains pattern, is an array, or is undefined
+        // Arrays and $1 patterns produce multiple files, so we can't calculate a single size
+        if (
+            !options.output ||
+            Array.isArray(options.output) ||
+            options.output.includes("$1")
+        ) {
+            return defaultResult;
+        }
+
+        // Get file sizes
+        const sizeGzip = await getFilesizeGzippedInBytes(options.output);
+        const size = getFilesizeInBytes(options.output);
+
+        return {
+            ...defaultResult,
+            size,
+            sizeGzip,
+        };
+    } catch (error) {
+        const errorMessage =
+            error instanceof Error ? error.message : "Unknown error occurred";
+        throw new Error(`Compression failed: ${errorMessage}`);
+    }
+}
+
 export { compress };

@@ -1,47 +1,29 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2024 Rodolphe Stoclin
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
  * MIT Licensed
  */
 
-/**
- * Module dependencies.
- */
-import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
-import crass from "crass";
+import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { warnDeprecation } from "@node-minify/utils";
+import minify from "crass";
 
 /**
  * Run crass.
- * @param settings Crass options
- * @param content Content to minify
- * @param callback Callback
- * @param index Index of current file in array
+ * @deprecated crass is no longer maintained. Use @node-minify/cssnano or @node-minify/clean-css instead.
+ * @param content - Content to minify
  * @returns Minified content
  */
-const minifyCrass = ({
-    settings,
+export async function crass({
     content,
-    callback,
-    index,
-}: MinifierOptions) => {
-    const contentMinified = crass.parse(content).optimize().toString();
-    if (settings && !settings.content && settings.output) {
-        settings.output &&
-            utils.writeFile({
-                file: settings.output,
-                content: contentMinified,
-                index,
-            });
-    }
-    if (callback) {
-        return callback(null, contentMinified);
-    }
-    return contentMinified;
-};
+}: MinifierOptions): Promise<CompressorResult> {
+    warnDeprecation(
+        "crass",
+        "crass is no longer maintained. " +
+            "Please migrate to @node-minify/cssnano or @node-minify/clean-css."
+    );
 
-/**
- * Expose `minifyCrass()`.
- */
-minifyCrass.default = minifyCrass;
-export = minifyCrass;
+    const code = minify.parse(content).optimize().toString();
+
+    return { code };
+}

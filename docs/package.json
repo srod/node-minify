@@ -1,7 +1,7 @@
 {
   "name": "@node-minify/docs",
   "type": "module",
-  "version": "9.0.0",
+  "version": "10.0.0",
   "private": true,
   "scripts": {
     "dev": "astro dev",
@@ -11,23 +11,23 @@
     "astro": "astro",
     "deploy": "astro build && wrangler pages deploy",
     "cf-typegen": "wrangler types",
-    "lint": "biome lint .",
     "format:check": "biome check .",
+    "lint": "biome lint .",
     "format": "biome check --write ."
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^11.2.0",
-    "@astrojs/partytown": "2.1.2",
-    "@astrojs/preact": "^3.5.3",
+    "@astrojs/cloudflare": "^12.0.0",
+    "@astrojs/partytown": "2.1.4",
+    "@astrojs/preact": "^4.0.0",
     "@astrolib/analytics": "0.6.1",
     "@types/node": "^22.9.0",
-    "astro": "^4.16.10",
+    "astro": "^5.0.0",
     "preact": "^10.24.3"
   },
   "devDependencies": {
-    "@astrojs/ts-plugin": "1.10.4",
+    "@astrojs/ts-plugin": "1.10.6",
     "@cloudflare/workers-types": "^4.20241106.0",
     "html-escaper": "^3.0.3",
-    "wrangler": "^3.86.0"
+    "wrangler": "^4.0.0"
   }
 }

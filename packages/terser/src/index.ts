@@ -1,73 +1,30 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2024 Rodolphe Stoclin
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
  * MIT Licensed
  */
 
-/**
- * Module dependencies.
- */
-import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
-// @ts-expect-error moduleResolution:nodenext issue 54523
+import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import { minify } from "terser";
-
-type OptionsTerser = {
-    sourceMap?: { url: string };
-};
-
-type SettingsTerser = {
-    options: OptionsTerser;
-};
-
-type MinifierOptionsTerser = {
-    settings: SettingsTerser;
-};
 
 /**
  * Run terser.
- * @param settings Terser options
- * @param content Content to minify
- * @param callback Callback
- * @param index Index of current file in array
- * @returns Minified content
+ * @param settings - Terser options
+ * @param content - Content to minify
+ * @returns Minified content and optional source map
  */
-const minifyTerser = async ({
+export async function terser({
     settings,
     content,
-    callback,
-    index,
-}: MinifierOptions & MinifierOptionsTerser) => {
-    try {
-        const contentMinified = await minify(content ?? "", settings?.options);
-        if (
-            contentMinified.map &&
-            typeof settings?.options?.sourceMap?.url === "string"
-        ) {
-            utils.writeFile({
-                file: settings.options.sourceMap.url,
-                content: contentMinified.map,
-                index,
-            });
-        }
-        if (settings && !settings.content && settings.output) {
-            utils.writeFile({
-                file: settings.output,
-                content: contentMinified.code,
-                index,
-            });
-        }
-        if (callback) {
-            return callback(null, contentMinified.code);
-        }
-        return contentMinified.code;
-    } catch (error) {
-        return callback?.(error);
-    }
-};
+}: MinifierOptions): Promise<CompressorResult> {
+    const result = await minify(content ?? "", settings?.options);
 
-/**
- * Expose `minifyTerser()`.
- */
-minifyTerser.default = minifyTerser;
-export = minifyTerser;
+    if (typeof result.code !== "string") {
+        throw new Error("Terser failed: empty result");
+    }
+
+    return {
+        code: result.code,
+        map: typeof result.map === "string" ? result.map : undefined,
+    };
+}

@@ -1,36 +1,48 @@
 ---
-title: "sqwish"
-description: "sqwish for node-minify"
+title: "sqwish (Deprecated)"
+description: "sqwish for node-minify - DEPRECATED"
 ---
+
+:::danger[Deprecated]
+**This package is deprecated.** `sqwish` is no longer maintained (last update ~2014).
+
+Please migrate to [`cssnano`](/compressors/cssnano) or [`clean-css`](/compressors/clean-css) instead.
+:::
 
 `sqwish` can compress only CSS files.
 
 [https://github.com/ded/sqwish](https://github.com/ded/sqwish)
 
+## Installation
+
+```bash
+npm install @node-minify/core @node-minify/sqwish
+```
+
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const sqwish = require('@node-minify/sqwish');
+import { minify } from '@node-minify/core';
+import { sqwish } from '@node-minify/sqwish';
 
-minify({
+const result = await minify({
   compressor: sqwish,
   input: 'foo.css',
-  output: 'bar.css',
-  callback: function(err, min) {}
+  output: 'bar.css'
 });
 ```
 
 ## Options
 
 ```js
-minify({
+const result = await minify({
   compressor: sqwish,
   input: 'foo.css',
   output: 'bar.css',
   options: {
-    strict: true // strict optimizations
-  },
-  callback: function(err, min) {}
+    strict: true
+  }
 });
 ```
+
+[Check all options](https://github.com/ded/sqwish)

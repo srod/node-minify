@@ -1,63 +1,69 @@
 ---
-title: "YUI Compressor"
-description: "Yahoo Compressor for node-minify"
+title: "YUI Compressor (Deprecated)"
+description: "Yahoo Compressor for node-minify - DEPRECATED"
 ---
+
+:::danger[Deprecated]
+**This package is deprecated.** YUI Compressor was deprecated by Yahoo in 2013 and is no longer maintained.
+
+Please migrate to [`terser`](/compressors/terser) for JavaScript or [`cssnano`](/compressors/cssnano) for CSS.
+:::
 
 `Yahoo Compressor` can compress both JavaScript and CSS files.
 
 [http://yui.github.io/yuicompressor/](http://yui.github.io/yuicompressor/)
 
+:::caution[Java Required]
+YUI Compressor requires Java to be installed on your system.
+
+```bash
+java -version
+```
+
+Install Java:
+- [Mac](https://java.com/en/download/help/mac_install.xml)
+- [Windows](https://java.com/en/download/help/windows_manual_download.xml)
+- [Linux](https://www.java.com/en/download/help/linux_x64_install.xml)
+:::
+
+## Installation
+
+```bash
+npm install @node-minify/core @node-minify/yui
+```
+
 ## Usage for JavaScript
 
 ```js
-const minify = require('@node-minify/core');
-const yui = require('@node-minify/yui');
+import { minify } from '@node-minify/core';
+import { yui } from '@node-minify/yui';
 
-minify({
+const result = await minify({
   compressor: yui,
   type: 'js',
   input: 'foo.js',
-  output: 'bar.js',
-  callback: function(err, min) {}
+  output: 'bar.js'
 });
 ```
 
 ## Usage for CSS
 
 ```js
-minify({
+import { minify } from '@node-minify/core';
+import { yui } from '@node-minify/yui';
+
+const result = await minify({
   compressor: yui,
   type: 'css',
   input: 'foo.css',
-  output: 'bar.css',
-  callback: function(err, min) {}
+  output: 'bar.css'
 });
 ```
-
-## Java
-
-::: warning
-It assumes that you have Java installed on your environment.
-:::
-
-To check, run:
-
-```bash
-java -version
-```
-
-How to install:
-
-Mac: [https://java.com/en/download/help/mac_install.xml](https://java.com/en/download/help/mac_install.xml)
-
-Windows: [https://java.com/en/download/help/windows_manual_download.xml](https://java.com/en/download/help/windows_manual_download.xml)
-
-Linux: [https://www.java.com/en/download/help/linux_x64_install.xml](https://www.java.com/en/download/help/linux_x64_install.xml)
 
 ## Options
 
 ```js
-minify({
+const result = await minify({
   compressor: yui,
   type: 'js',
   input: 'foo.js',
@@ -65,9 +71,7 @@ minify({
   options: {
     'line-break': 80,
     charset: 'utf8'
-    ... // See more information link below
-  },
-  callback: function (err, min) {}
+  }
 });
 ```
 

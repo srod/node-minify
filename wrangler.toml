@@ -1,0 +1,7 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "node-minify-docs"
+compatibility_date = "2025-12-27"
+pages_build_output_dir = "./docs/dist"
+
+[vars]
+NODE_VERSION = "22"

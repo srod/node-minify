@@ -6,34 +6,32 @@ on:
       - main
   workflow_dispatch:
 
-
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  publish:
-    name: Publish
+  release:
+    name: 🦋 Changesets Release
     runs-on: ubuntu-latest
+    outputs:
+      published_packages: ${{ steps.changesets.outputs.publishedPackages }}
+      published: ${{ steps.changesets.outputs.published }}
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
+      - name: ⬇️ Checkout Repo
+        uses: actions/checkout@v6
 
-      - uses: pnpm/action-setup@v4
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v2
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
+      - name: 📥 Install dependencies
+        run: bun install --frozen-lockfile
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Create Release Pull Request or Publish to npm
+      - name: 🚀 Create Release Pull Request or Publish to NPM
         uses: changesets/action@v1
         id: changesets
         with:
-          publish: pnpm changeset:release
-          version: pnpm changeset:version
+          publish: bun changeset:release
+          version: bun changeset:version
+          createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,7 +1,8 @@
 {
   "name": "@node-minify/crass",
-  "version": "9.0.1",
-  "description": "crass plugin for @node-minify",
+  "version": "10.0.0",
+  "deprecated": "crass is no longer maintained. Please use @node-minify/cssnano or @node-minify/clean-css instead.",
+  "description": "crass plugin for @node-minify (DEPRECATED - use @node-minify/cssnano)",
   "keywords": [
     "compressor",
     "minify",
@@ -9,25 +10,23 @@
     "crass"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
-  "homepage": "https://github.com/srod/node-minify/tree/master/packages/crass#readme",
+  "homepage": "https://github.com/srod/node-minify/tree/main/packages/crass#readme",
   "license": "MIT",
+  "type": "module",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "directories": {
     "lib": "dist",
     "test": "__tests__"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    }
+    "types": "./dist/index.d.ts",
+    "default": "./dist/index.js"
   },
+  "sideEffects": false,
   "files": [
     "dist/**/*"
   ],
@@ -42,13 +41,16 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "scripts": {
-    "clean": "pnpm dlx rimraf dist",
-    "build": "pnpm clean && tsup src/index.ts --format cjs,esm --dts --clean --sourcemap",
+    "build": "tsdown src/index.ts",
+    "check-exports": "attw --pack . --profile esm-only",
+    "format:check": "biome check .",
     "lint": "biome lint .",
-    "prepublishOnly": "pnpm build",
+    "prepublishOnly": "bun run build",
     "test": "vitest run",
     "test:ci": "vitest run --coverage",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsdown src/index.ts --watch"
   },
   "dependencies": {
     "@node-minify/utils": "workspace:*",

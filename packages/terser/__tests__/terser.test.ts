@@ -1,43 +1,48 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2024 Rodolphe Stoclin
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
  * MIT Licensed
  */
 
-import type { OptionsTest } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
-import { filesJS } from "../../../tests/files-path";
-import { runOneTest, tests } from "../../../tests/fixtures";
-import minify from "../../core/src";
-import terser from "../src";
+import { filesJS } from "../../../tests/files-path.ts";
+import { runOneTest, tests } from "../../../tests/fixtures.ts";
+import { minify } from "../../core/src/index.ts";
+import { terser } from "../src/index.ts";
 
 const compressorLabel = "terser";
 const compressor = terser;
 
-describe("Package: terser", () => {
-    tests.commonjs.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.uglifyjs.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor });
-    });
-    tests.commonjs.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
-    tests.uglifyjs.forEach((options) => {
-        runOneTest({ options, compressorLabel, compressor, sync: true });
-    });
-    test("should throw an error", () => {
-        const options: OptionsTest = {
-            minify: {
-                compressor: terser,
-                input: filesJS.errors,
-                output: filesJS.fileJSOut,
+describe("Package: terser", async () => {
+    if (!tests.commonjs || !tests.uglifyjs) {
+        throw new Error("Tests not found");
+    }
+
+    // Run commonjs tests
+    for (const options of tests.commonjs) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    for (const options of tests.uglifyjs) {
+        await runOneTest({ options, compressorLabel, compressor });
+    }
+
+    test("should throw an error", async () => {
+        const settings: Settings = {
+            compressor: terser,
+            input: filesJS.errors,
+            output: filesJS.fileJSOut,
+            options: {
+                mangle: false,
+                compress: false,
             },
         };
 
-        return minify(options.minify).catch((err: Error) => {
+        try {
+            return await minify(settings);
+        } catch (err) {
             return expect(err).not.toBeNull();
-        });
+        }
     });
 });

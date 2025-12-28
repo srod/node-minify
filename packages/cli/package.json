@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/cli",
-  "version": "9.0.2",
+  "version": "10.0.0",
   "description": "CLI - command line interface for @node-minify",
   "keywords": [
     "compressor",
@@ -8,28 +8,26 @@
     "minifier"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
-  "homepage": "https://github.com/srod/node-minify/tree/master/packages/cli#readme",
+  "homepage": "https://github.com/srod/node-minify/tree/main/packages/cli#readme",
   "license": "MIT",
+  "type": "module",
   "bin": {
-    "node-minify": "dist/cli.mjs"
+    "node-minify": "dist/cli.js"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "directories": {
     "lib": "dist",
     "test": "__tests__"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    }
+    "types": "./dist/index.d.ts",
+    "default": "./dist/index.js"
   },
+  "sideEffects": false,
   "files": [
     "bin",
     "dist/**/*"
@@ -45,25 +43,28 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "scripts": {
-    "clean": "pnpm dlx rimraf dist",
-    "build": "pnpm clean && tsup src/index.ts --format cjs,esm --dts --sourcemap && tsup src/bin/cli.ts --format esm --dts --sourcemap",
+    "build": "tsdown src/index.ts src/bin/cli.ts",
+    "check-exports": "attw --pack . --profile esm-only",
+    "format:check": "biome check .",
     "lint": "biome lint .",
-    "prepublishOnly": "pnpm build",
+    "prepublishOnly": "bun run build",
     "test": "vitest run",
     "test:ci": "vitest run --coverage",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsdown src/index.ts --watch"
   },
   "dependencies": {
     "@node-minify/core": "workspace:*",
     "@node-minify/utils": "workspace:*",
-    "chalk": "5.3.0",
-    "commander": "12.1.0",
-    "ora": "8.1.1",
+    "chalk": "5.6.2",
+    "commander": "14.0.2",
+    "ora": "9.0.0",
     "update-notifier": "7.3.1"
   },
   "devDependencies": {
+    "@node-minify/google-closure-compiler": "workspace:*",
     "@node-minify/types": "workspace:*",
-    "@types/chalk": "^2.2.0",
-    "@types/ora": "^3.2.0"
+    "@node-minify/yui": "workspace:*"
   }
 }

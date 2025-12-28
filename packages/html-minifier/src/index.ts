@@ -1,18 +1,5 @@
-/*!
- * node-minify
- * Copyright(c) 2011-2024 Rodolphe Stoclin
- * MIT Licensed
- */
+import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 
-/**
- * Module dependencies.
- */
-import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
-
-/**
- * Module variables.
- */
 const defaultOptions = {
     collapseBooleanAttributes: true,
     collapseInlineTagWhitespace: true,
@@ -29,39 +16,13 @@ const defaultOptions = {
     useShortDoctype: true,
 };
 
-/**
- * Run html-minifier-next.
- * @param settings HTMLMinifier options
- * @param content Content to minify
- * @param callback Callback
- * @param index Index of current file in array
- * @returns Minified content
- */
-const minifyHTMLMinifier = async ({
+export async function htmlMinifier({
     settings,
     content,
-    callback,
-    index,
-}: MinifierOptions) => {
+}: MinifierOptions): Promise<CompressorResult> {
     const { minify } = await import("html-minifier-next");
-    const options = Object.assign({}, defaultOptions, settings?.options);
-    const contentMinified = await minify(content ?? "", options);
-    if (settings && !settings.content && settings.output) {
-        settings.output &&
-            utils.writeFile({
-                file: settings.output,
-                content: contentMinified,
-                index,
-            });
-    }
-    if (callback) {
-        return callback(null, contentMinified);
-    }
-    return contentMinified;
-};
+    const options = { ...defaultOptions, ...settings?.options };
+    const code = await minify(content ?? "", options);
 
-/**
- * Expose `minifyHTMLMinifier()`.
- */
-minifyHTMLMinifier.default = minifyHTMLMinifier;
-export = minifyHTMLMinifier;
+    return { code };
+}

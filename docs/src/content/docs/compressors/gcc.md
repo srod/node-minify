@@ -7,26 +7,31 @@ description: "Google Closure Compiler for node-minify"
 
 [https://developers.google.com/closure/compiler/](https://developers.google.com/closure/compiler/)
 
+## Installation
+
+```bash
+npm install @node-minify/core @node-minify/google-closure-compiler
+```
+
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const gcc = require('@node-minify/google-closure-compiler');
+import { minify } from '@node-minify/core';
+import { gcc } from '@node-minify/google-closure-compiler';
 
-minify({
+const result = await minify({
   compressor: gcc,
   input: 'foo.js',
-  output: 'bar.js',
-  callback: function(err, min) {}
+  output: 'bar.js'
 });
 ```
 
-[https://www.npmjs.com/package/google-closure-compiler-js](https://www.npmjs.com/package/google-closure-compiler-js)
+[https://www.npmjs.com/package/google-closure-compiler](https://www.npmjs.com/package/google-closure-compiler)
 
 ## Options
 
 ```js
-minify({
+const result = await minify({
   compressor: gcc,
   input: 'foo.js',
   output: 'bar.js',
@@ -34,10 +39,8 @@ minify({
     createSourceMap: true,
     compilationLevel: 'WHITESPACE_ONLY',
     languageIn: 'ECMASCRIPT6'
-    ... // See more information link below
-  },
-  callback: function (err, min) {}
+  }
 });
 ```
 
-[Check all options](https://github.com/google/closure-compiler-js#flags)
+[Check all options](https://github.com/google/closure-compiler-npm/tree/master/packages/google-closure-compiler#flags)

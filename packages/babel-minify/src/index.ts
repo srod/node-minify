@@ -1,85 +1,57 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2024 Rodolphe Stoclin
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
  * MIT Licensed
  */
 
-/**
- * Module dependencies.
- */
-import type { MinifierOptions } from "@node-minify/types";
-import { utils } from "@node-minify/utils";
+import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { readFile, warnDeprecation } from "@node-minify/utils";
 import { transform } from "babel-core";
 import minify from "babel-preset-minify";
 
 type BabelOptions = {
-    presets: string[];
-};
-
-type OptionsBabel = {
-    babelrc?: string;
-};
-
-type SettingsBabel = {
-    options: OptionsBabel;
-};
-
-type MinifierOptionsBabel = {
-    settings: SettingsBabel;
+    presets: (string | typeof minify)[];
 };
 
 /**
  * Run babel-minify.
- * @param settings Babel-minify options
- * @param content Content to minify
- * @param callback Callback
- * @param index Index of current file in array
+ * @deprecated babel-minify uses Babel 6 which is no longer maintained. Use @node-minify/terser instead.
+ * @param settings - Babel-minify options
+ * @param content - Content to minify
  * @returns Minified content
  */
-const minifyBabel = ({
+export async function babelMinify({
     settings,
     content,
-    callback,
-    index,
-}: MinifierOptions & MinifierOptionsBabel) => {
-    let babelOptions: BabelOptions = {
-        presets: [],
-    };
+}: MinifierOptions): Promise<CompressorResult> {
+    warnDeprecation(
+        "babel-minify",
+        "babel-minify uses Babel 6 which is no longer maintained. " +
+            "Please migrate to @node-minify/terser for continued support and modern JavaScript features."
+    );
 
-    if (settings?.options?.babelrc) {
-        babelOptions = JSON.parse(utils.readFile(settings.options.babelrc));
+    let babelOptions: BabelOptions = { presets: [] };
+    const babelrc = settings?.options?.babelrc as string | undefined;
+    const presets = settings?.options?.presets as string[] | undefined;
+
+    if (babelrc) {
+        babelOptions = JSON.parse(readFile(babelrc));
     }
 
-    if (settings?.options?.presets) {
+    if (presets && Array.isArray(presets)) {
         const babelrcPresets = babelOptions.presets || [];
-        babelOptions.presets = babelrcPresets.concat(
-            Array.isArray(settings.options.presets)
-                ? settings.options.presets
-                : []
-        );
+        babelOptions.presets = presets.concat(babelrcPresets);
     }
 
-    if (babelOptions.presets.indexOf("minify") === -1) {
+    if (!babelOptions.presets.includes("minify")) {
         babelOptions.presets = babelOptions.presets.concat([minify]);
     }
 
-    const contentMinified = transform(content ?? "", babelOptions);
-    if (settings && !settings.content && settings.output) {
-        settings.output &&
-            utils.writeFile({
-                file: settings.output,
-                content: contentMinified.code,
-                index,
-            });
-    }
-    if (callback) {
-        return callback(null, contentMinified.code);
-    }
-    return contentMinified.code;
-};
+    const result = transform(content ?? "", babelOptions);
 
-/**
- * Expose `minifyBabel()`.
- */
-minifyBabel.default = minifyBabel;
-export = minifyBabel;
+    if (typeof result.code !== "string") {
+        throw new Error("Babel minification failed: empty result");
+    }
+
+    return { code: result.code };
+}

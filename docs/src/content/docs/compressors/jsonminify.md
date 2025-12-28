@@ -7,16 +7,41 @@ description: "jsonminify for node-minify"
 
 [https://github.com/fkei/JSON.minify](https://github.com/fkei/JSON.minify)
 
+## Installation
+
+```bash
+npm install @node-minify/core @node-minify/jsonminify
+```
+
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const jsonminify = require('@node-minify/jsonminify');
+import { minify } from '@node-minify/core';
+import { jsonminify } from '@node-minify/jsonminify';
 
-minify({
+const result = await minify({
   compressor: jsonminify,
   input: 'foo.json',
-  output: 'bar.json',
-  callback: function(err, min) {}
+  output: 'bar.json'
 });
 ```
+
+## In Memory
+
+```js
+import { minify } from '@node-minify/core';
+import { jsonminify } from '@node-minify/jsonminify';
+
+const json = `
+{
+  "name": "test",
+  "version": "1.0.0"
+}`;
+
+const result = await minify({
+  compressor: jsonminify,
+  content: json
+});
+```
+
+[Check all options](https://github.com/fkei/JSON.minify)

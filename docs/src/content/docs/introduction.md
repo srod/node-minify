@@ -68,4 +68,4 @@ CSS benchmark: [http://goalsmashers.github.io/css-minification-benchmark/](http:
 
 ## License
 
-[MIT](https://github.com/srod/node-minify/blob/master/LICENSE)
+[MIT](https://github.com/srod/node-minify/blob/main/LICENSE)

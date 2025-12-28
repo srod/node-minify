@@ -5,34 +5,65 @@ description: "html-minifier for node-minify"
 
 `html-minifier` can compress only HTML files.
 
-[https://github.com/kangax/html-minifier](https://github.com/kangax/html-minifier)
+[https://github.com/terser/html-minifier-terser](https://github.com/terser/html-minifier-terser)
+
+:::note
+In v10, `html-minifier` was replaced with `html-minifier-terser` for security reasons. The API remains the same.
+:::
+
+## Installation
+
+```bash
+npm install @node-minify/core @node-minify/html-minifier
+```
 
 ## Usage
 
 ```js
-const minify = require('@node-minify/core');
-const htmlMinifier = require('@node-minify/html-minifier');
+import { minify } from '@node-minify/core';
+import { htmlMinifier } from '@node-minify/html-minifier';
 
-minify({
+const result = await minify({
   compressor: htmlMinifier,
   input: 'foo.html',
-  output: 'bar.html',
-  callback: function(err, min) {}
+  output: 'bar.html'
+});
+```
+
+## In Memory
+
+```js
+import { minify } from '@node-minify/core';
+import { htmlMinifier } from '@node-minify/html-minifier';
+
+const html = `
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+</html>`;
+
+const result = await minify({
+  compressor: htmlMinifier,
+  content: html
 });
 ```
 
 ## Options
 
 ```js
-minify({
+const result = await minify({
   compressor: htmlMinifier,
   input: 'foo.html',
   output: 'bar.html',
   options: {
-    removeAttributeQuotes: true
-  },
-  callback: function(err, min) {}
+    removeAttributeQuotes: true,
+    collapseWhitespace: true,
+    minifyJS: true,
+    minifyCSS: true
+  }
 });
 ```
 
-[Check all options](https://github.com/kangax/html-minifier)
+[Check all options](https://github.com/terser/html-minifier-terser#options-quick-reference)

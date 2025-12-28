@@ -1,6 +1,7 @@
 @font-face {
     font-family: "Source Sans Pro override";
-    src: local("BlinkMacSystemFont"), local("Segoe UI"), local("Helvetica Neue"),
+    src:
+        local("BlinkMacSystemFont"), local("Segoe UI"), local("Helvetica Neue"),
         local("Arial"), local("Noto Sans");
     ascent-override: normal;
     descent-override: normal;
@@ -332,8 +333,9 @@ h2.heading {
 
 .header-link {
     font-size: 1em;
-    transition: border-inline-start-color 100ms ease-out, background-color 200ms
-        ease-out;
+    transition:
+        border-inline-start-color 100ms ease-out,
+        background-color 200ms ease-out;
     border-left: 4px solid var(--theme-divider);
 }
 
