@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/babel-minify",
-  "version": "10.0.0",
+  "version": "10.0.1",
   "deprecated": "babel-minify uses Babel 6 which is no longer maintained. Please use @node-minify/terser instead.",
   "description": "babel-minify plugin for @node-minify (DEPRECATED - use @node-minify/terser)",
   "keywords": [

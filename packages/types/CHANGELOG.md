@@ -1,5 +1,11 @@
 # @node-minify/types
 
+## 10.0.1
+
+### Patch Changes
+
+- d722b73: test: verify OIDC publishing with fixed workflow config
+
 ## 10.0.0
 
 ### Major Changes
