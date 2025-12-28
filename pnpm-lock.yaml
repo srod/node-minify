@@ -69,8 +69,8 @@ importers:
         specifier: workspace:*
         version: link:packages/yui
       '@tsconfig/node18':
-        specifier: 18.2.4
-        version: 18.2.4
+        specifier: 18.2.6
+        version: 18.2.6
       '@types/node':
         specifier: 18.19.64
         version: 18.19.64
@@ -2504,8 +2504,8 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: false
 
-  /@tsconfig/node18@18.2.4:
-    resolution: {integrity: sha512-5xxU8vVs9/FNcvm3gE07fPbn9tl6tqGGWA9tSlwsUEkBxtRnTsNmwrV8gasZ9F/EobaSv9+nu8AxUKccw77JpQ==}
+  /@tsconfig/node18@18.2.6:
+    resolution: {integrity: sha512-eAWQzAjPj18tKnDzmWstz4OyWewLUNBm9tdoN9LayzoboRktYx3Enk1ZXPmThj55L7c4VWYq/Bzq0A51znZfhw==}
     dev: false
 
   /@types/babel-core@6.25.10:
