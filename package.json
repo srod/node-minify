@@ -36,7 +36,7 @@
     "test:coverage": "vitest run --coverage",
     "changeset": "changeset",
     "changeset:version": "changeset version && bun install --no-frozen-lockfile",
-    "changeset:release": "bun run build && changeset publish",
+    "changeset:release": "bun run build && changeset publish --provenance",
     "format:check": "bun run --filter '*' format:check",
     "format": "biome check --write .",
     "typecheck": "bun run --filter '*' typecheck"
