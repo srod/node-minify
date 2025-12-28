@@ -1,5 +1,14 @@
 # @node-minify/yui
 
+## 10.0.2
+
+### Patch Changes
+
+- 156a53d: test: verify OIDC publishing with fixed workflow config
+- Updated dependencies [156a53d]
+  - @node-minify/run@10.0.2
+  - @node-minify/utils@10.0.2
+
 ## 10.0.1
 
 ### Patch Changes

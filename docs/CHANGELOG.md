@@ -1,5 +1,11 @@
 # @node-minify/docs
 
+## 10.0.2
+
+### Patch Changes
+
+- 156a53d: test: verify OIDC publishing with fixed workflow config
+
 ## 10.0.1
 
 ### Patch Changes
