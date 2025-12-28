@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/yui",
-  "version": "10.0.0",
+  "version": "10.0.1",
   "deprecated": "YUI Compressor was deprecated by Yahoo in 2013. Please use @node-minify/terser for JS or @node-minify/cssnano for CSS instead.",
   "description": "yui - yahoo compressor plugin for @node-minify (DEPRECATED)",
   "keywords": [

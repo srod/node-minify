@@ -1,5 +1,13 @@
 # @node-minify/uglify-js
 
+## 10.0.1
+
+### Patch Changes
+
+- d722b73: test: verify OIDC publishing with fixed workflow config
+- Updated dependencies [d722b73]
+  - @node-minify/utils@10.0.1
+
 ## 10.0.0
 
 ### Major Changes
