@@ -33,13 +33,11 @@ jobs:
       - name: Run tests
         run: bun run ci
 
-      - run: |
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov
-            for dir in packages/*; do
-              ./codecov --dir "${dir}" --flags "$(basename "${dir}")" --token "${CODECOV_TOKEN}" --verbose
-            done
-          fi
-        shell: bash
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - name: Upload coverage to Codecov
+        if: runner.os == 'Linux'
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./packages
+          fail_ci_if_error: false
+          verbose: true
