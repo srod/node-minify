@@ -34,21 +34,26 @@ It allow you to compress JavaScript, CSS and HTML files.
 
 **JavaScript:**
 
-- [babel-minify](/compressors/babel-minify)
+- [esbuild](/compressors/esbuild)
 - [Google Closure Compiler](/compressors/gcc)
+- [oxc](/compressors/oxc)
+- [swc](/compressors/swc)
 - [terser](/compressors/terser)
 - [uglify-js](/compressors/uglify-js)
-- [uglify-es](/compressors/uglify-es)
-- [YUI Compressor](/compressors/yui)
+- [babel-minify](/compressors/babel-minify) _(deprecated)_
+- [uglify-es](/compressors/uglify-es) _(deprecated)_
+- [YUI Compressor](/compressors/yui) _(deprecated)_
 
 **CSS:**
 
 - [clean-css](/compressors/clean-css)
-- [crass](/compressors/crass)
 - [cssnano](/compressors/cssnano)
 - [CSSO](/compressors/csso)
-- [sqwish](/compressors/sqwish)
-- [YUI Compressor](/compressors/yui)
+- [esbuild](/compressors/esbuild)
+- [lightningcss](/compressors/lightningcss)
+- [crass](/compressors/crass) _(deprecated)_
+- [sqwish](/compressors/sqwish) _(deprecated)_
+- [YUI Compressor](/compressors/yui) _(deprecated)_
 
 **HTML:**
 

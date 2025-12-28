@@ -4,11 +4,15 @@ import { minify } from "@node-minify/core";
 import { crass } from "@node-minify/crass";
 import { cssnano } from "@node-minify/cssnano";
 import { csso } from "@node-minify/csso";
+import { esbuild } from "@node-minify/esbuild";
 import { gcc } from "@node-minify/google-closure-compiler";
 import { htmlMinifier } from "@node-minify/html-minifier";
 import { jsonMinify } from "@node-minify/jsonminify";
+import { lightningCss } from "@node-minify/lightningcss";
 import { noCompress } from "@node-minify/no-compress";
+import { oxc } from "@node-minify/oxc";
 import { sqwish } from "@node-minify/sqwish";
+import { swc } from "@node-minify/swc";
 import { terser } from "@node-minify/terser";
 import { uglifyEs } from "@node-minify/uglify-es";
 import { uglifyJs } from "@node-minify/uglify-js";
@@ -73,6 +77,62 @@ await run("Terser - concat", () =>
         compressor: terser,
         input: ["public/js/sample.js", "public/js/sample2.js"],
         output: "public/js-dist/terser-concat.js",
+    })
+);
+
+// esbuild - JS single file
+await run("esbuild - JS single file", () =>
+    minify({
+        compressor: esbuild,
+        input: "public/js/sample.js",
+        output: "public/js-dist/esbuild-onefile.js",
+        type: "js",
+    })
+);
+
+// esbuild - JS concat
+await run("esbuild - JS concat", () =>
+    minify({
+        compressor: esbuild,
+        input: ["public/js/sample.js", "public/js/sample2.js"],
+        output: "public/js-dist/esbuild-concat.js",
+        type: "js",
+    })
+);
+
+// swc - single file
+await run("swc - single file", () =>
+    minify({
+        compressor: swc,
+        input: "public/js/sample.js",
+        output: "public/js-dist/swc-onefile.js",
+    })
+);
+
+// swc - concat
+await run("swc - concat", () =>
+    minify({
+        compressor: swc,
+        input: ["public/js/sample.js", "public/js/sample2.js"],
+        output: "public/js-dist/swc-concat.js",
+    })
+);
+
+// oxc - single file
+await run("oxc - single file", () =>
+    minify({
+        compressor: oxc,
+        input: "public/js/sample.js",
+        output: "public/js-dist/oxc-onefile.js",
+    })
+);
+
+// oxc - concat
+await run("oxc - concat", () =>
+    minify({
+        compressor: oxc,
+        input: ["public/js/sample.js", "public/js/sample2.js"],
+        output: "public/js-dist/oxc-concat.js",
     })
 );
 
@@ -262,6 +322,44 @@ await run("clean-css - concat with sourcemap", () =>
                 url: "public/css-dist/cleancss-concat.map",
             },
         },
+    })
+);
+
+// esbuild - CSS single file
+await run("esbuild - CSS single file", () =>
+    minify({
+        compressor: esbuild,
+        input: "public/css/sample.css",
+        output: "public/css-dist/esbuild-onefile.css",
+        type: "css",
+    })
+);
+
+// esbuild - CSS concat
+await run("esbuild - CSS concat", () =>
+    minify({
+        compressor: esbuild,
+        input: ["public/css/sample.css", "public/css/sample2.css"],
+        output: "public/css-dist/esbuild-concat.css",
+        type: "css",
+    })
+);
+
+// lightningcss - single file
+await run("lightningcss - single file", () =>
+    minify({
+        compressor: lightningCss,
+        input: "public/css/sample.css",
+        output: "public/css-dist/lightningcss-onefile.css",
+    })
+);
+
+// lightningcss - concat
+await run("lightningcss - concat", () =>
+    minify({
+        compressor: lightningCss,
+        input: ["public/css/sample.css", "public/css/sample2.css"],
+        output: "public/css-dist/lightningcss-concat.css",
     })
 );
 
