@@ -16,21 +16,26 @@ It allow you to compress JavaScript, CSS and HTML files.
 
 **JavaScript:**
 
-- [babel-minify](https://node-minify.2clics.net/compressors/babel-minify)
+- [esbuild](https://node-minify.2clics.net/compressors/esbuild)
 - [Google Closure Compiler](https://node-minify.2clics.net/compressors/gcc)
+- [oxc](https://node-minify.2clics.net/compressors/oxc)
+- [swc](https://node-minify.2clics.net/compressors/swc)
 - [terser](https://node-minify.2clics.net/compressors/terser)
 - [uglify-js](https://node-minify.2clics.net/compressors/uglify-js)
-- [uglify-es](https://node-minify.2clics.net/compressors/uglify-es)
-- [YUI Compressor](https://node-minify.2clics.net/compressors/yui)
+- [babel-minify](https://node-minify.2clics.net/compressors/babel-minify) _(deprecated)_
+- [uglify-es](https://node-minify.2clics.net/compressors/uglify-es) _(deprecated)_
+- [YUI Compressor](https://node-minify.2clics.net/compressors/yui) _(deprecated)_
 
 **CSS:**
 
 - [clean-css](https://node-minify.2clics.net/compressors/clean-css)
-- [crass](https://node-minify.2clics.net/compressors/crass)
 - [cssnano](https://node-minify.2clics.net/compressors/cssnano)
 - [CSSO](https://node-minify.2clics.net/compressors/csso)
-- [sqwish](https://node-minify.2clics.net/compressors/sqwish)
-- [YUI Compressor](https://node-minify.2clics.net/compressors/yui)
+- [esbuild](https://node-minify.2clics.net/compressors/esbuild)
+- [lightningcss](https://node-minify.2clics.net/compressors/lightningcss)
+- [crass](https://node-minify.2clics.net/compressors/crass) _(deprecated)_
+- [sqwish](https://node-minify.2clics.net/compressors/sqwish) _(deprecated)_
+- [YUI Compressor](https://node-minify.2clics.net/compressors/yui) _(deprecated)_
 
 **HTML:**
 
