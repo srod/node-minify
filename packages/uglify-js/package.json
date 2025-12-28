@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/uglify-js",
-  "version": "10.0.0",
+  "version": "10.0.1",
   "description": "uglify-js plugin for @node-minify",
   "keywords": [
     "compressor",
