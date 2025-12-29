@@ -17,7 +17,7 @@ export async function csso({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const result = await minify(content ?? "", settings?.options);
+    const result = await minify((content ?? "") as string, settings?.options);
 
     return { code: result.css };
 }

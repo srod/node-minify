@@ -17,7 +17,7 @@ export async function terser({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const result = await minify(content ?? "", settings?.options);
+    const result = await minify((content ?? "") as string, settings?.options);
 
     if (typeof result.code !== "string") {
         throw new Error("Terser failed: empty result");

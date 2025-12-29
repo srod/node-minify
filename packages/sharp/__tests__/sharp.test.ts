@@ -1,0 +1,112 @@
+/*!
+ * node-minify
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
+ * MIT Licensed
+ */
+
+import { describe, expect, test, vi } from "vitest";
+import { sharp } from "../src/index.ts";
+
+vi.mock("sharp", () => {
+    const mockSharp = Object.assign(
+        vi.fn().mockImplementation(() => ({
+            webp: vi.fn().mockReturnThis(),
+            avif: vi.fn().mockReturnThis(),
+            png: vi.fn().mockReturnThis(),
+            jpeg: vi.fn().mockReturnThis(),
+            toBuffer: vi.fn().mockResolvedValue(Buffer.from("converted")),
+        })),
+        { cache: vi.fn() }
+    );
+    return { default: mockSharp };
+});
+
+describe("sharp", () => {
+    test("should convert PNG to WebP", async () => {
+        const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+
+        const result = await sharp({
+            settings: {
+                compressor: sharp,
+                options: { format: "webp" },
+            },
+            content: inputBuffer,
+        });
+
+        expect(result.buffer).toBeInstanceOf(Buffer);
+        expect(result.buffer?.length).toBeGreaterThan(0);
+    });
+
+    test("should convert PNG to AVIF", async () => {
+        const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+
+        const result = await sharp({
+            settings: {
+                compressor: sharp,
+                options: { format: "avif" },
+            },
+            content: inputBuffer,
+        });
+
+        expect(result.buffer).toBeInstanceOf(Buffer);
+    });
+
+    test("should convert to multiple formats", async () => {
+        const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+
+        const result = await sharp({
+            settings: {
+                compressor: sharp,
+                options: { formats: ["webp", "avif"] },
+            },
+            content: inputBuffer,
+        });
+
+        expect(result.outputs).toBeDefined();
+        expect(result.outputs?.length).toBe(2);
+        expect(result.outputs?.[0]?.format).toBe("webp");
+        expect(result.outputs?.[1]?.format).toBe("avif");
+        expect(result.outputs?.[0]?.content).toBeInstanceOf(Buffer);
+        expect(result.outputs?.[1]?.content).toBeInstanceOf(Buffer);
+    });
+
+    test("should use default format (webp) when no format specified", async () => {
+        const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+
+        const result = await sharp({
+            settings: {
+                compressor: sharp,
+                options: {},
+            },
+            content: inputBuffer,
+        });
+
+        expect(result.buffer).toBeInstanceOf(Buffer);
+    });
+
+    test("should throw error for non-Buffer content", async () => {
+        await expect(
+            sharp({
+                settings: {
+                    compressor: sharp,
+                    options: {},
+                },
+                content: "not a buffer" as unknown as Buffer,
+            })
+        ).rejects.toThrow("Sharp compressor requires Buffer content");
+    });
+
+    test("should handle quality option", async () => {
+        const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+
+        const result = await sharp({
+            settings: {
+                compressor: sharp,
+                options: { format: "webp", quality: 50 },
+            },
+            content: inputBuffer,
+        });
+
+        expect(result.buffer).toBeInstanceOf(Buffer);
+    });
+});

@@ -17,7 +17,10 @@ export async function uglifyJs({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const result = uglifyJS.minify(content ?? "", settings?.options);
+    const result = uglifyJS.minify(
+        (content ?? "") as string,
+        settings?.options
+    );
 
     if (result.error) {
         throw result.error;

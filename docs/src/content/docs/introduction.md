@@ -30,7 +30,7 @@ description: 'Documentation for node-minify'
 
 ## Features
 
-It allow you to compress JavaScript, CSS and HTML files.
+It allows you to compress JavaScript, CSS, HTML, and image files.
 
 **JavaScript:**
 
@@ -62,6 +62,12 @@ It allow you to compress JavaScript, CSS and HTML files.
 **JSON:**
 
 - [jsonminify](/compressors/jsonminify)
+
+**Image:**
+
+- [sharp](/compressors/sharp) - WebP/AVIF conversion
+- [svgo](/compressors/svgo) - SVG optimization
+- [imagemin](/compressors/imagemin) - PNG/JPEG/GIF compression
 
 **Other:**
 

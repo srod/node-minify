@@ -4,15 +4,15 @@
  * MIT Licensed
  */
 
-import type { CompressorResult, Settings } from "@node-minify/types";
+import { join, parse } from "node:path";
+import type {
+    CompressorOptions,
+    CompressorResult,
+    MinifierOptions,
+    Settings,
+} from "@node-minify/types";
 import { ValidationError } from "./error.ts";
 import { writeFile } from "./writeFile.ts";
-
-interface RunParameters {
-    settings: Settings;
-    content?: string;
-    index?: number;
-}
 
 /**
  * Execute the compressor and write output.
@@ -20,11 +20,11 @@ interface RunParameters {
  * @returns Minified content string
  * @throws {ValidationError} If settings or compressor is missing
  */
-export async function run({
+export async function run<T extends CompressorOptions = CompressorOptions>({
     settings,
     content,
     index,
-}: RunParameters): Promise<string> {
+}: MinifierOptions<T>): Promise<string> {
     if (!settings) {
         throw new ValidationError("Settings must be provided");
     }
@@ -39,7 +39,7 @@ export async function run({
         index,
     });
 
-    writeOutput(result, settings, index);
+    writeOutput(result, settings as unknown as Settings, index);
 
     return result.code;
 }
@@ -54,6 +54,19 @@ function writeOutput(
         return;
     }
 
+    // Handle multi-output (for image conversion to multiple formats)
+    if (result.outputs && result.outputs.length > 0) {
+        writeMultipleOutputs(result.outputs, settings, index);
+        return;
+    }
+
+    // Handle single buffer output (for binary images)
+    if (result.buffer) {
+        writeFile({ file: settings.output, content: result.buffer, index });
+        return;
+    }
+
+    // Default: write code (string) output
     writeFile({ file: settings.output, content: result.code, index });
 
     if (result.map) {
@@ -61,6 +74,70 @@ function writeOutput(
         if (sourceMapUrl) {
             writeFile({ file: sourceMapUrl, content: result.map, index });
         }
+    }
+}
+
+/**
+ * Write multiple output files for multi-format image conversion.
+ */
+function writeMultipleOutputs(
+    outputs: CompressorResult["outputs"],
+    settings: Settings,
+    index?: number
+): void {
+    if (!outputs) {
+        return;
+    }
+
+    const output = settings.output;
+    const isArrayOutput = Array.isArray(output);
+    const outputsArray = isArrayOutput ? output : [output];
+    const inputFile = typeof settings.input === "string" ? settings.input : "";
+    const inputDir = parse(inputFile).dir;
+    const inputBase = parse(inputFile).name;
+
+    for (let i = 0; i < outputs.length; i++) {
+        const outputResult = outputs[i];
+        if (!outputResult) {
+            continue;
+        }
+
+        const format = outputResult.format || "out";
+        let targetFile: string;
+
+        const arrayItem = outputsArray[i];
+
+        if (
+            isArrayOutput &&
+            arrayItem !== undefined &&
+            arrayItem !== "$1" &&
+            arrayItem.trim() !== ""
+        ) {
+            // Explicit output path provided in array - use as-is
+            targetFile = arrayItem;
+        } else if (typeof output === "string" && output === "$1") {
+            // $1 only: auto-generate from input filename in input directory
+            const baseName = inputBase || "output";
+            targetFile = inputDir
+                ? join(inputDir, `${baseName}.${format}`)
+                : `${baseName}.${format}`;
+        } else if (typeof output === "string" && output.includes("$1")) {
+            // $1 pattern in path: replace and append format
+            const extensionlessName = inputBase || "output";
+            const outputFile = output.replace(/\$1/g, extensionlessName);
+            targetFile = `${outputFile}.${format}`;
+        } else if (typeof output === "string") {
+            // Single string output: append format extension
+            targetFile = `${output}.${format}`;
+        } else {
+            // Fallback
+            const baseName = inputBase || "output";
+            targetFile = inputDir
+                ? join(inputDir, `${baseName}.${format}`)
+                : `${baseName}.${format}`;
+        }
+
+        writeFile({ file: targetFile, content: outputResult.content, index });
     }
 }
 

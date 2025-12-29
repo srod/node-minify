@@ -7,13 +7,13 @@
 /**
  * Module dependencies.
  */
-import type { Settings } from "@node-minify/types";
+import type { CompressorOptions, Settings } from "@node-minify/types";
 import { setFileNameMin, setPublicFolder, wildcards } from "@node-minify/utils";
 
 /**
  * Default settings.
  */
-const defaultSettings = {
+const defaultSettings: Partial<Settings> = {
     options: {},
     buffer: 1000 * 1024,
 };
@@ -22,11 +22,13 @@ const defaultSettings = {
  * Run setup.
  * @param inputSettings Settings from user input
  */
-function setup(inputSettings: Settings) {
-    const settings: Settings = {
+function setup<T extends CompressorOptions = CompressorOptions>(
+    inputSettings: Settings<T>
+): Settings<T> {
+    const settings: Settings<T> = {
         ...structuredClone(defaultSettings),
         ...inputSettings,
-    };
+    } as Settings<T>;
 
     // In memory
     if (settings.content) {
@@ -56,7 +58,9 @@ function setup(inputSettings: Settings) {
 /**
  * Enhance settings.
  */
-function enhanceSettings(settings: Settings): Settings {
+function enhanceSettings<T extends CompressorOptions = CompressorOptions>(
+    settings: Settings<T>
+): Settings<T> {
     let enhancedSettings = settings;
 
     if (enhancedSettings.input) {
@@ -145,7 +149,9 @@ function checkOutput(
  * @param settings - Settings object to validate
  * @param fields - Array of required field names
  */
-function validateMandatoryFields(settings: Settings, fields: string[]) {
+function validateMandatoryFields<
+    T extends CompressorOptions = CompressorOptions,
+>(settings: Settings<T>, fields: string[]) {
     for (const field of fields) {
         mandatory(field, settings);
     }
