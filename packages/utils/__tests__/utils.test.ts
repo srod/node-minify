@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { lstatSync, unlinkSync } from "node:fs";
+import { existsSync, lstatSync, unlinkSync } from "node:fs";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 vi.mock("node:fs", async (importOriginal) => {
@@ -44,6 +44,18 @@ describe("Package: utils", () => {
 
         test("should throw an error if file does not exist", () => {
             expect(() => readFile("fake.js")).toThrow();
+        });
+
+        test("should return Buffer when asBuffer is true", () => {
+            const buffer = readFile(fixtureFile, true);
+            expect(buffer).toBeInstanceOf(Buffer);
+            expect(buffer.toString("utf-8")).toMatch("console.log('content');");
+        });
+
+        test("should return string when asBuffer is false", () => {
+            const content = readFile(fixtureFile, false);
+            expect(typeof content).toBe("string");
+            expect(content).toMatch("console.log('content');");
         });
     });
 
@@ -629,6 +641,195 @@ describe("Package: utils", () => {
 
             expect(readFile(outputFile)).toBe("minified");
             deleteFile(outputFile);
+        });
+    });
+
+    describe("run with buffer output (image compression)", () => {
+        const tmpDir = `${__dirname}/../../../tests/tmp`;
+
+        test("should write buffer output to file", async () => {
+            const outputFile = `${tmpDir}/buffer-output.png`;
+            const bufferContent = Buffer.from([0x89, 0x50, 0x4e, 0x47]); // PNG header
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                buffer: bufferContent,
+            });
+            const settings = {
+                compressor,
+                input: `${tmpDir}/input.png`,
+                output: outputFile,
+            } as any;
+
+            const result = await run({ settings, content: "" });
+
+            expect(result).toBe("");
+            const writtenContent = readFile(outputFile, true);
+            expect(writtenContent).toBeInstanceOf(Buffer);
+            expect(Buffer.isBuffer(writtenContent)).toBe(true);
+            deleteFile(outputFile);
+        });
+
+        test("should not write file in memory mode with buffer", async () => {
+            const bufferContent = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                buffer: bufferContent,
+            });
+            const settings = {
+                compressor,
+                content: "source content",
+            } as any;
+
+            const result = await run({ settings, content: "source content" });
+
+            expect(result).toBe("");
+        });
+    });
+
+    describe("run with multiple outputs (multi-format image conversion)", () => {
+        const tmpDir = `${__dirname}/../../../tests/tmp`;
+
+        afterEach(() => {
+            // Cleanup any leftover test files
+            const files = [
+                `${tmpDir}/multi-webp.png`,
+                `${tmpDir}/multi-avif.png`,
+                `${tmpDir}/multi-format.webp`,
+                `${tmpDir}/multi-format.avif`,
+                `${tmpDir}/test-webp.webp`,
+                `${tmpDir}/test-avif.avif`,
+            ];
+            for (const file of files) {
+                try {
+                    if (existsSync(file)) {
+                        deleteFile(file);
+                    }
+                } catch {
+                    // Ignore errors during cleanup
+                }
+            }
+        });
+
+        test("should write multiple output files from outputs array", async () => {
+            const webpFile = `${tmpDir}/multi-webp.png`;
+            const avifFile = `${tmpDir}/multi-avif.png`;
+            const webpContent = Buffer.from("WEBP_CONTENT");
+            const avifContent = Buffer.from("AVIF_CONTENT");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [
+                    { format: "webp", content: webpContent },
+                    { format: "avif", content: avifContent },
+                ],
+            });
+            const settings = {
+                compressor,
+                input: `${tmpDir}/input.png`,
+                output: [webpFile, avifFile],
+            } as any;
+
+            const result = await run({ settings, content: "" });
+
+            expect(result).toBe("");
+            expect(readFile(webpFile, true)).toEqual(webpContent);
+            expect(readFile(avifFile, true)).toEqual(avifContent);
+        });
+
+        test("should auto-generate filenames with format extension using $1 pattern", async () => {
+            const testFile = `${tmpDir}/test-image.png`;
+            // Create a small file to use as input
+            writeFile({ file: testFile, content: "test" });
+            const webpContent = Buffer.from("WEBP_DATA");
+            const avifContent = Buffer.from("AVIF_DATA");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [
+                    { format: "webp", content: webpContent },
+                    { format: "avif", content: avifContent },
+                ],
+            });
+            const settings = {
+                compressor,
+                input: testFile,
+                output: "$1", // Will generate test-image.webp and test-image.avif
+            } as any;
+
+            const result = await run({ settings, content: "" });
+
+            expect(result).toBe("");
+            expect(readFile(`${tmpDir}/test-image.webp`, true)).toEqual(
+                webpContent
+            );
+            expect(readFile(`${tmpDir}/test-image.avif`, true)).toEqual(
+                avifContent
+            );
+        });
+
+        test("should use format from output if provided", async () => {
+            const outputFile = `${tmpDir}/multi-format.png`;
+            const webpContent = Buffer.from("WEBP_DATA");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [{ format: "webp", content: webpContent }],
+            });
+            const settings = {
+                compressor,
+                input: `${tmpDir}/input.png`,
+                output: outputFile,
+            } as any;
+
+            await run({ settings, content: "" });
+
+            // Should write with .webp extension appended
+            expect(readFile(`${outputFile}.webp`, true)).toEqual(webpContent);
+        });
+
+        test("should not write files when no output specified with outputs", async () => {
+            const webpContent = Buffer.from("WEBP_DATA");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [{ format: "webp", content: webpContent }],
+            });
+            const settings = {
+                compressor,
+                input: `${tmpDir}/input.png`,
+            } as any;
+
+            const result = await run({ settings, content: "" });
+
+            expect(result).toBe("");
+        });
+
+        test("should not write files in memory mode with outputs", async () => {
+            const webpContent = Buffer.from("WEBP_DATA");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [{ format: "webp", content: webpContent }],
+            });
+            const settings = {
+                compressor,
+                content: "source content",
+            } as any;
+
+            const result = await run({ settings, content: "source content" });
+
+            expect(result).toBe("");
+        });
+    });
+
+    describe("compressSingleFile with Buffer content", () => {
+        test("should pass Buffer content unchanged to compressor", async () => {
+            const compressor = vi.fn().mockResolvedValue({ code: "minified" });
+            const bufferContent = Buffer.from("console.log('buffer');");
+            const settings = {
+                compressor,
+                content: bufferContent,
+            } as any;
+            const result = await compressSingleFile(settings);
+            expect(result).toBe("minified");
+            expect(compressor).toHaveBeenCalledWith(
+                expect.objectContaining({ content: bufferContent })
+            );
         });
     });
 });

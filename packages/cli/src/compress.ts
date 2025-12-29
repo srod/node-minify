@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import { minify } from "@node-minify/core";
-import type { Result, Settings } from "@node-minify/types";
+import type { CompressorOptions, Result, Settings } from "@node-minify/types";
 import {
     getFilesizeGzippedInBytes,
     getFilesizeInBytes,
@@ -18,9 +18,11 @@ import {
  * Run compression.
  * @param options Settings
  */
-async function compress(options: Settings): Promise<Result> {
+async function compress<T extends CompressorOptions = CompressorOptions>(
+    options: Settings<T>
+): Promise<Result> {
     try {
-        await minify(options);
+        await minify(options as any);
 
         const defaultResult: Result = {
             compressorLabel: options.compressorLabel ?? "",

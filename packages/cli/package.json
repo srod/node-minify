@@ -12,7 +12,7 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "node-minify": "dist/cli.js"
+    "node-minify": "dist/bin/cli.js"
   },
   "engines": {
     "node": ">=20.0.0"
@@ -29,7 +29,6 @@
   },
   "sideEffects": false,
   "files": [
-    "bin",
     "dist/**/*"
   ],
   "publishConfig": {

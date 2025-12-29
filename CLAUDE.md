@@ -46,6 +46,7 @@ This is a Bun monorepo for compressing JavaScript, CSS, and HTML files using var
 - JS: `esbuild`, `google-closure-compiler`, `oxc`, `swc`, `terser`, `uglify-js`
 - CSS: `clean-css`, `cssnano`, `csso`, `esbuild`, `lightningcss`
 - HTML: `html-minifier`
+- Image: `sharp` (WebP/AVIF conversion), `svgo` (SVG optimization), `imagemin` (PNG/JPEG/GIF compression)
 - Other: `jsonminify`, `no-compress` (passthrough)
 
 **Deprecated** (still available but unmaintained upstream):

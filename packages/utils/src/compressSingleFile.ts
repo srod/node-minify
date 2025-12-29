@@ -4,9 +4,31 @@
  * MIT Licensed
  */
 
-import type { Settings } from "@node-minify/types";
+import { readFileSync } from "node:fs";
+import type { MinifierOptions, Settings } from "@node-minify/types";
 import { getContentFromFiles } from "./getContentFromFiles.ts";
 import { run } from "./run.ts";
+
+const IMAGE_EXTENSIONS = new Set([
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif",
+    ".webp",
+    ".avif",
+    ".tiff",
+    ".tif",
+    ".heif",
+    ".heic",
+    ".svg",
+]);
+
+function isImageFile(filePath: string): boolean {
+    const lastDot = filePath.lastIndexOf(".");
+    if (lastDot === -1) return false;
+    const ext = filePath.slice(lastDot).toLowerCase();
+    return IMAGE_EXTENSIONS.has(ext);
+}
 
 /**
  * Compress a single file.
@@ -14,17 +36,23 @@ import { run } from "./run.ts";
  */
 export async function compressSingleFile(settings: Settings): Promise<string> {
     const content = determineContent(settings);
-    return run({ settings, content });
+    return run({ settings, content } as MinifierOptions);
 }
 
 /**
  * Determine the content to minify.
  * @param settings - Minification settings
- * @returns Content string to minify
+ * @returns Content to minify (string or Buffer for images)
  */
-function determineContent(settings: Settings): string {
+function determineContent(settings: Settings): string | Buffer {
     if (settings.content) {
         return settings.content;
+    }
+
+    if (settings.input && typeof settings.input === "string") {
+        if (isImageFile(settings.input)) {
+            return readFileSync(settings.input);
+        }
     }
 
     if (settings.input) {

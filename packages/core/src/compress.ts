@@ -8,7 +8,11 @@
  * Module dependencies.
  */
 import fs from "node:fs";
-import type { Settings } from "@node-minify/types";
+import type {
+    CompressorOptions,
+    MinifierOptions,
+    Settings,
+} from "@node-minify/types";
 import {
     compressSingleFile,
     getContentFromFiles,
@@ -20,7 +24,9 @@ import { mkdirp } from "mkdirp";
  * Run compressor.
  * @param settings Settings
  */
-export async function compress(settings: Settings): Promise<string> {
+export async function compress<T extends CompressorOptions = CompressorOptions>(
+    settings: Settings<T>
+): Promise<string> {
     if (Array.isArray(settings.output)) {
         if (!Array.isArray(settings.input)) {
             throw new Error(
@@ -40,24 +46,30 @@ export async function compress(settings: Settings): Promise<string> {
 
     // Handle array outputs (from user input or created internally by checkOutput when processing $1 pattern)
     if (Array.isArray(settings.output)) {
-        return compressArrayOfFiles(settings);
+        return compressArrayOfFiles(settings as Settings);
     }
 
-    return compressSingleFile(settings);
+    return compressSingleFile(settings as Settings);
 }
 
 /**
  * Compress an array of files.
  * @param settings Settings
  */
-async function compressArrayOfFiles(settings: Settings): Promise<string> {
+async function compressArrayOfFiles<
+    T extends CompressorOptions = CompressorOptions,
+>(settings: Settings<T>): Promise<string> {
     let result = "";
     if (Array.isArray(settings.input)) {
         for (let index = 0; index < settings.input.length; index++) {
             const input = settings.input[index];
             if (input) {
                 const content = getContentFromFiles(input);
-                result = await run({ settings, content, index });
+                result = await run({
+                    settings,
+                    content,
+                    index,
+                } as MinifierOptions);
             }
         }
     }

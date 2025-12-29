@@ -47,7 +47,7 @@ export async function babelMinify({
     const presets = settings?.options?.presets as string[] | undefined;
 
     if (babelrc) {
-        babelOptions = JSON.parse(readFile(babelrc));
+        babelOptions = JSON.parse(readFile(babelrc) as string);
     }
 
     if (presets && Array.isArray(presets)) {
@@ -68,7 +68,7 @@ export async function babelMinify({
         babelOptions.presets = babelOptions.presets.concat([minify]);
     }
 
-    const result = transform(content ?? "", babelOptions);
+    const result = transform((content ?? "") as string, babelOptions);
 
     if (typeof result.code !== "string") {
         throw new Error("Babel minification failed: empty result");

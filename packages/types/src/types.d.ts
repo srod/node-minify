@@ -11,11 +11,62 @@
 export type CompressorReturnType = string;
 
 /**
+ * Supported image formats for image compression.
+ */
+export type ImageFormat =
+    | "webp"
+    | "avif"
+    | "png"
+    | "jpeg"
+    | "jpg"
+    | "gif"
+    | "tiff"
+    | "heif"
+    | "heic";
+
+/**
+ * Output result for multi-format image compression.
+ */
+export type CompressorOutput = {
+    /**
+     * Format of the output (e.g., 'webp', 'avif').
+     */
+    format?: string;
+
+    /**
+     * Output content as string or Buffer.
+     */
+    content: string | Buffer;
+};
+
+/**
  * Result returned by a compressor function.
  */
 export type CompressorResult = {
+    /**
+     * Minified content as string (for text-based formats like JS, CSS, HTML, SVG).
+     */
     code: string;
+
+    /**
+     * Source map (for JS/CSS compressors).
+     */
     map?: string;
+
+    /**
+     * Minified content as Buffer (for binary formats like images).
+     * @example
+     * When using sharp for PNG/WebP compression
+     */
+    buffer?: Buffer;
+
+    /**
+     * Multiple outputs for multi-format image compression.
+     * Used when converting to multiple formats simultaneously.
+     * @example
+     * [{ format: 'webp', content: <Buffer> }, { format: 'avif', content: <Buffer> }]
+     */
+    outputs?: CompressorOutput[];
 };
 
 /**
@@ -68,8 +119,10 @@ export type Settings<TOptions extends CompressorOptions = CompressorOptions> = {
     /**
      * Content to minify (for in-memory minification).
      * If provided, input/output are not required.
+     * For text-based formats (JS, CSS, HTML, SVG): string
+     * For binary formats (images): Buffer (handled internally by image compressors)
      */
-    content?: string;
+    content?: string | Buffer;
 
     /**
      * Input file path(s) or glob pattern.
@@ -154,8 +207,10 @@ export type MinifierOptions<
 
     /**
      * The content to minify.
+     * For text-based formats (JS, CSS, HTML, SVG): string
+     * For binary formats (images): Buffer
      */
-    content?: string;
+    content?: string | Buffer;
 
     /**
      * Index of current file when processing multiple files.

@@ -12,7 +12,7 @@
 
 # Features
 
-It allow you to compress JavaScript, CSS and HTML files.
+It allows you to compress JavaScript, CSS, HTML, and image files.
 
 **JavaScript:**
 
@@ -45,6 +45,12 @@ It allow you to compress JavaScript, CSS and HTML files.
 
 - [jsonminify](https://node-minify.2clics.net/compressors/jsonminify)
 
+**Image:**
+
+- [sharp](https://node-minify.2clics.net/compressors/sharp) - WebP/AVIF conversion
+- [svgo](https://node-minify.2clics.net/compressors/svgo) - SVG optimization
+- [imagemin](https://node-minify.2clics.net/compressors/imagemin) - PNG/JPEG/GIF compression
+
 **Other:**
 
 - [No compress](https://node-minify.2clics.net/options#concatenate-files)
@@ -65,16 +71,42 @@ pnpm add @node-minify/core
 bun add @node-minify/core
 ```
 
-And install the compressor you want
+And install the compressor(s) you want:
+
+### JavaScript Compressors
 
 ```bash
-npm install @node-minify/uglify-js
-# Or Yarn
-yarn add @node-minify/uglify-js
-# Or pnpm
-pnpm add @node-minify/uglify-js
-# Or Bun
-bun add @node-minify/uglify-js
+npm install @node-minify/terser        # Recommended - modern, fast, well-maintained
+npm install @node-minify/esbuild       # Extremely fast, also handles CSS
+npm install @node-minify/swc           # Rust-based, very fast
+npm install @node-minify/oxc           # Rust-based, cutting-edge
+npm install @node-minify/uglify-js     # Classic, battle-tested
+npm install @node-minify/google-closure-compiler  # Advanced optimizations
+```
+
+### CSS Compressors
+
+```bash
+npm install @node-minify/lightningcss  # Recommended - Rust-based, fastest
+npm install @node-minify/esbuild       # Also handles JS
+npm install @node-minify/clean-css     # Feature-rich, reliable
+npm install @node-minify/cssnano       # PostCSS-based, customizable
+npm install @node-minify/csso          # Structural optimizations
+```
+
+### HTML & Other
+
+```bash
+npm install @node-minify/html-minifier # HTML minification
+npm install @node-minify/jsonminify    # JSON minification
+```
+
+### Image Compressors
+
+```bash
+npm install @node-minify/sharp         # WebP/AVIF conversion, high performance
+npm install @node-minify/svgo          # SVG optimization
+npm install @node-minify/imagemin      # PNG/JPEG/GIF compression
 ```
 
 ## Quick Start
