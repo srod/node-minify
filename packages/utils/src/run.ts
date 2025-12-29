@@ -44,9 +44,9 @@ export async function run<T extends CompressorOptions = CompressorOptions>({
     return result.code;
 }
 
-function writeOutput(
+function writeOutput<T extends CompressorOptions = CompressorOptions>(
     result: CompressorResult,
-    settings: Settings,
+    settings: Settings<T>,
     index?: number
 ): void {
     const isInMemoryMode = Boolean(settings.content);
@@ -80,9 +80,9 @@ function writeOutput(
 /**
  * Write multiple output files for multi-format image conversion.
  */
-function writeMultipleOutputs(
+function writeMultipleOutputs<T extends CompressorOptions = CompressorOptions>(
     outputs: CompressorResult["outputs"],
-    settings: Settings,
+    settings: Settings<T>,
     index?: number
 ): void {
     if (!outputs) {
@@ -141,7 +141,9 @@ function writeMultipleOutputs(
     }
 }
 
-function getSourceMapUrl(settings: Settings): string | undefined {
+function getSourceMapUrl<T extends CompressorOptions = CompressorOptions>(
+    settings: Settings<T>
+): string | undefined {
     const options = settings.options as Record<string, unknown> | undefined;
     if (!options) {
         return undefined;

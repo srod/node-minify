@@ -22,7 +22,7 @@ async function compress<T extends CompressorOptions = CompressorOptions>(
     options: Settings<T>
 ): Promise<Result> {
     try {
-        await minify(options as any);
+        await minify(options);
 
         const defaultResult: Result = {
             compressorLabel: options.compressorLabel ?? "",

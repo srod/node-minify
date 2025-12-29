@@ -5,7 +5,11 @@
  */
 
 import { readFileSync } from "node:fs";
-import type { MinifierOptions, Settings } from "@node-minify/types";
+import type {
+    CompressorOptions,
+    MinifierOptions,
+    Settings,
+} from "@node-minify/types";
 import { getContentFromFiles } from "./getContentFromFiles.ts";
 import { run } from "./run.ts";
 
@@ -34,9 +38,11 @@ function isImageFile(filePath: string): boolean {
  * Compress a single file.
  * @param settings Settings
  */
-export async function compressSingleFile(settings: Settings): Promise<string> {
+export async function compressSingleFile<
+    T extends CompressorOptions = CompressorOptions,
+>(settings: Settings<T>): Promise<string> {
     const content = determineContent(settings);
-    return run({ settings, content } as MinifierOptions);
+    return run({ settings, content } as MinifierOptions<T>);
 }
 
 /**
@@ -44,7 +50,9 @@ export async function compressSingleFile(settings: Settings): Promise<string> {
  * @param settings - Minification settings
  * @returns Content to minify (string or Buffer for images)
  */
-function determineContent(settings: Settings): string | Buffer {
+function determineContent<T extends CompressorOptions = CompressorOptions>(
+    settings: Settings<T>
+): string | Buffer {
     if (settings.content) {
         return settings.content;
     }
