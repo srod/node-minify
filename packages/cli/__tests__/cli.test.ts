@@ -21,7 +21,7 @@ describe("Package: cli", () => {
             option: '{"createSourceMap": true}',
         });
         return expect(spy).toHaveBeenCalled();
-    });
+    }, 60000); // GCC can take ~30s
 });
 
 describe("cli error", () => {

@@ -41,5 +41,19 @@ describe("Package: babel-minify", async () => {
             ).rejects.toThrow("Babel minification failed: empty result");
             spy.mockRestore();
         });
+
+        test("should pass through non-string presets unchanged", async () => {
+            const minifyPreset = (await import("babel-preset-minify")).default;
+            const result = await babelMinify({
+                content: "var x = 1;",
+                settings: {
+                    options: {
+                        // Pass the preset module directly instead of a string
+                        presets: [minifyPreset],
+                    },
+                },
+            } as any);
+            expect(result.code).toBeDefined();
+        });
     });
 });
