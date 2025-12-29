@@ -46,10 +46,10 @@ export async function compress<T extends CompressorOptions = CompressorOptions>(
 
     // Handle array outputs (from user input or created internally by checkOutput when processing $1 pattern)
     if (Array.isArray(settings.output)) {
-        return compressArrayOfFiles(settings as Settings);
+        return compressArrayOfFiles(settings);
     }
 
-    return compressSingleFile(settings as Settings);
+    return compressSingleFile(settings);
 }
 
 /**
@@ -69,7 +69,7 @@ async function compressArrayOfFiles<
                     settings,
                     content,
                     index,
-                } as MinifierOptions);
+                } as MinifierOptions<T>);
             }
         }
     }

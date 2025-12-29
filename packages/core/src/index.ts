@@ -21,5 +21,5 @@ export async function minify<T extends CompressorOptions = CompressorOptions>(
 ): Promise<string> {
     const compressorSettings = setup(settings);
     const method = settings.content ? compressSingleFile : compress;
-    return await method(compressorSettings as Settings);
+    return await method(compressorSettings);
 }
