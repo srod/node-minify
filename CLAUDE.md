@@ -15,8 +15,8 @@ This branch (`main`) uses **Bun** as the package manager and runtime.
 - **Build**: `bun run build`
 - **Lint**: `bun run lint` | **Format**: `bun run format`
 - **Test all**: `bun run test`
-- **Test single package**: `bun test packages/<name>` (e.g., `bun test packages/core`)
-- **Test single file**: `bun test packages/core/__tests__/core.test.ts`
+- **Test single package**: `bun run test packages/<name>` (e.g., `bun run test packages/core`)
+- **Test single file**: `bun run test packages/core/__tests__/core.test.ts`
 - **Typecheck**: `bun run typecheck`
 - **CI (full)**: `bun run ci`
 
