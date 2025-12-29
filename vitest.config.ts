@@ -4,7 +4,8 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
     plugins: [tsconfigPaths()],
     test: {
-        reporters: "dot",
+        projects: ["packages/*"],
+        reporters: ["default"],
         coverage: {
             reporter: ["text", "json", "html"],
             exclude: [
@@ -16,6 +17,5 @@ export default defineConfig({
                 "**/types/**",
             ],
         },
-        testTimeout: 240000,
     },
 });

@@ -47,7 +47,7 @@
     "lint": "biome lint .",
     "prepublishOnly": "bun run build",
     "test": "vitest run",
-    "test:ci": "vitest run --coverage",
+    "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "dev": "tsdown src/index.ts --watch"
@@ -55,11 +55,11 @@
   "dependencies": {
     "@node-minify/utils": "workspace:*",
     "babel-core": "6.26.3",
+    "babel-preset-env": "1.7.0",
     "babel-preset-minify": "0.5.2"
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*",
-    "@types/babel-core": "^6.25.10",
-    "babel-preset-env": "1.7.0"
+    "@types/babel-core": "^6.25.10"
   }
 }

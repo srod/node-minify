@@ -38,6 +38,6 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./packages
+          files: ./coverage/coverage-final.json
           fail_ci_if_error: false
           verbose: true
