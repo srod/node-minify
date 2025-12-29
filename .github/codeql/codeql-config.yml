@@ -1,0 +1,10 @@
+name: "CodeQL Configuration"
+
+# Exclude directories that don't need security scanning
+paths-ignore:
+  # Test fixtures (includes intentional syntax errors)
+  - 'tests/fixtures/**'
+  # Example files
+  - 'examples/**'
+  # Documentation site
+  - 'docs/**'
