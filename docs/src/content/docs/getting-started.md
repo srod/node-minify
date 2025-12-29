@@ -126,7 +126,10 @@ const result = await minify({
 
 ```js
 import { babelMinify } from '@node-minify/babel-minify';
+import { esbuild } from '@node-minify/esbuild';
 import { gcc } from '@node-minify/google-closure-compiler';
+import { oxc } from '@node-minify/oxc';
+import { swc } from '@node-minify/swc';
 import { terser } from '@node-minify/terser';
 import { uglifyJs } from '@node-minify/uglify-js';
 import { uglifyEs } from '@node-minify/uglify-es';
@@ -140,6 +143,8 @@ import { cleanCss } from '@node-minify/clean-css';
 import { crass } from '@node-minify/crass';
 import { cssnano } from '@node-minify/cssnano';
 import { csso } from '@node-minify/csso';
+import { esbuild } from '@node-minify/esbuild';
+import { lightningCss } from '@node-minify/lightningcss';
 import { sqwish } from '@node-minify/sqwish';
 import { yui } from '@node-minify/yui'; // with type: 'css'
 ```
@@ -154,6 +159,12 @@ import { htmlMinifier } from '@node-minify/html-minifier';
 
 ```js
 import { jsonMinify } from '@node-minify/jsonminify';
+```
+
+### Other
+
+```js
+import { noCompress } from '@node-minify/no-compress';
 ```
 
 [More examples](https://github.com/srod/node-minify/blob/main/examples/server.js)

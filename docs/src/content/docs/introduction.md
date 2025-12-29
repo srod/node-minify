@@ -63,6 +63,10 @@ It allow you to compress JavaScript, CSS and HTML files.
 
 - [jsonminify](/compressors/jsonminify)
 
+**Other:**
+
+- [No compress](/options#concatenate-files)
+
 **Command Line Interface:**
 
 - [CLI](/cli)

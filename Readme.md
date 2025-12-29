@@ -41,6 +41,14 @@ It allow you to compress JavaScript, CSS and HTML files.
 
 - [html-minifier](https://node-minify.2clics.net/compressors/html-minifier)
 
+**JSON:**
+
+- [jsonminify](https://node-minify.2clics.net/compressors/jsonminify)
+
+**Other:**
+
+- [No compress](https://node-minify.2clics.net/options#concatenate-files)
+
 **Command Line Interface:**
 
 - [CLI](https://node-minify.2clics.net/cli)

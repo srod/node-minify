@@ -43,14 +43,17 @@ This is a Bun monorepo for compressing JavaScript, CSS, and HTML files using var
 - `cli` - Command-line interface
 
 **Compressor packages** - Each wraps a specific minification library:
-- JS: `babel-minify`, `google-closure-compiler`, `terser`, `uglify-js`, `uglify-es`
-- CSS: `clean-css`, `crass`, `cssnano`, `csso`, `sqwish`
+- JS: `esbuild`, `google-closure-compiler`, `oxc`, `swc`, `terser`, `uglify-js`
+- CSS: `clean-css`, `cssnano`, `csso`, `esbuild`, `lightningcss`
 - HTML: `html-minifier`
-- Other: `yui` (JS/CSS), `jsonminify`, `no-compress` (passthrough)
+- Other: `jsonminify`, `no-compress` (passthrough)
 
 **Deprecated** (still available but unmaintained upstream):
 - `babel-minify` - Babel 6 only, use `terser` instead
 - `uglify-es` - Unmaintained, use `terser` instead
+- `yui` - Java-based, use modern alternatives instead
+- `crass` - Unmaintained, use `lightningcss` or `clean-css` instead
+- `sqwish` - Unmaintained, use `lightningcss` or `clean-css` instead
 
 ### Dependencies
 
