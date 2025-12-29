@@ -7,11 +7,14 @@ import { csso } from "@node-minify/csso";
 import { esbuild } from "@node-minify/esbuild";
 import { gcc } from "@node-minify/google-closure-compiler";
 import { htmlMinifier } from "@node-minify/html-minifier";
+import { imagemin } from "@node-minify/imagemin";
 import { jsonMinify } from "@node-minify/jsonminify";
 import { lightningCss } from "@node-minify/lightningcss";
 import { noCompress } from "@node-minify/no-compress";
 import { oxc } from "@node-minify/oxc";
+import { sharp } from "@node-minify/sharp";
 import { sqwish } from "@node-minify/sqwish";
+import { svgo } from "@node-minify/svgo";
 import { swc } from "@node-minify/swc";
 import { terser } from "@node-minify/terser";
 import { uglifyEs } from "@node-minify/uglify-es";
@@ -456,6 +459,88 @@ await run("JSON Minify - content in-memory", () =>
     minify({
         compressor: jsonMinify,
         content: json,
+    })
+);
+
+// ============================================
+// Image Examples
+// ============================================
+
+// Sharp - PNG to WebP
+await run("Sharp - PNG to WebP", () =>
+    minify({
+        compressor: sharp,
+        input: "public/images/test.png",
+        output: "public/images-dist/sharp-webp.webp",
+        options: {
+            format: "webp",
+            quality: 80,
+        },
+    })
+);
+
+// Sharp - PNG to AVIF
+await run("Sharp - PNG to AVIF", () =>
+    minify({
+        compressor: sharp,
+        input: "public/images/test.png",
+        output: "public/images-dist/sharp-avif.avif",
+        options: {
+            format: "avif",
+            quality: 60,
+        },
+    })
+);
+
+// Sharp - multi-format output
+await run("Sharp - multi-format (WebP + AVIF)", () =>
+    minify({
+        compressor: sharp,
+        input: "public/images/test.png",
+        output: "public/images-dist/sharp-multi",
+        options: {
+            formats: ["webp", "avif"],
+            quality: 80,
+        },
+    })
+);
+
+// SVGO - optimize SVG
+await run("SVGO - optimize SVG", () =>
+    minify({
+        compressor: svgo,
+        input: "public/images/test.svg",
+        output: "public/images-dist/svgo-optimized.svg",
+    })
+);
+
+// SVGO - with custom plugins
+await run("SVGO - with custom plugins", () =>
+    minify({
+        compressor: svgo,
+        input: "public/images/test.svg",
+        output: "public/images-dist/svgo-custom.svg",
+        options: {
+            plugins: [
+                {
+                    name: "preset-default",
+                    params: {
+                        overrides: {
+                            removeViewBox: false,
+                        },
+                    },
+                },
+            ],
+        },
+    })
+);
+
+// Imagemin - compress PNG
+await run("Imagemin - compress PNG", () =>
+    minify({
+        compressor: imagemin,
+        input: "public/images/test.png",
+        output: "public/images-dist/imagemin-compressed.png",
     })
 );
 
