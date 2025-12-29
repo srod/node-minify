@@ -7,10 +7,22 @@
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import { readFile, warnDeprecation } from "@node-minify/utils";
 import { transform } from "babel-core";
+import env from "babel-preset-env";
 import minify from "babel-preset-minify";
 
+type BabelPreset = typeof minify | typeof env;
+
 type BabelOptions = {
-    presets: (string | typeof minify)[];
+    presets: (string | BabelPreset)[];
+};
+
+/**
+ * Known presets that we can resolve directly to avoid Babel 6's runtime module resolution,
+ * which can fail in monorepos or when the working directory differs from the package location.
+ */
+const knownPresets: Record<string, BabelPreset> = {
+    env,
+    minify,
 };
 
 /**
@@ -43,7 +55,16 @@ export async function babelMinify({
         babelOptions.presets = presets.concat(babelrcPresets);
     }
 
-    if (!babelOptions.presets.includes("minify")) {
+    // Resolve known preset strings to their imported modules to avoid
+    // Babel 6's runtime resolution which fails in monorepos/different cwd
+    babelOptions.presets = babelOptions.presets.map((preset) =>
+        typeof preset === "string" && preset in knownPresets
+            ? knownPresets[preset]
+            : preset
+    );
+
+    // Ensure minify preset is always included
+    if (!babelOptions.presets.includes(minify)) {
         babelOptions.presets = babelOptions.presets.concat([minify]);
     }
 

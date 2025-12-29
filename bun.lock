@@ -71,12 +71,12 @@
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "babel-core": "6.26.3",
+        "babel-preset-env": "1.7.0",
         "babel-preset-minify": "0.5.2",
       },
       "devDependencies": {
         "@node-minify/types": "workspace:*",
         "@types/babel-core": "^6.25.10",
-        "babel-preset-env": "1.7.0",
       },
     },
     "packages/clean-css": {
