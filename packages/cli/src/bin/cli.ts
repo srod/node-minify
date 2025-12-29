@@ -28,6 +28,10 @@ function setupProgram(): Command {
         )
         .option("-i, --input [file]", "input file path")
         .option("-o, --output [file]", "output file path")
+        .option(
+            "-t, --type [type]",
+            "file type: js or css (for esbuild, lightningcss, yui)"
+        )
         .option("-s, --silence", "no output will be printed")
         .option(
             "-O, --option [option]",

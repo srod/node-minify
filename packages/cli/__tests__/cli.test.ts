@@ -6,7 +6,7 @@
 
 import childProcess from "node:child_process";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
-import { filesJS } from "../../../tests/files-path.ts";
+import { filesCSS, filesJS, filesJSON } from "../../../tests/files-path.ts";
 import { compress } from "../src/compress.ts";
 import type { SettingsWithCompressor } from "../src/index.ts";
 import * as cli from "../src/index.ts";
@@ -22,6 +22,78 @@ describe("Package: cli", () => {
         });
         return expect(spy).toHaveBeenCalled();
     }, 60000); // GCC can take ~30s
+});
+
+describe("JavaScript compressors", () => {
+    test.each([
+        ["terser"],
+        ["uglify-js"],
+        ["swc"],
+        ["oxc"],
+    ] as const)("should minify with %s", async (compressor) => {
+        const spy = vi.spyOn(cli, "run");
+        await cli.run({
+            compressor,
+            input: filesJS.oneFile,
+            output: filesJS.fileJSOut,
+            silence: true,
+        });
+        expect(spy).toHaveBeenCalled();
+    });
+
+    test("should minify with esbuild (requires type)", async () => {
+        const spy = vi.spyOn(cli, "run");
+        await cli.run({
+            compressor: "esbuild",
+            input: filesJS.oneFile,
+            output: filesJS.fileJSOut,
+            type: "js",
+            silence: true,
+        });
+        expect(spy).toHaveBeenCalled();
+    });
+});
+
+describe("CSS compressors", () => {
+    test.each([
+        ["clean-css"],
+        ["cssnano"],
+        ["csso"],
+    ] as const)("should minify with %s", async (compressor) => {
+        const spy = vi.spyOn(cli, "run");
+        await cli.run({
+            compressor,
+            input: filesCSS.fileCSS,
+            output: filesCSS.fileCSSOut,
+            silence: true,
+        });
+        expect(spy).toHaveBeenCalled();
+    });
+
+    test("should minify with lightningcss (requires type)", async () => {
+        const spy = vi.spyOn(cli, "run");
+        await cli.run({
+            compressor: "lightningcss",
+            input: filesCSS.fileCSS,
+            output: filesCSS.fileCSSOut,
+            type: "css",
+            silence: true,
+        });
+        expect(spy).toHaveBeenCalled();
+    });
+});
+
+describe("JSON compressors", () => {
+    test("should minify with jsonminify", async () => {
+        const spy = vi.spyOn(cli, "run");
+        await cli.run({
+            compressor: "jsonminify",
+            input: filesJSON.oneFileJSON,
+            output: filesJSON.fileJSONOut,
+            silence: true,
+        });
+        expect(spy).toHaveBeenCalled();
+    });
 });
 
 describe("cli error", () => {
@@ -65,16 +137,19 @@ describe("CLI Coverage", () => {
         });
 
         test("should throw if implementation is invalid", async () => {
-            vi.mock("@node-minify/csso", () => ({ csso: "not-a-function" }));
+            vi.doMock("@node-minify/no-compress", () => ({
+                noCompress: "not-a-function",
+            }));
             const settings = {
-                compressor: "csso" as any,
+                compressor: "no-compress" as any,
                 input: "foo.js",
                 output: "bar.js",
                 silence: true,
             };
             await expect(cli.run(settings)).rejects.toThrow(
-                "Invalid compressor implementation for 'csso'."
+                "Invalid compressor implementation for 'no-compress'."
             );
+            vi.doUnmock("@node-minify/no-compress");
         });
     });
 
