@@ -95,7 +95,7 @@
       "name": "@node-minify/cli",
       "version": "10.1.0",
       "bin": {
-        "node-minify": "dist/cli.js",
+        "node-minify": "dist/bin/cli.js",
       },
       "dependencies": {
         "@node-minify/core": "workspace:*",
@@ -106,8 +106,18 @@
         "update-notifier": "7.3.1",
       },
       "devDependencies": {
+        "@node-minify/clean-css": "workspace:*",
+        "@node-minify/cssnano": "workspace:*",
+        "@node-minify/csso": "workspace:*",
+        "@node-minify/esbuild": "workspace:*",
         "@node-minify/google-closure-compiler": "workspace:*",
+        "@node-minify/jsonminify": "workspace:*",
+        "@node-minify/lightningcss": "workspace:*",
+        "@node-minify/oxc": "workspace:*",
+        "@node-minify/swc": "workspace:*",
+        "@node-minify/terser": "workspace:*",
         "@node-minify/types": "workspace:*",
+        "@node-minify/uglify-js": "workspace:*",
         "@node-minify/yui": "workspace:*",
       },
     },
@@ -193,7 +203,7 @@
     },
     "packages/imagemin": {
       "name": "@node-minify/imagemin",
-      "version": "1.0.0",
+      "version": "10.0.0",
       "dependencies": {
         "@node-minify/core": "workspace:*",
         "@node-minify/utils": "workspace:*",
@@ -259,7 +269,7 @@
     },
     "packages/sharp": {
       "name": "@node-minify/sharp",
-      "version": "1.0.0",
+      "version": "10.0.0",
       "dependencies": {
         "@node-minify/core": "workspace:*",
         "@node-minify/utils": "workspace:*",
@@ -282,7 +292,7 @@
     },
     "packages/svgo": {
       "name": "@node-minify/svgo",
-      "version": "1.0.0",
+      "version": "10.0.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "svgo": "^4.0.0",
