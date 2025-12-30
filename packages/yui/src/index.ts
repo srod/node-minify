@@ -28,6 +28,10 @@ export async function yui({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    if (Array.isArray(content)) {
+        throw new Error("yui compressor does not support array content");
+    }
+
     warnDeprecation(
         "yui",
         "YUI Compressor was deprecated by Yahoo in 2013. " +
@@ -39,10 +43,6 @@ export async function yui({
         (settings.type !== "js" && settings.type !== "css")
     ) {
         throw new Error("You must specify a type: js or css");
-    }
-
-    if (Array.isArray(content)) {
-        throw new Error("yui compressor does not support array content");
     }
 
     const contentStr =

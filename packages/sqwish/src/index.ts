@@ -19,6 +19,10 @@ export async function sqwish({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    if (Array.isArray(content)) {
+        throw new Error("sqwish compressor does not support array content");
+    }
+
     warnDeprecation(
         "sqwish",
         "sqwish is no longer maintained. " +
@@ -26,10 +30,6 @@ export async function sqwish({
     );
 
     const strict = settings?.options?.strict as boolean | undefined;
-
-    if (Array.isArray(content)) {
-        throw new Error("sqwish compressor does not support array content");
-    }
 
     const contentStr =
         content instanceof Buffer

@@ -11,11 +11,11 @@ export async function oxc({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const options = settings?.options ?? {};
-
     if (Array.isArray(content)) {
         throw new Error("oxc compressor does not support array content");
     }
+
+    const options = settings?.options ?? {};
 
     const contentStr =
         content instanceof Buffer

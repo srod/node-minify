@@ -11,13 +11,13 @@ export async function lightningCss({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const options = settings?.options ?? {};
-
     if (Array.isArray(content)) {
         throw new Error(
-            "LightningCSS compressor does not support array content"
+            "lightningcss compressor does not support array content"
         );
     }
+
+    const options = settings?.options ?? {};
 
     const result = transform({
         filename: "input.css",

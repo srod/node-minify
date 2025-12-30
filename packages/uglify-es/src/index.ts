@@ -19,15 +19,15 @@ export async function uglifyEs({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    if (Array.isArray(content)) {
+        throw new Error("uglify-es compressor does not support array content");
+    }
+
     warnDeprecation(
         "uglify-es",
         "uglify-es is no longer maintained. " +
             "Please migrate to @node-minify/terser for continued support and modern JavaScript features."
     );
-
-    if (Array.isArray(content)) {
-        throw new Error("uglify-es compressor does not support array content");
-    }
 
     const contentStr =
         content instanceof Buffer

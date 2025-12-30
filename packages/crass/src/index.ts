@@ -17,15 +17,15 @@ import minify from "crass";
 export async function crass({
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    if (Array.isArray(content)) {
+        throw new Error("crass compressor does not support array content");
+    }
+
     warnDeprecation(
         "crass",
         "crass is no longer maintained. " +
             "Please migrate to @node-minify/cssnano or @node-minify/clean-css."
     );
-
-    if (Array.isArray(content)) {
-        throw new Error("crass compressor does not support array content");
-    }
 
     const contentStr =
         content instanceof Buffer
