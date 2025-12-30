@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { readFileSync } from "node:fs";
+import { readFile } from "node:fs/promises";
 import type {
     CompressorOptions,
     MinifierOptions,
@@ -66,13 +66,15 @@ async function determineContent<
                     "Cannot mix image and text files in the same input array"
                 );
             }
-            return settings.input.map((file) => readFileSync(file));
+            return await Promise.all(
+                settings.input.map((file) => readFile(file))
+            );
         }
     }
 
     if (settings.input && typeof settings.input === "string") {
         if (isImageFile(settings.input)) {
-            return readFileSync(settings.input);
+            return await readFile(settings.input);
         }
     }
 
