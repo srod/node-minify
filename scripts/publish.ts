@@ -106,25 +106,31 @@ async function main() {
         console.log(`Publishing ${pkg.name}@${pkg.version}...`);
 
         try {
-            execSync("npm publish --access public --provenance", {
-                cwd: join(PACKAGES_DIR, dir),
-                stdio: "inherit",
-            });
-            console.log(`Published ${pkg.name}@${pkg.version}\n`);
-        } catch {
-            console.log(
-                `Failed to publish ${pkg.name}@${pkg.version} (may already exist)\n`
-            );
+            try {
+                execSync("npm publish --access public --provenance", {
+                    cwd: join(PACKAGES_DIR, dir),
+                    stdio: "inherit",
+                });
+                console.log(`Published ${pkg.name}@${pkg.version}\n`);
+            } catch (err) {
+                if (err instanceof Error) {
+                    console.log(
+                        `Failed to publish ${pkg.name}@${pkg.version} (may already exist)\n`
+                    );
+                }
+            }
+        } finally {
+            writeFileSync(pkgPath, originalContent);
         }
-
-        writeFileSync(pkgPath, originalContent);
     }
 
     console.log("\nCreating git tags...");
     try {
         execSync("changeset tag", { stdio: "inherit" });
-    } catch {
-        console.log("Failed to create tags (may already exist)");
+    } catch (err) {
+        if (err instanceof Error) {
+            console.log("Failed to create tags (may already exist)");
+        }
     }
 
     console.log("\nDone!");
