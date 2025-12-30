@@ -17,13 +17,13 @@ export const AVAILABLE_MINIFIER = [
     { name: "uglify-es", export: "uglifyEs" },
     { name: "yui", export: "yui" },
     // CSS compressors
-    { name: "clean-css", export: "cleanCss" },
-    { name: "cssnano", export: "cssnano" },
-    { name: "csso", export: "csso" },
-    { name: "lightningcss", export: "lightningCss" },
+    { name: "clean-css", export: "cleanCss", cssOnly: true },
+    { name: "cssnano", export: "cssnano", cssOnly: true },
+    { name: "csso", export: "csso", cssOnly: true },
+    { name: "lightningcss", export: "lightningCss", cssOnly: true },
     // Deprecated CSS compressors
-    { name: "crass", export: "crass" },
-    { name: "sqwish", export: "sqwish" },
+    { name: "crass", export: "crass", cssOnly: true },
+    { name: "sqwish", export: "sqwish", cssOnly: true },
     // HTML compressors
     { name: "html-minifier", export: "htmlMinifier" },
     // JSON compressors

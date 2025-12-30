@@ -151,6 +151,19 @@ describe("CLI Coverage", () => {
             );
             vi.doUnmock("@node-minify/no-compress");
         });
+
+        test("should throw if cssOnly compressor receives non-css type", async () => {
+            const settings = {
+                compressor: "lightningcss" as const,
+                input: filesCSS.fileCSS,
+                output: filesCSS.fileCSSOut,
+                type: "js" as const,
+                silence: true,
+            };
+            await expect(cli.run(settings)).rejects.toThrow(
+                "lightningcss only supports type 'css'"
+            );
+        });
     });
 
     describe("compress default results", () => {
