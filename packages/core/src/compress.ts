@@ -54,15 +54,20 @@ export async function compress(settings: Settings): Promise<string> {
 async function compressArrayOfFiles(settings: Settings): Promise<string> {
     const inputs = settings.input as string[];
 
-    const compressionTasks = inputs
-        .map((input, index) => {
-            if (!input) {
-                return null;
-            }
-            const content = getContentFromFiles(input);
-            return run({ settings, content, index });
-        })
-        .filter((task): task is Promise<string> => task !== null);
+    inputs.forEach((input, index) => {
+        if (!input || typeof input !== "string") {
+            throw new Error(
+                `Invalid input at index ${index}: expected non-empty string, got ${
+                    typeof input === "string" ? "empty string" : typeof input
+                }`
+            );
+        }
+    });
+
+    const compressionTasks = inputs.map((input, index) => {
+        const content = getContentFromFiles(input);
+        return run({ settings, content, index });
+    });
 
     const results = await Promise.all(compressionTasks);
     return results[results.length - 1] ?? "";

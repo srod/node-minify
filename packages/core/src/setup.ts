@@ -36,6 +36,20 @@ function setup(inputSettings: Settings) {
 
     validateMandatoryFields(inputSettings, ["compressor", "input", "output"]);
 
+    if (Array.isArray(settings.input)) {
+        settings.input.forEach((input, index) => {
+            if (!input || typeof input !== "string") {
+                throw new Error(
+                    `Invalid input at index ${index}: expected non-empty string, got ${
+                        typeof input === "string"
+                            ? "empty string"
+                            : typeof input
+                    }`
+                );
+            }
+        });
+    }
+
     return enhanceSettings(settings);
 }
 
