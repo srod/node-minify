@@ -8,6 +8,7 @@ import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import imageminLib from "imagemin";
 import imageminGifsicle from "imagemin-gifsicle";
 import imageminMozjpeg from "imagemin-mozjpeg";
+import imageminOptipng from "imagemin-optipng";
 import imageminPngquant from "imagemin-pngquant";
 
 /**
@@ -78,19 +79,30 @@ export async function imagemin({
             quantBaseline: false,
             arithmetic: false,
         }),
-        imageminPngquant({
-            quality: [qualityNormalized, 1],
-            speed: 11 - effortClamped, // invert: higher effort = lower speed
-            strip: true,
-            dithering: 1,
-            posterize: 0,
-        }),
         imageminGifsicle({
             optimizationLevel: optimizationLevelClamped,
             interlaced: true,
             colors: 256,
         }),
     ];
+
+    if (options.lossless) {
+        plugins.push(
+            imageminOptipng({
+                optimizationLevel: 3,
+            })
+        );
+    } else {
+        plugins.push(
+            imageminPngquant({
+                quality: [qualityNormalized, 1],
+                speed: 11 - effortClamped, // invert: higher effort = lower speed
+                strip: true,
+                dithering: 1,
+                posterize: 0,
+            })
+        );
+    }
 
     const result = await imageminLib.buffer(content, {
         plugins,
