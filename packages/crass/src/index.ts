@@ -23,7 +23,12 @@ export async function crass({
             "Please migrate to @node-minify/cssnano or @node-minify/clean-css."
     );
 
-    const code = minify.parse(content).optimize().toString();
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+
+    const code = minify.parse(contentStr).optimize().toString();
 
     return { code };
 }

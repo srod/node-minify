@@ -13,7 +13,12 @@ export async function oxc({
 }: MinifierOptions): Promise<CompressorResult> {
     const options = settings?.options ?? {};
 
-    const result = await oxcMinify("input.js", (content ?? "") as string, {
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+
+    const result = await oxcMinify("input.js", contentStr, {
         sourcemap: !!options.sourceMap,
         ...options,
     });

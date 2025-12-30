@@ -21,7 +21,12 @@ export async function esbuild({
     const loader = settings.type === "css" ? "css" : "js";
     const { sourceMap, ...restOptions } = settings?.options ?? {};
 
-    const result = await transform(content ?? "", {
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+
+    const result = await transform(contentStr, {
         loader,
         minify: true,
         sourcemap: !!sourceMap,

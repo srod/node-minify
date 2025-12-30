@@ -25,15 +25,19 @@ export async function uglifyEs({
             "Please migrate to @node-minify/terser for continued support and modern JavaScript features."
     );
 
-    let inputContent: string | Record<string, string> = (content ??
-        "") as string;
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+
+    let inputContent: string | Record<string, string> = contentStr;
     const sourceMapOptions = settings.options?.sourceMap as
         | { filename?: string }
         | undefined;
 
     if (typeof sourceMapOptions === "object") {
         inputContent = {
-            [sourceMapOptions.filename ?? ""]: (content ?? "") as string,
+            [sourceMapOptions.filename ?? ""]: contentStr,
         };
     }
 

@@ -13,7 +13,12 @@ export async function swc({
 }: MinifierOptions): Promise<CompressorResult> {
     const options = settings?.options ?? {};
 
-    const result = await swcMinify(content ?? "", {
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+
+    const result = await swcMinify(contentStr, {
         compress: true,
         mangle: true,
         sourceMap: !!options.sourceMap,

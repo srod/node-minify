@@ -16,7 +16,11 @@ import postcss from "postcss";
 export async function cssnano({
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const result = await postcss([minify]).process(content || "", {
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+    const result = await postcss([minify]).process(contentStr, {
         from: undefined,
     });
 
