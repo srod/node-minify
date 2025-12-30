@@ -28,6 +28,7 @@ declare module "imagemin-gifsicle" {
         optimizationLevel?: number;
         interlaced?: boolean;
         colors?: number;
+        lossy?: number;
     }
 
     function gifsicle(options?: GifsicleOptions): import("imagemin").Plugin;
