@@ -127,7 +127,7 @@ describe("sharp", () => {
 
         expect(result.buffer).toBeInstanceOf(Buffer);
 
-        await sharp({
+        const result2 = await sharp({
             settings: {
                 compressor: sharp,
                 options: {
@@ -139,9 +139,9 @@ describe("sharp", () => {
             content: inputBuffer,
         });
 
-        expect(result.buffer).toBeInstanceOf(Buffer);
+        expect(result2.buffer).toBeInstanceOf(Buffer);
 
-        await sharp({
+        const result3 = await sharp({
             settings: {
                 compressor: sharp,
                 options: {
@@ -152,9 +152,9 @@ describe("sharp", () => {
             content: inputBuffer,
         });
 
-        expect(result.buffer).toBeInstanceOf(Buffer);
+        expect(result3.buffer).toBeInstanceOf(Buffer);
 
-        await sharp({
+        const result4 = await sharp({
             settings: {
                 compressor: sharp,
                 options: {
@@ -165,7 +165,7 @@ describe("sharp", () => {
             content: inputBuffer,
         });
 
-        expect(result.buffer).toBeInstanceOf(Buffer);
+        expect(result4.buffer).toBeInstanceOf(Buffer);
     });
 
     test("should use compressionLevel for PNG when provided", async () => {
