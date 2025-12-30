@@ -1,15 +1,6 @@
 language: "en-US"
 reviews:
   profile: "chill"
-  path_filters:
-    - "!dist/**"
-    - "!node_modules/**"
-    - "!coverage/**"
-    - "!tests/tmp/**"
-    - "!*.tsbuildinfo"
-    - "!.changeset/**"
-    - "!examples/public/**/*-dist/**"
-    - "!examples/public/**/*.min.*"
   auto_review:
     enabled: true
     auto_incremental_review: true

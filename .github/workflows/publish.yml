@@ -26,14 +26,11 @@ jobs:
 
       - name: 📦 Setup Bun
         uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: "1.3.5"
 
       - name: ⚙️ Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: "22"
-          registry-url: "https://registry.npmjs.org"
+          node-version: '22'
 
       - name: 🔧 Upgrade npm for OIDC support
         run: npm install -g npm@latest
