@@ -102,7 +102,7 @@ function resolveDependencies(
  *
  * @returns Nothing.
  */
-async function main() {
+function main() {
     const packageDirs = getPackageDirs();
     const versionMap = buildVersionMap();
 
@@ -167,11 +167,13 @@ async function main() {
     console.log("\nDone!");
 }
 
-main().catch((error) => {
+try {
+    main();
+} catch (error) {
     if (error instanceof Error) {
         console.error("Publish failed:", error.message);
     } else {
         console.error("Publish failed:", error);
     }
     process.exit(1);
-});
+}
