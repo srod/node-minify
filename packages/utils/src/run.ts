@@ -81,14 +81,10 @@ function writeOutput<T extends CompressorOptions = CompressorOptions>(
  * Write multiple output files for multi-format image conversion.
  */
 function writeMultipleOutputs<T extends CompressorOptions = CompressorOptions>(
-    outputs: CompressorResult["outputs"],
+    outputs: NonNullable<CompressorResult["outputs"]>,
     settings: Settings<T>,
     index?: number
 ): void {
-    if (!outputs) {
-        return;
-    }
-
     const output = settings.output;
     const isArrayOutput = Array.isArray(output);
     const outputsArray = isArrayOutput ? output : [output];
