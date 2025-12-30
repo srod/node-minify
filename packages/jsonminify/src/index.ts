@@ -15,7 +15,11 @@ import jsonminify from "jsonminify";
 export async function jsonMinify({
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const code = jsonminify((content ?? "") as string);
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+    const code = jsonminify(contentStr);
 
     return { code };
 }

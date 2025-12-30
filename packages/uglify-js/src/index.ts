@@ -17,10 +17,11 @@ export async function uglifyJs({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const result = uglifyJS.minify(
-        (content ?? "") as string,
-        settings?.options
-    );
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+    const result = uglifyJS.minify(contentStr, settings?.options);
 
     if (result.error) {
         throw result.error;

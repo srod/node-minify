@@ -24,8 +24,13 @@ export async function cleanCss({
         options.sourceMap = true;
     }
 
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+
     const result = new CleanCSS({ returnPromise: false, ...options }).minify(
-        content ?? ""
+        contentStr
     );
 
     return {

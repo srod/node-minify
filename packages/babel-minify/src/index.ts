@@ -68,7 +68,11 @@ export async function babelMinify({
         babelOptions.presets = babelOptions.presets.concat([minify]);
     }
 
-    const result = transform((content ?? "") as string, babelOptions);
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+    const result = transform(contentStr, babelOptions);
 
     if (typeof result.code !== "string") {
         throw new Error("Babel minification failed: empty result");

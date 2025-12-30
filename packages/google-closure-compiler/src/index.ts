@@ -44,9 +44,14 @@ export async function gcc({
 }: MinifierOptions): Promise<CompressorResult> {
     const options = applyOptions({}, settings?.options ?? {});
 
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+
     const result = await runCommandLine({
         args: gccCommand(options),
-        data: content as string,
+        data: contentStr,
     });
 
     if (typeof result !== "string") {

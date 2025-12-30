@@ -22,7 +22,11 @@ export async function htmlMinifier({
 }: MinifierOptions): Promise<CompressorResult> {
     const { minify } = await import("html-minifier-next");
     const options = { ...defaultOptions, ...settings?.options };
-    const code = await minify((content ?? "") as string, options);
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+    const code = await minify(contentStr, options);
 
     return { code };
 }

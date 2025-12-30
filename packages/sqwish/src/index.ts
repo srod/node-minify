@@ -26,7 +26,11 @@ export async function sqwish({
     );
 
     const strict = settings?.options?.strict as boolean | undefined;
-    const code = minify.minify(content, strict);
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+    const code = minify.minify(contentStr, strict);
 
     return { code };
 }

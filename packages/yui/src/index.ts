@@ -41,9 +41,14 @@ export async function yui({
         throw new Error("You must specify a type: js or css");
     }
 
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+
     const result = await runCommandLine({
         args: yuiCommand(settings.type, settings?.options ?? {}),
-        data: content as string,
+        data: contentStr,
     });
 
     if (typeof result !== "string") {

@@ -20,10 +20,10 @@ describe("Package: no-compress", async () => {
         await runOneTest({ options, compressorLabel, compressor });
     }
 
-    test("should throw when content is undefined", async () => {
+    test("should return empty string when content is undefined", async () => {
         await expect(
             noCompress({ settings: {} as any, content: undefined })
-        ).rejects.toThrow("no-compress failed: empty result");
+        ).resolves.toEqual({ code: "" });
     });
 
     test("should throw when content is not a string", async () => {

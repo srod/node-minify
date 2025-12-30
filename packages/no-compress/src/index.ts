@@ -14,9 +14,14 @@ import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 export async function noCompress({
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (typeof content !== "string") {
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+
+    if (typeof contentStr !== "string") {
         throw new Error("no-compress failed: empty result");
     }
 
-    return { code: content };
+    return { code: contentStr };
 }

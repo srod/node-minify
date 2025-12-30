@@ -17,7 +17,11 @@ export async function csso({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const result = await minify((content ?? "") as string, settings?.options);
+    const contentStr =
+        content instanceof Buffer
+            ? content.toString()
+            : ((content ?? "") as string);
+    const result = await minify(contentStr, settings?.options);
 
     return { code: result.css };
 }
