@@ -209,8 +209,9 @@ export type MinifierOptions<
      * The content to minify.
      * For text-based formats (JS, CSS, HTML, SVG): string
      * For binary formats (images): Buffer
+     * For multiple binary files: Buffer[]
      */
-    content?: string | Buffer;
+    content?: string | Buffer | Buffer[];
 
     /**
      * Index of current file when processing multiple files.
