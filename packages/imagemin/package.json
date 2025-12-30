@@ -1,7 +1,7 @@
 {
     "name": "@node-minify/imagemin",
     "version": "10.0.0",
-    "description": "Imagemin plugin for @node-minify - Compress PNG, JPEG, GIF and WebP images",
+    "description": "Imagemin plugin for @node-minify - Compress PNG, JPEG and GIF images",
     "keywords": [
         "compressor",
         "minify",
@@ -11,8 +11,7 @@
         "png",
         "jpeg",
         "jpg",
-        "gif",
-        "webp"
+        "gif"
     ],
     "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
     "homepage": "https://github.com/srod/node-minify/tree/main/packages/imagemin#readme",
