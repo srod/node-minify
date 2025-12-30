@@ -1,9 +1,9 @@
-import { describe, expect, test, vi, afterAll } from "vitest";
-import { compress } from "../src/compress.ts";
-import { noCompress } from "../../no-compress/src/index.ts";
+import fs from "node:fs";
+import path from "node:path";
 import type { Settings } from "@node-minify/types";
-import path from "path";
-import fs from "fs";
+import { afterAll, describe, expect, test } from "vitest";
+import { noCompress } from "../../no-compress/src/index.ts";
+import { compress } from "../src/compress.ts";
 
 describe("compress async", () => {
     const tempDir = path.join(__dirname, "temp_async");

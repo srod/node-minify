@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, type Stats } from "node:fs";
 import { lstat, readFile } from "node:fs/promises";
 import { FileOperationError } from "./error.ts";
 import { isValidFile } from "./isValidFile.ts";
@@ -37,11 +37,16 @@ function readFileContent(path: string): string {
  */
 async function readFileContentAsync(path: string): Promise<string> {
     try {
-        let stats;
+        let stats: Stats;
         try {
             stats = await lstat(path);
-        } catch (e: any) {
-            if (e.code === "ENOENT") {
+        } catch (e: unknown) {
+            if (
+                e &&
+                typeof e === "object" &&
+                "code" in e &&
+                e.code === "ENOENT"
+            ) {
                 throw new Error("File does not exist");
             }
             throw e;

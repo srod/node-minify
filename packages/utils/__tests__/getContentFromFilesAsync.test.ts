@@ -4,8 +4,17 @@
  * MIT Licensed
  */
 
-import { describe, expect, test } from "vitest";
+import { lstat } from "node:fs/promises";
+import { describe, expect, test, vi } from "vitest";
 import { getContentFromFilesAsync } from "../src/getContentFromFiles.ts";
+
+vi.mock("node:fs/promises", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("node:fs/promises")>();
+    return {
+        ...actual,
+        lstat: vi.fn(actual.lstat),
+    };
+});
 
 const fixtureFile = `${__dirname}/../../../tests/fixtures/fixture-content.js`;
 
@@ -51,6 +60,13 @@ describe("getContentFromFilesAsync", () => {
     test("should throw if path is not a valid file (async check)", async () => {
         await expect(getContentFromFilesAsync("fake.js")).rejects.toThrow(
             "File does not exist"
+        );
+    });
+
+    test("should throw if lstat fails with non-ENOENT error", async () => {
+        vi.mocked(lstat).mockRejectedValueOnce(new Error("Generic FS error"));
+        await expect(getContentFromFilesAsync(fixtureFile)).rejects.toThrow(
+            "Generic FS error"
         );
     });
 });

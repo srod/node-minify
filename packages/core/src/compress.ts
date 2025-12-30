@@ -15,7 +15,6 @@ import type {
 } from "@node-minify/types";
 import {
     compressSingleFile,
-    getContentFromFiles,
     getContentFromFilesAsync,
     run,
 } from "@node-minify/utils";
