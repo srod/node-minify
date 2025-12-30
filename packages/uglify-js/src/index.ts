@@ -17,6 +17,10 @@ export async function uglifyJs({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    if (Array.isArray(content)) {
+        throw new Error("uglify-js compressor does not support array content");
+    }
+
     const contentStr =
         content instanceof Buffer
             ? content.toString()

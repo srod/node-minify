@@ -23,6 +23,10 @@ export async function crass({
             "Please migrate to @node-minify/cssnano or @node-minify/clean-css."
     );
 
+    if (Array.isArray(content)) {
+        throw new Error("crass compressor does not support array content");
+    }
+
     const contentStr =
         content instanceof Buffer
             ? content.toString()

@@ -74,6 +74,10 @@ export async function svgo({
 }: MinifierOptions<SvgOptions>): Promise<CompressorResult> {
     const options = settings?.options ?? {};
 
+    if (Array.isArray(content)) {
+        throw new Error("SVGO compressor does not support array content");
+    }
+
     // SVGO only accepts strings, convert Buffer if needed
     const svgContent = Buffer.isBuffer(content)
         ? content.toString("utf8")

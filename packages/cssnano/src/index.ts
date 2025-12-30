@@ -16,6 +16,10 @@ import postcss from "postcss";
 export async function cssnano({
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    if (Array.isArray(content)) {
+        throw new Error("cssnano compressor does not support array content");
+    }
+
     const contentStr =
         content instanceof Buffer
             ? content.toString()

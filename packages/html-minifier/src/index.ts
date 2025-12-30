@@ -22,6 +22,13 @@ export async function htmlMinifier({
 }: MinifierOptions): Promise<CompressorResult> {
     const { minify } = await import("html-minifier-next");
     const options = { ...defaultOptions, ...settings?.options };
+
+    if (Array.isArray(content)) {
+        throw new Error(
+            "html-minifier compressor does not support array content"
+        );
+    }
+
     const contentStr =
         content instanceof Buffer
             ? content.toString()
