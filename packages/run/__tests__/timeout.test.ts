@@ -39,7 +39,7 @@ describe("Package: run - Timeout", () => {
         Object.assign(mockChild, {
             stdin: Object.assign(mockStdin, {
                 end: vi.fn(),
-                write: vi.fn(), // Add write mock for robustness
+                write: vi.fn(),
             }),
             stdout: mockStdout,
             stderr: mockStderr,
@@ -74,7 +74,7 @@ describe("Package: run - Timeout", () => {
         Object.assign(mockChild, {
             stdin: Object.assign(mockStdin, {
                 end: vi.fn(),
-                write: vi.fn(), // Add write mock for robustness
+                write: vi.fn(),
             }),
             stdout: mockStdout,
             stderr: mockStderr,

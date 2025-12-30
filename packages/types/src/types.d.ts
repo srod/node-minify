@@ -138,6 +138,12 @@ export type Settings<TOptions extends CompressorOptions = CompressorOptions> = {
      * @default false
      */
     replaceInPlace?: boolean;
+
+    /**
+     * Timeout for the compressor process in milliseconds.
+     * Only applies to compressors that spawn a child process (e.g., GCC, YUI).
+     */
+    timeout?: number;
 };
 
 /**
