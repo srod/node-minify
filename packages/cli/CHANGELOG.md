@@ -1,5 +1,14 @@
 # @node-minify/cli
 
+## 10.1.1
+
+### Patch Changes
+
+- eb785b0: Fix npm install error caused by unresolved workspace:\* references in published packages
+- Updated dependencies [eb785b0]
+  - @node-minify/core@10.1.1
+  - @node-minify/utils@10.1.1
+
 ## 10.1.0
 
 ### Patch Changes
