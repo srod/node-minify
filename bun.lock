@@ -218,6 +218,8 @@
       },
       "devDependencies": {
         "@node-minify/types": "workspace:*",
+        "@types/imagemin-gifsicle": "^7.0.4",
+        "@types/imagemin-mozjpeg": "^8.0.4",
         "@types/imagemin-optipng": "^5.2.4",
       },
     },
@@ -969,6 +971,10 @@
     "@types/hast": ["@types/hast@3.0.4", "", { "dependencies": { "@types/unist": "*" } }, "sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ=="],
 
     "@types/imagemin": ["@types/imagemin@9.0.1", "", { "dependencies": { "@types/node": "*" } }, "sha512-xMWpvrUhtYxl6EeW+UhVH3rwUKhCRx21XddcoWByjDAasXZT5pQaCn0YVnXoTijX5hlTrGqV4TGQL/Htpp00+w=="],
+
+    "@types/imagemin-gifsicle": ["@types/imagemin-gifsicle@7.0.4", "", { "dependencies": { "@types/imagemin": "*" } }, "sha512-ZghMBd/Jgqg5utTJNPmvf6DkuHzMhscJ8vgf/7MUGCpO+G+cLrhYltL+5d+h3A1B4W73S2SrmJZ1jS5LACpX+A=="],
+
+    "@types/imagemin-mozjpeg": ["@types/imagemin-mozjpeg@8.0.4", "", { "dependencies": { "@types/imagemin": "*" } }, "sha512-ZCAxV8SYJB8ehwHpnbRpHjg5Wc4HcyuAMiDhXbkgC7gujDoOTyHO3dhDkUtZ1oK1DLBRZapqG9etdLVhUml7yQ=="],
 
     "@types/imagemin-optipng": ["@types/imagemin-optipng@5.2.4", "", { "dependencies": { "@types/imagemin": "*" } }, "sha512-mvKnDMC8eCYZetAQudjs1DbgpR84WhsTx1wgvdiXnpuUEti3oJ+MaMYBRWPY0JlQ4+y4TXKOfa7+LOuT8daegQ=="],
 
