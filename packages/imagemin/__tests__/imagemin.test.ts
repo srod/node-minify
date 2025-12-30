@@ -5,10 +5,12 @@
  */
 
 import imageminLib from "imagemin";
+import imageminGifsicle from "imagemin-gifsicle";
+import imageminMozjpeg from "imagemin-mozjpeg";
+import imageminPngquant from "imagemin-pngquant";
 import { describe, expect, test, vi } from "vitest";
 import { imagemin } from "../src/index.ts";
 
-// Mock imagemin modules
 vi.mock("imagemin", () => {
     return {
         default: {
@@ -39,7 +41,7 @@ vi.mock("imagemin-pngquant", () => {
 
 describe("Package: imagemin", () => {
     test("should compress image with default options", async () => {
-        const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]); // PNG magic bytes
+        const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
 
         const result = await imagemin({
             settings: {
@@ -51,6 +53,64 @@ describe("Package: imagemin", () => {
 
         expect(result.code).toBe("compressed");
         expect(result.buffer).toBeDefined();
+    });
+
+    test("should clamp quality, effort and optimizationLevel", async () => {
+        const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+
+        await imagemin({
+            settings: {
+                compressor: imagemin,
+                options: {
+                    quality: 200,
+                    effort: 20,
+                    optimizationLevel: 5,
+                },
+            },
+            content: inputBuffer,
+        });
+
+        expect(imageminMozjpeg).toHaveBeenCalledWith(
+            expect.objectContaining({ quality: 100 })
+        );
+
+        expect(imageminPngquant).toHaveBeenCalledWith(
+            expect.objectContaining({
+                quality: [1, 1],
+                speed: 1,
+            })
+        );
+
+        expect(imageminGifsicle).toHaveBeenCalledWith(
+            expect.objectContaining({ optimizationLevel: 3 })
+        );
+
+        await imagemin({
+            settings: {
+                compressor: imagemin,
+                options: {
+                    quality: -50,
+                    effort: -5,
+                    optimizationLevel: -1,
+                },
+            },
+            content: inputBuffer,
+        });
+
+        expect(imageminMozjpeg).toHaveBeenCalledWith(
+            expect.objectContaining({ quality: 0 })
+        );
+
+        expect(imageminPngquant).toHaveBeenCalledWith(
+            expect.objectContaining({
+                quality: [0, 1],
+                speed: 10,
+            })
+        );
+
+        expect(imageminGifsicle).toHaveBeenCalledWith(
+            expect.objectContaining({ optimizationLevel: 1 })
+        );
     });
 
     test("should compress image with custom quality", async () => {
