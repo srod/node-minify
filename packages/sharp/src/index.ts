@@ -131,7 +131,7 @@ export async function sharp({
     const outputBuffer = await convertImage(inputBuffer, format, options);
 
     return {
-        code: outputBuffer.toString("binary"),
+        code: "",
         buffer: outputBuffer,
     };
 }
