@@ -167,4 +167,51 @@ describe("sharp", () => {
 
         expect(result.buffer).toBeInstanceOf(Buffer);
     });
+
+    test("should use compressionLevel for PNG when provided", async () => {
+        const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+        const { default: mockSharp } = await import("sharp");
+        const pngMock = vi.fn().mockReturnThis();
+        // @ts-ignore
+        mockSharp.mockImplementationOnce(() => ({
+            png: pngMock,
+            toBuffer: vi.fn().mockResolvedValue(Buffer.from("converted")),
+        }));
+
+        await sharp({
+            settings: {
+                compressor: sharp,
+                options: {
+                    format: "png",
+                    compressionLevel: 8,
+                },
+            },
+            content: inputBuffer,
+        });
+
+        expect(pngMock).toHaveBeenCalledWith(
+            expect.objectContaining({ compressionLevel: 8 })
+        );
+    });
+
+    test("should wrap and rethrow sharp errors", async () => {
+        const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+        const { default: mockSharp } = await import("sharp");
+        // @ts-ignore
+        mockSharp.mockImplementationOnce(() => ({
+            webp: vi.fn().mockImplementation(() => {
+                throw new Error("Sharp error");
+            }),
+        }));
+
+        await expect(
+            sharp({
+                settings: {
+                    compressor: sharp,
+                    options: { format: "webp" },
+                },
+                content: inputBuffer,
+            })
+        ).rejects.toThrow("Sharp conversion to webp failed: Sharp error");
+    });
 });

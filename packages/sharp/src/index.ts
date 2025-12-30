@@ -11,6 +11,7 @@ export type SharpOptions = {
     quality?: number;
     lossless?: boolean;
     effort?: number;
+    compressionLevel?: number;
     format?: "webp" | "avif" | "png" | "jpeg";
     formats?: Array<"webp" | "avif" | "png" | "jpeg">;
 };
@@ -39,41 +40,54 @@ async function convertImage(
     format: "webp" | "avif" | "png" | "jpeg",
     options: SharpOptions
 ): Promise<Buffer> {
-    const sharpInstance = await getSharp();
-    let converter = sharpInstance(input);
+    try {
+        const sharpInstance = await getSharp();
+        let converter = sharpInstance(input);
 
-    const clamp = (val: number, min: number, max: number) =>
-        Math.max(min, Math.min(max, val));
+        const clamp = (val: number, min: number, max: number) =>
+            Math.max(min, Math.min(max, val));
 
-    switch (format) {
-        case "webp":
-            converter = converter.webp({
-                quality: clamp(options.quality ?? 80, 1, 100),
-                lossless: options.lossless ?? false,
-                effort: clamp(options.effort ?? 4, 0, 6),
-            });
-            break;
-        case "avif":
-            converter = converter.avif({
-                quality: clamp(options.quality ?? 50, 1, 100),
-                lossless: options.lossless ?? false,
-                effort: clamp(options.effort ?? 4, 0, 9),
-            });
-            break;
-        case "png":
-            converter = converter.png({
-                compressionLevel: clamp(options.effort ?? 6, 0, 9),
-            });
-            break;
-        case "jpeg":
-            converter = converter.jpeg({
-                quality: clamp(options.quality ?? 90, 1, 100),
-                mozjpeg: true,
-            });
-            break;
+        switch (format) {
+            case "webp":
+                converter = converter.webp({
+                    quality: clamp(options.quality ?? 80, 1, 100),
+                    lossless: options.lossless ?? false,
+                    effort: clamp(options.effort ?? 4, 0, 6),
+                });
+                break;
+            case "avif":
+                converter = converter.avif({
+                    quality: clamp(options.quality ?? 50, 1, 100),
+                    lossless: options.lossless ?? false,
+                    effort: clamp(options.effort ?? 4, 0, 9),
+                });
+                break;
+            case "png":
+                converter = converter.png({
+                    compressionLevel: clamp(
+                        options.compressionLevel ?? options.effort ?? 6,
+                        0,
+                        9
+                    ),
+                });
+                break;
+            case "jpeg":
+                converter = converter.jpeg({
+                    quality: clamp(options.quality ?? 90, 1, 100),
+                    mozjpeg: true,
+                });
+                break;
+        }
+
+        return converter.toBuffer();
+    } catch (err) {
+        if (err instanceof Error) {
+            throw new Error(
+                `Sharp conversion to ${format} failed: ${err.message}`
+            );
+        }
+        throw err;
     }
-
-    return converter.toBuffer();
 }
 
 /**
