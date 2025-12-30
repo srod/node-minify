@@ -5,7 +5,7 @@
  */
 
 import { existsSync, readFileSync } from "node:fs";
-import { readFile } from "node:fs/promises";
+import { lstat, readFile } from "node:fs/promises";
 import { FileOperationError } from "./error.ts";
 import { isValidFile } from "./isValidFile.ts";
 
@@ -37,15 +37,20 @@ function readFileContent(path: string): string {
  */
 async function readFileContentAsync(path: string): Promise<string> {
     try {
-        // We use existsSync/isValidFile here for consistency with the sync version,
-        // although technically we could rely on readFile throwing.
-        // But isValidFile checks if it is a directory too.
-        if (!existsSync(path)) {
-            throw new Error("File does not exist");
+        let stats;
+        try {
+            stats = await lstat(path);
+        } catch (e: any) {
+            if (e.code === "ENOENT") {
+                throw new Error("File does not exist");
+            }
+            throw e;
         }
-        if (!isValidFile(path)) {
+
+        if (stats.isDirectory()) {
             throw new Error("Path is not a valid file");
         }
+
         return await readFile(path, "utf8");
     } catch (error) {
         throw new FileOperationError("read", path, error as Error);

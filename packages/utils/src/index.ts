@@ -9,7 +9,7 @@ import {
 } from "./getContentFromFiles.ts";
 import { getFilesizeGzippedInBytes } from "./getFilesizeGzippedInBytes.ts";
 import { getFilesizeInBytes } from "./getFilesizeInBytes.ts";
-import { isValidFile } from "./isValidFile.ts";
+import { isValidFile, isValidFileAsync } from "./isValidFile.ts";
 import { prettyBytes } from "./prettyBytes.ts";
 import { readFile } from "./readFile.ts";
 import { run } from "./run.ts";
@@ -29,6 +29,7 @@ export {
     getFilesizeGzippedInBytes,
     getFilesizeInBytes,
     isValidFile,
+    isValidFileAsync,
     prettyBytes,
     readFile,
     resetDeprecationWarnings,
