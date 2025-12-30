@@ -5,14 +5,17 @@
  */
 
 declare module "imagemin" {
-    type Plugin = (input: Uint8Array) => Promise<Uint8Array>;
+    type Plugin = (input: Buffer | Uint8Array) => Promise<Buffer | Uint8Array>;
 
     interface BufferOptions {
         plugins?: Plugin[];
     }
 
     interface Imagemin {
-        buffer(data: Uint8Array, options?: BufferOptions): Promise<Uint8Array>;
+        buffer(
+            data: Buffer | Uint8Array,
+            options?: BufferOptions
+        ): Promise<Buffer | Uint8Array>;
     }
 
     const imagemin: Imagemin;
