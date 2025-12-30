@@ -39,6 +39,21 @@ import {
 const fixtureFile = `${__dirname}/../../../tests/fixtures/fixture-content.js`;
 
 describe("Package: utils", () => {
+    const filesToCleanup = new Set<string>();
+
+    afterEach(() => {
+        for (const file of filesToCleanup) {
+            try {
+                if (existsSync(file)) {
+                    deleteFile(file);
+                }
+            } catch {
+                // Ignore cleanup errors
+            }
+        }
+        filesToCleanup.clear();
+    });
+
     describe("readFile", () => {
         test("should return the content", () =>
             expect(readFile(fixtureFile)).toMatch("console.log('content');"));
@@ -516,6 +531,7 @@ describe("Package: utils", () => {
 
         test("should write output file when output is specified", async () => {
             const outputFile = `${tmpDir}/run-output.js`;
+            filesToCleanup.add(outputFile);
             const compressor = vi.fn().mockResolvedValue({ code: "minified" });
             const settings = {
                 compressor,
@@ -526,12 +542,13 @@ describe("Package: utils", () => {
             await run({ settings, content: "content" });
 
             expect(readFile(outputFile)).toBe("minified");
-            deleteFile(outputFile);
         });
 
         test("should write source map when result includes map", async () => {
             const outputFile = `${tmpDir}/run-output-map.js`;
             const mapFile = `${tmpDir}/run-output-map.js.map`;
+            filesToCleanup.add(outputFile);
+            filesToCleanup.add(mapFile);
             const compressor = vi.fn().mockResolvedValue({
                 code: "minified",
                 map: '{"version":3}',
@@ -549,13 +566,13 @@ describe("Package: utils", () => {
 
             expect(readFile(outputFile)).toBe("minified");
             expect(readFile(mapFile)).toBe('{"version":3}');
-            deleteFile(outputFile);
-            deleteFile(mapFile);
         });
 
         test("should use sourceMap.filename if url not present", async () => {
             const outputFile = `${tmpDir}/run-output-filename.js`;
             const mapFile = `${tmpDir}/run-output-filename.js.map`;
+            filesToCleanup.add(outputFile);
+            filesToCleanup.add(mapFile);
             const compressor = vi.fn().mockResolvedValue({
                 code: "minified",
                 map: '{"version":3}',
@@ -572,13 +589,13 @@ describe("Package: utils", () => {
             await run({ settings, content: "content" });
 
             expect(readFile(mapFile)).toBe('{"version":3}');
-            deleteFile(outputFile);
-            deleteFile(mapFile);
         });
 
         test("should use _sourceMap.url as fallback", async () => {
             const outputFile = `${tmpDir}/run-output-underscore.js`;
             const mapFile = `${tmpDir}/run-output-underscore.js.map`;
+            filesToCleanup.add(outputFile);
+            filesToCleanup.add(mapFile);
             const compressor = vi.fn().mockResolvedValue({
                 code: "minified",
                 map: '{"version":3}',
@@ -595,12 +612,11 @@ describe("Package: utils", () => {
             await run({ settings, content: "content" });
 
             expect(readFile(mapFile)).toBe('{"version":3}');
-            deleteFile(outputFile);
-            deleteFile(mapFile);
         });
 
         test("should not write source map if no url found", async () => {
             const outputFile = `${tmpDir}/run-output-nomap.js`;
+            filesToCleanup.add(outputFile);
             const compressor = vi.fn().mockResolvedValue({
                 code: "minified",
                 map: '{"version":3}',
@@ -617,7 +633,6 @@ describe("Package: utils", () => {
             await run({ settings, content: "content" });
 
             expect(readFile(outputFile)).toBe("minified");
-            deleteFile(outputFile);
         });
 
         test("should not write files in memory mode", async () => {
@@ -659,7 +674,7 @@ describe("Package: utils", () => {
             await run({ settings, content: "content" });
 
             expect(readFile(outputFile)).toBe("minified");
-            deleteFile(outputFile);
+            filesToCleanup.add(outputFile);
         });
     });
 
@@ -668,6 +683,7 @@ describe("Package: utils", () => {
 
         test("should write buffer output to file", async () => {
             const outputFile = `${tmpDir}/buffer-output.png`;
+            filesToCleanup.add(outputFile);
             const bufferContent = Buffer.from([0x89, 0x50, 0x4e, 0x47]); // PNG header
             const compressor = vi.fn().mockResolvedValue({
                 code: "",
@@ -685,7 +701,6 @@ describe("Package: utils", () => {
             const writtenContent = readFile(outputFile, true);
             expect(writtenContent).toBeInstanceOf(Buffer);
             expect(Buffer.isBuffer(writtenContent)).toBe(true);
-            deleteFile(outputFile);
         });
 
         test("should not write file in memory mode with buffer", async () => {
@@ -708,41 +723,11 @@ describe("Package: utils", () => {
     describe("run with multiple outputs (multi-format image conversion)", () => {
         const tmpDir = `${__dirname}/../../../tests/tmp`;
 
-        afterEach(() => {
-            const files = [
-                `${tmpDir}/multi-webp.png`,
-                `${tmpDir}/multi-avif.png`,
-                `${tmpDir}/multi-format.webp`,
-                `${tmpDir}/multi-format.avif`,
-                `${tmpDir}/test-webp.webp`,
-                `${tmpDir}/test-avif.avif`,
-                `${tmpDir}/source-image.png`,
-                `${tmpDir}/source-image.webp`,
-                `${tmpDir}/explicit-output.avif`,
-                `${tmpDir}/my-image.png`,
-                `${tmpDir}/my-image-converted.webp`,
-                `${tmpDir}/fallback-test.png`,
-                `${tmpDir}/fallback-test.webp`,
-                `${tmpDir}/extra-test.png`,
-                `${tmpDir}/first.webp`,
-                `${tmpDir}/extra-test.avif`,
-                `${tmpDir}/extra-test.jpeg`,
-                `${tmpDir}/no-format-output.out`,
-            ];
-            for (const file of files) {
-                try {
-                    if (existsSync(file)) {
-                        deleteFile(file);
-                    }
-                } catch {
-                    // Ignore errors during cleanup
-                }
-            }
-        });
-
         test("should write multiple output files from outputs array", async () => {
             const webpFile = `${tmpDir}/multi-webp.png`;
             const avifFile = `${tmpDir}/multi-avif.png`;
+            filesToCleanup.add(webpFile);
+            filesToCleanup.add(avifFile);
             const webpContent = Buffer.from("WEBP_CONTENT");
             const avifContent = Buffer.from("AVIF_CONTENT");
             const compressor = vi.fn().mockResolvedValue({
@@ -767,6 +752,9 @@ describe("Package: utils", () => {
 
         test("should auto-generate filenames with format extension using $1 pattern", async () => {
             const testFile = `${tmpDir}/test-image.png`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(`${tmpDir}/test-image.webp`);
+            filesToCleanup.add(`${tmpDir}/test-image.avif`);
             // Create a small file to use as input
             writeFile({ file: testFile, content: "test" });
             const webpContent = Buffer.from("WEBP_DATA");
@@ -797,6 +785,7 @@ describe("Package: utils", () => {
 
         test("should use format from output if provided", async () => {
             const outputFile = `${tmpDir}/multi-format.png`;
+            filesToCleanup.add(`${outputFile}.webp`);
             const webpContent = Buffer.from("WEBP_DATA");
             const compressor = vi.fn().mockResolvedValue({
                 code: "",
@@ -865,6 +854,9 @@ describe("Package: utils", () => {
 
         test("should handle mixed array with $1 and explicit paths", async () => {
             const testFile = `${tmpDir}/source-image.png`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(`${tmpDir}/source-image.webp`);
+            filesToCleanup.add(`${tmpDir}/explicit-output.avif`);
             writeFile({ file: testFile, content: "test" });
             const webpContent = Buffer.from("WEBP_MIXED");
             const avifContent = Buffer.from("AVIF_MIXED");
@@ -895,6 +887,8 @@ describe("Package: utils", () => {
 
         test("should handle $1 pattern in path (replace and append format)", async () => {
             const testFile = `${tmpDir}/my-image.png`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(`${tmpDir}/my-image-converted.webp`);
             writeFile({ file: testFile, content: "test" });
             const webpContent = Buffer.from("WEBP_PATTERN");
             const compressor = vi.fn().mockResolvedValue({
@@ -917,6 +911,8 @@ describe("Package: utils", () => {
 
         test("should handle empty string in output array (fallback to auto-generated)", async () => {
             const testFile = `${tmpDir}/fallback-test.png`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(`${tmpDir}/fallback-test.webp`);
             writeFile({ file: testFile, content: "test" });
             const webpContent = Buffer.from("WEBP_FALLBACK");
             const compressor = vi.fn().mockResolvedValue({
@@ -939,6 +935,10 @@ describe("Package: utils", () => {
 
         test("should handle more outputs than array items (fallback for extras)", async () => {
             const testFile = `${tmpDir}/extra-test.png`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(`${tmpDir}/first.webp`);
+            filesToCleanup.add(`${tmpDir}/extra-test.avif`);
+            filesToCleanup.add(`${tmpDir}/extra-test.jpeg`);
             writeFile({ file: testFile, content: "test" });
             const webpContent = Buffer.from("WEBP_EXTRA");
             const avifContent = Buffer.from("AVIF_EXTRA");
@@ -999,17 +999,20 @@ describe("Package: utils", () => {
                 input: [],
                 output: `${tmpDir}/default-output`,
             } as any;
+            filesToCleanup.add(`${tmpDir}/default-output.webp`);
 
             await run({ settings, content: "" });
 
             expect(readFile(`${tmpDir}/default-output.webp`, true)).toEqual(
                 webpContent
             );
-            deleteFile(`${tmpDir}/default-output.webp`);
         });
 
         test("should handle fallback when output array has undefined item", async () => {
             const testFile = `${tmpDir}/fallback-undef-test.png`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(`${tmpDir}/fallback-undef-test.webp`);
+            filesToCleanup.add(`${tmpDir}/fallback-undef-test.avif`);
             writeFile({ file: testFile, content: "test" });
             const webpContent = Buffer.from("WEBP_FALLBACK_UNDEF");
             const avifContent = Buffer.from("AVIF_FALLBACK_UNDEF");
@@ -1037,9 +1040,6 @@ describe("Package: utils", () => {
             expect(
                 readFile(`${tmpDir}/fallback-undef-test.avif`, true)
             ).toEqual(avifContent);
-            deleteFile(testFile);
-            deleteFile(`${tmpDir}/fallback-undef-test.webp`);
-            deleteFile(`${tmpDir}/fallback-undef-test.avif`);
         });
 
         test("should use 'output' as default in $1 pattern when input basename is empty", async () => {
@@ -1053,13 +1053,13 @@ describe("Package: utils", () => {
                 input: "",
                 output: `${tmpDir}/$1-converted`,
             } as any;
+            filesToCleanup.add(`${tmpDir}/output-converted.webp`);
 
             await run({ settings, content: "" });
 
             expect(readFile(`${tmpDir}/output-converted.webp`, true)).toEqual(
                 webpContent
             );
-            deleteFile(`${tmpDir}/output-converted.webp`);
         });
     });
 
@@ -1126,6 +1126,8 @@ describe("Package: utils", () => {
         test("should allow uniform image array in input array", async () => {
             const testFile1 = `${tmpDir}/image1.png`;
             const testFile2 = `${tmpDir}/image2.png`;
+            filesToCleanup.add(testFile1);
+            filesToCleanup.add(testFile2);
             writeFile({ file: testFile1, content: "image1" });
             writeFile({ file: testFile2, content: "image2" });
 
@@ -1142,9 +1144,6 @@ describe("Package: utils", () => {
                     content: [Buffer.from("image1"), Buffer.from("image2")],
                 })
             );
-
-            deleteFile(testFile1);
-            deleteFile(testFile2);
         });
     });
 });
