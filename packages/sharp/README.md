@@ -59,7 +59,7 @@ await minify({
 | `formats` | `Array<'webp' \| 'avif'>` | - | Multiple output formats |
 | `quality` | `number` | `80` | Quality setting (1-100) |
 | `lossless` | `boolean` | `false` | Use lossless compression |
-| `effort` | `number` | `6` | Compression effort (0-10) |
+| `effort` | `number` | `4` | CPU effort/compression level (0-9 for AVIF/PNG, 0-6 for WebP) |
 
 ## Documentation
 
