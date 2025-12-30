@@ -16,7 +16,7 @@
   "license": "MIT",
   "type": "module",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.3.0"
   },
   "directories": {
     "lib": "dist",
@@ -57,7 +57,7 @@
   "dependencies": {
     "@node-minify/core": "workspace:*",
     "@node-minify/utils": "workspace:*",
-    "sharp": "^0.33.0"
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*"
