@@ -42,13 +42,13 @@ export async function gcc({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const options = applyOptions({}, settings?.options ?? {});
-
     if (Array.isArray(content)) {
         throw new Error(
             "google-closure-compiler compressor does not support array content"
         );
     }
+
+    const options = applyOptions({}, settings?.options ?? {});
 
     const contentStr =
         content instanceof Buffer

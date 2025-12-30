@@ -11,11 +11,11 @@ export async function swc({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const options = settings?.options ?? {};
-
     if (Array.isArray(content)) {
         throw new Error("swc compressor does not support array content");
     }
+
+    const options = settings?.options ?? {};
 
     const contentStr =
         content instanceof Buffer

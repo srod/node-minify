@@ -36,6 +36,12 @@ export async function babelMinify({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    if (Array.isArray(content)) {
+        throw new Error(
+            "babel-minify compressor does not support array content"
+        );
+    }
+
     warnDeprecation(
         "babel-minify",
         "babel-minify uses Babel 6 which is no longer maintained. " +
@@ -66,12 +72,6 @@ export async function babelMinify({
     // Ensure minify preset is always included
     if (!babelOptions.presets.includes(minify)) {
         babelOptions.presets = babelOptions.presets.concat([minify]);
-    }
-
-    if (Array.isArray(content)) {
-        throw new Error(
-            "babel-minify compressor does not support array content"
-        );
     }
 
     const contentStr =

@@ -17,15 +17,15 @@ export async function cleanCss({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    if (Array.isArray(content)) {
+        throw new Error("clean-css compressor does not support array content");
+    }
+
     const options = settings?.options ? { ...settings.options } : {};
 
     if (options.sourceMap && typeof options.sourceMap === "object") {
         options._sourceMap = options.sourceMap;
         options.sourceMap = true;
-    }
-
-    if (Array.isArray(content)) {
-        throw new Error("clean-css compressor does not support array content");
     }
 
     const contentStr =
