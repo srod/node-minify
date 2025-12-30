@@ -48,20 +48,29 @@ export async function compress(settings: Settings): Promise<string> {
 
 /**
  * Compress an array of files.
+ * Files are processed in parallel since each input/output pair is independent.
  * @param settings Settings
  */
 async function compressArrayOfFiles(settings: Settings): Promise<string> {
-    let result = "";
-    if (Array.isArray(settings.input)) {
-        for (let index = 0; index < settings.input.length; index++) {
-            const input = settings.input[index];
-            if (input) {
-                const content = getContentFromFiles(input);
-                result = await run({ settings, content, index });
-            }
+    const inputs = settings.input as string[];
+
+    inputs.forEach((input, index) => {
+        if (!input || typeof input !== "string") {
+            throw new Error(
+                `Invalid input at index ${index}: expected non-empty string, got ${
+                    typeof input === "string" ? "empty string" : typeof input
+                }`
+            );
         }
-    }
-    return result;
+    });
+
+    const compressionTasks = inputs.map((input, index) => {
+        const content = getContentFromFiles(input);
+        return run({ settings, content, index });
+    });
+
+    const results = await Promise.all(compressionTasks);
+    return results[results.length - 1] ?? "";
 }
 
 /**
