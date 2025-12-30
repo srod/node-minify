@@ -1,4 +1,5 @@
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 
 const defaultOptions = {
     collapseBooleanAttributes: true,
@@ -20,19 +21,11 @@ export async function htmlMinifier({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (Array.isArray(content)) {
-        throw new Error(
-            "html-minifier compressor does not support array content"
-        );
-    }
+    const contentStr = ensureStringContent(content, "html-minifier");
 
     const { minify } = await import("html-minifier-next");
     const options = { ...defaultOptions, ...settings?.options };
 
-    const contentStr =
-        content instanceof Buffer
-            ? content.toString()
-            : ((content ?? "") as string);
     const code = await minify(contentStr, options);
 
     return { code };

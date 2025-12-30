@@ -5,6 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 import { minify } from "csso";
 
 /**
@@ -17,14 +18,8 @@ export async function csso({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (Array.isArray(content)) {
-        throw new Error("csso compressor does not support array content");
-    }
+    const contentStr = ensureStringContent(content, "csso");
 
-    const contentStr =
-        content instanceof Buffer
-            ? content.toString()
-            : ((content ?? "") as string);
     const result = await minify(contentStr, settings?.options);
 
     return { code: result.css };

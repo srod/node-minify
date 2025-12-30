@@ -5,23 +5,20 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 import { transform } from "lightningcss";
 
 export async function lightningCss({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (Array.isArray(content)) {
-        throw new Error(
-            "lightningcss compressor does not support array content"
-        );
-    }
+    const contentStr = ensureStringContent(content, "lightningcss");
 
     const options = settings?.options ?? {};
 
     const result = transform({
         filename: "input.css",
-        code: Buffer.from(content ?? ""),
+        code: Buffer.from(contentStr),
         minify: true,
         sourceMap: !!options.sourceMap,
         ...options,

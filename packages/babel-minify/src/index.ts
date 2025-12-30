@@ -5,7 +5,11 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { readFile, warnDeprecation } from "@node-minify/utils";
+import {
+    ensureStringContent,
+    readFile,
+    warnDeprecation,
+} from "@node-minify/utils";
 import { transform } from "babel-core";
 import env from "babel-preset-env";
 import minify from "babel-preset-minify";
@@ -36,11 +40,7 @@ export async function babelMinify({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (Array.isArray(content)) {
-        throw new Error(
-            "babel-minify compressor does not support array content"
-        );
-    }
+    const contentStr = ensureStringContent(content, "babel-minify");
 
     warnDeprecation(
         "babel-minify",
@@ -74,8 +74,6 @@ export async function babelMinify({
         babelOptions.presets = babelOptions.presets.concat([minify]);
     }
 
-    const contentStr =
-        content instanceof Buffer ? content.toString() : String(content ?? "");
     const result = transform(contentStr, babelOptions);
 
     if (typeof result.code !== "string") {

@@ -5,22 +5,16 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 import { minify as oxcMinify } from "oxc-minify";
 
 export async function oxc({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (Array.isArray(content)) {
-        throw new Error("oxc compressor does not support array content");
-    }
+    const contentStr = ensureStringContent(content, "oxc");
 
     const options = settings?.options ?? {};
-
-    const contentStr =
-        content instanceof Buffer
-            ? content.toString()
-            : ((content ?? "") as string);
 
     const result = await oxcMinify("input.js", contentStr, {
         sourcemap: !!options.sourceMap,

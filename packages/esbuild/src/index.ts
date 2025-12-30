@@ -5,15 +5,14 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 import { transform } from "esbuild";
 
 export async function esbuild({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (Array.isArray(content)) {
-        throw new Error("esbuild compressor does not support array content");
-    }
+    const contentStr = ensureStringContent(content, "esbuild");
 
     if (
         !settings?.type ||
@@ -24,11 +23,6 @@ export async function esbuild({
 
     const loader = settings.type === "css" ? "css" : "js";
     const { sourceMap, ...restOptions } = settings?.options ?? {};
-
-    const contentStr =
-        content instanceof Buffer
-            ? content.toString()
-            : ((content ?? "") as string);
 
     const result = await transform(contentStr, {
         loader,
