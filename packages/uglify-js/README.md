@@ -4,10 +4,10 @@
 
 <p align="center">
   <br>
-  <a href="https://npmjs.org/package/@node-minify/uglify-js"><img src="https://img.shields.io/npm/v/@node-minify/uglify-js.svg"></a>
-  <a href="https://npmjs.org/package/@node-minify/uglify-js"><img src="https://img.shields.io/npm/dm/@node-minify/uglify-js.svg"></a>
+  <a href="https://npmjs.org/package/@node-minify/uglify-js"><img src="https://img.shields.io/npm/v/@node-minify/uglify-js.svg" alt="npm version"></a>
+  <a href="https://npmjs.org/package/@node-minify/uglify-js"><img src="https://img.shields.io/npm/dm/@node-minify/uglify-js.svg" alt="npm downloads"></a>
   <a href="https://github.com/srod/node-minify/actions"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fsrod%2Fnode-minify%2Fbadge%3Fref%3Dmain&style=flat" /></a>
-  <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/main/graph/badge.svg"></a>
+  <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/main/graph/badge.svg" alt="code coverage"></a>
 </p>
 
 # uglify-js
