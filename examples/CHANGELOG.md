@@ -1,30 +1,5 @@
 # @node-minify/examples
 
-## 10.1.1
-
-### Patch Changes
-
-- Updated dependencies [eb785b0]
-  - @node-minify/babel-minify@10.1.1
-  - @node-minify/clean-css@10.1.1
-  - @node-minify/core@10.1.1
-  - @node-minify/crass@10.1.1
-  - @node-minify/cssnano@10.1.1
-  - @node-minify/csso@10.1.1
-  - @node-minify/esbuild@10.1.1
-  - @node-minify/google-closure-compiler@10.1.1
-  - @node-minify/html-minifier@10.1.1
-  - @node-minify/jsonminify@10.1.1
-  - @node-minify/lightningcss@10.1.1
-  - @node-minify/no-compress@10.1.1
-  - @node-minify/oxc@10.1.1
-  - @node-minify/sqwish@10.1.1
-  - @node-minify/swc@10.1.1
-  - @node-minify/terser@10.1.1
-  - @node-minify/uglify-es@10.1.1
-  - @node-minify/uglify-js@10.1.1
-  - @node-minify/yui@10.1.1
-
 ## 10.1.0
 
 ### Patch Changes

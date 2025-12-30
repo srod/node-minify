@@ -1,9 +1,9 @@
-import fs from "node:fs";
-import path from "node:path";
-import type { Settings } from "@node-minify/types";
-import { afterAll, describe, expect, test } from "vitest";
-import { noCompress } from "../../no-compress/src/index.ts";
+import { describe, expect, test, vi, afterAll } from "vitest";
 import { compress } from "../src/compress.ts";
+import { noCompress } from "../../no-compress/src/index.ts";
+import type { Settings } from "@node-minify/types";
+import path from "path";
+import fs from "fs";
 
 describe("compress async", () => {
     const tempDir = path.join(__dirname, "temp_async");
@@ -31,7 +31,7 @@ describe("compress async", () => {
         // This is tricky because input type is string[], so null is not allowed by TS.
         // But runtime might pass it.
         // Also the code checks `if (input)`.
-        const _settings: Settings = {
+        const settings: Settings = {
             compressor: noCompress,
             input: ["", "file.js"], // Empty string is falsy
             output: ["out1.js", "out2.js"],
