@@ -7,7 +7,15 @@
 import childProcess from "node:child_process";
 import { statSync } from "node:fs";
 import type { Compressor, Settings } from "@node-minify/types";
-import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
+import {
+    afterAll,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    test,
+    vi,
+} from "vitest";
 
 vi.mock("node:fs", async (importOriginal) => {
     const actual = await importOriginal<typeof import("node:fs")>();
@@ -372,6 +380,53 @@ describe("Package: core", async () => {
 
             const min = await minify(settings);
             expect(min).toBeDefined();
+        });
+    });
+
+    describe("parallel array processing", () => {
+        beforeEach(() => {
+            vi.restoreAllMocks();
+        });
+
+        test("should compress multiple files in parallel with array input/output", async () => {
+            const outputFile1 = `${__dirname}/../../../tests/tmp/parallel-1.js`;
+            const outputFile2 = `${__dirname}/../../../tests/tmp/parallel-2.js`;
+            const settings: Settings = {
+                compressor: noCompress,
+                input: filesJS.filesArray,
+                output: [outputFile1, outputFile2],
+            };
+
+            const min = await minify(settings);
+            expect(min).toBeDefined();
+
+            const fs = await import("node:fs");
+            expect(fs.existsSync(outputFile1)).toBe(true);
+            expect(fs.existsSync(outputFile2)).toBe(true);
+        });
+
+        test("should throw error when input/output array lengths mismatch", async () => {
+            const settings: Settings = {
+                compressor: noCompress,
+                input: filesJS.filesArray,
+                output: [`${__dirname}/../../../tests/tmp/single-output.js`],
+            };
+
+            await expect(minify(settings)).rejects.toThrow(
+                "Input and output arrays must have the same length"
+            );
+        });
+
+        test("should throw error when output is array but input is not", async () => {
+            const settings: Settings = {
+                compressor: noCompress,
+                input: filesJS.oneFile,
+                output: [`${__dirname}/../../../tests/tmp/output.js`],
+            };
+
+            await expect(minify(settings)).rejects.toThrow(
+                "When output is an array, input must also be an array"
+            );
         });
     });
 });
