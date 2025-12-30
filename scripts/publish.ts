@@ -64,11 +64,12 @@ function buildVersionMap(): Map<string, string> {
 /**
  * Replace `workspace:` dependency specifiers with concrete versions from the provided map.
  *
- * Resolves any dependency versions that start with `workspace:` by looking up the package name in `versionMap`. If a package name is not found, the original `workspace:` specifier is retained and a warning is logged.
+ * Resolves any dependency versions that start with `workspace:` by looking up the package name in `versionMap`. If a package name is not found, throws an error to prevent publishing packages with unresolved workspace references.
  *
  * @param deps - The dependency map to resolve (may be `dependencies`, `devDependencies`, `peerDependencies`, or `optionalDependencies`); may be `undefined`.
  * @param versionMap - A mapping from package name to concrete version string used to replace `workspace:` specifiers.
- * @returns The resolved dependency map with workspace references replaced when possible, or `undefined` if `deps` was `undefined`.
+ * @returns The resolved dependency map with all workspace references replaced, or `undefined` if `deps` was `undefined`.
+ * @throws {Error} When a workspace reference cannot be resolved to a concrete version.
  */
 function resolveDependencies(
     deps: Record<string, string> | undefined,
@@ -155,7 +156,10 @@ function main() {
 
     console.log("\nCreating git tags...");
     try {
-        execSync("changeset tag", { stdio: "inherit" });
+        execSync("changeset tag", {
+            cwd: join(__dirname, ".."),
+            stdio: "inherit",
+        });
     } catch (err) {
         if (err instanceof Error) {
             console.log("Failed to create tags (may already exist)");
