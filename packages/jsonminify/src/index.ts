@@ -5,6 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 import jsonminify from "jsonminify";
 
 /**
@@ -15,7 +16,9 @@ import jsonminify from "jsonminify";
 export async function jsonMinify({
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const code = jsonminify(content ?? "");
+    const contentStr = ensureStringContent(content, "jsonminify");
+
+    const code = jsonminify(contentStr);
 
     return { code };
 }

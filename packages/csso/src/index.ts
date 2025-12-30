@@ -5,6 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 import { minify } from "csso";
 
 /**
@@ -17,7 +18,9 @@ export async function csso({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const result = await minify(content ?? "", settings?.options);
+    const contentStr = ensureStringContent(content, "csso");
+
+    const result = await minify(contentStr, settings?.options);
 
     return { code: result.css };
 }

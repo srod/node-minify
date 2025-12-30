@@ -54,12 +54,17 @@ async function runOne(cli: SettingsWithCompressor): Promise<Result> {
         );
     }
 
+    if ("cssOnly" in minifierDefinition && cli.type && cli.type !== "css") {
+        throw new Error(`${cli.compressor} only supports type 'css'`);
+    }
+
     // Prepare settings
     const settings: Settings = {
         compressorLabel: cli.compressor,
         compressor: minifierImplementation,
         input: typeof cli.input === "string" ? cli.input.split(",") : cli.input,
         output: cli.output,
+        ...(cli.type && { type: cli.type }),
         ...(cli.option && { options: JSON.parse(cli.option) }),
     };
 

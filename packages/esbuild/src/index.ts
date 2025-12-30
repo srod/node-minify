@@ -5,12 +5,15 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 import { transform } from "esbuild";
 
 export async function esbuild({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    const contentStr = ensureStringContent(content, "esbuild");
+
     if (
         !settings?.type ||
         (settings.type !== "js" && settings.type !== "css")
@@ -21,7 +24,7 @@ export async function esbuild({
     const loader = settings.type === "css" ? "css" : "js";
     const { sourceMap, ...restOptions } = settings?.options ?? {};
 
-    const result = await transform(content ?? "", {
+    const result = await transform(contentStr, {
         loader,
         minify: true,
         sourcemap: !!sourceMap,

@@ -1,0 +1,63 @@
+{
+    "name": "@node-minify/svgo",
+    "version": "10.0.0",
+    "description": "SVGO plugin for @node-minify - Optimize SVG files",
+    "keywords": [
+        "compressor",
+        "minify",
+        "minifier",
+        "svgo",
+        "svg",
+        "optimize"
+    ],
+    "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
+    "homepage": "https://github.com/srod/node-minify/tree/main/packages/svgo#readme",
+    "license": "MIT",
+    "type": "module",
+    "engines": {
+        "node": ">=20.0.0"
+    },
+    "directories": {
+        "lib": "dist",
+        "test": "__tests__"
+    },
+    "types": "./dist/index.d.ts",
+    "main": "./dist/index.js",
+    "exports": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+    },
+    "sideEffects": false,
+    "files": [
+        "dist/**/*"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/srod/node-minify.git"
+    },
+    "bugs": {
+        "url": "https://github.com/srod/node-minify/issues"
+    },
+    "scripts": {
+        "build": "tsdown src/index.ts",
+        "check-exports": "attw --pack . --profile esm-only",
+        "format:check": "biome check .",
+        "lint": "biome lint .",
+        "prepublishOnly": "bun run build",
+        "test": "vitest run",
+        "test:coverage": "vitest run --coverage",
+        "test:watch": "vitest",
+        "typecheck": "tsc --noEmit",
+        "dev": "tsdown src/index.ts --watch"
+    },
+    "dependencies": {
+        "@node-minify/utils": "workspace:*",
+        "svgo": "^4.0.0"
+    },
+    "devDependencies": {
+        "@node-minify/types": "workspace:*"
+    }
+}

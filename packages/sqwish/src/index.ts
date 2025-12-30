@@ -5,7 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { warnDeprecation } from "@node-minify/utils";
+import { ensureStringContent, warnDeprecation } from "@node-minify/utils";
 import minify from "sqwish";
 
 /**
@@ -19,6 +19,8 @@ export async function sqwish({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    const contentStr = ensureStringContent(content, "sqwish");
+
     warnDeprecation(
         "sqwish",
         "sqwish is no longer maintained. " +
@@ -26,7 +28,8 @@ export async function sqwish({
     );
 
     const strict = settings?.options?.strict as boolean | undefined;
-    const code = minify.minify(content, strict);
+
+    const code = minify.minify(contentStr, strict);
 
     return { code };
 }

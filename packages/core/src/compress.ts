@@ -8,7 +8,11 @@
  * Module dependencies.
  */
 import fs from "node:fs";
-import type { Settings } from "@node-minify/types";
+import type {
+    CompressorOptions,
+    MinifierOptions,
+    Settings,
+} from "@node-minify/types";
 import {
     compressSingleFile,
     getContentFromFiles,
@@ -20,7 +24,9 @@ import { mkdirp } from "mkdirp";
  * Run compressor.
  * @param settings Settings
  */
-export async function compress(settings: Settings): Promise<string> {
+export async function compress<T extends CompressorOptions = CompressorOptions>(
+    settings: Settings<T>
+): Promise<string> {
     if (Array.isArray(settings.output)) {
         if (!Array.isArray(settings.input)) {
             throw new Error(
@@ -43,7 +49,7 @@ export async function compress(settings: Settings): Promise<string> {
         return compressArrayOfFiles(settings);
     }
 
-    return compressSingleFile(settings);
+    return compressSingleFile(settings as Settings);
 }
 
 /**
@@ -51,7 +57,9 @@ export async function compress(settings: Settings): Promise<string> {
  * Files are processed in parallel since each input/output pair is independent.
  * @param settings Settings
  */
-async function compressArrayOfFiles(settings: Settings): Promise<string> {
+async function compressArrayOfFiles<
+    T extends CompressorOptions = CompressorOptions,
+>(settings: Settings<T>): Promise<string> {
     const inputs = settings.input as string[];
 
     inputs.forEach((input, index) => {
@@ -66,7 +74,7 @@ async function compressArrayOfFiles(settings: Settings): Promise<string> {
 
     const compressionTasks = inputs.map((input, index) => {
         const content = getContentFromFiles(input);
-        return run({ settings, content, index });
+        return run({ settings, content, index } as MinifierOptions<T>);
     });
 
     const results = await Promise.all(compressionTasks);

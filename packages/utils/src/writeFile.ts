@@ -55,7 +55,11 @@ export function writeFile({
             throw new Error("Target path exists and is a directory");
         }
 
-        writeFileSync(targetFile, content, "utf8");
+        writeFileSync(
+            targetFile,
+            content,
+            Buffer.isBuffer(content) ? undefined : "utf8"
+        );
         return content;
     } catch (error) {
         if (error instanceof ValidationError) {

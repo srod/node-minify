@@ -5,6 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 import { minify } from "terser";
 
 /**
@@ -17,7 +18,9 @@ export async function terser({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const result = await minify(content ?? "", settings?.options);
+    const contentStr = ensureStringContent(content, "terser");
+
+    const result = await minify(contentStr, settings?.options);
 
     if (typeof result.code !== "string") {
         throw new Error("Terser failed: empty result");

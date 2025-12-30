@@ -61,4 +61,15 @@ describe("Package: lightningcss", async () => {
             return expect(err).not.toBeNull();
         }
     });
+
+    test("should throw an error for array content", async () => {
+        await expect(
+            lightningCss({
+                settings: {} as Settings,
+                content: [Buffer.from("a"), Buffer.from("b")],
+            })
+        ).rejects.toThrow(
+            "lightningcss compressor does not support array content"
+        );
+    });
 });

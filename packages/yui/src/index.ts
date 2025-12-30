@@ -10,6 +10,7 @@ import { runCommandLine } from "@node-minify/run";
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import {
     buildArgs,
+    ensureStringContent,
     toBuildArgsOptions,
     warnDeprecation,
 } from "@node-minify/utils";
@@ -28,6 +29,8 @@ export async function yui({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    const contentStr = ensureStringContent(content, "yui");
+
     warnDeprecation(
         "yui",
         "YUI Compressor was deprecated by Yahoo in 2013. " +
@@ -43,7 +46,7 @@ export async function yui({
 
     const result = await runCommandLine({
         args: yuiCommand(settings.type, settings?.options ?? {}),
-        data: content as string,
+        data: contentStr,
     });
 
     if (typeof result !== "string") {

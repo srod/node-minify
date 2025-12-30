@@ -5,7 +5,11 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { readFile, warnDeprecation } from "@node-minify/utils";
+import {
+    ensureStringContent,
+    readFile,
+    warnDeprecation,
+} from "@node-minify/utils";
 import { transform } from "babel-core";
 import env from "babel-preset-env";
 import minify from "babel-preset-minify";
@@ -36,6 +40,8 @@ export async function babelMinify({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    const contentStr = ensureStringContent(content, "babel-minify");
+
     warnDeprecation(
         "babel-minify",
         "babel-minify uses Babel 6 which is no longer maintained. " +
@@ -68,7 +74,7 @@ export async function babelMinify({
         babelOptions.presets = babelOptions.presets.concat([minify]);
     }
 
-    const result = transform(content ?? "", babelOptions);
+    const result = transform(contentStr, babelOptions);
 
     if (typeof result.code !== "string") {
         throw new Error("Babel minification failed: empty result");

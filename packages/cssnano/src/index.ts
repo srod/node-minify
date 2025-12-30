@@ -5,6 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 import minify from "cssnano";
 import postcss from "postcss";
 
@@ -16,7 +17,9 @@ import postcss from "postcss";
 export async function cssnano({
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const result = await postcss([minify]).process(content || "", {
+    const contentStr = ensureStringContent(content, "cssnano");
+
+    const result = await postcss([minify]).process(contentStr, {
         from: undefined,
     });
 

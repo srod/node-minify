@@ -6,7 +6,11 @@
 
 import { runCommandLine } from "@node-minify/run";
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { buildArgs, toBuildArgsOptions } from "@node-minify/utils";
+import {
+    buildArgs,
+    ensureStringContent,
+    toBuildArgsOptions,
+} from "@node-minify/utils";
 import compilerPath from "google-closure-compiler-java";
 
 // the allowed flags, taken from https://github.com/google/closure-compiler/wiki/Flags-and-Options
@@ -42,11 +46,13 @@ export async function gcc({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    const contentStr = ensureStringContent(content, "google-closure-compiler");
+
     const options = applyOptions({}, settings?.options ?? {});
 
     const result = await runCommandLine({
         args: gccCommand(options),
-        data: content as string,
+        data: contentStr,
     });
 
     if (typeof result !== "string") {

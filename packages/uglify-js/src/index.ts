@@ -5,6 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 import uglifyJS from "uglify-js";
 
 /**
@@ -17,7 +18,9 @@ export async function uglifyJs({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    const result = uglifyJS.minify(content ?? "", settings?.options);
+    const contentStr = ensureStringContent(content, "uglify-js");
+
+    const result = uglifyJS.minify(contentStr, settings?.options);
 
     if (result.error) {
         throw result.error;

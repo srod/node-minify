@@ -20,15 +20,26 @@ describe("Package: no-compress", async () => {
         await runOneTest({ options, compressorLabel, compressor });
     }
 
-    test("should throw when content is undefined", async () => {
+    test("should return empty string when content is undefined", async () => {
         await expect(
             noCompress({ settings: {} as any, content: undefined })
-        ).rejects.toThrow("no-compress failed: empty result");
+        ).resolves.toEqual({ code: "" });
     });
 
     test("should throw when content is not a string", async () => {
         await expect(
             noCompress({ settings: {} as any, content: 123 as any })
-        ).rejects.toThrow("no-compress failed: empty result");
+        ).rejects.toThrow(
+            "no-compress failed: content must be a string or Buffer but received number"
+        );
+    });
+
+    test("should handle Buffer content", async () => {
+        const buffer = Buffer.from("buffer content");
+        const result = await noCompress({
+            settings: {} as any,
+            content: buffer,
+        });
+        expect(result.code).toBe("buffer content");
     });
 });

@@ -14,9 +14,19 @@ import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 export async function noCompress({
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (typeof content !== "string") {
-        throw new Error("no-compress failed: empty result");
+    if (content instanceof Buffer) {
+        return { code: content.toString() };
     }
 
-    return { code: content };
+    if (typeof content === "string") {
+        return { code: content };
+    }
+
+    if (content === undefined) {
+        return { code: "" };
+    }
+
+    throw new Error(
+        `no-compress failed: content must be a string or Buffer but received ${typeof content}`
+    );
 }
