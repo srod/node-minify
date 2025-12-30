@@ -20,6 +20,10 @@ import { FileOperationError } from "./error.ts";
  * // Read as Buffer (for binary files like images)
  * const buffer = readFile('image.png', true);
  */
+export function readFile(file: string): string;
+export function readFile(file: string, asBuffer: true): Buffer;
+export function readFile(file: string, asBuffer: false): string;
+export function readFile(file: string, asBuffer?: boolean): string | Buffer;
 export function readFile(file: string, asBuffer?: boolean): string | Buffer {
     try {
         if (!existsSync(file)) {
