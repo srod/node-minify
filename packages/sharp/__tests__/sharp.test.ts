@@ -112,8 +112,23 @@ describe("sharp", () => {
 
     test("should clamp quality and effort", async () => {
         const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+        const { default: mockSharp } = await import("sharp");
 
-        const result = await sharp({
+        const webpMock = vi.fn().mockReturnThis();
+        const avifMock = vi.fn().mockReturnThis();
+        const pngMock = vi.fn().mockReturnThis();
+        const jpegMock = vi.fn().mockReturnThis();
+
+        // @ts-expect-error
+        mockSharp.mockImplementation(() => ({
+            webp: webpMock,
+            avif: avifMock,
+            png: pngMock,
+            jpeg: jpegMock,
+            toBuffer: vi.fn().mockResolvedValue(Buffer.from("converted")),
+        }));
+
+        await sharp({
             settings: {
                 compressor: sharp,
                 options: {
@@ -125,9 +140,11 @@ describe("sharp", () => {
             content: inputBuffer,
         });
 
-        expect(result.buffer).toBeInstanceOf(Buffer);
+        expect(webpMock).toHaveBeenCalledWith(
+            expect.objectContaining({ quality: 100, effort: 6 })
+        );
 
-        const result2 = await sharp({
+        await sharp({
             settings: {
                 compressor: sharp,
                 options: {
@@ -139,9 +156,11 @@ describe("sharp", () => {
             content: inputBuffer,
         });
 
-        expect(result2.buffer).toBeInstanceOf(Buffer);
+        expect(avifMock).toHaveBeenCalledWith(
+            expect.objectContaining({ quality: 1, effort: 0 })
+        );
 
-        const result3 = await sharp({
+        await sharp({
             settings: {
                 compressor: sharp,
                 options: {
@@ -152,9 +171,11 @@ describe("sharp", () => {
             content: inputBuffer,
         });
 
-        expect(result3.buffer).toBeInstanceOf(Buffer);
+        expect(pngMock).toHaveBeenCalledWith(
+            expect.objectContaining({ compressionLevel: 9 })
+        );
 
-        const result4 = await sharp({
+        await sharp({
             settings: {
                 compressor: sharp,
                 options: {
@@ -165,14 +186,16 @@ describe("sharp", () => {
             content: inputBuffer,
         });
 
-        expect(result4.buffer).toBeInstanceOf(Buffer);
+        expect(jpegMock).toHaveBeenCalledWith(
+            expect.objectContaining({ quality: 100 })
+        );
     });
 
     test("should use compressionLevel for PNG when provided", async () => {
         const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
         const { default: mockSharp } = await import("sharp");
         const pngMock = vi.fn().mockReturnThis();
-        // @ts-ignore
+        // @ts-expect-error
         mockSharp.mockImplementationOnce(() => ({
             png: pngMock,
             toBuffer: vi.fn().mockResolvedValue(Buffer.from("converted")),
@@ -197,7 +220,7 @@ describe("sharp", () => {
     test("should wrap and rethrow sharp errors", async () => {
         const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
         const { default: mockSharp } = await import("sharp");
-        // @ts-ignore
+        // @ts-expect-error
         mockSharp.mockImplementationOnce(() => ({
             webp: vi.fn().mockImplementation(() => {
                 throw new Error("Sharp error");
