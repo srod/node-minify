@@ -10,7 +10,7 @@ import type {
     MinifierOptions,
     Settings,
 } from "@node-minify/types";
-import { getContentFromFiles } from "./getContentFromFiles.ts";
+import { getContentFromFilesAsync } from "./getContentFromFiles.ts";
 import { run } from "./run.ts";
 
 const IMAGE_EXTENSIONS = new Set([
@@ -40,7 +40,7 @@ function isImageFile(filePath: string): boolean {
 export async function compressSingleFile<
     T extends CompressorOptions = CompressorOptions,
 >(settings: Settings<T>): Promise<string> {
-    const content = determineContent(settings);
+    const content = await determineContent(settings);
     return run({ settings, content } as MinifierOptions<T>);
 }
 
@@ -49,9 +49,9 @@ export async function compressSingleFile<
  * @param settings - Minification settings
  * @returns Content to minify (string for text files, Buffer for single image, Buffer[] for multiple images)
  */
-function determineContent<T extends CompressorOptions = CompressorOptions>(
-    settings: Settings<T>
-): string | Buffer | Buffer[] {
+async function determineContent<
+    T extends CompressorOptions = CompressorOptions,
+>(settings: Settings<T>): Promise<string | Buffer | Buffer[]> {
     if (settings.content) {
         return settings.content;
     }
@@ -77,7 +77,7 @@ function determineContent<T extends CompressorOptions = CompressorOptions>(
     }
 
     if (settings.input) {
-        return getContentFromFiles(settings.input);
+        return await getContentFromFilesAsync(settings.input);
     }
 
     return "";
