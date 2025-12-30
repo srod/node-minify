@@ -83,10 +83,9 @@ function resolveDependencies(
             if (actualVersion) {
                 resolved[name] = actualVersion;
             } else {
-                console.warn(
-                    `Warning: Could not resolve workspace reference for ${name}`
+                throw new Error(
+                    `Cannot resolve workspace:* reference for ${name}. Package not found in version map.`
                 );
-                resolved[name] = version;
             }
         } else {
             resolved[name] = version;
