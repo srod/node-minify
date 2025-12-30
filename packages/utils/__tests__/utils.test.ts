@@ -988,6 +988,32 @@ describe("Package: utils", () => {
             );
         });
 
+        test("should skip undefined elements in sparse outputs array", async () => {
+            const testFile = `${tmpDir}/sparse-test.png`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(`${tmpDir}/sparse-test.avif`);
+            writeFile({ file: testFile, content: "test" });
+            const avifContent = Buffer.from("AVIF_SPARSE");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [
+                    undefined,
+                    { format: "avif", content: avifContent },
+                ] as any,
+            });
+            const settings = {
+                compressor,
+                input: testFile,
+                output: "$1",
+            } as any;
+
+            await run({ settings, content: "" });
+
+            expect(readFile(`${tmpDir}/sparse-test.avif`, true)).toEqual(
+                avifContent
+            );
+        });
+
         test("should use 'output' as default basename when input has no name", async () => {
             const webpContent = Buffer.from("WEBP_NO_INPUT");
             const compressor = vi.fn().mockResolvedValue({
@@ -1142,6 +1168,26 @@ describe("Package: utils", () => {
             expect(compressor).toHaveBeenCalledWith(
                 expect.objectContaining({
                     content: [Buffer.from("image1"), Buffer.from("image2")],
+                })
+            );
+        });
+
+        test("should read single image file as Buffer", async () => {
+            const testFile = `${tmpDir}/single-image.png`;
+            filesToCleanup.add(testFile);
+            writeFile({ file: testFile, content: "image-data" });
+
+            const compressor = vi.fn().mockResolvedValue({ code: "minified" });
+            const settings = {
+                compressor,
+                input: testFile,
+                output: `${tmpDir}/output.png`,
+            } as any;
+
+            await compressSingleFile(settings);
+            expect(compressor).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    content: Buffer.from("image-data"),
                 })
             );
         });
