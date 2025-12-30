@@ -24,7 +24,6 @@ const IMAGE_EXTENSIONS = new Set([
     ".tif",
     ".heif",
     ".heic",
-    ".svg",
 ]);
 
 function isImageFile(filePath: string): boolean {
