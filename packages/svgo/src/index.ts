@@ -73,16 +73,23 @@ export async function svgo({
     settings,
     content,
 }: MinifierOptions<SvgOptions>): Promise<CompressorResult> {
-    const svgContent = ensureStringContent(content, "svgo");
+    try {
+        const svgContent = ensureStringContent(content, "svgo");
 
-    const options = settings?.options ?? {};
+        const options = settings?.options ?? {};
 
-    const result = optimize(svgContent, {
-        multipass: true,
-        ...options,
-    });
+        const result = optimize(svgContent, {
+            multipass: true,
+            ...options,
+        });
 
-    return {
-        code: result.data,
-    };
+        return {
+            code: result.data,
+        };
+    } catch (err) {
+        if (err instanceof Error) {
+            throw new Error(`SVGO optimization failed: ${err.message}`);
+        }
+        throw err;
+    }
 }
