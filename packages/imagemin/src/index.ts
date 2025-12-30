@@ -57,25 +57,36 @@ export async function imagemin({
 
     const options = settings?.options ?? {};
 
+    const clamp = (val: number, min: number, max: number) =>
+        Math.max(min, Math.min(max, val));
+    const qualityClamped = clamp(options.quality ?? 80, 0, 100);
+    const qualityNormalized = qualityClamped / 100;
+    const effortClamped = clamp(options.effort ?? 6, 1, 10);
+    const optimizationLevelClamped = clamp(
+        options.optimizationLevel ?? 1,
+        1,
+        3
+    );
+
     // Determine plugins based on input or desired output
     // Default to using all three for comprehensive compression
     const plugins = [
         imageminMozjpeg({
-            quality: options.quality ?? 80,
+            quality: qualityClamped,
             progressive: true,
             smooth: 0,
             quantBaseline: false,
             arithmetic: false,
         }),
         imageminPngquant({
-            quality: [options.quality ? options.quality / 100 : 0.8, 1],
-            speed: 11 - (options.effort ?? 6), // invert: higher effort = lower speed
+            quality: [qualityNormalized, 1],
+            speed: 11 - effortClamped, // invert: higher effort = lower speed
             strip: true,
             dithering: 1,
             posterize: 0,
         }),
         imageminGifsicle({
-            optimizationLevel: options.optimizationLevel ?? 1,
+            optimizationLevel: optimizationLevelClamped,
             interlaced: true,
             colors: 256,
         }),
