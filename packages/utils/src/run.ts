@@ -92,7 +92,13 @@ function writeMultipleOutputs<T extends CompressorOptions = CompressorOptions>(
     const output = settings.output;
     const isArrayOutput = Array.isArray(output);
     const outputsArray = isArrayOutput ? output : [output];
-    const inputFile = typeof settings.input === "string" ? settings.input : "";
+    // Use the first input file to derive the base name and directory for auto-generated output paths
+    const inputFile =
+        typeof settings.input === "string"
+            ? settings.input
+            : Array.isArray(settings.input) && settings.input.length > 0
+              ? (settings.input[0] ?? "")
+              : "";
     const inputDir = parse(inputFile).dir;
     const inputBase = parse(inputFile).name;
 
