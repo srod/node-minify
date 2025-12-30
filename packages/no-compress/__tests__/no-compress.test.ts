@@ -29,6 +29,8 @@ describe("Package: no-compress", async () => {
     test("should throw when content is not a string", async () => {
         await expect(
             noCompress({ settings: {} as any, content: 123 as any })
-        ).rejects.toThrow("no-compress failed: empty result");
+        ).rejects.toThrow(
+            "no-compress failed: content must be a string or Buffer but received number"
+        );
     });
 });
