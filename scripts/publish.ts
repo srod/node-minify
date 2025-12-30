@@ -137,6 +137,10 @@ async function main() {
 }
 
 main().catch((error) => {
-    console.error("Publish failed:", error);
+    if (error instanceof Error) {
+        console.error("Publish failed:", error.message);
+    } else {
+        console.error("Publish failed:", error);
+    }
     process.exit(1);
 });
