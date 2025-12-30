@@ -140,16 +140,19 @@ describe("CLI Coverage", () => {
             vi.doMock("@node-minify/no-compress", () => ({
                 noCompress: "not-a-function",
             }));
-            const settings = {
-                compressor: "no-compress" as any,
-                input: "foo.js",
-                output: "bar.js",
-                silence: true,
-            };
-            await expect(cli.run(settings)).rejects.toThrow(
-                "Invalid compressor implementation for 'no-compress'."
-            );
-            vi.doUnmock("@node-minify/no-compress");
+            try {
+                const settings = {
+                    compressor: "no-compress" as any,
+                    input: "foo.js",
+                    output: "bar.js",
+                    silence: true,
+                };
+                await expect(cli.run(settings)).rejects.toThrow(
+                    "Invalid compressor implementation for 'no-compress'."
+                );
+            } finally {
+                vi.doUnmock("@node-minify/no-compress");
+            }
         });
 
         test("should throw if cssOnly compressor receives non-css type", async () => {
