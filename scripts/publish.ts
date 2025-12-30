@@ -19,6 +19,11 @@ interface PackageJson {
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PACKAGES_DIR = join(__dirname, "..", "packages");
 
+/**
+ * List package directory names inside the packages directory that contain a package.json file.
+ *
+ * @returns A sorted (alphabetical) array of directory names under PACKAGES_DIR that contain a package.json
+ */
 function getPackageDirs(): string[] {
     return readdirSync(PACKAGES_DIR, { withFileTypes: true })
         .filter((entry) => entry.isDirectory())
@@ -29,11 +34,22 @@ function getPackageDirs(): string[] {
         .sort();
 }
 
+/**
+ * Read and parse the package.json file for a package located under the packages root.
+ *
+ * @param packageDir - The directory name of the package inside PACKAGES_DIR
+ * @returns The parsed package.json as a `PackageJson`
+ */
 function readPackageJson(packageDir: string): PackageJson {
     const pkgPath = join(PACKAGES_DIR, packageDir, "package.json");
     return JSON.parse(readFileSync(pkgPath, "utf-8"));
 }
 
+/**
+ * Builds a map from each package's name to its version by reading package.json for all packages.
+ *
+ * @returns A Map where each key is a package name and each value is that package's version string.
+ */
 function buildVersionMap(): Map<string, string> {
     const versionMap = new Map<string, string>();
 
@@ -45,6 +61,15 @@ function buildVersionMap(): Map<string, string> {
     return versionMap;
 }
 
+/**
+ * Replace `workspace:` dependency specifiers with concrete versions from the provided map.
+ *
+ * Resolves any dependency versions that start with `workspace:` by looking up the package name in `versionMap`. If a package name is not found, the original `workspace:` specifier is retained and a warning is logged.
+ *
+ * @param deps - The dependency map to resolve (may be `dependencies`, `devDependencies`, `peerDependencies`, or `optionalDependencies`); may be `undefined`.
+ * @param versionMap - A mapping from package name to concrete version string used to replace `workspace:` specifiers.
+ * @returns The resolved dependency map with workspace references replaced when possible, or `undefined` if `deps` was `undefined`.
+ */
 function resolveDependencies(
     deps: Record<string, string> | undefined,
     versionMap: Map<string, string>
@@ -71,6 +96,13 @@ function resolveDependencies(
     return resolved;
 }
 
+/**
+ * Publishes non-private workspace packages and creates changeset tags.
+ *
+ * For each package under the packages directory, resolves `workspace:` dependency references to actual package versions, writes the updated package.json, attempts `npm publish --access public --provenance`, restores the original package.json, and logs progress. After processing all packages, runs `changeset tag` to create git tags; publish or tag failures are logged but do not stop processing.
+ *
+ * @returns Nothing.
+ */
 async function main() {
     const packageDirs = getPackageDirs();
     const versionMap = buildVersionMap();
