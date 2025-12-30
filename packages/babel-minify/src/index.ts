@@ -53,7 +53,7 @@ export async function babelMinify({
     const presets = settings?.options?.presets as string[] | undefined;
 
     if (babelrc) {
-        babelOptions = JSON.parse(readFile(babelrc) as string);
+        babelOptions = JSON.parse(readFile(babelrc));
     }
 
     if (presets && Array.isArray(presets)) {
@@ -75,9 +75,7 @@ export async function babelMinify({
     }
 
     const contentStr =
-        content instanceof Buffer
-            ? content.toString()
-            : ((content ?? "") as string);
+        content instanceof Buffer ? content.toString() : String(content ?? "");
     const result = transform(contentStr, babelOptions);
 
     if (typeof result.code !== "string") {
