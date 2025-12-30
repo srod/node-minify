@@ -237,4 +237,25 @@ describe("sharp", () => {
             })
         ).rejects.toThrow("Sharp conversion to webp failed: Sharp error");
     });
+
+    test("should rethrow non-Error exceptions", async () => {
+        const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+        const { default: mockSharp } = await import("sharp");
+        // @ts-expect-error
+        mockSharp.mockImplementationOnce(() => ({
+            webp: vi.fn().mockImplementation(() => {
+                throw "string error";
+            }),
+        }));
+
+        await expect(
+            sharp({
+                settings: {
+                    compressor: sharp,
+                    options: { format: "webp" },
+                },
+                content: inputBuffer,
+            })
+        ).rejects.toBe("string error");
+    });
 });

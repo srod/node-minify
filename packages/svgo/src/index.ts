@@ -5,6 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 import { optimize, type PluginConfig } from "svgo";
 
 /**
@@ -72,16 +73,9 @@ export async function svgo({
     settings,
     content,
 }: MinifierOptions<SvgOptions>): Promise<CompressorResult> {
-    if (Array.isArray(content)) {
-        throw new Error("svgo compressor does not support array content");
-    }
+    const svgContent = ensureStringContent(content, "svgo");
 
     const options = settings?.options ?? {};
-
-    // SVGO only accepts strings, convert Buffer if needed
-    const svgContent = Buffer.isBuffer(content)
-        ? content.toString("utf8")
-        : (content ?? "");
 
     const result = optimize(svgContent, {
         multipass: true,
