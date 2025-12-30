@@ -4,12 +4,15 @@
  * MIT Licensed
  */
 
+import path from "node:path";
 import { describe, expect, test } from "vitest";
 import { isValidFileAsync } from "../src/isValidFile.ts";
-import path from "path";
 
 describe("isValidFileAsync", () => {
-    const fixtureFile = path.join(__dirname, "../../../tests/fixtures/fixture-content.js");
+    const fixtureFile = path.join(
+        __dirname,
+        "../../../tests/fixtures/fixture-content.js"
+    );
     const fixtureDir = path.join(__dirname, "../../../tests/fixtures");
 
     test("should return true for a valid file", async () => {

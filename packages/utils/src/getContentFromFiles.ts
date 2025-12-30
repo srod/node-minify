@@ -6,6 +6,7 @@
 
 import { existsSync, readFileSync } from "node:fs";
 import { lstat, readFile } from "node:fs/promises";
+import type { Stats } from "node:fs";
 import { FileOperationError } from "./error.ts";
 import { isValidFile } from "./isValidFile.ts";
 
@@ -37,7 +38,7 @@ function readFileContent(path: string): string {
  */
 async function readFileContentAsync(path: string): Promise<string> {
     try {
-        let stats;
+        let stats: Stats | undefined;
         try {
             stats = await lstat(path);
         } catch (e: any) {
