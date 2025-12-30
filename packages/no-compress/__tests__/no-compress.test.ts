@@ -33,4 +33,13 @@ describe("Package: no-compress", async () => {
             "no-compress failed: content must be a string or Buffer but received number"
         );
     });
+
+    test("should handle Buffer content", async () => {
+        const buffer = Buffer.from("buffer content");
+        const result = await noCompress({
+            settings: {} as any,
+            content: buffer,
+        });
+        expect(result.code).toBe("buffer content");
+    });
 });

@@ -47,6 +47,10 @@ describe("Package: utils", () => {
             expect(() => readFile("fake.js")).toThrow();
         });
 
+        test("should throw an error if path is a directory", () => {
+            expect(() => readFile(__dirname)).toThrow("Path is not a file");
+        });
+
         test("should return Buffer when asBuffer is true", () => {
             const buffer = readFile(fixtureFile, true);
             expect(buffer).toBeInstanceOf(Buffer);
@@ -384,6 +388,20 @@ describe("Package: utils", () => {
                 compressor,
             } as any;
             await compressSingleFile(settings);
+            expect(compressor).toHaveBeenCalledWith(
+                expect.objectContaining({ content: "" })
+            );
+        });
+
+        test("should return empty string when input is undefined", async () => {
+            const compressor = vi.fn().mockResolvedValue({ code: "" });
+            const settings = {
+                compressor,
+                input: undefined,
+                content: undefined,
+            } as any;
+            const result = await compressSingleFile(settings);
+            expect(result).toBe("");
             expect(compressor).toHaveBeenCalledWith(
                 expect.objectContaining({ content: "" })
             );
@@ -968,6 +986,80 @@ describe("Package: utils", () => {
             expect(readFile(`${tmpDir}/no-format-output.out`, true)).toEqual(
                 Buffer.from("NO_FORMAT")
             );
+        });
+
+        test("should use 'output' as default basename when input has no name", async () => {
+            const webpContent = Buffer.from("WEBP_NO_INPUT");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [{ format: "webp", content: webpContent }],
+            });
+            const settings = {
+                compressor,
+                input: [],
+                output: `${tmpDir}/default-output`,
+            } as any;
+
+            await run({ settings, content: "" });
+
+            expect(readFile(`${tmpDir}/default-output.webp`, true)).toEqual(
+                webpContent
+            );
+            deleteFile(`${tmpDir}/default-output.webp`);
+        });
+
+        test("should handle fallback when output array has undefined item", async () => {
+            const testFile = `${tmpDir}/fallback-undef-test.png`;
+            writeFile({ file: testFile, content: "test" });
+            const webpContent = Buffer.from("WEBP_FALLBACK_UNDEF");
+            const avifContent = Buffer.from("AVIF_FALLBACK_UNDEF");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [
+                    { format: "webp", content: webpContent },
+                    { format: "avif", content: avifContent },
+                ],
+            });
+            const settings = {
+                compressor,
+                input: testFile,
+                output: [
+                    undefined as unknown as string,
+                    undefined as unknown as string,
+                ],
+            } as any;
+
+            await run({ settings, content: "" });
+
+            expect(
+                readFile(`${tmpDir}/fallback-undef-test.webp`, true)
+            ).toEqual(webpContent);
+            expect(
+                readFile(`${tmpDir}/fallback-undef-test.avif`, true)
+            ).toEqual(avifContent);
+            deleteFile(testFile);
+            deleteFile(`${tmpDir}/fallback-undef-test.webp`);
+            deleteFile(`${tmpDir}/fallback-undef-test.avif`);
+        });
+
+        test("should use 'output' as default in $1 pattern when input basename is empty", async () => {
+            const webpContent = Buffer.from("WEBP_PATTERN_EMPTY");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [{ format: "webp", content: webpContent }],
+            });
+            const settings = {
+                compressor,
+                input: "",
+                output: `${tmpDir}/$1-converted`,
+            } as any;
+
+            await run({ settings, content: "" });
+
+            expect(readFile(`${tmpDir}/output-converted.webp`, true)).toEqual(
+                webpContent
+            );
+            deleteFile(`${tmpDir}/output-converted.webp`);
         });
     });
 
