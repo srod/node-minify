@@ -661,6 +661,7 @@ describe("Package: utils", () => {
 
         test("should not write source map when options is undefined", async () => {
             const outputFile = `${tmpDir}/run-output-no-options.js`;
+            filesToCleanup.add(outputFile);
             const compressor = vi.fn().mockResolvedValue({
                 code: "minified",
                 map: '{"version":3}',
@@ -674,7 +675,6 @@ describe("Package: utils", () => {
             await run({ settings, content: "content" });
 
             expect(readFile(outputFile)).toBe("minified");
-            filesToCleanup.add(outputFile);
         });
     });
 
