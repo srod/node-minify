@@ -9,11 +9,12 @@ import { ensureStringContent, warnDeprecation } from "@node-minify/utils";
 import minify from "sqwish";
 
 /**
- * Run sqwish.
+ * Minify CSS using the sqwish library.
+ *
  * @deprecated sqwish is no longer maintained. Use @node-minify/cssnano or @node-minify/clean-css instead.
- * @param settings - Sqwish options
- * @param content - Content to minify
- * @returns Minified content
+ * @param settings - Options for the sqwish minifier (may include `options.strict`)
+ * @param content - Input to minify (string-like content)
+ * @returns An object containing the minified CSS as `code`
  */
 export async function sqwish({
     settings,

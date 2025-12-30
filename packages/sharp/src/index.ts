@@ -22,8 +22,9 @@ type SharpInput = MinifierOptions<SharpOptions>;
 let sharpLib: typeof SharpType | undefined;
 
 /**
- * Get sharp instance, loading it lazily on first use.
- * This reduces initial bundle size for users who may not use the sharp compressor.
+ * Lazily loads and returns the Sharp default export.
+ *
+ * @returns The loaded Sharp default export (constructor/function)
  */
 async function getSharp(): Promise<typeof SharpType> {
     if (!sharpLib) {
@@ -33,7 +34,13 @@ async function getSharp(): Promise<typeof SharpType> {
 }
 
 /**
- * Convert image to specified format using Sharp.
+ * Convert an image buffer into the specified output format using Sharp.
+ *
+ * @param input - Source image data as a Buffer
+ * @param format - Target format: `"webp"`, `"avif"`, `"png"`, or `"jpeg"`
+ * @param options - Encoding options (e.g., `quality`, `lossless`, `effort`, `compressionLevel`)
+ * @returns A Buffer containing the encoded image in the requested format
+ * @throws Error if Sharp fails to perform the conversion
  */
 async function convertImage(
     input: Buffer,
@@ -91,8 +98,13 @@ async function convertImage(
 }
 
 /**
- * Minify/compress image using Sharp.
- * Supports single format output or multi-format conversion (e.g., PNG → WebP + AVIF).
+ * Compresses an image using Sharp, producing either a single-format buffer or multiple format outputs.
+ *
+ * When `settings?.options.formats` is a non-empty array, converts the input to each listed format and returns `outputs` with `{ format, content }` entries. Otherwise converts to `settings?.options.format` (defaults to `webp`) and returns a single `buffer`.
+ *
+ * @param settings - Optional compressor settings; recognized keys include `format` (string) and `formats` (string[]), plus format-specific tuning options (quality, lossless, effort, compressionLevel).
+ * @param content - The input image as a Buffer (binary). Must be a Buffer or an error is thrown.
+ * @returns A CompressorResult containing either `outputs` (array of `{ format, content: Buffer }`) when multiple formats were requested, or `buffer` (Buffer) for a single-format conversion; `code` is provided as an empty string.
  */
 export async function sharp({
     settings,

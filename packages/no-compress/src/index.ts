@@ -7,9 +7,11 @@
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 
 /**
- * No compression, just concatenation.
- * @param content - Content to pass through
- * @returns Unmodified content
+ * Passes input content through unchanged and returns it as the compressor result.
+ *
+ * @param content - The input to pass through; may be a `string`, a `Buffer`, or `undefined`.
+ * @returns An object with `code` set to the input converted to a string (empty string if `content` is `undefined`).
+ * @throws Error if `content` is neither a `string` nor a `Buffer`.
  */
 export async function noCompress({
     content,

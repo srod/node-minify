@@ -15,6 +15,16 @@ import { run } from "../index.ts";
 
 const DEFAULT_COMPRESSOR = "uglify-js";
 
+/**
+ * Create and return the CLI Command configured for this application.
+ *
+ * Configures version flag and the following options: `--compressor` (default
+ * `uglify-js`), `--input`, `--output`, `--type` (file type: `js` or `css`),
+ * `--silence`, and `--option` (JSON string). Also registers a help hook that
+ * displays the list of available compressors.
+ *
+ * @returns A configured Command instance ready to parse CLI arguments.
+ */
 function setupProgram(): Command {
     const program = new Command();
 

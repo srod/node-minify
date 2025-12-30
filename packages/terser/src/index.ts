@@ -9,10 +9,12 @@ import { ensureStringContent } from "@node-minify/utils";
 import { minify } from "terser";
 
 /**
- * Run terser.
- * @param settings - Terser options
- * @param content - Content to minify
- * @returns Minified content and optional source map
+ * Minifies JavaScript content using terser and the provided options.
+ *
+ * @param settings - Terser options passed to terser under `settings.options`
+ * @param content - The source content to minify
+ * @returns An object with `code` containing the minified output and `map` containing the source map string if available
+ * @throws Error if terser produces no code (empty result)
  */
 export async function terser({
     settings,

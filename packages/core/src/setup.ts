@@ -19,8 +19,13 @@ const defaultSettings: Partial<Settings> = {
 };
 
 /**
- * Run setup.
- * @param inputSettings Settings from user input
+ * Prepare and validate compressor settings by merging defaults with user input.
+ *
+ * If `inputSettings` contains `content`, validates required in-memory fields and returns the merged settings.
+ * Otherwise, validates file-based fields and returns settings enhanced for file input/output handling.
+ *
+ * @param inputSettings - User-provided settings; may include `content` for in-memory compression or `input`/`output` for file-based compression
+ * @returns The resulting `Settings<T>` object merged with defaults and adjusted for in-memory or file-based operation
  */
 function setup<T extends CompressorOptions = CompressorOptions>(
     inputSettings: Settings<T>
@@ -42,7 +47,10 @@ function setup<T extends CompressorOptions = CompressorOptions>(
 }
 
 /**
- * Enhance settings.
+ * Normalize and augment settings by expanding input wildcards, resolving output paths, and applying public-folder context when present.
+ *
+ * @param settings - The settings to enhance
+ * @returns The settings augmented with expanded `input`, a resolved `output` when applicable, and any applied `publicFolder` context
  */
 function enhanceSettings<T extends CompressorOptions = CompressorOptions>(
     settings: Settings<T>
@@ -131,9 +139,11 @@ function checkOutput(
 }
 
 /**
- * Validate that mandatory fields are present in settings.
- * @param settings - Settings object to validate
- * @param fields - Array of required field names
+ * Ensures required setting keys exist and that the `compressor` property is a function.
+ *
+ * @param settings - The settings object to check
+ * @param fields - Names of keys that must be present on `settings`
+ * @throws If `settings.compressor` is not a function
  */
 function validateMandatoryFields<
     T extends CompressorOptions = CompressorOptions,

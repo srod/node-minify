@@ -23,8 +23,13 @@ export type SettingsWithCompressor = Omit<Settings, "compressor"> & {
 let silence = false;
 
 /**
- * Run one compressor.
- * @param cli Settings
+ * Execute a single compressor using the provided CLI-style settings.
+ *
+ * @param cli - Configuration selecting the compressor (by name) and its input/output plus optional `type` and `option` values.
+ * @returns The compression `Result` produced by the selected compressor.
+ * @throws Error if the named compressor is not listed in AVAILABLE_MINIFIER.
+ * @throws Error if the compressor package does not expose a valid implementation function.
+ * @throws Error Propagates any error thrown during compression.
  */
 async function runOne(cli: SettingsWithCompressor): Promise<Result> {
     // Find compressor

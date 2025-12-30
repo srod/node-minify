@@ -64,10 +64,12 @@ export type SvgOptions = {
 };
 
 /**
- * Run SVGO.
- * @param settings - SVGO options
- * @param content - SVG content to minify
- * @returns Minified SVG content
+ * Optimize SVG content using SVGO with multipass enforced.
+ *
+ * @param settings - Optional wrapper for SVGO configuration; the `options` object it contains is merged with defaults and passed to SVGO
+ * @param content - SVG input to optimize
+ * @returns An object whose `code` property contains the optimized SVG string
+ * @throws Error if SVGO optimization fails
  */
 export async function svgo({
     settings,

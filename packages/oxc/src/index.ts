@@ -8,6 +8,13 @@ import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import { ensureStringContent } from "@node-minify/utils";
 import { minify as oxcMinify } from "oxc-minify";
 
+/**
+ * Minifies JavaScript source using the oxc-minify library and the provided options.
+ *
+ * @param settings - Optional minifier settings; `settings.options` are forwarded to oxc-minify.
+ * @param content - Input to minify; will be converted to a string before processing.
+ * @returns An object with `code` containing the minified source and `map` set to `undefined`.
+ */
 export async function oxc({
     settings,
     content,

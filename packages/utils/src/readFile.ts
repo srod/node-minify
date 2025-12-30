@@ -24,6 +24,14 @@ export function readFile(file: string): string;
 export function readFile(file: string, asBuffer: true): Buffer;
 export function readFile(file: string, asBuffer: false): string;
 export function readFile(file: string, asBuffer?: boolean): string | Buffer;
+/**
+ * Reads a file from disk and returns its contents as a string or Buffer.
+ *
+ * @param file - Path to the file to read
+ * @param asBuffer - If `true`, return a `Buffer`; otherwise return a UTF-8 `string`
+ * @returns The file contents as a `Buffer` when `asBuffer` is `true`, otherwise as a UTF-8 `string`
+ * @throws FileOperationError when the file does not exist, is not a regular file, or an error occurs while reading
+ */
 export function readFile(file: string, asBuffer?: boolean): string | Buffer {
     try {
         if (!existsSync(file)) {

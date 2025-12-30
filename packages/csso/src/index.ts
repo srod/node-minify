@@ -9,10 +9,11 @@ import { ensureStringContent } from "@node-minify/utils";
 import { minify } from "csso";
 
 /**
- * Run csso.
- * @param settings - CSSO options
- * @param content - Content to minify
- * @returns Minified content
+ * Minifies CSS using CSSO.
+ *
+ * @param settings - Compressor options; any `options` provided are forwarded to CSSO
+ * @param content - CSS content to minify (e.g., string or Buffer)
+ * @returns An object with the minified CSS in the `code` property
  */
 export async function csso({
     settings,

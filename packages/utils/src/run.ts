@@ -15,10 +15,13 @@ import { ValidationError } from "./error.ts";
 import { writeFile } from "./writeFile.ts";
 
 /**
- * Execute the compressor and write output.
- * @param params - Run parameters containing settings, content, and index
- * @returns Minified content string
- * @throws {ValidationError} If settings or compressor is missing
+ * Run the configured compressor for the given input and persist its outputs.
+ *
+ * @param settings - Compressor configuration including output targets and a `compressor` function
+ * @param content - Input content to be compressed
+ * @param index - Optional index for multi-input processing
+ * @returns The minified code produced by the compressor
+ * @throws {ValidationError} If `settings` is missing or `settings.compressor` is not provided
  */
 export async function run<T extends CompressorOptions = CompressorOptions>({
     settings,
@@ -44,6 +47,15 @@ export async function run<T extends CompressorOptions = CompressorOptions>({
     return result.code;
 }
 
+/**
+ * Persist compressor output to disk unless running in in-memory mode.
+ *
+ * Writes either multiple output files, a binary buffer, or a text code file depending on the contents of `result`.
+ *
+ * @param result - Compressor result which may contain `outputs` (multiple outputs), `buffer` (binary), `code` (string), and `map` (source map). The presence of `outputs` delegates to multi-output handling; `buffer` is written directly; otherwise `code` is written and `map` is written to the source map URL if available.
+ * @param settings - Minifier settings used to determine in-memory mode and the target `output` path. If `settings.content` is present or `settings.output` is falsy, no files will be written.
+ * @param index - Optional output index passed through to the underlying writeFile calls.
+ */
 function writeOutput<T extends CompressorOptions = CompressorOptions>(
     result: CompressorResult,
     settings: Settings<T>,
@@ -78,7 +90,16 @@ function writeOutput<T extends CompressorOptions = CompressorOptions>(
 }
 
 /**
- * Write multiple output files for multi-format image conversion.
+ * Write multiple output files produced by a compressor, resolving target paths and extensions.
+ *
+ * Uses `settings.output` and the provided `outputs` array to determine target file paths for each
+ * entry, handling per-entry explicit paths, the `$1` placeholder, auto-generated names derived from
+ * the first input file, and a default format extension when none is provided. Skips falsy output
+ * entries.
+ *
+ * @param outputs - Array of output descriptors containing `content` and optional `format` for each output
+ * @param settings - Minifier settings used to resolve output targets (reads `input` and `output`)
+ * @param index - Optional index used when writing files to distinguish parallel tasks or inputs
  */
 function writeMultipleOutputs<T extends CompressorOptions = CompressorOptions>(
     outputs: NonNullable<CompressorResult["outputs"]>,
@@ -143,6 +164,12 @@ function writeMultipleOutputs<T extends CompressorOptions = CompressorOptions>(
     }
 }
 
+/**
+ * Retrieve the source map URL or filename declared in the provided minifier settings.
+ *
+ * @param settings - Minifier settings that may include `options.sourceMap` or internal `options._sourceMap`
+ * @returns The source map `url` or `filename` when present, `undefined` otherwise
+ */
 function getSourceMapUrl<T extends CompressorOptions = CompressorOptions>(
     settings: Settings<T>
 ): string | undefined {

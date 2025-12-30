@@ -15,8 +15,11 @@ import {
 } from "@node-minify/utils";
 
 /**
- * Run compression.
- * @param options Settings
+ * Compresses files using the provided settings and returns size metrics for the produced output.
+ *
+ * @param options - Compression settings including compressor, input, and output configuration. If `options.output` is undefined, an array, or contains the `$1` pattern, size metrics cannot be computed and the result will contain `"0"` for `size` and `sizeGzip`.
+ * @returns The compression result containing `compressorLabel`, `size`, and `sizeGzip`. `size` and `sizeGzip` are byte counts represented as strings; when size cannot be determined both will be `"0"`.
+ * @throws Error - If compression or file-size calculation fails; the thrown error message is prefixed with "Compression failed: ".
  */
 async function compress<T extends CompressorOptions = CompressorOptions>(
     options: Settings<T>

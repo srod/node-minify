@@ -30,11 +30,13 @@ const knownPresets: Record<string, BabelPreset> = {
 };
 
 /**
- * Run babel-minify.
- * @deprecated babel-minify uses Babel 6 which is no longer maintained. Use @node-minify/terser instead.
- * @param settings - Babel-minify options
- * @param content - Content to minify
- * @returns Minified content
+ * Minify JavaScript content using the Babel 6-based babel-minify preset.
+ *
+ * @deprecated babel-minify uses Babel 6 which is no longer maintained. Please migrate to @node-minify/terser for continued support and modern JavaScript features.
+ * @param settings - Minifier settings; may include `options.babelrc` (path to a .babelrc JSON) and `options.presets` (array of presets or preset names)
+ * @param content - The input to minify; will be converted to a string prior to transformation
+ * @returns An object with `code` containing the minified JavaScript
+ * @throws Error if the Babel transform produces no code
  */
 export async function babelMinify({
     settings,

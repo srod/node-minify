@@ -8,6 +8,14 @@ import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import { ensureStringContent } from "@node-minify/utils";
 import { transform } from "esbuild";
 
+/**
+ * Minifies JavaScript or CSS content using esbuild.
+ *
+ * @param settings - Minifier settings; must include `type` set to `"js"` or `"css"`. Any `options` provided are forwarded to esbuild (e.g., `sourceMap`).
+ * @param content - The input to minify; will be converted to a string before processing.
+ * @returns An object with `code` containing the minified output and `map` containing the source map string if produced, otherwise `undefined`.
+ * @throws Error if `settings.type` is missing or not `"js"` or `"css"`.
+ */
 export async function esbuild({
     settings,
     content,

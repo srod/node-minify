@@ -9,10 +9,11 @@ import { ensureStringContent, warnDeprecation } from "@node-minify/utils";
 import minify from "crass";
 
 /**
- * Run crass.
+ * Minifies CSS content using the crass library.
+ *
  * @deprecated crass is no longer maintained. Use @node-minify/cssnano or @node-minify/clean-css instead.
- * @param content - Content to minify
- * @returns Minified content
+ * @param content - The CSS source to minify; will be coerced to a string
+ * @returns An object containing the minified CSS as `code`
  */
 export async function crass({
     content,

@@ -14,14 +14,12 @@ interface WriteFileParams {
 }
 
 /**
- * Write content into file.
- * @param params Object containing file path, content and optional index
- * @returns Written content
- * @throws {ValidationError} If no target file is provided
- * @throws {FileOperationError} If file operations fail
- * @example
- * writeFile({ file: 'output.js', content: 'console.log("Hello")' })
- * writeFile({ file: ['file1.js', 'file2.js'], content: 'shared content', index: 0 })
+ * Writes content to the specified file path.
+ *
+ * @param params - Object with `file`, `content`, and optional `index` selecting which entry to use when `file` is an array
+ * @returns The original `content` that was written
+ * @throws {ValidationError} If no target file is provided, content is missing, or the resolved target path is not a valid file path
+ * @throws {FileOperationError} If an underlying filesystem operation fails
  */
 export function writeFile({
     file,

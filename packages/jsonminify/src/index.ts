@@ -9,9 +9,10 @@ import { ensureStringContent } from "@node-minify/utils";
 import jsonminify from "jsonminify";
 
 /**
- * Run jsonminify.
- * @param content - Content to minify
- * @returns Minified content
+ * Minifies JSON-like content by removing comments and unnecessary whitespace.
+ *
+ * @param content - The input to minify (e.g., a JSON string or value convertible to a string)
+ * @returns An object with a `code` property containing the minified content
  */
 export async function jsonMinify({
     content,

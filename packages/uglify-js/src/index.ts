@@ -9,10 +9,12 @@ import { ensureStringContent } from "@node-minify/utils";
 import uglifyJS from "uglify-js";
 
 /**
- * Run uglify-js.
- * @param settings - UglifyJS options
- * @param content - Content to minify
- * @returns Minified content and optional source map
+ * Minify JavaScript using uglify-js.
+ *
+ * @param settings - Optional UglifyJS options applied to the minification process
+ * @param content - Input to minify; will be converted to a string before processing
+ * @returns An object with `code` containing the minified source and `map` containing the source map if generated
+ * @throws The error produced by uglify-js when minification fails
  */
 export async function uglifyJs({
     settings,

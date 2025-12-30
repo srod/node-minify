@@ -37,10 +37,12 @@ const allowedFlags = [
 ];
 
 /**
- * Run Google Closure Compiler.
- * @param settings - GCC options
- * @param content - Content to minify
- * @returns Minified content
+ * Run Google Closure Compiler on the given input and produce minified output.
+ *
+ * @param settings - Compiler settings and flags; unrecognized flags are ignored.
+ * @param content - Source content to compile/minify.
+ * @returns An object with `code` set to the compiler's output string.
+ * @throws If the compiler produces no output.
  */
 export async function gcc({
     settings,

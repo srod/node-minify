@@ -19,11 +19,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const binYui = `${__dirname}/binaries/yuicompressor-2.4.7.jar`;
 
 /**
- * Run YUI Compressor.
- * @deprecated YUI Compressor was deprecated by Yahoo in 2013. Use @node-minify/terser for JS or @node-minify/cssnano for CSS.
- * @param settings - YUI Compressor options
+ * Minify JavaScript or CSS using the YUI Compressor.
+ *
+ * @deprecated YUI Compressor was deprecated by Yahoo in 2013. Please migrate to @node-minify/terser for JS or @node-minify/cssnano for CSS.
+ * @param settings - YUI Compressor options; `settings.type` must be either `"js"` or `"css"`
  * @param content - Content to minify
- * @returns Minified content
+ * @returns An object with a `code` property containing the minified string
  */
 export async function yui({
     settings,

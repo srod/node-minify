@@ -13,8 +13,10 @@ import { compress } from "./compress.ts";
 import { setup } from "./setup.ts";
 
 /**
- * Run node-minify.
- * @param settings Settings from user input
+ * Minifies files or provided content according to the given settings.
+ *
+ * @param settings - User-supplied configuration that controls input (files or content), compressor options, and output behavior
+ * @returns The resulting minified output or an output file path as a string
  */
 export async function minify<T extends CompressorOptions = CompressorOptions>(
     settings: Settings<T>

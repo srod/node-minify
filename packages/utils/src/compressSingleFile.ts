@@ -26,6 +26,12 @@ const IMAGE_EXTENSIONS = new Set([
     ".heic",
 ]);
 
+/**
+ * Determines whether a file path refers to a supported image file by its extension.
+ *
+ * @param filePath - File path or filename to check
+ * @returns `true` if the path ends with a supported image extension, `false` otherwise.
+ */
 function isImageFile(filePath: string): boolean {
     const lastDot = filePath.lastIndexOf(".");
     if (lastDot === -1) return false;
@@ -34,8 +40,10 @@ function isImageFile(filePath: string): boolean {
 }
 
 /**
- * Compress a single file.
- * @param settings Settings
+ * Compresses the provided input according to the given settings.
+ *
+ * @param settings - Configuration that specifies input/content and compressor options to use for compression
+ * @returns The compressed output string
  */
 export async function compressSingleFile<
     T extends CompressorOptions = CompressorOptions,
@@ -45,9 +53,11 @@ export async function compressSingleFile<
 }
 
 /**
- * Determine the content to minify.
- * @param settings - Minification settings
- * @returns Content to minify (string for text files, Buffer for single image, Buffer[] for multiple images)
+ * Determines the content to be minified from the provided settings.
+ *
+ * @param settings - Settings that may include `content` or `input` (file path or array of file paths) plus compressor options
+ * @returns `string` for text content, `Buffer` for a single image file, or `Buffer[]` for multiple image files
+ * @throws Error when an `input` array mixes image and non-image file paths
  */
 function determineContent<T extends CompressorOptions = CompressorOptions>(
     settings: Settings<T>
