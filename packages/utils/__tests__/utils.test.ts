@@ -985,4 +985,45 @@ describe("Package: utils", () => {
             );
         });
     });
+
+    describe("determineContent mixed-type array validation", () => {
+        const tmpDir = `${__dirname}/../../../tests/tmp`;
+
+        test("should throw an error when mixing image and text files in input array", async () => {
+            const compressor = vi.fn().mockResolvedValue({ code: "" });
+            const settings = {
+                compressor,
+                input: [`${tmpDir}/image.png`, `${tmpDir}/script.js`],
+                output: `${tmpDir}/output.js`,
+            } as any;
+
+            await expect(compressSingleFile(settings)).rejects.toThrow(
+                "Cannot mix image and text files in the same input array"
+            );
+        });
+
+        test("should allow uniform image array in input array", async () => {
+            const testFile1 = `${tmpDir}/image1.png`;
+            const testFile2 = `${tmpDir}/image2.png`;
+            writeFile({ file: testFile1, content: "image1" });
+            writeFile({ file: testFile2, content: "image2" });
+
+            const compressor = vi.fn().mockResolvedValue({ code: "minified" });
+            const settings = {
+                compressor,
+                input: [testFile1, testFile2],
+                output: `${tmpDir}/output.png`,
+            } as any;
+
+            await compressSingleFile(settings);
+            expect(compressor).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    content: [Buffer.from("image1"), Buffer.from("image2")],
+                })
+            );
+
+            deleteFile(testFile1);
+            deleteFile(testFile2);
+        });
+    });
 });

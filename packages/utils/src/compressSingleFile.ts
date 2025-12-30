@@ -57,8 +57,15 @@ function determineContent<T extends CompressorOptions = CompressorOptions>(
     }
 
     if (settings.input && Array.isArray(settings.input)) {
-        const isImage = settings.input.some((file) => isImageFile(file));
-        if (isImage) {
+        const imageFilesCount = settings.input.filter((file) =>
+            isImageFile(file)
+        ).length;
+        if (imageFilesCount > 0) {
+            if (imageFilesCount !== settings.input.length) {
+                throw new Error(
+                    "Cannot mix image and text files in the same input array"
+                );
+            }
             return settings.input.map((file) => readFileSync(file));
         }
     }
