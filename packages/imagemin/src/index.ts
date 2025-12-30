@@ -64,7 +64,7 @@ export async function imagemin({
             quality: options.quality ?? 80,
             progressive: true,
             smooth: 0,
-            baseline: false,
+            quantBaseline: false,
             arithmetic: false,
         }),
         imageminPngquant({

@@ -41,8 +41,21 @@ declare module "imagemin-mozjpeg" {
         quality?: number;
         progressive?: boolean;
         smooth?: number;
-        baseline?: boolean;
+        quantBaseline?: boolean;
         arithmetic?: boolean;
+        trellis?: boolean;
+        notrellis?: boolean;
+        trellisDC?: boolean;
+        notrellisDC?: boolean;
+        dcScanOpt?: 0 | 1 | 2;
+        overshoot?: boolean;
+        noovershoot?: boolean;
+        dct?: "int" | "fast" | "float" | number;
+        quantTable?: 0 | 1 | 2 | 3 | 4 | 5;
+        tune?: "hvs-psnr" | "psnr" | "ssim" | "ms-ssim";
+        fastCrush?: boolean;
+        sample?: number;
+        maxMemory?: number;
     }
 
     function mozjpeg(options?: MozjpegOptions): import("imagemin").Plugin;
