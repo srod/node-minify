@@ -25,6 +25,10 @@ export async function uglifyEs({
             "Please migrate to @node-minify/terser for continued support and modern JavaScript features."
     );
 
+    if (Array.isArray(content)) {
+        throw new Error("uglify-es compressor does not support array content");
+    }
+
     const contentStr =
         content instanceof Buffer
             ? content.toString()

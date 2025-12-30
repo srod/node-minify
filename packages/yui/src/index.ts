@@ -41,6 +41,10 @@ export async function yui({
         throw new Error("You must specify a type: js or css");
     }
 
+    if (Array.isArray(content)) {
+        throw new Error("yui compressor does not support array content");
+    }
+
     const contentStr =
         content instanceof Buffer
             ? content.toString()

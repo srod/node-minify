@@ -21,6 +21,10 @@ export async function esbuild({
     const loader = settings.type === "css" ? "css" : "js";
     const { sourceMap, ...restOptions } = settings?.options ?? {};
 
+    if (Array.isArray(content)) {
+        throw new Error("esbuild compressor does not support array content");
+    }
+
     const contentStr =
         content instanceof Buffer
             ? content.toString()

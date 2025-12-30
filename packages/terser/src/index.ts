@@ -17,6 +17,10 @@ export async function terser({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    if (Array.isArray(content)) {
+        throw new Error("terser compressor does not support array content");
+    }
+
     const contentStr =
         content instanceof Buffer
             ? content.toString()

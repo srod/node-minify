@@ -68,6 +68,12 @@ export async function babelMinify({
         babelOptions.presets = babelOptions.presets.concat([minify]);
     }
 
+    if (Array.isArray(content)) {
+        throw new Error(
+            "babel-minify compressor does not support array content"
+        );
+    }
+
     const contentStr =
         content instanceof Buffer
             ? content.toString()

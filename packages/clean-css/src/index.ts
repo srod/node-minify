@@ -24,6 +24,10 @@ export async function cleanCss({
         options.sourceMap = true;
     }
 
+    if (Array.isArray(content)) {
+        throw new Error("clean-css compressor does not support array content");
+    }
+
     const contentStr =
         content instanceof Buffer
             ? content.toString()
