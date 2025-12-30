@@ -68,6 +68,7 @@
     },
     "devDependencies": {
         "@node-minify/types": "workspace:*",
+        "@types/imagemin": "^9.0.1",
         "@types/imagemin-gifsicle": "^7.0.4",
         "@types/imagemin-mozjpeg": "^8.0.4",
         "@types/imagemin-optipng": "^5.2.4"
