@@ -68,8 +68,9 @@ declare module "imagemin-pngquant" {
         quality?: [number, number];
         speed?: number;
         strip?: boolean;
-        dithering?: number;
+        dithering?: number | boolean;
         posterize?: number;
+        verbose?: boolean;
     }
 
     function pngquant(options?: PngquantOptions): import("imagemin").Plugin;
