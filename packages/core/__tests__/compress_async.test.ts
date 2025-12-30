@@ -27,30 +27,15 @@ describe("compress async", () => {
         expect(result).toBe("");
     });
 
-    test("should handle input array with empty/null values", async () => {
-        // This is tricky because input type is string[], so null is not allowed by TS.
-        // But runtime might pass it.
-        // Also the code checks `if (input)`.
+    test("should throw error for input array with empty/null values", async () => {
         const settings: Settings = {
             compressor: noCompress,
-            input: ["", "file.js"], // Empty string is falsy
+            input: ["", "file.js"],
             output: ["out1.js", "out2.js"],
         } as any;
 
-        // Let's create a real file.
-        const file = path.join(tempDir, "file.js");
-        fs.writeFileSync(file, "content");
-        const out2 = path.join(tempDir, "out2.js");
-
-        const validSettings: Settings = {
-            compressor: noCompress,
-            input: ["", file],
-            output: ["", out2], // output array length must match input
-        };
-
-        const result = await compress(validSettings);
-        expect(result).toBe("content"); // The result of the last processed file?
-        // The last file is "file.js" (index 1).
-        // The first file (index 0) was skipped.
+        await expect(compress(settings)).rejects.toThrow(
+            "Invalid input at index 0: expected non-empty string, got empty string"
+        );
     });
 });
