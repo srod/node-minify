@@ -137,18 +137,16 @@ function main() {
         console.log(`Publishing ${pkg.name}@${pkg.version}...`);
 
         try {
-            try {
-                execSync("npm publish --access public --provenance", {
-                    cwd: join(PACKAGES_DIR, dir),
-                    stdio: "inherit",
-                });
-                console.log(`Published ${pkg.name}@${pkg.version}\n`);
-            } catch (err) {
-                if (err instanceof Error) {
-                    console.log(
-                        `Failed to publish ${pkg.name}@${pkg.version} (may already exist)\n`
-                    );
-                }
+            execSync("npm publish --access public --provenance", {
+                cwd: join(PACKAGES_DIR, dir),
+                stdio: "inherit",
+            });
+            console.log(`Published ${pkg.name}@${pkg.version}\n`);
+        } catch (err) {
+            if (err instanceof Error) {
+                console.log(
+                    `Failed to publish ${pkg.name}@${pkg.version} (may already exist)\n`
+                );
             }
         } finally {
             writeFileSync(pkgPath, originalContent);
