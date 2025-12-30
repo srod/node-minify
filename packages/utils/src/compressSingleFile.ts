@@ -47,7 +47,7 @@ export async function compressSingleFile<
 /**
  * Determine the content to minify.
  * @param settings - Minification settings
- * @returns Content to minify (string or Buffer for images)
+ * @returns Content to minify (string for text files, Buffer for single image, Buffer[] for multiple images)
  */
 function determineContent<T extends CompressorOptions = CompressorOptions>(
     settings: Settings<T>
