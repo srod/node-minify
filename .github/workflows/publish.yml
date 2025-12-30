@@ -26,11 +26,14 @@ jobs:
 
       - name: 📦 Setup Bun
         uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.5"
 
       - name: ⚙️ Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
 
       - name: 🔧 Upgrade npm for OIDC support
         run: npm install -g npm@latest
@@ -42,8 +45,8 @@ jobs:
         uses: changesets/action@v1
         id: changesets
         with:
-          publish: bun changeset:release
-          version: bun changeset:version
+          publish: bun run changeset:release
+          version: bun run changeset:version
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
