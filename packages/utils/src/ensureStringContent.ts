@@ -18,9 +18,9 @@ export function ensureStringContent(
         );
     }
 
-    if (content instanceof Buffer) {
+    if (Buffer.isBuffer(content)) {
         return content.toString();
     }
 
-    return (content ?? "") as string;
+    return content ?? "";
 }
