@@ -7,8 +7,9 @@
 import imageminLib from "imagemin";
 import imageminGifsicle from "imagemin-gifsicle";
 import imageminMozjpeg from "imagemin-mozjpeg";
+import imageminOptipng from "imagemin-optipng";
 import imageminPngquant from "imagemin-pngquant";
-import { describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import { imagemin } from "../src/index.ts";
 
 vi.mock("imagemin", () => {
@@ -33,6 +34,12 @@ vi.mock("imagemin-mozjpeg", () => {
     };
 });
 
+vi.mock("imagemin-optipng", () => {
+    return {
+        default: vi.fn().mockReturnValue(async (input: Buffer) => input),
+    };
+});
+
 vi.mock("imagemin-pngquant", () => {
     return {
         default: vi.fn().mockReturnValue(async (input: Buffer) => input),
@@ -40,6 +47,10 @@ vi.mock("imagemin-pngquant", () => {
 });
 
 describe("Package: imagemin", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
     test("should compress image with default options", async () => {
         const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
 
@@ -141,6 +152,12 @@ describe("Package: imagemin", () => {
 
         expect(result.code).toBe("compressed");
         expect(result.buffer).toBeDefined();
+        expect(imageminOptipng).toHaveBeenCalledWith(
+            expect.objectContaining({ optimizationLevel: 3 })
+        );
+        expect(imageminPngquant).not.toHaveBeenCalledWith(
+            expect.objectContaining({ quality: [0.8, 1] })
+        );
     });
 
     test("should compress image with custom optimization level", async () => {
