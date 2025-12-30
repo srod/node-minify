@@ -89,7 +89,7 @@ export async function imagemin({
     if (options.lossless) {
         plugins.push(
             imageminOptipng({
-                optimizationLevel: 3,
+                optimizationLevel: optimizationLevelClamped,
             })
         );
     } else {

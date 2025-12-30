@@ -145,7 +145,7 @@ describe("Package: imagemin", () => {
         const result = await imagemin({
             settings: {
                 compressor: imagemin,
-                options: { lossless: true },
+                options: { lossless: true, optimizationLevel: 3 },
             },
             content: inputBuffer,
         });
@@ -155,9 +155,7 @@ describe("Package: imagemin", () => {
         expect(imageminOptipng).toHaveBeenCalledWith(
             expect.objectContaining({ optimizationLevel: 3 })
         );
-        expect(imageminPngquant).not.toHaveBeenCalledWith(
-            expect.objectContaining({ quality: [0.8, 1] })
-        );
+        expect(imageminPngquant).not.toHaveBeenCalled();
     });
 
     test("should compress image with custom optimization level", async () => {
