@@ -12,7 +12,7 @@ export type SharpOptions = {
     lossless?: boolean;
     effort?: number;
     format?: "webp" | "avif" | "png" | "jpeg";
-    formats?: Array<"webp" | "avif">;
+    formats?: Array<"webp" | "avif" | "png" | "jpeg">;
 };
 
 type SharpInput = MinifierOptions<SharpOptions>;
