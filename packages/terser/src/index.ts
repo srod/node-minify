@@ -5,6 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 import { minify } from "terser";
 
 /**
@@ -17,14 +18,8 @@ export async function terser({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (Array.isArray(content)) {
-        throw new Error("terser compressor does not support array content");
-    }
+    const contentStr = ensureStringContent(content, "terser");
 
-    const contentStr =
-        content instanceof Buffer
-            ? content.toString()
-            : ((content ?? "") as string);
     const result = await minify(contentStr, settings?.options);
 
     if (typeof result.code !== "string") {

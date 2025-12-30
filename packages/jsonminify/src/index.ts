@@ -5,6 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 import jsonminify from "jsonminify";
 
 /**
@@ -15,14 +16,8 @@ import jsonminify from "jsonminify";
 export async function jsonMinify({
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (Array.isArray(content)) {
-        throw new Error("jsonminify compressor does not support array content");
-    }
+    const contentStr = ensureStringContent(content, "jsonminify");
 
-    const contentStr =
-        content instanceof Buffer
-            ? content.toString()
-            : ((content ?? "") as string);
     const code = jsonminify(contentStr);
 
     return { code };

@@ -5,6 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 import uglifyJS from "uglify-js";
 
 /**
@@ -17,14 +18,8 @@ export async function uglifyJs({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (Array.isArray(content)) {
-        throw new Error("uglify-js compressor does not support array content");
-    }
+    const contentStr = ensureStringContent(content, "uglify-js");
 
-    const contentStr =
-        content instanceof Buffer
-            ? content.toString()
-            : ((content ?? "") as string);
     const result = uglifyJS.minify(contentStr, settings?.options);
 
     if (result.error) {

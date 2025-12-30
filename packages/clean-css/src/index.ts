@@ -5,6 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 import CleanCSS from "clean-css";
 
 /**
@@ -17,9 +18,7 @@ export async function cleanCss({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (Array.isArray(content)) {
-        throw new Error("clean-css compressor does not support array content");
-    }
+    const contentStr = ensureStringContent(content, "clean-css");
 
     const options = settings?.options ? { ...settings.options } : {};
 
@@ -27,11 +26,6 @@ export async function cleanCss({
         options._sourceMap = options.sourceMap;
         options.sourceMap = true;
     }
-
-    const contentStr =
-        content instanceof Buffer
-            ? content.toString()
-            : ((content ?? "") as string);
 
     const result = new CleanCSS({ returnPromise: false, ...options }).minify(
         contentStr

@@ -2,6 +2,7 @@ import { buildArgs, toBuildArgsOptions } from "./buildArgs.ts";
 import { compressSingleFile } from "./compressSingleFile.ts";
 import { deleteFile } from "./deleteFile.ts";
 import { resetDeprecationWarnings, warnDeprecation } from "./deprecation.ts";
+import { ensureStringContent } from "./ensureStringContent.ts";
 import { getContentFromFiles } from "./getContentFromFiles.ts";
 import { getFilesizeGzippedInBytes } from "./getFilesizeGzippedInBytes.ts";
 import { getFilesizeInBytes } from "./getFilesizeInBytes.ts";
@@ -19,6 +20,7 @@ export {
     buildArgs,
     compressSingleFile,
     deleteFile,
+    ensureStringContent,
     getContentFromFiles,
     getFilesizeGzippedInBytes,
     getFilesizeInBytes,

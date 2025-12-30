@@ -5,7 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { warnDeprecation } from "@node-minify/utils";
+import { ensureStringContent, warnDeprecation } from "@node-minify/utils";
 import minify from "sqwish";
 
 /**
@@ -19,9 +19,7 @@ export async function sqwish({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (Array.isArray(content)) {
-        throw new Error("sqwish compressor does not support array content");
-    }
+    const contentStr = ensureStringContent(content, "sqwish");
 
     warnDeprecation(
         "sqwish",
@@ -31,10 +29,6 @@ export async function sqwish({
 
     const strict = settings?.options?.strict as boolean | undefined;
 
-    const contentStr =
-        content instanceof Buffer
-            ? content.toString()
-            : ((content ?? "") as string);
     const code = minify.minify(contentStr, strict);
 
     return { code };

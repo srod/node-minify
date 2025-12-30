@@ -6,7 +6,11 @@
 
 import { runCommandLine } from "@node-minify/run";
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { buildArgs, toBuildArgsOptions } from "@node-minify/utils";
+import {
+    buildArgs,
+    ensureStringContent,
+    toBuildArgsOptions,
+} from "@node-minify/utils";
 import compilerPath from "google-closure-compiler-java";
 
 // the allowed flags, taken from https://github.com/google/closure-compiler/wiki/Flags-and-Options
@@ -42,18 +46,9 @@ export async function gcc({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (Array.isArray(content)) {
-        throw new Error(
-            "google-closure-compiler compressor does not support array content"
-        );
-    }
+    const contentStr = ensureStringContent(content, "google-closure-compiler");
 
     const options = applyOptions({}, settings?.options ?? {});
-
-    const contentStr =
-        content instanceof Buffer
-            ? content.toString()
-            : ((content ?? "") as string);
 
     const result = await runCommandLine({
         args: gccCommand(options),

@@ -5,7 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { warnDeprecation } from "@node-minify/utils";
+import { ensureStringContent, warnDeprecation } from "@node-minify/utils";
 import minify from "crass";
 
 /**
@@ -17,20 +17,13 @@ import minify from "crass";
 export async function crass({
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (Array.isArray(content)) {
-        throw new Error("crass compressor does not support array content");
-    }
+    const contentStr = ensureStringContent(content, "crass");
 
     warnDeprecation(
         "crass",
         "crass is no longer maintained. " +
             "Please migrate to @node-minify/cssnano or @node-minify/clean-css."
     );
-
-    const contentStr =
-        content instanceof Buffer
-            ? content.toString()
-            : ((content ?? "") as string);
 
     const code = minify.parse(contentStr).optimize().toString();
 

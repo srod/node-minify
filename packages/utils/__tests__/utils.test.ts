@@ -21,6 +21,7 @@ import {
     buildArgs,
     compressSingleFile,
     deleteFile,
+    ensureStringContent,
     getContentFromFiles,
     getFilesizeGzippedInBytes,
     getFilesizeInBytes,
@@ -982,6 +983,34 @@ describe("Package: utils", () => {
             expect(result).toBe("minified");
             expect(compressor).toHaveBeenCalledWith(
                 expect.objectContaining({ content: bufferContent })
+            );
+        });
+    });
+
+    describe("ensureStringContent", () => {
+        test("should return string content unchanged", () => {
+            expect(ensureStringContent("hello", "test")).toBe("hello");
+        });
+
+        test("should return empty string for undefined content", () => {
+            expect(ensureStringContent(undefined, "test")).toBe("");
+        });
+
+        test("should convert Buffer to string", () => {
+            const buffer = Buffer.from("buffer content");
+            expect(ensureStringContent(buffer, "test")).toBe("buffer content");
+        });
+
+        test("should throw error for array content", () => {
+            const arrayContent = [Buffer.from("a"), Buffer.from("b")];
+            expect(() =>
+                ensureStringContent(arrayContent, "myCompressor")
+            ).toThrow("myCompressor compressor does not support array content");
+        });
+
+        test("should include compressor name in error message", () => {
+            expect(() => ensureStringContent([], "terser")).toThrow(
+                "terser compressor does not support array content"
             );
         });
     });

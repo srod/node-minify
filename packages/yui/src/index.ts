@@ -10,6 +10,7 @@ import { runCommandLine } from "@node-minify/run";
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import {
     buildArgs,
+    ensureStringContent,
     toBuildArgsOptions,
     warnDeprecation,
 } from "@node-minify/utils";
@@ -28,9 +29,7 @@ export async function yui({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (Array.isArray(content)) {
-        throw new Error("yui compressor does not support array content");
-    }
+    const contentStr = ensureStringContent(content, "yui");
 
     warnDeprecation(
         "yui",
@@ -44,11 +43,6 @@ export async function yui({
     ) {
         throw new Error("You must specify a type: js or css");
     }
-
-    const contentStr =
-        content instanceof Buffer
-            ? content.toString()
-            : ((content ?? "") as string);
 
     const result = await runCommandLine({
         args: yuiCommand(settings.type, settings?.options ?? {}),
