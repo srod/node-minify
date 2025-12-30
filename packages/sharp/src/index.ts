@@ -42,29 +42,32 @@ async function convertImage(
     const sharpInstance = await getSharp();
     let converter = sharpInstance(input);
 
+    const clamp = (val: number, min: number, max: number) =>
+        Math.max(min, Math.min(max, val));
+
     switch (format) {
         case "webp":
             converter = converter.webp({
-                quality: options.quality ?? 80,
+                quality: clamp(options.quality ?? 80, 1, 100),
                 lossless: options.lossless ?? false,
-                effort: options.effort ?? 6,
+                effort: clamp(options.effort ?? 4, 0, 6),
             });
             break;
         case "avif":
             converter = converter.avif({
-                quality: options.quality ?? 50,
+                quality: clamp(options.quality ?? 50, 1, 100),
                 lossless: options.lossless ?? false,
-                effort: options.effort ?? 4,
+                effort: clamp(options.effort ?? 4, 0, 9),
             });
             break;
         case "png":
             converter = converter.png({
-                compressionLevel: options.effort ?? 9,
+                compressionLevel: clamp(options.effort ?? 6, 0, 9),
             });
             break;
         case "jpeg":
             converter = converter.jpeg({
-                quality: options.quality ?? 90,
+                quality: clamp(options.quality ?? 90, 1, 100),
                 mozjpeg: true,
             });
             break;

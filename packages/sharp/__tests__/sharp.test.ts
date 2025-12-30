@@ -109,4 +109,62 @@ describe("sharp", () => {
 
         expect(result.buffer).toBeInstanceOf(Buffer);
     });
+
+    test("should clamp quality and effort", async () => {
+        const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+
+        const result = await sharp({
+            settings: {
+                compressor: sharp,
+                options: {
+                    format: "webp",
+                    quality: 200,
+                    effort: 20,
+                },
+            },
+            content: inputBuffer,
+        });
+
+        expect(result.buffer).toBeInstanceOf(Buffer);
+
+        await sharp({
+            settings: {
+                compressor: sharp,
+                options: {
+                    format: "avif",
+                    quality: -50,
+                    effort: -5,
+                },
+            },
+            content: inputBuffer,
+        });
+
+        expect(result.buffer).toBeInstanceOf(Buffer);
+
+        await sharp({
+            settings: {
+                compressor: sharp,
+                options: {
+                    format: "png",
+                    effort: 20,
+                },
+            },
+            content: inputBuffer,
+        });
+
+        expect(result.buffer).toBeInstanceOf(Buffer);
+
+        await sharp({
+            settings: {
+                compressor: sharp,
+                options: {
+                    format: "jpeg",
+                    quality: 200,
+                },
+            },
+            content: inputBuffer,
+        });
+
+        expect(result.buffer).toBeInstanceOf(Buffer);
+    });
 });
