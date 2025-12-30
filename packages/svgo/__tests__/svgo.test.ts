@@ -142,3 +142,45 @@ describe("svgo (integration)", () => {
         expect(result.code).toContain("viewBox");
     });
 });
+
+describe("svgo (error handling)", () => {
+    test("should wrap SVGO errors with descriptive message", async () => {
+        // Invalid SVG that will cause SVGO to throw an error
+        const invalidSvg = "<svg><invalid-element";
+
+        await expect(
+            svgo({
+                settings: {
+                    compressor: svgo,
+                    options: {},
+                },
+                content: invalidSvg,
+            })
+        ).rejects.toThrow("SVGO optimization failed:");
+    });
+
+    test("should re-throw non-Error exceptions", async () => {
+        // Use a plugin that throws a non-Error value
+        const validSvg =
+            '<svg xmlns="http://www.w3.org/2000/svg"><rect/></svg>';
+
+        await expect(
+            svgo({
+                settings: {
+                    compressor: svgo,
+                    options: {
+                        plugins: [
+                            {
+                                name: "throwNonError",
+                                fn: () => {
+                                    throw "string error"; // Non-Error throw
+                                },
+                            },
+                        ],
+                    },
+                },
+                content: validSvg,
+            })
+        ).rejects.toBe("string error");
+    });
+});

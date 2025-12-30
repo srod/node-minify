@@ -1087,6 +1087,47 @@ describe("Package: utils", () => {
                 webpContent
             );
         });
+
+        test("should fallback to auto-generated path when output is non-string truthy value", async () => {
+            const testFile = `${tmpDir}/fallback-nonstring.png`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(`${tmpDir}/fallback-nonstring.webp`);
+            writeFile({ file: testFile, content: "test" });
+            const webpContent = Buffer.from("WEBP_NONSTRING_OUTPUT");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [{ format: "webp", content: webpContent }],
+            });
+            const settings = {
+                compressor,
+                input: testFile,
+                output: { invalid: "object" },
+            } as any;
+
+            await run({ settings, content: "" });
+
+            expect(readFile(`${tmpDir}/fallback-nonstring.webp`, true)).toEqual(
+                webpContent
+            );
+        });
+
+        test("should fallback with 'output' basename when input is empty and output is non-string", async () => {
+            const webpContent = Buffer.from("WEBP_FALLBACK_NO_INPUT");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [{ format: "webp", content: webpContent }],
+            });
+            const settings = {
+                compressor,
+                input: "",
+                output: 123,
+            } as any;
+            filesToCleanup.add("output.webp");
+
+            await run({ settings, content: "" });
+
+            expect(readFile("output.webp", true)).toEqual(webpContent);
+        });
     });
 
     describe("compressSingleFile with Buffer content", () => {
