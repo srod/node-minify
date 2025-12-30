@@ -69,19 +69,6 @@ function determineContent<T extends CompressorOptions = CompressorOptions>(
         }
     }
 
-    if (settings.input && Array.isArray(settings.input)) {
-        const isImage = settings.input.some((file) => isImageFile(file));
-        if (isImage) {
-            return settings.input.map((file) => readFileSync(file));
-        }
-    }
-
-    if (settings.input && typeof settings.input === "string") {
-        if (isImageFile(settings.input)) {
-            return readFileSync(settings.input);
-        }
-    }
-
     if (settings.input) {
         return getContentFromFiles(settings.input);
     }
