@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { lstat } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { describe, expect, test, vi } from "vitest";
 import { getContentFromFilesAsync } from "../src/getContentFromFiles.ts";
 
@@ -12,7 +12,7 @@ vi.mock("node:fs/promises", async (importOriginal) => {
     const actual = await importOriginal<typeof import("node:fs/promises")>();
     return {
         ...actual,
-        lstat: vi.fn(actual.lstat),
+        readFile: vi.fn(actual.readFile),
     };
 });
 
@@ -48,7 +48,7 @@ describe("getContentFromFilesAsync", () => {
     test("should throw if one file does not exist", async () => {
         await expect(
             getContentFromFilesAsync([fixtureFile, "fake.js"])
-        ).rejects.toThrow("File does not exist");
+        ).rejects.toThrow("ENOENT");
     });
 
     test("should throw if one path is a directory", async () => {
@@ -59,12 +59,14 @@ describe("getContentFromFilesAsync", () => {
 
     test("should throw if path is not a valid file (async check)", async () => {
         await expect(getContentFromFilesAsync("fake.js")).rejects.toThrow(
-            "File does not exist"
+            "ENOENT"
         );
     });
 
-    test("should throw if lstat fails with non-ENOENT error", async () => {
-        vi.mocked(lstat).mockRejectedValueOnce(new Error("Generic FS error"));
+    test("should throw if readFile fails with a generic error", async () => {
+        vi.mocked(readFile).mockRejectedValueOnce(
+            new Error("Generic FS error")
+        );
         await expect(getContentFromFilesAsync(fixtureFile)).rejects.toThrow(
             "Generic FS error"
         );
