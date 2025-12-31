@@ -37,10 +37,19 @@ export async function isValidFileAsync(path: string): Promise<boolean> {
     try {
         const stats = await lstat(path);
         return !stats.isDirectory();
-    } catch (error: any) {
-        if (error.code === "ENOENT") {
+    } catch (error: unknown) {
+        if (
+            error &&
+            typeof error === "object" &&
+            "code" in error &&
+            error.code === "ENOENT"
+        ) {
             return false;
         }
-        throw new FileOperationError("validate", path, error as Error);
+        throw new FileOperationError(
+            "validate",
+            path,
+            error instanceof Error ? error : new Error(String(error))
+        );
     }
 }
