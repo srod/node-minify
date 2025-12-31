@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { existsSync, lstatSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { FileOperationError } from "./error.ts";
 
 /**
@@ -26,12 +26,6 @@ export function readFile(file: string, asBuffer: false): string;
 export function readFile(file: string, asBuffer?: boolean): string | Buffer;
 export function readFile(file: string, asBuffer?: boolean): string | Buffer {
     try {
-        if (!existsSync(file)) {
-            throw new Error("File does not exist");
-        }
-        if (!lstatSync(file).isFile()) {
-            throw new Error("Path is not a file");
-        }
         return asBuffer ? readFileSync(file) : readFileSync(file, "utf8");
     } catch (error) {
         throw new FileOperationError("read", file, error as Error);

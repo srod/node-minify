@@ -63,7 +63,7 @@ describe("Package: utils", () => {
         });
 
         test("should throw an error if path is a directory", () => {
-            expect(() => readFile(__dirname)).toThrow("Path is not a file");
+            expect(() => readFile(__dirname)).toThrow(/EISDIR/);
         });
 
         test("should return Buffer when asBuffer is true", () => {
