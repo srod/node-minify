@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/cssnano",
-  "version": "10.1.1",
+  "version": "10.2.0",
   "description": "cssnano plugin for @node-minify",
   "keywords": [
     "compressor",
