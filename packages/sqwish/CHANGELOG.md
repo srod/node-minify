@@ -1,5 +1,12 @@
 # @node-minify/sqwish
 
+## 10.2.0
+
+### Patch Changes
+
+- Updated dependencies [3c98739]
+  - @node-minify/utils@10.2.0
+
 ## 10.1.1
 
 ### Patch Changes

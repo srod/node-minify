@@ -23,7 +23,7 @@
     },
     "docs": {
       "name": "@node-minify/docs",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@astrojs/cloudflare": "^12.0.0",
         "@astrojs/partytown": "2.1.4",
@@ -42,7 +42,7 @@
     },
     "examples": {
       "name": "@node-minify/examples",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/babel-minify": "workspace:*",
         "@node-minify/clean-css": "workspace:*",
@@ -70,7 +70,7 @@
     },
     "packages/babel-minify": {
       "name": "@node-minify/babel-minify",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "babel-core": "6.26.3",
@@ -84,7 +84,7 @@
     },
     "packages/clean-css": {
       "name": "@node-minify/clean-css",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "clean-css": "5.3.3",
@@ -96,7 +96,7 @@
     },
     "packages/cli": {
       "name": "@node-minify/cli",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "bin": {
         "node-minify": "dist/bin/cli.js",
       },
@@ -126,7 +126,7 @@
     },
     "packages/core": {
       "name": "@node-minify/core",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "mkdirp": "3.0.1",
@@ -137,7 +137,7 @@
     },
     "packages/crass": {
       "name": "@node-minify/crass",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "crass": "0.12.3",
@@ -148,7 +148,7 @@
     },
     "packages/cssnano": {
       "name": "@node-minify/cssnano",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "cssnano": "^7.0.6",
@@ -160,7 +160,7 @@
     },
     "packages/csso": {
       "name": "@node-minify/csso",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "csso": "5.0.5",
@@ -172,7 +172,7 @@
     },
     "packages/esbuild": {
       "name": "@node-minify/esbuild",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "esbuild": "^0.27.0",
@@ -183,7 +183,7 @@
     },
     "packages/google-closure-compiler": {
       "name": "@node-minify/google-closure-compiler",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/run": "workspace:*",
         "@node-minify/utils": "workspace:*",
@@ -195,7 +195,7 @@
     },
     "packages/html-minifier": {
       "name": "@node-minify/html-minifier",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "html-minifier-next": "^4.14.3",
@@ -206,7 +206,7 @@
     },
     "packages/imagemin": {
       "name": "@node-minify/imagemin",
-      "version": "10.0.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/core": "workspace:*",
         "@node-minify/utils": "workspace:*",
@@ -226,7 +226,7 @@
     },
     "packages/jsonminify": {
       "name": "@node-minify/jsonminify",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "jsonminify": "0.4.2",
@@ -238,7 +238,7 @@
     },
     "packages/lightningcss": {
       "name": "@node-minify/lightningcss",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "lightningcss": "^1.28.2",
@@ -249,7 +249,7 @@
     },
     "packages/no-compress": {
       "name": "@node-minify/no-compress",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
       },
@@ -259,7 +259,7 @@
     },
     "packages/oxc": {
       "name": "@node-minify/oxc",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "oxc-minify": "^0.106.0",
@@ -270,14 +270,14 @@
     },
     "packages/run": {
       "name": "@node-minify/run",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "devDependencies": {
         "@node-minify/types": "workspace:*",
       },
     },
     "packages/sharp": {
       "name": "@node-minify/sharp",
-      "version": "10.0.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/core": "workspace:*",
         "@node-minify/utils": "workspace:*",
@@ -289,7 +289,7 @@
     },
     "packages/sqwish": {
       "name": "@node-minify/sqwish",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "sqwish": "0.2.2",
@@ -300,7 +300,7 @@
     },
     "packages/svgo": {
       "name": "@node-minify/svgo",
-      "version": "10.0.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "svgo": "^4.0.0",
@@ -311,7 +311,7 @@
     },
     "packages/swc": {
       "name": "@node-minify/swc",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "@swc/core": "^1.10.4",
@@ -322,7 +322,7 @@
     },
     "packages/terser": {
       "name": "@node-minify/terser",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "terser": "5.44.1",
@@ -333,11 +333,11 @@
     },
     "packages/types": {
       "name": "@node-minify/types",
-      "version": "10.1.1",
+      "version": "10.2.0",
     },
     "packages/uglify-es": {
       "name": "@node-minify/uglify-es",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "uglify-es": "3.3.9",
@@ -349,7 +349,7 @@
     },
     "packages/uglify-js": {
       "name": "@node-minify/uglify-js",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "uglify-js": "3.19.3",
@@ -361,7 +361,7 @@
     },
     "packages/utils": {
       "name": "@node-minify/utils",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "fast-glob": "^3.3.3",
         "gzip-size": "7.0.0",
@@ -372,7 +372,7 @@
     },
     "packages/yui": {
       "name": "@node-minify/yui",
-      "version": "10.1.1",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/run": "workspace:*",
         "@node-minify/utils": "workspace:*",
