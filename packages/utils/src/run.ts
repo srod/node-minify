@@ -89,6 +89,12 @@ function writeOutput<T extends CompressorOptions = CompressorOptions>(
     }
 }
 
+/**
+ * Extract the first input file path from the input configuration.
+ *
+ * @param input - A single file path, an array of paths, or undefined
+ * @returns The first input file path, or an empty string if none available
+ */
 function getFirstInputFile(input: string | string[] | undefined): string {
     if (typeof input === "string") {
         return input;
