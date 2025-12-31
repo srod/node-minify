@@ -5,34 +5,38 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { warnDeprecation } from "@node-minify/utils";
+import { ensureStringContent, warnDeprecation } from "@node-minify/utils";
 import uglifyES from "uglify-es";
 
 /**
- * Run uglify-es.
+ * Minifies JavaScript content using uglify-es.
+ *
  * @deprecated uglify-es is no longer maintained. Use @node-minify/terser instead.
- * @param settings - UglifyES options
- * @param content - Content to minify
- * @returns Minified content and optional source map
+ * @param settings - Minifier settings and uglify-es options
+ * @param content - Input content to minify
+ * @returns The minified code as `code` and the source map as `map` if produced
+ * @throws The error produced by uglify-es when minification fails
  */
 export async function uglifyEs({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    const contentStr = ensureStringContent(content, "uglify-es");
+
     warnDeprecation(
         "uglify-es",
         "uglify-es is no longer maintained. " +
             "Please migrate to @node-minify/terser for continued support and modern JavaScript features."
     );
 
-    let inputContent: string | Record<string, string> = content ?? "";
+    let inputContent: string | Record<string, string> = contentStr;
     const sourceMapOptions = settings.options?.sourceMap as
         | { filename?: string }
         | undefined;
 
     if (typeof sourceMapOptions === "object") {
         inputContent = {
-            [sourceMapOptions.filename ?? ""]: content ?? "",
+            [sourceMapOptions.filename ?? ""]: contentStr,
         };
     }
 

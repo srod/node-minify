@@ -1,18 +1,18 @@
-<p align="center"><img src="/static/node-minify.svg" width="348" alt="node-minify"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/srod/node-minify/main/static/node-minify.svg" width="348" alt="node-minify"></p>
 
 <p align="center">A very light minifier Node.js module.</p>
 
 <p align="center">
   <br>
-  <a href="https://npmjs.org/package/@node-minify/core"><img src="https://img.shields.io/npm/v/@node-minify/core.svg"></a>
-  <a href="https://npmjs.org/package/@node-minify/core"><img src="https://img.shields.io/npm/dm/@node-minify/core.svg"></a>
+  <a href="https://npmjs.org/package/@node-minify/core"><img src="https://img.shields.io/npm/v/@node-minify/core.svg" alt="npm version"></a>
+  <a href="https://npmjs.org/package/@node-minify/core"><img src="https://img.shields.io/npm/dm/@node-minify/core.svg" alt="npm downloads"></a>
   <a href="https://github.com/srod/node-minify/actions"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fsrod%2Fnode-minify%2Fbadge%3Fref%3Dmain&style=flat" /></a>
-  <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/main/graph/badge.svg"></a>
+  <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/main/graph/badge.svg" alt="code coverage"></a>
 </p>
 
 # Features
 
-It allow you to compress JavaScript, CSS and HTML files.
+It allows you to compress JavaScript, CSS, HTML, and image files.
 
 **JavaScript:**
 
@@ -45,6 +45,12 @@ It allow you to compress JavaScript, CSS and HTML files.
 
 - [jsonminify](https://node-minify.2clics.net/compressors/jsonminify)
 
+**Image:**
+
+- [sharp](https://node-minify.2clics.net/compressors/sharp) - WebP/AVIF conversion
+- [svgo](https://node-minify.2clics.net/compressors/svgo) - SVG optimization
+- [imagemin](https://node-minify.2clics.net/compressors/imagemin) - PNG/JPEG/GIF compression
+
 **Other:**
 
 - [No compress](https://node-minify.2clics.net/options#concatenate-files)
@@ -65,16 +71,42 @@ pnpm add @node-minify/core
 bun add @node-minify/core
 ```
 
-And install the compressor you want
+And install the compressor(s) you want:
+
+### JavaScript Compressors
 
 ```bash
-npm install @node-minify/uglify-js
-# Or Yarn
-yarn add @node-minify/uglify-js
-# Or pnpm
-pnpm add @node-minify/uglify-js
-# Or Bun
-bun add @node-minify/uglify-js
+npm install @node-minify/terser        # Recommended - modern, fast, well-maintained
+npm install @node-minify/esbuild       # Extremely fast, also handles CSS
+npm install @node-minify/swc           # Rust-based, very fast
+npm install @node-minify/oxc           # Rust-based, cutting-edge
+npm install @node-minify/uglify-js     # Classic, battle-tested
+npm install @node-minify/google-closure-compiler  # Advanced optimizations
+```
+
+### CSS Compressors
+
+```bash
+npm install @node-minify/lightningcss  # Recommended - Rust-based, fastest
+npm install @node-minify/esbuild       # Also handles JS
+npm install @node-minify/clean-css     # Feature-rich, reliable
+npm install @node-minify/cssnano       # PostCSS-based, customizable
+npm install @node-minify/csso          # Structural optimizations
+```
+
+### HTML & Other
+
+```bash
+npm install @node-minify/html-minifier # HTML minification
+npm install @node-minify/jsonminify    # JSON minification
+```
+
+### Image Compressors
+
+```bash
+npm install @node-minify/sharp         # WebP/AVIF conversion, high performance
+npm install @node-minify/svgo          # SVG optimization
+npm install @node-minify/imagemin      # PNG/JPEG/GIF compression
 ```
 
 ## Quick Start

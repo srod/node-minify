@@ -47,7 +47,31 @@ jobs:
         with:
           publish: bun run changeset:release
           version: bun run changeset:version
-          createGithubReleases: true
+          createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
+
+      - name: 📦 Create Aggregated GitHub Release
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          VERSION=$(jq -r '.version' packages/core/package.json)
+          PACKAGES='${{ steps.changesets.outputs.publishedPackages }}'
+
+          # Format package list as markdown
+          PACKAGE_LIST=$(echo "$PACKAGES" | jq -r '.[] | "- `\(.name)@\(.version)`"')
+
+          # Create release notes
+          cat > /tmp/release-notes.md << 'EOF'
+          ## Published Packages
+
+          EOF
+          echo "$PACKAGE_LIST" >> /tmp/release-notes.md
+          echo "" >> /tmp/release-notes.md
+          echo "See individual package CHANGELOGs for details." >> /tmp/release-notes.md
+
+          gh release create "v${VERSION}" \
+            --title "v${VERSION}" \
+            --notes-file /tmp/release-notes.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

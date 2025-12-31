@@ -8,19 +8,30 @@
  * Module dependencies.
  */
 import fs from "node:fs";
-import type { Settings } from "@node-minify/types";
+import type {
+    CompressorOptions,
+    MinifierOptions,
+    Settings,
+} from "@node-minify/types";
 import {
     compressSingleFile,
-    getContentFromFiles,
+    getContentFromFilesAsync,
     run,
 } from "@node-minify/utils";
 import { mkdirp } from "mkdirp";
 
 /**
- * Run compressor.
- * @param settings Settings
+ * Run the compressor using the provided settings.
+ *
+ * Validates settings when `output` is an array (requires `input` to be an array with the same length) and ensures target output directories exist before processing. Dispatches either multi-file or single-file compression based on `settings.output`.
+ *
+ * @param settings - Compression settings including `input`, `output`, and compressor-specific options
+ * @returns The resulting compressed output string for a single output, or the last result produced when processing multiple outputs (or an empty string if no results were produced)
+ * @throws Error - If `output` is an array but `input` is not, or if `input` and `output` arrays have differing lengths
  */
-export async function compress(settings: Settings): Promise<string> {
+export async function compress<T extends CompressorOptions = CompressorOptions>(
+    settings: Settings<T>
+): Promise<string> {
     if (Array.isArray(settings.output)) {
         if (!Array.isArray(settings.input)) {
             throw new Error(
@@ -43,25 +54,38 @@ export async function compress(settings: Settings): Promise<string> {
         return compressArrayOfFiles(settings);
     }
 
-    return compressSingleFile(settings);
+    return compressSingleFile(settings as Settings);
 }
 
 /**
- * Compress an array of files.
- * @param settings Settings
+ * Compress multiple input files specified in the settings.
+ *
+ * @param settings - Configuration object where `settings.input` and `settings.output` are arrays of equal length; each `settings.input[i]` is a file path to compress and corresponds to `settings.output[i]`.
+ * @returns The result of the last compression task, or an empty string if no tasks ran.
+ * @throws Error if any entry in `settings.input` is not a non-empty string.
  */
-async function compressArrayOfFiles(settings: Settings): Promise<string> {
-    let result = "";
-    if (Array.isArray(settings.input)) {
-        for (let index = 0; index < settings.input.length; index++) {
-            const input = settings.input[index];
-            if (input) {
-                const content = getContentFromFiles(input);
-                result = await run({ settings, content, index });
-            }
+async function compressArrayOfFiles<
+    T extends CompressorOptions = CompressorOptions,
+>(settings: Settings<T>): Promise<string> {
+    const inputs = settings.input as string[];
+
+    inputs.forEach((input, index) => {
+        if (!input || typeof input !== "string") {
+            throw new Error(
+                `Invalid input at index ${index}: expected non-empty string, got ${
+                    typeof input === "string" ? "empty string" : typeof input
+                }`
+            );
         }
-    }
-    return result;
+    });
+
+    const compressionTasks = inputs.map(async (input, index) => {
+        const content = await getContentFromFilesAsync(input);
+        return run({ settings, content, index } as MinifierOptions<T>);
+    });
+
+    const results = await Promise.all(compressionTasks);
+    return results[results.length - 1] ?? "";
 }
 
 /**

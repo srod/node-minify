@@ -7,26 +7,30 @@
 /**
  * Module dependencies.
  */
-import type { Settings } from "@node-minify/types";
+import type { CompressorOptions, Settings } from "@node-minify/types";
 import { setFileNameMin, setPublicFolder, wildcards } from "@node-minify/utils";
 
 /**
  * Default settings.
  */
-const defaultSettings = {
+const defaultSettings: Partial<Settings> = {
     options: {},
     buffer: 1000 * 1024,
 };
 
 /**
- * Run setup.
- * @param inputSettings Settings from user input
+ * Builds and validates the final Settings object by merging defaults with user input.
+ *
+ * @param inputSettings - User-provided settings that override defaults
+ * @returns The validated and enhanced Settings object ready for use
  */
-function setup(inputSettings: Settings) {
-    const settings: Settings = {
+function setup<T extends CompressorOptions = CompressorOptions>(
+    inputSettings: Settings<T>
+): Settings<T> {
+    const settings: Settings<T> = {
         ...structuredClone(defaultSettings),
         ...inputSettings,
-    };
+    } as Settings<T>;
 
     // In memory
     if (settings.content) {
@@ -36,13 +40,37 @@ function setup(inputSettings: Settings) {
 
     validateMandatoryFields(inputSettings, ["compressor", "input", "output"]);
 
+    if (Array.isArray(settings.input)) {
+        settings.input.forEach((input, index) => {
+            if (!input || typeof input !== "string") {
+                throw new Error(
+                    `Invalid input at index ${index}: expected non-empty string, got ${
+                        typeof input === "string"
+                            ? "empty string"
+                            : typeof input
+                    }`
+                );
+            }
+        });
+    }
+
     return enhanceSettings(settings);
 }
 
 /**
- * Enhance settings.
+ * Augments a Settings object with derived values and normalized path outputs.
+ *
+ * Enhancements performed when applicable:
+ * - Expands input patterns into concrete input entries.
+ * - Computes output paths when a single output string contains the `$1` placeholder, producing per-input outputs.
+ * - Resolves and attaches public-folder-related values derived from input and publicFolder.
+ *
+ * @param settings - The initial settings to enhance
+ * @returns The enhanced Settings object with derived inputs, outputs, and public-folder values applied
  */
-function enhanceSettings(settings: Settings): Settings {
+function enhanceSettings<T extends CompressorOptions = CompressorOptions>(
+    settings: Settings<T>
+): Settings<T> {
     let enhancedSettings = settings;
 
     if (enhancedSettings.input) {
@@ -127,11 +155,16 @@ function checkOutput(
 }
 
 /**
- * Validate that mandatory fields are present in settings.
+ * Ensure required settings are present and that `compressor` is a valid function.
+ *
  * @param settings - Settings object to validate
- * @param fields - Array of required field names
+ * @param fields - Names of required fields to check on `settings`
+ * @throws Error if a required field is missing
+ * @throws Error if `settings.compressor` is not a function
  */
-function validateMandatoryFields(settings: Settings, fields: string[]) {
+function validateMandatoryFields<
+    T extends CompressorOptions = CompressorOptions,
+>(settings: Settings<T>, fields: string[]) {
     for (const field of fields) {
         mandatory(field, settings);
     }

@@ -14,14 +14,16 @@ interface WriteFileParams {
 }
 
 /**
- * Write content into file.
- * @param params Object containing file path, content and optional index
- * @returns Written content
- * @throws {ValidationError} If no target file is provided
- * @throws {FileOperationError} If file operations fail
- * @example
- * writeFile({ file: 'output.js', content: 'console.log("Hello")' })
- * writeFile({ file: ['file1.js', 'file2.js'], content: 'shared content', index: 0 })
+ * Write provided content to a target file.
+ *
+ * When `file` is an array and `index` is provided, the file at that index is used; otherwise `file` is used directly.
+ *
+ * @param file - Target path or array of target paths
+ * @param content - Content to write; may be a `string` or `Buffer`
+ * @param index - Optional index to select a file when `file` is an array
+ * @returns The same `content` value that was written
+ * @throws ValidationError If no target file, no content, or the resolved target path is invalid
+ * @throws FileOperationError If the underlying filesystem write fails (wraps the original error)
  */
 export function writeFile({
     file,
@@ -55,7 +57,11 @@ export function writeFile({
             throw new Error("Target path exists and is a directory");
         }
 
-        writeFileSync(targetFile, content, "utf8");
+        writeFileSync(
+            targetFile,
+            content,
+            Buffer.isBuffer(content) ? undefined : "utf8"
+        );
         return content;
     } catch (error) {
         if (error instanceof ValidationError) {

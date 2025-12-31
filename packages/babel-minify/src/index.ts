@@ -5,7 +5,11 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { readFile, warnDeprecation } from "@node-minify/utils";
+import {
+    ensureStringContent,
+    readFile,
+    warnDeprecation,
+} from "@node-minify/utils";
 import { transform } from "babel-core";
 import env from "babel-preset-env";
 import minify from "babel-preset-minify";
@@ -26,16 +30,23 @@ const knownPresets: Record<string, BabelPreset> = {
 };
 
 /**
- * Run babel-minify.
- * @deprecated babel-minify uses Babel 6 which is no longer maintained. Use @node-minify/terser instead.
- * @param settings - Babel-minify options
- * @param content - Content to minify
- * @returns Minified content
+ * Minifies JavaScript using Babel (ensures the `babel-preset-minify` preset is applied).
+ *
+ * Accepts optional Babel configuration via `settings.options.babelrc` (path to a .babelrc file)
+ * and `settings.options.presets` (array of presets or preset names). Known preset names are
+ * resolved to their bundled implementations before running Babel.
+ *
+ * @deprecated babel-minify uses Babel 6 which is no longer maintained. Migrate to @node-minify/terser for ongoing support.
+ * @param settings - Minifier settings; may include `options.babelrc` (string path) and `options.presets` (string[] or preset entries)
+ * @param content - Source content to be minified
+ * @returns An object with the minified code: `{ code: string }`
  */
 export async function babelMinify({
     settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
+    const contentStr = ensureStringContent(content, "babel-minify");
+
     warnDeprecation(
         "babel-minify",
         "babel-minify uses Babel 6 which is no longer maintained. " +
@@ -68,7 +79,7 @@ export async function babelMinify({
         babelOptions.presets = babelOptions.presets.concat([minify]);
     }
 
-    const result = transform(content ?? "", babelOptions);
+    const result = transform(contentStr, babelOptions);
 
     if (typeof result.code !== "string") {
         throw new Error("Babel minification failed: empty result");

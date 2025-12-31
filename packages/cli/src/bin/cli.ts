@@ -15,6 +15,15 @@ import { run } from "../index.ts";
 
 const DEFAULT_COMPRESSOR = "uglify-js";
 
+/**
+ * Create and configure the command-line interface for the node-minify tool.
+ *
+ * Configures options for selecting a compressor, input and output paths, file
+ * type, silence mode, and compressor-specific options; registers a help hook
+ * that displays available compressors and sets the CLI version.
+ *
+ * @returns The configured Command instance ready to parse CLI arguments.
+ */
 function setupProgram(): Command {
     const program = new Command();
 
@@ -28,6 +37,10 @@ function setupProgram(): Command {
         )
         .option("-i, --input [file]", "input file path")
         .option("-o, --output [file]", "output file path")
+        .option(
+            "-t, --type [type]",
+            "file type: js or css (required for esbuild, lightningcss, yui)"
+        )
         .option("-s, --silence", "no output will be printed")
         .option(
             "-O, --option [option]",

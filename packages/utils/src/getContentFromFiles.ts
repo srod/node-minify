@@ -5,6 +5,7 @@
  */
 
 import { existsSync, readFileSync } from "node:fs";
+import { readFile } from "node:fs/promises";
 import { FileOperationError } from "./error.ts";
 import { isValidFile } from "./isValidFile.ts";
 
@@ -23,6 +24,21 @@ function readFileContent(path: string): string {
             throw new Error("Path is not a valid file");
         }
         return readFileSync(path, "utf8");
+    } catch (error) {
+        throw new FileOperationError("read", path, error as Error);
+    }
+}
+
+/**
+ * Read the UTF-8 content of a single file.
+ *
+ * @param path - Filesystem path to the file
+ * @returns The file content as a string
+ * @throws FileOperationError if the file does not exist, the path is a directory, or reading the file fails
+ */
+async function readFileContentAsync(path: string): Promise<string> {
+    try {
+        return await readFile(path, "utf8");
     } catch (error) {
         throw new FileOperationError("read", path, error as Error);
     }
@@ -52,6 +68,43 @@ export function getContentFromFiles(input: string | string[]): string {
         }
 
         return input.map(readFileContent).join("\n");
+    } catch (error: unknown) {
+        if (error instanceof FileOperationError) {
+            throw error;
+        }
+        throw new Error(
+            `Failed to process input files: ${error instanceof Error ? error.message : String(error)}`
+        );
+    }
+}
+
+/**
+ * Concatenate contents of one or more files asynchronously.
+ *
+ * @param input - A file path or an array of file paths to read
+ * @returns The files' contents joined with newline characters
+ * @throws {FileOperationError} If an underlying file operation fails for any path
+ * @throws {Error} If `input` is missing or processing of the provided input fails
+ */
+export async function getContentFromFilesAsync(
+    input: string | string[]
+): Promise<string> {
+    try {
+        if (!input) {
+            throw new Error("Input must be a string or array of strings");
+        }
+
+        if (!Array.isArray(input)) {
+            return await readFileContentAsync(input);
+        }
+
+        if (input.length === 0) {
+            return "";
+        }
+
+        // Read files in parallel
+        const contents = await Promise.all(input.map(readFileContentAsync));
+        return contents.join("\n");
     } catch (error: unknown) {
         if (error instanceof FileOperationError) {
             throw error;

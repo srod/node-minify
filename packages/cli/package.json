@@ -12,7 +12,7 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "node-minify": "dist/cli.js"
+    "node-minify": "dist/bin/cli.js"
   },
   "engines": {
     "node": ">=20.0.0"
@@ -29,7 +29,6 @@
   },
   "sideEffects": false,
   "files": [
-    "bin",
     "dist/**/*"
   ],
   "publishConfig": {
@@ -63,8 +62,18 @@
     "update-notifier": "7.3.1"
   },
   "devDependencies": {
+    "@node-minify/clean-css": "workspace:*",
+    "@node-minify/cssnano": "workspace:*",
+    "@node-minify/csso": "workspace:*",
+    "@node-minify/esbuild": "workspace:*",
     "@node-minify/google-closure-compiler": "workspace:*",
+    "@node-minify/jsonminify": "workspace:*",
+    "@node-minify/lightningcss": "workspace:*",
+    "@node-minify/oxc": "workspace:*",
+    "@node-minify/swc": "workspace:*",
+    "@node-minify/terser": "workspace:*",
     "@node-minify/types": "workspace:*",
+    "@node-minify/uglify-js": "workspace:*",
     "@node-minify/yui": "workspace:*"
   }
 }

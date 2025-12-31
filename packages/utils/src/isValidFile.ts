@@ -5,6 +5,7 @@
  */
 
 import { existsSync, lstatSync } from "node:fs";
+import { lstat } from "node:fs/promises";
 import { FileOperationError } from "./error.ts";
 
 /**
@@ -22,5 +23,33 @@ export function isValidFile(path: string): boolean {
         return existsSync(path) && !lstatSync(path).isDirectory();
     } catch (error) {
         throw new FileOperationError("validate", path, error as Error);
+    }
+}
+
+/**
+ * Determine whether a filesystem path refers to an existing file (not a directory).
+ *
+ * @param path - Path to check
+ * @returns `true` if the path exists and is a file, `false` otherwise.
+ * @throws {FileOperationError} If a filesystem error other than `ENOENT` occurs while validating the path.
+ */
+export async function isValidFileAsync(path: string): Promise<boolean> {
+    try {
+        const stats = await lstat(path);
+        return !stats.isDirectory();
+    } catch (error: unknown) {
+        if (
+            error &&
+            typeof error === "object" &&
+            "code" in error &&
+            error.code === "ENOENT"
+        ) {
+            return false;
+        }
+        throw new FileOperationError(
+            "validate",
+            path,
+            error instanceof Error ? error : new Error(String(error))
+        );
     }
 }
