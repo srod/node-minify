@@ -68,7 +68,7 @@ This is a Bun monorepo for compressing JavaScript, CSS, and HTML files using var
 ### Package Pattern
 
 All packages follow the same structure:
-```
+```text
 packages/<name>/
 ├── src/index.ts      # Main export
 ├── __tests__/        # Vitest tests
@@ -138,6 +138,91 @@ import { warnDeprecation } from "@node-minify/utils";
 
 warnDeprecation("@node-minify/old-package", "Use @node-minify/new-package instead");
 ```
+
+### Async / Parallel Patterns
+
+The codebase uses async functions for file operations and parallel compression.
+
+#### Async File Operations
+```ts
+import {
+    getContentFromFilesAsync,
+    isValidFileAsync,
+} from "@node-minify/utils";
+
+// Async file reading (preferred for non-blocking IO)
+const content = await getContentFromFilesAsync("src/app.js");
+const contents = await getContentFromFilesAsync(["src/a.js", "src/b.js"]);
+
+// Async file validation
+if (await isValidFileAsync("src/app.js")) {
+    // file exists and is readable
+}
+```
+
+#### Parallel Compression (Array Inputs)
+
+The core `minify()` function automatically processes array inputs in parallel:
+```ts
+// Core handles parallelization internally via Promise.all
+await minify({
+    compressor: terser,
+    input: ["src/a.js", "src/b.js", "src/c.js"],
+    output: ["dist/a.min.js", "dist/b.min.js", "dist/c.min.js"],
+});
+```
+
+#### Custom Parallel Processing
+
+For custom parallel operations:
+```ts
+// Basic parallel execution
+const results = await Promise.all(
+    files.map(async (file, index) => {
+        const content = await getContentFromFilesAsync(file);
+        return run({ settings, content, index });
+    })
+);
+
+// With error handling per item (use allSettled)
+const results = await Promise.allSettled(
+    files.map(file => compressSingleFile({ ...settings, input: file }))
+);
+// Map results back to inputs
+results.forEach((result, i) => {
+    if (result.status === "fulfilled") {
+        console.log(`${files[i]}: success`);
+    } else {
+        console.error(`${files[i]}: ${result.reason}`);
+    }
+});
+```
+
+#### Concurrency Limits
+
+For large arrays, limit concurrent operations to avoid resource exhaustion:
+```ts
+// Using p-limit (install: bun add p-limit)
+import pLimit from "p-limit";
+
+const limit = pLimit(5); // max 5 concurrent
+const results = await Promise.all(
+    files.map(file => limit(() => compressSingleFile({ ...settings, input: file })))
+);
+
+// Or batch processing
+async function processBatches<T>(items: T[], batchSize: number, fn: (item: T) => Promise<unknown>) {
+    for (let i = 0; i < items.length; i += batchSize) {
+        await Promise.all(items.slice(i, i + batchSize).map(fn));
+    }
+}
+```
+
+**Guidelines:**
+- Use `Promise.all` when all operations must succeed (fail-fast)
+- Use `Promise.allSettled` when you need results for all items regardless of individual failures
+- Limit concurrency to 5-10 for file operations, 2-4 for CPU-intensive compressions
+- Always maintain 1:1 mapping between inputs and outputs for traceability
 
 ## Troubleshooting
 
