@@ -27,14 +27,11 @@ export function isValidFile(path: string): boolean {
 }
 
 /**
- * Check if the path is a valid file asynchronously.
- * @param path Path to check
- * @returns true if path exists and is a file, false otherwise
- * @throws {FileOperationError} If filesystem operations fail
- * @example
- * if (await isValidFileAsync('path/to/file.js')) {
- *   // do something
- * }
+ * Determine whether a filesystem path refers to an existing file (not a directory).
+ *
+ * @param path - Path to check
+ * @returns `true` if the path exists and is a file, `false` otherwise.
+ * @throws {FileOperationError} If a filesystem error other than `ENOENT` occurs while validating the path.
  */
 export async function isValidFileAsync(path: string): Promise<boolean> {
     try {

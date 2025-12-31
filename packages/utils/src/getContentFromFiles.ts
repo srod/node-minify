@@ -30,10 +30,11 @@ function readFileContent(path: string): string {
 }
 
 /**
- * Read content from a single file with error handling asynchronously.
- * @param path Path to the file
- * @returns Content of the file
- * @throws {FileOperationError} If file doesn't exist or reading fails
+ * Read the UTF-8 content of a single file.
+ *
+ * @param path - Filesystem path to the file
+ * @returns The file content as a string
+ * @throws FileOperationError if the file does not exist, the path is a directory, or reading the file fails
  */
 async function readFileContentAsync(path: string): Promise<string> {
     try {
@@ -97,13 +98,12 @@ export function getContentFromFiles(input: string | string[]): string {
 }
 
 /**
- * Concatenate all input files and get the data asynchronously.
- * @param input Single file path or array of file paths
- * @returns Concatenated content of all files
- * @throws {FileOperationError} If any file operation fails
- * @example
- * await getContentFromFilesAsync('file.js')
- * await getContentFromFilesAsync(['file1.js', 'file2.js'])
+ * Concatenate contents of one or more files asynchronously.
+ *
+ * @param input - A file path or an array of file paths to read
+ * @returns The files' contents joined with newline characters
+ * @throws {FileOperationError} If an underlying file operation fails for any path
+ * @throws {Error} If `input` is missing or processing of the provided input fails
  */
 export async function getContentFromFilesAsync(
     input: string | string[]

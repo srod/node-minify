@@ -37,10 +37,11 @@ const allowedFlags = [
 ];
 
 /**
- * Run Google Closure Compiler.
- * @param settings - GCC options
- * @param content - Content to minify
- * @returns Minified content
+ * Minifies JavaScript using the Google Closure Compiler.
+ *
+ * @param settings - Minifier options; `settings.options` keys that match supported compiler flags are applied
+ * @param content - Source to minify; non-string input will be converted to a string before compilation
+ * @returns An object with `code` containing the compiled/minified source string
  */
 export async function gcc({
     settings,

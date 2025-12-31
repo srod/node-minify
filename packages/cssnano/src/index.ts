@@ -10,9 +10,10 @@ import minify from "cssnano";
 import postcss from "postcss";
 
 /**
- * Run cssnano.
- * @param content - Content to minify
- * @returns Minified content
+ * Minifies the provided CSS content using cssnano via PostCSS.
+ *
+ * @param content - The CSS content to minify (string or buffer)
+ * @returns An object whose `code` property is the minified CSS string
  */
 export async function cssnano({
     content,

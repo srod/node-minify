@@ -64,10 +64,11 @@ export type SvgOptions = {
 };
 
 /**
- * Run SVGO.
- * @param settings - SVGO options
- * @param content - SVG content to minify
- * @returns Minified SVG content
+ * Minifies SVG content using SVGO.
+ *
+ * @param settings - Minifier settings; when present, `settings.options` configures SVGO behavior (for example: `plugins`, `floatPrecision`, `datauri`, `js2svg`, and `multipass`).
+ * @param content - The SVG content to minify.
+ * @returns A CompressorResult with the minified SVG in the `code` property.
  */
 export async function svgo({
     settings,

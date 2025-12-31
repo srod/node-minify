@@ -9,10 +9,11 @@ import { ensureStringContent } from "@node-minify/utils";
 import CleanCSS from "clean-css";
 
 /**
- * Run clean-css.
- * @param settings - Clean-css options
- * @param content - Content to minify
- * @returns Minified content and optional source map
+ * Minify CSS using the clean-css library and produce an optional source map.
+ *
+ * @param settings - Configuration for the clean-css minifier (may include an `options` object with clean-css flags)
+ * @param content - CSS input to be minified
+ * @returns An object with `code` containing the minified CSS and `map` containing the source map as a string if available
  */
 export async function cleanCss({
     settings,
