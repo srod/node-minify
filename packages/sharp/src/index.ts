@@ -5,7 +5,9 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import type SharpType from "sharp";
+import type { Sharp } from "sharp";
+
+type SharpConstructor = (input: Buffer | string) => Sharp;
 
 export type SharpOptions = {
     quality?: number;
@@ -19,13 +21,13 @@ export type SharpOptions = {
 type SharpInput = MinifierOptions<SharpOptions>;
 
 // Lazy-loaded sharp instance
-let sharpLib: typeof SharpType | undefined;
+let sharpLib: SharpConstructor | undefined;
 
 /**
  * Get sharp instance, loading it lazily on first use.
  * This reduces initial bundle size for users who may not use the sharp compressor.
  */
-async function getSharp(): Promise<typeof SharpType> {
+async function getSharp(): Promise<SharpConstructor> {
     if (!sharpLib) {
         sharpLib = (await import("sharp")).default;
     }
