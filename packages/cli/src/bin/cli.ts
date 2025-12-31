@@ -39,7 +39,7 @@ function setupProgram(): Command {
         .option("-o, --output [file]", "output file path")
         .option(
             "-t, --type [type]",
-            "file type: js or css (for esbuild, lightningcss, yui)"
+            "file type: js or css (required for esbuild, lightningcss, yui)"
         )
         .option("-s, --silence", "no output will be printed")
         .option(
