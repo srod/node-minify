@@ -1,3 +1,9 @@
+/*!
+ * node-minify
+ * Copyright(c) 2011-2025 Rodolphe Stoclin
+ * MIT Licensed
+ */
+
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import { ensureStringContent } from "@node-minify/utils";
 
