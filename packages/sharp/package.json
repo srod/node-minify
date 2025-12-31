@@ -57,7 +57,7 @@
   "dependencies": {
     "@node-minify/core": "workspace:*",
     "@node-minify/utils": "workspace:*",
-    "sharp": "^0.33.5"
+    "sharp": "^0.34.0"
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*"
