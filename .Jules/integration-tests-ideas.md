@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document captures ideas for expanding integration test coverage beyond the initial 58 tests implemented in Phase 1-4.
+This document captures ideas for expanding integration test coverage beyond the initial 79 tests implemented in Phase 1-5.
 
 ---
 
@@ -13,7 +13,6 @@ This document captures ideas for expanding integration test coverage beyond the 
 | **Cross-platform path tests** | Test Windows backslashes, UNC paths, drive letters. Currently only tested on macOS/Linux. | Medium | High |
 | **Memory usage baseline** | Ensure large file processing doesn't leak memory. Track heap usage before/after. | Medium | High |
 | **Compression ratio validation** | Assert minimum compression % for known inputs (e.g., terser should compress sample.js by at least 30%). | Low | High |
-| **Image compressor tests** | sharp, svgo, imagemin are core features but untested in integration. | Medium | High |
 
 ---
 
@@ -46,24 +45,18 @@ This document captures ideas for expanding integration test coverage beyond the 
 
 These can be implemented quickly with high value:
 
-### 1. Image Compressor Tests
-- Test sharp: PNG → WebP, PNG → AVIF
-- Test svgo: SVG optimization
-- Test imagemin: PNG/JPEG compression
-- Use existing fixture images in `examples/public/images/`
-
-### 2. Unicode Content Tests
+### 1. Unicode Content Tests
 - JS with emoji in strings: `const msg = "Hello 👋 World";`
 - CSS with unicode selectors: `.日本語 { color: red; }`
 - HTML with CJK content
 - JSON with unicode keys/values
 
-### 3. Compression Ratio Assertions
+### 2. Compression Ratio Assertions
 - Define expected minimum compression for sample files
 - Fail if compression ratio drops below threshold
 - Catches accidental regressions in compressor configs
 
-### 4. Deprecated Compressor Smoke Tests
+### 3. Deprecated Compressor Smoke Tests
 - One basic test per deprecated compressor
 - Just verify they still load and run
 - Skip on CI if dependencies unavailable
@@ -78,7 +71,7 @@ tests/integration/
 ├── cli.integration.test.ts          # ✅ Done (18 tests)
 ├── workflow.integration.test.ts     # ✅ Done (15 tests)
 ├── error-scenarios.integration.test.ts  # ✅ Done (25 tests)
-├── image.integration.test.ts        # 🆕 Planned
+├── image.integration.test.ts        # ✅ Done (21 tests)
 ├── unicode.integration.test.ts      # 🆕 Planned
 ├── compression-ratio.integration.test.ts  # 🆕 Planned
 └── deprecated.integration.test.ts   # 🆕 Planned
@@ -97,18 +90,16 @@ tests/integration/
 
 ## Priority Ranking
 
-1. **Image compressors** - Core feature, zero coverage
-2. **Compression ratio** - Catches regressions, easy to add
-3. **Unicode content** - Common bug source, easy to add
-4. **Deprecated smoke tests** - Prevents silent breakage
-5. **Cross-platform paths** - Important for Windows users
-6. **Everything else** - As needed
+1. **Compression ratio** - Catches regressions, easy to add
+2. **Unicode content** - Common bug source, easy to add
+3. **Deprecated smoke tests** - Prevents silent breakage
+4. **Cross-platform paths** - Important for Windows users
+5. **Everything else** - As needed
 
 ---
 
 ## Open Questions
 
-1. Should image tests be separate from main integration suite (slower)?
-2. What compression ratio thresholds are reasonable?
-3. Should deprecated compressor tests run in CI or be manual-only?
-4. Do we need Windows CI runner for cross-platform tests?
+1. What compression ratio thresholds are reasonable?
+2. Should deprecated compressor tests run in CI or be manual-only?
+3. Do we need Windows CI runner for cross-platform tests?

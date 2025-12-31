@@ -229,7 +229,8 @@ export function assertValidMinifiedCSS(content: string): void;
 | CLI Integration | 18 | `cli.integration.test.ts` |
 | Workflow Integration | 15 | `workflow.integration.test.ts` |
 | Error Scenarios | 25 | `error-scenarios.integration.test.ts` |
-| **Total** | **58** | |
+| Image Compressors | 21 | `image.integration.test.ts` |
+| **Total** | **79** | |
 
 **Command:** `bun run test:integration`
 
@@ -239,10 +240,10 @@ export function assertValidMinifiedCSS(content: string): void;
 
 See [integration-tests-ideas.md](./integration-tests-ideas.md) for additional test ideas:
 
-### Phase 5: Image Compressors
-- [ ] Test sharp: PNG → WebP, PNG → AVIF
-- [ ] Test svgo: SVG optimization  
-- [ ] Test imagemin: PNG/JPEG compression
+### Phase 5: Image Compressors ✅ DONE
+- [x] Test sharp: PNG → WebP, PNG → AVIF
+- [x] Test svgo: SVG optimization  
+- [x] Test imagemin: PNG/JPEG compression
 
 ### Phase 6: Edge Cases
 - [ ] Unicode content (emoji, CJK, RTL)

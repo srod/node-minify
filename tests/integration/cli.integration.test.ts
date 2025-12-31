@@ -15,8 +15,8 @@ import {
     sampleCSS,
     sampleJS,
     sampleJSON,
-    tempFileExists,
     type TempFixtures,
+    tempFileExists,
 } from "./helpers.ts";
 
 const __filename = fileURLToPath(import.meta.url);

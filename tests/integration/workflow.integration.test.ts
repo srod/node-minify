@@ -4,23 +4,22 @@
  * MIT Licensed
  */
 
-import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { afterEach, describe, expect, test } from "vitest";
-import { minify } from "@node-minify/core";
 import { cleanCss } from "@node-minify/clean-css";
-import { terser } from "@node-minify/terser";
+import { minify } from "@node-minify/core";
 import { htmlMinifier } from "@node-minify/html-minifier";
 import { noCompress } from "@node-minify/no-compress";
+import { terser } from "@node-minify/terser";
+import { afterEach, describe, expect, test } from "vitest";
 import {
     createTempFixtures,
     readTempFile,
     sampleCSS,
     sampleHTML,
     sampleJS,
-    tempFileExists,
     type TempFixtures,
+    tempFileExists,
 } from "./helpers.ts";
 
 const __filename = fileURLToPath(import.meta.url);
