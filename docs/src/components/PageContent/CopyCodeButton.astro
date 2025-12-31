@@ -1,0 +1,91 @@
+<script>
+    // UX Enhancement: Add copy button to code blocks
+    function attachCopyButtons() {
+        const preBlocks = document.querySelectorAll("pre");
+
+        preBlocks.forEach((pre) => {
+            // Prevent duplicate buttons
+            if (pre.parentNode?.querySelector(".copy-code-btn")) return;
+
+            // Create wrapper if not exists
+            const wrapper = document.createElement("div");
+            wrapper.className = "code-block-wrapper";
+            wrapper.style.position = "relative";
+
+            // Insert wrapper before pre, then move pre into wrapper
+            pre.parentNode?.insertBefore(wrapper, pre);
+            wrapper.appendChild(pre);
+
+            const button = document.createElement("button");
+            button.className = "copy-code-btn";
+            button.setAttribute("aria-label", "Copy code to clipboard");
+            button.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+            `;
+
+            // Style the button
+            button.style.position = "absolute";
+            button.style.top = "0.5rem";
+            button.style.right = "0.5rem";
+            button.style.padding = "0.25rem";
+            button.style.background = "var(--theme-bg)";
+            button.style.border = "1px solid var(--theme-divider)";
+            button.style.borderRadius = "4px";
+            button.style.cursor = "pointer";
+            button.style.opacity = "0"; // Hidden by default
+            button.style.transition = "opacity 0.2s, background-color 0.2s";
+
+            // Show on hover/focus
+            wrapper.addEventListener("mouseenter", () => button.style.opacity = "1");
+            wrapper.addEventListener("mouseleave", () => {
+                if (document.activeElement !== button) button.style.opacity = "0";
+            });
+            button.addEventListener("focus", () => button.style.opacity = "1");
+            button.addEventListener("blur", () => button.style.opacity = "0");
+
+            button.addEventListener("click", async () => {
+                const code = pre.querySelector("code")?.innerText || pre.innerText;
+                try {
+                    await navigator.clipboard.writeText(code);
+
+                    // Visual feedback
+                    const originalIcon = button.innerHTML;
+                    button.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    `;
+                    button.setAttribute("aria-label", "Copied!");
+
+                    setTimeout(() => {
+                        button.innerHTML = originalIcon;
+                        button.setAttribute("aria-label", "Copy code to clipboard");
+                    }, 2000);
+                } catch (err) {
+                    console.error("Failed to copy:", err);
+                    button.setAttribute("aria-label", "Failed to copy");
+                }
+            });
+
+            wrapper.appendChild(button);
+        });
+    }
+
+    // Run on load and after Astro swaps (if using View Transitions)
+    document.addEventListener("DOMContentLoaded", attachCopyButtons);
+    document.addEventListener("astro:page-load", attachCopyButtons);
+</script>
+
+<style is:global>
+    /* Ensure code blocks have space for the button */
+    .code-block-wrapper pre {
+        padding-right: 2.5rem !important;
+    }
+
+    .copy-code-btn:hover {
+        background-color: var(--theme-bg-hover) !important;
+    }
+</style>
