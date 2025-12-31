@@ -350,6 +350,11 @@ describe("Package: utils", () => {
     });
 
     describe("getContentFromFiles", () => {
+        test("should return content from a single file", () => {
+            const content = getContentFromFiles(fixtureFile);
+            expect(content).toContain("console.log('content');");
+        });
+
         test("should return content from multiple files", () => {
             const content = getContentFromFiles([fixtureFile, fixtureFile]);
             expect(content).toContain("console.log('content');");

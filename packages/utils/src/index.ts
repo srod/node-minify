@@ -3,10 +3,13 @@ import { compressSingleFile } from "./compressSingleFile.ts";
 import { deleteFile } from "./deleteFile.ts";
 import { resetDeprecationWarnings, warnDeprecation } from "./deprecation.ts";
 import { ensureStringContent } from "./ensureStringContent.ts";
-import { getContentFromFiles } from "./getContentFromFiles.ts";
+import {
+    getContentFromFiles,
+    getContentFromFilesAsync,
+} from "./getContentFromFiles.ts";
 import { getFilesizeGzippedInBytes } from "./getFilesizeGzippedInBytes.ts";
 import { getFilesizeInBytes } from "./getFilesizeInBytes.ts";
-import { isValidFile } from "./isValidFile.ts";
+import { isValidFile, isValidFileAsync } from "./isValidFile.ts";
 import { prettyBytes } from "./prettyBytes.ts";
 import { readFile } from "./readFile.ts";
 import { run } from "./run.ts";
@@ -22,9 +25,11 @@ export {
     deleteFile,
     ensureStringContent,
     getContentFromFiles,
+    getContentFromFilesAsync,
     getFilesizeGzippedInBytes,
     getFilesizeInBytes,
     isValidFile,
+    isValidFileAsync,
     prettyBytes,
     readFile,
     resetDeprecationWarnings,

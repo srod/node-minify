@@ -15,7 +15,7 @@ import type {
 } from "@node-minify/types";
 import {
     compressSingleFile,
-    getContentFromFiles,
+    getContentFromFilesAsync,
     run,
 } from "@node-minify/utils";
 import { mkdirp } from "mkdirp";
@@ -72,8 +72,8 @@ async function compressArrayOfFiles<
         }
     });
 
-    const compressionTasks = inputs.map((input, index) => {
-        const content = getContentFromFiles(input);
+    const compressionTasks = inputs.map(async (input, index) => {
+        const content = await getContentFromFilesAsync(input);
         return run({ settings, content, index } as MinifierOptions<T>);
     });
 
