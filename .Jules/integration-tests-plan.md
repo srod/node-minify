@@ -217,3 +217,39 @@ export function assertValidMinifiedCSS(content: string): void;
 | Phase 3: Workflow Tests | 2-3 hours |
 | Phase 4: Examples & Errors | 2-3 hours |
 | **Total** | **7-11 hours** |
+
+---
+
+## Results
+
+**Completed:** December 31, 2025
+
+| Suite | Tests | File |
+|-------|-------|------|
+| CLI Integration | 18 | `cli.integration.test.ts` |
+| Workflow Integration | 15 | `workflow.integration.test.ts` |
+| Error Scenarios | 25 | `error-scenarios.integration.test.ts` |
+| **Total** | **58** | |
+
+**Command:** `bun run test:integration`
+
+---
+
+## Phase 5+ (Future)
+
+See [integration-tests-ideas.md](./integration-tests-ideas.md) for additional test ideas:
+
+### Phase 5: Image Compressors
+- [ ] Test sharp: PNG → WebP, PNG → AVIF
+- [ ] Test svgo: SVG optimization  
+- [ ] Test imagemin: PNG/JPEG compression
+
+### Phase 6: Edge Cases
+- [ ] Unicode content (emoji, CJK, RTL)
+- [ ] Compression ratio assertions
+- [ ] Deprecated compressor smoke tests
+
+### Phase 7: Platform & Performance
+- [ ] Cross-platform path tests (Windows)
+- [ ] Memory usage baseline
+- [ ] Benchmark suite
