@@ -118,7 +118,7 @@ export async function imagemin({
     const outputBuffer = Buffer.from(result);
 
     return {
-        code: outputBuffer.toString("binary"),
+        code: outputBuffer.toString("latin1"),
         buffer: outputBuffer,
     };
 }
