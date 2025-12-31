@@ -1133,6 +1133,42 @@ describe("Package: utils", () => {
 
             expect(readFile("output.webp", true)).toEqual(webpContent);
         });
+
+        test("should use 'output' as default basename when output is $1 and input has no name", async () => {
+            const webpContent = Buffer.from("WEBP_DOLLAR_ONE_NO_INPUT");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [{ format: "webp", content: webpContent }],
+            });
+            const settings = {
+                compressor,
+                input: "",
+                output: "$1",
+            } as any;
+            filesToCleanup.add("output.webp");
+
+            await run({ settings, content: "" });
+
+            expect(readFile("output.webp", true)).toEqual(webpContent);
+        });
+
+        test("should handle input array with undefined first element", async () => {
+            const webpContent = Buffer.from("WEBP_UNDEFINED_INPUT");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [{ format: "webp", content: webpContent }],
+            });
+            const settings = {
+                compressor,
+                input: [undefined as unknown as string],
+                output: "$1",
+            } as any;
+            filesToCleanup.add("output.webp");
+
+            await run({ settings, content: "" });
+
+            expect(readFile("output.webp", true)).toEqual(webpContent);
+        });
     });
 
     describe("compressSingleFile with Buffer content", () => {
