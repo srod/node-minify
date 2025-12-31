@@ -28,6 +28,10 @@ export function readFile(file: string, asBuffer?: boolean): string | Buffer {
     try {
         return asBuffer ? readFileSync(file) : readFileSync(file, "utf8");
     } catch (error) {
-        throw new FileOperationError("read", file, error as Error);
+        throw new FileOperationError(
+            "read",
+            file,
+            error instanceof Error ? error : undefined
+        );
     }
 }
