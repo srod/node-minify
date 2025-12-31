@@ -1125,13 +1125,15 @@ describe("Package: utils", () => {
             const settings = {
                 compressor,
                 input: "",
-                output: 123,
+                output: `${tmpDir}/output`,
             } as any;
-            filesToCleanup.add("output.webp");
+            filesToCleanup.add(`${tmpDir}/output.webp`);
 
             await run({ settings, content: "" });
 
-            expect(readFile("output.webp", true)).toEqual(webpContent);
+            expect(readFile(`${tmpDir}/output.webp`, true)).toEqual(
+                webpContent
+            );
         });
 
         test("should use 'output' as default basename when output is $1 and input has no name", async () => {
@@ -1143,13 +1145,15 @@ describe("Package: utils", () => {
             const settings = {
                 compressor,
                 input: "",
-                output: "$1",
+                output: `${tmpDir}/$1`,
             } as any;
-            filesToCleanup.add("output.webp");
+            filesToCleanup.add(`${tmpDir}/output.webp`);
 
             await run({ settings, content: "" });
 
-            expect(readFile("output.webp", true)).toEqual(webpContent);
+            expect(readFile(`${tmpDir}/output.webp`, true)).toEqual(
+                webpContent
+            );
         });
 
         test("should handle input array with undefined first element", async () => {
@@ -1161,13 +1165,15 @@ describe("Package: utils", () => {
             const settings = {
                 compressor,
                 input: [undefined as unknown as string],
-                output: "$1",
+                output: `${tmpDir}/$1`,
             } as any;
-            filesToCleanup.add("output.webp");
+            filesToCleanup.add(`${tmpDir}/output.webp`);
 
             await run({ settings, content: "" });
 
-            expect(readFile("output.webp", true)).toEqual(webpContent);
+            expect(readFile(`${tmpDir}/output.webp`, true)).toEqual(
+                webpContent
+            );
         });
     });
 
