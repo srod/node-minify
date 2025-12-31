@@ -38,6 +38,9 @@ async function getSharp(): Promise<SharpConstructor> {
     return sharpLib;
 }
 
+const clamp = (val: number, min: number, max: number) =>
+    Math.max(min, Math.min(max, val));
+
 /**
  * Convert an image buffer to the specified image format.
  *
@@ -57,9 +60,6 @@ async function convertImage(
     try {
         const sharpInstance = await getSharp();
         let converter = sharpInstance(input);
-
-        const clamp = (val: number, min: number, max: number) =>
-            Math.max(min, Math.min(max, val));
 
         switch (format) {
             case "webp":
