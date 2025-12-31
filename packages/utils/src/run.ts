@@ -89,6 +89,16 @@ function writeOutput<T extends CompressorOptions = CompressorOptions>(
     }
 }
 
+function getFirstInputFile(input: string | string[] | undefined): string {
+    if (typeof input === "string") {
+        return input;
+    }
+    if (Array.isArray(input) && input.length > 0) {
+        return input[0] ?? "";
+    }
+    return "";
+}
+
 /**
  * Write multiple output files produced by a compressor according to the settings' output configuration.
  *
@@ -113,13 +123,7 @@ function writeMultipleOutputs<T extends CompressorOptions = CompressorOptions>(
     const output = settings.output;
     const isArrayOutput = Array.isArray(output);
     const outputsArray = isArrayOutput ? output : [output];
-    // Use the first input file to derive the base name and directory for auto-generated output paths
-    const inputFile =
-        typeof settings.input === "string"
-            ? settings.input
-            : Array.isArray(settings.input) && settings.input.length > 0
-              ? (settings.input[0] ?? "")
-              : "";
+    const inputFile = getFirstInputFile(settings.input);
     const inputDir = parse(inputFile).dir;
     const inputBase = parse(inputFile).name;
 
