@@ -230,7 +230,9 @@ export function assertValidMinifiedCSS(content: string): void;
 | Workflow Integration | 15 | `workflow.integration.test.ts` |
 | Error Scenarios | 25 | `error-scenarios.integration.test.ts` |
 | Image Compressors | 21 | `image.integration.test.ts` |
-| **Total** | **79** | |
+| Edge Cases | 20 | `edge-cases.integration.test.ts` |
+| Deprecated Compressors | 4 | `deprecated.integration.test.ts` |
+| **Total** | **103** | |
 
 **Command:** `bun run test:integration`
 
@@ -245,10 +247,10 @@ See [integration-tests-ideas.md](./integration-tests-ideas.md) for additional te
 - [x] Test svgo: SVG optimization  
 - [x] Test imagemin: PNG/JPEG compression
 
-### Phase 6: Edge Cases
-- [ ] Unicode content (emoji, CJK, RTL)
-- [ ] Compression ratio assertions
-- [ ] Deprecated compressor smoke tests
+### Phase 6: Edge Cases ✅ DONE
+- [x] Unicode content (emoji, CJK, RTL)
+- [x] Compression ratio assertions
+- [x] Deprecated compressor smoke tests
 
 ### Phase 7: Platform & Performance
 - [ ] Cross-platform path tests (Windows)

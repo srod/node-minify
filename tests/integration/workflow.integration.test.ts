@@ -330,7 +330,7 @@ describe("Workflow Integration Tests", () => {
                 output: outputPath,
                 options: {
                     sourceMap: {
-                        url: "inline",
+                        url: path.join(fixtures.dir, "app.min.js.map"),
                     },
                 } as Record<string, unknown>,
             });
