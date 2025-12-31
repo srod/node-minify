@@ -9,14 +9,18 @@ import type { Sharp } from "sharp";
 
 type SharpConstructor = (input: Buffer | string) => Sharp;
 
-export type SharpOptions = {
+type BaseSharpOptions = {
     quality?: number;
     lossless?: boolean;
     effort?: number;
     compressionLevel?: number;
-    format?: "webp" | "avif" | "png" | "jpeg";
-    formats?: Array<"webp" | "avif" | "png" | "jpeg">;
 };
+
+export type SharpOptions = BaseSharpOptions &
+    (
+        | { format?: "webp" | "avif" | "png" | "jpeg"; formats?: never }
+        | { formats?: Array<"webp" | "avif" | "png" | "jpeg">; format?: never }
+    );
 
 type SharpInput = MinifierOptions<SharpOptions>;
 
