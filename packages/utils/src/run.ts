@@ -42,7 +42,7 @@ export async function run<T extends CompressorOptions = CompressorOptions>({
         index,
     });
 
-    writeOutput(result, settings as unknown as Settings, index);
+    writeOutput(result, settings, index);
 
     return result.code;
 }
