@@ -14,6 +14,7 @@ type BaseSharpOptions = {
     lossless?: boolean;
     effort?: number;
     compressionLevel?: number;
+    mozjpeg?: boolean;
 };
 
 export type SharpOptions = BaseSharpOptions &
@@ -88,7 +89,7 @@ async function convertImage(
             case "jpeg":
                 converter = converter.jpeg({
                     quality: clamp(options.quality ?? 90, 1, 100),
-                    mozjpeg: true,
+                    mozjpeg: options.mozjpeg ?? true,
                 });
                 break;
         }
