@@ -19,8 +19,10 @@ const defaultSettings: Partial<Settings> = {
 };
 
 /**
- * Run setup.
- * @param inputSettings Settings from user input
+ * Builds and validates the final Settings object by merging defaults with user input.
+ *
+ * @param inputSettings - User-provided settings that override defaults
+ * @returns The validated and enhanced Settings object ready for use
  */
 function setup<T extends CompressorOptions = CompressorOptions>(
     inputSettings: Settings<T>
@@ -56,7 +58,15 @@ function setup<T extends CompressorOptions = CompressorOptions>(
 }
 
 /**
- * Enhance settings.
+ * Augments a Settings object with derived values and normalized path outputs.
+ *
+ * Enhancements performed when applicable:
+ * - Expands input patterns into concrete input entries.
+ * - Computes output paths when a single output string contains the `$1` placeholder, producing per-input outputs.
+ * - Resolves and attaches public-folder-related values derived from input and publicFolder.
+ *
+ * @param settings - The initial settings to enhance
+ * @returns The enhanced Settings object with derived inputs, outputs, and public-folder values applied
  */
 function enhanceSettings<T extends CompressorOptions = CompressorOptions>(
     settings: Settings<T>
@@ -145,9 +155,12 @@ function checkOutput(
 }
 
 /**
- * Validate that mandatory fields are present in settings.
+ * Ensure required settings are present and that `compressor` is a valid function.
+ *
  * @param settings - Settings object to validate
- * @param fields - Array of required field names
+ * @param fields - Names of required fields to check on `settings`
+ * @throws Error if a required field is missing
+ * @throws Error if `settings.compressor` is not a function
  */
 function validateMandatoryFields<
     T extends CompressorOptions = CompressorOptions,

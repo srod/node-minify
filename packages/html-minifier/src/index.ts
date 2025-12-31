@@ -23,6 +23,13 @@ const defaultOptions = {
     useShortDoctype: true,
 };
 
+/**
+ * Minifies HTML content using html-minifier-next, applying default options merged with any provided settings.
+ *
+ * @param settings - Optional minifier settings; `settings.options` are merged with the built-in defaults to form the effective minification options.
+ * @param content - The input to minify; will be converted to a string before minification.
+ * @returns An object containing the minified HTML as `code`.
+ */
 export async function htmlMinifier({
     settings,
     content,

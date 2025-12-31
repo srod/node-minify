@@ -9,11 +9,13 @@ import { ensureStringContent, warnDeprecation } from "@node-minify/utils";
 import uglifyES from "uglify-es";
 
 /**
- * Run uglify-es.
+ * Minifies JavaScript content using uglify-es.
+ *
  * @deprecated uglify-es is no longer maintained. Use @node-minify/terser instead.
- * @param settings - UglifyES options
- * @param content - Content to minify
- * @returns Minified content and optional source map
+ * @param settings - Minifier settings and uglify-es options
+ * @param content - Input content to minify
+ * @returns The minified code as `code` and the source map as `map` if produced
+ * @throws The error produced by uglify-es when minification fails
  */
 export async function uglifyEs({
     settings,

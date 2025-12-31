@@ -21,8 +21,13 @@ import {
 import { mkdirp } from "mkdirp";
 
 /**
- * Run compressor.
- * @param settings Settings
+ * Run the compressor using the provided settings.
+ *
+ * Validates settings when `output` is an array (requires `input` to be an array with the same length) and ensures target output directories exist before processing. Dispatches either multi-file or single-file compression based on `settings.output`.
+ *
+ * @param settings - Compression settings including `input`, `output`, and compressor-specific options
+ * @returns The resulting compressed output string for a single output, or the last result produced when processing multiple outputs (or an empty string if no results were produced)
+ * @throws Error - If `output` is an array but `input` is not, or if `input` and `output` arrays have differing lengths
  */
 export async function compress<T extends CompressorOptions = CompressorOptions>(
     settings: Settings<T>
@@ -53,9 +58,11 @@ export async function compress<T extends CompressorOptions = CompressorOptions>(
 }
 
 /**
- * Compress an array of files.
- * Files are processed in parallel since each input/output pair is independent.
- * @param settings Settings
+ * Compress multiple input files specified in the settings.
+ *
+ * @param settings - Configuration object where `settings.input` and `settings.output` are arrays of equal length; each `settings.input[i]` is a file path to compress and corresponds to `settings.output[i]`.
+ * @returns The result of the last compression task, or an empty string if no tasks ran.
+ * @throws Error if any entry in `settings.input` is not a non-empty string.
  */
 async function compressArrayOfFiles<
     T extends CompressorOptions = CompressorOptions,

@@ -33,7 +33,15 @@ async function getSharp(): Promise<typeof SharpType> {
 }
 
 /**
- * Convert image to specified format using Sharp.
+ * Convert an image buffer to the specified image format.
+ *
+ * Options control per-format encoding parameters such as quality, lossless, effort, and compression level.
+ *
+ * @param input - Source image data as a Buffer
+ * @param format - Target image format: `"webp"`, `"avif"`, `"png"`, or `"jpeg"`
+ * @param options - Encoding options that adjust quality, lossless mode, effort, and compression level
+ * @returns A Buffer containing the converted image data
+ * @throws An Error prefixed with `Sharp conversion to <format> failed:` when conversion fails
  */
 async function convertImage(
     input: Buffer,
@@ -91,8 +99,19 @@ async function convertImage(
 }
 
 /**
- * Minify/compress image using Sharp.
- * Supports single format output or multi-format conversion (e.g., PNG → WebP + AVIF).
+ * Compresses an image buffer to one or more target formats using Sharp.
+ *
+ * When `options.formats` is provided and non-empty, produces an `outputs` array with one entry per
+ * requested format; otherwise converts to a single target format (default `"webp"`) and returns a
+ * `buffer`.
+ *
+ * @param settings - Optional compressor settings object containing `options` (e.g., `format`, `formats`, `quality`, `lossless`, `effort`, `compressionLevel`).
+ * @param content - The input image as a Buffer.
+ * @returns An object containing either:
+ *  - `outputs`: an array of `{ format, content }` entries when multiple formats were requested, or
+ *  - `buffer`: a Buffer with the converted image for single-format conversion.
+ *  The returned object also includes `code`, which is an empty string.
+ * @throws If `content` is not a Buffer.
  */
 export async function sharp({
     settings,

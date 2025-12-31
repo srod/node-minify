@@ -41,10 +41,13 @@ export type ImageminOptions = {
 };
 
 /**
- * Run imagemin.
- * @param settings - Imagemin options
- * @param content - Image content to compress (Buffer)
- * @returns Compressed image content
+ * Compresses an image buffer using imagemin and plugin configuration from `settings`.
+ *
+ * @param settings - Minifier settings; `settings.options` may contain ImageminOptions (quality, lossless, effort, optimizationLevel)
+ * @param content - Image data to compress; must be a Buffer
+ * @returns The compressed image as a `CompressorResult` containing `code` (binary string) and `buffer` (Buffer)
+ * @throws Error if `content` is not a Buffer
+ * @throws Error if imagemin produces no output
  */
 export async function imagemin({
     settings,
