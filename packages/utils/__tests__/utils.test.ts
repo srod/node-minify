@@ -16,7 +16,7 @@ vi.mock("node:fs", async (importOriginal) => {
     };
 });
 
-import { ValidationError } from "../src/error.ts";
+import { FileOperationError, ValidationError } from "../src/error.ts";
 import {
     buildArgs,
     compressSingleFile,
@@ -28,6 +28,7 @@ import {
     isValidFile,
     prettyBytes,
     readFile,
+    readFileAsync,
     resetDeprecationWarnings,
     run,
     setFileNameMin,
@@ -74,6 +75,37 @@ describe("Package: utils", () => {
 
         test("should return string when asBuffer is false", () => {
             const content = readFile(fixtureFile, false);
+            expect(typeof content).toBe("string");
+            expect(content).toMatch("console.log('content');");
+        });
+    });
+
+    describe("readFileAsync", () => {
+        test("should return the content", async () => {
+            const content = await readFileAsync(fixtureFile);
+            expect(content).toMatch("console.log('content');");
+        });
+
+        test("should throw FileOperationError if file does not exist", async () => {
+            await expect(readFileAsync("nonexistent-file.js")).rejects.toThrow(
+                FileOperationError
+            );
+        });
+
+        test("should throw FileOperationError if path is a directory", async () => {
+            await expect(readFileAsync(__dirname)).rejects.toThrow(
+                FileOperationError
+            );
+        });
+
+        test("should return Buffer when asBuffer is true", async () => {
+            const buffer = await readFileAsync(fixtureFile, true);
+            expect(buffer).toBeInstanceOf(Buffer);
+            expect(buffer.toString("utf-8")).toMatch("console.log('content');");
+        });
+
+        test("should return string when asBuffer is false", async () => {
+            const content = await readFileAsync(fixtureFile, false);
             expect(typeof content).toBe("string");
             expect(content).toMatch("console.log('content');");
         });
@@ -1256,6 +1288,26 @@ describe("Package: utils", () => {
             expect(compressor).toHaveBeenCalledWith(
                 expect.objectContaining({
                     content: [Buffer.from("image1"), Buffer.from("image2")],
+                })
+            );
+        });
+
+        test("should read single image file array as Buffer (not Buffer[])", async () => {
+            const testFile = `${tmpDir}/single-array-image.png`;
+            filesToCleanup.add(testFile);
+            writeFile({ file: testFile, content: "single-image-data" });
+
+            const compressor = vi.fn().mockResolvedValue({ code: "minified" });
+            const settings = {
+                compressor,
+                input: [testFile],
+                output: `${tmpDir}/output-single.png`,
+            } as any;
+
+            await compressSingleFile(settings);
+            expect(compressor).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    content: Buffer.from("single-image-data"),
                 })
             );
         });
