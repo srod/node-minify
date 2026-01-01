@@ -336,12 +336,14 @@ describe("Workflow Integration Tests", () => {
                 output: outputPath,
                 options: {
                     sourceMap: {
-                        url: path.join(fixtures.dir, "app.min.js.map"),
+                        filename: "app.min.js",
+                        url: "app.min.js.map",
                     },
                 } as Record<string, unknown>,
             });
 
             expect(await tempFileExists(fixtures, "app.min.js")).toBe(true);
+            expect(await tempFileExists(fixtures, "app.min.js.map")).toBe(true);
 
             const minifiedContent = await readTempFile(fixtures, "app.min.js");
             expect(minifiedContent).toContain("sourceMappingURL");
