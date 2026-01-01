@@ -1,1 +1,0 @@
-# Bolt's Journal

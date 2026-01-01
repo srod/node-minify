@@ -1,5 +1,6 @@
 ---
 import type { MarkdownHeading } from "astro";
+import CopyCodeButton from "./CopyCodeButton.astro";
 
 // import TableOfContents from '../RightSidebar/TableOfContents';
 
@@ -19,6 +20,7 @@ const { title, headings } = Astro.props;
     </nav> -->
     <slot />
   </section>
+  <CopyCodeButton />
 </article>
 
 <style>
