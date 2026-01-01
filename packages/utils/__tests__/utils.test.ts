@@ -5,7 +5,6 @@
  */
 
 import { existsSync, lstatSync, unlinkSync } from "node:fs";
-import path from "node:path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 vi.mock("node:fs", async (importOriginal) => {
@@ -284,13 +283,13 @@ describe("Package: utils", () => {
 
         test("should return file name min with public folder", () =>
             expect(setFileNameMin("foo.js", "$1.min.js", "public/")).toBe(
-                path.join("public", "foo.min.js")
+                "public/foo.min.js"
             ));
 
         test("should return file name min in place", () =>
             expect(
                 setFileNameMin("src/foo.js", "$1.min.js", undefined, true)
-            ).toBe(path.join("src", "foo.min.js")));
+            ).toBe("src/foo.min.js"));
 
         test("should throw if no file", () => {
             expect(() => setFileNameMin("", "$1.min.js")).toThrow(

@@ -4,11 +4,10 @@
  * MIT Licensed
  */
 
-import { stat } from "node:fs/promises";
 /**
  * Module dependencies.
  */
-import { dirname } from "node:path";
+import fs from "node:fs";
 import type {
     CompressorOptions,
     MinifierOptions,
@@ -47,7 +46,7 @@ export async function compress<T extends CompressorOptions = CompressorOptions>(
     }
 
     if (settings.output) {
-        await createDirectory(settings.output);
+        createDirectory(settings.output);
     }
 
     // Handle array outputs (from user input or created internally by checkOutput when processing $1 pattern)
@@ -93,7 +92,7 @@ async function compressArrayOfFiles<
  * Create folder of the target file.
  * @param filePath Full path of the file (can be string or array when $1 pattern is used)
  */
-async function createDirectory(filePath: string | string[]) {
+function createDirectory(filePath: string | string[]) {
     // Early return if no file path provided
     if (!filePath) {
         return;
@@ -102,31 +101,30 @@ async function createDirectory(filePath: string | string[]) {
     // Handle array (created internally by checkOutput when processing $1 pattern)
     const paths = Array.isArray(filePath) ? filePath : [filePath];
 
-    await Promise.all(
-        paths.map(async (path) => {
-            if (typeof path !== "string") {
-                return;
-            }
+    for (const path of paths) {
+        if (typeof path !== "string") {
+            continue;
+        }
 
-            const dirPath = dirname(path);
+        // Extract directory path
+        const dirPath = path.substring(0, path.lastIndexOf("/"));
 
-            // Early return if no directory path
-            if (!dirPath) {
-                return;
-            }
+        // Early return if no directory path
+        if (!dirPath) {
+            continue;
+        }
 
-            // Create directory if it doesn't exist
-            if (!(await directoryExists(dirPath))) {
-                await mkdirp(dirPath);
-            }
-        })
-    );
+        // Create directory if it doesn't exist
+        if (!directoryExists(dirPath)) {
+            mkdirp.sync(dirPath);
+        }
+    }
 }
 
 // Helper function to check if directory exists
-async function directoryExists(path: string): Promise<boolean> {
+function directoryExists(path: string): boolean {
     try {
-        return (await stat(path)).isDirectory();
+        return fs.statSync(path).isDirectory();
     } catch {
         return false;
     }
