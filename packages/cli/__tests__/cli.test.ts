@@ -200,6 +200,19 @@ describe("CLI Coverage", () => {
             );
         });
 
+        test("should handle null input gracefully (edge case)", async () => {
+            const spy = vi.spyOn(cli, "run");
+            await cli
+                .run({
+                    compressor: "imagemin",
+                    input: null as any,
+                    output: filesImages.filePNGOut,
+                    silence: true,
+                })
+                .catch(() => {});
+            expect(spy).toHaveBeenCalled();
+        });
+
         test("should throw if implementation is invalid", async () => {
             vi.doMock("@node-minify/no-compress", () => ({
                 noCompress: "not-a-function",
