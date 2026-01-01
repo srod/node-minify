@@ -7,5 +7,6 @@ export default defineConfig({
         include: ["**/*.integration.test.ts"],
         testTimeout: 60000,
         hookTimeout: 30000,
-    },
+        execArgv: ["--expose-gc"],
+    } as any,
 });
