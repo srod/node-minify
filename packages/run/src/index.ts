@@ -62,8 +62,7 @@ export async function run({
         }
 
         const handleError = (source: string) => (error: Error) => {
-            // Do not clear timeout here, as we are not resolving/rejecting yet.
-            // Just logging the error.
+            if (timer) clearTimeout(timer);
             console.error(`Error in ${source}:`, error);
         };
 
