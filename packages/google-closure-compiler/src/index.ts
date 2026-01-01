@@ -53,6 +53,7 @@ export async function gcc({
     const result = await runCommandLine({
         args: gccCommand(options),
         data: contentStr,
+        timeout: settings?.timeout,
     });
 
     if (typeof result !== "string") {

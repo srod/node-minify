@@ -9,46 +9,66 @@ import childProcess from "node:child_process";
 export type RunCommandLineParams = {
     args: string[];
     data: string;
+    timeout?: number;
 };
 
 /**
  * Run the command line with spawn.
  * @param args - Command line arguments for the Java process
  * @param data - Data to minify (piped to stdin)
+ * @param timeout - Timeout in milliseconds
  * @returns Promise with minified content from stdout
  */
 export async function runCommandLine({
     args,
     data,
+    timeout,
 }: RunCommandLineParams): Promise<string> {
-    return run({ data, args });
+    return run({ data, args, timeout });
 }
 
 type RunParams = {
     data: string;
     args: string[];
+    timeout?: number;
 };
 
 /**
  * Execute command with Java process.
  * @param data - Data to minify (piped to stdin)
  * @param args - Command line arguments
+ * @param timeout - Timeout in milliseconds
  * @returns Promise with minified content from stdout
  */
-export async function run({ data, args }: RunParams): Promise<string> {
+export async function run({
+    data,
+    args,
+    timeout,
+}: RunParams): Promise<string> {
     return new Promise((resolve, reject) => {
         let stdout = "";
         let stderr = "";
+        let timer: ReturnType<typeof setTimeout> | undefined;
 
         const child = childProcess.spawn("java", args, {
             stdio: "pipe",
         });
 
+        if (timeout) {
+            timer = setTimeout(() => {
+                child.kill();
+                reject(new Error("Processing timed out"));
+            }, timeout);
+        }
+
         const handleError = (source: string) => (error: Error) => {
+            // Do not clear timeout here, as we are not resolving/rejecting yet.
+            // Just logging the error.
             console.error(`Error in ${source}:`, error);
         };
 
         child.on("error", (error) => {
+            if (timer) clearTimeout(timer);
             handleError("child")(error);
             reject(new Error(`Process error: ${error.message}`));
         });
@@ -58,6 +78,7 @@ export async function run({ data, args }: RunParams): Promise<string> {
         child.stderr?.on("error", handleError("child.stderr"));
 
         child.on("exit", (code: number | null) => {
+            if (timer) clearTimeout(timer);
             if (code !== 0) {
                 reject(new Error(stderr || `Process exited with code ${code}`));
                 return;

@@ -191,6 +191,11 @@ export type Settings<TOptions extends CompressorOptions = CompressorOptions> = {
      * @default false
      */
     replaceInPlace?: boolean;
+
+    /**
+     * Timeout in milliseconds for compressors that run as child processes.
+     */
+    timeout?: number;
 };
 
 /**
