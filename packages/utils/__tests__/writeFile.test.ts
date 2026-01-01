@@ -209,6 +209,16 @@ describe("writeFileAsync", () => {
             if (existsSync(file)) unlinkSync(file);
         }
     });
+
+    test("should create parent directory if it does not exist (async)", async () => {
+        const nestedFile = path.join(tmpDir, "async/nested/dir/file.js");
+        const content = "content";
+        const result = await writeFileAsync({ file: nestedFile, content });
+        expect(result).toBe(content);
+        expect(existsSync(nestedFile)).toBe(true);
+        // cleanup
+        rmdirSync(path.join(tmpDir, "async"), { recursive: true });
+    });
 });
 
 describe("writeFile (sync)", () => {

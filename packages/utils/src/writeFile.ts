@@ -5,7 +5,7 @@
  */
 
 import { existsSync, lstatSync, mkdirSync, writeFileSync } from "node:fs";
-import { lstat, writeFile as writeFileNode } from "node:fs/promises";
+import { lstat, mkdir, writeFile as writeFileNode } from "node:fs/promises";
 import { dirname } from "node:path";
 import { FileOperationError, ValidationError } from "./error.ts";
 
@@ -133,6 +133,13 @@ export async function writeFileAsync({
         if (isDirectory) {
             throw new Error("Target path exists and is a directory");
         }
+
+        const targetDir = dirname(targetFile);
+        await mkdir(targetDir, { recursive: true }).catch((e: any) => {
+            if (e.code !== "EEXIST") {
+                throw e;
+            }
+        });
 
         await writeFileNode(
             targetFile,
