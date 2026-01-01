@@ -202,14 +202,14 @@ describe("CLI Coverage", () => {
 
         test("should handle null input gracefully (edge case)", async () => {
             const spy = vi.spyOn(cli, "run");
-            await cli
-                .run({
+            await expect(
+                cli.run({
                     compressor: "imagemin",
                     input: null as any,
                     output: filesImages.filePNGOut,
                     silence: true,
                 })
-                .catch(() => {});
+            ).rejects.toThrow();
             expect(spy).toHaveBeenCalled();
         });
 
