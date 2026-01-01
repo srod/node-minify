@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { join, parse } from "node:path";
+import { dirname, isAbsolute, join, parse } from "node:path";
 import type {
     CompressorOptions,
     CompressorResult,
@@ -82,8 +82,19 @@ function writeOutput<T extends CompressorOptions = CompressorOptions>(
     writeFile({ file: settings.output, content: result.code, index });
 
     if (result.map) {
-        const sourceMapUrl = getSourceMapUrl(settings);
+        let sourceMapUrl = getSourceMapUrl(settings);
         if (sourceMapUrl) {
+            const output =
+                index !== undefined && Array.isArray(settings.output)
+                    ? settings.output[index]
+                    : settings.output;
+            if (
+                output &&
+                typeof output === "string" &&
+                !isAbsolute(sourceMapUrl)
+            ) {
+                sourceMapUrl = join(dirname(output), sourceMapUrl);
+            }
             writeFile({ file: sourceMapUrl, content: result.map, index });
         }
     }
