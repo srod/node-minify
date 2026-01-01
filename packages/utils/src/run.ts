@@ -12,7 +12,7 @@ import type {
     Settings,
 } from "@node-minify/types";
 import { ValidationError } from "./error.ts";
-import { writeFile, writeFileAsync } from "./writeFile.ts";
+import { writeFileAsync } from "./writeFile.ts";
 
 /**
  * Run the configured compressor and persist its outputs according to the provided settings.

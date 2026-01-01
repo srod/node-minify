@@ -5,8 +5,8 @@
  */
 
 import { existsSync, lstatSync, mkdirSync, writeFileSync } from "node:fs";
-import { dirname } from "node:path";
 import { lstat, writeFile as writeFileNode } from "node:fs/promises";
+import { dirname } from "node:path";
 import { FileOperationError, ValidationError } from "./error.ts";
 
 interface WriteFileParams {
