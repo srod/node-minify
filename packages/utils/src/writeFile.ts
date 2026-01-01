@@ -4,7 +4,8 @@
  * MIT Licensed
  */
 
-import { existsSync, lstatSync, writeFileSync } from "node:fs";
+import { existsSync, lstatSync, mkdirSync, writeFileSync } from "node:fs";
+import { dirname } from "node:path";
 import { FileOperationError, ValidationError } from "./error.ts";
 
 interface WriteFileParams {
@@ -55,6 +56,11 @@ export function writeFile({
 
         if (!shouldWrite) {
             throw new Error("Target path exists and is a directory");
+        }
+
+        const targetDir = dirname(targetFile);
+        if (!existsSync(targetDir)) {
+            mkdirSync(targetDir, { recursive: true });
         }
 
         writeFileSync(
