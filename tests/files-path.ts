@@ -177,3 +177,20 @@ export const filesJSON = {
     fileJSONOutReplacePublicFolder,
     contentJSON,
 };
+
+/**
+ * Images
+ */
+const filePNG = `${__dirname}/fixtures/images/test.png`;
+const fileSVG = `${__dirname}/fixtures/images/test.svg`;
+const filePNGOut = `${__dirname}/tmp/test.min.png`;
+const fileWebPOut = `${__dirname}/tmp/test.webp`;
+const fileSVGOut = `${__dirname}/tmp/test.min.svg`;
+
+export const filesImages = {
+    filePNG,
+    fileSVG,
+    filePNGOut,
+    fileWebPOut,
+    fileSVGOut,
+};

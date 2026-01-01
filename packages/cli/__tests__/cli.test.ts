@@ -6,7 +6,12 @@
 
 import childProcess from "node:child_process";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
-import { filesCSS, filesJS, filesJSON } from "../../../tests/files-path.ts";
+import {
+    filesCSS,
+    filesImages,
+    filesJS,
+    filesJSON,
+} from "../../../tests/files-path.ts";
 import { compress } from "../src/compress.ts";
 import type { SettingsWithCompressor } from "../src/index.ts";
 import * as cli from "../src/index.ts";
@@ -90,6 +95,53 @@ describe("JSON compressors", () => {
             compressor: "jsonminify",
             input: filesJSON.oneFileJSON,
             output: filesJSON.fileJSONOut,
+            silence: true,
+        });
+        expect(spy).toHaveBeenCalled();
+    });
+});
+
+describe("Image compressors", () => {
+    test("should compress with imagemin", async () => {
+        const spy = vi.spyOn(cli, "run");
+        await cli.run({
+            compressor: "imagemin",
+            input: filesImages.filePNG,
+            output: filesImages.filePNGOut,
+            silence: true,
+        });
+        expect(spy).toHaveBeenCalled();
+    });
+
+    test("should convert with sharp", async () => {
+        const spy = vi.spyOn(cli, "run");
+        await cli.run({
+            compressor: "sharp",
+            input: filesImages.filePNG,
+            output: filesImages.fileWebPOut,
+            silence: true,
+            option: '{"format": "webp", "quality": 80}',
+        });
+        expect(spy).toHaveBeenCalled();
+    });
+
+    test("should optimize with svgo", async () => {
+        const spy = vi.spyOn(cli, "run");
+        await cli.run({
+            compressor: "svgo",
+            input: filesImages.fileSVG,
+            output: filesImages.fileSVGOut,
+            silence: true,
+        });
+        expect(spy).toHaveBeenCalled();
+    });
+
+    test("should handle non-string input for binary compressor", async () => {
+        const spy = vi.spyOn(cli, "run");
+        await cli.run({
+            compressor: "imagemin",
+            input: filesImages.filePNG as any,
+            output: filesImages.filePNGOut,
             silence: true,
         });
         expect(spy).toHaveBeenCalled();
