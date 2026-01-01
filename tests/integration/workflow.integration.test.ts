@@ -215,7 +215,7 @@ describe("Workflow Integration Tests", () => {
             expect(result.length).toBeLessThan(sampleCSS.length);
         });
 
-        test("should process in-memory and write to file", async () => {
+        test("should process file and write to output", async () => {
             fixtures = await createTempFixtures({
                 "input.js": sampleJS,
             });
@@ -385,12 +385,10 @@ describe("Workflow Integration Tests", () => {
                 // Expected to fail
             }
 
-            // Output file should not exist or be empty
+            // Contract: compression errors must not create output files
+            // This prevents partial/corrupted files from persisting
             const exists = await tempFileExists(fixtures, "invalid.min.js");
-            if (exists) {
-                const content = await readTempFile(fixtures, "invalid.min.js");
-                expect(content.trim()).toBe("");
-            }
+            expect(exists).toBe(false);
         });
     });
 });
