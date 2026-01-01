@@ -25,7 +25,9 @@ export interface TempFixtures {
 }
 
 /**
- * Get the path to the CLI binary
+ * Locate the CLI binary and return its absolute filesystem path.
+ *
+ * @returns The absolute path to the CLI binary file
  */
 export function getCLIPath(): string {
     return path.resolve(__dirname, "../../packages/cli/dist/bin/cli.js");
@@ -35,7 +37,10 @@ export function getCLIPath(): string {
  * Run CLI command and capture output
  */
 /**
- * Run CLI command and capture output
+ * Execute the project's CLI binary with the given arguments and collect its exit code, stdout, and stderr.
+ *
+ * @param args - Arguments to pass to the CLI process
+ * @returns An object containing the process `exitCode`, captured `stdout`, and captured `stderr`
  */
 export function runCLI(args: string[]): Promise<CLIResult> {
     const cliPath = getCLIPath();
@@ -72,7 +77,12 @@ export function runCLI(args: string[]): Promise<CLIResult> {
 }
 
 /**
- * Create isolated temp directory with fixtures
+ * Creates an isolated temporary directory populated with the provided files.
+ *
+ * The keys of `files` are treated as relative paths inside the temp directory and their values are written using UTF-8 encoding.
+ *
+ * @param files - Mapping of relative file paths to file contents to create inside the temp directory
+ * @returns An object containing `dir`, the absolute path to the created temp directory, and `cleanup`, a function that removes the directory and its contents and returns a Promise<void>
  */
 export async function createTempFixtures(
     files: Record<string, string>
@@ -101,7 +111,11 @@ export async function createTempFixtures(
 }
 
 /**
- * Read file content from temp directory
+ * Read and return the UTF-8 contents of a file inside a TempFixtures directory.
+ *
+ * @param fixtures - The temporary fixtures container whose `dir` is used as the base path
+ * @param filename - Relative path to the file within the fixtures directory
+ * @returns The file contents as a string
  */
 export async function readTempFile(
     fixtures: TempFixtures,
@@ -112,7 +126,11 @@ export async function readTempFile(
 }
 
 /**
- * Check if file exists in temp directory
+ * Determine whether a file exists inside a TempFixtures directory.
+ *
+ * @param fixtures - The TempFixtures container whose `dir` is used as the base path
+ * @param filename - Path to the file relative to `fixtures.dir`
+ * @returns `true` if the file is accessible, `false` otherwise
  */
 export async function tempFileExists(
     fixtures: TempFixtures,
@@ -128,10 +146,11 @@ export async function tempFileExists(
 }
 
 /**
- * Assert that minified JS is valid (basic check)
- * - Not empty
- * - Smaller or equal to original (unless very small)
- * - No obvious errors
+ * Validates that a minified JavaScript string is non-empty and reasonably sized compared to the original.
+ *
+ * @param original - The original JavaScript source used as the size/reference input.
+ * @param minified - The minified JavaScript output to validate.
+ * @throws Error if `minified` is empty or contains only whitespace, or if `original` is longer than 100 characters and `minified` exceeds 110% of `original`'s length.
  */
 export function assertValidMinifiedJS(
     original: string,
@@ -150,7 +169,15 @@ export function assertValidMinifiedJS(
 }
 
 /**
- * Assert that minified CSS is valid (basic check)
+ * Validates basic expectations for minified CSS content.
+ *
+ * Throws if the minified output is empty or, for inputs longer than 100 characters,
+ * if the minified output is more than 10% larger than the original.
+ *
+ * @param original - The original CSS source text used as the reference size.
+ * @param minified - The minified CSS output to validate.
+ * @throws Error if `minified` is empty or consists only of whitespace.
+ * @throws Error if `original` length is greater than 100 and `minified` length is greater than `original.length * 1.1`.
  */
 export function assertValidMinifiedCSS(
     original: string,
