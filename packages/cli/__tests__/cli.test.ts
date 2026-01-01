@@ -147,13 +147,14 @@ describe("Image compressors", () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    test("should handle non-string input for binary compressor", async () => {
+    test("should handle svgo with options", async () => {
         const spy = vi.spyOn(cli, "run");
         await cli.run({
-            compressor: "imagemin",
-            input: filesImages.filePNG as any,
-            output: filesImages.filePNGOut,
+            compressor: "svgo",
+            input: filesImages.fileSVG,
+            output: filesImages.fileSVGOut,
             silence: true,
+            option: '{"plugins": ["preset-default"]}',
         });
         expect(spy).toHaveBeenCalled();
     });

@@ -29,8 +29,8 @@ export const AVAILABLE_MINIFIER = [
     // JSON compressors
     { name: "jsonminify", export: "jsonMinify" },
     // Image compressors
-    { name: "imagemin", export: "imagemin", binaryOnly: true },
-    { name: "sharp", export: "sharp", binaryOnly: true },
+    { name: "imagemin", export: "imagemin" },
+    { name: "sharp", export: "sharp" },
     { name: "svgo", export: "svgo" },
     // Other
     { name: "no-compress", export: "noCompress" },
