@@ -85,10 +85,14 @@ export function writeFile({
 /**
  * Write provided content to a target file asynchronously.
  *
+ * When `file` is an array and `index` is provided, the file at that index is used; otherwise `file` is used directly.
+ *
  * @param file - Target path or array of target paths
  * @param content - Content to write; may be a `string` or `Buffer`
  * @param index - Optional index to select a file when `file` is an array
  * @returns The same `content` value that was written
+ * @throws ValidationError If no target file, no content, or the resolved target path is invalid
+ * @throws FileOperationError If the underlying filesystem write fails (wraps the original error)
  */
 export async function writeFileAsync({
     file,
