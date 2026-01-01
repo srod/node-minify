@@ -316,8 +316,9 @@ describe("Workflow Integration Tests", () => {
             expect(await tempFileExists(fixtures, "bundle.min.js")).toBe(true);
 
             const content = await readTempFile(fixtures, "bundle.min.js");
-            expect(content).toContain("a");
-            expect(content).toContain("b");
+            // Verify both files were concatenated by checking for their values
+            expect(content).toContain("1");
+            expect(content).toContain("2");
         });
     });
 
