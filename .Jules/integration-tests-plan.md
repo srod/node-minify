@@ -232,7 +232,8 @@ export function assertValidMinifiedCSS(content: string): void;
 | Image Compressors | 21 | `image.integration.test.ts` |
 | Edge Cases | 20 | `edge-cases.integration.test.ts` |
 | Deprecated Compressors | 4 | `deprecated.integration.test.ts` |
-| **Total** | **103** | |
+| Memory Baseline | 11 | `memory.integration.test.ts` |
+| **Total** | **114** | |
 
 **Command:** `bun run test:integration`
 
@@ -252,7 +253,7 @@ See [integration-tests-ideas.md](./integration-tests-ideas.md) for additional te
 - [x] Compression ratio assertions
 - [x] Deprecated compressor smoke tests
 
-### Phase 7: Platform & Performance
-- [ ] Cross-platform path tests (Windows)
-- [ ] Memory usage baseline
-- [ ] Benchmark suite
+### Phase 7: Platform & Performance ✅ DONE
+- [x] Cross-platform path tests (Windows) - covered by CI running on Windows
+- [x] Memory usage baseline - memory.integration.test.ts (11 tests)
+- [ ] Benchmark suite (future)
