@@ -10,6 +10,7 @@ vi.mock("node:fs/promises", async (importOriginal) => {
     return {
         ...actual,
         lstat: vi.fn(actual.lstat),
+        mkdir: vi.fn(actual.mkdir),
         writeFile: vi.fn(actual.writeFile),
     };
 });
@@ -218,6 +219,44 @@ describe("writeFileAsync", () => {
         expect(existsSync(nestedFile)).toBe(true);
         // cleanup
         rmdirSync(path.join(tmpDir, "async"), { recursive: true });
+    });
+
+    test("should ignore EEXIST error during directory creation", async () => {
+        const nestedFile = path.join(tmpDir, "exist/nested/dir/file.js");
+        const content = "content";
+        const error = new Error("File exists");
+        (error as any).code = "EEXIST";
+
+        // Mock mkdir to throw EEXIST once
+        await import("node:fs/promises").then(fs => {
+            vi.mocked(fs.mkdir).mockRejectedValueOnce(error);
+            // Also mock writeFile to succeed without doing anything, preventing ENOENT
+            vi.mocked(fs.writeFile).mockResolvedValueOnce(undefined);
+        });
+
+        const result = await writeFileAsync({ file: nestedFile, content });
+        expect(result).toBe(content);
+        // We verified that even if mkdir throws EEXIST, we proceed to write (which is mocked here)
+
+        // No need to check existsSync because writeFile was mocked
+
+        // cleanup not needed for file, but maybe for dir if it was partially created (it wasn't)
+        if (existsSync(path.join(tmpDir, "exist"))) {
+           rmdirSync(path.join(tmpDir, "exist"), { recursive: true });
+        }
+    });
+
+    test("should rethrow non-EEXIST error during directory creation", async () => {
+        const nestedFile = path.join(tmpDir, "fail/dir/file.js");
+        const error = new Error("Permission denied");
+        (error as any).code = "EACCES";
+
+        await import("node:fs/promises").then(fs => {
+            vi.mocked(fs.mkdir).mockRejectedValueOnce(error);
+        });
+
+        await expect(writeFileAsync({ file: nestedFile, content: "content" }))
+            .rejects.toThrow(FileOperationError);
     });
 });
 
