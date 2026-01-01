@@ -9,9 +9,10 @@ import {
 } from "./getContentFromFiles.ts";
 import { getFilesizeGzippedInBytes } from "./getFilesizeGzippedInBytes.ts";
 import { getFilesizeInBytes } from "./getFilesizeInBytes.ts";
+import { isImageFile } from "./isImageFile.ts";
 import { isValidFile, isValidFileAsync } from "./isValidFile.ts";
 import { prettyBytes } from "./prettyBytes.ts";
-import { readFile } from "./readFile.ts";
+import { readFile, readFileAsync } from "./readFile.ts";
 import { run } from "./run.ts";
 import { setFileNameMin } from "./setFileNameMin.ts";
 import { setPublicFolder } from "./setPublicFolder.ts";
@@ -28,10 +29,12 @@ export {
     getContentFromFilesAsync,
     getFilesizeGzippedInBytes,
     getFilesizeInBytes,
+    isImageFile,
     isValidFile,
     isValidFileAsync,
     prettyBytes,
     readFile,
+    readFileAsync,
     resetDeprecationWarnings,
     run,
     setFileNameMin,

@@ -5,6 +5,7 @@
  */
 
 import { readFileSync } from "node:fs";
+import { readFile as readFilePromise } from "node:fs/promises";
 import { FileOperationError } from "./error.ts";
 
 /**
@@ -35,6 +36,51 @@ export function readFile(file: string, asBuffer?: boolean): string | Buffer;
 export function readFile(file: string, asBuffer?: boolean): string | Buffer {
     try {
         return asBuffer ? readFileSync(file) : readFileSync(file, "utf8");
+    } catch (error) {
+        throw new FileOperationError(
+            "read",
+            file,
+            error instanceof Error ? error : undefined
+        );
+    }
+}
+
+/**
+ * Read content from file asynchronously.
+ * @param file - Path to file
+ * @param asBuffer - If true, return Buffer; if false, return string (default: false)
+ * @returns File content as string or Buffer
+ * @throws {FileOperationError} If file doesn't exist or reading fails
+ */
+export async function readFileAsync(file: string): Promise<string>;
+export async function readFileAsync(
+    file: string,
+    asBuffer: true
+): Promise<Buffer>;
+export async function readFileAsync(
+    file: string,
+    asBuffer: false
+): Promise<string>;
+export async function readFileAsync(
+    file: string,
+    asBuffer?: boolean
+): Promise<string | Buffer>;
+/**
+ * Read a file from disk asynchronously and return its contents as a UTF-8 string by default or as a raw Buffer.
+ *
+ * @param file - Path to the file to read.
+ * @param asBuffer - If `true`, return a raw `Buffer`; if `false` or omitted, return the file decoded as a UTF-8 `string`.
+ * @returns A `Buffer` when `asBuffer` is `true`, otherwise the file content as a UTF-8 `string`.
+ * @throws FileOperationError when the file cannot be read; the original error is attached as the cause.
+ */
+export async function readFileAsync(
+    file: string,
+    asBuffer?: boolean
+): Promise<string | Buffer> {
+    try {
+        return asBuffer
+            ? await readFilePromise(file)
+            : await readFilePromise(file, "utf8");
     } catch (error) {
         throw new FileOperationError(
             "read",
