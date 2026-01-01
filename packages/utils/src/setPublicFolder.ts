@@ -25,7 +25,7 @@ export function setPublicFolder(
         const normalizedPath = path.normalize(item);
         return normalizedPath.includes(normalizedPublicFolder)
             ? normalizedPath
-            : path.normalize(normalizedPublicFolder + item);
+            : path.join(normalizedPublicFolder, item);
     };
 
     return {

@@ -4,6 +4,7 @@
  * MIT Licensed
  */
 
+import path from "node:path";
 import { ValidationError } from "./error.ts";
 
 /**
@@ -35,9 +36,8 @@ export function setFileNameMin(
     }
 
     try {
-        const lastSlashIndex = file.lastIndexOf("/");
-        const filePath = file.substring(0, lastSlashIndex + 1);
-        const fileWithoutPath = file.substring(lastSlashIndex + 1);
+        const fileWithoutPath = path.basename(file);
+        const filePath = path.dirname(file);
         const lastDotIndex = fileWithoutPath.lastIndexOf(".");
 
         if (lastDotIndex === -1) {
@@ -50,11 +50,14 @@ export function setFileNameMin(
             if (typeof publicFolder !== "string") {
                 throw new ValidationError("Public folder must be a string");
             }
-            fileWithoutExtension = publicFolder + fileWithoutExtension;
+            fileWithoutExtension = path.join(
+                publicFolder,
+                fileWithoutExtension
+            );
         }
 
         if (replaceInPlace) {
-            fileWithoutExtension = filePath + fileWithoutExtension;
+            fileWithoutExtension = path.join(filePath, fileWithoutExtension);
         }
 
         return output.replace("$1", fileWithoutExtension);

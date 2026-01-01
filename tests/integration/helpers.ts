@@ -4,14 +4,11 @@
  * MIT Licensed
  */
 
-import { exec } from "node:child_process";
+import { spawn } from "node:child_process";
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { promisify } from "node:util";
-
-const execAsync = promisify(exec);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,47 +34,41 @@ export function getCLIPath(): string {
 /**
  * Run CLI command and capture output
  */
-export async function runCLI(args: string[]): Promise<CLIResult> {
+/**
+ * Run CLI command and capture output
+ */
+export function runCLI(args: string[]): Promise<CLIResult> {
     const cliPath = getCLIPath();
-    const quotedArgs = args.map((arg) => {
-        if (arg.includes(" ") || arg.includes("{") || arg.includes("}")) {
-            return `'${arg.replace(/'/g, "'\\''")}'`;
-        }
-        return arg;
-    });
-    const command = `node ${cliPath} ${quotedArgs.join(" ")}`;
 
-    try {
-        const { stdout, stderr } = await execAsync(command, {
-            timeout: 30000,
-            maxBuffer: 10 * 1024 * 1024,
+    return new Promise((resolve, reject) => {
+        const child = spawn("node", [cliPath, ...args], {
+            stdio: ["ignore", "pipe", "pipe"],
+            // windowsHide: true, // Only available on Windows
         });
-        return {
-            exitCode: 0,
-            stdout,
-            stderr,
-        };
-    } catch (error: unknown) {
-        if (
-            error &&
-            typeof error === "object" &&
-            "code" in error &&
-            "stdout" in error &&
-            "stderr" in error
-        ) {
-            const execError = error as {
-                code: number;
-                stdout: string;
-                stderr: string;
-            };
-            return {
-                exitCode: execError.code ?? 1,
-                stdout: execError.stdout ?? "",
-                stderr: execError.stderr ?? "",
-            };
-        }
-        throw error;
-    }
+
+        let stdout = "";
+        let stderr = "";
+
+        child.stdout.on("data", (data) => {
+            stdout += data.toString();
+        });
+
+        child.stderr.on("data", (data) => {
+            stderr += data.toString();
+        });
+
+        child.on("error", (error) => {
+            reject(error);
+        });
+
+        child.on("close", (code) => {
+            resolve({
+                exitCode: code ?? 1,
+                stdout,
+                stderr,
+            });
+        });
+    });
 }
 
 /**

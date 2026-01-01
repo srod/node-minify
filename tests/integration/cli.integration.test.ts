@@ -329,26 +329,30 @@ describe("CLI Integration Tests", () => {
     });
 
     describe("CLI with options", () => {
-        test("should pass compressor options as JSON", async () => {
-            fixtures = await createTempFixtures({
-                "input.js": sampleJS,
-            });
+        // Skip on Windows: shell quoting for JSON differs between platforms
+        test.skipIf(process.platform === "win32")(
+            "should pass compressor options as JSON",
+            async () => {
+                fixtures = await createTempFixtures({
+                    "input.js": sampleJS,
+                });
 
-            const result = await runCLI([
-                "-c",
-                "terser",
-                "-i",
-                path.join(fixtures.dir, "input.js"),
-                "-o",
-                path.join(fixtures.dir, "output.js"),
-                "-O",
-                '{"mangle":false}',
-                "-s",
-            ]);
+                const result = await runCLI([
+                    "-c",
+                    "terser",
+                    "-i",
+                    path.join(fixtures.dir, "input.js"),
+                    "-o",
+                    path.join(fixtures.dir, "output.js"),
+                    "-O",
+                    '{"mangle":false}',
+                    "-s",
+                ]);
 
-            expect(result.exitCode).toBe(0);
-            expect(await tempFileExists(fixtures, "output.js")).toBe(true);
-        });
+                expect(result.exitCode).toBe(0);
+                expect(await tempFileExists(fixtures, "output.js")).toBe(true);
+            }
+        );
     });
 
     describe("Multiple input files", () => {

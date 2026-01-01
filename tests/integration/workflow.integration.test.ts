@@ -39,6 +39,7 @@ describe("Workflow Integration Tests", () => {
             fixtures = await createTempFixtures({
                 "src/app.js": sampleJS,
                 "src/styles.css": sampleCSS,
+                "dist/.gitkeep": "",
             });
 
             const jsResult = await minify({
@@ -78,6 +79,7 @@ describe("Workflow Integration Tests", () => {
                 "src/app.js": sampleJS,
                 "src/styles.css": sampleCSS,
                 "src/index.html": sampleHTML,
+                "dist/.gitkeep": "",
             });
 
             await minify({
@@ -116,6 +118,7 @@ describe("Workflow Integration Tests", () => {
                 "src/a.js": "function a() { return 1; }",
                 "src/b.js": "function b() { return 2; }",
                 "src/c.js": "function c() { return 3; }",
+                "dist/.gitkeep": "",
             });
 
             const results = await Promise.all([
@@ -235,6 +238,7 @@ describe("Workflow Integration Tests", () => {
         test("should use publicFolder with relative input paths", async () => {
             fixtures = await createTempFixtures({
                 "public/js/app.js": sampleJS,
+                "dist/.gitkeep": "",
             });
 
             const result = await minify({
@@ -254,6 +258,7 @@ describe("Workflow Integration Tests", () => {
             fixtures = await createTempFixtures({
                 "public/js/a.js": "var a = 1;",
                 "public/js/b.js": "var b = 2;",
+                "dist/.gitkeep": "",
             });
 
             const result = await minify({
@@ -346,6 +351,7 @@ describe("Workflow Integration Tests", () => {
         test("should use $1 pattern for output naming", async () => {
             fixtures = await createTempFixtures({
                 "src/app.js": sampleJS,
+                "dist/.gitkeep": "",
             });
 
             await minify({
