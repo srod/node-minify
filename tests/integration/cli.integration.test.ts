@@ -376,8 +376,9 @@ describe("CLI Integration Tests", () => {
             expect(await tempFileExists(fixtures, "output.js")).toBe(true);
 
             const output = await readTempFile(fixtures, "output.js");
-            expect(output).toContain("a");
-            expect(output).toContain("b");
+            // Verify both files were concatenated by checking for their values
+            expect(output).toContain("1");
+            expect(output).toContain("2");
         });
     });
 });
