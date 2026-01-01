@@ -21,10 +21,21 @@ node-minify --compressor uglify-js --input 'input.js' --output 'output.js'
 
 ## Multiple Inputs
 
-To compress multiple files, pass an array of file paths programmatically. The CLI treats a single `--input` value as one file path (no comma-splitting).
+To compress multiple files, you can pass multiple `--input` (or `-i`) flags. Each value is treated as a single file path, which allows supporting paths that contain commas.
+
+```bash
+node-minify --compressor uglify-js --input 'file1.js' --input 'file2.js' --output 'bundle.min.js'
+```
+
+Alternatively, you can use wildcards (globs):
+
+```bash
+node-minify --compressor uglify-js --input 'src/**/*.js' --output 'bundle.min.js'
+```
+
+For programmatic usage, pass an array of file paths:
 
 ```js
-// Programmatic usage with multiple inputs
 await run({
   compressor: "terser",
   input: ["src/a.js", "src/b.js"],
