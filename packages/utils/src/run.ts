@@ -12,7 +12,7 @@ import type {
     Settings,
 } from "@node-minify/types";
 import { ValidationError } from "./error.ts";
-import { writeFile } from "./writeFile.ts";
+import { writeFile, writeFileAsync } from "./writeFile.ts";
 
 /**
  * Run the configured compressor and persist its outputs according to the provided settings.
@@ -42,7 +42,7 @@ export async function run<T extends CompressorOptions = CompressorOptions>({
         index,
     });
 
-    writeOutput(result, settings, index);
+    await writeOutput(result, settings, index);
 
     return result.code;
 }
@@ -56,11 +56,11 @@ export async function run<T extends CompressorOptions = CompressorOptions>({
  * @param settings - Settings that include output destination(s) and optional in-memory `content` which disables disk writes
  * @param index - Optional index used when writing to multiple targets or when tracking a particular input within a batch
  */
-function writeOutput<T extends CompressorOptions = CompressorOptions>(
+async function writeOutput<T extends CompressorOptions = CompressorOptions>(
     result: CompressorResult,
     settings: Settings<T>,
     index?: number
-): void {
+): Promise<void> {
     const isInMemoryMode = Boolean(settings.content);
     if (isInMemoryMode || !settings.output) {
         return;
@@ -68,18 +68,26 @@ function writeOutput<T extends CompressorOptions = CompressorOptions>(
 
     // Handle multi-output (for image conversion to multiple formats)
     if (result.outputs && result.outputs.length > 0) {
-        writeMultipleOutputs(result.outputs, settings, index);
+        await writeMultipleOutputs(result.outputs, settings, index);
         return;
     }
 
     // Handle single buffer output (for binary images)
     if (result.buffer) {
-        writeFile({ file: settings.output, content: result.buffer, index });
+        await writeFileAsync({
+            file: settings.output,
+            content: result.buffer,
+            index,
+        });
         return;
     }
 
     // Default: write code (string) output
-    writeFile({ file: settings.output, content: result.code, index });
+    await writeFileAsync({
+        file: settings.output,
+        content: result.code,
+        index,
+    });
 
     if (result.map) {
         let sourceMapUrl = getSourceMapUrl(settings);
@@ -95,7 +103,11 @@ function writeOutput<T extends CompressorOptions = CompressorOptions>(
             ) {
                 sourceMapUrl = join(dirname(output), sourceMapUrl);
             }
-            writeFile({ file: sourceMapUrl, content: result.map, index });
+            await writeFileAsync({
+                file: sourceMapUrl,
+                content: result.map,
+                index,
+            });
         }
     }
 }
@@ -132,11 +144,13 @@ function getFirstInputFile(input: string | string[] | undefined): string {
  * @param settings - Settings used to resolve output targets (may supply `output` and `input`).
  * @param index - Optional index forwarded to the file writer when writing each output.
  */
-function writeMultipleOutputs<T extends CompressorOptions = CompressorOptions>(
+async function writeMultipleOutputs<
+    T extends CompressorOptions = CompressorOptions,
+>(
     outputs: NonNullable<CompressorResult["outputs"]>,
     settings: Settings<T>,
     index?: number
-): void {
+): Promise<void> {
     const output = settings.output;
     const isArrayOutput = Array.isArray(output);
     const outputsArray = isArrayOutput ? output : [output];
@@ -144,10 +158,9 @@ function writeMultipleOutputs<T extends CompressorOptions = CompressorOptions>(
     const inputDir = parse(inputFile).dir;
     const inputBase = parse(inputFile).name;
 
-    for (let i = 0; i < outputs.length; i++) {
-        const outputResult = outputs[i];
+    const tasks = outputs.map((outputResult, i) => {
         if (!outputResult) {
-            continue;
+            return Promise.resolve();
         }
 
         const format = outputResult.format || "out";
@@ -185,8 +198,14 @@ function writeMultipleOutputs<T extends CompressorOptions = CompressorOptions>(
                 : `${baseName}.${format}`;
         }
 
-        writeFile({ file: targetFile, content: outputResult.content, index });
-    }
+        return writeFileAsync({
+            file: targetFile,
+            content: outputResult.content,
+            index,
+        });
+    });
+
+    await Promise.all(tasks);
 }
 
 /**
