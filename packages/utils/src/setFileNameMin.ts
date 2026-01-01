@@ -4,22 +4,19 @@
  * MIT Licensed
  */
 
-import path from "node:path";
 import { ValidationError } from "./error.ts";
 
 /**
- * Compute a minified file path by applying the `output` pattern to the original file name.
- *
- * The `output` string must contain the placeholder `$1`, which will be replaced with the original
- * filename without its extension, optionally prefixed by `publicFolder` and/or placed inside the
- * original file's directory when `replaceInPlace` is true.
- *
- * @param file - Original file path; must be a non-empty string and include a file extension
- * @param output - Output pattern that must include the `$1` placeholder
- * @param publicFolder - Optional directory prefix to prepend to the filename portion in the result
- * @param replaceInPlace - If true, place the transformed filename inside the original file's directory
- * @returns The final path produced by replacing `$1` in `output` with the computed filename
- * @throws {ValidationError} When `file` or `output` is invalid, when `file` lacks an extension, when `publicFolder` is not a string, or when processing fails
+ * Set the file name as minified.
+ * @param file Original file path
+ * @param output Output pattern (use $1 as placeholder for filename)
+ * @param publicFolder Optional public folder prefix
+ * @param replaceInPlace Whether to keep original path
+ * @returns Minified file path
+ * @throws {ValidationError} If input parameters are invalid
+ * @example
+ * setFileNameMin('src/file.js', '$1.min.js') // 'src/file.min.js'
+ * setFileNameMin('file.js', '$1.min.js', 'public/') // 'public/file.min.js'
  */
 export function setFileNameMin(
     file: string,
@@ -38,8 +35,9 @@ export function setFileNameMin(
     }
 
     try {
-        const fileWithoutPath = path.basename(file);
-        const filePath = path.dirname(file);
+        const lastSlashIndex = file.lastIndexOf("/");
+        const filePath = file.substring(0, lastSlashIndex + 1);
+        const fileWithoutPath = file.substring(lastSlashIndex + 1);
         const lastDotIndex = fileWithoutPath.lastIndexOf(".");
 
         if (lastDotIndex === -1) {
@@ -52,14 +50,11 @@ export function setFileNameMin(
             if (typeof publicFolder !== "string") {
                 throw new ValidationError("Public folder must be a string");
             }
-            fileWithoutExtension = path.join(
-                publicFolder,
-                fileWithoutExtension
-            );
+            fileWithoutExtension = publicFolder + fileWithoutExtension;
         }
 
         if (replaceInPlace) {
-            fileWithoutExtension = path.join(filePath, fileWithoutExtension);
+            fileWithoutExtension = filePath + fileWithoutExtension;
         }
 
         return output.replace("$1", fileWithoutExtension);
