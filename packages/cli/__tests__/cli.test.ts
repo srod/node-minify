@@ -57,6 +57,17 @@ describe("JavaScript compressors", () => {
         });
         expect(spy).toHaveBeenCalled();
     });
+
+    test("should minify multiple files when input is an array", async () => {
+        const spy = vi.spyOn(cli, "run");
+        await cli.run({
+            compressor: "terser",
+            input: filesJS.filesArray,
+            output: filesJS.fileJSOut,
+            silence: true,
+        });
+        expect(spy).toHaveBeenCalled();
+    });
 });
 
 describe("CSS compressors", () => {
