@@ -4,10 +4,11 @@
  * MIT Licensed
  */
 
+import { stat } from "node:fs/promises";
 /**
  * Module dependencies.
  */
-import { stat } from "node:fs/promises";
+import { dirname } from "node:path";
 import type {
     CompressorOptions,
     MinifierOptions,
@@ -107,8 +108,7 @@ async function createDirectory(filePath: string | string[]) {
                 return;
             }
 
-            // Extract directory path
-            const dirPath = path.substring(0, path.lastIndexOf("/"));
+            const dirPath = dirname(path);
 
             // Early return if no directory path
             if (!dirPath) {
