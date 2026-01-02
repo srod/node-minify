@@ -162,7 +162,7 @@ interface CompressorMetrics {
 
 ### Console Format
 
-```
+```console
 🔍 Benchmarking: src/app.js (45.2 KB)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
