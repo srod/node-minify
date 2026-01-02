@@ -63,7 +63,8 @@ export async function runCLI(args: string[]): Promise<CLIResult> {
         stderr += data.toString();
     });
 
-    const exitCode = await new Promise<number | null>((resolve) => {
+    const exitCode = await new Promise<number | null>((resolve, reject) => {
+        child.on("error", reject);
         child.on("close", resolve);
     });
 
