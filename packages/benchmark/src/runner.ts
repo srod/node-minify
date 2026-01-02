@@ -111,7 +111,7 @@ async function benchmarkCompressor(
                 compressor,
                 input: file,
                 output: warmupFile,
-                type: options.type as any,
+                type: options.type as "js" | "css",
                 options: options.compressorOptions,
             });
         }
@@ -127,7 +127,7 @@ async function benchmarkCompressor(
                 compressor,
                 input: file,
                 output: lastOutputFile,
-                type: options.type as any,
+                type: options.type as "js" | "css",
                 options: options.compressorOptions,
             });
             times.push(performance.now() - start);
