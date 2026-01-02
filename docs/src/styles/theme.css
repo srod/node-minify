@@ -127,7 +127,9 @@ body {
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     opacity: 0;
-    transition: opacity 0.2s, background-color 0.2s;
+    transition:
+        opacity 0.2s,
+        background-color 0.2s;
     background-color: var(--theme-bg);
     border: 1px solid var(--theme-divider);
     cursor: pointer;
