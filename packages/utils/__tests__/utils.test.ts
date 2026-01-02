@@ -111,6 +111,27 @@ describe("Package: utils", () => {
         });
     });
 
+    describe("FileOperationError", () => {
+        test("should chain the original error via cause", () => {
+            const originalError = new Error("Original failure");
+            const error = new FileOperationError(
+                "read",
+                "test.js",
+                originalError
+            );
+
+            expect(error.message).toContain("Failed to read file test.js");
+            expect(error.message).toContain("Original failure");
+            expect(error.cause).toBe(originalError);
+        });
+
+        test("should handle missing original error", () => {
+            const error = new FileOperationError("read", "test.js");
+            expect(error.message).toContain("Failed to read file test.js");
+            expect(error.cause).toBeUndefined();
+        });
+    });
+
     describe("isValidFile", () => {
         test("should return true if file exists", () => {
             expect(isValidFile(fixtureFile)).toBe(true);
