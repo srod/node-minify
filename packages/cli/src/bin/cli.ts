@@ -6,6 +6,7 @@
  * MIT Licensed
  */
 
+import { benchmark, getReporter } from "@node-minify/benchmark";
 import { Command } from "commander";
 import updateNotifier from "update-notifier";
 import packageJson from "../../package.json" with { type: "json" };
@@ -56,6 +57,45 @@ function setupProgram(): Command {
             ""
         );
 
+    program
+        .command("benchmark <input>")
+        .description("Benchmark compressors on input files")
+        .option(
+            "-c, --compressors [compressors]",
+            "comma-separated list of compressors"
+        )
+        .option("-n, --iterations [iterations]", "number of iterations", "1")
+        .option(
+            "-f, --format [format]",
+            "output format: console|json|markdown",
+            "console"
+        )
+        .option("-o, --output [output]", "output file path")
+        .option("--gzip", "include gzip size")
+        .action(async (input, options) => {
+            const globalOpts = program.opts();
+            try {
+                const results = await benchmark({
+                    input,
+                    compressors:
+                        options.compressors?.split(",") ||
+                        globalOpts.compressor?.split(","),
+                    iterations: parseInt(options.iterations, 10),
+                    format: options.format,
+                    output: options.output,
+                    includeGzip: !!options.gzip,
+                    type: globalOpts.type,
+                });
+
+                const reporter = getReporter(options.format);
+                console.log(reporter(results));
+                process.exit(0);
+            } catch (error) {
+                console.error(error);
+                process.exit(1);
+            }
+        });
+
     program.on("--help", displayCompressorsList);
 
     return program;
@@ -82,15 +122,22 @@ async function main(): Promise<void> {
     const program = setupProgram();
     program.parse(process.argv);
 
-    const options: SettingsWithCompressor = program.opts();
-    validateOptions(options, program);
+    // If no command was executed, validate global options for the main command
+    if (
+        program.args.length === 0 ||
+        (program.args.length > 0 &&
+            AVAILABLE_MINIFIER.some((m) => m.name === program.args[0]))
+    ) {
+        const options: SettingsWithCompressor = program.opts();
+        validateOptions(options, program);
 
-    try {
-        await run(options);
-        process.exit(0);
-    } catch (error) {
-        console.error(error);
-        process.exit(1);
+        try {
+            await run(options);
+            process.exit(0);
+        } catch (error) {
+            console.error(error);
+            process.exit(1);
+        }
     }
 }
 

@@ -1,19 +1,17 @@
 {
-  "name": "@node-minify/cli",
+  "name": "@node-minify/benchmark",
   "version": "10.2.0",
-  "description": "CLI - command line interface for @node-minify",
+  "description": "Benchmark tool for @node-minify compressors",
   "keywords": [
     "compressor",
     "minify",
-    "minifier"
+    "benchmark",
+    "performance"
   ],
   "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
-  "homepage": "https://github.com/srod/node-minify/tree/main/packages/cli#readme",
+  "homepage": "https://github.com/srod/node-minify/tree/main/packages/benchmark#readme",
   "license": "MIT",
   "type": "module",
-  "bin": {
-    "node-minify": "dist/bin/cli.js"
-  },
   "engines": {
     "node": ">=20.0.0"
   },
@@ -42,7 +40,7 @@
     "url": "https://github.com/srod/node-minify/issues"
   },
   "scripts": {
-    "build": "tsdown src/index.ts src/bin/cli.ts",
+    "build": "tsdown src/index.ts",
     "check-exports": "attw --pack . --profile esm-only",
     "format:check": "biome check .",
     "lint": "biome lint .",
@@ -55,29 +53,13 @@
   },
   "dependencies": {
     "@node-minify/core": "workspace:*",
-    "@node-minify/benchmark": "workspace:*",
     "@node-minify/utils": "workspace:*",
-    "chalk": "5.6.2",
-    "commander": "14.0.2",
-    "ora": "9.0.0",
-    "update-notifier": "7.3.1"
+    "chalk": "5.6.2"
   },
   "devDependencies": {
-    "@node-minify/clean-css": "workspace:*",
-    "@node-minify/cssnano": "workspace:*",
-    "@node-minify/csso": "workspace:*",
-    "@node-minify/esbuild": "workspace:*",
-    "@node-minify/google-closure-compiler": "workspace:*",
-    "@node-minify/imagemin": "workspace:*",
-    "@node-minify/jsonminify": "workspace:*",
-    "@node-minify/lightningcss": "workspace:*",
-    "@node-minify/oxc": "workspace:*",
-    "@node-minify/sharp": "workspace:*",
-    "@node-minify/svgo": "workspace:*",
-    "@node-minify/swc": "workspace:*",
-    "@node-minify/terser": "workspace:*",
     "@node-minify/types": "workspace:*",
-    "@node-minify/uglify-js": "workspace:*",
-    "@node-minify/yui": "workspace:*"
+    "@node-minify/terser": "workspace:*",
+    "@node-minify/esbuild": "workspace:*",
+    "@node-minify/swc": "workspace:*"
   }
 }
