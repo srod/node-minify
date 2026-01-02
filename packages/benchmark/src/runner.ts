@@ -102,9 +102,10 @@ async function benchmarkCompressor(
     const warmup = options.warmup ?? (iterations > 1 ? 1 : 0);
     const times: number[] = [];
     const tempFiles: string[] = [];
+    const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
     try {
-        const warmupFile = `${file}.warmup.tmp`;
+        const warmupFile = `${file}.warmup.${uniqueId}.tmp`;
         for (let i = 0; i < warmup; i++) {
             await minify({
                 compressor,
@@ -121,7 +122,7 @@ async function benchmarkCompressor(
         let lastOutputFile = "";
         for (let i = 0; i < iterations; i++) {
             const start = performance.now();
-            lastOutputFile = `${file}.${name}.tmp`;
+            lastOutputFile = `${file}.${name}.${uniqueId}.tmp`;
             await minify({
                 compressor,
                 input: file,
