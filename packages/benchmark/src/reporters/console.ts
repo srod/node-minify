@@ -73,7 +73,7 @@ function formatTable(
             ];
             if (hasGzip) row.push((r.gzipSize ?? "-").padEnd(COL_GZIP));
             if (hasBrotli) row.push((r.brotliSize ?? "-").padEnd(COL_BROTLI));
-            row.push(chalk.green("OK").padEnd(COL_STATUS));
+            row.push(chalk.green("OK".padEnd(COL_STATUS)));
             table += `${row.join("")}\n`;
 
             if (isVerbose && r.iterationTimes) {
