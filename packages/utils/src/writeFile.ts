@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-import { existsSync, lstatSync, writeFileSync } from "node:fs";
+import { lstatSync, writeFileSync } from "node:fs";
 import { lstat, writeFile as writeFileFs } from "node:fs/promises";
 import { FileOperationError, ValidationError } from "./error.ts";
 
@@ -35,7 +35,7 @@ export function writeFile({
         const targetFile = resolveTargetFile(file, index);
         validateContent(content);
 
-        if (checkFileExists(targetFile) && isDirectory(targetFile)) {
+        if (isDirectory(targetFile)) {
             throw new Error("Target path exists and is a directory");
         }
 
@@ -88,20 +88,13 @@ export async function writeFileAsync({
     }
 }
 
-function resolveTargetFile(
-    file: string | string[],
-    index?: number
-): string {
+function resolveTargetFile(file: string | string[], index?: number): string {
     if (!file) {
         throw new ValidationError("No target file provided");
     }
 
     const targetFile =
-        index !== undefined
-            ? Array.isArray(file)
-                ? file[index]
-                : file
-            : file;
+        index !== undefined ? (Array.isArray(file) ? file[index] : file) : file;
 
     if (typeof targetFile !== "string") {
         throw new ValidationError("Invalid target file path");
@@ -114,10 +107,6 @@ function validateContent(content: string | Buffer): void {
     if (!content) {
         throw new ValidationError("No content provided");
     }
-}
-
-function checkFileExists(path: string): boolean {
-    return existsSync(path);
 }
 
 function isDirectory(path: string): boolean {
