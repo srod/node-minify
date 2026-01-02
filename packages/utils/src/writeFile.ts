@@ -52,14 +52,15 @@ export function writeFile({
 }
 
 /**
- * Write provided content to a target file asynchronously.
+ * Write content to a resolved target file path.
  *
- * When `file` is an array and `index` is provided, the file at that index is used; otherwise `file` is used directly.
+ * Resolves the target from `file` (string or array) using `index` when provided, validates the content,
+ * ensures the target is not a directory, and writes the content to disk.
  *
- * @param file - Target path or array of target paths
- * @param content - Content to write; may be a `string` or `Buffer`
- * @param index - Optional index to select a file when `file` is an array
- * @returns Promise resolving to the same `content` value that was written
+ * @param file - Target path or array of target paths; when `file` is an array, `index` selects the entry
+ * @param content - Content to write; a `string` or `Buffer`
+ * @param index - Optional index used to select a file when `file` is an array
+ * @returns The same `content` value that was written
  * @throws ValidationError If no target file, no content, or the resolved target path is invalid
  * @throws FileOperationError If the underlying filesystem write fails (wraps the original error)
  */
@@ -88,6 +89,14 @@ export async function writeFileAsync({
     }
 }
 
+/**
+ * Resolve a target file path from a string or an array of paths, optionally selecting by index.
+ *
+ * @param file - A file path or an array of file paths to resolve from.
+ * @param index - Optional index to select an entry when `file` is an array; ignored if not provided.
+ * @returns The resolved file path.
+ * @throws ValidationError if no file is provided or the resolved target is not a string.
+ */
 function resolveTargetFile(file: string | string[], index?: number): string {
     if (!file) {
         throw new ValidationError("No target file provided");
@@ -103,12 +112,23 @@ function resolveTargetFile(file: string | string[], index?: number): string {
     return targetFile;
 }
 
+/**
+ * Ensure content is present before writing.
+ *
+ * @param content - The data to write; a string or Buffer
+ * @throws ValidationError if `content` is empty or otherwise falsy
+ */
 function validateContent(content: string | Buffer): void {
     if (!content) {
         throw new ValidationError("No content provided");
     }
 }
 
+/**
+ * Checks whether the given filesystem path refers to a directory.
+ *
+ * @returns `true` if the path exists and is a directory, `false` otherwise.
+ */
 function isDirectory(path: string): boolean {
     try {
         return lstatSync(path).isDirectory();
@@ -117,6 +137,12 @@ function isDirectory(path: string): boolean {
     }
 }
 
+/**
+ * Determine whether a filesystem path refers to a directory.
+ *
+ * @param path - The filesystem path to check
+ * @returns `true` if the path exists and is a directory, `false` otherwise
+ */
 async function isDirectoryAsync(path: string): Promise<boolean> {
     try {
         const stats = await lstat(path);
@@ -126,6 +152,14 @@ async function isDirectoryAsync(path: string): Promise<boolean> {
     }
 }
 
+/**
+ * Normalize and rethrow errors that occur while attempting to write to one or more files.
+ *
+ * @param error - The original error thrown during the write attempt
+ * @param file - The target file path or an array of paths that were the intended write targets
+ * @throws ValidationError - rethrows the provided ValidationError without modification
+ * @throws FileOperationError - thrown for any other error, wrapping the original error with context about the write operation and the target file(s)
+ */
 function handleWriteError(error: unknown, file: string | string[]): never {
     if (error instanceof ValidationError) {
         throw error;

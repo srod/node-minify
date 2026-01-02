@@ -118,20 +118,13 @@ function getFirstInputFile(input: string | string[] | undefined): string {
 }
 
 /**
- * Write multiple output files produced by a compressor according to the settings' output configuration.
+ * Write compressor outputs to files resolved from the provided settings.
  *
- * This writes each provided output entry to a computed target path:
- * - If `settings.output` is an array, a non-empty array item (not "$1") at the same index is used verbatim as the target path.
- * - If `settings.output` is the string "$1", the target is generated from the first input filename and the output's `format` (or "out" if missing).
- * - If `settings.output` contains "$1", every "$1" is replaced with the input base name and the output's `format` is appended.
- * - If `settings.output` is a plain string, that string is used with the output's `format` appended.
- * - If no usable output pattern is provided, a default path is generated from the input filename and the output's `format`.
+ * Resolves a target path for each output entry based on settings.output and settings.input, then writes each entry's content to its resolved file location.
  *
- * Each output's `content` is written to its resolved path using `writeFile`. The first input (if any) is used to derive base names and directories for auto-generated targets.
- *
- * @param outputs - Array of compressor outputs (each may include `content` and optional `format`) to write.
- * @param settings - Settings used to resolve output targets (may supply `output` and `input`).
- * @param index - Optional index forwarded to the file writer when writing each output.
+ * @param outputs - Array of compressor output entries (each entry typically contains `content` and optional `format`) to be written.
+ * @param settings - Settings used to resolve target paths (may supply `output` pattern/array and `input` for deriving names).
+ * @param index - Optional numeric index forwarded to the file writer for each write operation.
  */
 async function writeMultipleOutputs<
     T extends CompressorOptions = CompressorOptions,
