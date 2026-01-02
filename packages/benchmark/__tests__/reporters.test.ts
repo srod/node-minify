@@ -215,8 +215,8 @@ describe("Reporters - Console", () => {
         const result = createFailedResult();
         const output = formatConsoleOutput(result);
 
-        expect(output).toContain("ERROR");
         expect(output).toContain("non-existent");
+        expect(output).toContain("Compressor not found or not installed");
     });
 
     test("should handle multiple files", () => {

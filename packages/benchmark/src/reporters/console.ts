@@ -85,7 +85,16 @@ function formatTable(
                 )}\n`;
             }
         } else {
-            table += `${chalk.red(r.compressor.padEnd(COL_COMPRESSOR))} ${chalk.red(`ERROR: ${r.error}`)}\n`;
+            const row = [
+                chalk.red(r.compressor.padEnd(COL_COMPRESSOR)),
+                chalk.red("-".padEnd(COL_SIZE)),
+                chalk.red("-".padEnd(COL_REDUCTION)),
+                chalk.red("-".padEnd(COL_TIME)),
+            ];
+            if (hasGzip) row.push(chalk.red("-".padEnd(COL_GZIP)));
+            if (hasBrotli) row.push(chalk.red("-".padEnd(COL_BROTLI)));
+            row.push(chalk.red((r.error ?? "Error").padEnd(COL_STATUS)));
+            table += `${row.join("")}\n`;
         }
     }
 
