@@ -76,6 +76,18 @@ describe("Coverage Gaps", () => {
         expect(compressor).toBeDefined();
     });
 
+    test("loadCompressor - falls back to mod.default when no named export", async () => {
+        vi.doMock("@node-minify/unknown-pkg", () => ({
+            default: async () => ({ code: "default-export" }),
+        }));
+
+        const { loadCompressor: loadComp } = await import(
+            "../src/compressor-loader.ts"
+        );
+        const compressor = await loadComp("unknown-pkg");
+        expect(compressor).toBeDefined();
+    });
+
     test("runBenchmark - handles non-Error throw in compressor", async () => {
         vi.spyOn(compressorLoader, "loadCompressor").mockResolvedValue(
             async () => {
