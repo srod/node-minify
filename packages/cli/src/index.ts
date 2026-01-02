@@ -67,11 +67,15 @@ async function runOne(cli: SettingsWithCompressor): Promise<Result> {
         throw new Error(`${cli.compressor} only supports type 'css'`);
     }
 
+    // Input handling: arrays are used as-is, strings are treated as a single file path.
+    // Multiple inputs must be passed as an array (no implicit comma-splitting).
+    const inputValue = cli.input;
+
     // Prepare settings
     const settings: Settings = {
         compressorLabel: cli.compressor,
         compressor: minifierImplementation,
-        input: typeof cli.input === "string" ? cli.input.split(",") : cli.input,
+        input: inputValue,
         output: cli.output,
         ...(cli.type && { type: cli.type }),
         ...(cli.option && { options: JSON.parse(cli.option) }),

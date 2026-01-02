@@ -28,6 +28,10 @@ export const AVAILABLE_MINIFIER = [
     { name: "html-minifier", export: "htmlMinifier" },
     // JSON compressors
     { name: "jsonminify", export: "jsonMinify" },
+    // Image compressors
+    { name: "imagemin", export: "imagemin" },
+    { name: "sharp", export: "sharp" },
+    { name: "svgo", export: "svgo" },
     // Other
     { name: "no-compress", export: "noCompress" },
 ] as const;

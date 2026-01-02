@@ -35,7 +35,15 @@ function setupProgram(): Command {
             "use the specified compressor [uglify-js]",
             DEFAULT_COMPRESSOR
         )
-        .option("-i, --input [file]", "input file path")
+        .option(
+            "-i, --input [file]",
+            "input file path",
+            (val: string, memo: string[]) => {
+                memo.push(val);
+                return memo;
+            },
+            []
+        )
         .option("-o, --output [file]", "output file path")
         .option(
             "-t, --type [type]",

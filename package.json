@@ -34,7 +34,7 @@
   "packageManager": "bun@1.3.5",
   "private": true,
   "scripts": {
-    "build": "bun run build:deps && bun run --filter '*' build",
+    "build": "bun run build:deps && bun run --filter '*' --parallel build",
     "build:deps": "bun run --filter '@node-minify/utils' build && bun run --filter '@node-minify/run' build",
     "build:docs": "bun run --filter '@node-minify/docs' build",
     "check-exports": "bun run --filter '*' check-exports",
