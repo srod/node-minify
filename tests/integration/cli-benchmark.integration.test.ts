@@ -125,8 +125,7 @@ describe("CLI Benchmark Integration Tests", () => {
         ]);
 
         expect(result.exitCode).toBe(0);
-        // Reporter console.ts needs to be updated to show Brotli column
-        // But the runner should already be calculating it
+        expect(result.stdout).toContain("Brotli");
     });
 
     test("should handle errors for non-existent compressor via CLI", async () => {
