@@ -59,6 +59,10 @@ It allows you to compress JavaScript, CSS, HTML, and image files.
 
 - [CLI](https://node-minify.2clics.net/cli)
 
+**Benchmark:**
+
+- [Benchmark](https://node-minify.2clics.net/benchmark) - Compare compressor performance
+
 ## Installation
 
 ```bash

@@ -82,6 +82,21 @@
         "@types/babel-core": "^6.25.10",
       },
     },
+    "packages/benchmark": {
+      "name": "@node-minify/benchmark",
+      "version": "10.2.0",
+      "dependencies": {
+        "@node-minify/core": "workspace:*",
+        "@node-minify/utils": "workspace:*",
+        "chalk": "5.6.2",
+      },
+      "devDependencies": {
+        "@node-minify/esbuild": "workspace:*",
+        "@node-minify/swc": "workspace:*",
+        "@node-minify/terser": "workspace:*",
+        "@node-minify/types": "workspace:*",
+      },
+    },
     "packages/clean-css": {
       "name": "@node-minify/clean-css",
       "version": "10.2.0",
@@ -101,6 +116,7 @@
         "node-minify": "dist/bin/cli.js",
       },
       "dependencies": {
+        "@node-minify/benchmark": "workspace:*",
         "@node-minify/core": "workspace:*",
         "@node-minify/utils": "workspace:*",
         "chalk": "5.6.2",
@@ -675,6 +691,8 @@
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.1.0", "", { "dependencies": { "@emnapi/core": "^1.7.1", "@emnapi/runtime": "^1.7.1", "@tybys/wasm-util": "^0.10.1" } }, "sha512-Fq6DJW+Bb5jaWE69/qOE0D1TUN9+6uWhCeZpdnSBk14pjLcCWR7Q8n49PTSPHazM37JqrsdpEthXy2xn6jWWiA=="],
 
     "@node-minify/babel-minify": ["@node-minify/babel-minify@workspace:packages/babel-minify"],
+
+    "@node-minify/benchmark": ["@node-minify/benchmark@workspace:packages/benchmark"],
 
     "@node-minify/clean-css": ["@node-minify/clean-css@workspace:packages/clean-css"],
 

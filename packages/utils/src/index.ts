@@ -7,6 +7,7 @@ import {
     getContentFromFiles,
     getContentFromFilesAsync,
 } from "./getContentFromFiles.ts";
+import { getFilesizeBrotliInBytes } from "./getFilesizeBrotliInBytes.ts";
 import { getFilesizeGzippedInBytes } from "./getFilesizeGzippedInBytes.ts";
 import { getFilesizeInBytes } from "./getFilesizeInBytes.ts";
 import { isImageFile } from "./isImageFile.ts";
@@ -27,6 +28,7 @@ export {
     ensureStringContent,
     getContentFromFiles,
     getContentFromFilesAsync,
+    getFilesizeBrotliInBytes,
     getFilesizeGzippedInBytes,
     getFilesizeInBytes,
     isImageFile,

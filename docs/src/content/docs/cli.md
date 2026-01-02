@@ -50,3 +50,68 @@ You can pass an `option` as a JSON string to the compressor.
 ```bash
 node-minify --compressor uglify-js --input 'input.js' --output 'output.js' --option '{"warnings": true, "mangle": false}'
 ```
+
+## Benchmark Command
+
+Compare the performance of different compressors using the `benchmark` command.
+
+### Basic Usage
+
+```bash
+node-minify benchmark src/app.js
+```
+
+### Compare Specific Compressors
+
+```bash
+node-minify benchmark src/app.js --compressors terser,esbuild,swc
+```
+
+### With Options
+
+```bash
+# Run 3 iterations, include gzip size, specify JS type
+node-minify benchmark src/app.js -c terser,esbuild -n 3 --gzip -t js
+```
+
+### Output Formats
+
+```bash
+# Console output (default)
+node-minify benchmark src/app.js -c terser,esbuild
+
+# JSON output
+node-minify benchmark src/app.js -c terser,esbuild -f json
+
+# Markdown output
+node-minify benchmark src/app.js -c terser,esbuild -f markdown
+```
+
+### Benchmark Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-c, --compressors` | Comma-separated list of compressors | `terser,esbuild,swc` |
+| `-n, --iterations` | Number of iterations | `1` |
+| `-f, --format` | Output format: `console`, `json`, `markdown` | `console` |
+| `-o, --output` | Output file path | stdout |
+| `--gzip` | Include gzip size in results | `false` |
+| `-t, --type` | File type: `js`, `css`, `html` | auto-detect |
+
+### Example Output
+
+```console
+🔍 Benchmarking: src/app.js (45.2 KB)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Compressor      Size      Reduction   Time      Status
+──────────────────────────────────────────────────────
+terser          11.8 KB   73.9%       234ms     OK
+esbuild         12.3 KB   72.8%       45ms      OK
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🏆 Best compression: terser
+⚡ Fastest: esbuild
+💡 Recommended: esbuild
+```

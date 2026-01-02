@@ -6,7 +6,9 @@
  * MIT Licensed
  */
 
+import { benchmark, getReporter } from "@node-minify/benchmark";
 import { Command } from "commander";
+import ora from "ora";
 import updateNotifier from "update-notifier";
 import packageJson from "../../package.json" with { type: "json" };
 import { AVAILABLE_MINIFIER } from "../config.ts";
@@ -56,6 +58,55 @@ function setupProgram(): Command {
             ""
         );
 
+    program
+        .command("benchmark <input>")
+        .description("Benchmark compressors on input files")
+        .option(
+            "-c, --compressors [compressors]",
+            "comma-separated list of compressors"
+        )
+        .option("-n, --iterations [iterations]", "number of iterations", "1")
+        .option(
+            "-f, --format [format]",
+            "output format: console|json|markdown",
+            "console"
+        )
+        .option("-o, --output [output]", "output file path")
+        .option("--gzip", "include gzip size")
+        .option("--brotli", "include brotli size")
+        .option("-v, --verbose", "verbose output")
+        .action(async (input, options) => {
+            const globalOpts = program.opts();
+            const spinner = ora("Benchmarking...").start();
+            try {
+                const results = await benchmark({
+                    input,
+                    compressors:
+                        options.compressors?.split(",") ||
+                        globalOpts.compressor?.split(","),
+                    iterations: parseInt(options.iterations, 10),
+                    format: options.format,
+                    output: options.output,
+                    includeGzip: !!options.gzip,
+                    includeBrotli: !!options.brotli,
+                    type: globalOpts.type,
+                    verbose: !!options.verbose,
+                    onProgress: (compressor: string, file: string) => {
+                        spinner.text = `Benchmarking ${compressor} on ${file}...`;
+                    },
+                });
+
+                spinner.stop();
+                const reporter = getReporter(options.format);
+                console.log(reporter(results));
+                process.exit(0);
+            } catch (error) {
+                spinner.fail("Benchmark failed");
+                console.error(error);
+                process.exit(1);
+            }
+        });
+
     program.on("--help", displayCompressorsList);
 
     return program;
@@ -82,15 +133,22 @@ async function main(): Promise<void> {
     const program = setupProgram();
     program.parse(process.argv);
 
-    const options: SettingsWithCompressor = program.opts();
-    validateOptions(options, program);
+    // If no command was executed, validate global options for the main command
+    if (
+        program.args.length === 0 ||
+        (program.args.length > 0 &&
+            AVAILABLE_MINIFIER.some((m) => m.name === program.args[0]))
+    ) {
+        const options: SettingsWithCompressor = program.opts();
+        validateOptions(options, program);
 
-    try {
-        await run(options);
-        process.exit(0);
-    } catch (error) {
-        console.error(error);
-        process.exit(1);
+        try {
+            await run(options);
+            process.exit(0);
+        } catch (error) {
+            console.error(error);
+            process.exit(1);
+        }
     }
 }
 

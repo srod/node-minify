@@ -47,6 +47,7 @@ This is a Bun monorepo for compressing JavaScript, CSS, and HTML files using var
 - `run` - Command execution wrapper for external tools
 - `types` - TypeScript type definitions (not compiled)
 - `cli` - Command-line interface
+- `benchmark` - Benchmark tool to compare compressor performance
 
 **Compressor packages** - Each wraps a specific minification library:
 - JS: `esbuild`, `google-closure-compiler`, `oxc`, `swc`, `terser`, `uglify-js`

@@ -15,3 +15,4 @@ tests/tmp
 examples/public/**/*-dist
 examples/public/**/*.min.html
 packages/utils/__tests__/temp_perf/
+*.tmp
