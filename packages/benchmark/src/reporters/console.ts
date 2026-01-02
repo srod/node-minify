@@ -7,6 +7,12 @@
 import chalk from "chalk";
 import type { BenchmarkResult, CompressorMetrics } from "../types.ts";
 
+/**
+ * Format a BenchmarkResult into a colored, human-readable console report.
+ *
+ * @param result - The benchmark result containing per-file metrics, options, and summary
+ * @returns A string containing per-file tables and a summary (best compression, fastest, recommended), formatted with colors and separators for console output
+ */
 export function formatConsoleOutput(result: BenchmarkResult): string {
     let output = "";
 
@@ -25,6 +31,20 @@ export function formatConsoleOutput(result: BenchmarkResult): string {
     return output;
 }
 
+/**
+ * Builds a console-formatted ASCII table summarizing compressor metrics.
+ *
+ * The table includes columns for compressor name, size, reduction percent, time,
+ * and a status column. Gzip and Brotli columns are included only if any result
+ * provides those sizes. For successful results the status shows `OK`; failed
+ * results display the error message. When `options.verbose` is set and a result
+ * contains `iterationTimes`, a secondary line lists per-iteration times.
+ *
+ * @param results - Array of compressor metric objects to render as rows.
+ * @param options - Optional rendering options; if `options.verbose` is true,
+ *   per-iteration times (when present) are appended for each successful result.
+ * @returns A single string containing the formatted table ready for console output.
+ */
 function formatTable(
     results: CompressorMetrics[],
     options?: Partial<BenchmarkResult["options"]>

@@ -30,6 +30,12 @@ const COMPRESSOR_EXPORTS: Record<string, string> = {
     "no-compress": "noCompress",
 };
 
+/**
+ * Load a compressor implementation from the corresponding @node-minify scoped package.
+ *
+ * @param name - Compressor package identifier (without the `@node-minify/` scope), e.g. `"esbuild"`
+ * @returns The resolved `Compressor` export from the package, or `null` if the package or export cannot be loaded
+ */
 export async function loadCompressor(name: string): Promise<Compressor | null> {
     try {
         const packageName = `@node-minify/${name}`;

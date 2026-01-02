@@ -127,6 +127,11 @@ function validateOptions(options: SettingsWithCompressor, program: Command) {
     }
 }
 
+/**
+ * Initialize and run the command-line interface: notify about updates, parse arguments, validate options, and execute the selected action.
+ *
+ * On successful completion the process exits with code 0; on error the process exits with code 1.
+ */
 async function main(): Promise<void> {
     updateNotifier({ pkg: packageJson }).notify();
 

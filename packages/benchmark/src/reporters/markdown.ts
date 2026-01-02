@@ -6,6 +6,22 @@
 
 import type { BenchmarkResult } from "../types.ts";
 
+/**
+ * Render a BenchmarkResult as a Markdown-formatted report.
+ *
+ * The output includes a top-level header with the result timestamp, a per-file section
+ * for each input file containing a dynamic table (always: Compressor, Size, Reduction, Time;
+ * optionally: Gzip and/or Brotli if present), and a final "Summary" section with
+ * best compression, fastest, and recommended entries.
+ *
+ * For successful measurements each table row contains compressor, size, reduction (one decimal),
+ * rounded time (ms), optional gzip/brotli column values (or `-` when absent), and `OK` in the Status column.
+ * For failed measurements the row shows `-` placeholders for numeric columns and a Status value of
+ * `ERROR: <message>` where any pipe characters in the message are escaped.
+ *
+ * @param result - The benchmark result object to format into Markdown.
+ * @returns The complete Markdown report as a string.
+ */
 export function formatMarkdownOutput(result: BenchmarkResult): string {
     let output = "# Benchmark Results\n\n";
     output += `**Generated:** ${result.timestamp}\n\n`;

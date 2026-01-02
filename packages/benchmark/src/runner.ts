@@ -21,6 +21,12 @@ import type {
     FileResult,
 } from "./types.ts";
 
+/**
+ * Run benchmarks for the given input patterns/files across configured compressors and produce aggregated results.
+ *
+ * @param options - Benchmark configuration (includes `input` as a string or array of file/glob patterns, `compressors`, `iterations`, `warmup`, and reporting flags)
+ * @returns A BenchmarkResult containing the run timestamp, the original options, an array of per-file results, and an overall summary
+ */
 export async function runBenchmark(
     options: BenchmarkOptions
 ): Promise<BenchmarkResult> {
@@ -53,6 +59,13 @@ export async function runBenchmark(
     };
 }
 
+/**
+ * Benchmarks a single input file across the configured compressors.
+ *
+ * @param file - Path to the file to benchmark
+ * @param options - Benchmark options (controls which compressors to run, iterations/warmup, verbosity, and progress callback)
+ * @returns A FileResult containing the file path, original size (bytes and human-readable), and an array of CompressorMetrics in the same order as the configured compressors
+ */
 async function benchmarkFile(
     file: string,
     options: BenchmarkOptions
@@ -79,6 +92,15 @@ async function benchmarkFile(
     };
 }
 
+/**
+ * Runs the named compressor on a single input file and produces measured metrics.
+ *
+ * Creates temporary files for warmup and iteration outputs and removes them before returning.
+ *
+ * @param file - Path to the file to compress.
+ * @param name - Compressor identifier to load and run.
+ * @param options - Benchmark options (controls iterations, warmup, input type, compressor options, verbosity, and whether to include gzip/brotli sizes).
+ * @returns CompressorMetrics describing the result: measured output size, human-readable size, average/min/max times, reduction percent, and optional `gzipSize`/`brotliSize`. If compression failed, `success` is `false` and `error` contains a message.
 async function benchmarkCompressor(
     file: string,
     name: string,
@@ -177,6 +199,12 @@ async function benchmarkCompressor(
     }
 }
 
+/**
+ * Produce an overall summary selecting the best compressor by compression, by performance, and a recommended choice.
+ *
+ * @param files - Array of per-file benchmark results to aggregate
+ * @returns An object with `bestCompression`, `bestPerformance`, and `recommended` — each a compressor name or `"N/A"` when no successful results exist
+ */
 function calculateSummary(files: FileResult[]): BenchmarkResult["summary"] {
     const allResults = files.flatMap((f) => f.results).filter((r) => r.success);
 
@@ -215,6 +243,13 @@ function calculateSummary(files: FileResult[]): BenchmarkResult["summary"] {
     };
 }
 
+/**
+ * Deletes the provided temporary files.
+ *
+ * Performs best-effort removal: individual unlink errors are ignored so cleanup does not throw.
+ *
+ * @param files - Array of file paths to remove
+ */
 function cleanupTempFiles(files: string[]): void {
     for (const file of files) {
         try {

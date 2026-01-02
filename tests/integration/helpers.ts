@@ -23,6 +23,12 @@ export interface CLIResult {
     exitCode: number | null;
 }
 
+/**
+ * Create a temporary directory populated with the provided files and return its path plus a cleanup function.
+ *
+ * @param files - Object mapping file paths (relative to the temporary directory) to file contents
+ * @returns An object with `dir`, the temporary directory path, and `cleanup`, an async function that removes the directory and its contents
+ */
 export async function createTempFixtures(
     files: Record<string, string>
 ): Promise<TempFixtures> {
@@ -44,10 +50,21 @@ export async function createTempFixtures(
     };
 }
 
+/**
+ * Get the absolute path to the project's CLI executable.
+ *
+ * @returns The absolute filesystem path to the CLI entry script at "../../packages/cli/dist/bin/cli.js"
+ */
 export function getCLIPath(): string {
     return path.resolve(__dirname, "../../packages/cli/dist/bin/cli.js");
 }
 
+/**
+ * Run the CLI with the given arguments and capture its output and exit code.
+ *
+ * @param args - Command-line arguments to pass to the CLI executable
+ * @returns An object containing `stdout` (captured standard output), `stderr` (captured standard error), and `exitCode` (the process exit code, or `null` if none was produced)
+ */
 export async function runCLI(args: string[]): Promise<CLIResult> {
     const cliPath = getCLIPath();
     const child = spawn("node", [cliPath, ...args]);

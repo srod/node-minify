@@ -8,10 +8,10 @@ import { runBenchmark } from "./runner.ts";
 import type { BenchmarkOptions, BenchmarkResult } from "./types.ts";
 
 /**
- * Benchmarks minification performance across multiple compressors.
+ * Run a minification benchmark across multiple compressors.
  *
- * @param options - Benchmark options
- * @returns Benchmark results
+ * @param options - Configuration for the benchmark (input sources, compressors to run, and measurement settings)
+ * @returns BenchmarkResult containing per-compressor metrics and an aggregated summary
  */
 export async function benchmark(
     options: BenchmarkOptions

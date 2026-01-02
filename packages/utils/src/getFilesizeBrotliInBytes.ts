@@ -14,6 +14,13 @@ import { prettyBytes } from "./prettyBytes.ts";
 
 const brotliCompressAsync = promisify(brotliCompress);
 
+/**
+ * Compute the Brotli-compressed size of a file and return it as a human-readable string.
+ *
+ * @param file - Path to the file whose Brotli-compressed size will be measured
+ * @returns The size of the file's Brotli-compressed content formatted as a human-readable string
+ * @throws FileOperationError if the file does not exist, the path is not a valid file, or an I/O/compression error occurs
+ */
 export async function getFilesizeBrotliInBytes(file: string): Promise<string> {
     try {
         if (!existsSync(file)) {
