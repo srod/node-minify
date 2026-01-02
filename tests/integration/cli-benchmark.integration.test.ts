@@ -7,13 +7,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { afterEach, beforeAll, describe, expect, test } from "vitest";
-import {
-    createTempFixtures,
-    getCLIPath,
-    runCLI,
-    type TempFixtures,
-} from "./helpers.ts";
+import { beforeAll, describe, expect, test } from "vitest";
+import { getCLIPath, runCLI } from "./helpers.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CLI_PATH = getCLIPath();
@@ -27,14 +22,6 @@ const fixtureJS = path.resolve(__dirname, "../fixtures/es5/fixture-1.js");
  * correct minification mode is used.
  */
 describe("CLI Benchmark Integration Tests", () => {
-    let fixtures: TempFixtures;
-
-    afterEach(async () => {
-        if (fixtures) {
-            await fixtures.cleanup();
-        }
-    });
-
     beforeAll(async () => {
         try {
             await fs.access(CLI_PATH);
@@ -46,7 +33,6 @@ describe("CLI Benchmark Integration Tests", () => {
     });
 
     test("should run benchmark via CLI", async () => {
-        fixtures = await createTempFixtures({});
         const result = await runCLI([
             "benchmark",
             fixtureJS,
@@ -66,7 +52,6 @@ describe("CLI Benchmark Integration Tests", () => {
     });
 
     test("should run benchmark and output JSON via CLI", async () => {
-        fixtures = await createTempFixtures({});
         const result = await runCLI([
             "benchmark",
             fixtureJS,
@@ -86,7 +71,6 @@ describe("CLI Benchmark Integration Tests", () => {
     });
 
     test("should run benchmark and output Markdown via CLI", async () => {
-        fixtures = await createTempFixtures({});
         const result = await runCLI([
             "benchmark",
             fixtureJS,
@@ -104,7 +88,6 @@ describe("CLI Benchmark Integration Tests", () => {
     });
 
     test("should include gzip size via CLI", async () => {
-        fixtures = await createTempFixtures({});
         const result = await runCLI([
             "benchmark",
             fixtureJS,
@@ -120,7 +103,6 @@ describe("CLI Benchmark Integration Tests", () => {
     });
 
     test("should include brotli size via CLI", async () => {
-        fixtures = await createTempFixtures({});
         const result = await runCLI([
             "benchmark",
             fixtureJS,
@@ -136,7 +118,6 @@ describe("CLI Benchmark Integration Tests", () => {
     });
 
     test("should handle errors for non-existent compressor via CLI", async () => {
-        fixtures = await createTempFixtures({});
         const result = await runCLI([
             "benchmark",
             fixtureJS,
