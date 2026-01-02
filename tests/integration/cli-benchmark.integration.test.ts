@@ -19,6 +19,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CLI_PATH = getCLIPath();
 const fixtureJS = path.resolve(__dirname, "../fixtures/es5/fixture-1.js");
 
+/**
+ * CLI Benchmark Integration Tests
+ *
+ * Note: The `-t js` flag specifies the file type for compressors that support
+ * multiple types (e.g., esbuild handles both JS and CSS). This ensures the
+ * correct minification mode is used.
+ */
 describe("CLI Benchmark Integration Tests", () => {
     let fixtures: TempFixtures;
 
