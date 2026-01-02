@@ -4,7 +4,8 @@
  * MIT Licensed
  */
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
+import { readFile } from "node:fs/promises";
 import { promisify } from "node:util";
 import { brotliCompress, constants } from "node:zlib";
 import { FileOperationError } from "./error.ts";
@@ -31,7 +32,7 @@ export async function getFilesizeBrotliInBytes(file: string): Promise<string> {
             );
         }
 
-        const content = readFileSync(file);
+        const content = await readFile(file);
         const compressed = await brotliCompressAsync(content, {
             params: {
                 [constants.BROTLI_PARAM_QUALITY]: constants.BROTLI_MAX_QUALITY,
