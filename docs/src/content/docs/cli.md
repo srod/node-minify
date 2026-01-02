@@ -100,7 +100,7 @@ node-minify benchmark src/app.js -c terser,esbuild -f markdown
 
 ### Example Output
 
-```
+```console
 🔍 Benchmarking: src/app.js (45.2 KB)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
