@@ -18,7 +18,7 @@ import { setFileNameMin } from "./setFileNameMin.ts";
 import { setPublicFolder } from "./setPublicFolder.ts";
 import type { BuildArgsOptions } from "./types.ts";
 import { wildcards } from "./wildcards.ts";
-import { writeFile } from "./writeFile.ts";
+import { writeFile, writeFileAsync } from "./writeFile.ts";
 
 export {
     buildArgs,
@@ -43,6 +43,7 @@ export {
     warnDeprecation,
     wildcards,
     writeFile,
+    writeFileAsync,
 };
 
 export type { BuildArgsOptions };

@@ -35,6 +35,7 @@ import {
     toBuildArgsOptions,
     warnDeprecation,
     writeFile,
+    writeFileAsync,
 } from "../src/index.ts";
 
 const fixtureFile = `${__dirname}/../../../tests/fixtures/fixture-content.js`;
@@ -277,6 +278,82 @@ describe("Package: utils", () => {
                     index: 0,
                 })
             ).toThrow();
+        });
+    });
+
+    describe("writeFileAsync", () => {
+        test("should return the content", async () => {
+            const result = await writeFileAsync({
+                file: `${__dirname}/../../../tests/tmp/temp-async.js`,
+                content: "const foo = 'bar';",
+            });
+            expect(result).toBe("const foo = 'bar';");
+        });
+
+        test("should write content to an array of files", async () => {
+            const files: [string, string] = [
+                `${__dirname}/../../../tests/tmp/temp1-async.js`,
+                `${__dirname}/../../../tests/tmp/temp2-async.js`,
+            ];
+            const result = await writeFileAsync({
+                file: files,
+                content: "content",
+                index: 0,
+            });
+            expect(result).toBe("content");
+            expect(readFile(files[0])).toBe("content");
+        });
+
+        test("should throw if no target file", async () => {
+            await expect(
+                writeFileAsync({ file: "", content: "content" })
+            ).rejects.toThrow(ValidationError);
+        });
+
+        test("should throw if no content", async () => {
+            await expect(
+                writeFileAsync({ file: "foo.js", content: "" })
+            ).rejects.toThrow(ValidationError);
+        });
+
+        test("should throw if target path is a directory", async () => {
+            await expect(
+                writeFileAsync({
+                    file: __dirname,
+                    content: "content",
+                })
+            ).rejects.toThrow();
+        });
+
+        test("should handle index with non-array file", async () => {
+            const file = `${__dirname}/../../../tests/tmp/temp-index-async.js`;
+            const result = await writeFileAsync({
+                file,
+                content: "content",
+                index: 0,
+            });
+            expect(result).toBe("content");
+            expect(readFile(file)).toBe("content");
+        });
+
+        test("should throw if targetFile is not a string", async () => {
+            await expect(
+                writeFileAsync({
+                    file: [null as any],
+                    content: "content",
+                    index: 0,
+                })
+            ).rejects.toThrow(ValidationError);
+        });
+
+        test("should throw FileOperationError on multi-file failure", async () => {
+            await expect(
+                writeFileAsync({
+                    file: [__dirname],
+                    content: "content",
+                    index: 0,
+                })
+            ).rejects.toThrow();
         });
     });
 
