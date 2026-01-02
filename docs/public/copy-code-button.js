@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const button = document.createElement("button");
         button.className = "copy-code-button";
         button.type = "button";
-        button.ariaLabel = "Copy code to clipboard";
+        button.setAttribute("aria-label", "Copy code to clipboard");
         button.innerText = "Copy";
 
         let timeoutId = null;
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Visual feedback
                 button.innerText = "Copied!";
                 button.classList.add("copied");
-                button.ariaLabel = "Copied to clipboard";
+                button.setAttribute("aria-label", "Copied to clipboard");
 
                 // Clear existing timeout if user clicked again rapidly
                 if (timeoutId) {
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 timeoutId = setTimeout(() => {
                     button.innerText = "Copy";
                     button.classList.remove("copied");
-                    button.ariaLabel = "Copy code to clipboard";
+                    button.setAttribute("aria-label", "Copy code to clipboard");
                     timeoutId = null;
                 }, 2000);
             } catch (err) {
