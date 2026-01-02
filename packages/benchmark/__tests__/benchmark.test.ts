@@ -26,8 +26,10 @@ describe("Package: benchmark", () => {
 
         expect(results).toBeDefined();
         expect(results.files).toHaveLength(1);
-        expect(results.files[0].results).toHaveLength(2);
-        expect(results.files[0].results[0].success).toBe(true);
+        const firstFile = results.files[0];
+        expect(firstFile).toBeDefined();
+        expect(firstFile?.results).toHaveLength(2);
+        expect(firstFile?.results[0]?.success).toBe(true);
         expect(results.summary).toBeDefined();
     });
 
@@ -37,7 +39,9 @@ describe("Package: benchmark", () => {
             compressors: ["non-existent"],
         });
 
-        expect(results.files[0].results[0].success).toBe(false);
-        expect(results.files[0].results[0].error).toContain("not found");
+        const firstFile = results.files[0];
+        const firstResult = firstFile?.results[0];
+        expect(firstResult?.success).toBe(false);
+        expect(firstResult?.error).toContain("not found");
     });
 });
