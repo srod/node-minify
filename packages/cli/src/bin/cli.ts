@@ -8,6 +8,7 @@
 
 import { benchmark, getReporter } from "@node-minify/benchmark";
 import { Command } from "commander";
+import ora from "ora";
 import updateNotifier from "update-notifier";
 import packageJson from "../../package.json" with { type: "json" };
 import { AVAILABLE_MINIFIER } from "../config.ts";
@@ -72,8 +73,11 @@ function setupProgram(): Command {
         )
         .option("-o, --output [output]", "output file path")
         .option("--gzip", "include gzip size")
+        .option("--brotli", "include brotli size")
+        .option("-v, --verbose", "verbose output")
         .action(async (input, options) => {
             const globalOpts = program.opts();
+            const spinner = ora("Benchmarking...").start();
             try {
                 const results = await benchmark({
                     input,
@@ -84,13 +88,20 @@ function setupProgram(): Command {
                     format: options.format,
                     output: options.output,
                     includeGzip: !!options.gzip,
+                    includeBrotli: !!options.brotli,
                     type: globalOpts.type,
+                    verbose: !!options.verbose,
+                    onProgress: (compressor: string, file: string) => {
+                        spinner.text = `Benchmarking ${compressor} on ${file}...`;
+                    },
                 });
 
+                spinner.stop();
                 const reporter = getReporter(options.format);
                 console.log(reporter(results));
                 process.exit(0);
             } catch (error) {
+                spinner.fail("Benchmark failed");
                 console.error(error);
                 process.exit(1);
             }

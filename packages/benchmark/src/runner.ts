@@ -4,9 +4,10 @@
  * MIT Licensed
  */
 
-import { statSync } from "node:fs";
+import { statSync, unlinkSync } from "node:fs";
 import { minify } from "@node-minify/core";
 import {
+    getFilesizeBrotliInBytes,
     getFilesizeGzippedInBytes,
     prettyBytes,
     wildcards,
@@ -64,6 +65,9 @@ async function benchmarkFile(
     const compressors = options.compressors || ["terser", "esbuild", "swc"];
 
     for (const name of compressors) {
+        if (options.onProgress) {
+            options.onProgress(name, file);
+        }
         results.push(await benchmarkCompressor(file, name, options));
     }
 
@@ -97,17 +101,21 @@ async function benchmarkCompressor(
     const iterations = options.iterations || 1;
     const warmup = options.warmup ?? (iterations > 1 ? 1 : 0);
     const times: number[] = [];
+    const tempFiles: string[] = [];
 
     try {
-        // Warmup
+        const warmupFile = `${file}.warmup.tmp`;
         for (let i = 0; i < warmup; i++) {
             await minify({
                 compressor,
                 input: file,
-                output: `${file}.tmp`,
+                output: warmupFile,
                 type: options.type as any,
                 options: options.compressorOptions,
             });
+        }
+        if (warmup > 0) {
+            tempFiles.push(warmupFile);
         }
 
         let lastOutputFile = "";
@@ -123,6 +131,7 @@ async function benchmarkCompressor(
             });
             times.push(performance.now() - start);
         }
+        tempFiles.push(lastOutputFile);
 
         const avgTime = times.reduce((a, b) => a + b, 0) / times.length;
         const outStats = statSync(lastOutputFile);
@@ -136,17 +145,25 @@ async function benchmarkCompressor(
             timeMs: avgTime,
             timeMinMs: Math.min(...times),
             timeMaxMs: Math.max(...times),
+            iterationTimes: options.verbose ? times : undefined,
             reductionPercent: calculateReduction(originalStats.size, sizeBytes),
             success: true,
         };
 
         if (options.includeGzip) {
             metrics.gzipSize = await getFilesizeGzippedInBytes(lastOutputFile);
-            // We don't have getRawFilesizeGzippedInBytes yet, so we parse if needed or just use string
         }
+
+        if (options.includeBrotli) {
+            metrics.brotliSize = await getFilesizeBrotliInBytes(lastOutputFile);
+        }
+
+        cleanupTempFiles(tempFiles);
 
         return metrics;
     } catch (err) {
+        cleanupTempFiles(tempFiles);
+
         return {
             compressor: name,
             sizeBytes: 0,
@@ -195,4 +212,12 @@ function calculateSummary(files: FileResult[]): BenchmarkResult["summary"] {
         bestPerformance,
         recommended,
     };
+}
+
+function cleanupTempFiles(files: string[]): void {
+    for (const file of files) {
+        try {
+            unlinkSync(file);
+        } catch {}
+    }
 }

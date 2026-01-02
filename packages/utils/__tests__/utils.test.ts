@@ -23,6 +23,7 @@ import {
     deleteFile,
     ensureStringContent,
     getContentFromFiles,
+    getFilesizeBrotliInBytes,
     getFilesizeGzippedInBytes,
     getFilesizeInBytes,
     isValidFile,
@@ -476,6 +477,37 @@ describe("Package: utils", () => {
         test("should throw if path is a directory", async () => {
             const dirPath = __dirname || ".";
             await expect(getFilesizeGzippedInBytes(dirPath)).rejects.toThrow();
+        });
+    });
+
+    describe("getFilesizeBrotliInBytes", () => {
+        test("should return file size", async () => {
+            const size = await getFilesizeBrotliInBytes(fixtureFile);
+            expect(size).toMatch(/\d+ B/);
+            expect(size.length).toBeGreaterThan(0);
+        });
+
+        test("should throw if file does not exist", async () => {
+            await expect(getFilesizeBrotliInBytes("fake.js")).rejects.toThrow(
+                FileOperationError
+            );
+        });
+
+        test("should throw if path is a directory", async () => {
+            const dirPath = __dirname || ".";
+            await expect(getFilesizeBrotliInBytes(dirPath)).rejects.toThrow(
+                FileOperationError
+            );
+        });
+
+        test("should throw FileOperationError with correct message", async () => {
+            try {
+                await getFilesizeBrotliInBytes("non-existent-file.js");
+                throw new Error("Expected FileOperationError");
+            } catch (error) {
+                expect(error).toBeInstanceOf(FileOperationError);
+                expect((error as Error).message).toContain("Failed to");
+            }
         });
     });
 

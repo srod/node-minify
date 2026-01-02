@@ -14,7 +14,7 @@ export function formatConsoleOutput(result: BenchmarkResult): string {
         output += `\n${chalk.cyan("🔍 Benchmarking:")} ${chalk.bold(file.file)} (${file.originalSize})\n`;
         output += `${chalk.gray("━".repeat(60))}\n\n`;
 
-        output += formatTable(file.results);
+        output += formatTable(file.results, result.options);
         output += `\n${chalk.gray("━".repeat(60))}\n`;
     }
 
@@ -25,22 +25,38 @@ export function formatConsoleOutput(result: BenchmarkResult): string {
     return output;
 }
 
-function formatTable(results: CompressorMetrics[]): string {
-    const headers = ["Compressor", "Size", "Reduction", "Time", "Status"];
+function formatTable(
+    results: CompressorMetrics[],
+    options?: Partial<BenchmarkResult["options"]>
+): string {
+    const hasGzip = results.some((r) => r.gzipSize);
+    const hasBrotli = results.some((r) => r.brotliSize);
+    const isVerbose = options?.verbose;
+
+    const headers = ["Compressor", "Size", "Reduction", "Time"];
+    if (hasGzip) headers.push("Gzip");
+    if (hasBrotli) headers.push("Brotli");
+    headers.push("Status");
+
     const COL_COMPRESSOR = 16;
     const COL_SIZE = 10;
     const COL_REDUCTION = 12;
     const COL_TIME = 10;
+    const COL_GZIP = 10;
+    const COL_BROTLI = 10;
     const COL_STATUS = 10;
-    const colWidths = [
+
+    const colWidths: number[] = [
         COL_COMPRESSOR,
         COL_SIZE,
         COL_REDUCTION,
         COL_TIME,
-        COL_STATUS,
     ];
-    const totalWidth =
-        COL_COMPRESSOR + COL_SIZE + COL_REDUCTION + COL_TIME + COL_STATUS;
+    if (hasGzip) colWidths.push(COL_GZIP);
+    if (hasBrotli) colWidths.push(COL_BROTLI);
+    colWidths.push(COL_STATUS);
+
+    const totalWidth = colWidths.reduce((a, b) => a + b, 0);
 
     let table = `${chalk.bold(
         headers.map((h, i) => h.padEnd(colWidths[i] ?? 10)).join("")
@@ -54,9 +70,20 @@ function formatTable(results: CompressorMetrics[]): string {
                 r.size.padEnd(COL_SIZE),
                 `${r.reductionPercent.toFixed(1)}%`.padEnd(COL_REDUCTION),
                 `${Math.round(r.timeMs)}ms`.padEnd(COL_TIME),
-                chalk.green("OK").padEnd(COL_STATUS),
             ];
+            if (hasGzip) row.push((r.gzipSize ?? "-").padEnd(COL_GZIP));
+            if (hasBrotli) row.push((r.brotliSize ?? "-").padEnd(COL_BROTLI));
+            row.push(chalk.green("OK").padEnd(COL_STATUS));
             table += `${row.join("")}\n`;
+
+            if (isVerbose && r.iterationTimes) {
+                table += `${chalk.gray(
+                    "  └─ " +
+                        r.iterationTimes
+                            .map((t) => `${Math.round(t)}ms`)
+                            .join(", ")
+                )}\n`;
+            }
         } else {
             table += `${chalk.red(r.compressor.padEnd(COL_COMPRESSOR))} ${chalk.red(`ERROR: ${r.error}`)}\n`;
         }

@@ -16,6 +16,7 @@ export interface BenchmarkOptions {
     verbose?: boolean;
     type?: "js" | "css" | "html";
     compressorOptions?: Record<string, unknown>;
+    onProgress?: (compressor: string, file: string) => void;
 }
 
 export interface CompressorMetrics {
@@ -25,6 +26,7 @@ export interface CompressorMetrics {
     timeMs: number;
     timeMinMs?: number;
     timeMaxMs?: number;
+    iterationTimes?: number[];
     reductionPercent: number;
     gzipBytes?: number;
     gzipSize?: string;

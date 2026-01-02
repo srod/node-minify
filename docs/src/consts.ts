@@ -11,6 +11,7 @@ export const SIDEBAR: Sidebar = {
         { text: "Getting Started", link: "getting-started" },
         { text: "Options", link: "options" },
         { text: "CLI", link: "cli" },
+        { text: "Benchmark", link: "benchmark" },
     ],
     Compressors: [
         { text: "babel-minify", link: "compressors/babel-minify" },

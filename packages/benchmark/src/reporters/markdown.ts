@@ -11,15 +11,38 @@ export function formatMarkdownOutput(result: BenchmarkResult): string {
     output += `**Generated:** ${result.timestamp}\n\n`;
 
     for (const file of result.files) {
+        const hasGzip = file.results.some((r) => r.gzipSize);
+        const hasBrotli = file.results.some((r) => r.brotliSize);
+
         output += `## ${file.file} (${file.originalSize})\n\n`;
-        output += "| Compressor | Size | Reduction | Time | Status |\n";
-        output += "|------------|------|-----------|------|--------|\n";
+
+        let headers = "| Compressor | Size | Reduction | Time |";
+        let separator = "|------------|------|-----------|------|";
+        if (hasGzip) {
+            headers += " Gzip |";
+            separator += "------|";
+        }
+        if (hasBrotli) {
+            headers += " Brotli |";
+            separator += "--------|";
+        }
+        headers += " Status |\n";
+        separator += "--------|\n";
+
+        output += headers;
+        output += separator;
 
         for (const r of file.results) {
             if (r.success) {
-                output += `| ${r.compressor} | ${r.size} | ${r.reductionPercent.toFixed(1)}% | ${Math.round(r.timeMs)}ms | OK |\n`;
+                output += `| ${r.compressor} | ${r.size} | ${r.reductionPercent.toFixed(1)}% | ${Math.round(r.timeMs)}ms |`;
+                if (hasGzip) output += ` ${r.gzipSize ?? "-"} |`;
+                if (hasBrotli) output += ` ${r.brotliSize ?? "-"} |`;
+                output += " OK |\n";
             } else {
-                output += `| ${r.compressor} | - | - | - | ERROR: ${r.error} |\n`;
+                output += `| ${r.compressor} | - | - | - |`;
+                if (hasGzip) output += " - |";
+                if (hasBrotli) output += " - |";
+                output += ` ERROR: ${r.error} |\n`;
             }
         }
         output += "\n";

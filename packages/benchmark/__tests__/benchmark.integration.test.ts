@@ -168,6 +168,20 @@ describe("Benchmark Integration Tests", () => {
                 terserResult?.timeMs ?? 0
             );
         });
+
+        test("should include iteration times when verbose is true", async () => {
+            const result = await benchmark({
+                input: fixtureJS,
+                compressors: ["terser"],
+                iterations: 2,
+                verbose: true,
+            });
+
+            assertValidBenchmarkResult(result);
+            const terserResult = result.files[0]?.results[0];
+            expect(terserResult?.iterationTimes).toBeDefined();
+            expect(terserResult?.iterationTimes).toHaveLength(2);
+        });
     });
 
     describe("CSS Compressors", () => {
@@ -314,6 +328,21 @@ describe("Benchmark Integration Tests", () => {
             expect(cleanCssResult).toBeDefined();
             expect(cleanCssResult?.success).toBe(true);
             expect(cleanCssResult?.gzipSize).toBeDefined();
+        });
+
+        test("should include brotli size when requested for JS", async () => {
+            const result = await benchmark({
+                input: fixtureJS,
+                compressors: ["terser"],
+                iterations: 1,
+                includeBrotli: true,
+            });
+
+            assertValidBenchmarkResult(result);
+            const terserResult = result.files[0]?.results[0];
+            expect(terserResult).toBeDefined();
+            expect(terserResult?.success).toBe(true);
+            expect(terserResult?.brotliSize).toBeDefined();
         });
     });
 

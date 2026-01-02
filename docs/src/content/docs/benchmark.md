@@ -121,6 +121,7 @@ for (const file of results.files) {
 | `format` | `string` | Output format: `console`, `json`, `markdown` | `console` |
 | `output` | `string` | Output file path | stdout |
 | `type` | `string` | File type: `js`, `css`, `html` | auto-detect |
+| `verbose` | `boolean` | Show per-iteration details | `false` |
 
 ## Result Structure
 
@@ -150,6 +151,8 @@ interface CompressorMetrics {
   timeMs: number;
   reductionPercent: number;
   gzipSize?: string;
+  brotliSize?: string;
+  iterationTimes?: number[];
   success: boolean;
   error?: string;
 }
