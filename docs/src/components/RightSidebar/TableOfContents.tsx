@@ -93,7 +93,12 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
         });
 
         // Stop observing when the component is unmounted.
-        return () => headingsObserver.disconnect();
+        return () => {
+            headingsObserver.disconnect();
+            if (manualClickTimeout.current) {
+                clearTimeout(manualClickTimeout.current);
+            }
+        };
     }, []);
 
     const onLinkClick = (e) => {
