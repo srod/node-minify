@@ -137,8 +137,11 @@ function createIsolatedPublicFolder(originalPublicFolder: string): string {
         });
     } catch (error) {
         if (isRetriableFileSystemError(error)) {
-            const start = Date.now();
-            while (Date.now() - start < 100) {}
+            // Use Atomics.wait for a blocking sleep without busy-looping
+            const sharedBuffer = new SharedArrayBuffer(4);
+            const int32 = new Int32Array(sharedBuffer);
+            Atomics.wait(int32, 0, 0, 100);
+
             fs.cpSync(originalResolved, isolatedPublicFolder, {
                 recursive: true,
                 force: true,
