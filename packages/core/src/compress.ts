@@ -7,7 +7,6 @@
 /**
  * Module dependencies.
  */
-import fs from "node:fs";
 import type {
     CompressorOptions,
     MinifierOptions,
@@ -48,7 +47,7 @@ export async function compress<T extends CompressorOptions = CompressorOptions>(
     }
 
     if (settings.output) {
-        createDirectory(settings.output);
+        await createDirectory(settings.output);
     }
 
     // Handle array outputs (from user input or created internally by checkOutput when processing $1 pattern)
@@ -96,7 +95,7 @@ async function compressArrayOfFiles<
  * Create folder of the target file.
  * @param filePath Full path of the file (can be string or array when $1 pattern is used)
  */
-function createDirectory(filePath: string | string[]) {
+async function createDirectory(filePath: string | string[]) {
     // Early return if no file path provided
     if (!filePath) {
         return;
@@ -104,6 +103,7 @@ function createDirectory(filePath: string | string[]) {
 
     // Handle array (created internally by checkOutput when processing $1 pattern)
     const paths = Array.isArray(filePath) ? filePath : [filePath];
+    const uniqueDirs = new Set<string>();
 
     for (const path of paths) {
         if (typeof path !== "string") {
@@ -118,18 +118,11 @@ function createDirectory(filePath: string | string[]) {
             continue;
         }
 
-        // Create directory if it doesn't exist
-        if (!directoryExists(dirPath)) {
-            mkdirp.sync(dirPath);
-        }
+        uniqueDirs.add(dirPath);
     }
-}
 
-// Helper function to check if directory exists
-function directoryExists(path: string): boolean {
-    try {
-        return fs.statSync(path).isDirectory();
-    } catch {
-        return false;
-    }
+    // Create directories in parallel
+    await Promise.all(
+        Array.from(uniqueDirs).map((dir) => mkdirp(dir))
+    );
 }
