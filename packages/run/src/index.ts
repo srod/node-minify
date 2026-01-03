@@ -77,7 +77,10 @@ export async function run({
 
         child.stdout?.on("data", (chunk: Buffer) => {
             stdout += chunk;
-            if (maxBuffer && Buffer.byteLength(stdout, "utf8") > maxBuffer) {
+            if (
+                maxBuffer > 0 &&
+                Buffer.byteLength(stdout, "utf8") > maxBuffer
+            ) {
                 child.kill();
                 reject(new Error("stdout maxBuffer exceeded"));
                 return;
@@ -86,7 +89,10 @@ export async function run({
 
         child.stderr?.on("data", (chunk: Buffer) => {
             stderr += chunk;
-            if (maxBuffer && Buffer.byteLength(stderr, "utf8") > maxBuffer) {
+            if (
+                maxBuffer > 0 &&
+                Buffer.byteLength(stderr, "utf8") > maxBuffer
+            ) {
                 child.kill();
                 reject(new Error("stderr maxBuffer exceeded"));
                 return;
