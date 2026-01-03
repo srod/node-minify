@@ -136,12 +136,7 @@ function createIsolatedPublicFolder(originalPublicFolder: string): string {
             force: true,
         });
     } catch (error) {
-        if (
-            error instanceof Error &&
-            (error.message.includes("ENOENT") ||
-                error.message.includes("EPERM") ||
-                error.message.includes("EBUSY"))
-        ) {
+        if (isRetriableFileSystemError(error)) {
             const start = Date.now();
             while (Date.now() - start < 100) {}
             fs.cpSync(originalResolved, isolatedPublicFolder, {
@@ -155,6 +150,17 @@ function createIsolatedPublicFolder(originalPublicFolder: string): string {
 
     // Keep the trailing separator for consistency with existing publicFolder values.
     return `${isolatedPublicFolder}${path.sep}`;
+}
+
+function isRetriableFileSystemError(
+    error: unknown
+): error is { code: string } & Error {
+    return (
+        error instanceof Error &&
+        "code" in error &&
+        (error as any).code &&
+        ["ENOENT", "EPERM", "EBUSY"].includes((error as any).code)
+    );
 }
 
 function rewriteInputToIsolatedPublicFolder(
