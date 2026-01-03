@@ -76,21 +76,21 @@ export async function run({
         });
 
         child.stdout?.on("data", (chunk: Buffer) => {
-            if (maxBuffer && stdout.length + chunk.length > maxBuffer) {
+            stdout += chunk;
+            if (maxBuffer && Buffer.byteLength(stdout, "utf8") > maxBuffer) {
                 child.kill();
                 reject(new Error("stdout maxBuffer exceeded"));
                 return;
             }
-            stdout += chunk;
         });
 
         child.stderr?.on("data", (chunk: Buffer) => {
-            if (maxBuffer && stderr.length + chunk.length > maxBuffer) {
+            stderr += chunk;
+            if (maxBuffer && Buffer.byteLength(stderr, "utf8") > maxBuffer) {
                 child.kill();
                 reject(new Error("stderr maxBuffer exceeded"));
                 return;
             }
-            stderr += chunk;
         });
 
         child.stdin?.end(data);
