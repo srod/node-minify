@@ -15,6 +15,8 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
     const onThisPageID = "on-this-page-heading";
     const itemOffsets = useRef<ItemOffsets[]>([]);
     const [currentID, setCurrentID] = useState("overview");
+    const isManualClick = useRef(false);
+    const manualClickTimeout = useRef<number | null>(null);
 
     // Scroll active item into view
     useEffect(() => {
@@ -22,10 +24,19 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
 
         const activeLink = toc.current.querySelector(`a[href="#${currentID}"]`);
         if (activeLink) {
-            activeLink.scrollIntoView({
-                behavior: "smooth",
-                block: "nearest",
-            });
+            const linkRect = activeLink.getBoundingClientRect();
+            const tocRect = toc.current.getBoundingClientRect();
+
+            const isVisible =
+                linkRect.top >= tocRect.top &&
+                linkRect.bottom <= tocRect.bottom;
+
+            if (!isVisible) {
+                activeLink.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                });
+            }
         }
     }, [currentID]);
 
@@ -52,6 +63,8 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
         if (!toc.current) return;
 
         const setCurrent: IntersectionObserverCallback = (entries) => {
+            if (isManualClick.current) return;
+
             for (const entry of entries) {
                 if (entry.isIntersecting) {
                     const { id } = entry.target;
@@ -84,6 +97,15 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
     }, []);
 
     const onLinkClick = (e) => {
+        isManualClick.current = true;
+        if (manualClickTimeout.current) {
+            clearTimeout(manualClickTimeout.current);
+        }
+
+        manualClickTimeout.current = window.setTimeout(() => {
+            isManualClick.current = false;
+        }, 1000);
+
         setCurrentID(e.target.getAttribute("href").replace("#", ""));
     };
 
