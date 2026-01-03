@@ -47,14 +47,18 @@ async function run(): Promise<void> {
     const fileType = process.env.FILE_TYPE;
     const optionsJson = process.env.OPTIONS || "{}";
     const includeGzip = process.env.INCLUDE_GZIP !== "false";
+    const workspaceDir =
+        process.env.WORKSPACE_DIR ||
+        process.env.GITHUB_WORKSPACE ||
+        process.cwd();
 
     if (!inputFile || !outputFile) {
         console.error("::error::Input and output files are required");
         process.exit(1);
     }
 
-    const inputPath = resolve(process.cwd(), "..", "..", "..", inputFile);
-    const outputPath = resolve(process.cwd(), "..", "..", "..", outputFile);
+    const inputPath = resolve(workspaceDir, inputFile);
+    const outputPath = resolve(workspaceDir, outputFile);
 
     if (!existsSync(inputPath)) {
         console.error(`::error::Input file not found: ${inputPath}`);
