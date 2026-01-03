@@ -98,6 +98,25 @@ describe("Package: utils/compressor-resolver", () => {
                 filesToCleanup.add(testCompressorPath);
             });
 
+            test("should resolve local file with first function export as fallback", async () => {
+                const uniquePath = path.join(
+                    tmpDir,
+                    "first-fn-export-compressor.mjs"
+                );
+                filesToCleanup.add(uniquePath);
+                const compressorCode = `
+                    export const someValue = "not a function";
+                    export async function myCustomFn({ content }) {
+                        return { code: content.trim() };
+                    }
+                `;
+                writeFile({ file: uniquePath, content: compressorCode });
+
+                const result = await resolveCompressor(uniquePath);
+                expect(result.compressor).toBeTypeOf("function");
+                expect(result.isBuiltIn).toBe(false);
+            });
+
             test("should resolve local file with default export", async () => {
                 const compressorCode = `
                     export default async function({ content }) {
@@ -150,6 +169,64 @@ describe("Package: utils/compressor-resolver", () => {
                     "doesn't export a valid compressor function"
                 );
             });
+
+            test("should resolve local file with camelCase named export", async () => {
+                const uniquePath = path.join(
+                    tmpDir,
+                    "camel-case-compressor.mjs"
+                );
+                filesToCleanup.add(uniquePath);
+                const compressorCode = `
+                    export async function camelCaseCompressor({ content }) {
+                        return { code: content.toLowerCase() };
+                    }
+                `;
+                writeFile({ file: uniquePath, content: compressorCode });
+
+                const result = await resolveCompressor(uniquePath);
+                expect(result.compressor).toBeTypeOf("function");
+                expect(result.isBuiltIn).toBe(false);
+            });
+
+            test("should handle absolute paths", async () => {
+                const absolutePath = path.resolve(
+                    tmpDir,
+                    "absolute-compressor.mjs"
+                );
+                filesToCleanup.add(absolutePath);
+                const compressorCode = `
+                    export default async function({ content }) {
+                        return { code: content };
+                    }
+                `;
+                writeFile({ file: absolutePath, content: compressorCode });
+
+                const result = await resolveCompressor(absolutePath);
+                expect(result.compressor).toBeTypeOf("function");
+                expect(result.label).toBe("absolute-compressor");
+                expect(result.isBuiltIn).toBe(false);
+            });
+
+            test("should handle relative paths with ../", async () => {
+                const absolutePath = path.resolve(
+                    tmpDir,
+                    "parent-ref-compressor.mjs"
+                );
+                filesToCleanup.add(absolutePath);
+                const compressorCode = `
+                    export default async function({ content }) {
+                        return { code: content };
+                    }
+                `;
+                writeFile({ file: absolutePath, content: compressorCode });
+
+                const relativePath = path.relative(
+                    path.join(tmpDir, "subdir"),
+                    absolutePath
+                );
+
+                expect(relativePath.startsWith("../")).toBe(true);
+            });
         });
 
         describe("npm package compressors", () => {
@@ -157,6 +234,12 @@ describe("Package: utils/compressor-resolver", () => {
                 await expect(
                     resolveCompressor("non-existent-npm-package-12345")
                 ).rejects.toThrow("Could not resolve compressor");
+            });
+
+            test("should resolve npm package with valid export", async () => {
+                const result = await resolveCompressor("picocolors");
+                expect(result.compressor).toBeTypeOf("function");
+                expect(result.isBuiltIn).toBe(false);
             });
         });
 
