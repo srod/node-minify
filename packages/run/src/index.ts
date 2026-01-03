@@ -16,7 +16,7 @@ export type RunCommandLineParams = {
  * Run the command line with spawn.
  * @param args - Command line arguments for the Java process
  * @param data - Data to minify (piped to stdin)
- * @param maxBuffer - Optional buffer limit in bytes
+ * @param maxBuffer - Optional buffer limit in bytes. Defaults to 1024 * 1024 (1MB).
  * @returns Promise with minified content from stdout
  */
 export async function runCommandLine({
@@ -37,13 +37,13 @@ type RunParams = {
  * Execute command with Java process.
  * @param data - Data to minify (piped to stdin)
  * @param args - Command line arguments
- * @param maxBuffer - Optional buffer limit in bytes
+ * @param maxBuffer - Optional buffer limit in bytes. Defaults to 1024 * 1024 (1MB).
  * @returns Promise with minified content from stdout
  */
 export async function run({
     data,
     args,
-    maxBuffer,
+    maxBuffer = 1024 * 1024,
 }: RunParams): Promise<string> {
     return new Promise((resolve, reject) => {
         let stdout = "";

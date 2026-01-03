@@ -47,6 +47,7 @@ export async function yui({
     const result = await runCommandLine({
         args: yuiCommand(settings.type, settings?.options ?? {}),
         data: contentStr,
+        maxBuffer: settings?.buffer,
     });
 
     if (typeof result !== "string") {
