@@ -163,15 +163,15 @@ export const AVAILABLE_MINIFIER = [
 *   **name**: The CLI argument (kebab-case).
 *   **export**: The named export from your package (camelCase).
 
-### 3. Registering for Benchmark Support
+### 3. Registering for Resolution (Benchmark & Core)
 
-To enable benchmarking for your tool, update `packages/benchmark/src/compressor-loader.ts`.
+To enable proper resolution for your tool (used by Benchmark and CLI internals), update `packages/utils/src/compressor-resolver.ts`.
 
-Add your compressor to the `COMPRESSOR_EXPORTS` object:
+Add your compressor to the `KNOWN_COMPRESSOR_EXPORTS` object:
 
 ```typescript
-// packages/benchmark/src/compressor-loader.ts
-const COMPRESSOR_EXPORTS: Record<string, string> = {
+// packages/utils/src/compressor-resolver.ts
+const KNOWN_COMPRESSOR_EXPORTS: Record<string, string> = {
     // ...
     "my-tool": "myTool",
 };
