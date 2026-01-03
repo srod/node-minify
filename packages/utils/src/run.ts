@@ -15,13 +15,13 @@ import { ValidationError } from "./error.ts";
 import { writeFileAsync } from "./writeFile.ts";
 
 /**
- * Run the configured compressor and persist its outputs according to the provided settings.
+ * Execute the configured compressor and persist its outputs according to the provided settings.
  *
- * @param settings - Compressor settings including output targets and the `compressor` implementation
+ * @param settings - Compressor settings including output targets, options, and the `compressor` implementation
  * @param content - The input content to be compressed
  * @param index - Optional index used when processing multiple inputs
  * @returns The minified code produced by the compressor
- * @throws {ValidationError} If `settings` is missing or `settings.compressor` is not provided
+ * @throws ValidationError If `settings` is missing, `settings.compressor` is not provided, or the compressor returns an invalid result
  */
 export async function run<T extends CompressorOptions = CompressorOptions>({
     settings,
@@ -42,9 +42,37 @@ export async function run<T extends CompressorOptions = CompressorOptions>({
         index,
     });
 
+    validateCompressorResult(result, settings);
+
     await writeOutput(result, settings, index);
 
     return result.code;
+}
+
+/**
+ * Verify that a compressor result is an object containing a string `code` property and narrow its type to `CompressorResult`.
+ *
+ * @param result - The value returned by the compressor to validate.
+ * @param settings - Minifier settings (used to derive the compressor label for error messages).
+ * @throws ValidationError - If `result` is not an object with a string `code` property.
+ */
+function validateCompressorResult<
+    T extends CompressorOptions = CompressorOptions,
+>(result: unknown, settings: Settings<T>): asserts result is CompressorResult {
+    if (!result || typeof result !== "object") {
+        const label = settings.compressorLabel || "compressor";
+        throw new ValidationError(
+            `Compressor '${label}' returned invalid result. Expected an object with { code: string }.`
+        );
+    }
+
+    const obj = result as Record<string, unknown>;
+    if (!("code" in obj) || typeof obj.code !== "string") {
+        const label = settings.compressorLabel || "compressor";
+        throw new ValidationError(
+            `Compressor '${label}' must return { code: string }. Got: ${JSON.stringify(Object.keys(obj))}`
+        );
+    }
 }
 
 /**

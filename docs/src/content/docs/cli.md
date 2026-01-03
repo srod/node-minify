@@ -43,6 +43,20 @@ await run({
 });
 ```
 
+## Custom Compressors
+
+The CLI supports custom compressors in addition to built-in ones:
+
+```bash
+# Use an npm package as compressor
+node-minify --compressor my-custom-compressor --input 'input.js' --output 'output.js'
+
+# Use a local file as compressor
+node-minify --compressor ./my-compressor.js --input 'input.js' --output 'output.js'
+```
+
+See the [Custom Compressors](/custom-compressors) documentation for details on creating your own compressor.
+
 ## Options
 
 You can pass an `option` as a JSON string to the compressor.

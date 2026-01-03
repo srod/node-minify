@@ -116,6 +116,19 @@ function isolatePublicFolderIfTestWouldOverwriteFixtures(
     };
 }
 
+/**
+ * Creates an isolated copy of a public folder for test execution and returns its path.
+ *
+ * Creates a new temporary directory under the test harness (tmp/isolated-public-folders/<uuid>),
+ * copies the contents of `originalPublicFolder` into it, and returns the isolated folder path
+ * with a trailing path separator.
+ *
+ * The copy operation will retry once after a short wait if it fails with a transient filesystem
+ * error (e.g. `ENOENT`, `EPERM`, `EBUSY`).
+ *
+ * @param originalPublicFolder - Path to the existing public folder to duplicate
+ * @returns The absolute path to the isolated public folder, guaranteed to end with the platform path separator
+ */
 function createIsolatedPublicFolder(originalPublicFolder: string): string {
     const originalResolved = path.resolve(originalPublicFolder);
     const folderName = path.basename(path.normalize(originalResolved));
@@ -129,15 +142,57 @@ function createIsolatedPublicFolder(originalPublicFolder: string): string {
     const isolatedPublicFolder = path.join(isolatedBase, folderName);
 
     fs.mkdirSync(isolatedPublicFolder, { recursive: true });
-    fs.cpSync(originalResolved, isolatedPublicFolder, {
-        recursive: true,
-        force: true,
-    });
+
+    try {
+        fs.cpSync(originalResolved, isolatedPublicFolder, {
+            recursive: true,
+            force: true,
+        });
+    } catch (error) {
+        if (isRetriableFileSystemError(error)) {
+            // Use Atomics.wait for a blocking sleep without busy-looping
+            const sharedBuffer = new SharedArrayBuffer(4);
+            const int32 = new Int32Array(sharedBuffer);
+            Atomics.wait(int32, 0, 0, 100);
+
+            fs.cpSync(originalResolved, isolatedPublicFolder, {
+                recursive: true,
+                force: true,
+            });
+        } else {
+            throw error;
+        }
+    }
 
     // Keep the trailing separator for consistency with existing publicFolder values.
     return `${isolatedPublicFolder}${path.sep}`;
 }
 
+/**
+ * Determines whether a value is an Error object representing a retriable filesystem error.
+ *
+ * @param error - The value to inspect
+ * @returns `true` if `error` is an `Error` with a `code` of `"ENOENT"`, `"EPERM"`, or `"EBUSY"`, `false` otherwise.
+ */
+function isRetriableFileSystemError(
+    error: unknown
+): error is { code: string } & Error {
+    return (
+        error instanceof Error &&
+        "code" in error &&
+        (error as any).code &&
+        ["ENOENT", "EPERM", "EBUSY"].includes((error as any).code)
+    );
+}
+
+/**
+ * Rewrite input path(s) so any absolute paths that are inside the original public folder
+ * are converted to paths relative to that public folder.
+ *
+ * @param input - A single path, an array of paths, or `undefined`.
+ * @param originalPublicFolder - The original public folder path used as the base for rewriting.
+ * @returns The rewritten input: a string, an array of strings, or `undefined`. Absolute paths within `originalPublicFolder` are returned as relative paths; other values are returned unchanged.
+ */
 function rewriteInputToIsolatedPublicFolder(
     input: string | string[] | undefined,
     originalPublicFolder: string

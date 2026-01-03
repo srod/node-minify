@@ -34,7 +34,7 @@ function setupProgram(): Command {
         .version(packageJson.version, "-v, --version")
         .option(
             "-c, --compressor [compressor]",
-            "use the specified compressor [uglify-js]",
+            "compressor name, npm package, or path to local file [uglify-js]",
             DEFAULT_COMPRESSOR
         )
         .option(
