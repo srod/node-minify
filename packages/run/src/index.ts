@@ -9,33 +9,42 @@ import childProcess from "node:child_process";
 export type RunCommandLineParams = {
     args: string[];
     data: string;
+    maxBuffer?: number;
 };
 
 /**
  * Run the command line with spawn.
  * @param args - Command line arguments for the Java process
  * @param data - Data to minify (piped to stdin)
+ * @param maxBuffer - Optional buffer limit in bytes
  * @returns Promise with minified content from stdout
  */
 export async function runCommandLine({
     args,
     data,
+    maxBuffer,
 }: RunCommandLineParams): Promise<string> {
-    return run({ data, args });
+    return run({ data, args, maxBuffer });
 }
 
 type RunParams = {
     data: string;
     args: string[];
+    maxBuffer?: number;
 };
 
 /**
  * Execute command with Java process.
  * @param data - Data to minify (piped to stdin)
  * @param args - Command line arguments
+ * @param maxBuffer - Optional buffer limit in bytes
  * @returns Promise with minified content from stdout
  */
-export async function run({ data, args }: RunParams): Promise<string> {
+export async function run({
+    data,
+    args,
+    maxBuffer,
+}: RunParams): Promise<string> {
     return new Promise((resolve, reject) => {
         let stdout = "";
         let stderr = "";
@@ -67,10 +76,20 @@ export async function run({ data, args }: RunParams): Promise<string> {
         });
 
         child.stdout?.on("data", (chunk: Buffer) => {
+            if (maxBuffer && stdout.length + chunk.length > maxBuffer) {
+                child.kill();
+                reject(new Error("stdout maxBuffer exceeded"));
+                return;
+            }
             stdout += chunk;
         });
 
         child.stderr?.on("data", (chunk: Buffer) => {
+            if (maxBuffer && stderr.length + chunk.length > maxBuffer) {
+                child.kill();
+                reject(new Error("stderr maxBuffer exceeded"));
+                return;
+            }
             stderr += chunk;
         });
 
