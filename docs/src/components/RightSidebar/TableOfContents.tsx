@@ -11,7 +11,7 @@ type ItemOffsets = {
 const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
     headings = [],
 }) => {
-    const toc = useRef<HTMLUListElement>();
+    const toc = useRef<HTMLUListElement>(null);
     const onThisPageID = "on-this-page-heading";
     const itemOffsets = useRef<ItemOffsets[]>([]);
     const [currentID, setCurrentID] = useState("overview");
@@ -22,9 +22,9 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
 
         const activeLink = toc.current.querySelector(`a[href="#${currentID}"]`);
         if (activeLink) {
-             activeLink.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
+            activeLink.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
             });
         }
     }, [currentID]);
@@ -107,7 +107,11 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
                             <a
                                 href={`#${heading.slug}`}
                                 onClick={onLinkClick}
-                                aria-current={currentID === heading.slug ? "true" : undefined}
+                                aria-current={
+                                    currentID === heading.slug
+                                        ? "location"
+                                        : undefined
+                                }
                             >
                                 {unescape(heading.text)}
                             </a>
