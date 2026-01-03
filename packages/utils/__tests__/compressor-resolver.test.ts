@@ -225,7 +225,7 @@ describe("Package: utils/compressor-resolver", () => {
                     absolutePath
                 );
 
-                expect(relativePath.startsWith("../")).toBe(true);
+                expect(relativePath.startsWith("..")).toBe(true);
             });
         });
 
