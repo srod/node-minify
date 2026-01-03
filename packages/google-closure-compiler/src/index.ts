@@ -54,6 +54,7 @@ export async function gcc({
     const result = await runCommandLine({
         args: gccCommand(options),
         data: contentStr,
+        maxBuffer: settings?.buffer,
     });
 
     if (typeof result !== "string") {

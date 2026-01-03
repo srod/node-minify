@@ -22,6 +22,7 @@ const jar = `${__dirname}/../../yui/src/binaries/yuicompressor-2.4.7.jar`;
 type Command = {
     args: string[];
     data: string;
+    maxBuffer?: number;
 };
 
 describe("Package: run", () => {
@@ -99,6 +100,7 @@ describe("Package: run", () => {
                 }),
                 stdout: mockStdout,
                 stderr: mockStderr,
+                kill: vi.fn(),
             });
 
             spy.mockReturnValue(mockChild);
@@ -140,6 +142,7 @@ describe("Package: run", () => {
                 }),
                 stdout: mockStdout,
                 stderr: mockStderr,
+                kill: vi.fn(),
             });
 
             spy.mockReturnValue(mockChild);
@@ -156,6 +159,8 @@ describe("Package: run", () => {
             // Emit stream error and then exit successfully
             setImmediate(() => {
                 mockStdin.emit("error", new Error("stdin error"));
+                mockStdout.emit("error", new Error("stdout error"));
+                mockStderr.emit("error", new Error("stderr error"));
                 mockStdout.emit("data", Buffer.from("output"));
                 mockChild.emit("exit", 0);
             });
@@ -166,8 +171,91 @@ describe("Package: run", () => {
                 "Error in child.stdin:",
                 expect.any(Error)
             );
+            expect(consoleSpy).toHaveBeenCalledWith(
+                "Error in child.stdout:",
+                expect.any(Error)
+            );
+            expect(consoleSpy).toHaveBeenCalledWith(
+                "Error in child.stderr:",
+                expect.any(Error)
+            );
 
             consoleSpy.mockRestore();
+        });
+
+        test("should reject when maxBuffer is exceeded", async () => {
+            const mockChild = new EventEmitter() as ReturnType<
+                typeof childProcess.spawn
+            >;
+            const mockStdin = new EventEmitter();
+            const mockStdout = new EventEmitter();
+            const mockStderr = new EventEmitter();
+
+            Object.assign(mockChild, {
+                stdin: Object.assign(mockStdin, {
+                    end: vi.fn(),
+                }),
+                stdout: mockStdout,
+                stderr: mockStderr,
+                kill: vi.fn(),
+            });
+
+            spy.mockReturnValue(mockChild);
+
+            const command: Command = {
+                args: ["-jar", "fake.jar"],
+                data: "test",
+                maxBuffer: 10,
+            };
+
+            const promise = runCommandLine(
+                command as unknown as RunCommandLineParams
+            );
+
+            // Emit data exceeding buffer
+            setImmediate(() => {
+                mockStdout.emit("data", Buffer.from("12345678901"));
+            });
+
+            await expect(promise).rejects.toThrow("stdout maxBuffer exceeded");
+            expect(mockChild.kill).toHaveBeenCalled();
+        });
+
+        test("should reject when stderr maxBuffer is exceeded", async () => {
+            const mockChild = new EventEmitter() as ReturnType<
+                typeof childProcess.spawn
+            >;
+            const mockStdin = new EventEmitter();
+            const mockStdout = new EventEmitter();
+            const mockStderr = new EventEmitter();
+
+            Object.assign(mockChild, {
+                stdin: Object.assign(mockStdin, {
+                    end: vi.fn(),
+                }),
+                stdout: mockStdout,
+                stderr: mockStderr,
+                kill: vi.fn(),
+            });
+
+            spy.mockReturnValue(mockChild);
+
+            const command: Command = {
+                args: ["-jar", "fake.jar"],
+                data: "test",
+                maxBuffer: 10,
+            };
+
+            const promise = runCommandLine(
+                command as unknown as RunCommandLineParams
+            );
+
+            setImmediate(() => {
+                mockStderr.emit("data", Buffer.from("12345678901"));
+            });
+
+            await expect(promise).rejects.toThrow("stderr maxBuffer exceeded");
+            expect(mockChild.kill).toHaveBeenCalled();
         });
     });
 
