@@ -111,10 +111,11 @@ node-minify --compressor ./my-compressor.js --input src/app.js --output dist/app
 
 The CLI looks for exports in this order:
 
-1. Named export matching camelCase of package name (e.g., `myTool` for `my-tool`)
-2. Named export `compressor`
-3. Default export
-4. First function export
+1. Known export name (for built-in compressors)
+2. Named export matching camelCase of package name (e.g., `myTool` for `my-tool`)
+3. Named export `compressor`
+4. Default export
+5. First function export
 
 ## Using Custom Compressors with Benchmark
 
