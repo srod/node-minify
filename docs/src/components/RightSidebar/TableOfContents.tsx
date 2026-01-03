@@ -11,10 +11,35 @@ type ItemOffsets = {
 const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
     headings = [],
 }) => {
-    const toc = useRef<HTMLUListElement>();
+    const toc = useRef<HTMLUListElement>(null);
     const onThisPageID = "on-this-page-heading";
     const itemOffsets = useRef<ItemOffsets[]>([]);
     const [currentID, setCurrentID] = useState("overview");
+    const isManualClick = useRef(false);
+    const manualClickTimeout = useRef<number | null>(null);
+
+    // Scroll active item into view
+    useEffect(() => {
+        if (!toc.current) return;
+
+        const activeLink = toc.current.querySelector(`a[href="#${currentID}"]`);
+        if (activeLink) {
+            const linkRect = activeLink.getBoundingClientRect();
+            const tocRect = toc.current.getBoundingClientRect();
+
+            const isVisible =
+                linkRect.top >= tocRect.top &&
+                linkRect.bottom <= tocRect.bottom;
+
+            if (!isVisible) {
+                activeLink.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                });
+            }
+        }
+    }, [currentID]);
+
     useEffect(() => {
         const getItemOffsets = () => {
             const titles = document.querySelectorAll(
@@ -38,6 +63,8 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
         if (!toc.current) return;
 
         const setCurrent: IntersectionObserverCallback = (entries) => {
+            if (isManualClick.current) return;
+
             for (const entry of entries) {
                 if (entry.isIntersecting) {
                     const { id } = entry.target;
@@ -66,11 +93,29 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
         });
 
         // Stop observing when the component is unmounted.
-        return () => headingsObserver.disconnect();
+        return () => {
+            headingsObserver.disconnect();
+            if (manualClickTimeout.current) {
+                clearTimeout(manualClickTimeout.current);
+            }
+        };
     }, []);
 
-    const onLinkClick = (e) => {
-        setCurrentID(e.target.getAttribute("href").replace("#", ""));
+    const onLinkClick = (e: MouseEvent) => {
+        isManualClick.current = true;
+        if (manualClickTimeout.current) {
+            clearTimeout(manualClickTimeout.current);
+        }
+
+        manualClickTimeout.current = window.setTimeout(() => {
+            isManualClick.current = false;
+        }, 1000);
+
+        const target = e.currentTarget as HTMLAnchorElement;
+        const href = target.getAttribute("href");
+        if (href) {
+            setCurrentID(href.replace("#", ""));
+        }
     };
 
     return (
@@ -90,7 +135,15 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
                                     : ""
                             }`.trim()}
                         >
-                            <a href={`#${heading.slug}`} onClick={onLinkClick}>
+                            <a
+                                href={`#${heading.slug}`}
+                                onClick={onLinkClick}
+                                aria-current={
+                                    currentID === heading.slug
+                                        ? "location"
+                                        : undefined
+                                }
+                            >
                                 {unescape(heading.text)}
                             </a>
                         </li>

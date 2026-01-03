@@ -122,7 +122,5 @@ async function createDirectory(filePath: string | string[]) {
     }
 
     // Create directories in parallel
-    await Promise.all(
-        Array.from(uniqueDirs).map((dir) => mkdirp(dir))
-    );
+    await Promise.all(Array.from(uniqueDirs).map((dir) => mkdirp(dir)));
 }
