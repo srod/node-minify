@@ -101,7 +101,7 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
         };
     }, []);
 
-    const onLinkClick = (e) => {
+    const onLinkClick = (e: MouseEvent) => {
         isManualClick.current = true;
         if (manualClickTimeout.current) {
             clearTimeout(manualClickTimeout.current);
@@ -111,7 +111,11 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
             isManualClick.current = false;
         }, 1000);
 
-        setCurrentID(e.target.getAttribute("href").replace("#", ""));
+        const target = e.currentTarget as HTMLAnchorElement;
+        const href = target.getAttribute("href");
+        if (href) {
+            setCurrentID(href.replace("#", ""));
+        }
     };
 
     return (
