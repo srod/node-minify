@@ -227,6 +227,30 @@ describe("Package: utils/compressor-resolver", () => {
                     resolveCompressor("@nonexistent-scope/fake-package")
                 ).rejects.toThrow("Could not resolve compressor");
             });
+
+            test("should throw specific error for missing local file", async () => {
+                const missingPath = "./non-existent-file.js";
+                await expect(resolveCompressor(missingPath)).rejects.toThrow(
+                    "Could not load local compressor"
+                );
+            });
+
+            test("should throw for local file with syntax error", async () => {
+                const syntaxErrorPath = path.join(tmpDir, "syntax-error.mjs");
+                filesToCleanup.add(syntaxErrorPath);
+                // Invalid JS syntax
+                writeFile({
+                    file: syntaxErrorPath,
+                    content: "export const foo = ;",
+                });
+
+                // We need to pass a path that looks local to the resolver logic (absolute path is fine)
+                // But resolveCompressor uses process.cwd() for relative paths.
+                // Using absolute path is safer for test execution.
+                await expect(
+                    resolveCompressor(syntaxErrorPath)
+                ).rejects.toThrow("Could not load local compressor");
+            });
         });
 
         describe("error messages", () => {
