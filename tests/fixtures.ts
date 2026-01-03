@@ -129,10 +129,29 @@ function createIsolatedPublicFolder(originalPublicFolder: string): string {
     const isolatedPublicFolder = path.join(isolatedBase, folderName);
 
     fs.mkdirSync(isolatedPublicFolder, { recursive: true });
-    fs.cpSync(originalResolved, isolatedPublicFolder, {
-        recursive: true,
-        force: true,
-    });
+
+    try {
+        fs.cpSync(originalResolved, isolatedPublicFolder, {
+            recursive: true,
+            force: true,
+        });
+    } catch (error) {
+        if (
+            error instanceof Error &&
+            (error.message.includes("ENOENT") ||
+                error.message.includes("EPERM") ||
+                error.message.includes("EBUSY"))
+        ) {
+            const start = Date.now();
+            while (Date.now() - start < 100) {}
+            fs.cpSync(originalResolved, isolatedPublicFolder, {
+                recursive: true,
+                force: true,
+            });
+        } else {
+            throw error;
+        }
+    }
 
     // Keep the trailing separator for consistency with existing publicFolder values.
     return `${isolatedPublicFolder}${path.sep}`;
