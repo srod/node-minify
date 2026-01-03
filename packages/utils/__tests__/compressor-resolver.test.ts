@@ -220,6 +220,12 @@ describe("Package: utils/compressor-resolver", () => {
                 expect(result.compressor).toBeTypeOf("function");
                 expect(result.isBuiltIn).toBe(false);
             });
+
+            test("should throw for non-existent scoped npm package", async () => {
+                await expect(
+                    resolveCompressor("@nonexistent-scope/fake-package")
+                ).rejects.toThrow("Could not resolve compressor");
+            });
         });
 
         describe("error messages", () => {

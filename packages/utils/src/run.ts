@@ -42,9 +42,30 @@ export async function run<T extends CompressorOptions = CompressorOptions>({
         index,
     });
 
+    validateCompressorResult(result, settings);
+
     await writeOutput(result, settings, index);
 
     return result.code;
+}
+
+function validateCompressorResult<
+    T extends CompressorOptions = CompressorOptions,
+>(result: unknown, settings: Settings<T>): asserts result is CompressorResult {
+    if (!result || typeof result !== "object") {
+        const label = settings.compressorLabel || "compressor";
+        throw new ValidationError(
+            `Compressor '${label}' returned invalid result. Expected an object with { code: string }.`
+        );
+    }
+
+    const obj = result as Record<string, unknown>;
+    if (!("code" in obj) || typeof obj.code !== "string") {
+        const label = settings.compressorLabel || "compressor";
+        throw new ValidationError(
+            `Compressor '${label}' must return { code: string }. Got: ${JSON.stringify(Object.keys(obj))}`
+        );
+    }
 }
 
 /**

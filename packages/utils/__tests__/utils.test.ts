@@ -179,6 +179,40 @@ describe("Package: utils", () => {
                 ValidationError
             );
         });
+
+        test("should throw if compressor returns invalid result (non-object)", async () => {
+            const compressor = vi
+                .fn()
+                .mockResolvedValue("invalid string result");
+            await expect(
+                run({
+                    settings: {
+                        compressor,
+                        compressorLabel: "bad-compressor",
+                    } as any,
+                    content: "content",
+                })
+            ).rejects.toThrow(
+                "Compressor 'bad-compressor' returned invalid result. Expected an object with { code: string }."
+            );
+        });
+
+        test("should throw if compressor returns invalid result (missing code)", async () => {
+            const compressor = vi
+                .fn()
+                .mockResolvedValue({ somethingElse: "foo" });
+            await expect(
+                run({
+                    settings: {
+                        compressor,
+                        compressorLabel: "bad-compressor",
+                    } as any,
+                    content: "content",
+                })
+            ).rejects.toThrow(
+                "Compressor 'bad-compressor' must return { code: string }."
+            );
+        });
     });
 
     describe("deleteFile", () => {

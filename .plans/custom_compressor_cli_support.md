@@ -101,6 +101,7 @@ export type SettingsWithCompressor = Omit<Settings, "compressor"> & {
 For local file resolution, use proper `file://` URL format:
 ```typescript
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 async function resolveCompressor(name: string) {
     // Try known compressors first
@@ -117,7 +118,7 @@ async function resolveCompressor(name: string) {
         const isLocalPath = name.startsWith('./') || name.startsWith('/') || name.startsWith('../');
         if (isLocalPath) {
             const absolutePath = path.resolve(process.cwd(), name);
-            const fileUrl = new URL(`file://${absolutePath}`).href;
+            const fileUrl = pathToFileURL(absolutePath).href;
             return await import(fileUrl);
         }
         throw new Error(`Could not resolve compressor '${name}'. Is it installed?`);
