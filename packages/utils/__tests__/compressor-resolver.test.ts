@@ -206,27 +206,6 @@ describe("Package: utils/compressor-resolver", () => {
                 expect(result.label).toBe("absolute-compressor");
                 expect(result.isBuiltIn).toBe(false);
             });
-
-            test("should handle relative paths with ../", async () => {
-                const absolutePath = path.resolve(
-                    tmpDir,
-                    "parent-ref-compressor.mjs"
-                );
-                filesToCleanup.add(absolutePath);
-                const compressorCode = `
-                    export default async function({ content }) {
-                        return { code: content };
-                    }
-                `;
-                writeFile({ file: absolutePath, content: compressorCode });
-
-                const relativePath = path.relative(
-                    path.join(tmpDir, "subdir"),
-                    absolutePath
-                );
-
-                expect(relativePath.startsWith("..")).toBe(true);
-            });
         });
 
         describe("npm package compressors", () => {

@@ -7,7 +7,9 @@ Enable developers to create their own compressors for `node-minify`. This covers
 
 ---
 
-## Status: PARTIALLY IMPLEMENTED
+## Status: IMPLEMENTED ✅
+
+Completed January 2026.
 
 ### Completed
 - [x] Documentation created at `docs/src/content/docs/custom-compressors.md`
@@ -16,9 +18,9 @@ Enable developers to create their own compressors for `node-minify`. This covers
 - [x] Minimal example with inline compressor
 - [x] Handling options example
 - [x] Contributing to Core section (package structure, CLI registration, Benchmark registration, testing)
+- [x] CLI and Benchmark support for custom compressors (npm packages and local files)
 
 ### Remaining Items
-- [ ] **CLI limitation note**: Add explicit note that custom compressors cannot be used with CLI (only programmatic API) - see `custom_compressor_cli_support.md` for future enhancement
 - [ ] **Binary content support**: Add note that compressors can handle `Buffer` content (for image compressors like `sharp`, `imagemin`)
 - [ ] **Source map support**: Document that compressors can optionally return `map` field
 - [ ] **CONTRIBUTING.md**: Consider adding/linking compressor contribution guide in root `CONTRIBUTING.md`
@@ -29,7 +31,7 @@ Enable developers to create their own compressors for `node-minify`. This covers
 *Context: You are a user who wants to use a custom tool with `node-minify`.*
 
 **Concept:**
-The `minify()` function accepts a `Compressor` function. You do **not** need to register your compressor in any static lists (`AVAILABLE_MINIFIER`, etc.). Those lists are only for the CLI and Benchmark tools.
+The `minify()` function accepts a `Compressor` function. You do **not** need to register your compressor in any static lists (`AVAILABLE_MINIFIER`, etc.). Those lists are only for built-in compressors.
 
 **Action Items:**
 *   ~~Create `docs/src/content/docs/custom-compressors.md`.~~ DONE
@@ -37,7 +39,7 @@ The `minify()` function accepts a `Compressor` function. You do **not** need to 
     *   ~~**The Compressor Interface**: Explain `MinifierOptions` and `CompressorResult`.~~ DONE
     *   ~~**Example**: Writing a simple in-memory replacement compressor.~~ DONE
     *   ~~**Usage**: Passing the function directly to `minify({ compressor: myFunc })`.~~ DONE
-    *   **Note on CLI**: Explicitly state that custom compressors cannot be used with the standard CLI currently. **TODO** - add to docs
+    *   ~~**CLI Support**: Document npm package and local file path usage.~~ DONE
 
 ## 2. Official Contributions (Core Integration)
 *Context: You are contributing a new compressor package (e.g., `@node-minify/new-tool`) to the repository.*
@@ -68,15 +70,7 @@ To expose a new compressor via the CLI and Benchmark tools, it must be registere
 
 ## Suggested Additions to Existing Docs
 
-### 1. Add CLI Limitation Note (to custom-compressors.md)
-Under "Creating a Local Compressor" section, add:
-```markdown
-> **Note**: Custom compressors can only be used with the programmatic API (`minify()`).
-> The CLI currently only supports built-in compressors. See the [CLI Support Plan](./custom_compressor_cli_support.md)
-> for a future enhancement that will enable `node-minify --compressor ./my-compressor.js`.
-```
-
-### 2. Add Binary Content Note
+### 1. Add Binary Content Note
 ```markdown
 ### Binary Content (Images)
 
@@ -92,7 +86,7 @@ export const myImageCompressor: Compressor = async ({ content }) => {
 \`\`\`
 ```
 
-### 3. Add Source Map Note
+### 2. Add Source Map Note
 ```markdown
 ### Source Maps
 
