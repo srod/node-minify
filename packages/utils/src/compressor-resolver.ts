@@ -96,7 +96,9 @@ function extractCompressor(
     }
 
     // 2. Try camelCase of package name
-    const baseName = name.includes("/") ? name.split("/").pop()! : name;
+    const baseName = name.includes("/")
+        ? (name.split("/").pop() ?? name)
+        : name;
     const camelName = toCamelCase(baseName);
     if (typeof mod[camelName] === "function") {
         return mod[camelName] as Compressor;
