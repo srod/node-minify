@@ -148,7 +148,7 @@ Your `index.ts` should export the compressor function.
 
 ### 2. Registering for CLI Support
 
-To make your compressor available via the CLI (e.g., `node-minify --compressor my-tool`), you must register it in `packages/cli/src/config.ts`.
+To make your compressor available via the CLI (e.g., `node-minify --compressor my-tool`), you must register it in `packages/cli/src/config.ts`. This makes it discoverable as a built-in option in help menus and enables CLI-specific validation.
 
 Add your compressor to the `AVAILABLE_MINIFIER` array:
 
@@ -165,7 +165,7 @@ export const AVAILABLE_MINIFIER = [
 
 ### 3. Registering for Resolution (Benchmark & Core)
 
-To enable proper resolution for your tool (used by Benchmark and CLI internals), update `packages/utils/src/compressor-resolver.ts`.
+To enable proper resolution for your tool (used by Benchmark and CLI internals), update `packages/utils/src/compressor-resolver.ts`. This ensures the system recognizes it as a built-in package rather than an external npm dependency.
 
 Add your compressor to the `KNOWN_COMPRESSOR_EXPORTS` object:
 
