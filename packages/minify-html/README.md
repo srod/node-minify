@@ -49,7 +49,7 @@ All options from [@minify-html/node](https://docs.rs/minify-html/latest/minify_h
 | Option | Default | Description |
 |--------|---------|-------------|
 | `minify_css` | `true` | Minify inline CSS |
-| `minify_js` | `true` | Minify inline JavaScript |
+| `minify_js` | `false` | Minify inline JavaScript |
 
 ### Example with Options
 
