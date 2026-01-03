@@ -89,9 +89,16 @@ runs:
 
     - name: Install dependencies
       shell: bash
+      env:
+        ACTION_PATH: ${{ github.action_path }}
       run: |
-        cd ${{ github.action_path }}
+        TEMP_DIR="${RUNNER_TEMP}/node-minify-action"
+        mkdir -p "$TEMP_DIR"
+        cd "$TEMP_DIR"
+        bun init -y
         bun add @node-minify/core @node-minify/utils @node-minify/${{ inputs.compressor }}
+        cp "$ACTION_PATH/minify.ts" "$TEMP_DIR/"
+        echo "NODE_MINIFY_ACTION_DIR=$TEMP_DIR" >> $GITHUB_ENV
 
     - name: Run minification
       id: minify
@@ -103,8 +110,9 @@ runs:
         FILE_TYPE: ${{ inputs.type }}
         OPTIONS: ${{ inputs.options }}
         INCLUDE_GZIP: ${{ inputs.include-gzip }}
+        WORKSPACE_DIR: ${{ github.workspace }}
       run: |
-        cd ${{ github.action_path }}
+        cd "$NODE_MINIFY_ACTION_DIR"
         bun run minify.ts
 
     - name: Generate job summary
