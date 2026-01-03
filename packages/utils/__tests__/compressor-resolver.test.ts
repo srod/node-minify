@@ -136,17 +136,22 @@ describe("Package: utils/compressor-resolver", () => {
             });
 
             test("should resolve local file with named 'compressor' export", async () => {
+                const uniquePath = path.join(
+                    tmpDir,
+                    "compressor-export-only.mjs"
+                );
+                filesToCleanup.add(uniquePath);
                 const compressorCode = `
                     export async function compressor({ content }) {
                         return { code: content.toUpperCase() };
                     }
                 `;
                 writeFile({
-                    file: testCompressorPath,
+                    file: uniquePath,
                     content: compressorCode,
                 });
 
-                const result = await resolveCompressor(testCompressorPath);
+                const result = await resolveCompressor(uniquePath);
                 expect(result.compressor).toBeTypeOf("function");
                 expect(result.isBuiltIn).toBe(false);
             });
@@ -169,6 +174,21 @@ describe("Package: utils/compressor-resolver", () => {
                 await expect(resolveCompressor(uniquePath)).rejects.toThrow(
                     "doesn't export a valid compressor function"
                 );
+            });
+
+            test("should resolve local file with camelCase named export matching filename", async () => {
+                const uniquePath = path.join(tmpDir, "my-custom-tool");
+                filesToCleanup.add(uniquePath);
+                const compressorCode = `
+                    export async function myCustomTool({ content }) {
+                        return { code: content.toLowerCase() };
+                    }
+                `;
+                writeFile({ file: uniquePath, content: compressorCode });
+
+                const result = await resolveCompressor(uniquePath);
+                expect(result.compressor).toBeTypeOf("function");
+                expect(result.isBuiltIn).toBe(false);
             });
 
             test("should resolve local file with camelCase named export", async () => {
@@ -207,6 +227,47 @@ describe("Package: utils/compressor-resolver", () => {
                 expect(result.label).toBe("absolute-compressor");
                 expect(result.isBuiltIn).toBe(false);
             });
+
+            test("should treat Windows-style paths as local files", async () => {
+                await expect(
+                    resolveCompressor("C:\\Users\\test\\compressor.js")
+                ).rejects.toThrow("Could not load local compressor");
+
+                await expect(
+                    resolveCompressor("C:/Users/test/compressor.js")
+                ).rejects.toThrow("Could not load local compressor");
+            });
+
+            test("should resolve relative path with ./ prefix", async () => {
+                const relativePath = "./tests/tmp/relative-compressor.mjs";
+                const absolutePath = path.resolve(process.cwd(), relativePath);
+                filesToCleanup.add(absolutePath);
+
+                const compressorCode = `
+                    export default async function({ content }) {
+                        return { code: content.trim() };
+                    }
+                `;
+                writeFile({ file: absolutePath, content: compressorCode });
+
+                const result = await resolveCompressor(relativePath);
+                expect(result.compressor).toBeTypeOf("function");
+                expect(result.label).toBe("relative-compressor");
+                expect(result.isBuiltIn).toBe(false);
+            });
+
+            test("should throw for relative path without valid export", async () => {
+                const relativePath = "./tests/tmp/no-fn-relative.mjs";
+                const absolutePath = path.resolve(process.cwd(), relativePath);
+                filesToCleanup.add(absolutePath);
+
+                const noFunctionModule = `export const value = 42;`;
+                writeFile({ file: absolutePath, content: noFunctionModule });
+
+                await expect(resolveCompressor(relativePath)).rejects.toThrow(
+                    "doesn't export a valid compressor function"
+                );
+            });
         });
 
         describe("npm package compressors", () => {
@@ -228,11 +289,10 @@ describe("Package: utils/compressor-resolver", () => {
                 ).rejects.toThrow("Could not resolve compressor");
             });
 
-            test("should throw specific error for missing local file", async () => {
-                const missingPath = "./non-existent-file.js";
-                await expect(resolveCompressor(missingPath)).rejects.toThrow(
-                    "Could not load local compressor"
-                );
+            test("should throw for npm package without function exports", async () => {
+                await expect(
+                    resolveCompressor("@changesets/types")
+                ).rejects.toThrow("doesn't export a valid compressor function");
             });
 
             test("should throw for local file with syntax error", async () => {
