@@ -57,7 +57,13 @@ export type CompressorResolution = {
 };
 
 /**
- * Checks if a string looks like a local file path.
+ * Determines whether a string represents a local file path.
+ *
+ * Recognizes POSIX-style relative or absolute paths starting with "./", "../", or "/",
+ * and Windows absolute paths like "C:\\" or "C:/".
+ *
+ * @param name - The path string to test
+ * @returns `true` if `name` appears to be a local file path, `false` otherwise
  */
 function isLocalPath(name: string): boolean {
     return (
@@ -70,20 +76,28 @@ function isLocalPath(name: string): boolean {
 
 /**
  * Converts a package name to camelCase for export lookup.
+ *
  * Examples: "my-tool" -> "myTool", "some_pkg" -> "somePkg"
+ *
+ * @returns The input `name` converted to camelCase where characters following `-` or `_` are uppercased
  */
 function toCamelCase(name: string): string {
     return name.replace(/[-_](.)/g, (_, char) => char.toUpperCase());
 }
 
 /**
- * Extracts the compressor function from a module.
- * Checks for exports in this priority order:
- * 1. Known export name (for built-in compressors)
- * 2. Named export matching camelCase of package name
- * 3. Named export "compressor"
+ * Resolve a compressor function exported by a loaded module.
+ *
+ * Searches the module's exports in this priority order to locate a usable compressor:
+ * 1. Known built-in export for the given name
+ * 2. CamelCase export derived from the package/base name
+ * 3. Named export `compressor`
  * 4. Default export
- * 5. First function export
+ * 5. First export whose value is a function
+ *
+ * @param mod - The imported module object to inspect for exports
+ * @param name - The package or file name used to derive known and camelCase export names
+ * @returns The resolved `Compressor` function if found, or `null` if no suitable function export exists
  */
 function extractCompressor(
     mod: Record<string, unknown>,
@@ -125,7 +139,10 @@ function extractCompressor(
 }
 
 /**
- * Generates a user-friendly label from a compressor name/path.
+ * Create a display label from a compressor package name or a local file path.
+ *
+ * @param name - Compressor npm package name or a local file path (./, ../, /, or Windows absolute).
+ * @returns The package name for npm compressors, or the local file's basename without its .js/.ts/.mjs/.cjs extension.
  */
 function generateLabel(name: string): string {
     if (isLocalPath(name)) {
@@ -137,26 +154,11 @@ function generateLabel(name: string): string {
 }
 
 /**
- * Resolves a compressor from a name, which can be:
- * - A built-in @node-minify compressor name (e.g., "terser")
- * - An npm package name (e.g., "my-custom-compressor")
- * - A local file path (e.g., "./my-compressor.js")
+ * Resolve a compressor by name from a built-in @node-minify package, an installed npm package, or a local file path.
  *
- * @param name - The compressor name, package, or file path
- * @returns Promise resolving to the compressor and metadata
- * @throws Error if the compressor cannot be found or has no valid export
- *
- * @example
- * ```ts
- * // Built-in compressor
- * const { compressor } = await resolveCompressor("terser");
- *
- * // npm package
- * const { compressor } = await resolveCompressor("my-custom-compressor");
- *
- * // Local file
- * const { compressor } = await resolveCompressor("./compressor.js");
- * ```
+ * @param name - Compressor identifier: a built-in name (e.g., "terser"), an npm package name, or a local path (e.g., "./compressor.js")
+ * @returns The resolved CompressorResolution containing the compressor function, a display `label`, and `isBuiltIn` flag
+ * @throws Error if the compressor cannot be found or the module does not export a valid compressor function
  */
 export async function resolveCompressor(
     name: string
@@ -255,15 +257,20 @@ export async function resolveCompressor(
 }
 
 /**
- * Check if a compressor name is a known built-in compressor.
+ * Determines whether a compressor name corresponds to a known built-in compressor.
+ *
+ * @param name - The compressor identifier (e.g., built-in package name or alias)
+ * @returns `true` if the name corresponds to a known built-in compressor, `false` otherwise.
  */
 export function isBuiltInCompressor(name: string): boolean {
     return name in KNOWN_COMPRESSOR_EXPORTS;
 }
 
 /**
- * Get the export name for a known built-in compressor.
- * Returns undefined for unknown compressors.
+ * Return the known exported symbol name for a built-in compressor package.
+ *
+ * @param name - The compressor package name (for example, `"esbuild"`, `"terser"`)
+ * @returns The export name used by the built-in package, or `undefined` if the compressor is not a known built-in
  */
 export function getKnownExportName(name: string): string | undefined {
     return KNOWN_COMPRESSOR_EXPORTS[name];
