@@ -5,9 +5,14 @@ Allow developers to use custom compressors (external packages or local files) wi
 
 ---
 
-## Status: NOT IMPLEMENTED
+## Status: IMPLEMENTED ✅
 
-This is a future enhancement proposal. The plan has been reviewed and enhanced with additional considerations.
+Completed January 2026. The CLI and Benchmark tools now support custom compressors via:
+- Built-in `@node-minify/*` packages (existing behavior)
+- External npm packages (`node-minify --compressor my-custom-compressor`)
+- Local file paths (`node-minify --compressor ./my-compressor.js`)
+
+Shared resolver utility added to `@node-minify/utils` (`compressor-resolver.ts`).
 
 ---
 

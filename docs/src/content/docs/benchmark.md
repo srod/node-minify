@@ -31,6 +31,17 @@ node-minify benchmark src/app.js
 node-minify benchmark src/app.js --compressors terser,esbuild,swc
 ```
 
+### Custom Compressors
+
+You can benchmark custom compressors (npm packages or local files):
+
+```bash
+# Mix built-in and custom compressors
+node-minify benchmark src/app.js --compressors terser,./my-compressor.js,my-custom-package
+```
+
+See the [Custom Compressors](/custom-compressors) documentation for details.
+
 ### With Options
 
 ```bash

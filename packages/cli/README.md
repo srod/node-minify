@@ -28,6 +28,18 @@ npm install -g @node-minify/cli @node-minify/uglify-js
 node-minify --compressor uglify-js --input 'input.js' --output 'output.js'
 ```
 
+### Custom Compressors
+
+You can also use custom compressors (npm packages or local files):
+
+```bash
+# npm package
+node-minify --compressor my-custom-compressor --input 'input.js' --output 'output.js'
+
+# Local file
+node-minify --compressor ./my-compressor.js --input 'input.js' --output 'output.js'
+```
+
 ## Documentation
 
 Visit https://node-minify.2clics.net/cli.html for full documentation

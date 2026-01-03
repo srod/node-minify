@@ -1,4 +1,9 @@
 import { buildArgs, toBuildArgsOptions } from "./buildArgs.ts";
+import {
+    getKnownExportName,
+    isBuiltInCompressor,
+    resolveCompressor,
+} from "./compressor-resolver.ts";
 import { compressSingleFile } from "./compressSingleFile.ts";
 import { deleteFile } from "./deleteFile.ts";
 import { resetDeprecationWarnings, warnDeprecation } from "./deprecation.ts";
@@ -31,6 +36,8 @@ export {
     getFilesizeBrotliInBytes,
     getFilesizeGzippedInBytes,
     getFilesizeInBytes,
+    getKnownExportName,
+    isBuiltInCompressor,
     isImageFile,
     isValidFile,
     isValidFileAsync,
@@ -38,6 +45,7 @@ export {
     readFile,
     readFileAsync,
     resetDeprecationWarnings,
+    resolveCompressor,
     run,
     setFileNameMin,
     setPublicFolder,
@@ -49,3 +57,4 @@ export {
 };
 
 export type { BuildArgsOptions };
+export type { CompressorResolution } from "./compressor-resolver.ts";

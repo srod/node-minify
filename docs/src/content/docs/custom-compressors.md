@@ -1,6 +1,6 @@
 ---
 title: Custom Compressors
-description: Learn how to create custom compressors for node-minify or contribute new ones to the core.
+description: Learn how to create custom compressors for node-minify and use them with the CLI, Benchmark, and programmatic API.
 ---
 
 `node-minify` is designed to be extensible. You can use your own custom compression logic without needing to modify the core library, or you can contribute a new official compressor to the project.
@@ -67,6 +67,64 @@ await minify({
   options: { aggressive: true }
 });
 ```
+
+## Using Custom Compressors with CLI
+
+You can use custom compressors directly with the CLI without registering them. The CLI accepts:
+
+- **Built-in compressor names**: e.g., `terser`, `esbuild`
+- **npm package names**: e.g., `my-custom-compressor`
+- **Local file paths**: e.g., `./my-compressor.js`
+
+### Using an npm Package
+
+First, install your custom compressor package:
+
+```bash
+npm install my-custom-compressor
+```
+
+Then use it with the CLI:
+
+```bash
+node-minify --compressor my-custom-compressor --input src/app.js --output dist/app.min.js
+```
+
+### Using a Local File
+
+Create a local compressor file with a default export:
+
+```javascript
+// ./my-compressor.js
+export default async function({ content }) {
+  return { code: content.replace(/\s+/g, ' ') };
+}
+```
+
+Then use it with the CLI:
+
+```bash
+node-minify --compressor ./my-compressor.js --input src/app.js --output dist/app.min.js
+```
+
+### Export Resolution
+
+The CLI looks for exports in this order:
+
+1. Named export matching camelCase of package name (e.g., `myTool` for `my-tool`)
+2. Named export `compressor`
+3. Default export
+4. First function export
+
+## Using Custom Compressors with Benchmark
+
+The benchmark tool also supports custom compressors:
+
+```bash
+node-minify benchmark src/app.js --compressors terser,./my-compressor.js,my-custom-package
+```
+
+This allows you to compare your custom compressor against built-in ones.
 
 ## Contributing to Core
 

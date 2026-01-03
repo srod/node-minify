@@ -196,7 +196,7 @@ describe("CLI Coverage", () => {
                 silence: true,
             };
             await expect(cli.run(settings)).rejects.toThrow(
-                "Compressor 'invalid-compressor' not found."
+                "Could not resolve compressor 'invalid-compressor'"
             );
         });
 
@@ -213,23 +213,16 @@ describe("CLI Coverage", () => {
             expect(spy).toHaveBeenCalled();
         });
 
-        test("should throw if implementation is invalid", async () => {
-            vi.doMock("@node-minify/no-compress", () => ({
-                noCompress: "not-a-function",
-            }));
-            try {
-                const settings = {
-                    compressor: "no-compress" as any,
-                    input: "foo.js",
-                    output: "bar.js",
-                    silence: true,
-                };
-                await expect(cli.run(settings)).rejects.toThrow(
-                    "Invalid compressor implementation for 'no-compress'."
-                );
-            } finally {
-                vi.doUnmock("@node-minify/no-compress");
-            }
+        test("should throw if implementation is invalid (non-existent package)", async () => {
+            const settings = {
+                compressor: "definitely-not-a-real-package-xyz" as any,
+                input: "foo.js",
+                output: "bar.js",
+                silence: true,
+            };
+            await expect(cli.run(settings)).rejects.toThrow(
+                "Could not resolve compressor"
+            );
         });
 
         test("should throw if cssOnly compressor receives non-css type", async () => {

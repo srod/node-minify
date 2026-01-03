@@ -48,6 +48,9 @@ node-minify benchmark src/app.js
 # Compare specific compressors
 node-minify benchmark src/app.js --compressors terser,esbuild,swc
 
+# Custom compressors (npm packages or local files)
+node-minify benchmark src/app.js --compressors terser,./my-compressor.js,my-custom-pkg
+
 # With options
 node-minify benchmark src/app.js -c terser,esbuild -n 3 --gzip -t js
 

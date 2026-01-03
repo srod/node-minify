@@ -7,14 +7,15 @@
 /**
  * Module dependencies.
  */
-import type { Compressor, Result, Settings } from "@node-minify/types";
+import type { Result, Settings } from "@node-minify/types";
+import { resolveCompressor } from "@node-minify/utils";
 import chalk from "chalk";
 import { compress } from "./compress.ts";
 import { AVAILABLE_MINIFIER } from "./config.ts";
 import { spinnerError, spinnerStart, spinnerStop } from "./spinner.ts";
 
 export type SettingsWithCompressor = Omit<Settings, "compressor"> & {
-    compressor: (typeof AVAILABLE_MINIFIER)[number]["name"];
+    compressor: string;
 };
 
 /**
@@ -36,44 +37,28 @@ let silence = false;
  * @throws Error if the compressor only supports CSS but a non-`css` type is provided
  */
 async function runOne(cli: SettingsWithCompressor): Promise<Result> {
-    // Find compressor
-    const minifierDefinition = AVAILABLE_MINIFIER.find(
-        (compressor) => compressor.name === cli.compressor
-    );
+    const resolution = await resolveCompressor(cli.compressor);
+    const { compressor: minifierImplementation, label: compressorLabel } =
+        resolution;
 
-    if (!minifierDefinition) {
-        throw new Error(`Compressor '${cli.compressor}' not found.`);
-    }
-
-    // Load minifier implementation dynamically
-    const minifierPackage = (await import(
-        `@node-minify/${cli.compressor}`
-    )) as Record<string, Compressor>;
-
-    const minifierImplementation = minifierPackage[
-        minifierDefinition.export
-    ] as Compressor;
-
-    if (
-        !minifierImplementation ||
-        typeof minifierImplementation !== "function"
-    ) {
-        throw new Error(
-            `Invalid compressor implementation for '${cli.compressor}'.`
+    if (resolution.isBuiltIn) {
+        const minifierDefinition = AVAILABLE_MINIFIER.find(
+            (c) => c.name === cli.compressor
         );
+        if (
+            minifierDefinition &&
+            "cssOnly" in minifierDefinition &&
+            cli.type &&
+            cli.type !== "css"
+        ) {
+            throw new Error(`${cli.compressor} only supports type 'css'`);
+        }
     }
 
-    if ("cssOnly" in minifierDefinition && cli.type && cli.type !== "css") {
-        throw new Error(`${cli.compressor} only supports type 'css'`);
-    }
-
-    // Input handling: arrays are used as-is, strings are treated as a single file path.
-    // Multiple inputs must be passed as an array (no implicit comma-splitting).
     const inputValue = cli.input;
 
-    // Prepare settings
     const settings: Settings = {
-        compressorLabel: cli.compressor,
+        compressorLabel,
         compressor: minifierImplementation,
         input: inputValue,
         output: cli.output,
