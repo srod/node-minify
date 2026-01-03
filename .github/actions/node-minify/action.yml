@@ -1,0 +1,128 @@
+name: "node-minify"
+description: "Minify JavaScript, CSS, and HTML files with detailed reporting"
+author: "srod"
+branding:
+  icon: "minimize-2"
+  color: "green"
+
+inputs:
+  input:
+    description: "Files to minify (glob pattern or path)"
+    required: true
+  compressor:
+    description: |
+      Compressor to use.
+      Recommended: terser, esbuild, swc (fast, no Java).
+      Note: 'gcc' and 'yui' require Java (pre-installed on GitHub runners).
+    required: false
+    default: "terser"
+  output:
+    description: "Output file path"
+    required: true
+  type:
+    description: "File type: js or css (required for esbuild, lightningcss, yui)"
+    required: false
+  options:
+    description: "Compressor-specific options (JSON string)"
+    required: false
+    default: "{}"
+  report-summary:
+    description: "Add results to job summary"
+    required: false
+    default: "true"
+  include-gzip:
+    description: "Include gzip sizes in report"
+    required: false
+    default: "true"
+  java-version:
+    description: "Java version for gcc/yui compressors (optional)"
+    required: false
+
+outputs:
+  original-size:
+    description: "Original file size in bytes"
+    value: ${{ steps.minify.outputs.original-size }}
+  original-size-formatted:
+    description: "Original file size formatted (e.g., 45.2 kB)"
+    value: ${{ steps.minify.outputs.original-size-formatted }}
+  minified-size:
+    description: "Minified file size in bytes"
+    value: ${{ steps.minify.outputs.minified-size }}
+  minified-size-formatted:
+    description: "Minified file size formatted (e.g., 12.3 kB)"
+    value: ${{ steps.minify.outputs.minified-size-formatted }}
+  reduction-percent:
+    description: "Size reduction percentage"
+    value: ${{ steps.minify.outputs.reduction-percent }}
+  gzip-size:
+    description: "Gzipped size in bytes"
+    value: ${{ steps.minify.outputs.gzip-size }}
+  gzip-size-formatted:
+    description: "Gzipped size formatted"
+    value: ${{ steps.minify.outputs.gzip-size-formatted }}
+  time-ms:
+    description: "Compression time in milliseconds"
+    value: ${{ steps.minify.outputs.time-ms }}
+
+runs:
+  using: "composite"
+  steps:
+    # Setup Java for gcc/yui compressors (only if java-version is specified)
+    - name: Setup Java (for gcc/yui)
+      if: inputs.java-version != ''
+      uses: actions/setup-java@v4
+      with:
+        distribution: "temurin"
+        java-version: ${{ inputs.java-version }}
+
+    # Warn about deprecated yui compressor
+    - name: Deprecation warning (yui)
+      if: inputs.compressor == 'yui'
+      shell: bash
+      run: |
+        echo "::warning::YUI Compressor was deprecated by Yahoo in 2013. Consider using 'terser' for JS or 'lightningcss' for CSS."
+
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: "1.1.38"
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        cd ${{ github.action_path }}
+        bun add @node-minify/core @node-minify/utils @node-minify/${{ inputs.compressor }}
+
+    - name: Run minification
+      id: minify
+      shell: bash
+      env:
+        INPUT_FILE: ${{ inputs.input }}
+        OUTPUT_FILE: ${{ inputs.output }}
+        COMPRESSOR: ${{ inputs.compressor }}
+        FILE_TYPE: ${{ inputs.type }}
+        OPTIONS: ${{ inputs.options }}
+        INCLUDE_GZIP: ${{ inputs.include-gzip }}
+      run: |
+        cd ${{ github.action_path }}
+        bun run minify.ts
+
+    - name: Generate job summary
+      if: inputs.report-summary == 'true'
+      shell: bash
+      run: |
+        cat >> $GITHUB_STEP_SUMMARY << EOF
+        ## 📦 node-minify Results
+
+        | Metric | Value |
+        |--------|-------|
+        | **Input** | \`${{ inputs.input }}\` |
+        | **Output** | \`${{ inputs.output }}\` |
+        | **Compressor** | ${{ inputs.compressor }} |
+        | **Original Size** | ${{ steps.minify.outputs.original-size-formatted }} |
+        | **Minified Size** | ${{ steps.minify.outputs.minified-size-formatted }} |
+        | **Reduction** | ${{ steps.minify.outputs.reduction-percent }}% |
+        | **Gzip Size** | ${{ steps.minify.outputs.gzip-size-formatted }} |
+        | **Time** | ${{ steps.minify.outputs.time-ms }}ms |
+
+        EOF
