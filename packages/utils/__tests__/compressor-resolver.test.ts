@@ -31,6 +31,7 @@ describe("Package: utils/compressor-resolver", () => {
             }
         }
         filesToCleanup.clear();
+        vi.resetModules();
     });
 
     describe("isBuiltInCompressor", () => {
