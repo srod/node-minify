@@ -15,6 +15,20 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
     const onThisPageID = "on-this-page-heading";
     const itemOffsets = useRef<ItemOffsets[]>([]);
     const [currentID, setCurrentID] = useState("overview");
+
+    // Scroll active item into view
+    useEffect(() => {
+        if (!toc.current) return;
+
+        const activeLink = toc.current.querySelector(`a[href="#${currentID}"]`);
+        if (activeLink) {
+             activeLink.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+            });
+        }
+    }, [currentID]);
+
     useEffect(() => {
         const getItemOffsets = () => {
             const titles = document.querySelectorAll(
@@ -90,7 +104,11 @@ const TableOfContents: FunctionalComponent<{ headings: MarkdownHeading[] }> = ({
                                     : ""
                             }`.trim()}
                         >
-                            <a href={`#${heading.slug}`} onClick={onLinkClick}>
+                            <a
+                                href={`#${heading.slug}`}
+                                onClick={onLinkClick}
+                                aria-current={currentID === heading.slug ? "true" : undefined}
+                            >
                                 {unescape(heading.text)}
                             </a>
                         </li>
