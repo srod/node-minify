@@ -266,6 +266,17 @@
         "@node-minify/types": "workspace:*",
       },
     },
+    "packages/minify-html": {
+      "name": "@node-minify/minify-html",
+      "version": "10.2.0",
+      "dependencies": {
+        "@minify-html/node": "^0.16.4",
+        "@node-minify/utils": "workspace:*",
+      },
+      "devDependencies": {
+        "@node-minify/types": "workspace:*",
+      },
+    },
     "packages/no-compress": {
       "name": "@node-minify/no-compress",
       "version": "10.2.0",
@@ -688,6 +699,18 @@
 
     "@manypkg/get-packages": ["@manypkg/get-packages@1.1.3", "", { "dependencies": { "@babel/runtime": "^7.5.5", "@changesets/types": "^4.0.1", "@manypkg/find-root": "^1.1.0", "fs-extra": "^8.1.0", "globby": "^11.0.0", "read-yaml-file": "^1.1.0" } }, "sha512-fo+QhuU3qE/2TQMQmbVMqaQ6EWbMhi4ABWP+O4AM1NqPBuy0OrApV5LO6BrrgnhtAHS2NH6RrVk9OL181tTi8A=="],
 
+    "@minify-html/node": ["@minify-html/node@0.16.4", "", { "optionalDependencies": { "@minify-html/node-darwin-arm64": "0.16.4", "@minify-html/node-darwin-x64": "0.16.4", "@minify-html/node-linux-arm64": "0.16.4", "@minify-html/node-linux-x64": "0.16.4", "@minify-html/node-win32-x64": "0.16.4" }, "bin": { "minify-html": "cli.js" } }, "sha512-ykQgl6xcQQDE1shUExeObPSNwAf00DVUt/GrxdjiqFNCVGu7DXK9nuH29sNTyKKYnJJLZAi6OEib2bDfxW3udg=="],
+
+    "@minify-html/node-darwin-arm64": ["@minify-html/node-darwin-arm64@0.16.4", "", { "os": "darwin", "cpu": "arm64" }, "sha512-9H8hcywDb8zo2jEJfaIAibgsKjMqE+XF7SyqTtJ5H8lVXHxffOkawH4TQtphf9V/x7zXeb/nByAvHe1orJ/RHA=="],
+
+    "@minify-html/node-darwin-x64": ["@minify-html/node-darwin-x64@0.16.4", "", { "os": "darwin", "cpu": "x64" }, "sha512-P0Krf5nwXbccMrC7ragKAIVOENHFoVRQi+v/8k5pmfjrNlxgXGVILacG0FbUZXsH2Z2XaIo39HxuMf70L6wQlA=="],
+
+    "@minify-html/node-linux-arm64": ["@minify-html/node-linux-arm64@0.16.4", "", { "os": "linux", "cpu": "arm64" }, "sha512-GDRExKf7AmyAdBTdhMkMyzFhJu5VeyJTu0OnNH2ekp69JrhQTrrrt9UYqnjen+7qLIaZB/R8urDRAYNk0HZi5w=="],
+
+    "@minify-html/node-linux-x64": ["@minify-html/node-linux-x64@0.16.4", "", { "os": "linux", "cpu": "x64" }, "sha512-MS/gF1gxJoeHqEGcb1xoUIRv6gVin4cGJszgHPYSikzkK8Yg0p6rVOZdDAE4AAnp/NW0DYNq7fwYgw3igmppFw=="],
+
+    "@minify-html/node-win32-x64": ["@minify-html/node-win32-x64@0.16.4", "", { "os": "win32", "cpu": "x64" }, "sha512-SCY7hzIqG1RclU0QzU2MlGtPOujPu6dvaPYqDvhAHpkvRXtX0hnyOrrfqf7GcBdDbASxV8LDlBWpY46JO2cjAA=="],
+
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.1.0", "", { "dependencies": { "@emnapi/core": "^1.7.1", "@emnapi/runtime": "^1.7.1", "@tybys/wasm-util": "^0.10.1" } }, "sha512-Fq6DJW+Bb5jaWE69/qOE0D1TUN9+6uWhCeZpdnSBk14pjLcCWR7Q8n49PTSPHazM37JqrsdpEthXy2xn6jWWiA=="],
 
     "@node-minify/babel-minify": ["@node-minify/babel-minify@workspace:packages/babel-minify"],
@@ -721,6 +744,8 @@
     "@node-minify/jsonminify": ["@node-minify/jsonminify@workspace:packages/jsonminify"],
 
     "@node-minify/lightningcss": ["@node-minify/lightningcss@workspace:packages/lightningcss"],
+
+    "@node-minify/minify-html": ["@node-minify/minify-html@workspace:packages/minify-html"],
 
     "@node-minify/no-compress": ["@node-minify/no-compress@workspace:packages/no-compress"],
 

@@ -26,6 +26,7 @@ export const AVAILABLE_MINIFIER = [
     { name: "sqwish", export: "sqwish", cssOnly: true },
     // HTML compressors
     { name: "html-minifier", export: "htmlMinifier" },
+    { name: "minify-html", export: "minifyHtml" },
     // JSON compressors
     { name: "jsonminify", export: "jsonMinify" },
     // Image compressors
