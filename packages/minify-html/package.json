@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@node-minify/utils": "workspace:*",
-    "@minify-html/node": "^0.16.4"
+    "@minify-html/node": "^0.18.0"
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*"
