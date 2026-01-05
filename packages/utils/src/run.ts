@@ -168,12 +168,12 @@ async function writeMultipleOutputs<
     const inputDir = parse(inputFile).dir;
     const inputBase = parse(inputFile).name;
 
-    for (let i = 0; i < outputs.length; i++) {
-        const outputResult = outputs[i];
+    const promises = outputs.map(async (outputResult, i) => {
         if (!outputResult) {
-            continue;
+            return;
         }
 
+        // Write outputs in parallel to improve performance
         const format = outputResult.format || "out";
         let targetFile: string;
 
@@ -214,7 +214,9 @@ async function writeMultipleOutputs<
             content: outputResult.content,
             index,
         });
-    }
+    });
+
+    await Promise.all(promises);
 }
 
 /**
