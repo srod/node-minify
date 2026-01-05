@@ -257,6 +257,39 @@ describe("Package: run", () => {
             await expect(promise).rejects.toThrow("stderr maxBuffer exceeded");
             expect(mockChild.kill).toHaveBeenCalled();
         });
+
+        test("should reject when timeout is exceeded", async () => {
+            const mockChild = new EventEmitter() as ReturnType<
+                typeof childProcess.spawn
+            >;
+            const mockStdin = new EventEmitter();
+            const mockStdout = new EventEmitter();
+            const mockStderr = new EventEmitter();
+
+            Object.assign(mockChild, {
+                stdin: Object.assign(mockStdin, {
+                    end: vi.fn(),
+                }),
+                stdout: mockStdout,
+                stderr: mockStderr,
+                kill: vi.fn(),
+            });
+
+            spy.mockReturnValue(mockChild);
+
+            const command: Command = {
+                args: ["-jar", "fake.jar"],
+                data: "test",
+                timeout: 100,
+            };
+
+            const promise = runCommandLine(
+                command as unknown as RunCommandLineParams
+            );
+
+            await expect(promise).rejects.toThrow("Process timed out");
+            expect(mockChild.kill).toHaveBeenCalled();
+        });
     });
 
     afterAll(() => {
