@@ -117,4 +117,17 @@ describe("Package: google-closure-compiler", async () => {
             ).rejects.toThrow("Google Closure Compiler failed: empty result");
         });
     });
+
+    describe("Timeout", () => {
+        test("should fail if execution exceeds timeout", async () => {
+            const settings: Settings = {
+                compressor: gcc,
+                input: filesJS.oneFile,
+                output: filesJS.fileJSOut,
+                timeout: 1, // Extremely short timeout
+            };
+
+            await expect(minify(settings)).rejects.toThrow("Process timed out");
+        });
+    });
 });

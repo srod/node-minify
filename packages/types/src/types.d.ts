@@ -166,6 +166,11 @@ export type Settings<TOptions extends CompressorOptions = CompressorOptions> = {
     buffer?: number;
 
     /**
+     * Timeout for the child process execution (in milliseconds).
+     */
+    timeout?: number;
+
+    /**
      * File type for compressors that support multiple types.
      * Required for YUI compressor.
      */
