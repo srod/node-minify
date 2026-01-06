@@ -56,7 +56,7 @@ export async function run({
         const stderrChunks: Buffer[] = [];
         let stdoutLength = 0;
         let stderrLength = 0;
-        let timeoutId: NodeJS.Timeout;
+        let timeoutId: NodeJS.Timeout | undefined;
 
         const child = childProcess.spawn("java", args, {
             stdio: "pipe",
@@ -64,6 +64,7 @@ export async function run({
 
         if (timeout) {
             timeoutId = setTimeout(() => {
+                if (child.killed) return;
                 child.kill();
                 reject(new Error(`Process timed out after ${timeout}ms`));
             }, timeout);
