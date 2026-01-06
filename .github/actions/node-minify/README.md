@@ -42,7 +42,7 @@ Minify JavaScript, CSS, and HTML files in your CI/CD pipeline with detailed repo
 | `input` | Files to minify (glob pattern or path) | Yes | - |
 | `output` | Output file path | Yes | - |
 | `compressor` | Compressor to use | No | `terser` |
-| `type` | File type: js or css | No | - |
+| `type` | File type: js, css, or html | No | - |
 | `options` | Compressor options (JSON) | No | `{}` |
 | `report-summary` | Add results to job summary | No | `true` |
 | `include-gzip` | Include gzip sizes | No | `true` |
@@ -63,6 +63,9 @@ Minify JavaScript, CSS, and HTML files in your CI/CD pipeline with detailed repo
 - `cssnano`
 - `csso`
 - `esbuild`
+
+**HTML:**
+- `html-minifier`
 
 **Requires Java:**
 - `gcc` (Google Closure Compiler)
@@ -111,6 +114,17 @@ Minify JavaScript, CSS, and HTML files in your CI/CD pipeline with detailed repo
     output: "dist/app.min.js"
     compressor: "gcc"
     options: '{"compilation_level": "ADVANCED_OPTIMIZATIONS"}'
+```
+
+### HTML Minification
+
+```yaml
+- name: Minify HTML
+  uses: srod/node-minify/.github/actions/node-minify@main
+  with:
+    input: "src/index.html"
+    output: "dist/index.html"
+    compressor: "html-minifier"
 ```
 
 ## License
