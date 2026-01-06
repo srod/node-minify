@@ -2,10 +2,58 @@ import { appendFileSync, existsSync } from "node:fs";
 import { stat } from "node:fs/promises";
 import { resolve } from "node:path";
 import { minify } from "@node-minify/core";
-import {
-    getFilesizeGzippedInBytes,
-    resolveCompressor,
-} from "@node-minify/utils";
+import { getFilesizeGzippedInBytes } from "@node-minify/utils";
+
+const KNOWN_COMPRESSOR_EXPORTS: Record<string, string> = {
+    esbuild: "esbuild",
+    "google-closure-compiler": "gcc",
+    gcc: "gcc",
+    oxc: "oxc",
+    swc: "swc",
+    terser: "terser",
+    "uglify-js": "uglifyJs",
+    "babel-minify": "babelMinify",
+    "uglify-es": "uglifyEs",
+    yui: "yui",
+    "clean-css": "cleanCss",
+    cssnano: "cssnano",
+    csso: "csso",
+    lightningcss: "lightningCss",
+    crass: "crass",
+    sqwish: "sqwish",
+    "html-minifier": "htmlMinifier",
+    jsonminify: "jsonMinify",
+    imagemin: "imagemin",
+    sharp: "sharp",
+    svgo: "svgo",
+    "no-compress": "noCompress",
+};
+
+async function resolveCompressor(
+    name: string
+): Promise<{ compressor: unknown; label: string }> {
+    const packageName = `@node-minify/${name}`;
+    const mod = (await import(packageName)) as Record<string, unknown>;
+
+    const knownExport = KNOWN_COMPRESSOR_EXPORTS[name];
+    if (knownExport && typeof mod[knownExport] === "function") {
+        return { compressor: mod[knownExport], label: name };
+    }
+
+    if (typeof mod.default === "function") {
+        return { compressor: mod.default, label: name };
+    }
+
+    for (const value of Object.values(mod)) {
+        if (typeof value === "function") {
+            return { compressor: value, label: name };
+        }
+    }
+
+    throw new Error(
+        `Package '${packageName}' doesn't export a valid compressor function.`
+    );
+}
 
 interface ActionResult {
     originalSize: number;
@@ -75,7 +123,9 @@ async function run(): Promise<void> {
         const startTime = performance.now();
 
         await minify({
-            compressor,
+            compressor: compressor as Parameters<
+                typeof minify
+            >[0]["compressor"],
             input: inputPath,
             output: outputPath,
             ...(fileType && { type: fileType as "js" | "css" }),
