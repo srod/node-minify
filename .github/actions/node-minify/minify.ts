@@ -76,11 +76,10 @@ function formatBytes(bytes: number): string {
 
 function setOutput(name: string, value: string | number): void {
     const outputFile = process.env.GITHUB_OUTPUT;
-    if (outputFile) {
-        appendFileSync(outputFile, `${name}=${value}\n`);
-    } else {
-        console.log(`::set-output name=${name}::${value}`);
+    if (!outputFile) {
+        throw new Error("GITHUB_OUTPUT environment variable is not set");
     }
+    appendFileSync(outputFile, `${name}=${value}\n`);
 }
 
 async function getFileSize(filePath: string): Promise<number> {
