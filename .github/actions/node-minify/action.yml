@@ -67,9 +67,9 @@ outputs:
 runs:
   using: "composite"
   steps:
-    # Setup Java for gcc/yui compressors (only if java-version is specified)
+    # Setup Java for gcc/yui compressors (only if java-version is specified and compressor needs it)
     - name: Setup Java (for gcc/yui)
-      if: inputs.java-version != ''
+      if: inputs.java-version != '' && contains(fromJSON('["gcc", "google-closure-compiler", "yui"]'), inputs.compressor)
       uses: actions/setup-java@v4
       with:
         distribution: "temurin"
