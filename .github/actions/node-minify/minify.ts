@@ -115,7 +115,14 @@ async function run(): Promise<void> {
     try {
         const originalSize = await getFileSize(inputPath);
         const { compressor, label } = await resolveCompressor(compressorName);
-        const options = JSON.parse(optionsJson);
+
+        let options: Record<string, unknown>;
+        try {
+            options = JSON.parse(optionsJson);
+        } catch {
+            console.error(`::error::Invalid JSON in options: ${optionsJson}`);
+            process.exit(1);
+        }
 
         console.log(`Minifying ${inputFile} with ${label}...`);
 
