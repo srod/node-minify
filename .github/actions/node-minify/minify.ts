@@ -29,6 +29,13 @@ const KNOWN_COMPRESSOR_EXPORTS: Record<string, string> = {
     "no-compress": "noCompress",
 };
 
+/**
+ * Resolves a compressor function from the @node-minify/{name} package and returns it with a label.
+ *
+ * @param name - Compressor package identifier (e.g., "terser", "esbuild"); used to import @node-minify/{name}
+ * @returns An object containing `compressor` (the resolved compressor function) and `label` (the provided name)
+ * @throws Error if the package does not export a usable compressor function
+ */
 async function resolveCompressor(
     name: string
 ): Promise<{ compressor: unknown; label: string }> {
@@ -66,6 +73,12 @@ interface ActionResult {
     timeMs: number;
 }
 
+/**
+ * Format a byte count into a human-readable string using unit suffixes (B, kB, MB, GB).
+ *
+ * @param bytes - The number of bytes to format
+ * @returns `'0 B'` if `bytes` is zero; otherwise a decimal number with up to two fractional digits followed by a unit (`B`, `kB`, `MB`, `GB`), e.g. `1.23 MB`
+ */
 function formatBytes(bytes: number): string {
     if (bytes === 0) return "0 B";
     const k = 1024;
@@ -74,6 +87,13 @@ function formatBytes(bytes: number): string {
     return `${Number.parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
 }
 
+/**
+ * Appends a GitHub Actions output line (`name=value`) to the file pointed to by `GITHUB_OUTPUT`.
+ *
+ * @param name - The output variable name to set
+ * @param value - The output value to write
+ * @throws Error if the `GITHUB_OUTPUT` environment variable is not set
+ */
 function setOutput(name: string, value: string | number): void {
     const outputFile = process.env.GITHUB_OUTPUT;
     if (!outputFile) {
@@ -82,11 +102,26 @@ function setOutput(name: string, value: string | number): void {
     appendFileSync(outputFile, `${name}=${value}\n`);
 }
 
+/**
+ * Get the size of a file in bytes.
+ *
+ * @returns The file size in bytes.
+ */
 async function getFileSize(filePath: string): Promise<number> {
     const stats = await stat(filePath);
     return stats.size;
 }
 
+/**
+ * Orchestrates minification of a file using a dynamically resolved @node-minify compressor.
+ *
+ * Reads configuration from environment variables (INPUT_FILE, OUTPUT_FILE, COMPRESSOR, FILE_TYPE,
+ * OPTIONS, INCLUDE_GZIP, WORKSPACE_DIR/GITHUB_WORKSPACE), validates inputs, resolves and runs the
+ * chosen compressor to produce the output file, measures sizes and elapsed time, optionally
+ * computes gzipped size, writes results to GitHub Actions outputs, and logs a concise summary.
+ *
+ * On validation or runtime failure the function logs an error and exits the process with code 1.
+ */
 async function run(): Promise<void> {
     const inputFile = process.env.INPUT_FILE;
     const outputFile = process.env.OUTPUT_FILE;
