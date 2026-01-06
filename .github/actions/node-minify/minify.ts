@@ -159,6 +159,7 @@ async function run(): Promise<void> {
                     B: 1,
                     kB: 1024,
                     MB: 1024 * 1024,
+                    GB: 1024 * 1024 * 1024,
                 };
                 gzipSize = Math.round(value * (multipliers[unit] || 1));
                 gzipSizeFormatted = gzipResult;
