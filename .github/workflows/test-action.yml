@@ -57,6 +57,11 @@ jobs:
             exit 1
           fi
           
+          if [ "$(echo '${{ steps.minify-terser.outputs.reduction-percent }} > 0' | bc -l)" -ne 1 ]; then
+            echo "::error::Reduction percentage should be > 0"
+            exit 1
+          fi
+          
           echo "Output file content:"
           cat test-action/output.min.js
 
@@ -125,6 +130,12 @@ jobs:
           echo "Original: ${{ steps.minify-css.outputs.original-size-formatted }}"
           echo "Minified: ${{ steps.minify-css.outputs.minified-size-formatted }}"
           echo "Reduction: ${{ steps.minify-css.outputs.reduction-percent }}%"
+          
+          if [ "$(echo '${{ steps.minify-css.outputs.reduction-percent }} > 0' | bc -l)" -ne 1 ]; then
+            echo "::error::CSS reduction percentage should be > 0"
+            exit 1
+          fi
+          
           cat test-action/output.min.css
 
   test-summary:
