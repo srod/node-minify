@@ -208,4 +208,8 @@ async function run(): Promise<void> {
     }
 }
 
-run();
+run().catch((error) => {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    console.error(`::error::Minification failed: ${message}`);
+    process.exit(1);
+});
