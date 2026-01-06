@@ -46,8 +46,10 @@ export async function run({
     maxBuffer = 1024 * 1024,
 }: RunParams): Promise<string> {
     return new Promise((resolve, reject) => {
-        let stdout = "";
-        let stderr = "";
+        const stdoutChunks: Buffer[] = [];
+        const stderrChunks: Buffer[] = [];
+        let stdoutLength = 0;
+        let stderrLength = 0;
 
         const child = childProcess.spawn("java", args, {
             stdio: "pipe",
@@ -67,20 +69,20 @@ export async function run({
         child.stderr?.on("error", handleError("child.stderr"));
 
         child.on("exit", (code: number | null) => {
+            const stderr = Buffer.concat(stderrChunks).toString("utf8");
             if (code !== 0) {
                 reject(new Error(stderr || `Process exited with code ${code}`));
                 return;
             }
 
-            resolve(stdout);
+            resolve(Buffer.concat(stdoutChunks).toString("utf8"));
         });
 
         child.stdout?.on("data", (chunk: Buffer) => {
-            stdout += chunk;
-            if (
-                maxBuffer > 0 &&
-                Buffer.byteLength(stdout, "utf8") > maxBuffer
-            ) {
+            stdoutChunks.push(chunk);
+            stdoutLength += chunk.length;
+
+            if (maxBuffer > 0 && stdoutLength > maxBuffer) {
                 child.kill();
                 reject(new Error("stdout maxBuffer exceeded"));
                 return;
@@ -88,11 +90,10 @@ export async function run({
         });
 
         child.stderr?.on("data", (chunk: Buffer) => {
-            stderr += chunk;
-            if (
-                maxBuffer > 0 &&
-                Buffer.byteLength(stderr, "utf8") > maxBuffer
-            ) {
+            stderrChunks.push(chunk);
+            stderrLength += chunk.length;
+
+            if (maxBuffer > 0 && stderrLength > maxBuffer) {
                 child.kill();
                 reject(new Error("stderr maxBuffer exceeded"));
                 return;
