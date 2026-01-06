@@ -23,6 +23,7 @@ type Command = {
     args: string[];
     data: string;
     maxBuffer?: number;
+    timeout?: number;
 };
 
 describe("Package: run", () => {
@@ -255,6 +256,42 @@ describe("Package: run", () => {
             });
 
             await expect(promise).rejects.toThrow("stderr maxBuffer exceeded");
+            expect(mockChild.kill).toHaveBeenCalled();
+        });
+
+        test("should reject when timeout is exceeded", async () => {
+            // Use real timers because vi.useFakeTimers causes issues with internal node timers
+            const mockChild = new EventEmitter() as ReturnType<
+                typeof childProcess.spawn
+            >;
+            const mockStdin = new EventEmitter();
+            const mockStdout = new EventEmitter();
+            const mockStderr = new EventEmitter();
+
+            Object.assign(mockChild, {
+                stdin: Object.assign(mockStdin, {
+                    end: vi.fn(),
+                }),
+                stdout: mockStdout,
+                stderr: mockStderr,
+                kill: vi.fn(),
+            });
+
+            spy.mockReturnValue(mockChild);
+
+            const command: Command = {
+                args: ["-jar", "fake.jar"],
+                data: "test",
+                timeout: 50,
+            };
+
+            const promise = runCommandLine(
+                command as unknown as RunCommandLineParams
+            );
+
+            await expect(promise).rejects.toThrow(
+                "Process timed out after 50ms"
+            );
             expect(mockChild.kill).toHaveBeenCalled();
         });
     });
