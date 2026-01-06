@@ -10,6 +10,7 @@ export type RunCommandLineParams = {
     args: string[];
     data: string;
     maxBuffer?: number;
+    timeout?: number;
 };
 
 /**
@@ -17,20 +18,23 @@ export type RunCommandLineParams = {
  * @param args - Command line arguments for the Java process
  * @param data - Data to minify (piped to stdin)
  * @param maxBuffer - Optional buffer limit in bytes. Defaults to 1024 * 1024 (1MB).
+ * @param timeout - Optional timeout in milliseconds. Process will be killed if it exceeds this limit.
  * @returns Promise with minified content from stdout
  */
 export async function runCommandLine({
     args,
     data,
     maxBuffer,
+    timeout,
 }: RunCommandLineParams): Promise<string> {
-    return run({ data, args, maxBuffer });
+    return run({ data, args, maxBuffer, timeout });
 }
 
 type RunParams = {
     data: string;
     args: string[];
     maxBuffer?: number;
+    timeout?: number;
 };
 
 /**
@@ -38,28 +42,39 @@ type RunParams = {
  * @param data - Data to minify (piped to stdin)
  * @param args - Command line arguments
  * @param maxBuffer - Optional buffer limit in bytes. Defaults to 1024 * 1024 (1MB).
+ * @param timeout - Optional timeout in milliseconds. Process will be killed if it exceeds this limit.
  * @returns Promise with minified content from stdout
  */
 export async function run({
     data,
     args,
     maxBuffer = 1024 * 1024,
+    timeout,
 }: RunParams): Promise<string> {
     return new Promise((resolve, reject) => {
         const stdoutChunks: Buffer[] = [];
         const stderrChunks: Buffer[] = [];
         let stdoutLength = 0;
         let stderrLength = 0;
+        let timeoutId: NodeJS.Timeout;
 
         const child = childProcess.spawn("java", args, {
             stdio: "pipe",
         });
+
+        if (timeout) {
+            timeoutId = setTimeout(() => {
+                child.kill();
+                reject(new Error(`Process timed out after ${timeout}ms`));
+            }, timeout);
+        }
 
         const handleError = (source: string) => (error: Error) => {
             console.error(`Error in ${source}:`, error);
         };
 
         child.on("error", (error) => {
+            if (timeoutId) clearTimeout(timeoutId);
             handleError("child")(error);
             reject(new Error(`Process error: ${error.message}`));
         });
@@ -69,6 +84,7 @@ export async function run({
         child.stderr?.on("error", handleError("child.stderr"));
 
         child.on("exit", (code: number | null) => {
+            if (timeoutId) clearTimeout(timeoutId);
             const stderr = Buffer.concat(stderrChunks).toString("utf8");
             if (code !== 0) {
                 reject(new Error(stderr || `Process exited with code ${code}`));
@@ -83,6 +99,7 @@ export async function run({
             stdoutLength += chunk.length;
 
             if (maxBuffer > 0 && stdoutLength > maxBuffer) {
+                if (timeoutId) clearTimeout(timeoutId);
                 child.kill();
                 reject(new Error("stdout maxBuffer exceeded"));
                 return;
@@ -94,6 +111,7 @@ export async function run({
             stderrLength += chunk.length;
 
             if (maxBuffer > 0 && stderrLength > maxBuffer) {
+                if (timeoutId) clearTimeout(timeoutId);
                 child.kill();
                 reject(new Error("stderr maxBuffer exceeded"));
                 return;

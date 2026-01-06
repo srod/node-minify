@@ -48,6 +48,7 @@ export async function yui({
         args: yuiCommand(settings.type, settings?.options ?? {}),
         data: contentStr,
         maxBuffer: settings?.buffer,
+        timeout: settings?.timeout,
     });
 
     if (typeof result !== "string") {
