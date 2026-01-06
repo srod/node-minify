@@ -57,6 +57,7 @@ export async function run({
         let stdoutLength = 0;
         let stderrLength = 0;
         let timeoutId: NodeJS.Timeout | undefined;
+        let settled = false;
 
         const child = childProcess.spawn("java", args, {
             stdio: "pipe",
@@ -64,7 +65,8 @@ export async function run({
 
         if (timeout) {
             timeoutId = setTimeout(() => {
-                if (child.killed) return;
+                if (settled || child.killed) return;
+                settled = true;
                 child.kill();
                 reject(new Error(`Process timed out after ${timeout}ms`));
             }, timeout);
@@ -75,6 +77,8 @@ export async function run({
         };
 
         child.on("error", (error) => {
+            if (settled) return;
+            settled = true;
             if (timeoutId) clearTimeout(timeoutId);
             handleError("child")(error);
             reject(new Error(`Process error: ${error.message}`));
@@ -85,6 +89,8 @@ export async function run({
         child.stderr?.on("error", handleError("child.stderr"));
 
         child.on("exit", (code: number | null) => {
+            if (settled) return;
+            settled = true;
             if (timeoutId) clearTimeout(timeoutId);
             const stderr = Buffer.concat(stderrChunks).toString("utf8");
             if (code !== 0) {
@@ -100,6 +106,8 @@ export async function run({
             stdoutLength += chunk.length;
 
             if (maxBuffer > 0 && stdoutLength > maxBuffer) {
+                if (settled) return;
+                settled = true;
                 if (timeoutId) clearTimeout(timeoutId);
                 child.kill();
                 reject(new Error("stdout maxBuffer exceeded"));
@@ -112,6 +120,8 @@ export async function run({
             stderrLength += chunk.length;
 
             if (maxBuffer > 0 && stderrLength > maxBuffer) {
+                if (settled) return;
+                settled = true;
                 if (timeoutId) clearTimeout(timeoutId);
                 child.kill();
                 reject(new Error("stderr maxBuffer exceeded"));
