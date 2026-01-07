@@ -49,3 +49,22 @@ window.addEventListener("resize", () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(updateCodeBlocks, 100);
 });
+
+// Watch for dynamically added pre elements (e.g., client-side navigation)
+const observer = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+        if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+            for (const node of mutation.addedNodes) {
+                if (
+                    node.nodeName === "PRE" ||
+                    (node.nodeType === 1 && node.querySelector("pre"))
+                ) {
+                    updateCodeBlocks();
+                    return;
+                }
+            }
+        }
+    }
+});
+
+observer.observe(document.body, { childList: true, subtree: true });
