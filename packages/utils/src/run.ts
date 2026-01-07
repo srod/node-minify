@@ -111,22 +111,28 @@ async function writeOutput<T extends CompressorOptions = CompressorOptions>(
     }
 
     // Default: write code (string) output
-    await writeFileAsync({
-        file: settings.output,
-        content: result.code,
-        index,
-    });
+    const writePromises = [
+        writeFileAsync({
+            file: settings.output,
+            content: result.code,
+            index,
+        }),
+    ];
 
     if (result.map) {
         const sourceMapUrl = getSourceMapUrl(settings);
         if (sourceMapUrl) {
-            await writeFileAsync({
-                file: sourceMapUrl,
-                content: result.map,
-                index,
-            });
+            writePromises.push(
+                writeFileAsync({
+                    file: sourceMapUrl,
+                    content: result.map,
+                    index,
+                })
+            );
         }
     }
+
+    await Promise.all(writePromises);
 }
 
 /**
