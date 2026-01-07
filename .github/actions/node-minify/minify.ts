@@ -161,6 +161,16 @@ async function run(): Promise<void> {
 
         console.log(`Minifying ${inputFile} with ${label}...`);
 
+        const requiresType = ["esbuild", "lightningcss", "yui"].includes(
+            compressorName
+        );
+        if (requiresType && !fileType) {
+            console.error(
+                `::error::Compressor '${compressorName}' requires the 'type' input (js or css)`
+            );
+            process.exit(1);
+        }
+
         const startTime = performance.now();
 
         await minify({
