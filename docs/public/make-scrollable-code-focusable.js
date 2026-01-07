@@ -9,10 +9,12 @@ const updateCodeBlocks = () => {
 
     preElements.forEach((pre) => {
         // Check if the element has horizontal overflow
-        const isScrollable = pre.scrollWidth > pre.clientWidth;
+        const isScrollable =
+            pre.scrollWidth > pre.clientWidth ||
+            pre.scrollHeight > pre.clientHeight;
 
         if (isScrollable) {
-            // Only add tabindex if not already present
+            // Only add attributes if not already present
             if (!pre.hasAttribute("tabindex")) {
                 pre.setAttribute("tabindex", "0");
             }
@@ -22,17 +24,14 @@ const updateCodeBlocks = () => {
             if (!pre.hasAttribute("aria-label")) {
                 pre.setAttribute("aria-label", "Code Snippet");
             }
-        } else {
-            // Clean up if it's no longer scrollable (e.g., window resized larger)
-            if (pre.getAttribute("tabindex") === "0") {
-                pre.removeAttribute("tabindex");
-            }
-            if (pre.getAttribute("role") === "region") {
-                pre.removeAttribute("role");
-            }
-            if (pre.getAttribute("aria-label") === "Code Snippet") {
-                pre.removeAttribute("aria-label");
-            }
+            // Mark that we modified this element
+            pre.dataset.scrollableFocusable = "true";
+        } else if (pre.dataset.scrollableFocusable === "true") {
+            // Only clean up elements we previously modified
+            pre.removeAttribute("tabindex");
+            pre.removeAttribute("role");
+            pre.removeAttribute("aria-label");
+            delete pre.dataset.scrollableFocusable;
         }
     });
 };
