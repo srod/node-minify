@@ -7,6 +7,7 @@
  */
 
 import { benchmark, getReporter } from "@node-minify/benchmark";
+import chalk from "chalk";
 import { Command } from "commander";
 import ora from "ora";
 import updateNotifier from "update-notifier";
@@ -146,7 +147,11 @@ async function main(): Promise<void> {
             await run(options);
             process.exit(0);
         } catch (error) {
-            console.error(error);
+            if (error instanceof Error && !process.env.DEBUG) {
+                console.error(chalk.red("Error:"), error.message);
+            } else {
+                console.error(error);
+            }
             process.exit(1);
         }
     }

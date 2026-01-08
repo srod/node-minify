@@ -63,7 +63,7 @@ async function runOne(cli: SettingsWithCompressor): Promise<Result> {
         input: inputValue,
         output: cli.output,
         ...(cli.type && { type: cli.type }),
-        ...(cli.option && { options: JSON.parse(cli.option) }),
+        ...(cli.option && { options: parseOptions(cli.option) }),
     };
 
     if (!silence) spinnerStart(settings);
@@ -115,4 +115,14 @@ function logMessage(
         messageColor ? chalk[messageColor](message) : message
     );
     console.log("");
+}
+
+function parseOptions(option: string) {
+    try {
+        return JSON.parse(option);
+    } catch (e) {
+        throw new Error(
+            `Invalid JSON options: ${e instanceof Error ? e.message : String(e)}`
+        );
+    }
 }
