@@ -70,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 timeoutId = setTimeout(() => {
                     button.innerText = "Copy";
+                    button.classList.remove("copied");
                     button.setAttribute("aria-label", "Copy code to clipboard");
                     timeoutId = null;
                 }, 2000);
