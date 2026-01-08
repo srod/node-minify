@@ -94,12 +94,13 @@ describe("Runner Edge Cases", () => {
         });
 
         const results2 = await benchmark({
-            input: pattern,
+            input: [pattern, pattern],
             compressors: ["terser"],
             iterations: 1,
         });
 
         expect(results1.files.length).toBe(results2.files.length);
+        expect(results1.files.length).toBeGreaterThan(0);
     });
 
     test("should handle single file input (array)", async () => {
@@ -262,6 +263,7 @@ describe("Runner Edge Cases", () => {
         });
 
         expect(results.files).toBeDefined();
+        expect(results.files).toHaveLength(0);
     });
 
     test("should use default warmup of 0 when iterations is 1 and warmup not specified", async () => {

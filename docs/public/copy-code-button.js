@@ -63,9 +63,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.error("Failed to copy:", err);
                 button.innerText = "Error";
                 button.setAttribute("aria-label", "Failed to copy code");
-                setTimeout(() => {
+
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                }
+
+                timeoutId = setTimeout(() => {
                     button.innerText = "Copy";
                     button.setAttribute("aria-label", "Copy code to clipboard");
+                    timeoutId = null;
                 }, 2000);
             }
         });

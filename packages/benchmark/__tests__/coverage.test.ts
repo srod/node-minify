@@ -77,6 +77,7 @@ describe("Coverage Gaps", () => {
     });
 
     test("loadCompressor - falls back to mod.default when no named export", async () => {
+        vi.resetModules();
         vi.doMock("@node-minify/unknown-pkg", () => ({
             default: async () => ({ code: "default-export" }),
         }));

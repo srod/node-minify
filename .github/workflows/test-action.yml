@@ -45,19 +45,25 @@ jobs:
           compressor: "terser"
 
       - name: Verify terser outputs
+        env:
+          ORIGINAL_SIZE: ${{ steps.minify-terser.outputs.original-size-formatted }}
+          MINIFIED_SIZE: ${{ steps.minify-terser.outputs.minified-size-formatted }}
+          REDUCTION_PERCENT: ${{ steps.minify-terser.outputs.reduction-percent }}
+          GZIP_SIZE: ${{ steps.minify-terser.outputs.gzip-size-formatted }}
+          TIME_MS: ${{ steps.minify-terser.outputs.time-ms }}
         run: |
-          echo "Original size: ${{ steps.minify-terser.outputs.original-size-formatted }}"
-          echo "Minified size: ${{ steps.minify-terser.outputs.minified-size-formatted }}"
-          echo "Reduction: ${{ steps.minify-terser.outputs.reduction-percent }}%"
-          echo "Gzip size: ${{ steps.minify-terser.outputs.gzip-size-formatted }}"
-          echo "Time: ${{ steps.minify-terser.outputs.time-ms }}ms"
+          echo "Original size: $ORIGINAL_SIZE"
+          echo "Minified size: $MINIFIED_SIZE"
+          echo "Reduction: $REDUCTION_PERCENT%"
+          echo "Gzip size: $GZIP_SIZE"
+          echo "Time: ${TIME_MS}ms"
           
           if [ ! -f "test-action/output.min.js" ]; then
             echo "::error::Output file was not created"
             exit 1
           fi
           
-          if [ "$(echo '${{ steps.minify-terser.outputs.reduction-percent }} > 0' | bc -l)" -ne 1 ]; then
+          if [ "$(echo "$REDUCTION_PERCENT > 0" | bc -l)" -ne 1 ]; then
             echo "::error::Reduction percentage should be > 0"
             exit 1
           fi
@@ -75,13 +81,18 @@ jobs:
           type: "js"
 
       - name: Compare results
+        env:
+          TERSER_SIZE: ${{ steps.minify-terser.outputs.minified-size-formatted }}
+          TERSER_REDUCTION: ${{ steps.minify-terser.outputs.reduction-percent }}
+          ESBUILD_SIZE: ${{ steps.minify-esbuild.outputs.minified-size-formatted }}
+          ESBUILD_REDUCTION: ${{ steps.minify-esbuild.outputs.reduction-percent }}
         run: |
           echo "## Comparison" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Compressor | Minified Size | Reduction |" >> $GITHUB_STEP_SUMMARY
           echo "|------------|---------------|-----------|" >> $GITHUB_STEP_SUMMARY
-          echo "| terser | ${{ steps.minify-terser.outputs.minified-size-formatted }} | ${{ steps.minify-terser.outputs.reduction-percent }}% |" >> $GITHUB_STEP_SUMMARY
-          echo "| esbuild | ${{ steps.minify-esbuild.outputs.minified-size-formatted }} | ${{ steps.minify-esbuild.outputs.reduction-percent }}% |" >> $GITHUB_STEP_SUMMARY
+          echo "| terser | $TERSER_SIZE | $TERSER_REDUCTION% |" >> $GITHUB_STEP_SUMMARY
+          echo "| esbuild | $ESBUILD_SIZE | $ESBUILD_REDUCTION% |" >> $GITHUB_STEP_SUMMARY
 
   test-css-minification:
     name: Test CSS Minification

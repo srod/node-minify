@@ -68,7 +68,9 @@ async function benchmarkFile(
         if (options.onProgress) {
             options.onProgress(name, file);
         }
-        results.push(await benchmarkCompressor(file, name, options));
+        results.push(
+            await benchmarkCompressor(file, name, options, originalSizeBytes)
+        );
     }
 
     return {
@@ -82,7 +84,8 @@ async function benchmarkFile(
 async function benchmarkCompressor(
     file: string,
     name: string,
-    options: BenchmarkOptions
+    options: BenchmarkOptions,
+    originalSizeBytes: number
 ): Promise<CompressorMetrics> {
     const compressor = await loadCompressor(name);
 
@@ -137,7 +140,6 @@ async function benchmarkCompressor(
         const avgTime = times.reduce((a, b) => a + b, 0) / times.length;
         const outStats = statSync(lastOutputFile);
         const sizeBytes = outStats.size;
-        const originalStats = statSync(file);
 
         const metrics: CompressorMetrics = {
             compressor: name,
@@ -147,7 +149,7 @@ async function benchmarkCompressor(
             timeMinMs: Math.min(...times),
             timeMaxMs: Math.max(...times),
             iterationTimes: options.verbose ? times : undefined,
-            reductionPercent: calculateReduction(originalStats.size, sizeBytes),
+            reductionPercent: calculateReduction(originalSizeBytes, sizeBytes),
             success: true,
         };
 
