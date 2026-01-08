@@ -39,7 +39,9 @@ export function formatMarkdownOutput(result: BenchmarkResult): string {
                 if (hasBrotli) output += ` ${r.brotliSize ?? "-"} |`;
                 output += " OK |\n";
             } else {
-                const safeError = (r.error ?? "-").replace(/\|/g, "\\|");
+                const safeError = (r.error ?? "-")
+                    .replace(/\\/g, "\\\\")
+                    .replace(/\|/g, "\\|");
                 output += `| ${r.compressor} | - | - | - |`;
                 if (hasGzip) output += " - |";
                 if (hasBrotli) output += " - |";
