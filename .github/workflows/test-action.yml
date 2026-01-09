@@ -69,27 +69,9 @@ jobs:
           npm init -y
           npm install @node-minify/terser @node-minify/esbuild
           
-          # Prepare destination directories
-          mkdir -p $GITHUB_WORKSPACE/node_modules/@node-minify
-          mkdir -p $GITHUB_WORKSPACE/packages/action/node_modules/@node-minify
-          mkdir -p $GITHUB_WORKSPACE/packages/action/dist/node_modules/@node-minify
-          
-          # Copy EVERYTHING from temp node_modules to all possible locations
-          echo "Copying to root node_modules..."
+          # Copy all installed packages (including dependencies) to root node_modules
+          # This ensures that both @node-minify/* wrappers AND their dependencies (terser, esbuild) are available
           cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/node_modules/
-          
-          echo "Copying to packages/action/node_modules..."
-          cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/packages/action/node_modules/
-          
-          echo "Copying to packages/action/dist/node_modules..."
-          cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/packages/action/dist/node_modules/
-          
-          # Debug
-          echo "Checking @node-minify/terser existence:"
-          find $GITHUB_WORKSPACE -name terser -type d | grep node_modules
-          
-          echo "Checking package.json of installed terser:"
-          cat $GITHUB_WORKSPACE/node_modules/@node-minify/terser/package.json || echo "Not found in root"
 
       - name: Create test file
         run: |
@@ -190,15 +172,8 @@ jobs:
           npm init -y
           npm install @node-minify/lightningcss
           
-          # Prepare destination directories
-          mkdir -p $GITHUB_WORKSPACE/node_modules/@node-minify
-          mkdir -p $GITHUB_WORKSPACE/packages/action/node_modules/@node-minify
-          mkdir -p $GITHUB_WORKSPACE/packages/action/dist/node_modules/@node-minify
-          
-          # Copy EVERYTHING
+          # Copy all installed packages to root node_modules
           cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/node_modules/
-          cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/packages/action/node_modules/
-          cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/packages/action/dist/node_modules/
 
       - name: Create test CSS file
         run: |
