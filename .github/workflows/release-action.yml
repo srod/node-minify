@@ -69,11 +69,17 @@ jobs:
             exit 1
           fi
 
-      - name: Update major version tag
+      - name: Commit built action dist
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
+          # Force add dist (ignored by .gitignore)
+          git add -f packages/action/dist/
+          git commit -m "chore: build action dist for ${{ steps.version.outputs.version }}" || echo "No changes to commit"
+
+      - name: Update major version tag
+        run: |
           # Force update the major version tag (e.g., v1)
           MAJOR="${{ steps.version.outputs.major }}"
           git tag -fa "$MAJOR" -m "Update $MAJOR tag to ${{ steps.version.outputs.version }}"
