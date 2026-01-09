@@ -27,7 +27,7 @@ function getPackageDirs() {
  */
 function checkPublished(packageName: string, version: string) {
     // Basic validation to prevent command injection
-    if (!/^[\w@/-]+$/.test(packageName) || !/^[\w.-]+$/.test(version)) {
+    if (!/^[\w@/.-]+$/.test(packageName) || !/^[\w.-]+$/.test(version)) {
         return { exists: false, publishedVersion: false };
     }
 
@@ -89,7 +89,6 @@ async function main() {
                 `Skipping package ${dir}:`,
                 error instanceof Error ? error.message : String(error)
             );
-            continue;
         }
     }
 
