@@ -1,6 +1,6 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2025 Rodolphe Stoclin
+ * Copyright (c) 2011-2026 Rodolphe Stoclin
  * MIT Licensed
  */
 
@@ -164,6 +164,12 @@ export type Settings<TOptions extends CompressorOptions = CompressorOptions> = {
      * @default 1024000 (1MB)
      */
     buffer?: number;
+
+    /**
+     * Timeout for the compressor process (in milliseconds).
+     * If execution exceeds this limit, the process will be killed.
+     */
+    timeout?: number;
 
     /**
      * File type for compressors that support multiple types.

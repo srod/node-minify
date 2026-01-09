@@ -1,6 +1,6 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2025 Rodolphe Stoclin
+ * Copyright (c) 2011-2026 Rodolphe Stoclin
  * MIT Licensed
  */
 
@@ -16,24 +16,27 @@ vi.mock("node:fs", async (importOriginal) => {
     };
 });
 
-import { ValidationError } from "../src/error.ts";
+import { FileOperationError, ValidationError } from "../src/error.ts";
 import {
     buildArgs,
     compressSingleFile,
     deleteFile,
     ensureStringContent,
     getContentFromFiles,
+    getFilesizeBrotliInBytes,
     getFilesizeGzippedInBytes,
     getFilesizeInBytes,
     isValidFile,
     prettyBytes,
     readFile,
+    readFileAsync,
     resetDeprecationWarnings,
     run,
     setFileNameMin,
     toBuildArgsOptions,
     warnDeprecation,
     writeFile,
+    writeFileAsync,
 } from "../src/index.ts";
 
 const fixtureFile = `${__dirname}/../../../tests/fixtures/fixture-content.js`;
@@ -76,6 +79,58 @@ describe("Package: utils", () => {
             const content = readFile(fixtureFile, false);
             expect(typeof content).toBe("string");
             expect(content).toMatch("console.log('content');");
+        });
+    });
+
+    describe("readFileAsync", () => {
+        test("should return the content", async () => {
+            const content = await readFileAsync(fixtureFile);
+            expect(content).toMatch("console.log('content');");
+        });
+
+        test("should throw FileOperationError if file does not exist", async () => {
+            await expect(readFileAsync("nonexistent-file.js")).rejects.toThrow(
+                FileOperationError
+            );
+        });
+
+        test("should throw FileOperationError if path is a directory", async () => {
+            await expect(readFileAsync(__dirname)).rejects.toThrow(
+                FileOperationError
+            );
+        });
+
+        test("should return Buffer when asBuffer is true", async () => {
+            const buffer = await readFileAsync(fixtureFile, true);
+            expect(buffer).toBeInstanceOf(Buffer);
+            expect(buffer.toString("utf-8")).toMatch("console.log('content');");
+        });
+
+        test("should return string when asBuffer is false", async () => {
+            const content = await readFileAsync(fixtureFile, false);
+            expect(typeof content).toBe("string");
+            expect(content).toMatch("console.log('content');");
+        });
+    });
+
+    describe("FileOperationError", () => {
+        test("should chain the original error via cause", () => {
+            const originalError = new Error("Original failure");
+            const error = new FileOperationError(
+                "read",
+                "test.js",
+                originalError
+            );
+
+            expect(error.message).toContain("Failed to read file test.js");
+            expect(error.message).toContain("Original failure");
+            expect(error.cause).toBe(originalError);
+        });
+
+        test("should handle missing original error", () => {
+            const error = new FileOperationError("read", "test.js");
+            expect(error.message).toContain("Failed to read file test.js");
+            expect(error.cause).toBeUndefined();
         });
     });
 
@@ -122,6 +177,40 @@ describe("Package: utils", () => {
         test("should throw if no compressor", async () => {
             await expect(run({ settings: {} } as any)).rejects.toThrow(
                 ValidationError
+            );
+        });
+
+        test("should throw if compressor returns invalid result (non-object)", async () => {
+            const compressor = vi
+                .fn()
+                .mockResolvedValue("invalid string result");
+            await expect(
+                run({
+                    settings: {
+                        compressor,
+                        compressorLabel: "bad-compressor",
+                    } as any,
+                    content: "content",
+                })
+            ).rejects.toThrow(
+                "Compressor 'bad-compressor' returned invalid result. Expected an object with { code: string }."
+            );
+        });
+
+        test("should throw if compressor returns invalid result (missing code)", async () => {
+            const compressor = vi
+                .fn()
+                .mockResolvedValue({ somethingElse: "foo" });
+            await expect(
+                run({
+                    settings: {
+                        compressor,
+                        compressorLabel: "bad-compressor",
+                    } as any,
+                    content: "content",
+                })
+            ).rejects.toThrow(
+                "Compressor 'bad-compressor' must return { code: string }."
             );
         });
     });
@@ -224,6 +313,82 @@ describe("Package: utils", () => {
                     index: 0,
                 })
             ).toThrow();
+        });
+    });
+
+    describe("writeFileAsync", () => {
+        test("should return the content", async () => {
+            const result = await writeFileAsync({
+                file: `${__dirname}/../../../tests/tmp/temp-async.js`,
+                content: "const foo = 'bar';",
+            });
+            expect(result).toBe("const foo = 'bar';");
+        });
+
+        test("should write content to an array of files", async () => {
+            const files: [string, string] = [
+                `${__dirname}/../../../tests/tmp/temp1-async.js`,
+                `${__dirname}/../../../tests/tmp/temp2-async.js`,
+            ];
+            const result = await writeFileAsync({
+                file: files,
+                content: "content",
+                index: 0,
+            });
+            expect(result).toBe("content");
+            expect(readFile(files[0])).toBe("content");
+        });
+
+        test("should throw if no target file", async () => {
+            await expect(
+                writeFileAsync({ file: "", content: "content" })
+            ).rejects.toThrow(ValidationError);
+        });
+
+        test("should throw if no content", async () => {
+            await expect(
+                writeFileAsync({ file: "foo.js", content: "" })
+            ).rejects.toThrow(ValidationError);
+        });
+
+        test("should throw if target path is a directory", async () => {
+            await expect(
+                writeFileAsync({
+                    file: __dirname,
+                    content: "content",
+                })
+            ).rejects.toThrow();
+        });
+
+        test("should handle index with non-array file", async () => {
+            const file = `${__dirname}/../../../tests/tmp/temp-index-async.js`;
+            const result = await writeFileAsync({
+                file,
+                content: "content",
+                index: 0,
+            });
+            expect(result).toBe("content");
+            expect(readFile(file)).toBe("content");
+        });
+
+        test("should throw if targetFile is not a string", async () => {
+            await expect(
+                writeFileAsync({
+                    file: [null as any],
+                    content: "content",
+                    index: 0,
+                })
+            ).rejects.toThrow(ValidationError);
+        });
+
+        test("should throw FileOperationError on multi-file failure", async () => {
+            await expect(
+                writeFileAsync({
+                    file: [__dirname],
+                    content: "content",
+                    index: 0,
+                })
+            ).rejects.toThrow();
         });
     });
 
@@ -346,6 +511,37 @@ describe("Package: utils", () => {
         test("should throw if path is a directory", async () => {
             const dirPath = __dirname || ".";
             await expect(getFilesizeGzippedInBytes(dirPath)).rejects.toThrow();
+        });
+    });
+
+    describe("getFilesizeBrotliInBytes", () => {
+        test("should return file size", async () => {
+            const size = await getFilesizeBrotliInBytes(fixtureFile);
+            expect(size).toMatch(/\d+ B/);
+            expect(size.length).toBeGreaterThan(0);
+        });
+
+        test("should throw if file does not exist", async () => {
+            await expect(getFilesizeBrotliInBytes("fake.js")).rejects.toThrow(
+                FileOperationError
+            );
+        });
+
+        test("should throw if path is a directory", async () => {
+            const dirPath = __dirname || ".";
+            await expect(getFilesizeBrotliInBytes(dirPath)).rejects.toThrow(
+                FileOperationError
+            );
+        });
+
+        test("should throw FileOperationError with correct message", async () => {
+            try {
+                await getFilesizeBrotliInBytes("non-existent-file.js");
+                throw new Error("Expected FileOperationError");
+            } catch (error) {
+                expect(error).toBeInstanceOf(FileOperationError);
+                expect((error as Error).message).toContain("Failed to");
+            }
         });
     });
 
@@ -1256,6 +1452,26 @@ describe("Package: utils", () => {
             expect(compressor).toHaveBeenCalledWith(
                 expect.objectContaining({
                     content: [Buffer.from("image1"), Buffer.from("image2")],
+                })
+            );
+        });
+
+        test("should read single image file array as Buffer (not Buffer[])", async () => {
+            const testFile = `${tmpDir}/single-array-image.png`;
+            filesToCleanup.add(testFile);
+            writeFile({ file: testFile, content: "single-image-data" });
+
+            const compressor = vi.fn().mockResolvedValue({ code: "minified" });
+            const settings = {
+                compressor,
+                input: [testFile],
+                output: `${tmpDir}/output-single.png`,
+            } as any;
+
+            await compressSingleFile(settings);
+            expect(compressor).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    content: Buffer.from("single-image-data"),
                 })
             );
         });

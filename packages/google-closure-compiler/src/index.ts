@@ -1,6 +1,6 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2025 Rodolphe Stoclin
+ * Copyright (c) 2011-2026 Rodolphe Stoclin
  * MIT Licensed
  */
 
@@ -54,6 +54,8 @@ export async function gcc({
     const result = await runCommandLine({
         args: gccCommand(options),
         data: contentStr,
+        maxBuffer: settings?.buffer,
+        timeout: settings?.timeout,
     });
 
     if (typeof result !== "string") {

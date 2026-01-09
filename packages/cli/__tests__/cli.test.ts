@@ -1,12 +1,17 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2025 Rodolphe Stoclin
+ * Copyright (c) 2011-2026 Rodolphe Stoclin
  * MIT Licensed
  */
 
 import childProcess from "node:child_process";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
-import { filesCSS, filesJS, filesJSON } from "../../../tests/files-path.ts";
+import {
+    filesCSS,
+    filesImages,
+    filesJS,
+    filesJSON,
+} from "../../../tests/files-path.ts";
 import { compress } from "../src/compress.ts";
 import type { SettingsWithCompressor } from "../src/index.ts";
 import * as cli from "../src/index.ts";
@@ -48,6 +53,17 @@ describe("JavaScript compressors", () => {
             input: filesJS.oneFile,
             output: filesJS.fileJSOut,
             type: "js",
+            silence: true,
+        });
+        expect(spy).toHaveBeenCalled();
+    });
+
+    test("should minify multiple files when input is an array", async () => {
+        const spy = vi.spyOn(cli, "run");
+        await cli.run({
+            compressor: "terser",
+            input: filesJS.filesArray,
+            output: filesJS.fileJSOut,
             silence: true,
         });
         expect(spy).toHaveBeenCalled();
@@ -96,6 +112,54 @@ describe("JSON compressors", () => {
     });
 });
 
+describe("Image compressors", () => {
+    test("should compress with imagemin", async () => {
+        const spy = vi.spyOn(cli, "run");
+        await cli.run({
+            compressor: "imagemin",
+            input: filesImages.filePNG,
+            output: filesImages.filePNGOut,
+            silence: true,
+        });
+        expect(spy).toHaveBeenCalled();
+    });
+
+    test("should convert with sharp", async () => {
+        const spy = vi.spyOn(cli, "run");
+        await cli.run({
+            compressor: "sharp",
+            input: filesImages.filePNG,
+            output: filesImages.fileWebPOut,
+            silence: true,
+            option: '{"format": "webp", "quality": 80}',
+        });
+        expect(spy).toHaveBeenCalled();
+    });
+
+    test("should optimize with svgo", async () => {
+        const spy = vi.spyOn(cli, "run");
+        await cli.run({
+            compressor: "svgo",
+            input: filesImages.fileSVG,
+            output: filesImages.fileSVGOut,
+            silence: true,
+        });
+        expect(spy).toHaveBeenCalled();
+    });
+
+    test("should handle svgo with options", async () => {
+        const spy = vi.spyOn(cli, "run");
+        await cli.run({
+            compressor: "svgo",
+            input: filesImages.fileSVG,
+            output: filesImages.fileSVGOut,
+            silence: true,
+            option: '{"plugins": ["preset-default"]}',
+        });
+        expect(spy).toHaveBeenCalled();
+    });
+});
+
 describe("cli error", () => {
     beforeAll(() => {
         const spy = vi.spyOn(childProcess, "spawn");
@@ -132,27 +196,33 @@ describe("CLI Coverage", () => {
                 silence: true,
             };
             await expect(cli.run(settings)).rejects.toThrow(
-                "Compressor 'invalid-compressor' not found."
+                "Could not resolve compressor 'invalid-compressor'"
             );
         });
 
-        test("should throw if implementation is invalid", async () => {
-            vi.doMock("@node-minify/no-compress", () => ({
-                noCompress: "not-a-function",
-            }));
-            try {
-                const settings = {
-                    compressor: "no-compress" as any,
-                    input: "foo.js",
-                    output: "bar.js",
+        test("should handle null input gracefully (edge case)", async () => {
+            const spy = vi.spyOn(cli, "run");
+            await expect(
+                cli.run({
+                    compressor: "imagemin",
+                    input: null as any,
+                    output: filesImages.filePNGOut,
                     silence: true,
-                };
-                await expect(cli.run(settings)).rejects.toThrow(
-                    "Invalid compressor implementation for 'no-compress'."
-                );
-            } finally {
-                vi.doUnmock("@node-minify/no-compress");
-            }
+                })
+            ).rejects.toThrow();
+            expect(spy).toHaveBeenCalled();
+        });
+
+        test("should throw if implementation is invalid (non-existent package)", async () => {
+            const settings = {
+                compressor: "definitely-not-a-real-package-xyz" as any,
+                input: "foo.js",
+                output: "bar.js",
+                silence: true,
+            };
+            await expect(cli.run(settings)).rejects.toThrow(
+                "Could not resolve compressor"
+            );
         });
 
         test("should throw if cssOnly compressor receives non-css type", async () => {

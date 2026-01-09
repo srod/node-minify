@@ -1,6 +1,6 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2025 Rodolphe Stoclin
+ * Copyright (c) 2011-2026 Rodolphe Stoclin
  * MIT Licensed
  */
 
@@ -12,16 +12,16 @@ import type {
     Settings,
 } from "@node-minify/types";
 import { ValidationError } from "./error.ts";
-import { writeFile } from "./writeFile.ts";
+import { writeFileAsync } from "./writeFile.ts";
 
 /**
- * Run the configured compressor and persist its outputs according to the provided settings.
+ * Execute the configured compressor and persist its outputs according to the provided settings.
  *
- * @param settings - Compressor settings including output targets and the `compressor` implementation
+ * @param settings - Compressor settings including output targets, options, and the `compressor` implementation
  * @param content - The input content to be compressed
  * @param index - Optional index used when processing multiple inputs
  * @returns The minified code produced by the compressor
- * @throws {ValidationError} If `settings` is missing or `settings.compressor` is not provided
+ * @throws ValidationError If `settings` is missing, `settings.compressor` is not provided, or the compressor returns an invalid result
  */
 export async function run<T extends CompressorOptions = CompressorOptions>({
     settings,
@@ -42,9 +42,37 @@ export async function run<T extends CompressorOptions = CompressorOptions>({
         index,
     });
 
-    writeOutput(result, settings, index);
+    validateCompressorResult(result, settings);
+
+    await writeOutput(result, settings, index);
 
     return result.code;
+}
+
+/**
+ * Verify that a compressor result is an object containing a string `code` property and narrow its type to `CompressorResult`.
+ *
+ * @param result - The value returned by the compressor to validate.
+ * @param settings - Minifier settings (used to derive the compressor label for error messages).
+ * @throws ValidationError - If `result` is not an object with a string `code` property.
+ */
+function validateCompressorResult<
+    T extends CompressorOptions = CompressorOptions,
+>(result: unknown, settings: Settings<T>): asserts result is CompressorResult {
+    if (!result || typeof result !== "object") {
+        const label = settings.compressorLabel || "compressor";
+        throw new ValidationError(
+            `Compressor '${label}' returned invalid result. Expected an object with { code: string }.`
+        );
+    }
+
+    const obj = result as Record<string, unknown>;
+    if (!("code" in obj) || typeof obj.code !== "string") {
+        const label = settings.compressorLabel || "compressor";
+        throw new ValidationError(
+            `Compressor '${label}' must return { code: string }. Got: ${JSON.stringify(Object.keys(obj))}`
+        );
+    }
 }
 
 /**
@@ -56,11 +84,11 @@ export async function run<T extends CompressorOptions = CompressorOptions>({
  * @param settings - Settings that include output destination(s) and optional in-memory `content` which disables disk writes
  * @param index - Optional index used when writing to multiple targets or when tracking a particular input within a batch
  */
-function writeOutput<T extends CompressorOptions = CompressorOptions>(
+async function writeOutput<T extends CompressorOptions = CompressorOptions>(
     result: CompressorResult,
     settings: Settings<T>,
     index?: number
-): void {
+): Promise<void> {
     const isInMemoryMode = Boolean(settings.content);
     if (isInMemoryMode || !settings.output) {
         return;
@@ -68,25 +96,43 @@ function writeOutput<T extends CompressorOptions = CompressorOptions>(
 
     // Handle multi-output (for image conversion to multiple formats)
     if (result.outputs && result.outputs.length > 0) {
-        writeMultipleOutputs(result.outputs, settings, index);
+        await writeMultipleOutputs(result.outputs, settings, index);
         return;
     }
 
     // Handle single buffer output (for binary images)
     if (result.buffer) {
-        writeFile({ file: settings.output, content: result.buffer, index });
+        await writeFileAsync({
+            file: settings.output,
+            content: result.buffer,
+            index,
+        });
         return;
     }
 
     // Default: write code (string) output
-    writeFile({ file: settings.output, content: result.code, index });
+    const writePromises = [
+        writeFileAsync({
+            file: settings.output,
+            content: result.code,
+            index,
+        }),
+    ];
 
     if (result.map) {
         const sourceMapUrl = getSourceMapUrl(settings);
         if (sourceMapUrl) {
-            writeFile({ file: sourceMapUrl, content: result.map, index });
+            writePromises.push(
+                writeFileAsync({
+                    file: sourceMapUrl,
+                    content: result.map,
+                    index,
+                })
+            );
         }
     }
+
+    await Promise.all(writePromises);
 }
 
 /**
@@ -106,26 +152,21 @@ function getFirstInputFile(input: string | string[] | undefined): string {
 }
 
 /**
- * Write multiple output files produced by a compressor according to the settings' output configuration.
+ * Write compressor outputs to files resolved from the provided settings.
  *
- * This writes each provided output entry to a computed target path:
- * - If `settings.output` is an array, a non-empty array item (not "$1") at the same index is used verbatim as the target path.
- * - If `settings.output` is the string "$1", the target is generated from the first input filename and the output's `format` (or "out" if missing).
- * - If `settings.output` contains "$1", every "$1" is replaced with the input base name and the output's `format` is appended.
- * - If `settings.output` is a plain string, that string is used with the output's `format` appended.
- * - If no usable output pattern is provided, a default path is generated from the input filename and the output's `format`.
+ * Resolves a target path for each output entry based on settings.output and settings.input, then writes each entry's content to its resolved file location.
  *
- * Each output's `content` is written to its resolved path using `writeFile`. The first input (if any) is used to derive base names and directories for auto-generated targets.
- *
- * @param outputs - Array of compressor outputs (each may include `content` and optional `format`) to write.
- * @param settings - Settings used to resolve output targets (may supply `output` and `input`).
- * @param index - Optional index forwarded to the file writer when writing each output.
+ * @param outputs - Array of compressor output entries (each entry typically contains `content` and optional `format`) to be written.
+ * @param settings - Settings used to resolve target paths (may supply `output` pattern/array and `input` for deriving names).
+ * @param index - Optional numeric index forwarded to the file writer for each write operation.
  */
-function writeMultipleOutputs<T extends CompressorOptions = CompressorOptions>(
+async function writeMultipleOutputs<
+    T extends CompressorOptions = CompressorOptions,
+>(
     outputs: NonNullable<CompressorResult["outputs"]>,
     settings: Settings<T>,
     index?: number
-): void {
+): Promise<void> {
     const output = settings.output;
     const isArrayOutput = Array.isArray(output);
     const outputsArray = isArrayOutput ? output : [output];
@@ -133,12 +174,12 @@ function writeMultipleOutputs<T extends CompressorOptions = CompressorOptions>(
     const inputDir = parse(inputFile).dir;
     const inputBase = parse(inputFile).name;
 
-    for (let i = 0; i < outputs.length; i++) {
-        const outputResult = outputs[i];
+    const promises = outputs.map(async (outputResult, i) => {
         if (!outputResult) {
-            continue;
+            return;
         }
 
+        // Write outputs in parallel to improve performance
         const format = outputResult.format || "out";
         let targetFile: string;
 
@@ -174,8 +215,14 @@ function writeMultipleOutputs<T extends CompressorOptions = CompressorOptions>(
                 : `${baseName}.${format}`;
         }
 
-        writeFile({ file: targetFile, content: outputResult.content, index });
-    }
+        await writeFileAsync({
+            file: targetFile,
+            content: outputResult.content,
+            index,
+        });
+    });
+
+    await Promise.all(promises);
 }
 
 /**

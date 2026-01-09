@@ -1,6 +1,6 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2025 Rodolphe Stoclin
+ * Copyright (c) 2011-2026 Rodolphe Stoclin
  * MIT Licensed
  */
 
@@ -47,6 +47,8 @@ export async function yui({
     const result = await runCommandLine({
         args: yuiCommand(settings.type, settings?.options ?? {}),
         data: contentStr,
+        maxBuffer: settings?.buffer,
+        timeout: settings?.timeout,
     });
 
     if (typeof result !== "string") {

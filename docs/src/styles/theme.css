@@ -116,6 +116,42 @@ body {
     );
 }
 
+/* Copy Code Button */
+.copy-code-button {
+    position: sticky;
+    float: right;
+    top: 0.5rem;
+    right: 0.5rem;
+    margin-top: -0.5rem; /* Offset for sticky/float behavior */
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    opacity: 0;
+    transition:
+        opacity 0.2s,
+        background-color 0.2s;
+    background-color: var(--theme-bg);
+    border: 1px solid var(--theme-divider);
+    cursor: pointer;
+    z-index: 10;
+    color: var(--theme-text);
+}
+
+pre:hover .copy-code-button,
+.copy-code-button:focus {
+    opacity: 1;
+}
+
+.copy-code-button:hover {
+    background-color: var(--theme-bg-hover);
+}
+
+.copy-code-button.copied {
+    background-color: var(--theme-bg-accent);
+    color: var(--theme-text-accent);
+    border-color: transparent;
+}
+
 ::selection {
     color: var(--theme-selection-color);
     background-color: var(--theme-selection-bg);

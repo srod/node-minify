@@ -9,8 +9,10 @@ export const SIDEBAR: Sidebar = {
     "": [
         { text: "Introduction", link: "introduction" },
         { text: "Getting Started", link: "getting-started" },
+        { text: "Custom Compressors", link: "custom-compressors" },
         { text: "Options", link: "options" },
         { text: "CLI", link: "cli" },
+        { text: "Benchmark", link: "benchmark" },
     ],
     Compressors: [
         { text: "babel-minify", link: "compressors/babel-minify" },

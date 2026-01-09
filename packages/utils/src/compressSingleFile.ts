@@ -1,43 +1,18 @@
 /*!
  * node-minify
- * Copyright(c) 2011-2025 Rodolphe Stoclin
+ * Copyright (c) 2011-2026 Rodolphe Stoclin
  * MIT Licensed
  */
 
-import { readFile } from "node:fs/promises";
 import type {
     CompressorOptions,
     MinifierOptions,
     Settings,
 } from "@node-minify/types";
 import { getContentFromFilesAsync } from "./getContentFromFiles.ts";
+import { isImageFile } from "./isImageFile.ts";
+import { readFileAsync } from "./readFile.ts";
 import { run } from "./run.ts";
-
-const IMAGE_EXTENSIONS = new Set([
-    ".png",
-    ".jpg",
-    ".jpeg",
-    ".gif",
-    ".webp",
-    ".avif",
-    ".tiff",
-    ".tif",
-    ".heif",
-    ".heic",
-]);
-
-/**
- * Determines whether a file path refers to a supported image file by its extension.
- *
- * @param filePath - The file name or path to check; may include directories.
- * @returns `true` if the path ends with a recognized image extension, `false` otherwise.
- */
-function isImageFile(filePath: string): boolean {
-    const lastDot = filePath.lastIndexOf(".");
-    if (lastDot === -1) return false;
-    const ext = filePath.slice(lastDot).toLowerCase();
-    return IMAGE_EXTENSIONS.has(ext);
-}
 
 /**
  * Compress a single file using the provided settings.
@@ -76,15 +51,19 @@ async function determineContent<
                     "Cannot mix image and text files in the same input array"
                 );
             }
+            const firstInput = settings.input[0];
+            if (settings.input.length === 1 && firstInput) {
+                return await readFileAsync(firstInput, true);
+            }
             return await Promise.all(
-                settings.input.map((file) => readFile(file))
+                settings.input.map((file) => readFileAsync(file, true))
             );
         }
     }
 
     if (settings.input && typeof settings.input === "string") {
         if (isImageFile(settings.input)) {
-            return await readFile(settings.input);
+            return await readFileAsync(settings.input, true);
         }
     }
 

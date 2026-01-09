@@ -47,6 +47,7 @@ This is a Bun monorepo for compressing JavaScript, CSS, and HTML files using var
 - `run` - Command execution wrapper for external tools
 - `types` - TypeScript type definitions (not compiled)
 - `cli` - Command-line interface
+- `benchmark` - Benchmark tool to compare compressor performance
 
 **Compressor packages** - Each wraps a specific minification library:
 - JS: `esbuild`, `google-closure-compiler`, `oxc`, `swc`, `terser`, `uglify-js`
@@ -137,6 +138,21 @@ const size = await getFilesizeInBytes("dist/app.min.js");
 import { warnDeprecation } from "@node-minify/utils";
 
 warnDeprecation("@node-minify/old-package", "Use @node-minify/new-package instead");
+```
+
+### Dynamic Compressor Resolution
+```ts
+import { resolveCompressor, isBuiltInCompressor } from "@node-minify/utils";
+
+// Resolve a compressor by name (built-in, npm package, or local file)
+const { compressor, label, isBuiltIn } = await resolveCompressor("terser");
+const { compressor: custom } = await resolveCompressor("./my-compressor.js");
+const { compressor: pkg } = await resolveCompressor("my-custom-package");
+
+// Check if a name is a built-in compressor
+if (isBuiltInCompressor("terser")) {
+    // ...
+}
 ```
 
 ### Async / Parallel Patterns
