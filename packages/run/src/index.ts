@@ -72,21 +72,20 @@ export async function run({
             }, timeout);
         }
 
-        const handleError = (source: string) => (error: Error) => {
-            console.error(`Error in ${source}:`, error);
-        };
-
         child.on("error", (error) => {
             if (settled) return;
             settled = true;
             if (timeoutId) clearTimeout(timeoutId);
-            handleError("child")(error);
             reject(new Error(`Process error: ${error.message}`));
         });
 
-        child.stdin?.on("error", handleError("child.stdin"));
-        child.stdout?.on("error", handleError("child.stdout"));
-        child.stderr?.on("error", handleError("child.stderr"));
+        // Silence explicit error logging to prevent information leakage.
+        // We attach empty error handlers to streams to prevent them from throwing
+        // unhandled 'error' events, which would crash the process.
+        const noop = () => {};
+        child.stdin?.on("error", noop);
+        child.stdout?.on("error", noop);
+        child.stderr?.on("error", noop);
 
         child.on("exit", (code: number | null) => {
             if (settled) return;
