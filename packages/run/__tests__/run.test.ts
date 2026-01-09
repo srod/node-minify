@@ -168,18 +168,8 @@ describe("Package: run", () => {
 
             const result = await promise;
             expect(result).toBe("output");
-            expect(consoleSpy).toHaveBeenCalledWith(
-                "Error in child.stdin:",
-                expect.any(Error)
-            );
-            expect(consoleSpy).toHaveBeenCalledWith(
-                "Error in child.stdout:",
-                expect.any(Error)
-            );
-            expect(consoleSpy).toHaveBeenCalledWith(
-                "Error in child.stderr:",
-                expect.any(Error)
-            );
+            // Errors should not be logged to console.error anymore
+            expect(consoleSpy).not.toHaveBeenCalled();
 
             consoleSpy.mockRestore();
         });
