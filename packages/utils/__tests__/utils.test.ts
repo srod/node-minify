@@ -25,6 +25,7 @@ import {
     getContentFromFiles,
     getFilesizeBrotliInBytes,
     getFilesizeGzippedInBytes,
+    getFilesizeGzippedRaw,
     getFilesizeInBytes,
     isValidFile,
     prettyBytes,
@@ -511,6 +512,18 @@ describe("Package: utils", () => {
         test("should throw if path is a directory", async () => {
             const dirPath = __dirname || ".";
             await expect(getFilesizeGzippedInBytes(dirPath)).rejects.toThrow();
+        });
+    });
+
+    describe("getFilesizeGzippedRaw", () => {
+        test("should return file size in bytes", async () => {
+            const size = await getFilesizeGzippedRaw(fixtureFile);
+            expect(typeof size).toBe("number");
+            expect(size).toBeGreaterThan(0);
+        });
+
+        test("should throw if file does not exist", async () => {
+            await expect(getFilesizeGzippedRaw("fake.js")).rejects.toThrow();
         });
     });
 
