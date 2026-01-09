@@ -69,8 +69,8 @@ jobs:
           npm init -y
           npm install @node-minify/terser @node-minify/esbuild
           
-          # Copy all installed packages (including dependencies) to root node_modules
-          # This ensures that both @node-minify/* wrappers AND their dependencies (terser, esbuild) are available
+          # Create node_modules and copy packages
+          mkdir -p $GITHUB_WORKSPACE/node_modules
           cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/node_modules/
 
       - name: Create test file
@@ -172,7 +172,8 @@ jobs:
           npm init -y
           npm install @node-minify/lightningcss
           
-          # Copy all installed packages to root node_modules
+          # Create node_modules and copy packages
+          mkdir -p $GITHUB_WORKSPACE/node_modules
           cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/node_modules/
 
       - name: Create test CSS file
