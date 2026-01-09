@@ -12,6 +12,7 @@ export const SIDEBAR: Sidebar = {
         { text: "Custom Compressors", link: "custom-compressors" },
         { text: "Options", link: "options" },
         { text: "CLI", link: "cli" },
+        { text: "GitHub Action", link: "github-action" },
         { text: "Benchmark", link: "benchmark" },
     ],
     Compressors: [

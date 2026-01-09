@@ -1,8 +1,48 @@
-# node-minify GitHub Action
+# node-minify GitHub Action (DEPRECATED)
 
-Minify JavaScript, CSS, and HTML files in your CI/CD pipeline with detailed reporting.
+> **This action is deprecated.** Please use the new bundled action instead:
+>
+> ```yaml
+> - uses: srod/node-minify@main
+> ```
 
-## Usage
+The new action includes:
+- Bundled dependencies (faster startup)
+- PR comment reporting
+- File annotations
+- Benchmark comparison
+- Threshold enforcement
+- More compressor options
+
+## Migration
+
+Replace:
+
+```yaml
+- uses: srod/node-minify/.github/actions/node-minify@main
+  with:
+    input: "src/app.js"
+    output: "dist/app.min.js"
+    compressor: "terser"
+```
+
+With:
+
+```yaml
+- uses: srod/node-minify@main
+  with:
+    input: "src/app.js"
+    output: "dist/app.min.js"
+    compressor: "terser"
+```
+
+See [packages/action/README.md](../../../packages/action/README.md) for full documentation.
+
+---
+
+## Legacy Documentation
+
+The following documentation is for the deprecated composite action.
 
 ### Basic Example
 
@@ -15,27 +55,7 @@ Minify JavaScript, CSS, and HTML files in your CI/CD pipeline with detailed repo
     compressor: "terser"
 ```
 
-### With All Options
-
-```yaml
-- name: Minify with full options
-  id: minify
-  uses: srod/node-minify/.github/actions/node-minify@main
-  with:
-    input: "src/app.js"
-    output: "dist/app.min.js"
-    compressor: "esbuild"
-    type: "js"
-    options: '{"minify": true}'
-    report-summary: "true"
-    include-gzip: "true"
-
-- name: Show results
-  run: |
-    echo "Reduction: ${{ steps.minify.outputs.reduction-percent }}%"
-```
-
-## Inputs
+### Inputs
 
 | Input | Description | Required | Default |
 |-------|-------------|----------|---------|
@@ -48,30 +68,7 @@ Minify JavaScript, CSS, and HTML files in your CI/CD pipeline with detailed repo
 | `include-gzip` | Include gzip sizes | No | `true` |
 | `java-version` | Java version for gcc/yui | No | - |
 
-### Available Compressors
-
-**JavaScript (no Java required):**
-- `terser` (recommended)
-- `esbuild` (fastest)
-- `swc`
-- `oxc`
-- `uglify-js`
-
-**CSS (no Java required):**
-- `lightningcss` (recommended)
-- `clean-css`
-- `cssnano`
-- `csso`
-- `esbuild`
-
-**HTML:**
-- `html-minifier`
-
-**Requires Java:**
-- `gcc` (Google Closure Compiler)
-- `yui` (deprecated)
-
-## Outputs
+### Outputs
 
 | Output | Description |
 |--------|-------------|
@@ -83,49 +80,6 @@ Minify JavaScript, CSS, and HTML files in your CI/CD pipeline with detailed repo
 | `gzip-size` | Gzipped size in bytes |
 | `gzip-size-formatted` | Gzipped size formatted |
 | `time-ms` | Compression time in milliseconds |
-
-## Examples
-
-### CSS Minification
-
-```yaml
-- name: Minify CSS
-  uses: srod/node-minify/.github/actions/node-minify@main
-  with:
-    input: "src/styles.css"
-    output: "dist/styles.min.css"
-    compressor: "lightningcss"
-    type: "css"
-```
-
-### Using Google Closure Compiler
-
-```yaml
-- name: Setup Java
-  uses: actions/setup-java@v4
-  with:
-    distribution: "temurin"
-    java-version: "17"
-
-- name: Minify with GCC
-  uses: srod/node-minify/.github/actions/node-minify@main
-  with:
-    input: "src/app.js"
-    output: "dist/app.min.js"
-    compressor: "gcc"
-    options: '{"compilation_level": "ADVANCED_OPTIMIZATIONS"}'
-```
-
-### HTML Minification
-
-```yaml
-- name: Minify HTML
-  uses: srod/node-minify/.github/actions/node-minify@main
-  with:
-    input: "src/index.html"
-    output: "dist/index.html"
-    compressor: "html-minifier"
-```
 
 ## License
 
