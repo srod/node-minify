@@ -68,7 +68,8 @@ jobs:
           mkdir -p /tmp/compressors && cd /tmp/compressors
           npm init -y
           npm install @node-minify/terser @node-minify/esbuild
-          echo "NODE_PATH=/tmp/compressors/node_modules" >> $GITHUB_ENV
+          # Copy packages to repo node_modules so action can find them
+          cp -r /tmp/compressors/node_modules/@node-minify $GITHUB_WORKSPACE/node_modules/
 
       - name: Create test file
         run: |
@@ -168,7 +169,8 @@ jobs:
           mkdir -p /tmp/compressors && cd /tmp/compressors
           npm init -y
           npm install @node-minify/lightningcss
-          echo "NODE_PATH=/tmp/compressors/node_modules" >> $GITHUB_ENV
+          # Copy packages to repo node_modules so action can find them
+          cp -r /tmp/compressors/node_modules/@node-minify $GITHUB_WORKSPACE/node_modules/
 
       - name: Create test CSS file
         run: |
