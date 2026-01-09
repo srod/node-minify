@@ -8,6 +8,14 @@ import { summary } from "@actions/core";
 import { prettyBytes } from "@node-minify/utils";
 import type { BenchmarkResult, MinifyResult } from "../types.ts";
 
+/**
+ * Generate a GitHub Actions summary reporting per-file minification metrics and totals.
+ *
+ * Builds a Markdown table with columns File, Original, Minified, Reduction, Gzip, and Time,
+ * includes the compressor name, and appends a total line showing aggregated original/minified sizes and overall reduction.
+ *
+ * @param result - Minification results containing per-file metrics and aggregate totals used to populate the summary
+ */
 export async function generateSummary(result: MinifyResult): Promise<void> {
     const rows = result.files.map((f) => [
         { data: `\`${f.file}\`` },
@@ -40,6 +48,13 @@ export async function generateSummary(result: MinifyResult): Promise<void> {
         .write();
 }
 
+/**
+ * Generate a Markdown benchmark summary comparing compressors and write it to the GitHub Actions summary.
+ *
+ * Builds a table of compressors showing status, size, reduction, gzip size, and time; marks recommended, best-speed, and best-compression entries with badges; and includes the source file and recommended compressor in the summary.
+ *
+ * @param result - BenchmarkResult containing the file path, originalSize, a list of compressors with their metrics or errors, and optional recommended/best markers used to annotate the table
+ */
 export async function generateBenchmarkSummary(
     result: BenchmarkResult
 ): Promise<void> {

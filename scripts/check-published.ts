@@ -4,6 +4,11 @@ import { join } from "node:path";
 
 const PACKAGES_DIR = "packages";
 
+/**
+ * Lists package subdirectories under PACKAGES_DIR that contain a package.json file.
+ *
+ * @returns An array of directory names for packages that have a package.json in their folder
+ */
 function getPackageDirs() {
     return readdirSync(PACKAGES_DIR, { withFileTypes: true })
         .filter((entry) => entry.isDirectory())
@@ -13,6 +18,13 @@ function getPackageDirs() {
         .map((entry) => entry.name);
 }
 
+/**
+ * Checks whether an npm package exists on the registry and whether a specific version is published.
+ *
+ * @param packageName - The npm package name to check (e.g., "lodash")
+ * @param version - The package version to check for publication (e.g., "1.2.3")
+ * @returns An object with `exists`: `true` if the package is found on the npm registry, `false` otherwise; and `publishedVersion`: `true` if the specified `version` is published, `false` otherwise.
+ */
 async function checkPublished(packageName: string, version: string) {
     try {
         const latest = execSync(`npm view ${packageName} version --json`, {
@@ -38,6 +50,15 @@ async function checkPublished(packageName: string, version: string) {
     }
 }
 
+/**
+ * Checks all non-private packages under the packages directory and reports their publication status on npm.
+ *
+ * Scans each package's package.json, queries npm to determine whether the package exists and whether the current
+ * package version is published, and prints categorized results to the console:
+ * - packages not found on npm (new packages)
+ * - packages with unpublished versions (updates needed)
+ * - or a confirmation that all packages are up to date
+ */
 async function main() {
     const dirs = getPackageDirs();
     const results = [];

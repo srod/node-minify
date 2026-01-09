@@ -11,6 +11,12 @@ import type { MinifyResult } from "../types.ts";
 
 const COMMENT_TAG = "<!-- node-minify-report -->";
 
+/**
+ * Posts or updates a pull request comment with a minification report.
+ *
+ * @param result - Minification results containing per-file metrics, totals, compressor name, and execution time
+ * @param githubToken - GitHub API token used to authenticate requests; when `undefined`, the function skips posting
+ */
 export async function postPRComment(
     result: MinifyResult,
     githubToken: string | undefined
@@ -58,6 +64,12 @@ export async function postPRComment(
     }
 }
 
+/**
+ * Builds the Markdown body for the node-minify PR comment, including a per-file table, totals, and a configuration section.
+ *
+ * @param result - Minification results used to populate the report (expects `files`, `totalOriginalSize`, `totalMinifiedSize`, `totalReduction`, `compressor`, and `totalTimeMs`)
+ * @returns The Markdown string for the PR comment, beginning with `COMMENT_TAG` and containing the file table, total summary, and configuration details
+ */
 function generateCommentBody(result: MinifyResult): string {
     const filesTable = result.files
         .map(

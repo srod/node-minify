@@ -14,6 +14,13 @@ import { addAnnotations } from "./reporters/annotations.ts";
 import { postPRComment } from "./reporters/comment.ts";
 import { generateSummary } from "./reporters/summary.ts";
 
+/**
+ * Orchestrates the minification workflow for the GitHub Action.
+ *
+ * Parses and validates inputs, runs the minification, and persists outputs.
+ * Optionally generates a summary, posts a pull-request comment when running in a PR, and adds annotations based on inputs.
+ * If configured thresholds are violated or an error is thrown, signals action failure with an explanatory message.
+ */
 async function run(): Promise<void> {
     try {
         const inputs = parseInputs();

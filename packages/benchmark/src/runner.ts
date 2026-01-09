@@ -53,6 +53,13 @@ export async function runBenchmark(
     };
 }
 
+/**
+ * Benchmarks a single input file using the configured compressors and returns per-compressor metrics.
+ *
+ * @param file - Path to the input file to benchmark
+ * @param options - Benchmark configuration (compressors to run, iterations, callbacks, and metric options)
+ * @returns A FileResult containing the file path, original size in bytes and human-readable form, and an array of CompressorMetrics for each attempted compressor
+ */
 async function benchmarkFile(
     file: string,
     options: BenchmarkOptions
