@@ -4,8 +4,8 @@
  * MIT Licensed
  */
 
-import { lstatSync, writeFileSync } from "node:fs";
-import { lstat, writeFile as writeFileFs } from "node:fs/promises";
+import { writeFileSync } from "node:fs";
+import { writeFile as writeFileFs } from "node:fs/promises";
 import { FileOperationError, ValidationError } from "./error.ts";
 
 interface WriteFileParams {
@@ -34,10 +34,6 @@ export function writeFile({
     try {
         const targetFile = resolveTargetFile(file, index);
         validateContent(content);
-
-        if (isDirectory(targetFile)) {
-            throw new Error("Target path exists and is a directory");
-        }
 
         writeFileSync(
             targetFile,
@@ -72,10 +68,6 @@ export async function writeFileAsync({
     try {
         const targetFile = resolveTargetFile(file, index);
         validateContent(content);
-
-        if (await isDirectoryAsync(targetFile)) {
-            throw new Error("Target path exists and is a directory");
-        }
 
         await writeFileFs(
             targetFile,
@@ -125,34 +117,6 @@ function validateContent(content: string | Buffer): void {
 }
 
 /**
- * Checks whether the given filesystem path refers to a directory.
- *
- * @returns `true` if the path exists and is a directory, `false` otherwise.
- */
-function isDirectory(path: string): boolean {
-    try {
-        return lstatSync(path).isDirectory();
-    } catch {
-        return false;
-    }
-}
-
-/**
- * Determine whether a filesystem path refers to a directory.
- *
- * @param path - The filesystem path to check
- * @returns `true` if the path exists and is a directory, `false` otherwise
- */
-async function isDirectoryAsync(path: string): Promise<boolean> {
-    try {
-        const stats = await lstat(path);
-        return stats.isDirectory();
-    } catch {
-        return false;
-    }
-}
-
-/**
  * Normalize and rethrow errors that occur while attempting to write to one or more files.
  *
  * @param error - The original error thrown during the write attempt
@@ -164,6 +128,11 @@ function handleWriteError(error: unknown, file: string | string[]): never {
     if (error instanceof ValidationError) {
         throw error;
     }
+    // Handle EISDIR to preserve specific error message for directories
+    if ((error as any)?.code === "EISDIR") {
+        throw new Error("Target path exists and is a directory");
+    }
+
     throw new FileOperationError(
         "write to",
         typeof file === "string" ? file : "multiple files",
