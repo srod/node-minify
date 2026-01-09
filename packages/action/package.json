@@ -52,6 +52,7 @@
     "dependencies": {
         "@actions/core": "^1.11.1",
         "@actions/github": "^6.0.0",
+        "@node-minify/benchmark": "workspace:*",
         "@node-minify/core": "workspace:*",
         "@node-minify/utils": "workspace:*"
     },
