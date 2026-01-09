@@ -21,7 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.tag || github.ref }}
+          ref: ${{ github.event.inputs.tag || (github.event.release.tag_name || github.ref) }}
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -51,8 +51,23 @@ jobs:
           else
             VERSION="$REF_NAME"
           fi
+          
+          # Validate that VERSION looks like a tag (starts with v followed by numbers)
+          if ! [[ "$VERSION" =~ ^v[0-9]+(\.[0-9]+)*$ ]]; then
+            echo "Error: Version '$VERSION' is not a valid release tag (must start with 'v' e.g. v1.0.0)"
+            exit 1
+          fi
+          
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "major=$(echo $VERSION | cut -d. -f1)" >> $GITHUB_OUTPUT
+          
+          # Extract major version using regex
+          if [[ "$VERSION" =~ ^v([0-9]+) ]]; then
+            MAJOR="v${BASH_REMATCH[1]}"
+            echo "major=$MAJOR" >> $GITHUB_OUTPUT
+          else
+            echo "Error: Could not extract major version from '$VERSION'"
+            exit 1
+          fi
 
       - name: Update major version tag
         run: |
