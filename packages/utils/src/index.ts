@@ -13,7 +13,10 @@ import {
     getContentFromFilesAsync,
 } from "./getContentFromFiles.ts";
 import { getFilesizeBrotliInBytes } from "./getFilesizeBrotliInBytes.ts";
-import { getFilesizeGzippedInBytes } from "./getFilesizeGzippedInBytes.ts";
+import {
+    getFilesizeGzippedInBytes,
+    getFilesizeGzippedRaw,
+} from "./getFilesizeGzippedInBytes.ts";
 import { getFilesizeInBytes } from "./getFilesizeInBytes.ts";
 import { isImageFile } from "./isImageFile.ts";
 import { isValidFile, isValidFileAsync } from "./isValidFile.ts";
@@ -35,6 +38,7 @@ export {
     getContentFromFilesAsync,
     getFilesizeBrotliInBytes,
     getFilesizeGzippedInBytes,
+    getFilesizeGzippedRaw,
     getFilesizeInBytes,
     getKnownExportName,
     isBuiltInCompressor,

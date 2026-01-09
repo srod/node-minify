@@ -62,7 +62,12 @@ async function benchmarkFile(
     const originalSize = prettyBytes(originalSizeBytes);
     const results: CompressorMetrics[] = [];
 
-    const compressors = options.compressors || ["terser", "esbuild", "swc"];
+    const compressors = options.compressors || [
+        "terser",
+        "esbuild",
+        "swc",
+        "oxc",
+    ];
 
     for (const name of compressors) {
         if (options.onProgress) {

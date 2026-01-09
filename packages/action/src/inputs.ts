@@ -1,0 +1,83 @@
+/*!
+ * node-minify
+ * Copyright (c) 2011-2026 Rodolphe Stoclin
+ * MIT Licensed
+ */
+
+import { getBooleanInput, getInput, warning } from "@actions/core";
+import { isBuiltInCompressor } from "@node-minify/utils";
+import type { ActionInputs } from "./types.ts";
+
+const TYPE_REQUIRED_COMPRESSORS = ["esbuild", "lightningcss", "yui"];
+const JAVA_COMPRESSORS = ["gcc", "google-closure-compiler", "yui"];
+
+const DEPRECATED_COMPRESSORS: Record<string, string> = {
+    "babel-minify":
+        "babel-minify only supports Babel 6 and is no longer maintained. Use 'terser' instead.",
+    "uglify-es": "uglify-es is no longer maintained. Use 'terser' instead.",
+    yui: "YUI Compressor was deprecated by Yahoo in 2013. Use 'terser' for JS or 'lightningcss' for CSS.",
+    crass: "crass is no longer maintained. Use 'lightningcss' or 'clean-css' instead.",
+    sqwish: "sqwish is no longer maintained. Use 'lightningcss' or 'clean-css' instead.",
+};
+
+export function parseInputs(): ActionInputs {
+    const compressor = getInput("compressor") || "terser";
+    const type = getInput("type") as "js" | "css" | undefined;
+
+    if (TYPE_REQUIRED_COMPRESSORS.includes(compressor) && !type) {
+        throw new Error(
+            `Compressor '${compressor}' requires the 'type' input (js or css)`
+        );
+    }
+
+    let options: Record<string, unknown> = {};
+    const optionsJson = getInput("options");
+    if (optionsJson) {
+        try {
+            options = JSON.parse(optionsJson);
+        } catch {
+            throw new Error(`Invalid JSON in 'options' input: ${optionsJson}`);
+        }
+    }
+
+    const benchmarkCompressorsInput = getInput("benchmark-compressors");
+    const benchmarkCompressors = benchmarkCompressorsInput
+        ? benchmarkCompressorsInput.split(",").map((c: string) => c.trim())
+        : ["terser", "esbuild", "swc", "oxc"];
+
+    return {
+        input: getInput("input", { required: true }),
+        output: getInput("output", { required: true }),
+        compressor,
+        type: type || undefined,
+        options,
+        reportSummary: getBooleanInput("report-summary"),
+        reportPRComment: getBooleanInput("report-pr-comment"),
+        reportAnnotations: getBooleanInput("report-annotations"),
+        benchmark: getBooleanInput("benchmark"),
+        benchmarkCompressors,
+        failOnIncrease: getBooleanInput("fail-on-increase"),
+        minReduction: Number.parseFloat(getInput("min-reduction")) || 0,
+        includeGzip: getBooleanInput("include-gzip"),
+        workingDirectory: getInput("working-directory") || ".",
+        githubToken: getInput("github-token") || process.env.GITHUB_TOKEN,
+    };
+}
+
+export function validateCompressor(compressor: string): void {
+    const deprecationMessage = DEPRECATED_COMPRESSORS[compressor];
+    if (deprecationMessage) {
+        warning(`⚠️ Deprecated: ${deprecationMessage}`);
+    }
+
+    if (!isBuiltInCompressor(compressor)) {
+        warning(
+            `Compressor '${compressor}' is not a built-in compressor. ` +
+                `Treating as custom npm package or local file.`
+        );
+    }
+}
+
+export const validateJavaCompressor = validateCompressor;
+
+export { DEPRECATED_COMPRESSORS, JAVA_COMPRESSORS, TYPE_REQUIRED_COMPRESSORS };
