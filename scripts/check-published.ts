@@ -79,6 +79,11 @@ async function main() {
 }
 
 main().catch((err) => {
-    console.error("Error checking packages:", err);
+    if (err instanceof Error) {
+        console.error("Error checking packages:", err.message);
+        console.error(err.stack);
+    } else {
+        console.error("An unknown error occurred:", String(err));
+    }
     process.exit(1);
 });

@@ -522,8 +522,16 @@ describe("Package: utils", () => {
             expect(size).toBeGreaterThan(0);
         });
 
-        test("should throw if file does not exist", async () => {
-            await expect(getFilesizeGzippedRaw("fake.js")).rejects.toThrow();
+        test("should throw FileOperationError if file does not exist", async () => {
+            await expect(getFilesizeGzippedRaw("fake.js")).rejects.toThrow(
+                FileOperationError
+            );
+        });
+
+        test("should throw FileOperationError if path is a directory", async () => {
+            await expect(getFilesizeGzippedRaw(__dirname)).rejects.toThrow(
+                FileOperationError
+            );
         });
     });
 
