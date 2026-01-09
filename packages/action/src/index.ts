@@ -6,13 +6,17 @@
 
 import { info, setFailed } from "@actions/core";
 import { context } from "@actions/github";
+import { runBenchmark } from "./benchmark.ts";
 import { checkThresholds } from "./checks.ts";
 import { parseInputs, validateJavaCompressor } from "./inputs.ts";
 import { runMinification } from "./minify.ts";
-import { setMinifyOutputs } from "./outputs.ts";
+import { setBenchmarkOutputs, setMinifyOutputs } from "./outputs.ts";
 import { addAnnotations } from "./reporters/annotations.ts";
 import { postPRComment } from "./reporters/comment.ts";
-import { generateSummary } from "./reporters/summary.ts";
+import {
+    generateBenchmarkSummary,
+    generateSummary,
+} from "./reporters/summary.ts";
 
 /**
  * Orchestrates the minification workflow for the GitHub Action.
@@ -43,6 +47,22 @@ async function run(): Promise<void> {
 
         if (inputs.reportAnnotations) {
             addAnnotations(result);
+        }
+
+        if (inputs.benchmark) {
+            info(
+                `Running benchmark with compressors: ${inputs.benchmarkCompressors.join(", ")}...`
+            );
+            const benchmarkResult = await runBenchmark(inputs);
+            setBenchmarkOutputs(benchmarkResult);
+
+            if (inputs.reportSummary) {
+                await generateBenchmarkSummary(benchmarkResult);
+            }
+
+            if (benchmarkResult.recommended) {
+                info(`🏆 Benchmark winner: ${benchmarkResult.recommended}`);
+            }
         }
 
         const thresholdError = checkThresholds(result.totalReduction, inputs);
