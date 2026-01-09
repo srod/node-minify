@@ -12,7 +12,13 @@ const VERY_LOW_REDUCTION_THRESHOLD = 5;
 
 export function addAnnotations(result: MinifyResult): void {
     for (const file of result.files) {
-        if (file.reduction < VERY_LOW_REDUCTION_THRESHOLD) {
+        if (file.reduction < 0) {
+            error(
+                `Minified file is larger than original (${Math.abs(file.reduction).toFixed(1)}% increase). ` +
+                    `This may indicate an issue with the compressor settings.`,
+                { file: file.file }
+            );
+        } else if (file.reduction < VERY_LOW_REDUCTION_THRESHOLD) {
             warning(
                 `Very low compression ratio (${file.reduction.toFixed(1)}%). ` +
                     `Consider reviewing for dead code or checking if file is already minified.`,
@@ -22,14 +28,6 @@ export function addAnnotations(result: MinifyResult): void {
             notice(
                 `Low compression ratio (${file.reduction.toFixed(1)}%). ` +
                     `File may already be optimized.`,
-                { file: file.file }
-            );
-        }
-
-        if (file.reduction < 0) {
-            error(
-                `Minified file is larger than original (${file.reduction.toFixed(1)}% increase). ` +
-                    `This may indicate an issue with the compressor settings.`,
                 { file: file.file }
             );
         }
