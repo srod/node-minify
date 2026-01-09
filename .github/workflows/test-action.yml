@@ -68,16 +68,28 @@ jobs:
           mkdir -p /tmp/compressors && cd /tmp/compressors
           npm init -y
           npm install @node-minify/terser @node-minify/esbuild
-          # Copy packages to multiple locations where Node might look
+          
+          # Prepare destination directories
           mkdir -p $GITHUB_WORKSPACE/node_modules/@node-minify
           mkdir -p $GITHUB_WORKSPACE/packages/action/node_modules/@node-minify
-          cp -r /tmp/compressors/node_modules/@node-minify/* $GITHUB_WORKSPACE/node_modules/@node-minify/
-          cp -r /tmp/compressors/node_modules/@node-minify/* $GITHUB_WORKSPACE/packages/action/node_modules/@node-minify/
-          # Also copy terser and esbuild themselves
-          cp -r /tmp/compressors/node_modules/terser $GITHUB_WORKSPACE/node_modules/ || true
-          cp -r /tmp/compressors/node_modules/esbuild $GITHUB_WORKSPACE/node_modules/ || true
-          cp -r /tmp/compressors/node_modules/terser $GITHUB_WORKSPACE/packages/action/node_modules/ || true
-          cp -r /tmp/compressors/node_modules/esbuild $GITHUB_WORKSPACE/packages/action/node_modules/ || true
+          mkdir -p $GITHUB_WORKSPACE/packages/action/dist/node_modules/@node-minify
+          
+          # Copy EVERYTHING from temp node_modules to all possible locations
+          echo "Copying to root node_modules..."
+          cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/node_modules/
+          
+          echo "Copying to packages/action/node_modules..."
+          cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/packages/action/node_modules/
+          
+          echo "Copying to packages/action/dist/node_modules..."
+          cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/packages/action/dist/node_modules/
+          
+          # Debug
+          echo "Checking @node-minify/terser existence:"
+          find $GITHUB_WORKSPACE -name terser -type d | grep node_modules
+          
+          echo "Checking package.json of installed terser:"
+          cat $GITHUB_WORKSPACE/node_modules/@node-minify/terser/package.json || echo "Not found in root"
 
       - name: Create test file
         run: |
@@ -177,14 +189,16 @@ jobs:
           mkdir -p /tmp/compressors && cd /tmp/compressors
           npm init -y
           npm install @node-minify/lightningcss
-          # Copy packages to multiple locations where Node might look
+          
+          # Prepare destination directories
           mkdir -p $GITHUB_WORKSPACE/node_modules/@node-minify
           mkdir -p $GITHUB_WORKSPACE/packages/action/node_modules/@node-minify
-          cp -r /tmp/compressors/node_modules/@node-minify/* $GITHUB_WORKSPACE/node_modules/@node-minify/
-          cp -r /tmp/compressors/node_modules/@node-minify/* $GITHUB_WORKSPACE/packages/action/node_modules/@node-minify/
-          # Also copy lightningcss itself (direct dep)
-          cp -r /tmp/compressors/node_modules/lightningcss $GITHUB_WORKSPACE/node_modules/ || true
-          cp -r /tmp/compressors/node_modules/lightningcss $GITHUB_WORKSPACE/packages/action/node_modules/ || true
+          mkdir -p $GITHUB_WORKSPACE/packages/action/dist/node_modules/@node-minify
+          
+          # Copy EVERYTHING
+          cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/node_modules/
+          cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/packages/action/node_modules/
+          cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/packages/action/dist/node_modules/
 
       - name: Create test CSS file
         run: |
