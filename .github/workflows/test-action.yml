@@ -33,6 +33,7 @@ jobs:
         run: |
           bun run build:deps
           bun run --filter '@node-minify/core' build
+          bun run --filter '@node-minify/benchmark' build
 
       - name: Build action
         run: bun run build
