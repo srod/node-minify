@@ -58,6 +58,14 @@ jobs:
           name: action-dist
           path: packages/action/dist/
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install compressor packages
+        run: npm install @node-minify/terser @node-minify/esbuild
+
       - name: Create test file
         run: |
           mkdir -p test-action
@@ -145,6 +153,14 @@ jobs:
         with:
           name: action-dist
           path: packages/action/dist/
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install compressor packages
+        run: npm install @node-minify/lightningcss
 
       - name: Create test CSS file
         run: |
