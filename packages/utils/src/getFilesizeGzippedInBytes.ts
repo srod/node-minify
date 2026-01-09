@@ -10,10 +10,11 @@ import { isValidFile } from "./isValidFile.ts";
 import { prettyBytes } from "./prettyBytes.ts";
 
 /**
- * Internal helper to calculate gzipped size of a file using streaming.
- * @param file - Path to the file
- * @returns Gzipped size in bytes
- * @throws {FileOperationError} If file doesn't exist or is not a valid file
+ * Compute the gzipped size of a file in bytes.
+ *
+ * @param file - Path to the file to measure
+ * @returns The gzipped size in bytes
+ * @throws FileOperationError if the file does not exist or the path is not a valid file
  * @internal
  */
 async function getGzipSize(file: string): Promise<number> {
@@ -45,12 +46,10 @@ async function getGzipSize(file: string): Promise<number> {
 }
 
 /**
- * Get the gzipped file size as a human-readable string.
+ * Get the gzipped size of a file as a human-readable string.
+ *
  * @param file - Path to the file
- * @returns Formatted gzipped file size string (e.g., "1.5 kB")
- * @example
- * const size = await getFilesizeGzippedInBytes('bundle.js')
- * console.log(size) // '12.3 kB'
+ * @returns The gzipped size formatted for display (for example, "1.5 kB")
  */
 export async function getFilesizeGzippedInBytes(file: string): Promise<string> {
     try {
