@@ -1,0 +1,62 @@
+{
+    "name": "@node-minify/action",
+    "version": "10.3.0",
+    "description": "GitHub Action for node-minify - minify JS, CSS, HTML with detailed reporting",
+    "keywords": [
+        "github-action",
+        "minify",
+        "minifier",
+        "compressor",
+        "ci-cd"
+    ],
+    "author": "Rodolphe Stoclin <srodolphe@gmail.com>",
+    "homepage": "https://github.com/srod/node-minify/tree/main/packages/action#readme",
+    "license": "MIT",
+    "private": true,
+    "type": "module",
+    "engines": {
+        "node": ">=20.0.0"
+    },
+    "directories": {
+        "lib": "dist",
+        "test": "__tests__"
+    },
+    "types": "./dist/index.d.ts",
+    "main": "./dist/index.js",
+    "exports": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+    },
+    "sideEffects": false,
+    "files": [
+        "dist/**/*",
+        "action.yml"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/srod/node-minify.git"
+    },
+    "bugs": {
+        "url": "https://github.com/srod/node-minify/issues"
+    },
+    "scripts": {
+        "build": "tsdown src/index.ts",
+        "build:ncc": "ncc build src/index.ts -o dist --source-map --license licenses.txt",
+        "format:check": "biome check .",
+        "lint": "biome lint .",
+        "test": "vitest run",
+        "test:coverage": "vitest run --coverage",
+        "test:watch": "vitest",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@actions/core": "^1.11.1",
+        "@actions/github": "^6.0.0",
+        "@node-minify/core": "workspace:*",
+        "@node-minify/utils": "workspace:*"
+    },
+    "devDependencies": {
+        "@node-minify/types": "workspace:*",
+        "@vercel/ncc": "^0.38.3"
+    }
+}

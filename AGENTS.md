@@ -273,7 +273,7 @@ node-minify --compressor terser --input src/app.js --output dist/app.min.js
 node-minify -c esbuild -i "src/**/*.js" -o dist/bundle.js -t js -O '{"minify":true}'
 
 # Benchmark
-node-minify benchmark src/app.js --compressors terser,esbuild,swc --format json
+node-minify benchmark src/app.js --compressors terser,esbuild,swc,oxc --format json
 ```
 
 **Benchmark formats**: `console` (default, colored tables), `json`, `markdown`
