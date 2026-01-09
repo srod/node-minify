@@ -10,6 +10,8 @@ on:
         required: true
         type: string
 
+concurrency: release-${{ github.ref_name }}
+
 permissions:
   contents: write
 
@@ -51,15 +53,15 @@ jobs:
           else
             VERSION="$REF_NAME"
           fi
-          
+
           # Validate that VERSION looks like a tag (starts with v followed by numbers)
           if ! [[ "$VERSION" =~ ^v[0-9]+(\.[0-9]+)*$ ]]; then
             echo "Error: Version '$VERSION' is not a valid release tag (must start with 'v' e.g. v1.0.0)"
             exit 1
           fi
-          
+
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          
+
           # Extract major version using regex
           if [[ "$VERSION" =~ ^v([0-9]+) ]]; then
             MAJOR="v${BASH_REMATCH[1]}"
@@ -73,17 +75,20 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           # Force add dist (ignored by .gitignore)
           git add -f packages/action/dist/
-          git commit -m "chore: build action dist for ${{ steps.version.outputs.version }}" || echo "No changes to commit"
+          git commit -m "chore: build action dist for ${{ steps.version.outputs.version }}"
 
       - name: Update major version tag
         run: |
           # Force update the major version tag (e.g., v1)
           MAJOR="${{ steps.version.outputs.major }}"
           git tag -fa "$MAJOR" -m "Update $MAJOR tag to ${{ steps.version.outputs.version }}"
-          git push origin "$MAJOR" --force
+          if ! git push origin "$MAJOR" --force; then
+            echo "Error: Failed to push major version tag $MAJOR"
+            exit 1
+          fi
 
       - name: Create action release artifact
         run: |
@@ -95,7 +100,7 @@ jobs:
           zip -r ../node-minify-action-${{ steps.version.outputs.version }}.zip .
 
       - name: Upload release artifact
-        if: github.event_name == 'release'
+        if: contains(fromJson('["release", "workflow_dispatch"]'), github.event_name)
         uses: softprops/action-gh-release@v2
         with:
           files: node-minify-action-${{ steps.version.outputs.version }}.zip
