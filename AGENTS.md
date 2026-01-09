@@ -299,7 +299,7 @@ The repository includes a reusable GitHub Action at `.github/actions/node-minify
 
 ### Usage
 ```yaml
-- uses: srod/node-minify/.github/actions/node-minify@main
+- uses: srod/node-minify@v1
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
@@ -315,8 +315,8 @@ The repository includes a reusable GitHub Action at `.github/actions/node-minify
 ### Files
 | File | Purpose |
 |------|---------|
-| `action.yml` | Action definition, inputs/outputs, composite steps |
-| `minify.ts` | Bun script that runs minification, writes GitHub outputs |
+| `action.yml` | Action definition, inputs/outputs |
+| `packages/action/` | Source code for the action (built to `packages/action/dist/index.js`) |
 
 ## CI/CD Workflows
 

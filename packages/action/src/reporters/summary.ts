@@ -64,10 +64,10 @@ export async function generateBenchmarkSummary(
 
         return [
             { data: `${c.compressor}${badge}` },
-            { data: c.size ? prettyBytes(c.size) : "-" },
-            { data: c.reduction ? `${c.reduction.toFixed(1)}%` : "-" },
-            { data: c.gzipSize ? prettyBytes(c.gzipSize) : "-" },
-            { data: c.timeMs ? `${c.timeMs}ms` : "-" },
+            { data: c.size != null ? prettyBytes(c.size) : "-" },
+            { data: c.reduction != null ? `${c.reduction.toFixed(1)}%` : "-" },
+            { data: c.gzipSize != null ? prettyBytes(c.gzipSize) : "-" },
+            { data: c.timeMs != null ? `${c.timeMs}ms` : "-" },
         ];
     });
 

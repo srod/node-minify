@@ -17,7 +17,7 @@ GitHub Action for minifying JavaScript, CSS, and HTML files with detailed report
 
 ```yaml
 - name: Minify JavaScript
-  uses: srod/node-minify/packages/action@main
+  uses: srod/node-minify@v1
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
@@ -28,7 +28,7 @@ GitHub Action for minifying JavaScript, CSS, and HTML files with detailed report
 
 ```yaml
 - name: Minify and Report
-  uses: srod/node-minify/packages/action@main
+  uses: srod/node-minify@v1
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
@@ -43,7 +43,7 @@ GitHub Action for minifying JavaScript, CSS, and HTML files with detailed report
 
 ```yaml
 - name: Minify with Quality Gates
-  uses: srod/node-minify/packages/action@main
+  uses: srod/node-minify@v1
   with:
     input: "src/app.js"
     output: "dist/app.min.js"

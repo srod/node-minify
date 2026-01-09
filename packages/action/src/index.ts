@@ -6,6 +6,7 @@
 
 import { info, setFailed } from "@actions/core";
 import { context } from "@actions/github";
+import { checkThresholds } from "./checks.ts";
 import { parseInputs, validateJavaCompressor } from "./inputs.ts";
 import { runMinification } from "./minify.ts";
 import { setMinifyOutputs } from "./outputs.ts";
@@ -37,20 +38,9 @@ async function run(): Promise<void> {
             addAnnotations(result);
         }
 
-        if (inputs.failOnIncrease && result.totalReduction < 0) {
-            setFailed(
-                `Minified size is larger than original (${result.totalReduction.toFixed(1)}% increase)`
-            );
-            return;
-        }
-
-        if (
-            inputs.minReduction > 0 &&
-            result.totalReduction < inputs.minReduction
-        ) {
-            setFailed(
-                `Reduction ${result.totalReduction.toFixed(1)}% is below minimum threshold ${inputs.minReduction}%`
-            );
+        const thresholdError = checkThresholds(result.totalReduction, inputs);
+        if (thresholdError) {
+            setFailed(thresholdError);
             return;
         }
 

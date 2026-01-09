@@ -31,7 +31,7 @@ export async function postPRComment(
 
     const body = generateCommentBody(result);
 
-    const { data: comments } = await octokit.rest.issues.listComments({
+    const comments = await octokit.paginate(octokit.rest.issues.listComments, {
         owner,
         repo,
         issue_number: prNumber,

@@ -1,6 +1,7 @@
 /*! node-minify action tests - MIT Licensed */
 
 import { describe, expect, test } from "vitest";
+import { checkThresholds } from "../src/checks.ts";
 import type { ActionInputs, FileResult, MinifyResult } from "../src/types.ts";
 
 describe("Action Types", () => {
@@ -72,25 +73,35 @@ describe("Action Types", () => {
 describe("Threshold Logic", () => {
     test("should detect size increase", () => {
         const reduction = -5;
-        const failOnIncrease = true;
+        const inputs = {
+            failOnIncrease: true,
+            minReduction: 0,
+        };
 
-        const shouldFail = failOnIncrease && reduction < 0;
-        expect(shouldFail).toBe(true);
+        const error = checkThresholds(reduction, inputs);
+        expect(error).toContain("larger than original");
+        expect(error).toContain("5.0% increase");
     });
 
     test("should detect insufficient reduction", () => {
         const reduction = 30;
-        const minReduction = 50;
+        const inputs = {
+            failOnIncrease: false,
+            minReduction: 50,
+        };
 
-        const shouldFail = minReduction > 0 && reduction < minReduction;
-        expect(shouldFail).toBe(true);
+        const error = checkThresholds(reduction, inputs);
+        expect(error).toContain("below minimum threshold");
     });
 
     test("should pass when reduction meets threshold", () => {
         const reduction = 60;
-        const minReduction = 50;
+        const inputs = {
+            failOnIncrease: false,
+            minReduction: 50,
+        };
 
-        const shouldFail = minReduction > 0 && reduction < minReduction;
-        expect(shouldFail).toBe(false);
+        const error = checkThresholds(reduction, inputs);
+        expect(error).toBeNull();
     });
 });

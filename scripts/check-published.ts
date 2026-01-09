@@ -78,4 +78,7 @@ async function main() {
     }
 }
 
-main();
+main().catch((err) => {
+    console.error("Error checking packages:", err);
+    process.exit(1);
+});
