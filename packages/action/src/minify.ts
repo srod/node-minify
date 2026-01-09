@@ -10,11 +10,32 @@ import { minify } from "@node-minify/core";
 import { getFilesizeGzippedRaw, resolveCompressor } from "@node-minify/utils";
 import type { ActionInputs, FileResult, MinifyResult } from "./types.ts";
 
+/**
+ * Get the size of a file in bytes.
+ *
+ * @param filePath - Path to the file
+ * @returns The file size in bytes
+ */
 async function getFileSize(filePath: string): Promise<number> {
     const stats = await stat(filePath);
     return stats.size;
 }
 
+/**
+ * Minifies a single input file according to the provided action inputs and returns summary metrics.
+ *
+ * Uses `inputs` to resolve input/output paths, run the selected compressor with optional type and options,
+ * and optionally computes gzipped size. The result includes per-file metrics and aggregated totals.
+ *
+ * @param inputs - Configuration for the minification run (input/output paths relative to `workingDirectory`, `compressor` selection, optional `type` and `options`, and `includeGzip` flag)
+ * @returns A `MinifyResult` containing:
+ *  - `files`: an array with one `FileResult` (`file`, `originalSize`, `minifiedSize`, `reduction`, optional `gzipSize`, `timeMs`)
+ *  - `compressor`: the human-readable compressor label
+ *  - `totalOriginalSize`: original file size in bytes
+ *  - `totalMinifiedSize`: minified file size in bytes
+ *  - `totalReduction`: percentage reduction (0–100)
+ *  - `totalTimeMs`: elapsed minification time in milliseconds
+ */
 export async function runMinification(
     inputs: ActionInputs
 ): Promise<MinifyResult> {
