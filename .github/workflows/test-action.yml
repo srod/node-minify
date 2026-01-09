@@ -64,7 +64,11 @@ jobs:
           node-version: "20"
 
       - name: Install compressor packages
-        run: npm install @node-minify/terser @node-minify/esbuild
+        run: |
+          mkdir -p /tmp/compressors && cd /tmp/compressors
+          npm init -y
+          npm install @node-minify/terser @node-minify/esbuild
+          echo "NODE_PATH=/tmp/compressors/node_modules" >> $GITHUB_ENV
 
       - name: Create test file
         run: |
@@ -160,7 +164,11 @@ jobs:
           node-version: "20"
 
       - name: Install compressor packages
-        run: npm install @node-minify/lightningcss
+        run: |
+          mkdir -p /tmp/compressors && cd /tmp/compressors
+          npm init -y
+          npm install @node-minify/lightningcss
+          echo "NODE_PATH=/tmp/compressors/node_modules" >> $GITHUB_ENV
 
       - name: Create test CSS file
         run: |
