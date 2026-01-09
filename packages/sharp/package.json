@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/sharp",
-  "version": "10.2.0",
+  "version": "10.3.0",
   "description": "Sharp plugin for @node-minify - Convert images to WebP and AVIF",
   "keywords": [
     "compressor",

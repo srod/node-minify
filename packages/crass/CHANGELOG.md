@@ -1,5 +1,12 @@
 # @node-minify/crass
 
+## 10.3.0
+
+### Patch Changes
+
+- Updated dependencies [1e06c03]
+  - @node-minify/utils@10.3.0
+
 ## 10.2.0
 
 ### Patch Changes
