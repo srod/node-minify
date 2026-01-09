@@ -68,14 +68,16 @@ jobs:
           mkdir -p /tmp/compressors && cd /tmp/compressors
           npm init -y
           npm install @node-minify/terser @node-minify/esbuild
-          # Copy packages to repo node_modules so action can find them
+          # Copy packages to multiple locations where Node might look
           mkdir -p $GITHUB_WORKSPACE/node_modules/@node-minify
+          mkdir -p $GITHUB_WORKSPACE/packages/action/node_modules/@node-minify
           cp -r /tmp/compressors/node_modules/@node-minify/* $GITHUB_WORKSPACE/node_modules/@node-minify/
-          # Also copy terser and esbuild themselves (direct deps)
+          cp -r /tmp/compressors/node_modules/@node-minify/* $GITHUB_WORKSPACE/packages/action/node_modules/@node-minify/
+          # Also copy terser and esbuild themselves
           cp -r /tmp/compressors/node_modules/terser $GITHUB_WORKSPACE/node_modules/ || true
           cp -r /tmp/compressors/node_modules/esbuild $GITHUB_WORKSPACE/node_modules/ || true
-          # Debug: verify packages exist
-          ls -la $GITHUB_WORKSPACE/node_modules/@node-minify/
+          cp -r /tmp/compressors/node_modules/terser $GITHUB_WORKSPACE/packages/action/node_modules/ || true
+          cp -r /tmp/compressors/node_modules/esbuild $GITHUB_WORKSPACE/packages/action/node_modules/ || true
 
       - name: Create test file
         run: |
@@ -175,13 +177,14 @@ jobs:
           mkdir -p /tmp/compressors && cd /tmp/compressors
           npm init -y
           npm install @node-minify/lightningcss
-          # Copy packages to repo node_modules so action can find them
+          # Copy packages to multiple locations where Node might look
           mkdir -p $GITHUB_WORKSPACE/node_modules/@node-minify
+          mkdir -p $GITHUB_WORKSPACE/packages/action/node_modules/@node-minify
           cp -r /tmp/compressors/node_modules/@node-minify/* $GITHUB_WORKSPACE/node_modules/@node-minify/
+          cp -r /tmp/compressors/node_modules/@node-minify/* $GITHUB_WORKSPACE/packages/action/node_modules/@node-minify/
           # Also copy lightningcss itself (direct dep)
           cp -r /tmp/compressors/node_modules/lightningcss $GITHUB_WORKSPACE/node_modules/ || true
-          # Debug: verify packages exist
-          ls -la $GITHUB_WORKSPACE/node_modules/@node-minify/
+          cp -r /tmp/compressors/node_modules/lightningcss $GITHUB_WORKSPACE/packages/action/node_modules/ || true
 
       - name: Create test CSS file
         run: |
