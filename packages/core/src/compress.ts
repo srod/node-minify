@@ -19,7 +19,8 @@ import {
     readFileAsync,
     run,
 } from "@node-minify/utils";
-import { mkdirp } from "mkdirp";
+import { mkdir } from "node:fs/promises";
+import { dirname } from "node:path";
 
 /**
  * Run the compressor using the provided settings.
@@ -111,10 +112,10 @@ async function createDirectory(filePath: string | string[]) {
         }
 
         // Extract directory path
-        const dirPath = path.substring(0, path.lastIndexOf("/"));
+        const dirPath = dirname(path);
 
         // Early return if no directory path
-        if (!dirPath) {
+        if (!dirPath || dirPath === ".") {
             continue;
         }
 
@@ -122,5 +123,7 @@ async function createDirectory(filePath: string | string[]) {
     }
 
     // Create directories in parallel
-    await Promise.all(Array.from(uniqueDirs).map((dir) => mkdirp(dir)));
+    await Promise.all(
+        Array.from(uniqueDirs).map((dir) => mkdir(dir, { recursive: true }))
+    );
 }
