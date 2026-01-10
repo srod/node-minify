@@ -77,7 +77,7 @@ export function parseInputs(): ActionInputs {
             const raw = getInput("min-reduction");
             if (!raw) return 0;
             const value = Number.parseFloat(raw);
-            if (Number.isNaN(value)) {
+            if (Number.isNaN(value) || value < 0 || value > 100) {
                 throw new Error(
                     `Invalid 'min-reduction' input: '${raw}' is not a valid number (expected 0-100)`
                 );

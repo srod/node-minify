@@ -84,7 +84,7 @@ jobs:
             echo "No changes to commit (dist files unchanged)"
           else
             git commit -m "chore: build action dist for ${{ steps.version.outputs.version }}"
-            git push origin HEAD:${{ github.ref_name }}
+            git push origin HEAD:refs/tags/${{ steps.version.outputs.version }}
           fi
 
       - name: Update major version tag
