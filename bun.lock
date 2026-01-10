@@ -76,6 +76,10 @@
         "@actions/github": "^6.0.0",
         "@node-minify/benchmark": "workspace:*",
         "@node-minify/core": "workspace:*",
+        "@node-minify/esbuild": "workspace:*",
+        "@node-minify/oxc": "workspace:*",
+        "@node-minify/swc": "workspace:*",
+        "@node-minify/terser": "workspace:*",
         "@node-minify/utils": "workspace:*",
       },
       "devDependencies": {
