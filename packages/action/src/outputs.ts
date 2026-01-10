@@ -21,7 +21,7 @@ export function setMinifyOutputs(result: MinifyResult): void {
     setOutput("time-ms", result.totalTimeMs);
     setOutput("report-json", JSON.stringify(result));
 
-    if (result.files.length > 0 && result.files[0]?.gzipSize) {
+    if (result.files.some((f) => f.gzipSize !== undefined)) {
         const totalGzip = result.files.reduce(
             (sum, f) => sum + (f.gzipSize || 0),
             0
