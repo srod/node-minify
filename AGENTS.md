@@ -304,7 +304,7 @@ The repository includes a reusable GitHub Action at `.github/actions/node-minify
     input: "src/app.js"
     output: "dist/app.min.js"
     compressor: "terser"  # or esbuild, swc, lightningcss, etc.
-    type: "js"            # required for esbuild, lightningcss, yui
+    type: "js"            # required for esbuild, yui
 ```
 
 ### Key Behaviors

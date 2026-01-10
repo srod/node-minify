@@ -86,7 +86,7 @@ describe("CSS compressors", () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    test("should minify with lightningcss (requires type)", async () => {
+    test("should minify with lightningcss", async () => {
         const spy = vi.spyOn(cli, "run");
         await cli.run({
             compressor: "lightningcss",

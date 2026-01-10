@@ -51,7 +51,7 @@ node-minify benchmark src/app.js -c terser,esbuild -n 3
 # Include gzip size in results
 node-minify benchmark src/app.js -c terser,esbuild --gzip
 
-# Specify file type (required for esbuild, lightningcss)
+# Specify file type (required for esbuild)
 node-minify benchmark src/app.js -c terser,esbuild -t js
 ```
 
