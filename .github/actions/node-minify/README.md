@@ -3,7 +3,7 @@
 > **This action is deprecated.** Please use the new bundled action instead:
 >
 > ```yaml
-> - uses: srod/node-minify@main
+> - uses: srod/node-minify@v1
 > ```
 
 The new action includes:
@@ -29,7 +29,7 @@ Replace:
 With:
 
 ```yaml
-- uses: srod/node-minify@main
+- uses: srod/node-minify@v1
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
