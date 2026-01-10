@@ -118,6 +118,10 @@ GitHub Action for minifying JavaScript, CSS, and HTML files with detailed report
 | `gzip-size` | Gzipped size in bytes |
 | `time-ms` | Compression time in ms |
 | `report-json` | Full report as JSON |
+| `benchmark-winner` | Best compressor from benchmark (if run) |
+| `best-compression` | Compressor with best compression ratio (if benchmark run) |
+| `best-speed` | Fastest compressor (if benchmark run) |
+| `benchmark-json` | Full benchmark results as JSON string |
 
 ## License
 

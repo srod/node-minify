@@ -24,6 +24,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.tag || (github.event.release.tag_name || github.ref) }}
+          fetch-depth: 0
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -69,6 +70,13 @@ jobs:
           else
             echo "Error: Could not extract major version from '$VERSION'"
             exit 1
+          fi
+
+      - name: Ensure we're on a branch
+        run: |
+          # If in detached HEAD, create a temporary branch
+          if ! git symbolic-ref -q HEAD; then
+            git checkout -b temp-release-branch
           fi
 
       - name: Commit and tag built action dist

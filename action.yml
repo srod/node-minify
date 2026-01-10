@@ -85,6 +85,8 @@ outputs:
     description: "Compressor with best compression ratio (if benchmark run)"
   best-speed:
     description: "Fastest compressor (if benchmark run)"
+  benchmark-json:
+    description: "Full benchmark results as JSON string"
 
 runs:
   using: "node20"
