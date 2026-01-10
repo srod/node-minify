@@ -125,7 +125,6 @@ jobs:
 
 The `type` parameter is **required** for:
 - `esbuild` (specify `js` or `css`)
-- `lightningcss` (specify `css`)
 - `yui` (specify `js` or `css`)
 
 ### Available Compressors
@@ -139,7 +138,7 @@ The `type` parameter is **required** for:
 - `google-closure-compiler` / `gcc` (requires Java)
 
 **CSS:**
-- `lightningcss` (recommended, requires `type: css`)
+- `lightningcss` (recommended, CSS-only)
 - `clean-css`
 - `cssnano`
 - `csso`

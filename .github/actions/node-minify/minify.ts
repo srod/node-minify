@@ -109,7 +109,7 @@ async function run(): Promise<void> {
 
         console.log(`Minifying ${inputFile} with ${label}...`);
 
-        const requiresType = ["esbuild", "lightningcss", "yui"].includes(
+        const requiresType = ["esbuild", "yui"].includes(
             compressorName
         );
         if (requiresType && !fileType) {

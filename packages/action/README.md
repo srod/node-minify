@@ -80,7 +80,7 @@ GitHub Action for minifying JavaScript, CSS, and HTML files with detailed report
 - `google-closure-compiler` / `gcc` (requires Java)
 
 **CSS:**
-- `lightningcss` (recommended, requires `type: css`)
+- `lightningcss` (recommended, CSS-only)
 - `clean-css`
 - `cssnano`
 - `csso`
