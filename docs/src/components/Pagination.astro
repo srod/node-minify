@@ -1,0 +1,85 @@
+---
+import { SIDEBAR } from "../consts";
+
+const currentPage = Astro.url.pathname;
+// Normalize the current path by removing leading/trailing slashes
+const currentSlug = currentPage.replace(/^\//, '').replace(/\/$/, '');
+const allLinks = Object.values(SIDEBAR).flat();
+const index = allLinks.findIndex(link => link.link === currentSlug);
+
+const prev = allLinks[index - 1];
+const next = allLinks[index + 1];
+---
+
+{
+  (prev || next) && (
+    <nav class="pagination" aria-label="Pagination">
+      {prev ? (
+        <a href={`/${prev.link}`} class="prev-link" rel="prev">
+          <span class="label">Previous</span>
+          <span class="title">← {prev.text}</span>
+        </a>
+      ) : (
+        <span />
+      )}
+      {next ? (
+        <a href={`/${next.link}`} class="next-link" rel="next">
+          <span class="label">Next</span>
+          <span class="title">{next.text} →</span>
+        </a>
+      ) : (
+        <span />
+      )}
+    </nav>
+  )
+}
+
+<style>
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--theme-divider);
+    gap: 1rem;
+  }
+
+  .pagination a {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    max-width: 45%;
+  }
+
+  .pagination a:hover .title {
+    color: var(--theme-text-accent);
+    text-decoration: none;
+  }
+
+  .pagination a:focus .title {
+    color: var(--theme-text-accent);
+    text-decoration: underline;
+  }
+
+  .label {
+    font-size: 0.85rem;
+    color: var(--theme-text-light);
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+
+  .title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--theme-text-accent);
+    transition: color 0.2s;
+  }
+
+  .next-link {
+    text-align: right;
+    align-items: flex-end;
+  }
+</style>
