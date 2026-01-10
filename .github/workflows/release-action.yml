@@ -79,7 +79,8 @@ jobs:
             git checkout -b temp-release-branch
           fi
 
-      - name: Commit and tag built action dist
+      - name: Commit built action dist
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -90,10 +91,15 @@ jobs:
           # Only commit if there are staged changes
           if git diff --cached --quiet; then
             echo "No changes to commit (dist files unchanged)"
+            echo "skip_tag_update=true" >> $GITHUB_OUTPUT
           else
             git commit -m "chore: build action dist for ${{ steps.version.outputs.version }}"
+            echo "skip_tag_update=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Update release tag
+        if: steps.commit.outputs.skip_tag_update != 'true'
+        run: |
           # Update the release tag to point at HEAD (with dist files) and push
           VERSION="${{ steps.version.outputs.version }}"
           git tag -fa "$VERSION" -m "Release $VERSION with built dist"
