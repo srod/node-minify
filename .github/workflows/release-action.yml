@@ -78,10 +78,14 @@ jobs:
 
           # Force add dist (ignored by .gitignore)
           git add -f packages/action/dist/
-          git commit -m "chore: build action dist for ${{ steps.version.outputs.version }}"
 
-          # Push the commit before tagging
-          git push origin HEAD:${{ github.ref_name }}
+          # Only commit and push if there are staged changes
+          if git diff --cached --quiet; then
+            echo "No changes to commit (dist files unchanged)"
+          else
+            git commit -m "chore: build action dist for ${{ steps.version.outputs.version }}"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
 
       - name: Update major version tag
         run: |
