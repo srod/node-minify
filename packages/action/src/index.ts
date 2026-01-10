@@ -8,7 +8,7 @@ import { info, setFailed } from "@actions/core";
 import { context } from "@actions/github";
 import { runBenchmark } from "./benchmark.ts";
 import { checkThresholds } from "./checks.ts";
-import { parseInputs, validateJavaCompressor } from "./inputs.ts";
+import { parseInputs, validateCompressor } from "./inputs.ts";
 import { runMinification } from "./minify.ts";
 import { setBenchmarkOutputs, setMinifyOutputs } from "./outputs.ts";
 import { addAnnotations } from "./reporters/annotations.ts";
@@ -29,7 +29,7 @@ async function run(): Promise<void> {
     try {
         const inputs = parseInputs();
 
-        validateJavaCompressor(inputs.compressor);
+        validateCompressor(inputs.compressor);
 
         info(`Minifying ${inputs.input} with ${inputs.compressor}...`);
 

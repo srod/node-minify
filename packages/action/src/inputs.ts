@@ -112,6 +112,5 @@ export function validateCompressor(compressor: string): void {
     }
 }
 
-export const validateJavaCompressor = validateCompressor;
 
 export { DEPRECATED_COMPRESSORS, TYPE_REQUIRED_COMPRESSORS };
