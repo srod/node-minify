@@ -73,7 +73,17 @@ export function parseInputs(): ActionInputs {
         benchmark: getBooleanInput("benchmark"),
         benchmarkCompressors,
         failOnIncrease: getBooleanInput("fail-on-increase"),
-        minReduction: Number.parseFloat(getInput("min-reduction")) || 0,
+        minReduction: (() => {
+            const raw = getInput("min-reduction");
+            if (!raw) return 0;
+            const value = Number.parseFloat(raw);
+            if (Number.isNaN(value)) {
+                throw new Error(
+                    `Invalid 'min-reduction' input: '${raw}' is not a valid number (expected 0-100)`
+                );
+            }
+            return value;
+        })(),
         includeGzip: getBooleanInput("include-gzip"),
         workingDirectory: getInput("working-directory") || ".",
         githubToken: getInput("github-token") || process.env.GITHUB_TOKEN,

@@ -52,7 +52,7 @@ export async function runBenchmark(
             success: r.success,
             size: r.sizeBytes,
             reduction: r.reductionPercent,
-            gzipSize: typeof r.gzipSize === "string" ? undefined : r.gzipSize,
+            gzipSize: r.gzipBytes,
             timeMs: r.timeMs,
             error: r.error,
         })),
