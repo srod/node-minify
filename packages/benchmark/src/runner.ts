@@ -9,6 +9,7 @@ import { minify } from "@node-minify/core";
 import {
     getFilesizeBrotliInBytes,
     getFilesizeGzippedInBytes,
+    getFilesizeGzippedRaw,
     prettyBytes,
     wildcards,
 } from "@node-minify/utils";
@@ -167,6 +168,7 @@ async function benchmarkCompressor(
 
         if (options.includeGzip) {
             metrics.gzipSize = await getFilesizeGzippedInBytes(lastOutputFile);
+            metrics.gzipBytes = await getFilesizeGzippedRaw(lastOutputFile);
         }
 
         if (options.includeBrotli) {
