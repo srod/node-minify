@@ -8,6 +8,8 @@ import { resolve } from "node:path";
 import { benchmark } from "@node-minify/benchmark";
 import type { ActionInputs, BenchmarkResult } from "./types.ts";
 
+const TYPE_REQUIRED_COMPRESSORS = ["esbuild", "lightningcss", "yui"];
+
 /**
  * Run benchmark comparison across multiple compressors.
  *
@@ -22,9 +24,16 @@ export async function runBenchmark(
 ): Promise<BenchmarkResult> {
     const inputPath = resolve(inputs.workingDirectory, inputs.input);
 
+    // Filter out compressors that require 'type' when type is not provided
+    const compressors = inputs.type
+        ? inputs.benchmarkCompressors
+        : inputs.benchmarkCompressors.filter(
+              (c) => !TYPE_REQUIRED_COMPRESSORS.includes(c)
+          );
+
     const result = await benchmark({
         input: inputPath,
-        compressors: inputs.benchmarkCompressors,
+        compressors,
         includeGzip: inputs.includeGzip,
         type: inputs.type,
         iterations: 1,
