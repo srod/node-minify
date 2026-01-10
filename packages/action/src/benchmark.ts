@@ -6,9 +6,9 @@
 
 import { resolve } from "node:path";
 import { benchmark } from "@node-minify/benchmark";
+import { TYPE_REQUIRED_COMPRESSORS } from "./inputs.ts";
 import type { ActionInputs, BenchmarkResult } from "./types.ts";
 
-const TYPE_REQUIRED_COMPRESSORS = ["esbuild", "lightningcss", "yui"];
 
 /**
  * Run benchmark comparison across multiple compressors.
