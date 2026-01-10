@@ -152,3 +152,116 @@ describe("validateCompressor", () => {
         expect(warning).not.toHaveBeenCalled();
     });
 });
+
+describe("parseInputs edge cases", () => {
+    beforeEach(() => {
+        vi.resetAllMocks();
+        vi.mocked(getBooleanInput).mockImplementation((name: string) => {
+            const defaults: Record<string, boolean> = {
+                "report-summary": true,
+                "report-pr-comment": false,
+                "report-annotations": false,
+                benchmark: false,
+                "fail-on-increase": false,
+                "include-gzip": true,
+            };
+            return defaults[name] ?? false;
+        });
+    });
+
+    test("throws error for invalid type value", () => {
+        vi.mocked(getInput).mockImplementation((name: string) => {
+            if (name === "type") return "invalid";
+            if (name === "input") return "src/app.js";
+            if (name === "output") return "dist/app.min.js";
+            return "";
+        });
+
+        expect(() => parseInputs()).toThrow(
+            "Invalid 'type' input: 'invalid' (expected 'js' or 'css')"
+        );
+    });
+
+    test("accepts valid type 'js'", () => {
+        vi.mocked(getInput).mockImplementation((name: string) => {
+            if (name === "type") return "js";
+            if (name === "input") return "src/app.js";
+            if (name === "output") return "dist/app.min.js";
+            return "";
+        });
+
+        const inputs = parseInputs();
+        expect(inputs.type).toBe("js");
+    });
+
+    test("accepts valid type 'css'", () => {
+        vi.mocked(getInput).mockImplementation((name: string) => {
+            if (name === "type") return "css";
+            if (name === "input") return "src/app.css";
+            if (name === "output") return "dist/app.min.css";
+            return "";
+        });
+
+        const inputs = parseInputs();
+        expect(inputs.type).toBe("css");
+    });
+
+    test("deduplicates benchmark compressors", () => {
+        vi.mocked(getInput).mockImplementation((name: string) => {
+            if (name === "benchmark-compressors")
+                return "terser, terser, swc, swc";
+            if (name === "input") return "src/app.js";
+            if (name === "output") return "dist/app.min.js";
+            return "";
+        });
+
+        const inputs = parseInputs();
+        expect(inputs.benchmarkCompressors).toEqual(["terser", "swc"]);
+    });
+
+    test("filters empty strings from benchmark compressors", () => {
+        vi.mocked(getInput).mockImplementation((name: string) => {
+            if (name === "benchmark-compressors") return "terser,,swc, ,oxc";
+            if (name === "input") return "src/app.js";
+            if (name === "output") return "dist/app.min.js";
+            return "";
+        });
+
+        const inputs = parseInputs();
+        expect(inputs.benchmarkCompressors).toEqual(["terser", "swc", "oxc"]);
+    });
+
+    test("falls back to defaults when all benchmark compressors are empty", () => {
+        vi.mocked(getInput).mockImplementation((name: string) => {
+            if (name === "benchmark-compressors") return ", , ,";
+            if (name === "input") return "src/app.js";
+            if (name === "output") return "dist/app.min.js";
+            return "";
+        });
+
+        const inputs = parseInputs();
+        expect(inputs.benchmarkCompressors).toEqual([
+            "terser",
+            "esbuild",
+            "swc",
+            "oxc",
+        ]);
+    });
+
+    test("does not leak raw JSON in error message", () => {
+        vi.mocked(getInput).mockImplementation((name: string) => {
+            if (name === "options") return '{"secret": "password123';
+            if (name === "input") return "src/app.js";
+            if (name === "output") return "dist/app.min.js";
+            return "";
+        });
+
+        expect(() => parseInputs()).toThrow(/Invalid JSON in 'options' input/);
+        // Should NOT contain the actual input value
+        try {
+            parseInputs();
+        } catch (err) {
+            expect((err as Error).message).not.toContain("password123");
+        }
+    });
+});

@@ -34,10 +34,22 @@ const DEPRECATED_COMPRESSORS: Record<string, string> = {
  * @throws Error if a compressor that requires a `type` is selected but `type`
  * is not provided.
  * @throws Error if the `options` input is present but is not valid JSON.
+ * @throws Error if the `type` input is provided but is not 'js' or 'css'.
  */
 export function parseInputs(): ActionInputs {
     const compressor = getInput("compressor") || "terser";
-    const type = getInput("type") as "js" | "css" | undefined;
+
+    // Validate type input explicitly
+    const typeRaw = getInput("type");
+    let type: "js" | "css" | undefined;
+    if (typeRaw) {
+        if (typeRaw !== "js" && typeRaw !== "css") {
+            throw new Error(
+                `Invalid 'type' input: '${typeRaw}' (expected 'js' or 'css')`
+            );
+        }
+        type = typeRaw;
+    }
 
     if (TYPE_REQUIRED_COMPRESSORS.includes(compressor) && !type) {
         throw new Error(
@@ -45,26 +57,39 @@ export function parseInputs(): ActionInputs {
         );
     }
 
+    // Parse options JSON without leaking raw input in error messages
     let options: Record<string, unknown> = {};
     const optionsJson = getInput("options");
     if (optionsJson) {
         try {
             options = JSON.parse(optionsJson);
-        } catch {
-            throw new Error(`Invalid JSON in 'options' input: ${optionsJson}`);
+        } catch (err) {
+            throw new Error(
+                `Invalid JSON in 'options' input: ${err instanceof Error ? err.message : String(err)}`
+            );
         }
     }
 
+    // Parse benchmark compressors with deduplication and empty string filtering
     const benchmarkCompressorsInput = getInput("benchmark-compressors");
-    const benchmarkCompressors = benchmarkCompressorsInput
-        ? benchmarkCompressorsInput.split(",").map((c: string) => c.trim())
-        : ["terser", "esbuild", "swc", "oxc"];
+    const benchmarkCompressors = (() => {
+        if (!benchmarkCompressorsInput) {
+            return ["terser", "esbuild", "swc", "oxc"];
+        }
+        const parsed = benchmarkCompressorsInput
+            .split(",")
+            .map((c) => c.trim())
+            .filter((c) => c.length > 0);
+        // Deduplicate while preserving order
+        const unique = [...new Set(parsed)];
+        return unique.length > 0 ? unique : ["terser", "esbuild", "swc", "oxc"];
+    })();
 
     return {
         input: getInput("input", { required: true }),
         output: getInput("output", { required: true }),
         compressor,
-        type: type || undefined,
+        type,
         options,
         reportSummary: getBooleanInput("report-summary"),
         reportPRComment: getBooleanInput("report-pr-comment"),
