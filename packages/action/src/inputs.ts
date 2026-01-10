@@ -8,7 +8,7 @@ import { getBooleanInput, getInput, warning } from "@actions/core";
 import { isBuiltInCompressor } from "@node-minify/utils";
 import type { ActionInputs } from "./types.ts";
 
-const TYPE_REQUIRED_COMPRESSORS = ["esbuild", "lightningcss", "yui"];
+const TYPE_REQUIRED_COMPRESSORS = ["esbuild", "yui"];
 
 const DEPRECATED_COMPRESSORS: Record<string, string> = {
     "babel-minify":

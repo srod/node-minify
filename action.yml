@@ -20,7 +20,7 @@ inputs:
     required: false
     default: "terser"
   type:
-    description: "File type: js or css (required for esbuild, lightningcss, yui)"
+    description: "File type: js or css (required for esbuild, yui)"
     required: false
   options:
     description: "Compressor-specific options (JSON string)"
