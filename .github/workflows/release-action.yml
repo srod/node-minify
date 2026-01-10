@@ -10,7 +10,7 @@ on:
         required: true
         type: string
 
-concurrency: release-${{ github.ref_name }}
+concurrency: release-${{ github.event.release.tag_name || github.event.inputs.tag || github.ref_name }}
 
 permissions:
   contents: write
@@ -71,7 +71,7 @@ jobs:
             exit 1
           fi
 
-      - name: Commit built action dist
+      - name: Commit and tag built action dist
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -79,13 +79,17 @@ jobs:
           # Force add dist (ignored by .gitignore)
           git add -f packages/action/dist/
 
-          # Only commit and push if there are staged changes
+          # Only commit if there are staged changes
           if git diff --cached --quiet; then
             echo "No changes to commit (dist files unchanged)"
           else
             git commit -m "chore: build action dist for ${{ steps.version.outputs.version }}"
-            git push origin HEAD:refs/tags/${{ steps.version.outputs.version }}
           fi
+
+          # Update the release tag to point at HEAD (with dist files) and push
+          VERSION="${{ steps.version.outputs.version }}"
+          git tag -fa "$VERSION" -m "Release $VERSION with built dist"
+          git push origin "$VERSION" --force
 
       - name: Update major version tag
         run: |
@@ -99,9 +103,9 @@ jobs:
 
       - name: Create action release artifact
         run: |
-          mkdir -p release-action
+          mkdir -p release-action/packages/action
           cp action.yml release-action/
-          cp -r packages/action/dist release-action/
+          cp -r packages/action/dist release-action/packages/action/
           cp packages/action/README.md release-action/
           cd release-action
           zip -r ../node-minify-action-${{ steps.version.outputs.version }}.zip .

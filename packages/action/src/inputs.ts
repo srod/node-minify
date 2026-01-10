@@ -9,7 +9,6 @@ import { isBuiltInCompressor } from "@node-minify/utils";
 import type { ActionInputs } from "./types.ts";
 
 const TYPE_REQUIRED_COMPRESSORS = ["esbuild", "lightningcss", "yui"];
-const JAVA_COMPRESSORS = ["gcc", "google-closure-compiler", "yui"];
 
 const DEPRECATED_COMPRESSORS: Record<string, string> = {
     "babel-minify":
@@ -115,4 +114,4 @@ export function validateCompressor(compressor: string): void {
 
 export const validateJavaCompressor = validateCompressor;
 
-export { DEPRECATED_COMPRESSORS, JAVA_COMPRESSORS, TYPE_REQUIRED_COMPRESSORS };
+export { DEPRECATED_COMPRESSORS, TYPE_REQUIRED_COMPRESSORS };
