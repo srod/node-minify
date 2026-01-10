@@ -31,7 +31,7 @@ import { benchmark } from '@node-minify/benchmark';
 
 const results = await benchmark({
   input: 'src/app.js',
-  compressors: ['terser', 'esbuild', 'swc'],
+  compressors: ['terser', 'esbuild', 'swc', 'oxc'],
   iterations: 3,
   includeGzip: true
 });
@@ -46,7 +46,7 @@ console.log(results.summary.recommended); // Best balance of speed and compressi
 node-minify benchmark src/app.js
 
 # Compare specific compressors
-node-minify benchmark src/app.js --compressors terser,esbuild,swc
+node-minify benchmark src/app.js --compressors terser,esbuild,swc,oxc
 
 # Custom compressors (npm packages or local files)
 node-minify benchmark src/app.js --compressors terser,./my-compressor.js,my-custom-pkg
@@ -66,7 +66,7 @@ node-minify benchmark src/app.js -c terser,esbuild -f markdown
 | Option | CLI Flag | Description | Default |
 |--------|----------|-------------|---------|
 | `input` | `<input>` | File(s) to benchmark | Required |
-| `compressors` | `-c, --compressors` | Comma-separated list of compressors | `terser,esbuild,swc` |
+| `compressors` | `-c, --compressors` | Comma-separated list of compressors | `terser,esbuild,swc,oxc` |
 | `iterations` | `-n, --iterations` | Number of iterations | `1` |
 | `format` | `-f, --format` | Output format: `console`, `json`, `markdown` | `console` |
 | `output` | `-o, --output` | Output file path | stdout |

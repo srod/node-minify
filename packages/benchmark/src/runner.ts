@@ -9,6 +9,7 @@ import { minify } from "@node-minify/core";
 import {
     getFilesizeBrotliInBytes,
     getFilesizeGzippedInBytes,
+    getFilesizeGzippedRaw,
     prettyBytes,
     wildcards,
 } from "@node-minify/utils";
@@ -53,6 +54,13 @@ export async function runBenchmark(
     };
 }
 
+/**
+ * Benchmarks a single input file using the configured compressors and returns per-compressor metrics.
+ *
+ * @param file - Path to the input file to benchmark
+ * @param options - Benchmark configuration (compressors to run, iterations, callbacks, and metric options)
+ * @returns A FileResult containing the file path, original size in bytes and human-readable form, and an array of CompressorMetrics for each attempted compressor
+ */
 async function benchmarkFile(
     file: string,
     options: BenchmarkOptions
@@ -62,7 +70,12 @@ async function benchmarkFile(
     const originalSize = prettyBytes(originalSizeBytes);
     const results: CompressorMetrics[] = [];
 
-    const compressors = options.compressors || ["terser", "esbuild", "swc"];
+    const compressors = options.compressors || [
+        "terser",
+        "esbuild",
+        "swc",
+        "oxc",
+    ];
 
     for (const name of compressors) {
         if (options.onProgress) {
@@ -114,7 +127,7 @@ async function benchmarkCompressor(
                 compressor,
                 input: file,
                 output: warmupFile,
-                type: options.type as "js" | "css",
+                ...(options.type && { type: options.type as "js" | "css" }),
                 options: options.compressorOptions,
             });
         }
@@ -130,7 +143,7 @@ async function benchmarkCompressor(
                 compressor,
                 input: file,
                 output: lastOutputFile,
-                type: options.type as "js" | "css",
+                ...(options.type && { type: options.type as "js" | "css" }),
                 options: options.compressorOptions,
             });
             times.push(performance.now() - start);
@@ -155,6 +168,7 @@ async function benchmarkCompressor(
 
         if (options.includeGzip) {
             metrics.gzipSize = await getFilesizeGzippedInBytes(lastOutputFile);
+            metrics.gzipBytes = await getFilesizeGzippedRaw(lastOutputFile);
         }
 
         if (options.includeBrotli) {

@@ -273,7 +273,7 @@ node-minify --compressor terser --input src/app.js --output dist/app.min.js
 node-minify -c esbuild -i "src/**/*.js" -o dist/bundle.js -t js -O '{"minify":true}'
 
 # Benchmark
-node-minify benchmark src/app.js --compressors terser,esbuild,swc --format json
+node-minify benchmark src/app.js --compressors terser,esbuild,swc,oxc --format json
 ```
 
 **Benchmark formats**: `console` (default, colored tables), `json`, `markdown`
@@ -299,12 +299,12 @@ The repository includes a reusable GitHub Action at `.github/actions/node-minify
 
 ### Usage
 ```yaml
-- uses: srod/node-minify/.github/actions/node-minify@main
+- uses: srod/node-minify@v1
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
     compressor: "terser"  # or esbuild, swc, lightningcss, etc.
-    type: "js"            # required for esbuild, lightningcss, yui
+    type: "js"            # required for esbuild, yui
 ```
 
 ### Key Behaviors
@@ -315,8 +315,8 @@ The repository includes a reusable GitHub Action at `.github/actions/node-minify
 ### Files
 | File | Purpose |
 |------|---------|
-| `action.yml` | Action definition, inputs/outputs, composite steps |
-| `minify.ts` | Bun script that runs minification, writes GitHub outputs |
+| `action.yml` | Action definition, inputs/outputs |
+| `packages/action/` | Source code for the action (built to `packages/action/dist/index.js`) |
 
 ## CI/CD Workflows
 

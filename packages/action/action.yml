@@ -1,0 +1,93 @@
+name: "node-minify"
+description: "Minify JavaScript, CSS, and HTML files with detailed reporting and PR comments"
+author: "srod"
+branding:
+  icon: "minimize-2"
+  color: "green"
+
+inputs:
+  input:
+    description: "Files to minify (glob pattern or path)"
+    required: true
+  output:
+    description: "Output file path"
+    required: true
+  compressor:
+    description: |
+      Compressor to use.
+      Recommended: terser, esbuild, swc, oxc (fast, no Java).
+      Note: 'gcc' and 'yui' require Java (pre-installed on GitHub runners).
+    required: false
+    default: "terser"
+  type:
+    description: "File type: js or css (required for esbuild, yui)"
+    required: false
+  options:
+    description: "Compressor-specific options (JSON string)"
+    required: false
+    default: "{}"
+  report-summary:
+    description: "Add results to job summary"
+    required: false
+    default: "true"
+  report-pr-comment:
+    description: "Post results as PR comment"
+    required: false
+    default: "false"
+  report-annotations:
+    description: "Add file annotations for warnings"
+    required: false
+    default: "false"
+  benchmark:
+    description: "Run benchmark comparison across compressors"
+    required: false
+    default: "false"
+  benchmark-compressors:
+    description: "Compressors to compare (comma-separated)"
+    required: false
+    default: "terser,esbuild,swc,oxc"
+  fail-on-increase:
+    description: "Fail if minified size is larger than original"
+    required: false
+    default: "false"
+  min-reduction:
+    description: "Minimum reduction % required (0-100)"
+    required: false
+    default: "0"
+  include-gzip:
+    description: "Include gzip sizes in report"
+    required: false
+    default: "true"
+  working-directory:
+    description: "Working directory for file operations"
+    required: false
+    default: "."
+  github-token:
+    description: "GitHub token for PR comments"
+    required: false
+
+outputs:
+  original-size:
+    description: "Original file size in bytes"
+  minified-size:
+    description: "Minified file size in bytes"
+  reduction-percent:
+    description: "Size reduction percentage"
+  gzip-size:
+    description: "Gzipped size in bytes"
+  time-ms:
+    description: "Compression time in milliseconds"
+  report-json:
+    description: "Full report as JSON string"
+  benchmark-winner:
+    description: "Best compressor from benchmark (if run)"
+  best-compression:
+    description: "Compressor with best compression ratio (if benchmark run)"
+  best-speed:
+    description: "Fastest compressor (if benchmark run)"
+  benchmark-json:
+    description: "Full benchmark results as JSON string"
+
+runs:
+  using: "node20"
+  main: "dist/index.js"
