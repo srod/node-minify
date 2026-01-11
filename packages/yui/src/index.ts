@@ -49,6 +49,7 @@ export async function yui({
         data: contentStr,
         maxBuffer: settings?.buffer,
         timeout: settings?.timeout,
+        silence: settings?.silence,
     });
 
     if (typeof result !== "string") {
