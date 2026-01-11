@@ -4,10 +4,9 @@
  * MIT Licensed
  */
 
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { FileOperationError } from "./error.ts";
-import { isValidFile } from "./isValidFile.ts";
 
 /**
  * Read content from a single file with error handling.
@@ -17,14 +16,22 @@ import { isValidFile } from "./isValidFile.ts";
  */
 function readFileContent(path: string): string {
     try {
-        if (!existsSync(path)) {
-            throw new Error("File does not exist");
-        }
-        if (!isValidFile(path)) {
-            throw new Error("Path is not a valid file");
-        }
         return readFileSync(path, "utf8");
-    } catch (error) {
+    } catch (error: any) {
+        if (error.code === "ENOENT") {
+            throw new FileOperationError(
+                "read",
+                path,
+                new Error("File does not exist")
+            );
+        }
+        if (error.code === "EISDIR") {
+            throw new FileOperationError(
+                "read",
+                path,
+                new Error("Path is not a valid file")
+            );
+        }
         throw new FileOperationError("read", path, error as Error);
     }
 }
