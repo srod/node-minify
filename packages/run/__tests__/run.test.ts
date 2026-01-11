@@ -24,6 +24,7 @@ type Command = {
     data: string;
     maxBuffer?: number;
     timeout?: number;
+    silence?: boolean;
 };
 
 describe("Package: run", () => {
@@ -180,6 +181,53 @@ describe("Package: run", () => {
                 "Error in child.stderr:",
                 expect.any(Error)
             );
+
+            consoleSpy.mockRestore();
+        });
+
+        test("should suppress console.error when silence is true", async () => {
+            const consoleSpy = vi
+                .spyOn(console, "error")
+                .mockImplementation(() => {});
+
+            const mockChild = new EventEmitter() as ReturnType<
+                typeof childProcess.spawn
+            >;
+            const mockStdin = new EventEmitter();
+            const mockStdout = new EventEmitter();
+            const mockStderr = new EventEmitter();
+
+            Object.assign(mockChild, {
+                stdin: Object.assign(mockStdin, {
+                    end: vi.fn(),
+                }),
+                stdout: mockStdout,
+                stderr: mockStderr,
+                kill: vi.fn(),
+            });
+
+            spy.mockReturnValue(mockChild);
+
+            const command: Command = {
+                args: ["-jar", "fake.jar"],
+                data: "test",
+                silence: true,
+            };
+
+            const promise = runCommandLine(
+                command as unknown as RunCommandLineParams
+            );
+
+            // Emit stream error and then exit successfully
+            setImmediate(() => {
+                mockStdin.emit("error", new Error("stdin error"));
+                mockStdout.emit("data", Buffer.from("output"));
+                mockChild.emit("exit", 0);
+            });
+
+            const result = await promise;
+            expect(result).toBe("output");
+            expect(consoleSpy).not.toHaveBeenCalled();
 
             consoleSpy.mockRestore();
         });
