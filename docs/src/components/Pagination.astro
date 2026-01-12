@@ -1,0 +1,125 @@
+---
+import { SIDEBAR } from "../consts";
+
+const currentPage = Astro.url.pathname.replace(/\/$/, "");
+const currentSlug = currentPage.split("/").slice(1).join("/");
+
+// Flatten the sidebar to get a linear list of pages
+const flatSidebar = Object.values(SIDEBAR).flat();
+
+const currentIndex = flatSidebar.findIndex((item) => {
+  // Handle both with and without leading slash matches just in case
+  return (
+    item.link === currentSlug ||
+    item.link === "/" + currentSlug ||
+    "/" + item.link === currentSlug
+  );
+});
+
+const prev = currentIndex > 0 ? flatSidebar[currentIndex - 1] : null;
+const next =
+  currentIndex < flatSidebar.length - 1
+    ? flatSidebar[currentIndex + 1]
+    : null;
+---
+
+<nav class="pagination-nav" aria-label="Pagination">
+  {
+    prev && (
+      <a href={`${import.meta.env.BASE_URL}${prev.link}`} class="pagination-link prev" rel="prev">
+        <span class="pagination-label">Previous</span>
+        <span class="pagination-title">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24" aria-hidden="true">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+            </svg>
+            {prev.text}
+        </span>
+      </a>
+    )
+  }
+  {
+    !prev && <div />
+  }
+  {
+    next && (
+      <a href={`${import.meta.env.BASE_URL}${next.link}`} class="pagination-link next" rel="next">
+        <span class="pagination-label">Next</span>
+        <span class="pagination-title">
+            {next.text}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24" aria-hidden="true">
+                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+            </svg>
+        </span>
+      </a>
+    )
+  }
+</nav>
+
+<style>
+  .pagination-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--theme-divider);
+  }
+
+  .pagination-link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    padding: 1rem;
+    border: 1px solid var(--theme-divider);
+    border-radius: 8px;
+    transition:
+      border-color 0.2s,
+      background-color 0.2s;
+    flex: 1;
+    min-width: 0;
+    max-width: 48%; /* Ensure they don't touch if very wide */
+    color: var(--theme-text);
+  }
+
+  .pagination-link:hover,
+  .pagination-link:focus {
+    border-color: var(--theme-text-accent);
+    background-color: var(--theme-bg-hover);
+  }
+
+  .pagination-link.next {
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .pagination-link.prev {
+      align-items: flex-start;
+  }
+
+  .pagination-label {
+    font-size: 0.875rem;
+    color: var(--theme-text-light);
+    margin-bottom: 0.5rem;
+  }
+
+  .pagination-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    line-height: 1.4;
+  }
+
+  .pagination-link.next .pagination-title {
+      flex-direction: row;
+  }
+
+  .pagination-link.prev .pagination-title {
+      flex-direction: row;
+  }
+
+  svg {
+      flex-shrink: 0;
+  }
+</style>

@@ -1,5 +1,6 @@
 ---
 import type { MarkdownHeading } from "astro";
+import Pagination from "../Pagination.astro";
 
 // import TableOfContents from '../RightSidebar/TableOfContents';
 
@@ -19,6 +20,7 @@ const { title, headings } = Astro.props;
     </nav> -->
     <slot />
   </section>
+  <Pagination />
 </article>
 
 <style>
