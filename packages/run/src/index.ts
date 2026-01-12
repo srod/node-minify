@@ -11,6 +11,7 @@ export type RunCommandLineParams = {
     data: string;
     maxBuffer?: number;
     timeout?: number;
+    silence?: boolean;
 };
 
 /**
@@ -19,6 +20,7 @@ export type RunCommandLineParams = {
  * @param data - Data to minify (piped to stdin)
  * @param maxBuffer - Optional buffer limit in bytes. Defaults to 1024 * 1024 (1MB).
  * @param timeout - Optional timeout in milliseconds. Process will be killed if it exceeds this limit.
+ * @param silence - Optional flag to suppress console.error output.
  * @returns Promise with minified content from stdout
  */
 export async function runCommandLine({
@@ -26,8 +28,9 @@ export async function runCommandLine({
     data,
     maxBuffer,
     timeout,
+    silence,
 }: RunCommandLineParams): Promise<string> {
-    return run({ data, args, maxBuffer, timeout });
+    return run({ data, args, maxBuffer, timeout, silence });
 }
 
 type RunParams = {
@@ -35,6 +38,7 @@ type RunParams = {
     args: string[];
     maxBuffer?: number;
     timeout?: number;
+    silence?: boolean;
 };
 
 /**
@@ -43,6 +47,7 @@ type RunParams = {
  * @param args - Command line arguments
  * @param maxBuffer - Optional buffer limit in bytes. Defaults to 1024 * 1024 (1MB).
  * @param timeout - Optional timeout in milliseconds. Process will be killed if it exceeds this limit.
+ * @param silence - Optional flag to suppress console.error output.
  * @returns Promise with minified content from stdout
  */
 export async function run({
@@ -50,6 +55,7 @@ export async function run({
     args,
     maxBuffer = 1024 * 1024,
     timeout,
+    silence = false,
 }: RunParams): Promise<string> {
     return new Promise((resolve, reject) => {
         const stdoutChunks: Buffer[] = [];
@@ -73,7 +79,9 @@ export async function run({
         }
 
         const handleError = (source: string) => (error: Error) => {
-            console.error(`Error in ${source}:`, error);
+            if (!silence) {
+                console.error(`Error in ${source}:`, error);
+            }
         };
 
         child.on("error", (error) => {
