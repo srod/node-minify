@@ -60,27 +60,23 @@ export type CompressorResolution = {
 /**
  * Determines whether a string represents a local file path.
  *
- * Recognizes POSIX-style relative or absolute paths starting with "./", "../", or "/",
- * and Windows absolute paths like "C:\\" or "C:/".
- *
  * @param name - The path string to test
  * @returns `true` if `name` appears to be a local file path, `false` otherwise
  */
-function isLocalPath(name: string): boolean {
+export function isLocalPath(name: string): boolean {
     return (
         name.startsWith("./") ||
         name.startsWith("../") ||
         name.startsWith("/") ||
-        /^[a-zA-Z]:[\\/]/.test(name) // Windows absolute path
+        /^[a-zA-Z]:[/\\]/.test(name)
     );
 }
 
 /**
  * Converts a package name to camelCase for export lookup.
  *
- * Examples: "my-tool" -> "myTool", "some_pkg" -> "somePkg"
- *
- * @returns The input `name` converted to camelCase where characters following `-` or `_` are uppercased
+ * @param name - The package or file name to convert
+ * @returns The input `name` converted to camelCase
  */
 function toCamelCase(name: string): string {
     return name.replace(/[-_](.)/g, (_, char) => char.toUpperCase());
@@ -88,13 +84,6 @@ function toCamelCase(name: string): string {
 
 /**
  * Resolve a compressor function exported by a loaded module.
- *
- * Searches the module's exports in this priority order to locate a usable compressor:
- * 1. Known built-in export for the given name
- * 2. CamelCase export derived from the package/base name
- * 3. Named export `compressor`
- * 4. Default export
- * 5. First export whose value is a function
  *
  * @param mod - The imported module object to inspect for exports
  * @param name - The package or file name used to derive known and camelCase export names
@@ -104,13 +93,11 @@ function extractCompressor(
     mod: Record<string, unknown>,
     name: string
 ): Compressor | null {
-    // 1. Check known exports first
     const knownExport = KNOWN_COMPRESSOR_EXPORTS[name];
     if (knownExport && typeof mod[knownExport] === "function") {
         return mod[knownExport] as Compressor;
     }
 
-    // 2. Try camelCase of package name
     const baseName = name.includes("/")
         ? (name.split("/").pop() ?? name)
         : name;
@@ -119,17 +106,14 @@ function extractCompressor(
         return mod[camelName] as Compressor;
     }
 
-    // 3. Try "compressor" named export
     if (typeof mod.compressor === "function") {
         return mod.compressor as Compressor;
     }
 
-    // 4. Try default export
     if (typeof mod.default === "function") {
         return mod.default as Compressor;
     }
 
-    // 5. Find first function export
     for (const value of Object.values(mod)) {
         if (typeof value === "function") {
             return value as Compressor;
@@ -142,52 +126,60 @@ function extractCompressor(
 /**
  * Create a display label from a compressor package name or a local file path.
  *
- * @param name - Compressor npm package name or a local file path (./, ../, /, or Windows absolute).
- * @returns The package name for npm compressors, or the local file's basename without its .js/.ts/.mjs/.cjs extension.
+ * @param name - Compressor npm package name or a local file path
+ * @returns The package name for npm compressors, or the local file's basename without extension
  */
 function generateLabel(name: string): string {
     if (isLocalPath(name)) {
-        // For local paths, use the filename without extension
         return path.basename(name).replace(/\.(js|ts|mjs|cjs)$/, "");
     }
-    // For npm packages, use as-is
     return name;
 }
 
 /**
- * Resolve a compressor by name from a built-in @node-minify package, an installed npm package, or a local file path.
+ * Try to resolve a compressor from a built-in @node-minify package.
  *
- * @param name - Compressor identifier: a built-in name (e.g., "terser"), an npm package name, or a local path (e.g., "./compressor.js")
- * @returns The resolved CompressorResolution containing the compressor function, a display `label`, and `isBuiltIn` flag
- * @throws Error if the compressor cannot be found or the module does not export a valid compressor function
+ * @param name - The compressor name (e.g., "terser", "esbuild")
+ * @returns The resolved CompressorResolution if found, or `null` if not installed/available
  */
-export async function resolveCompressor(
+export async function tryResolveBuiltIn(
     name: string
-): Promise<CompressorResolution> {
-    const isKnown = name in KNOWN_COMPRESSOR_EXPORTS;
-
-    // 1. Try built-in @node-minify package
-    if (isKnown) {
-        try {
-            const mod = (await import(`@node-minify/${name}`)) as Record<
-                string,
-                unknown
-            >;
-            const compressor = extractCompressor(mod, name);
-
-            if (compressor) {
-                return {
-                    compressor,
-                    label: name,
-                    isBuiltIn: true,
-                };
-            }
-        } catch {
-            // Built-in package not installed, will try as external
-        }
+): Promise<CompressorResolution | null> {
+    if (!(name in KNOWN_COMPRESSOR_EXPORTS)) {
+        return null;
     }
 
-    // 2. Try as npm package
+    try {
+        const mod = (await import(`@node-minify/${name}`)) as Record<
+            string,
+            unknown
+        >;
+        const compressor = extractCompressor(mod, name);
+
+        if (compressor) {
+            return {
+                compressor,
+                label: name,
+                isBuiltIn: true,
+            };
+        }
+    } catch {
+        // Built-in package not installed
+    }
+
+    return null;
+}
+
+/**
+ * Try to resolve a compressor from an npm package.
+ *
+ * @param name - The npm package name
+ * @returns The resolved CompressorResolution if found, or `null` if not resolvable
+ * @throws Error if the package is found but doesn't export a valid compressor
+ */
+export async function tryResolveNpmPackage(
+    name: string
+): Promise<CompressorResolution | null> {
     try {
         const mod = (await import(name)) as Record<string, unknown>;
         const compressor = extractCompressor(mod, name);
@@ -206,55 +198,96 @@ export async function resolveCompressor(
                 `named export '${toCamelCase(name)}'.`
         );
     } catch (error) {
-        // If it's our error about invalid exports, rethrow
         if (
             error instanceof Error &&
             error.message.includes("doesn't export a valid compressor")
         ) {
             throw error;
         }
+        return null;
+    }
+}
 
-        // 3. Try as local file path
-        if (isLocalPath(name)) {
-            try {
-                const absolutePath = path.resolve(process.cwd(), name);
-                const fileUrl = pathToFileURL(absolutePath).href;
-                const mod = (await import(fileUrl)) as Record<string, unknown>;
-                const compressor = extractCompressor(mod, name);
+/**
+ * Try to resolve a compressor from a local file path.
+ *
+ * @param name - The local file path (e.g., "./my-compressor.js")
+ * @returns The resolved CompressorResolution if found, or `null` if not a local path
+ * @throws Error if the file is found but doesn't export a valid compressor
+ */
+export async function tryResolveLocalFile(
+    name: string
+): Promise<CompressorResolution | null> {
+    if (!isLocalPath(name)) {
+        return null;
+    }
 
-                if (compressor) {
-                    return {
-                        compressor,
-                        label: generateLabel(name),
-                        isBuiltIn: false,
-                    };
-                }
+    try {
+        const absolutePath = path.resolve(process.cwd(), name);
+        const fileUrl = pathToFileURL(absolutePath).href;
+        const mod = (await import(fileUrl)) as Record<string, unknown>;
+        const compressor = extractCompressor(mod, name);
 
-                throw new Error(
-                    `Local file '${name}' doesn't export a valid compressor function. ` +
-                        `Expected a function as default export or named export 'compressor'.`
-                );
-            } catch (localError) {
-                if (
-                    localError instanceof Error &&
-                    localError.message.includes(
-                        "doesn't export a valid compressor"
-                    )
-                ) {
-                    throw localError;
-                }
-                throw new Error(
-                    `Could not load local compressor '${name}'. ` +
-                        `File not found or failed to import: ${localError instanceof Error ? localError.message : String(localError)}`
-                );
-            }
+        if (compressor) {
+            return {
+                compressor,
+                label: generateLabel(name),
+                isBuiltIn: false,
+            };
         }
 
         throw new Error(
-            `Could not resolve compressor '${name}'. ` +
-                `Is it installed? For local files, use a path starting with './' or '/'.`
+            `Local file '${name}' doesn't export a valid compressor function. ` +
+                `Expected a function as default export or named export 'compressor'.`
+        );
+    } catch (error) {
+        if (
+            error instanceof Error &&
+            error.message.includes("doesn't export a valid compressor")
+        ) {
+            throw error;
+        }
+        throw new Error(
+            `Could not load local compressor '${name}'. ` +
+                `File not found or failed to import: ${error instanceof Error ? error.message : String(error)}`
         );
     }
+}
+
+/**
+ * Resolve a compressor by name from a built-in @node-minify package, an installed npm package, or a local file path.
+ *
+ * @param name - Compressor identifier: a built-in name (e.g., "terser"), an npm package name, or a local path (e.g., "./compressor.js")
+ * @returns The resolved CompressorResolution containing the compressor function, a display `label`, and `isBuiltIn` flag
+ * @throws Error if the compressor cannot be found or the module does not export a valid compressor function
+ */
+export async function resolveCompressor(
+    name: string
+): Promise<CompressorResolution> {
+    // 1. Try built-in @node-minify package
+    const builtIn = await tryResolveBuiltIn(name);
+    if (builtIn) {
+        return builtIn;
+    }
+
+    // 2. Try as npm package
+    const npmPackage = await tryResolveNpmPackage(name);
+    if (npmPackage) {
+        return npmPackage;
+    }
+
+    // 3. Try as local file path
+    if (isLocalPath(name)) {
+        const localFile = await tryResolveLocalFile(name);
+        if (localFile) {
+            return localFile;
+        }
+    }
+
+    throw new Error(
+        `Could not resolve compressor '${name}'. ` +
+            `Is it installed? For local files, use a path starting with './' or '/'.`
+    );
 }
 
 /**

@@ -2,7 +2,11 @@ import { buildArgs, toBuildArgsOptions } from "./buildArgs.ts";
 import {
     getKnownExportName,
     isBuiltInCompressor,
+    isLocalPath,
     resolveCompressor,
+    tryResolveBuiltIn,
+    tryResolveLocalFile,
+    tryResolveNpmPackage,
 } from "./compressor-resolver.ts";
 import { compressSingleFile } from "./compressSingleFile.ts";
 import { deleteFile } from "./deleteFile.ts";
@@ -44,6 +48,7 @@ export {
     getKnownExportName,
     isBuiltInCompressor,
     isImageFile,
+    isLocalPath,
     isValidFile,
     isValidFileAsync,
     prettyBytes,
@@ -55,6 +60,9 @@ export {
     setFileNameMin,
     setPublicFolder,
     toBuildArgsOptions,
+    tryResolveBuiltIn,
+    tryResolveLocalFile,
+    tryResolveNpmPackage,
     validateMinifyResult,
     warnDeprecation,
     wildcards,
