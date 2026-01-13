@@ -5,7 +5,11 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { ensureStringContent, warnDeprecation } from "@node-minify/utils";
+import {
+    ensureStringContent,
+    warnDeprecation,
+    wrapMinificationError,
+} from "@node-minify/utils";
 import minify from "crass";
 
 /**
@@ -26,7 +30,15 @@ export async function crass({
             "Please migrate to @node-minify/cssnano or @node-minify/clean-css."
     );
 
-    const code = minify.parse(contentStr).optimize().toString();
+    try {
+        const code = minify.parse(contentStr).optimize().toString();
 
-    return { code };
+        if (typeof code !== "string") {
+            throw new Error("crass failed: empty result");
+        }
+
+        return { code };
+    } catch (error) {
+        throw wrapMinificationError("crass", error);
+    }
 }

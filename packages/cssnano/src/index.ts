@@ -5,7 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { ensureStringContent } from "@node-minify/utils";
+import { ensureStringContent, wrapMinificationError } from "@node-minify/utils";
 import minify from "cssnano";
 import postcss from "postcss";
 
@@ -21,12 +21,19 @@ export async function cssnano({
     content,
 }: MinifierOptions): Promise<CompressorResult> {
     const contentStr = ensureStringContent(content, "cssnano");
-
     const options = settings?.options ?? {};
 
-    const result = await postcss([minify(options)]).process(contentStr, {
-        from: undefined,
-    });
+    try {
+        const result = await postcss([minify(options)]).process(contentStr, {
+            from: undefined,
+        });
 
-    return { code: result.css };
+        if (typeof result.css !== "string") {
+            throw new Error("cssnano failed: empty result");
+        }
+
+        return { code: result.css };
+    } catch (error) {
+        throw wrapMinificationError("cssnano", error);
+    }
 }

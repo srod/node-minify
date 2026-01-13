@@ -286,9 +286,16 @@ node-minify benchmark src/app.js --compressors terser,esbuild,swc,oxc --format j
 - **Clean rebuild**: `bun run clean && bun run build`
 - **Java compressors fail**: Ensure Java is installed for `yui` and `google-closure-compiler`
 
+## Documentation
+
+- **JSDoc comments**: All exported functions MUST have JSDoc comments with `@param` and `@returns` tags
+- **Preserve existing JSDoc**: When refactoring, preserve or update JSDoc comments - never remove them
+- **Copyright headers**: All source files must include the copyright header: `/*! node-minify ... MIT Licensed */`
+
 ## Anti-Patterns (DO NOT)
 
 - **Never** suppress type errors with `as any`, `@ts-ignore`, `@ts-expect-error`
+- **Never** remove JSDoc comments from exported functions
 - **Never** use deprecated packages in new code (babel-minify, uglify-es, yui, crass, sqwish)
 - **Never** commit without running `bun run lint` first
 - **Avoid** synchronous file operations in compressor code (use async variants)

@@ -8,6 +8,7 @@ import { compressSingleFile } from "./compressSingleFile.ts";
 import { deleteFile } from "./deleteFile.ts";
 import { resetDeprecationWarnings, warnDeprecation } from "./deprecation.ts";
 import { ensureStringContent } from "./ensureStringContent.ts";
+import { validateMinifyResult, wrapMinificationError } from "./errors.ts";
 import {
     getContentFromFiles,
     getContentFromFilesAsync,
@@ -54,8 +55,10 @@ export {
     setFileNameMin,
     setPublicFolder,
     toBuildArgsOptions,
+    validateMinifyResult,
     warnDeprecation,
     wildcards,
+    wrapMinificationError,
     writeFile,
     writeFileAsync,
 };

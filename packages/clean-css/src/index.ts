@@ -5,7 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { ensureStringContent } from "@node-minify/utils";
+import { ensureStringContent, wrapMinificationError } from "@node-minify/utils";
 import CleanCSS from "clean-css";
 
 /**
@@ -20,7 +20,6 @@ export async function cleanCss({
     content,
 }: MinifierOptions): Promise<CompressorResult> {
     const contentStr = ensureStringContent(content, "clean-css");
-
     const options = settings?.options ? { ...settings.options } : {};
 
     if (options.sourceMap && typeof options.sourceMap === "object") {
@@ -28,12 +27,25 @@ export async function cleanCss({
         options.sourceMap = true;
     }
 
-    const result = new CleanCSS({ returnPromise: false, ...options }).minify(
-        contentStr
-    );
+    try {
+        const result = new CleanCSS({
+            returnPromise: false,
+            ...options,
+        }).minify(contentStr);
 
-    return {
-        code: result.styles,
-        map: result.sourceMap?.toString(),
-    };
+        if (result.errors && result.errors.length > 0) {
+            throw new Error(result.errors.join("; "));
+        }
+
+        if (typeof result.styles !== "string") {
+            throw new Error("clean-css failed: empty result");
+        }
+
+        return {
+            code: result.styles,
+            map: result.sourceMap?.toString(),
+        };
+    } catch (error) {
+        throw wrapMinificationError("clean-css", error);
+    }
 }
