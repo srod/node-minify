@@ -136,7 +136,7 @@ describe("runBenchmark", () => {
         expect(result.bestSpeed).toBe("terser");
     });
 
-    test("returns empty result when no file results", async () => {
+    test("throws error when no file results", async () => {
         vi.mocked(benchmark).mockResolvedValue({
             timestamp: new Date().toISOString(),
             options: {},
@@ -148,9 +148,8 @@ describe("runBenchmark", () => {
             },
         });
 
-        const result = await runBenchmark(baseInputs);
-
-        expect(result.originalSize).toBe(0);
-        expect(result.compressors).toEqual([]);
+        await expect(runBenchmark(baseInputs)).rejects.toThrow(
+            'Benchmark failed: no results for input "src/app.js"'
+        );
     });
 });

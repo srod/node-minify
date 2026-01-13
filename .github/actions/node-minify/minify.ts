@@ -109,9 +109,7 @@ async function run(): Promise<void> {
 
         console.log(`Minifying ${inputFile} with ${label}...`);
 
-        const requiresType = ["esbuild", "yui"].includes(
-            compressorName
-        );
+        const requiresType = ["esbuild", "yui"].includes(compressorName);
         if (requiresType && !fileType) {
             console.error(
                 `::error::Compressor '${compressorName}' requires the 'type' input (js or css)`

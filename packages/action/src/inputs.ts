@@ -137,5 +137,4 @@ export function validateCompressor(compressor: string): void {
     }
 }
 
-
 export { DEPRECATED_COMPRESSORS, TYPE_REQUIRED_COMPRESSORS };

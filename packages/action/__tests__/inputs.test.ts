@@ -14,7 +14,7 @@ vi.mock("@node-minify/utils", () => ({
     isBuiltInCompressor: vi.fn(),
 }));
 
-import { getInput, getBooleanInput, warning } from "@actions/core";
+import { getBooleanInput, getInput, warning } from "@actions/core";
 import { isBuiltInCompressor } from "@node-minify/utils";
 import { parseInputs, validateCompressor } from "../src/inputs.ts";
 
