@@ -51,8 +51,7 @@
     "dev": "tsdown src/index.ts --watch"
   },
   "dependencies": {
-    "@node-minify/utils": "workspace:*",
-    "mkdirp": "3.0.1"
+    "@node-minify/utils": "workspace:*"
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*"
