@@ -1,0 +1,131 @@
+name: Release GitHub Action
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to release (e.g., v1.0.0)"
+        required: true
+        type: string
+
+concurrency: release-${{ github.event.release.tag_name || github.event.inputs.tag || github.ref_name }}
+
+permissions:
+  contents: write
+
+jobs:
+  release-action:
+    name: Build and Release Action
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || (github.event.release.tag_name || github.ref) }}
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.5"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build dependencies
+        run: |
+          bun run build:deps
+          bun run --filter '@node-minify/core' build
+
+      - name: Build action
+        run: bun run build
+        working-directory: packages/action
+
+      - name: Get version
+        id: version
+        env:
+          INPUT_TAG: ${{ github.event.inputs.tag }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          if [ -n "$INPUT_TAG" ]; then
+            VERSION="$INPUT_TAG"
+          else
+            VERSION="$REF_NAME"
+          fi
+
+          # Validate that VERSION looks like a tag (starts with v followed by numbers)
+          if ! [[ "$VERSION" =~ ^v[0-9]+(\.[0-9]+)*$ ]]; then
+            echo "Error: Version '$VERSION' is not a valid release tag (must start with 'v' e.g. v1.0.0)"
+            exit 1
+          fi
+
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          # Extract major version using regex
+          if [[ "$VERSION" =~ ^v([0-9]+) ]]; then
+            MAJOR="v${BASH_REMATCH[1]}"
+            echo "major=$MAJOR" >> $GITHUB_OUTPUT
+          else
+            echo "Error: Could not extract major version from '$VERSION'"
+            exit 1
+          fi
+
+      - name: Ensure we're on a branch
+        run: |
+          # If in detached HEAD, create a temporary branch
+          if ! git symbolic-ref -q HEAD; then
+            git checkout -b temp-release-branch
+          fi
+
+      - name: Commit built action dist
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Force add dist (ignored by .gitignore)
+          git add -f packages/action/dist/
+
+          # Only commit if there are staged changes
+          if git diff --cached --quiet; then
+            echo "No changes to commit (dist files unchanged)"
+            echo "skip_tag_update=true" >> $GITHUB_OUTPUT
+          else
+            git commit -m "chore: build action dist for ${{ steps.version.outputs.version }}"
+            echo "skip_tag_update=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update release tag
+        if: steps.commit.outputs.skip_tag_update != 'true'
+        run: |
+          # Update the release tag to point at HEAD (with dist files) and push
+          VERSION="${{ steps.version.outputs.version }}"
+          git tag -fa "$VERSION" -m "Release $VERSION with built dist"
+          git push origin "refs/tags/$VERSION" --force
+
+      - name: Update major version tag
+        run: |
+          # Force update the major version tag (e.g., v1)
+          MAJOR="${{ steps.version.outputs.major }}"
+          git tag -fa "$MAJOR" -m "Update $MAJOR tag to ${{ steps.version.outputs.version }}"
+          if ! git push origin "refs/tags/$MAJOR" --force; then
+            echo "Error: Failed to push major version tag $MAJOR"
+            exit 1
+          fi
+
+      - name: Create action release artifact
+        run: |
+          mkdir -p release-action/packages/action
+          cp action.yml release-action/
+          cp -r packages/action/dist release-action/packages/action/
+          cp packages/action/README.md release-action/
+          cd release-action
+          zip -r ../node-minify-action-${{ steps.version.outputs.version }}.zip .
+
+      - name: Upload release artifact
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: node-minify-action-${{ steps.version.outputs.version }}.zip

@@ -28,7 +28,7 @@ node-minify benchmark src/app.js
 ### Compare Specific Compressors
 
 ```bash
-node-minify benchmark src/app.js --compressors terser,esbuild,swc
+node-minify benchmark src/app.js --compressors terser,esbuild,swc,oxc
 ```
 
 ### Custom Compressors
@@ -51,7 +51,7 @@ node-minify benchmark src/app.js -c terser,esbuild -n 3
 # Include gzip size in results
 node-minify benchmark src/app.js -c terser,esbuild --gzip
 
-# Specify file type (required for esbuild, lightningcss)
+# Specify file type (required for esbuild)
 node-minify benchmark src/app.js -c terser,esbuild -t js
 ```
 
@@ -84,7 +84,7 @@ import { benchmark } from '@node-minify/benchmark';
 
 const results = await benchmark({
   input: 'src/app.js',
-  compressors: ['terser', 'esbuild', 'swc']
+  compressors: ['terser', 'esbuild', 'swc', 'oxc']
 });
 
 console.log(results.summary.recommended);
@@ -124,7 +124,7 @@ for (const file of results.files) {
 | Option | Type | Description | Default |
 |--------|------|-------------|---------|
 | `input` | `string \| string[]` | File(s) or glob pattern to benchmark | Required |
-| `compressors` | `string[]` | List of compressor names | `['terser', 'esbuild', 'swc']` |
+| `compressors` | `string[]` | List of compressor names | `['terser', 'esbuild', 'swc', 'oxc']` |
 | `iterations` | `number` | Number of iterations per compressor | `1` |
 | `warmup` | `number` | Warmup runs before timing | `1` if iterations > 1 |
 | `includeGzip` | `boolean` | Include gzip size in results | `false` |

@@ -78,7 +78,7 @@ node-minify benchmark src/app.js
 ### Compare Specific Compressors
 
 ```bash
-node-minify benchmark src/app.js --compressors terser,esbuild,swc
+node-minify benchmark src/app.js --compressors terser,esbuild,swc,oxc
 ```
 
 ### With Options
@@ -105,7 +105,7 @@ node-minify benchmark src/app.js -c terser,esbuild -f markdown
 
 | Option | Description | Default |
 |--------|-------------|---------|
-| `-c, --compressors` | Comma-separated list of compressors | `terser,esbuild,swc` |
+| `-c, --compressors` | Comma-separated list of compressors | `terser,esbuild,swc,oxc` |
 | `-n, --iterations` | Number of iterations | `1` |
 | `-f, --format` | Output format: `console`, `json`, `markdown` | `console` |
 | `-o, --output` | Output file path | stdout |

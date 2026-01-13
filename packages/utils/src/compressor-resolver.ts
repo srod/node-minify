@@ -29,6 +29,7 @@ const KNOWN_COMPRESSOR_EXPORTS: Record<string, string> = {
     crass: "crass",
     sqwish: "sqwish",
     "html-minifier": "htmlMinifier",
+    "minify-html": "minifyHtml",
     jsonminify: "jsonMinify",
     imagemin: "imagemin",
     sharp: "sharp",

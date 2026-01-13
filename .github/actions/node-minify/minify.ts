@@ -2,65 +2,10 @@ import { appendFileSync, existsSync } from "node:fs";
 import { stat } from "node:fs/promises";
 import { resolve } from "node:path";
 import { minify } from "@node-minify/core";
-import { getFilesizeGzippedInBytes } from "@node-minify/utils";
-
-const KNOWN_COMPRESSOR_EXPORTS: Record<string, string> = {
-    esbuild: "esbuild",
-    "google-closure-compiler": "gcc",
-    gcc: "gcc",
-    oxc: "oxc",
-    swc: "swc",
-    terser: "terser",
-    "uglify-js": "uglifyJs",
-    "babel-minify": "babelMinify",
-    "uglify-es": "uglifyEs",
-    yui: "yui",
-    "clean-css": "cleanCss",
-    cssnano: "cssnano",
-    csso: "csso",
-    lightningcss: "lightningCss",
-    crass: "crass",
-    sqwish: "sqwish",
-    "html-minifier": "htmlMinifier",
-    jsonminify: "jsonMinify",
-    imagemin: "imagemin",
-    sharp: "sharp",
-    svgo: "svgo",
-    "no-compress": "noCompress",
-};
-
-/**
- * Resolves a compressor function from the @node-minify/{name} package and returns it with a label.
- *
- * @param name - Compressor package identifier (e.g., "terser", "esbuild"); used to import @node-minify/{name}
- * @returns An object containing `compressor` (the resolved compressor function) and `label` (the provided name)
- * @throws Error if the package does not export a usable compressor function
- */
-async function resolveCompressor(
-    name: string
-): Promise<{ compressor: unknown; label: string }> {
-    const packageName = `@node-minify/${name}`;
-    const mod = (await import(packageName)) as Record<string, unknown>;
-
-    const knownExport = KNOWN_COMPRESSOR_EXPORTS[name];
-    if (knownExport && typeof mod[knownExport] === "function") {
-        return { compressor: mod[knownExport], label: name };
-    }
-
-    if (typeof mod.default === "function") {
-        return { compressor: mod.default, label: name };
-    }
-
-    for (const value of Object.values(mod)) {
-        if (typeof value === "function") {
-            return { compressor: value, label: name };
-        }
-    }
-
-    throw new Error(
-        `Package '${packageName}' doesn't export a valid compressor function.`
-    );
-}
+import {
+    getFilesizeGzippedInBytes,
+    resolveCompressor,
+} from "@node-minify/utils";
 
 interface ActionResult {
     originalSize: number;
@@ -164,9 +109,7 @@ async function run(): Promise<void> {
 
         console.log(`Minifying ${inputFile} with ${label}...`);
 
-        const requiresType = ["esbuild", "lightningcss", "yui"].includes(
-            compressorName
-        );
+        const requiresType = ["esbuild", "yui"].includes(compressorName);
         if (requiresType && !fileType) {
             console.error(
                 `::error::Compressor '${compressorName}' requires the 'type' input (js or css)`
