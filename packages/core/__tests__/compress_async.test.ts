@@ -1,9 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import type { Settings } from "@node-minify/types";
 import { afterAll, describe, expect, test, vi } from "vitest";
 import { noCompress } from "../../no-compress/src/index.ts";
 import { compress } from "../src/compress.ts";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 describe("compress async", () => {
     const tempDir = path.join(__dirname, "temp_async");

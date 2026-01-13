@@ -6,6 +6,7 @@
 
 import { existsSync } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import {
     getKnownExportName,
@@ -14,6 +15,7 @@ import {
 } from "../src/compressor-resolver.ts";
 import { deleteFile, writeFile } from "../src/index.ts";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const tmpDir = path.resolve(__dirname, "../../../tests/tmp");
 const testCompressorPath = path.join(tmpDir, "test-compressor.mjs");
 
