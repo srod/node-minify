@@ -9,7 +9,6 @@ import { benchmark } from "@node-minify/benchmark";
 import { TYPE_REQUIRED_COMPRESSORS } from "./inputs.ts";
 import type { ActionInputs, BenchmarkResult } from "./types.ts";
 
-
 /**
  * Run benchmark comparison across multiple compressors.
  *
@@ -43,14 +42,10 @@ export async function runBenchmark(
     // The benchmark package returns results per-file, we take the first file
     const fileResult = result.files[0];
     if (!fileResult) {
-        return {
-            file: inputs.input,
-            originalSize: 0,
-            compressors: [],
-            recommended: undefined,
-            bestCompression: undefined,
-            bestSpeed: undefined,
-        };
+        throw new Error(
+            `Benchmark failed: no results for input "${inputs.input}". ` +
+                "Check that the file exists and at least one compressor succeeded."
+        );
     }
 
     return {
