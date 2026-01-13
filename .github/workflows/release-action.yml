@@ -103,14 +103,14 @@ jobs:
           # Update the release tag to point at HEAD (with dist files) and push
           VERSION="${{ steps.version.outputs.version }}"
           git tag -fa "$VERSION" -m "Release $VERSION with built dist"
-          git push origin "$VERSION" --force
+          git push origin "refs/tags/$VERSION" --force
 
       - name: Update major version tag
         run: |
           # Force update the major version tag (e.g., v1)
           MAJOR="${{ steps.version.outputs.major }}"
           git tag -fa "$MAJOR" -m "Update $MAJOR tag to ${{ steps.version.outputs.version }}"
-          if ! git push origin "$MAJOR" --force; then
+          if ! git push origin "refs/tags/$MAJOR" --force; then
             echo "Error: Failed to push major version tag $MAJOR"
             exit 1
           fi
