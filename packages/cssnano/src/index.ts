@@ -12,15 +12,19 @@ import postcss from "postcss";
 /**
  * Minifies the provided CSS content using cssnano via PostCSS.
  *
+ * @param settings - Minifier settings; `settings.options` are forwarded to cssnano as preset options.
  * @param content - The CSS content to minify (string or buffer)
  * @returns An object whose `code` property is the minified CSS string
  */
 export async function cssnano({
+    settings,
     content,
 }: MinifierOptions): Promise<CompressorResult> {
     const contentStr = ensureStringContent(content, "cssnano");
 
-    const result = await postcss([minify]).process(contentStr, {
+    const options = settings?.options ?? {};
+
+    const result = await postcss([minify(options)]).process(contentStr, {
         from: undefined,
     });
 
