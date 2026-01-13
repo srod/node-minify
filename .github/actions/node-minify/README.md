@@ -36,6 +36,39 @@ With:
     compressor: "terser"
 ```
 
+### Removed Inputs
+
+The following inputs are **not supported** in the new action and must be removed from your workflow YAML:
+
+| Removed Input | Migration Guide |
+|---------------|-----------------|
+| `include-gzip` | Gzip sizes are now always included in the output. No action needed. |
+| `java-version` | Use `actions/setup-java@v4` before running the action (see example below). |
+
+#### Java Compressors Migration
+
+If you use `gcc` or `yui` compressors that require Java:
+
+**Before (deprecated):**
+```yaml
+- uses: srod/node-minify/.github/actions/node-minify@main
+  with:
+    compressor: gcc
+    java-version: "17"
+```
+
+**After:**
+```yaml
+- uses: actions/setup-java@v4
+  with:
+    distribution: 'temurin'
+    java-version: '17'
+
+- uses: srod/node-minify@v1
+  with:
+    compressor: gcc
+```
+
 See [packages/action/README.md](../../../packages/action/README.md) for full documentation.
 
 ---
@@ -67,19 +100,6 @@ The following documentation is for the deprecated composite action.
 | `report-summary` | Add results to job summary | No | `true` |
 | `include-gzip` | Include gzip sizes | No | `true` |
 | `java-version` | Java version for gcc/yui | No | - |
-
-> **Note about `java-version`:** This input is **not supported** in the new bundled action (`srod/node-minify@v1`). The new action relies on GitHub runners having Java pre-installed. If you need Java compressors (`gcc` or `yui`), use `actions/setup-java` before running the action:
->
-> ```yaml
-> - uses: actions/setup-java@v4
->   with:
->     distribution: 'temurin'
->     java-version: '17'
-> - uses: srod/node-minify@v1
->   with:
->     compressor: gcc
->     # ...
-> ```
 
 ### Outputs
 
