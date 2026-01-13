@@ -13,7 +13,7 @@ import { minify as oxcMinify } from "oxc-minify";
  *
  * @param settings - Minifier settings; `settings.options` are forwarded to oxc-minify (sourcemap enabled when `options.sourceMap` is truthy).
  * @param content - Input to minify; converted to a string before minification.
- * @returns The minified output: `code` contains the minified JavaScript, `map` is `undefined`.
+ * @returns The minified output: `code` contains the minified JavaScript, `map` contains the source map when available.
  */
 export async function oxc({
     settings,
@@ -30,6 +30,6 @@ export async function oxc({
 
     return {
         code: result.code,
-        map: undefined,
+        map: result.map ? JSON.stringify(result.map) : undefined,
     };
 }
