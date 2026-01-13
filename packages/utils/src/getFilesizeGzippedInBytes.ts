@@ -36,12 +36,29 @@ async function getGzipSize(file: string): Promise<number> {
 
     const { gzipSizeStream } = await import("gzip-size");
     const source = createReadStream(file);
+    const gzip = gzipSizeStream();
 
     return new Promise<number>((resolve, reject) => {
+        const cleanup = () => {
+            source.destroy();
+            gzip.destroy();
+        };
+
+        source.on("error", (err) => {
+            cleanup();
+            reject(err);
+        });
+
         source
-            .pipe(gzipSizeStream())
-            .on("gzip-size", resolve)
-            .on("error", reject);
+            .pipe(gzip)
+            .on("gzip-size", (size: number) => {
+                cleanup();
+                resolve(size);
+            })
+            .on("error", (err) => {
+                cleanup();
+                reject(err);
+            });
     });
 }
 

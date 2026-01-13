@@ -8,6 +8,11 @@ export interface ActionInputs {
     input: string;
     output: string;
     compressor: string;
+    /**
+     * File type hint for compressors that handle multiple types.
+     * Only required for `esbuild` (supports both JS and CSS) and deprecated `yui`.
+     * Other compressors auto-detect or only support one type.
+     */
     type?: "js" | "css";
     options: Record<string, unknown>;
     reportSummary: boolean;

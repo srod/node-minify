@@ -68,6 +68,19 @@ The following documentation is for the deprecated composite action.
 | `include-gzip` | Include gzip sizes | No | `true` |
 | `java-version` | Java version for gcc/yui | No | - |
 
+> **Note about `java-version`:** This input is **not supported** in the new bundled action (`srod/node-minify@v1`). The new action relies on GitHub runners having Java pre-installed. If you need Java compressors (`gcc` or `yui`), use `actions/setup-java` before running the action:
+>
+> ```yaml
+> - uses: actions/setup-java@v4
+>   with:
+>     distribution: 'temurin'
+>     java-version: '17'
+> - uses: srod/node-minify@v1
+>   with:
+>     compressor: gcc
+>     # ...
+> ```
+
 ### Outputs
 
 | Output | Description |

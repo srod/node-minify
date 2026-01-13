@@ -40,7 +40,7 @@
         "url": "https://github.com/srod/node-minify/issues"
     },
     "scripts": {
-        "build": "bun build src/index.ts --outdir dist --target node --format esm --bundle --minify && cp src/index.d.ts dist/index.d.ts 2>/dev/null || true",
+        "build": "bun build src/index.ts --outdir dist --target node --format esm --bundle --minify && cp src/index.d.ts dist/index.d.ts",
         "build:ncc": "ncc build src/index.ts -o dist --source-map --license licenses.txt",
         "format:check": "biome check .",
         "lint": "biome lint .",
