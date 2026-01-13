@@ -65,9 +65,9 @@ jobs:
           node-version: "20"
 
       - name: Install compressor packages
-        # Required: Compressors use native dependencies that cannot be bundled.
-        # They are dynamically imported at runtime via resolveCompressor().
-        # TODO: Investigate using @vercel/ncc or marking compressors as external.
+        # Compressors contain native dependencies (esbuild binaries, swc binaries, etc.)
+        # that cannot be bundled. Users must install the compressor package they need.
+        # See packages/action/README.md for documentation.
         run: |
           mkdir -p /tmp/compressors && cd /tmp/compressors
           npm init -y
@@ -171,9 +171,8 @@ jobs:
           node-version: "20"
 
       - name: Install compressor packages
-        # Required: Compressors use native dependencies that cannot be bundled.
-        # They are dynamically imported at runtime via resolveCompressor().
-        # TODO: Investigate using @vercel/ncc or marking compressors as external.
+        # Compressors contain native dependencies that cannot be bundled.
+        # See packages/action/README.md for documentation.
         run: |
           mkdir -p /tmp/compressors && cd /tmp/compressors
           npm init -y

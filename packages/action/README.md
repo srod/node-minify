@@ -13,6 +13,27 @@ GitHub Action for minifying JavaScript, CSS, and HTML files with detailed report
 
 ## Usage
 
+### Prerequisites
+
+Compressor packages contain native dependencies that cannot be bundled into the action. You must install the compressor package you want to use before running the action:
+
+```yaml
+- name: Setup Node.js
+  uses: actions/setup-node@v4
+  with:
+    node-version: "20"
+
+- name: Install compressor
+  run: npm install @node-minify/terser
+
+- name: Minify JavaScript
+  uses: srod/node-minify@v1
+  with:
+    input: "src/app.js"
+    output: "dist/app.min.js"
+    compressor: "terser"
+```
+
 ### Basic Minification
 
 ```yaml
