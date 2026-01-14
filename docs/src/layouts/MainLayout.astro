@@ -7,6 +7,7 @@ import Header from "../components/Header/Header.astro";
 import HeadSEO from "../components/HeadSEO.astro";
 import LeftSidebar from "../components/LeftSidebar/LeftSidebar.astro";
 import PageContent from "../components/PageContent/PageContent.astro";
+import Pagination from "../components/Pagination.astro";
 // import RightSidebar from '../components/RightSidebar/RightSidebar.astro';
 import { SITE } from "../consts";
 
@@ -124,6 +125,7 @@ const currentPage = Astro.url.pathname;
       <div id="grid-main">
         <PageContent title={data.title} headings={headings}>
           <slot />
+          <Pagination currentPage={currentPage} />
         </PageContent>
       </div>
       <!-- <aside id="grid-right" class="grid-sidebar" title="Table of Contents">
