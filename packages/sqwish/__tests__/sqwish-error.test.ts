@@ -15,25 +15,11 @@ describe("Package: sqwish error handling", () => {
         vi.doUnmock("sqwish");
     });
 
-    test("should throw when sqwish returns empty result", async () => {
-        vi.doMock("sqwish", () => ({
-            default: {
-                minify: () => undefined,
-            },
-        }));
-
-        const { sqwish } = await import("../src/index.ts");
-
-        await expect(
-            sqwish({ settings: {} as any, content: ".a { color: red; }" })
-        ).rejects.toThrow("sqwish failed: empty result");
-    });
-
-    test("should wrap unexpected errors", async () => {
+    test("should wrap minification errors", async () => {
         vi.doMock("sqwish", () => ({
             default: {
                 minify: () => {
-                    throw new Error("Sqwish parse error");
+                    throw new Error("CSS parse error");
                 },
             },
         }));
@@ -42,6 +28,6 @@ describe("Package: sqwish error handling", () => {
 
         await expect(
             sqwish({ settings: {} as any, content: ".a { color: red; }" })
-        ).rejects.toThrow("sqwish");
+        ).rejects.toThrow("sqwish minification failed: CSS parse error");
     });
 });

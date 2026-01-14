@@ -35,11 +35,6 @@ export async function sqwish({
     try {
         const strict = settings?.options?.strict as boolean | undefined;
         const code = minify.minify(contentStr, strict);
-
-        if (typeof code !== "string") {
-            throw new Error("sqwish failed: empty result");
-        }
-
         return { code };
     } catch (error) {
         throw wrapMinificationError("sqwish", error);

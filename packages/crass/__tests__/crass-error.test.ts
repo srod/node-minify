@@ -15,25 +15,7 @@ describe("Package: crass error handling", () => {
         vi.doUnmock("crass");
     });
 
-    test("should throw when crass returns empty result", async () => {
-        vi.doMock("crass", () => ({
-            default: {
-                parse: () => ({
-                    optimize: () => ({
-                        toString: () => undefined,
-                    }),
-                }),
-            },
-        }));
-
-        const { crass } = await import("../src/index.ts");
-
-        await expect(
-            crass({ settings: {} as any, content: ".a { color: red; }" })
-        ).rejects.toThrow("crass failed: empty result");
-    });
-
-    test("should wrap unexpected errors", async () => {
+    test("should wrap parse errors", async () => {
         vi.doMock("crass", () => ({
             default: {
                 parse: () => {
@@ -46,6 +28,6 @@ describe("Package: crass error handling", () => {
 
         await expect(
             crass({ settings: {} as any, content: ".a { color: red; }" })
-        ).rejects.toThrow("crass");
+        ).rejects.toThrow("crass minification failed: Parse error");
     });
 });

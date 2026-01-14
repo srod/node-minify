@@ -15,19 +15,7 @@ describe("Package: jsonminify error handling", () => {
         vi.doUnmock("jsonminify");
     });
 
-    test("should throw when jsonminify returns empty result", async () => {
-        vi.doMock("jsonminify", () => ({
-            default: () => undefined,
-        }));
-
-        const { jsonMinify } = await import("../src/index.ts");
-
-        await expect(
-            jsonMinify({ settings: {} as any, content: '{"key": "value"}' })
-        ).rejects.toThrow("jsonminify failed: empty result");
-    });
-
-    test("should wrap unexpected errors", async () => {
+    test("should wrap minification errors", async () => {
         vi.doMock("jsonminify", () => ({
             default: () => {
                 throw new Error("JSON parse error");
@@ -38,6 +26,6 @@ describe("Package: jsonminify error handling", () => {
 
         await expect(
             jsonMinify({ settings: {} as any, content: '{"key": "value"}' })
-        ).rejects.toThrow("jsonminify");
+        ).rejects.toThrow("jsonminify minification failed: JSON parse error");
     });
 });

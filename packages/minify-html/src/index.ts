@@ -41,11 +41,6 @@ export async function minifyHtml({
         const inputBuffer = Buffer.from(contentStr);
         const outputBuffer = minifyHtmlLib.minify(inputBuffer, options);
         const code = outputBuffer.toString();
-
-        if (typeof code !== "string") {
-            throw new Error("minify-html failed: empty result");
-        }
-
         return { code };
     } catch (error) {
         throw wrapMinificationError("minify-html", error);

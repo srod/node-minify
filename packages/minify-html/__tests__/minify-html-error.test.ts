@@ -15,27 +15,10 @@ describe("Package: minify-html error handling", () => {
         vi.doUnmock("@minify-html/node");
     });
 
-    test("should throw when minify-html returns empty result", async () => {
-        vi.doMock("@minify-html/node", () => ({
-            minify: () => ({
-                toString: () => undefined,
-            }),
-        }));
-
-        const { minifyHtml } = await import("../src/index.ts");
-
-        await expect(
-            minifyHtml({
-                settings: {} as any,
-                content: "<html><body>test</body></html>",
-            })
-        ).rejects.toThrow("minify-html failed: empty result");
-    });
-
-    test("should wrap unexpected errors", async () => {
+    test("should wrap minification errors", async () => {
         vi.doMock("@minify-html/node", () => ({
             minify: () => {
-                throw new Error("Minify-html parse error");
+                throw new Error("Invalid HTML syntax");
             },
         }));
 
@@ -46,6 +29,8 @@ describe("Package: minify-html error handling", () => {
                 settings: {} as any,
                 content: "<html><body>test</body></html>",
             })
-        ).rejects.toThrow("minify-html");
+        ).rejects.toThrow(
+            "minify-html minification failed: Invalid HTML syntax"
+        );
     });
 });

@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import { validateMinifyResult, wrapMinificationError } from "../src/errors.ts";
 
 describe("wrapMinificationError", () => {
-    test("wraps Error with message", () => {
+    test("wraps Error with message and preserves cause", () => {
         const originalError = new Error("Parse error at line 5");
         const wrapped = wrapMinificationError("terser", originalError);
 
@@ -10,33 +10,38 @@ describe("wrapMinificationError", () => {
         expect(wrapped.message).toBe(
             "terser minification failed: Parse error at line 5"
         );
+        expect(wrapped.cause).toBe(originalError);
     });
 
-    test("wraps string error", () => {
+    test("wraps string error without cause", () => {
         const wrapped = wrapMinificationError("oxc", "unexpected token");
 
         expect(wrapped).toBeInstanceOf(Error);
         expect(wrapped.message).toBe(
             "oxc minification failed: unexpected token"
         );
+        expect(wrapped.cause).toBeUndefined();
     });
 
-    test("wraps null/undefined", () => {
+    test("wraps null/undefined without cause", () => {
         const wrappedNull = wrapMinificationError("csso", null);
         const wrappedUndefined = wrapMinificationError("csso", undefined);
 
         expect(wrappedNull.message).toBe("csso minification failed: null");
+        expect(wrappedNull.cause).toBeUndefined();
         expect(wrappedUndefined.message).toBe(
             "csso minification failed: undefined"
         );
+        expect(wrappedUndefined.cause).toBeUndefined();
     });
 
-    test("wraps object error", () => {
+    test("wraps object error without cause", () => {
         const wrapped = wrapMinificationError("clean-css", { code: "E001" });
 
         expect(wrapped.message).toBe(
             "clean-css minification failed: [object Object]"
         );
+        expect(wrapped.cause).toBeUndefined();
     });
 });
 

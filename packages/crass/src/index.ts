@@ -32,11 +32,6 @@ export async function crass({
 
     try {
         const code = minify.parse(contentStr).optimize().toString();
-
-        if (typeof code !== "string") {
-            throw new Error("crass failed: empty result");
-        }
-
         return { code };
     } catch (error) {
         throw wrapMinificationError("crass", error);

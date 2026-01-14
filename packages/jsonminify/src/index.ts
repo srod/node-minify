@@ -21,11 +21,6 @@ export async function jsonMinify({
 
     try {
         const code = jsonminify(contentStr);
-
-        if (typeof code !== "string") {
-            throw new Error("jsonminify failed: empty result");
-        }
-
         return { code };
     } catch (error) {
         throw wrapMinificationError("jsonminify", error);

@@ -16,7 +16,10 @@ export function wrapMinificationError(
     error: unknown
 ): Error {
     const message = error instanceof Error ? error.message : String(error);
-    return new Error(`${compressorName} minification failed: ${message}`);
+    const cause = error instanceof Error ? error : undefined;
+    return new Error(`${compressorName} minification failed: ${message}`, {
+        cause,
+    });
 }
 
 /**
