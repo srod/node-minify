@@ -6,6 +6,8 @@
 
 import childProcess from "node:child_process";
 import { EventEmitter } from "node:events";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import {
     afterAll,
     beforeAll,
@@ -17,6 +19,7 @@ import {
 } from "vitest";
 import { type RunCommandLineParams, runCommandLine } from "../src/index.ts";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const jar = `${__dirname}/../../yui/src/binaries/yuicompressor-2.4.7.jar`;
 
 type Command = {

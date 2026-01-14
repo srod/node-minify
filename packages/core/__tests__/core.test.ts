@@ -6,6 +6,8 @@
 
 import childProcess from "node:child_process";
 import { statSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import type { Compressor, Settings } from "@node-minify/types";
 import {
     afterAll,
@@ -16,6 +18,8 @@ import {
     test,
     vi,
 } from "vitest";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 vi.mock("node:fs", async (importOriginal) => {
     const actual = await importOriginal<typeof import("node:fs")>();
