@@ -75,6 +75,12 @@ export async function runIterations(
     iterationCount: number,
     options: Pick<BenchmarkOptions, "type" | "compressorOptions">
 ): Promise<IterationsResult> {
+    if (iterationCount < 1) {
+        throw new Error(
+            `iterationCount must be at least 1, got ${iterationCount}`
+        );
+    }
+
     const times: number[] = [];
 
     for (let i = 0; i < iterationCount; i++) {
@@ -109,6 +115,12 @@ export async function calculateCompressorMetrics(
     originalSizeBytes: number,
     options: Pick<BenchmarkOptions, "includeGzip" | "includeBrotli" | "verbose">
 ): Promise<CompressorMetrics> {
+    if (times.length === 0) {
+        throw new Error(
+            `Cannot calculate metrics for '${name}': no timing data provided`
+        );
+    }
+
     const avgTime = times.reduce((a, b) => a + b, 0) / times.length;
     const outStats = statSync(outputFile);
     const sizeBytes = outStats.size;

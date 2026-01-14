@@ -276,12 +276,15 @@ export async function resolveCompressor(
         return npmPackage;
     }
 
-    // 3. Try as local file path
+    // 3. Try as local file path (throws if file exists but has invalid exports)
     if (isLocalPath(name)) {
         const localFile = await tryResolveLocalFile(name);
         if (localFile) {
             return localFile;
         }
+        // tryResolveLocalFile throws for local paths that can't be loaded,
+        // so reaching here means it returned null (which shouldn't happen
+        // after the isLocalPath guard, but we handle it defensively)
     }
 
     throw new Error(
