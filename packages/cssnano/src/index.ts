@@ -11,7 +11,7 @@ import {
     wrapMinificationError,
 } from "@node-minify/utils";
 import minify from "cssnano";
-import postcss, { type Result } from "postcss";
+import postcss from "postcss";
 
 /**
  * Minifies the provided CSS content using cssnano via PostCSS.
@@ -27,15 +27,14 @@ export async function cssnano({
     const contentStr = ensureStringContent(content, "cssnano");
     const options = settings?.options ?? {};
 
-    let result: Result;
     try {
-        result = await postcss([minify(options)]).process(contentStr, {
+        const result = await postcss([minify(options)]).process(contentStr, {
             from: undefined,
         });
+
+        validateMinifyResult({ code: result.css }, "cssnano");
+        return { code: result.css };
     } catch (error) {
         throw wrapMinificationError("cssnano", error);
     }
-
-    validateMinifyResult({ code: result.css }, "cssnano");
-    return { code: result.css };
 }

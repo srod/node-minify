@@ -26,6 +26,8 @@ describe("Package: cssnano error handling", () => {
 
         await expect(
             cssnano({ settings: {} as any, content: ".a { color: red; }" })
-        ).rejects.toThrow("cssnano failed: empty or invalid result");
+        ).rejects.toThrow(
+            "cssnano minification failed: cssnano failed: empty or invalid result"
+        );
     });
 });
