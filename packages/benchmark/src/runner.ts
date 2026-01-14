@@ -9,6 +9,7 @@ import { minify } from "@node-minify/core";
 import type { Compressor } from "@node-minify/types";
 import {
     getFilesizeBrotliInBytes,
+    getFilesizeBrotliRaw,
     getFilesizeGzippedInBytes,
     getFilesizeGzippedRaw,
     prettyBytes,
@@ -144,6 +145,7 @@ export async function calculateCompressorMetrics(
 
     if (options.includeBrotli) {
         metrics.brotliSize = await getFilesizeBrotliInBytes(outputFile);
+        metrics.brotliBytes = await getFilesizeBrotliRaw(outputFile);
     }
 
     return metrics;

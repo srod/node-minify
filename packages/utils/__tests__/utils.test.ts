@@ -28,6 +28,7 @@ import {
     ensureStringContent,
     getContentFromFiles,
     getFilesizeBrotliInBytes,
+    getFilesizeBrotliRaw,
     getFilesizeGzippedInBytes,
     getFilesizeGzippedRaw,
     getFilesizeInBytes,
@@ -567,6 +568,27 @@ describe("Package: utils", () => {
                 expect(error).toBeInstanceOf(FileOperationError);
                 expect((error as Error).message).toContain("Failed to");
             }
+        });
+    });
+
+    describe("getFilesizeBrotliRaw", () => {
+        test("should return file size as number", async () => {
+            const size = await getFilesizeBrotliRaw(fixtureFile);
+            expect(typeof size).toBe("number");
+            expect(size).toBeGreaterThan(0);
+        });
+
+        test("should throw if file does not exist", async () => {
+            await expect(getFilesizeBrotliRaw("fake.js")).rejects.toThrow(
+                FileOperationError
+            );
+        });
+
+        test("should throw if path is a directory", async () => {
+            const dirPath = __dirname || ".";
+            await expect(getFilesizeBrotliRaw(dirPath)).rejects.toThrow(
+                FileOperationError
+            );
         });
     });
 

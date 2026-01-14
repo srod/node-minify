@@ -17,7 +17,10 @@ import {
     getContentFromFiles,
     getContentFromFilesAsync,
 } from "./getContentFromFiles.ts";
-import { getFilesizeBrotliInBytes } from "./getFilesizeBrotliInBytes.ts";
+import {
+    getFilesizeBrotliInBytes,
+    getFilesizeBrotliRaw,
+} from "./getFilesizeBrotliInBytes.ts";
 import {
     getFilesizeGzippedInBytes,
     getFilesizeGzippedRaw,
@@ -42,6 +45,7 @@ export {
     getContentFromFiles,
     getContentFromFilesAsync,
     getFilesizeBrotliInBytes,
+    getFilesizeBrotliRaw,
     getFilesizeGzippedInBytes,
     getFilesizeGzippedRaw,
     getFilesizeInBytes,
