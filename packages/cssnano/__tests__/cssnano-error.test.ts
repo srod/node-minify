@@ -26,6 +26,6 @@ describe("Package: cssnano error handling", () => {
 
         await expect(
             cssnano({ settings: {} as any, content: ".a { color: red; }" })
-        ).rejects.toThrow("cssnano failed: empty result");
+        ).rejects.toThrow("cssnano failed: empty or invalid result");
     });
 });
