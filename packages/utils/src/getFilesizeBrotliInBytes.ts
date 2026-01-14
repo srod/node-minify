@@ -60,6 +60,9 @@ export async function getFilesizeBrotliInBytes(file: string): Promise<string> {
         const size = await getBrotliSize(file);
         return prettyBytes(size);
     } catch (error) {
+        if (error instanceof FileOperationError) {
+            throw error;
+        }
         throw new FileOperationError(
             "get brotli size of",
             file,
@@ -81,6 +84,9 @@ export async function getFilesizeBrotliRaw(file: string): Promise<number> {
     try {
         return await getBrotliSize(file);
     } catch (error) {
+        if (error instanceof FileOperationError) {
+            throw error;
+        }
         throw new FileOperationError(
             "get brotli size of",
             file,

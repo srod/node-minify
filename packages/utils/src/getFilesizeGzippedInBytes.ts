@@ -51,6 +51,9 @@ export async function getFilesizeGzippedInBytes(file: string): Promise<string> {
         const size = await getGzipSize(file);
         return prettyBytes(size);
     } catch (error) {
+        if (error instanceof FileOperationError) {
+            throw error;
+        }
         throw new FileOperationError(
             "get gzipped size of",
             file,
@@ -71,6 +74,9 @@ export async function getFilesizeGzippedRaw(file: string): Promise<number> {
     try {
         return await getGzipSize(file);
     } catch (error) {
+        if (error instanceof FileOperationError) {
+            throw error;
+        }
         throw new FileOperationError(
             "get gzipped size of",
             file,
