@@ -86,6 +86,24 @@ describe("Package: utils/compressor-resolver", () => {
             const result = await tryResolveBuiltIn("picocolors");
             expect(result).toBeNull();
         });
+
+        test("should return null when built-in package has no valid compressor export", async () => {
+            // Mock import to return a module with no function exports
+            vi.doMock("@node-minify/terser", () => ({
+                notAFunction: "string value",
+                anotherValue: 42,
+            }));
+
+            // Re-import to pick up the mock
+            const { tryResolveBuiltIn: freshTryResolve } = await import(
+                "../src/compressor-resolver.ts"
+            );
+            const result = await freshTryResolve("terser");
+            expect(result).toBeNull();
+
+            // Restore mock so subsequent tests are unaffected
+            vi.doUnmock("@node-minify/terser");
+        });
     });
 
     describe("tryResolveNpmPackage", () => {
