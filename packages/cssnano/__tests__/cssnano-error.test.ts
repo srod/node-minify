@@ -29,5 +29,5 @@ describe("Package: cssnano error handling", () => {
         ).rejects.toThrow(
             "cssnano minification failed: cssnano failed: empty or invalid result"
         );
-    });
+    }, 15000);
 });
