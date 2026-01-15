@@ -53,7 +53,7 @@
   },
   "dependencies": {
     "@node-minify/utils": "workspace:*",
-    "terser": "5.45.0"
+    "terser": "5.46.0"
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*"
