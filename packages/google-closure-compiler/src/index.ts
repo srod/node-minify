@@ -72,7 +72,7 @@ export async function gcc({
  * @returns the flags object with the options added
  */
 type Flags = {
-    [key: string]: boolean | Record<string, unknown>;
+    [key: string]: string | boolean | Record<string, unknown>;
 };
 function applyOptions(flags: Flags, options?: Record<string, unknown>): Flags {
     if (!options || Object.keys(options).length === 0) {
@@ -83,10 +83,11 @@ function applyOptions(flags: Flags, options?: Record<string, unknown>): Flags {
         .forEach((option) => {
             const value = options[option];
             if (
+                typeof value === "string" ||
                 typeof value === "boolean" ||
                 (typeof value === "object" && !Array.isArray(value))
             ) {
-                flags[option] = value as boolean | Record<string, unknown>;
+                flags[option] = value as string | boolean | Record<string, unknown>;
             }
         });
     return flags;
