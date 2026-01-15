@@ -5,7 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { ensureStringContent } from "@node-minify/utils";
+import { ensureStringContent, wrapMinificationError } from "@node-minify/utils";
 
 const defaultOptions = {
     collapseBooleanAttributes: true,
@@ -36,10 +36,17 @@ export async function htmlMinifier({
 }: MinifierOptions): Promise<CompressorResult> {
     const contentStr = ensureStringContent(content, "html-minifier");
 
-    const { minify } = await import("html-minifier-next");
-    const options = { ...defaultOptions, ...settings?.options };
+    try {
+        const { minify } = await import("html-minifier-next");
+        const options = { ...defaultOptions, ...settings?.options };
+        const code = await minify(contentStr, options);
 
-    const code = await minify(contentStr, options);
+        if (typeof code !== "string") {
+            throw new Error("html-minifier failed: empty result");
+        }
 
-    return { code };
+        return { code };
+    } catch (error) {
+        throw wrapMinificationError("html-minifier", error);
+    }
 }

@@ -5,7 +5,11 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { ensureStringContent, warnDeprecation } from "@node-minify/utils";
+import {
+    ensureStringContent,
+    warnDeprecation,
+    wrapMinificationError,
+} from "@node-minify/utils";
 import minify from "sqwish";
 
 /**
@@ -28,9 +32,11 @@ export async function sqwish({
             "Please migrate to @node-minify/cssnano or @node-minify/clean-css."
     );
 
-    const strict = settings?.options?.strict as boolean | undefined;
-
-    const code = minify.minify(contentStr, strict);
-
-    return { code };
+    try {
+        const strict = settings?.options?.strict as boolean | undefined;
+        const code = minify.minify(contentStr, strict);
+        return { code };
+    } catch (error) {
+        throw wrapMinificationError("sqwish", error);
+    }
 }
