@@ -2,7 +2,11 @@ import { buildArgs, toBuildArgsOptions } from "./buildArgs.ts";
 import {
     getKnownExportName,
     isBuiltInCompressor,
+    isLocalPath,
     resolveCompressor,
+    tryResolveBuiltIn,
+    tryResolveLocalFile,
+    tryResolveNpmPackage,
 } from "./compressor-resolver.ts";
 import { compressSingleFile } from "./compressSingleFile.ts";
 import { deleteFile } from "./deleteFile.ts";
@@ -13,7 +17,10 @@ import {
     getContentFromFiles,
     getContentFromFilesAsync,
 } from "./getContentFromFiles.ts";
-import { getFilesizeBrotliInBytes } from "./getFilesizeBrotliInBytes.ts";
+import {
+    getFilesizeBrotliInBytes,
+    getFilesizeBrotliRaw,
+} from "./getFilesizeBrotliInBytes.ts";
 import {
     getFilesizeGzippedInBytes,
     getFilesizeGzippedRaw,
@@ -38,12 +45,14 @@ export {
     getContentFromFiles,
     getContentFromFilesAsync,
     getFilesizeBrotliInBytes,
+    getFilesizeBrotliRaw,
     getFilesizeGzippedInBytes,
     getFilesizeGzippedRaw,
     getFilesizeInBytes,
     getKnownExportName,
     isBuiltInCompressor,
     isImageFile,
+    isLocalPath,
     isValidFile,
     isValidFileAsync,
     prettyBytes,
@@ -55,6 +64,9 @@ export {
     setFileNameMin,
     setPublicFolder,
     toBuildArgsOptions,
+    tryResolveBuiltIn,
+    tryResolveLocalFile,
+    tryResolveNpmPackage,
     validateMinifyResult,
     warnDeprecation,
     wildcards,

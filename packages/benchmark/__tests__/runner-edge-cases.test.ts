@@ -8,6 +8,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, test, vi } from "vitest";
 import { benchmark } from "../src/index.ts";
+import { calculateCompressorMetrics, runIterations } from "../src/runner.ts";
 import type { BenchmarkOptions } from "../src/types.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -275,5 +276,31 @@ describe("Runner Edge Cases", () => {
 
         const result = results.files[0]?.results[0];
         expect(result?.success).toBe(true);
+    });
+
+    describe("runIterations validation", () => {
+        const mockCompressor = vi.fn();
+
+        test("should throw when iterationCount is 0", async () => {
+            await expect(
+                runIterations(fixtureJS, mockCompressor, "/tmp/out.js", 0, {})
+            ).rejects.toThrow("iterationCount must be at least 1, got 0");
+        });
+
+        test("should throw when iterationCount is negative", async () => {
+            await expect(
+                runIterations(fixtureJS, mockCompressor, "/tmp/out.js", -1, {})
+            ).rejects.toThrow("iterationCount must be at least 1, got -1");
+        });
+    });
+
+    describe("calculateCompressorMetrics validation", () => {
+        test("should throw when times array is empty", async () => {
+            await expect(
+                calculateCompressorMetrics("test", [], fixtureJS, 1000, {})
+            ).rejects.toThrow(
+                "Cannot calculate metrics for 'test': no timing data provided"
+            );
+        });
     });
 });
