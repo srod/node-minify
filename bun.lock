@@ -6,7 +6,7 @@
       "name": "node-minify",
       "devDependencies": {
         "@arethetypeswrong/cli": "^0.18.2",
-        "@biomejs/biome": "^2.3.11",
+        "@biomejs/biome": "^2.3.10",
         "@changesets/cli": "2.29.8",
         "@total-typescript/tsconfig": "^1.0.4",
         "@types/node": "^22.19.3",
@@ -23,7 +23,7 @@
     },
     "docs": {
       "name": "@node-minify/docs",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@astrojs/cloudflare": "^12.0.0",
         "@astrojs/partytown": "2.1.4",
@@ -42,7 +42,7 @@
     },
     "examples": {
       "name": "@node-minify/examples",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/babel-minify": "workspace:*",
         "@node-minify/clean-css": "workspace:*",
@@ -70,7 +70,7 @@
     },
     "packages/babel-minify": {
       "name": "@node-minify/babel-minify",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "babel-core": "6.26.3",
@@ -84,7 +84,7 @@
     },
     "packages/benchmark": {
       "name": "@node-minify/benchmark",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/core": "workspace:*",
         "@node-minify/utils": "workspace:*",
@@ -99,7 +99,7 @@
     },
     "packages/clean-css": {
       "name": "@node-minify/clean-css",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "clean-css": "5.3.3",
@@ -111,7 +111,7 @@
     },
     "packages/cli": {
       "name": "@node-minify/cli",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "bin": {
         "node-minify": "dist/bin/cli.js",
       },
@@ -145,7 +145,7 @@
     },
     "packages/core": {
       "name": "@node-minify/core",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "mkdirp": "3.0.1",
@@ -156,7 +156,7 @@
     },
     "packages/crass": {
       "name": "@node-minify/crass",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "crass": "0.12.3",
@@ -167,7 +167,7 @@
     },
     "packages/cssnano": {
       "name": "@node-minify/cssnano",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "cssnano": "^7.0.6",
@@ -179,7 +179,7 @@
     },
     "packages/csso": {
       "name": "@node-minify/csso",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "csso": "5.0.5",
@@ -191,7 +191,7 @@
     },
     "packages/esbuild": {
       "name": "@node-minify/esbuild",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "esbuild": "^0.27.0",
@@ -202,7 +202,7 @@
     },
     "packages/google-closure-compiler": {
       "name": "@node-minify/google-closure-compiler",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/run": "workspace:*",
         "@node-minify/utils": "workspace:*",
@@ -214,7 +214,7 @@
     },
     "packages/html-minifier": {
       "name": "@node-minify/html-minifier",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "html-minifier-next": "^4.14.3",
@@ -225,7 +225,7 @@
     },
     "packages/imagemin": {
       "name": "@node-minify/imagemin",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/core": "workspace:*",
         "@node-minify/utils": "workspace:*",
@@ -245,7 +245,7 @@
     },
     "packages/jsonminify": {
       "name": "@node-minify/jsonminify",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "jsonminify": "0.4.2",
@@ -257,7 +257,7 @@
     },
     "packages/lightningcss": {
       "name": "@node-minify/lightningcss",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "lightningcss": "^1.28.2",
@@ -268,7 +268,7 @@
     },
     "packages/minify-html": {
       "name": "@node-minify/minify-html",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@minify-html/node": "^0.18.0",
         "@node-minify/utils": "workspace:*",
@@ -279,7 +279,7 @@
     },
     "packages/no-compress": {
       "name": "@node-minify/no-compress",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
       },
@@ -289,7 +289,7 @@
     },
     "packages/oxc": {
       "name": "@node-minify/oxc",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "oxc-minify": "^0.107.0",
@@ -300,14 +300,14 @@
     },
     "packages/run": {
       "name": "@node-minify/run",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "devDependencies": {
         "@node-minify/types": "workspace:*",
       },
     },
     "packages/sharp": {
       "name": "@node-minify/sharp",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/core": "workspace:*",
         "@node-minify/utils": "workspace:*",
@@ -319,7 +319,7 @@
     },
     "packages/sqwish": {
       "name": "@node-minify/sqwish",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "sqwish": "0.2.2",
@@ -330,7 +330,7 @@
     },
     "packages/svgo": {
       "name": "@node-minify/svgo",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "svgo": "^4.0.0",
@@ -341,7 +341,7 @@
     },
     "packages/swc": {
       "name": "@node-minify/swc",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "@swc/core": "^1.10.4",
@@ -352,7 +352,7 @@
     },
     "packages/terser": {
       "name": "@node-minify/terser",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "terser": "5.44.1",
@@ -363,11 +363,11 @@
     },
     "packages/types": {
       "name": "@node-minify/types",
-      "version": "10.3.0",
+      "version": "10.2.0",
     },
     "packages/uglify-es": {
       "name": "@node-minify/uglify-es",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "uglify-es": "3.3.9",
@@ -379,7 +379,7 @@
     },
     "packages/uglify-js": {
       "name": "@node-minify/uglify-js",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
         "uglify-js": "3.19.3",
@@ -391,7 +391,7 @@
     },
     "packages/utils": {
       "name": "@node-minify/utils",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "fast-glob": "^3.3.3",
         "gzip-size": "7.0.0",
@@ -402,7 +402,7 @@
     },
     "packages/yui": {
       "name": "@node-minify/yui",
-      "version": "10.3.0",
+      "version": "10.2.0",
       "dependencies": {
         "@node-minify/run": "workspace:*",
         "@node-minify/utils": "workspace:*",
@@ -489,23 +489,23 @@
 
     "@bcoe/v8-coverage": ["@bcoe/v8-coverage@1.0.2", "", {}, "sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA=="],
 
-    "@biomejs/biome": ["@biomejs/biome@2.3.11", "", { "optionalDependencies": { "@biomejs/cli-darwin-arm64": "2.3.11", "@biomejs/cli-darwin-x64": "2.3.11", "@biomejs/cli-linux-arm64": "2.3.11", "@biomejs/cli-linux-arm64-musl": "2.3.11", "@biomejs/cli-linux-x64": "2.3.11", "@biomejs/cli-linux-x64-musl": "2.3.11", "@biomejs/cli-win32-arm64": "2.3.11", "@biomejs/cli-win32-x64": "2.3.11" }, "bin": { "biome": "bin/biome" } }, "sha512-/zt+6qazBWguPG6+eWmiELqO+9jRsMZ/DBU3lfuU2ngtIQYzymocHhKiZRyrbra4aCOoyTg/BmY+6WH5mv9xmQ=="],
+    "@biomejs/biome": ["@biomejs/biome@2.3.10", "", { "optionalDependencies": { "@biomejs/cli-darwin-arm64": "2.3.10", "@biomejs/cli-darwin-x64": "2.3.10", "@biomejs/cli-linux-arm64": "2.3.10", "@biomejs/cli-linux-arm64-musl": "2.3.10", "@biomejs/cli-linux-x64": "2.3.10", "@biomejs/cli-linux-x64-musl": "2.3.10", "@biomejs/cli-win32-arm64": "2.3.10", "@biomejs/cli-win32-x64": "2.3.10" }, "bin": { "biome": "bin/biome" } }, "sha512-/uWSUd1MHX2fjqNLHNL6zLYWBbrJeG412/8H7ESuK8ewoRoMPUgHDebqKrPTx/5n6f17Xzqc9hdg3MEqA5hXnQ=="],
 
-    "@biomejs/cli-darwin-arm64": ["@biomejs/cli-darwin-arm64@2.3.11", "", { "os": "darwin", "cpu": "arm64" }, "sha512-/uXXkBcPKVQY7rc9Ys2CrlirBJYbpESEDme7RKiBD6MmqR2w3j0+ZZXRIL2xiaNPsIMMNhP1YnA+jRRxoOAFrA=="],
+    "@biomejs/cli-darwin-arm64": ["@biomejs/cli-darwin-arm64@2.3.10", "", { "os": "darwin", "cpu": "arm64" }, "sha512-M6xUjtCVnNGFfK7HMNKa593nb7fwNm43fq1Mt71kpLpb+4mE7odO8W/oWVDyBVO4ackhresy1ZYO7OJcVo/B7w=="],
 
-    "@biomejs/cli-darwin-x64": ["@biomejs/cli-darwin-x64@2.3.11", "", { "os": "darwin", "cpu": "x64" }, "sha512-fh7nnvbweDPm2xEmFjfmq7zSUiox88plgdHF9OIW4i99WnXrAC3o2P3ag9judoUMv8FCSUnlwJCM1B64nO5Fbg=="],
+    "@biomejs/cli-darwin-x64": ["@biomejs/cli-darwin-x64@2.3.10", "", { "os": "darwin", "cpu": "x64" }, "sha512-Vae7+V6t/Avr8tVbFNjnFSTKZogZHFYl7MMH62P/J1kZtr0tyRQ9Fe0onjqjS2Ek9lmNLmZc/VR5uSekh+p1fg=="],
 
-    "@biomejs/cli-linux-arm64": ["@biomejs/cli-linux-arm64@2.3.11", "", { "os": "linux", "cpu": "arm64" }, "sha512-l4xkGa9E7Uc0/05qU2lMYfN1H+fzzkHgaJoy98wO+b/7Gl78srbCRRgwYSW+BTLixTBrM6Ede5NSBwt7rd/i6g=="],
+    "@biomejs/cli-linux-arm64": ["@biomejs/cli-linux-arm64@2.3.10", "", { "os": "linux", "cpu": "arm64" }, "sha512-hhPw2V3/EpHKsileVOFynuWiKRgFEV48cLe0eA+G2wO4SzlwEhLEB9LhlSrVeu2mtSn205W283LkX7Fh48CaxA=="],
 
-    "@biomejs/cli-linux-arm64-musl": ["@biomejs/cli-linux-arm64-musl@2.3.11", "", { "os": "linux", "cpu": "arm64" }, "sha512-XPSQ+XIPZMLaZ6zveQdwNjbX+QdROEd1zPgMwD47zvHV+tCGB88VH+aynyGxAHdzL+Tm/+DtKST5SECs4iwCLg=="],
+    "@biomejs/cli-linux-arm64-musl": ["@biomejs/cli-linux-arm64-musl@2.3.10", "", { "os": "linux", "cpu": "arm64" }, "sha512-B9DszIHkuKtOH2IFeeVkQmSMVUjss9KtHaNXquYYWCjH8IstNgXgx5B0aSBQNr6mn4RcKKRQZXn9Zu1rM3O0/A=="],
 
-    "@biomejs/cli-linux-x64": ["@biomejs/cli-linux-x64@2.3.11", "", { "os": "linux", "cpu": "x64" }, "sha512-/1s9V/H3cSe0r0Mv/Z8JryF5x9ywRxywomqZVLHAoa/uN0eY7F8gEngWKNS5vbbN/BsfpCG5yeBT5ENh50Frxg=="],
+    "@biomejs/cli-linux-x64": ["@biomejs/cli-linux-x64@2.3.10", "", { "os": "linux", "cpu": "x64" }, "sha512-wwAkWD1MR95u+J4LkWP74/vGz+tRrIQvr8kfMMJY8KOQ8+HMVleREOcPYsQX82S7uueco60L58Wc6M1I9WA9Dw=="],
 
-    "@biomejs/cli-linux-x64-musl": ["@biomejs/cli-linux-x64-musl@2.3.11", "", { "os": "linux", "cpu": "x64" }, "sha512-vU7a8wLs5C9yJ4CB8a44r12aXYb8yYgBn+WeyzbMjaCMklzCv1oXr8x+VEyWodgJt9bDmhiaW/I0RHbn7rsNmw=="],
+    "@biomejs/cli-linux-x64-musl": ["@biomejs/cli-linux-x64-musl@2.3.10", "", { "os": "linux", "cpu": "x64" }, "sha512-QTfHZQh62SDFdYc2nfmZFuTm5yYb4eO1zwfB+90YxUumRCR171tS1GoTX5OD0wrv4UsziMPmrePMtkTnNyYG3g=="],
 
-    "@biomejs/cli-win32-arm64": ["@biomejs/cli-win32-arm64@2.3.11", "", { "os": "win32", "cpu": "arm64" }, "sha512-PZQ6ElCOnkYapSsysiTy0+fYX+agXPlWugh6+eQ6uPKI3vKAqNp6TnMhoM3oY2NltSB89hz59o8xIfOdyhi9Iw=="],
+    "@biomejs/cli-win32-arm64": ["@biomejs/cli-win32-arm64@2.3.10", "", { "os": "win32", "cpu": "arm64" }, "sha512-o7lYc9n+CfRbHvkjPhm8s9FgbKdYZu5HCcGVMItLjz93EhgJ8AM44W+QckDqLA9MKDNFrR8nPbO4b73VC5kGGQ=="],
 
-    "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.3.11", "", { "os": "win32", "cpu": "x64" }, "sha512-43VrG813EW+b5+YbDbz31uUsheX+qFKCpXeY9kfdAx+ww3naKxeVkTD9zLIWxUPfJquANMHrmW3wbe/037G0Qg=="],
+    "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.3.10", "", { "os": "win32", "cpu": "x64" }, "sha512-pHEFgq7dUEsKnqG9mx9bXihxGI49X+ar+UBrEIj3Wqj3UCZp1rNgV+OoyjFgcXsjCWpuEAF4VJdkZr3TrWdCbQ=="],
 
     "@borewit/text-codec": ["@borewit/text-codec@0.1.1", "", {}, "sha512-5L/uBxmjaCIX5h8Z+uu+kA9BQLkc/Wl06UGR5ajNRxu+/XjonB5i8JpgFMrPj3LXTCPA0pv8yxUvbUi+QthGGA=="],
 

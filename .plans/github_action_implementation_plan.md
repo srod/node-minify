@@ -340,28 +340,18 @@ runs:
     
     - name: Install node-minify
       shell: bash
-      env:
-        COMPRESSOR: ${{ inputs.compressor }}
       run: |
-        bun add @node-minify/core @node-minify/$COMPRESSOR
+        bun add @node-minify/core @node-minify/${{ inputs.compressor }}
     
     - name: Run minification
       id: minify
       shell: bash
-      env:
-        INPUT_PATH: ${{ inputs.input }}
-        COMPRESSOR: ${{ inputs.compressor }}
-        OUTPUT_PATH: ${{ inputs.output }}
       run: |
         # Run CLI and capture output
-        OUTPUT_ARG=""
-        if [ -n "$OUTPUT_PATH" ]; then
-          OUTPUT_ARG="--output \"$OUTPUT_PATH\""
-        fi
         OUTPUT=$(bunx @node-minify/cli \
-          --input "$INPUT_PATH" \
-          --compressor "$COMPRESSOR" \
-          $OUTPUT_ARG \
+          --input "${{ inputs.input }}" \
+          --compressor "${{ inputs.compressor }}" \
+          ${{ inputs.output && format('--output "{0}"', inputs.output) || '' }} \
           --json 2>&1)
         
         # Parse and set outputs
@@ -372,19 +362,15 @@ runs:
     - name: Generate job summary
       if: inputs.report-summary == 'true'
       shell: bash
-      env:
-        ORIGINAL_SIZE: ${{ steps.minify.outputs.original-size }}
-        MINIFIED_SIZE: ${{ steps.minify.outputs.minified-size }}
-        REDUCTION_PERCENT: ${{ steps.minify.outputs.reduction-percent }}
       run: |
-        cat >> $GITHUB_STEP_SUMMARY << EOF
+        cat >> $GITHUB_STEP_SUMMARY << 'EOF'
         ## 📦 node-minify Results
         
         | Metric | Value |
         |--------|-------|
-        | Original Size | $ORIGINAL_SIZE |
-        | Minified Size | $MINIFIED_SIZE |
-        | Reduction | $REDUCTION_PERCENT% |
+        | Original Size | ${{ steps.minify.outputs.original-size }} |
+        | Minified Size | ${{ steps.minify.outputs.minified-size }} |
+        | Reduction | ${{ steps.minify.outputs.reduction-percent }}% |
         EOF
 ```
 

@@ -268,10 +268,6 @@ uglify-js       11.9 KB   73.7%       456ms     OK
 - `cssnano` - PostCSS-based
 - `csso` - Structural optimizations
 
-### HTML
-- `html-minifier` - Feature-rich HTML minifier
-- `minify-html` - Rust-based, high performance
-
 ## Tips
 
 1. **Use multiple iterations** for more accurate timing results

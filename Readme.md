@@ -8,7 +8,6 @@
   <a href="https://npmjs.org/package/@node-minify/core"><img src="https://img.shields.io/npm/dm/@node-minify/core.svg" alt="npm downloads"></a>
   <a href="https://github.com/srod/node-minify/actions"><img alt="Build Status" src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fsrod%2Fnode-minify%2Fbadge%3Fref%3Dmain&style=flat" /></a>
   <a href="https://codecov.io/gh/srod/node-minify"><img src="https://codecov.io/gh/srod/node-minify/branch/main/graph/badge.svg" alt="code coverage"></a>
-  <a href="https://coderabbit.ai"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.coderabbit.ai%2Fstats%2Fgithub%2Fsrod%2Fnode-minify&query=%24.reviews&label=CodeRabbit%20Reviews&color=orange" alt="CodeRabbit PR reviews"></a>
 </p>
 
 # Features

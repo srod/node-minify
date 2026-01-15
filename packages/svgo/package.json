@@ -1,6 +1,6 @@
 {
     "name": "@node-minify/svgo",
-    "version": "10.3.0",
+    "version": "10.2.0",
     "description": "SVGO plugin for @node-minify - Optimize SVG files",
     "keywords": [
         "compressor",

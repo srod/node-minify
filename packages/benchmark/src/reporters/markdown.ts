@@ -33,19 +33,14 @@ export function formatMarkdownOutput(result: BenchmarkResult): string {
         output += separator;
 
         for (const r of file.results) {
-            const safeCompressor = r.compressor
-                .replace(/\\/g, "\\\\")
-                .replace(/\|/g, "\\|");
             if (r.success) {
-                output += `| ${safeCompressor} | ${r.size} | ${r.reductionPercent.toFixed(1)}% | ${Math.round(r.timeMs)}ms |`;
+                output += `| ${r.compressor} | ${r.size} | ${r.reductionPercent.toFixed(1)}% | ${Math.round(r.timeMs)}ms |`;
                 if (hasGzip) output += ` ${r.gzipSize ?? "-"} |`;
                 if (hasBrotli) output += ` ${r.brotliSize ?? "-"} |`;
                 output += " OK |\n";
             } else {
-                const safeError = (r.error ?? "-")
-                    .replace(/\\/g, "\\\\")
-                    .replace(/\|/g, "\\|");
-                output += `| ${safeCompressor} | - | - | - |`;
+                const safeError = (r.error ?? "-").replace(/\|/g, "\\|");
+                output += `| ${r.compressor} | - | - | - |`;
                 if (hasGzip) output += " - |";
                 if (hasBrotli) output += " - |";
                 output += ` ERROR: ${safeError} |\n`;

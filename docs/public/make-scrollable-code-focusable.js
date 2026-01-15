@@ -67,14 +67,4 @@ const observer = new MutationObserver((mutations) => {
     }
 });
 
-const startObserver = () => {
-    if (document.body) {
-        observer.observe(document.body, { childList: true, subtree: true });
-    }
-};
-
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", startObserver);
-} else {
-    startObserver();
-}
+observer.observe(document.body, { childList: true, subtree: true });
