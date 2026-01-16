@@ -187,6 +187,50 @@ describe("Package: run", () => {
             consoleSpy.mockRestore();
         });
 
+        test("should not call console.error when silence is true", async () => {
+            const consoleSpy = vi
+                .spyOn(console, "error")
+                .mockImplementation(() => {});
+
+            const mockChild = new EventEmitter() as ReturnType<
+                typeof childProcess.spawn
+            >;
+            const mockStdin = new EventEmitter();
+            const mockStdout = new EventEmitter();
+            const mockStderr = new EventEmitter();
+
+            Object.assign(mockChild, {
+                stdin: Object.assign(mockStdin, {
+                    end: vi.fn(),
+                }),
+                stdout: mockStdout,
+                stderr: mockStderr,
+                kill: vi.fn(),
+            });
+
+            spy.mockReturnValue(mockChild);
+
+            const command: RunCommandLineParams = {
+                args: ["-jar", "fake.jar"],
+                data: "test",
+                silence: true,
+            };
+
+            const promise = runCommandLine(command);
+
+            setImmediate(() => {
+                mockStdin.emit("error", new Error("stdin error"));
+                mockStdout.emit("data", Buffer.from("output"));
+                mockChild.emit("exit", 0);
+            });
+
+            const result = await promise;
+            expect(result).toBe("output");
+            expect(consoleSpy).not.toHaveBeenCalled();
+
+            consoleSpy.mockRestore();
+        });
+
         test("should reject when maxBuffer is exceeded", async () => {
             const mockChild = new EventEmitter() as ReturnType<
                 typeof childProcess.spawn
