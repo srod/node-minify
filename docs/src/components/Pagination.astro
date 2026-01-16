@@ -1,0 +1,141 @@
+---
+import { SIDEBAR } from "../consts";
+
+type Props = {
+    currentPage: string;
+};
+
+const { currentPage } = Astro.props;
+// Remove trailing slash if present, and remove leading slash
+const cleanPath = currentPage.replace(/\/$/, "").replace(/^\//, "");
+
+const sidebar = SIDEBAR;
+const allLinks = Object.values(sidebar).flat();
+const index = allLinks.findIndex((x) => x.link === cleanPath);
+
+// Guard against page not found in sidebar (index === -1)
+const prev = index > 0 ? allLinks[index - 1] : undefined;
+const next = index >= 0 && index < allLinks.length - 1 ? allLinks[index + 1] : undefined;
+---
+
+<nav class="pagination" aria-label="Pagination">
+    {
+        prev ? (
+            <a
+                class="link-button prev"
+                href={`${import.meta.env.BASE_URL}${prev.link}`}
+                rel="prev"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    width="24"
+                    height="24"
+                    aria-hidden="true"
+                >
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                </svg>
+                <div class="text-wrapper">
+                    <span class="label">Previous</span>
+                    <span class="title">{prev.text}</span>
+                </div>
+            </a>
+        ) : (
+            <span />
+        )
+    }
+
+    {
+        next && (
+            <a
+                class="link-button next"
+                href={`${import.meta.env.BASE_URL}${next.link}`}
+                rel="next"
+            >
+                <div class="text-wrapper">
+                    <span class="label">Next</span>
+                    <span class="title">{next.text}</span>
+                </div>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    width="24"
+                    height="24"
+                    aria-hidden="true"
+                >
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                </svg>
+            </a>
+        )
+    }
+</nav>
+
+<style>
+    .pagination {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 4rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--theme-divider);
+        gap: 1rem;
+    }
+
+    .link-button {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: var(--theme-text);
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--theme-divider);
+        transition:
+            border-color 0.2s,
+            background-color 0.2s;
+        max-width: 48%;
+        gap: 0.5rem;
+        flex: 1;
+    }
+
+    .link-button:hover,
+    .link-button:focus-visible {
+        border-color: var(--theme-text-accent);
+        background-color: var(--theme-bg-hover);
+        outline: none;
+    }
+
+    .link-button:focus-visible {
+        outline: 2px solid var(--theme-text-accent);
+        outline-offset: 2px;
+    }
+
+    .link-button.next {
+        justify-content: flex-end;
+        text-align: right;
+    }
+
+    .text-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .label {
+        font-size: 0.75rem;
+        opacity: 0.7;
+        margin-bottom: 0.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .title {
+        font-weight: 600;
+        font-size: 1rem;
+        line-height: 1.2;
+    }
+
+    /* Ensure icons don't shrink */
+    svg {
+        flex-shrink: 0;
+    }
+</style>
