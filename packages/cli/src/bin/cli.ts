@@ -130,6 +130,11 @@ function setupProgram(): Command {
     return program;
 }
 
+/**
+ * Prints the list of available compressors to standard output.
+ *
+ * Outputs a header, each compressor name prefixed with a dash, and a trailing blank line.
+ */
 function displayCompressorsList() {
     console.log("  List of compressors:");
     console.log("");
@@ -139,6 +144,11 @@ function displayCompressorsList() {
     console.log("");
 }
 
+/**
+ * Initialize the update notifier and start parsing command-line arguments for the CLI.
+ *
+ * Registers the package update notifier and parses process.argv with the configured command-line program.
+ */
 async function main(): Promise<void> {
     updateNotifier({ pkg: packageJson }).notify();
 
