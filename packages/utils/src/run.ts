@@ -76,13 +76,13 @@ function validateCompressorResult<
 }
 
 /**
- * Write compressor result outputs to disk unless the operation is in-memory.
+ * Write compressor outputs to configured output paths unless execution is in-memory.
  *
- * Writes multiple output files when `result.outputs` is provided, writes a binary `result.buffer` to the configured output when present, otherwise writes `result.code`. If a source map is available and a source map URL can be resolved from `settings`, the map is written alongside the main output.
+ * Writes multiple outputs when `result.outputs` is present, writes `result.buffer` if provided, otherwise writes `result.code`. If `result.map` exists and a source map URL can be resolved from `settings`, the map file is written alongside the main output. The function returns without writing when `settings.output` is not set, when `settings.content` is provided (in-memory mode), or when `settings.allowEmptyOutput` is true and `result.code` is an empty string.
  *
- * @param result - The compressor result containing `code`, optional `buffer`, `map`, or `outputs` describing one or more outputs
- * @param settings - Settings that include output destination(s) and optional in-memory `content` which disables disk writes
- * @param index - Optional index used when writing to multiple targets or when tracking a particular input within a batch
+ * @param result - Compressor result containing `code` and optional `buffer`, `map`, or `outputs`
+ * @param settings - Settings that determine output destinations and in-memory mode
+ * @param index - Optional batch/index marker forwarded to underlying write operations
  */
 async function writeOutput<T extends CompressorOptions = CompressorOptions>(
     result: CompressorResult,
@@ -91,6 +91,14 @@ async function writeOutput<T extends CompressorOptions = CompressorOptions>(
 ): Promise<void> {
     const isInMemoryMode = Boolean(settings.content);
     if (isInMemoryMode || !settings.output) {
+        return;
+    }
+
+    const hasBuffer = result.buffer && result.buffer.length > 0;
+    const hasOutputs = result.outputs && result.outputs.length > 0;
+    const hasCode = result.code !== "";
+    const isCompletelyEmpty = !hasCode && !hasBuffer && !hasOutputs;
+    if (settings.allowEmptyOutput && isCompletelyEmpty) {
         return;
     }
 

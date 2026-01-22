@@ -968,6 +968,122 @@ describe("Package: utils", () => {
         });
     });
 
+    describe("run with allowEmptyOutput", () => {
+        const tmpDir = `${__dirname}/../../../tests/tmp`;
+
+        test("should not write file when allowEmptyOutput is true and result is empty", async () => {
+            const outputFile = `${tmpDir}/empty-output-allowed.js`;
+            filesToCleanup.add(outputFile);
+            const compressor = vi.fn().mockResolvedValue({ code: "" });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+                allowEmptyOutput: true,
+            } as any;
+
+            const result = await run({
+                settings,
+                content: "/* comment only */",
+            });
+
+            expect(result).toBe("");
+            // File should NOT exist
+            expect(() => readFile(outputFile)).toThrow();
+        });
+
+        test("should write file normally when allowEmptyOutput is true but result is not empty", async () => {
+            const outputFile = `${tmpDir}/nonempty-output.js`;
+            filesToCleanup.add(outputFile);
+            const compressor = vi.fn().mockResolvedValue({ code: "minified" });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+                allowEmptyOutput: true,
+            } as any;
+
+            const result = await run({ settings, content: "content" });
+
+            expect(result).toBe("minified");
+            expect(readFile(outputFile)).toBe("minified");
+        });
+
+        test("should throw when allowEmptyOutput is false and result is empty", async () => {
+            const outputFile = `${tmpDir}/empty-output-disallowed.js`;
+            filesToCleanup.add(outputFile);
+            const compressor = vi.fn().mockResolvedValue({ code: "" });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+                allowEmptyOutput: false,
+            } as any;
+
+            await expect(
+                run({ settings, content: "/* comment only */" })
+            ).rejects.toThrow(ValidationError);
+        });
+
+        test("should throw when allowEmptyOutput is undefined (default) and result is empty", async () => {
+            const outputFile = `${tmpDir}/empty-output-default.js`;
+            filesToCleanup.add(outputFile);
+            const compressor = vi.fn().mockResolvedValue({ code: "" });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+                // allowEmptyOutput not set - uses default (false)
+            } as any;
+
+            await expect(
+                run({ settings, content: "/* comment only */" })
+            ).rejects.toThrow(ValidationError);
+        });
+
+        test("should not write source map when allowEmptyOutput is true and code is empty", async () => {
+            const outputFile = `${tmpDir}/empty-with-map.js`;
+            const mapFile = `${tmpDir}/empty-with-map.js.map`;
+            filesToCleanup.add(outputFile);
+            filesToCleanup.add(mapFile);
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                map: '{"version":3}',
+            });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+                allowEmptyOutput: true,
+                options: {
+                    sourceMap: { url: mapFile },
+                },
+            } as any;
+
+            const result = await run({ settings, content: "/* comment */" });
+
+            expect(result).toBe("");
+            expect(() => readFile(outputFile)).toThrow();
+            expect(() => readFile(mapFile)).toThrow();
+        });
+
+        test("should return empty string in memory mode with allowEmptyOutput and empty result", async () => {
+            const compressor = vi.fn().mockResolvedValue({ code: "" });
+            const settings = {
+                compressor,
+                content: "/* comment only */",
+                allowEmptyOutput: true,
+            } as any;
+
+            const result = await run({
+                settings,
+                content: "/* comment only */",
+            });
+
+            expect(result).toBe("");
+        });
+    });
+
     describe("run with multiple outputs (multi-format image conversion)", () => {
         const tmpDir = `${__dirname}/../../../tests/tmp`;
 

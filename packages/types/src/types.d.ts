@@ -197,6 +197,14 @@ export type Settings<TOptions extends CompressorOptions = CompressorOptions> = {
      * @default false
      */
     replaceInPlace?: boolean;
+
+    /**
+     * Allow empty output without throwing an error.
+     * When true, if minification results in empty content, the output file will not be written.
+     * Useful for CSS files containing only comments that get stripped.
+     * @default false
+     */
+    allowEmptyOutput?: boolean;
 };
 
 /**

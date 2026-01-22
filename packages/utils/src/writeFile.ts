@@ -116,7 +116,6 @@ function validateContent(content: string | Buffer): void {
     }
 }
 
-
 /**
  * Normalize and rethrow errors that occur while attempting to write to one or more files.
  *

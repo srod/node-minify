@@ -75,6 +75,15 @@ export async function gcc({
 type Flags = {
     [key: string]: string | boolean | Record<string, unknown>;
 };
+/**
+ * Merge allowed user-provided options into the given flags object.
+ *
+ * Filters `options` to keys listed in `allowedFlags` and assigns values that are strings, booleans, or plain (non-array) objects into `flags`.
+ *
+ * @param flags - Target flags object to populate with allowed option entries.
+ * @param options - Optional user-supplied options to apply; keys not in `allowedFlags` or values that are arrays or unsupported types are ignored.
+ * @returns The same `flags` object after applying valid entries from `options`.
+ */
 function applyOptions(flags: Flags, options?: Record<string, unknown>): Flags {
     if (!options || Object.keys(options).length === 0) {
         return flags;
@@ -88,7 +97,10 @@ function applyOptions(flags: Flags, options?: Record<string, unknown>): Flags {
                 typeof value === "boolean" ||
                 (typeof value === "object" && !Array.isArray(value))
             ) {
-                flags[option] = value as string | boolean | Record<string, unknown>;
+                flags[option] = value as
+                    | string
+                    | boolean
+                    | Record<string, unknown>;
             }
         });
     return flags;

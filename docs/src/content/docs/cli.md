@@ -65,6 +65,14 @@ You can pass an `option` as a JSON string to the compressor.
 node-minify --compressor uglify-js --input 'input.js' --output 'output.js' --option '{"warnings": true, "mangle": false}'
 ```
 
+## Allowing Empty Output
+
+When minifying files that produce empty output (e.g., CSS with only comments), use `--allow-empty-output` to skip writing instead of throwing an error.
+
+```bash
+node-minify --compressor clean-css --input 'comments-only.css' --output 'output.css' --allow-empty-output
+```
+
 ## Benchmark Command
 
 Compare the performance of different compressors using the `benchmark` command.

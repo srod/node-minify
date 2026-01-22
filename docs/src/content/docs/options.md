@@ -101,6 +101,29 @@ minify({
 });
 ```
 
+## Allowing Empty Output
+
+When minifying files that contain only comments (e.g., license headers in CSS), the minifier may produce empty output. By default, this throws a validation error. Use `allowEmptyOutput` to skip writing the file instead.
+
+```js
+const minify = require('@node-minify/core');
+const cleanCss = require('@node-minify/clean-css');
+
+minify({
+  compressor: cleanCss,
+  input: 'styles-with-only-comments.css',
+  output: 'styles.min.css',
+  allowEmptyOutput: true, // Skip writing if result is empty
+  callback: function(err, min) {}
+});
+```
+
+When `allowEmptyOutput: true`:
+- Empty results are silently skipped (no file written, no error)
+- Source maps are also skipped when code is empty
+- Returns empty string `""` for in-memory mode
+- Original file is preserved when using `replaceInPlace`
+
 ## Max Buffer Size (only for Java)
 
 In some cases you might need a bigger max buffer size (for example when minifying really large files).

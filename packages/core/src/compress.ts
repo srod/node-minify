@@ -4,6 +4,7 @@
  * MIT Licensed
  */
 
+import { mkdir } from "node:fs/promises";
 /**
  * Module dependencies.
  */
@@ -19,7 +20,6 @@ import {
     readFileAsync,
     run,
 } from "@node-minify/utils";
-import { mkdir } from "node:fs/promises";
 
 /**
  * Run the compressor using the provided settings.

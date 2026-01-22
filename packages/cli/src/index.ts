@@ -64,6 +64,7 @@ async function runOne(cli: SettingsWithCompressor): Promise<Result> {
         output: cli.output,
         ...(cli.type && { type: cli.type }),
         ...(cli.option && { options: JSON.parse(cli.option) }),
+        ...(cli.allowEmptyOutput && { allowEmptyOutput: cli.allowEmptyOutput }),
     };
 
     if (!silence) spinnerStart(settings);
