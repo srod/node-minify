@@ -12,6 +12,7 @@ import type { CompressorOptions, Result, Settings } from "@node-minify/types";
 import {
     getFilesizeGzippedInBytes,
     getFilesizeInBytes,
+    isValidFileAsync,
 } from "@node-minify/utils";
 
 /**
@@ -49,20 +50,21 @@ async function compress<T extends CompressorOptions = CompressorOptions>(
             return defaultResult;
         }
 
-        // Get file sizes (file may not exist if allowEmptyOutput skipped writing)
-        try {
-            const sizeGzip = await getFilesizeGzippedInBytes(options.output);
-            const size = getFilesizeInBytes(options.output);
-
-            return {
-                ...defaultResult,
-                size,
-                sizeGzip,
-            };
-        } catch {
-            // File doesn't exist (e.g., allowEmptyOutput skipped writing)
+        // Check if file exists (may not exist if allowEmptyOutput skipped writing)
+        const fileExists = await isValidFileAsync(options.output);
+        if (!fileExists) {
             return defaultResult;
         }
+
+        // Get file sizes - let IO/permission errors propagate
+        const sizeGzip = await getFilesizeGzippedInBytes(options.output);
+        const size = getFilesizeInBytes(options.output);
+
+        return {
+            ...defaultResult,
+            size,
+            sizeGzip,
+        };
     } catch (error) {
         const errorMessage =
             error instanceof Error ? error.message : "Unknown error occurred";

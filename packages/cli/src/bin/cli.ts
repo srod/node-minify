@@ -63,7 +63,9 @@ function setupProgram(): Command {
         )
         .action(async () => {
             const options: SettingsWithCompressor = program.opts();
-            if (!options.compressor || !options.input || !options.output) {
+            const hasInput =
+                Array.isArray(options.input) && options.input.length > 0;
+            if (!options.compressor || !hasInput || !options.output) {
                 program.help();
                 return;
             }

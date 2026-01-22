@@ -94,8 +94,11 @@ async function writeOutput<T extends CompressorOptions = CompressorOptions>(
         return;
     }
 
-    // Handle empty output when allowed
-    if (settings.allowEmptyOutput && result.code === "") {
+    const hasBuffer = result.buffer && result.buffer.length > 0;
+    const hasOutputs = result.outputs && result.outputs.length > 0;
+    const hasCode = result.code !== "";
+    const isCompletelyEmpty = !hasCode && !hasBuffer && !hasOutputs;
+    if (settings.allowEmptyOutput && isCompletelyEmpty) {
         return;
     }
 
