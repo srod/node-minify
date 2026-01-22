@@ -1,5 +1,32 @@
 # @node-minify/examples
 
+## 10.4.0
+
+### Patch Changes
+
+- @node-minify/babel-minify@10.4.0
+- @node-minify/clean-css@10.4.0
+- @node-minify/core@10.4.0
+- @node-minify/crass@10.4.0
+- @node-minify/cssnano@10.4.0
+- @node-minify/csso@10.4.0
+- @node-minify/esbuild@10.4.0
+- @node-minify/google-closure-compiler@10.4.0
+- @node-minify/html-minifier@10.4.0
+- @node-minify/imagemin@10.4.0
+- @node-minify/jsonminify@10.4.0
+- @node-minify/lightningcss@10.4.0
+- @node-minify/no-compress@10.4.0
+- @node-minify/oxc@10.4.0
+- @node-minify/sharp@10.4.0
+- @node-minify/sqwish@10.4.0
+- @node-minify/svgo@10.4.0
+- @node-minify/swc@10.4.0
+- @node-minify/terser@10.4.0
+- @node-minify/uglify-es@10.4.0
+- @node-minify/uglify-js@10.4.0
+- @node-minify/yui@10.4.0
+
 ## 10.3.0
 
 ### Patch Changes

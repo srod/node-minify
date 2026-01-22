@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/swc",
-  "version": "10.3.0",
+  "version": "10.4.0",
   "description": "swc plugin for @node-minify",
   "keywords": [
     "compressor",
