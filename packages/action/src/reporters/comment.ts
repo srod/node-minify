@@ -32,35 +32,47 @@ export async function postPRComment(
         return;
     }
 
-    const octokit = getOctokit(githubToken);
-    const { owner, repo } = context.repo;
+    try {
+        const octokit = getOctokit(githubToken);
+        const { owner, repo } = context.repo;
 
-    const body = generateCommentBody(result);
+        const body = generateCommentBody(result);
 
-    const comments = await octokit.paginate(octokit.rest.issues.listComments, {
-        owner,
-        repo,
-        issue_number: prNumber,
-    });
+        const comments = await octokit.paginate(
+            octokit.rest.issues.listComments,
+            {
+                owner,
+                repo,
+                issue_number: prNumber,
+            }
+        );
 
-    const existingComment = comments.find((c) => c.body?.includes(COMMENT_TAG));
+        const existingComment = comments.find((c) =>
+            c.body?.includes(COMMENT_TAG)
+        );
 
-    if (existingComment) {
-        await octokit.rest.issues.updateComment({
-            owner,
-            repo,
-            comment_id: existingComment.id,
-            body,
-        });
-        info(`Updated existing PR comment #${existingComment.id}`);
-    } else {
-        const { data: newComment } = await octokit.rest.issues.createComment({
-            owner,
-            repo,
-            issue_number: prNumber,
-            body,
-        });
-        info(`Created new PR comment #${newComment.id}`);
+        if (existingComment) {
+            await octokit.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existingComment.id,
+                body,
+            });
+            info(`Updated existing PR comment #${existingComment.id}`);
+        } else {
+            const { data: newComment } =
+                await octokit.rest.issues.createComment({
+                    owner,
+                    repo,
+                    issue_number: prNumber,
+                    body,
+                });
+            info(`Created new PR comment #${newComment.id}`);
+        }
+    } catch (error) {
+        warning(
+            `Failed to post PR comment (this is common with read-only tokens on forked PRs): ${error}`
+        );
     }
 }
 

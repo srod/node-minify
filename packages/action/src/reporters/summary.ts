@@ -22,7 +22,7 @@ export async function generateSummary(result: MinifyResult): Promise<void> {
         { data: prettyBytes(f.originalSize) },
         { data: prettyBytes(f.minifiedSize) },
         { data: `${f.reduction.toFixed(1)}%` },
-        { data: f.gzipSize ? prettyBytes(f.gzipSize) : "-" },
+        { data: f.gzipSize != null ? prettyBytes(f.gzipSize) : "-" },
         { data: `${f.timeMs}ms` },
     ]);
 

@@ -23,7 +23,7 @@ export function setMinifyOutputs(result: MinifyResult): void {
 
     if (result.files.some((f) => f.gzipSize !== undefined)) {
         const totalGzip = result.files.reduce(
-            (sum, f) => sum + (f.gzipSize || 0),
+            (sum, f) => sum + (f.gzipSize ?? 0),
             0
         );
         setOutput("gzip-size", totalGzip);
