@@ -60,7 +60,21 @@ function setupProgram(): Command {
             "-O, --option [option]",
             "option for the compressor as JSON object",
             ""
-        );
+        )
+        .action(async () => {
+            const options: SettingsWithCompressor = program.opts();
+            if (!options.compressor || !options.input || !options.output) {
+                program.help();
+                return;
+            }
+            try {
+                await run(options);
+                process.exit(0);
+            } catch (error) {
+                console.error(error);
+                process.exit(1);
+            }
+        });
 
     program
         .command("benchmark <input>")
@@ -125,35 +139,11 @@ function displayCompressorsList() {
     console.log("");
 }
 
-function validateOptions(options: SettingsWithCompressor, program: Command) {
-    if (!options.compressor || !options.input || !options.output) {
-        program.help();
-    }
-}
-
 async function main(): Promise<void> {
     updateNotifier({ pkg: packageJson }).notify();
 
     const program = setupProgram();
-    program.parse(process.argv);
-
-    // If no command was executed, validate global options for the main command
-    if (
-        program.args.length === 0 ||
-        (program.args.length > 0 &&
-            AVAILABLE_MINIFIER.some((m) => m.name === program.args[0]))
-    ) {
-        const options: SettingsWithCompressor = program.opts();
-        validateOptions(options, program);
-
-        try {
-            await run(options);
-            process.exit(0);
-        } catch (error) {
-            console.error(error);
-            process.exit(1);
-        }
-    }
+    await program.parseAsync(process.argv);
 }
 
 main();

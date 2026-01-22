@@ -88,7 +88,10 @@ function applyOptions(flags: Flags, options?: Record<string, unknown>): Flags {
                 typeof value === "boolean" ||
                 (typeof value === "object" && !Array.isArray(value))
             ) {
-                flags[option] = value as string | boolean | Record<string, unknown>;
+                flags[option] = value as
+                    | string
+                    | boolean
+                    | Record<string, unknown>;
             }
         });
     return flags;

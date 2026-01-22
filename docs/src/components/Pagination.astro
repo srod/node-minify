@@ -15,7 +15,8 @@ const index = allLinks.findIndex((x) => x.link === cleanPath);
 
 // Guard against page not found in sidebar (index === -1)
 const prev = index > 0 ? allLinks[index - 1] : undefined;
-const next = index >= 0 && index < allLinks.length - 1 ? allLinks[index + 1] : undefined;
+const next =
+    index >= 0 && index < allLinks.length - 1 ? allLinks[index + 1] : undefined;
 ---
 
 <nav class="pagination" aria-label="Pagination">
