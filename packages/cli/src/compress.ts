@@ -15,18 +15,17 @@ import {
 } from "@node-minify/utils";
 
 /**
- * Run the configured compressor and, when possible, report the output file sizes.
+ * Run the configured compressor and, when possible, include output file sizes in the result.
  *
- * The function executes compression using the provided settings. If `options.output`
- * is a single file path (not an array and not containing the `$1` pattern), it
- * computes and returns the file size and gzipped file size; otherwise it returns
- * default sizes of `"0"`.
+ * When `options.output` is a single file path (not an array and not containing the `$1` pattern),
+ * the returned result will include `size` and `sizeGzip` with the output file's byte sizes; otherwise
+ * those fields will be `"0"`.
  *
- * @param options - Compression settings; when `options.output` is a single path without the `$1` pattern the returned result will include computed `size` and `sizeGzip`.
+ * @param options - Compression settings; if `options.output` is a single path the returned result may include computed `size` and `sizeGzip`
  * @returns The compression result containing:
  *  - `compressorLabel`: label of the compressor,
  *  - `size`: output file size in bytes as a string (or `"0"` if not computed),
- *  - `sizeGzip`: gzipped output size in bytes as a string (or `"0"` if not computed).
+ *  - `sizeGzip`: gzipped output size in bytes as a string (or `"0"` if not computed)
  */
 async function compress<T extends CompressorOptions = CompressorOptions>(
     options: Settings<T>
