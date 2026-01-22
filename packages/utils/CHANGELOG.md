@@ -1,5 +1,22 @@
 # @node-minify/utils
 
+## 10.4.0
+
+### Minor Changes
+
+- 2e64877: feat: add `allowEmptyOutput` option to skip writing empty output files
+
+  When minifiers produce empty output (e.g., CSS files with only comments), the new `allowEmptyOutput` option allows gracefully skipping the file write instead of throwing a validation error. Also adds `--allow-empty-output` CLI flag.
+
+- 0a51025: feat: add `getFilesizeGzippedRaw` utility and update benchmark defaults
+  feat(action): launch `@node-minify/action` GitHub Action
+
+### Patch Changes
+
+- 3d4d2d0: fix: improve gzip size stream handling in utils
+  fix: ensure action build fails if type definitions copy fails
+  docs: add documentation for action inputs and java-version migration
+
 ## 10.3.0
 
 ### Minor Changes

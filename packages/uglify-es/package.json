@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/uglify-es",
-  "version": "10.3.0",
+  "version": "10.4.0",
   "deprecated": "uglify-es is no longer maintained. Please use @node-minify/terser instead.",
   "description": "uglify-es plugin for @node-minify (DEPRECATED - use @node-minify/terser)",
   "keywords": [

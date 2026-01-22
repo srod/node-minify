@@ -1,6 +1,6 @@
 {
     "name": "@node-minify/action",
-    "version": "10.3.0",
+    "version": "10.4.0",
     "description": "GitHub Action for node-minify - minify JS, CSS, HTML with detailed reporting",
     "keywords": [
         "github-action",

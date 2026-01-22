@@ -1,5 +1,15 @@
 # @node-minify/yui
 
+## 10.4.0
+
+### Patch Changes
+
+- Updated dependencies [2e64877]
+- Updated dependencies [3d4d2d0]
+- Updated dependencies [0a51025]
+  - @node-minify/utils@10.4.0
+  - @node-minify/run@10.4.0
+
 ## 10.3.0
 
 ### Patch Changes

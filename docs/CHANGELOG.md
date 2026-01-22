@@ -1,5 +1,12 @@
 # @node-minify/docs
 
+## 10.4.0
+
+### Patch Changes
+
+- 0a51025: feat: add `getFilesizeGzippedRaw` utility and update benchmark defaults
+  feat(action): launch `@node-minify/action` GitHub Action
+
 ## 10.3.0
 
 ## 10.2.0
