@@ -272,5 +272,17 @@ describe("CLI Coverage", () => {
                 "Compression failed: Minify failed"
             );
         });
+
+        test("should return default result when allowEmptyOutput skips writing", async () => {
+            const settings = {
+                compressor: () => ({ code: "" }),
+                content: "/* comment only */",
+                output: "/tmp/nonexistent-output-file.js",
+                allowEmptyOutput: true,
+            };
+            const result = await compress(settings as any);
+            expect(result.size).toBe("0");
+            expect(result.sizeGzip).toBe("0");
+        });
     });
 });

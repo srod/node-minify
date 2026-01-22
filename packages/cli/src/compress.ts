@@ -50,15 +50,20 @@ async function compress<T extends CompressorOptions = CompressorOptions>(
             return defaultResult;
         }
 
-        // Get file sizes
-        const sizeGzip = await getFilesizeGzippedInBytes(options.output);
-        const size = getFilesizeInBytes(options.output);
+        // Get file sizes (file may not exist if allowEmptyOutput skipped writing)
+        try {
+            const sizeGzip = await getFilesizeGzippedInBytes(options.output);
+            const size = getFilesizeInBytes(options.output);
 
-        return {
-            ...defaultResult,
-            size,
-            sizeGzip,
-        };
+            return {
+                ...defaultResult,
+                size,
+                sizeGzip,
+            };
+        } catch {
+            // File doesn't exist (e.g., allowEmptyOutput skipped writing)
+            return defaultResult;
+        }
     } catch (error) {
         const errorMessage =
             error instanceof Error ? error.message : "Unknown error occurred";

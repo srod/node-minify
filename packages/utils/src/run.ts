@@ -94,6 +94,11 @@ async function writeOutput<T extends CompressorOptions = CompressorOptions>(
         return;
     }
 
+    // Handle empty output when allowed
+    if (settings.allowEmptyOutput && result.code === "") {
+        return;
+    }
+
     // Handle multi-output (for image conversion to multiple formats)
     if (result.outputs && result.outputs.length > 0) {
         await writeMultipleOutputs(result.outputs, settings, index);

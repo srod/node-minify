@@ -53,6 +53,10 @@ function setupProgram(): Command {
         )
         .option("-s, --silence", "no output will be printed")
         .option(
+            "--allow-empty-output",
+            "Skip writing output when result is empty"
+        )
+        .option(
             "-O, --option [option]",
             "option for the compressor as JSON object",
             ""
