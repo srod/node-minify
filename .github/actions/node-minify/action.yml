@@ -1,9 +1,9 @@
-name: "node-minify"
-description: "Minify JavaScript, CSS, and HTML files with detailed reporting"
+name: "node-minify (deprecated)"
+description: "DEPRECATED: Use srod/node-minify@v1 instead. This composite action will be removed in a future release."
 author: "srod"
 branding:
   icon: "minimize-2"
-  color: "green"
+  color: "gray"
 
 inputs:
   input:
@@ -20,7 +20,7 @@ inputs:
     description: "Output file path"
     required: true
   type:
-    description: "File type: js or css (required for esbuild, lightningcss, yui)"
+    description: "File type: js or css (required for esbuild, yui)"
     required: false
   options:
     description: "Compressor-specific options (JSON string)"
@@ -67,7 +67,11 @@ outputs:
 runs:
   using: "composite"
   steps:
-    # Setup Java for gcc/yui compressors (auto-setup with default if java-version not specified)
+    - name: Deprecation warning
+      shell: bash
+      run: |
+        echo "::warning::This action (.github/actions/node-minify) is DEPRECATED. Please migrate to 'uses: srod/node-minify@v1' for the new bundled action with more features (PR comments, annotations, benchmarking)."
+
     - name: Setup Java (for gcc/yui)
       if: contains(fromJSON('["gcc", "google-closure-compiler", "yui"]'), inputs.compressor)
       uses: actions/setup-java@v4
@@ -75,7 +79,6 @@ runs:
         distribution: "temurin"
         java-version: ${{ inputs.java-version || '17' }}
 
-    # Warn about deprecated yui compressor
     - name: Deprecation warning (yui)
       if: inputs.compressor == 'yui'
       shell: bash
@@ -85,7 +88,7 @@ runs:
     - name: Setup Bun
       uses: oven-sh/setup-bun@v2
       with:
-        bun-version: "1.3.5"
+        bun-version: "1.3.6"
 
     - name: Install dependencies
       shell: bash
@@ -121,7 +124,7 @@ runs:
       shell: bash
       run: |
         cat >> $GITHUB_STEP_SUMMARY << EOF
-        ## 📦 node-minify Results
+        ## node-minify Results
 
         | Metric | Value |
         |--------|-------|
@@ -133,5 +136,7 @@ runs:
         | **Reduction** | ${{ steps.minify.outputs.reduction-percent }}% |
         | **Gzip Size** | ${{ steps.minify.outputs.gzip-size-formatted }} |
         | **Time** | ${{ steps.minify.outputs.time-ms }}ms |
+
+        > **Note:** This action is deprecated. Please migrate to \`uses: srod/node-minify@v1\` for enhanced features.
 
         EOF

@@ -6,14 +6,20 @@
 
 import { existsSync } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import {
     getKnownExportName,
     isBuiltInCompressor,
+    isLocalPath,
     resolveCompressor,
+    tryResolveBuiltIn,
+    tryResolveLocalFile,
+    tryResolveNpmPackage,
 } from "../src/compressor-resolver.ts";
 import { deleteFile, writeFile } from "../src/index.ts";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const tmpDir = path.resolve(__dirname, "../../../tests/tmp");
 const testCompressorPath = path.join(tmpDir, "test-compressor.mjs");
 
@@ -32,6 +38,134 @@ describe("Package: utils/compressor-resolver", () => {
         }
         filesToCleanup.clear();
         vi.resetModules();
+    });
+
+    describe("isLocalPath", () => {
+        test("should return true for relative paths with ./", () => {
+            expect(isLocalPath("./compressor.js")).toBe(true);
+            expect(isLocalPath("./path/to/file.ts")).toBe(true);
+        });
+
+        test("should return true for parent relative paths with ../", () => {
+            expect(isLocalPath("../compressor.js")).toBe(true);
+            expect(isLocalPath("../../file.mjs")).toBe(true);
+        });
+
+        test("should return true for absolute POSIX paths", () => {
+            expect(isLocalPath("/usr/local/compressor.js")).toBe(true);
+            expect(isLocalPath("/compressor.js")).toBe(true);
+        });
+
+        test("should return true for Windows absolute paths", () => {
+            expect(isLocalPath("C:\\Users\\file.js")).toBe(true);
+            expect(isLocalPath("D:/Projects/comp.ts")).toBe(true);
+        });
+
+        test("should return false for npm package names", () => {
+            expect(isLocalPath("terser")).toBe(false);
+            expect(isLocalPath("@node-minify/terser")).toBe(false);
+            expect(isLocalPath("my-package")).toBe(false);
+        });
+    });
+
+    describe("tryResolveBuiltIn", () => {
+        test("should resolve known built-in compressor", async () => {
+            const result = await tryResolveBuiltIn("terser");
+            expect(result).not.toBeNull();
+            expect(result?.compressor).toBeTypeOf("function");
+            expect(result?.label).toBe("terser");
+            expect(result?.isBuiltIn).toBe(true);
+        });
+
+        test("should return null for unknown compressor name", async () => {
+            const result = await tryResolveBuiltIn("unknown-compressor");
+            expect(result).toBeNull();
+        });
+
+        test("should return null for npm package name", async () => {
+            const result = await tryResolveBuiltIn("picocolors");
+            expect(result).toBeNull();
+        });
+
+        test("should return null when built-in package has no valid compressor export", async () => {
+            // Mock import to return a module with no function exports
+            vi.doMock("@node-minify/terser", () => ({
+                notAFunction: "string value",
+                anotherValue: 42,
+            }));
+
+            // Re-import to pick up the mock
+            const { tryResolveBuiltIn: freshTryResolve } = await import(
+                "../src/compressor-resolver.ts"
+            );
+            const result = await freshTryResolve("terser");
+            expect(result).toBeNull();
+
+            // Restore mock so subsequent tests are unaffected
+            vi.doUnmock("@node-minify/terser");
+        });
+    });
+
+    describe("tryResolveNpmPackage", () => {
+        test("should resolve installed npm package with function export", async () => {
+            const result = await tryResolveNpmPackage("picocolors");
+            expect(result).not.toBeNull();
+            expect(result?.compressor).toBeTypeOf("function");
+            expect(result?.isBuiltIn).toBe(false);
+        });
+
+        test("should return null for non-existent package", async () => {
+            const result = await tryResolveNpmPackage(
+                "non-existent-package-xyz-123"
+            );
+            expect(result).toBeNull();
+        });
+
+        test("should throw for package without valid compressor export", async () => {
+            await expect(
+                tryResolveNpmPackage("@changesets/types")
+            ).rejects.toThrow("doesn't export a valid compressor function");
+        });
+    });
+
+    describe("tryResolveLocalFile", () => {
+        test("should return null for non-local paths", async () => {
+            const result = await tryResolveLocalFile("terser");
+            expect(result).toBeNull();
+        });
+
+        test("should resolve local file with default export", async () => {
+            const localPath = path.join(tmpDir, "try-resolve-local.mjs");
+            filesToCleanup.add(localPath);
+            writeFile({
+                file: localPath,
+                content: `export default async function({ content }) { return { code: content }; }`,
+            });
+
+            const result = await tryResolveLocalFile(localPath);
+            expect(result).not.toBeNull();
+            expect(result?.compressor).toBeTypeOf("function");
+            expect(result?.isBuiltIn).toBe(false);
+        });
+
+        test("should throw for non-existent local file", async () => {
+            await expect(
+                tryResolveLocalFile("./non-existent-file-xyz.js")
+            ).rejects.toThrow("Could not load local compressor");
+        });
+
+        test("should throw for local file without valid export", async () => {
+            const localPath = path.join(tmpDir, "no-valid-export.mjs");
+            filesToCleanup.add(localPath);
+            writeFile({
+                file: localPath,
+                content: `export const notAFunction = 42;`,
+            });
+
+            await expect(tryResolveLocalFile(localPath)).rejects.toThrow(
+                "doesn't export a valid compressor function"
+            );
+        });
     });
 
     describe("isBuiltInCompressor", () => {

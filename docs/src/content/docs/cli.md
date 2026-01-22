@@ -65,6 +65,14 @@ You can pass an `option` as a JSON string to the compressor.
 node-minify --compressor uglify-js --input 'input.js' --output 'output.js' --option '{"warnings": true, "mangle": false}'
 ```
 
+## Allowing Empty Output
+
+When minifying files that produce empty output (e.g., CSS with only comments), use `--allow-empty-output` to skip writing instead of throwing an error.
+
+```bash
+node-minify --compressor clean-css --input 'comments-only.css' --output 'output.css' --allow-empty-output
+```
+
 ## Benchmark Command
 
 Compare the performance of different compressors using the `benchmark` command.
@@ -78,7 +86,7 @@ node-minify benchmark src/app.js
 ### Compare Specific Compressors
 
 ```bash
-node-minify benchmark src/app.js --compressors terser,esbuild,swc
+node-minify benchmark src/app.js --compressors terser,esbuild,swc,oxc
 ```
 
 ### With Options
@@ -105,7 +113,7 @@ node-minify benchmark src/app.js -c terser,esbuild -f markdown
 
 | Option | Description | Default |
 |--------|-------------|---------|
-| `-c, --compressors` | Comma-separated list of compressors | `terser,esbuild,swc` |
+| `-c, --compressors` | Comma-separated list of compressors | `terser,esbuild,swc,oxc` |
 | `-n, --iterations` | Number of iterations | `1` |
 | `-f, --format` | Output format: `console`, `json`, `markdown` | `console` |
 | `-o, --output` | Output file path | stdout |

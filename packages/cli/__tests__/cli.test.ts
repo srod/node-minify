@@ -86,7 +86,7 @@ describe("CSS compressors", () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    test("should minify with lightningcss (requires type)", async () => {
+    test("should minify with lightningcss", async () => {
         const spy = vi.spyOn(cli, "run");
         await cli.run({
             compressor: "lightningcss",
@@ -271,6 +271,18 @@ describe("CLI Coverage", () => {
             await expect(compress(settings as any)).rejects.toThrow(
                 "Compression failed: Minify failed"
             );
+        });
+
+        test("should return default result when allowEmptyOutput skips writing", async () => {
+            const settings = {
+                compressor: () => ({ code: "" }),
+                content: "/* comment only */",
+                output: "/tmp/nonexistent-output-file.js",
+                allowEmptyOutput: true,
+            };
+            const result = await compress(settings as any);
+            expect(result.size).toBe("0");
+            expect(result.sizeGzip).toBe("0");
         });
     });
 });

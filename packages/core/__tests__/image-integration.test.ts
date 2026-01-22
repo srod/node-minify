@@ -5,12 +5,14 @@
  */
 
 import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import path, { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, test } from "vitest";
 import { sharp } from "../../sharp/src/index.ts";
 import { svgo } from "../../svgo/src/index.ts";
 import { minify } from "../src/index.ts";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const testPng = resolve(__dirname, "../../../tests/fixtures/images/test.png");
 const testSvg = resolve(__dirname, "../../../tests/fixtures/images/test.svg");
 

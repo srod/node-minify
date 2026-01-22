@@ -5,9 +5,14 @@
  */
 
 import { lstat } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, test, vi } from "vitest";
 import { FileOperationError } from "../src/error.ts";
 import { isValidFileAsync } from "../src/isValidFile.ts";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __filename = fileURLToPath(import.meta.url);
 
 vi.mock("node:fs/promises", async (importOriginal) => {
     const actual = await importOriginal<typeof import("node:fs/promises")>();

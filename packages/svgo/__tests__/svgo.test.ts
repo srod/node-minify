@@ -5,10 +5,12 @@
  */
 
 import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import path, { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, test } from "vitest";
 import { svgo } from "../src/index.ts";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const testSvg = resolve(__dirname, "../../../tests/fixtures/images/test.svg");
 
 describe("svgo", () => {

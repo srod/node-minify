@@ -5,7 +5,11 @@
  */
 
 import { existsSync, lstatSync, unlinkSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 vi.mock("node:fs", async (importOriginal) => {
     const actual = await importOriginal<typeof import("node:fs")>();
@@ -24,7 +28,9 @@ import {
     ensureStringContent,
     getContentFromFiles,
     getFilesizeBrotliInBytes,
+    getFilesizeBrotliRaw,
     getFilesizeGzippedInBytes,
+    getFilesizeGzippedRaw,
     getFilesizeInBytes,
     isValidFile,
     prettyBytes,
@@ -514,6 +520,26 @@ describe("Package: utils", () => {
         });
     });
 
+    describe("getFilesizeGzippedRaw", () => {
+        test("should return file size in bytes", async () => {
+            const size = await getFilesizeGzippedRaw(fixtureFile);
+            expect(typeof size).toBe("number");
+            expect(size).toBeGreaterThan(0);
+        });
+
+        test("should throw FileOperationError if file does not exist", async () => {
+            await expect(getFilesizeGzippedRaw("fake.js")).rejects.toThrow(
+                FileOperationError
+            );
+        });
+
+        test("should throw FileOperationError if path is a directory", async () => {
+            await expect(getFilesizeGzippedRaw(__dirname)).rejects.toThrow(
+                FileOperationError
+            );
+        });
+    });
+
     describe("getFilesizeBrotliInBytes", () => {
         test("should return file size", async () => {
             const size = await getFilesizeBrotliInBytes(fixtureFile);
@@ -542,6 +568,27 @@ describe("Package: utils", () => {
                 expect(error).toBeInstanceOf(FileOperationError);
                 expect((error as Error).message).toContain("Failed to");
             }
+        });
+    });
+
+    describe("getFilesizeBrotliRaw", () => {
+        test("should return file size as number", async () => {
+            const size = await getFilesizeBrotliRaw(fixtureFile);
+            expect(typeof size).toBe("number");
+            expect(size).toBeGreaterThan(0);
+        });
+
+        test("should throw if file does not exist", async () => {
+            await expect(getFilesizeBrotliRaw("fake.js")).rejects.toThrow(
+                FileOperationError
+            );
+        });
+
+        test("should throw if path is a directory", async () => {
+            const dirPath = __dirname || ".";
+            await expect(getFilesizeBrotliRaw(dirPath)).rejects.toThrow(
+                FileOperationError
+            );
         });
     });
 
@@ -916,6 +963,122 @@ describe("Package: utils", () => {
             } as any;
 
             const result = await run({ settings, content: "source content" });
+
+            expect(result).toBe("");
+        });
+    });
+
+    describe("run with allowEmptyOutput", () => {
+        const tmpDir = `${__dirname}/../../../tests/tmp`;
+
+        test("should not write file when allowEmptyOutput is true and result is empty", async () => {
+            const outputFile = `${tmpDir}/empty-output-allowed.js`;
+            filesToCleanup.add(outputFile);
+            const compressor = vi.fn().mockResolvedValue({ code: "" });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+                allowEmptyOutput: true,
+            } as any;
+
+            const result = await run({
+                settings,
+                content: "/* comment only */",
+            });
+
+            expect(result).toBe("");
+            // File should NOT exist
+            expect(() => readFile(outputFile)).toThrow();
+        });
+
+        test("should write file normally when allowEmptyOutput is true but result is not empty", async () => {
+            const outputFile = `${tmpDir}/nonempty-output.js`;
+            filesToCleanup.add(outputFile);
+            const compressor = vi.fn().mockResolvedValue({ code: "minified" });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+                allowEmptyOutput: true,
+            } as any;
+
+            const result = await run({ settings, content: "content" });
+
+            expect(result).toBe("minified");
+            expect(readFile(outputFile)).toBe("minified");
+        });
+
+        test("should throw when allowEmptyOutput is false and result is empty", async () => {
+            const outputFile = `${tmpDir}/empty-output-disallowed.js`;
+            filesToCleanup.add(outputFile);
+            const compressor = vi.fn().mockResolvedValue({ code: "" });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+                allowEmptyOutput: false,
+            } as any;
+
+            await expect(
+                run({ settings, content: "/* comment only */" })
+            ).rejects.toThrow(ValidationError);
+        });
+
+        test("should throw when allowEmptyOutput is undefined (default) and result is empty", async () => {
+            const outputFile = `${tmpDir}/empty-output-default.js`;
+            filesToCleanup.add(outputFile);
+            const compressor = vi.fn().mockResolvedValue({ code: "" });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+                // allowEmptyOutput not set - uses default (false)
+            } as any;
+
+            await expect(
+                run({ settings, content: "/* comment only */" })
+            ).rejects.toThrow(ValidationError);
+        });
+
+        test("should not write source map when allowEmptyOutput is true and code is empty", async () => {
+            const outputFile = `${tmpDir}/empty-with-map.js`;
+            const mapFile = `${tmpDir}/empty-with-map.js.map`;
+            filesToCleanup.add(outputFile);
+            filesToCleanup.add(mapFile);
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                map: '{"version":3}',
+            });
+            const settings = {
+                compressor,
+                input: fixtureFile,
+                output: outputFile,
+                allowEmptyOutput: true,
+                options: {
+                    sourceMap: { url: mapFile },
+                },
+            } as any;
+
+            const result = await run({ settings, content: "/* comment */" });
+
+            expect(result).toBe("");
+            expect(() => readFile(outputFile)).toThrow();
+            expect(() => readFile(mapFile)).toThrow();
+        });
+
+        test("should return empty string in memory mode with allowEmptyOutput and empty result", async () => {
+            const compressor = vi.fn().mockResolvedValue({ code: "" });
+            const settings = {
+                compressor,
+                content: "/* comment only */",
+                allowEmptyOutput: true,
+            } as any;
+
+            const result = await run({
+                settings,
+                content: "/* comment only */",
+            });
 
             expect(result).toBe("");
         });

@@ -4,6 +4,7 @@
  * MIT Licensed
  */
 
+import { mkdir } from "node:fs/promises";
 /**
  * Module dependencies.
  */
@@ -19,7 +20,6 @@ import {
     readFileAsync,
     run,
 } from "@node-minify/utils";
-import { mkdirp } from "mkdirp";
 
 /**
  * Run the compressor using the provided settings.
@@ -122,5 +122,7 @@ async function createDirectory(filePath: string | string[]) {
     }
 
     // Create directories in parallel
-    await Promise.all(Array.from(uniqueDirs).map((dir) => mkdirp(dir)));
+    await Promise.all(
+        Array.from(uniqueDirs).map((dir) => mkdir(dir, { recursive: true }))
+    );
 }

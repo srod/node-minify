@@ -5,7 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { ensureStringContent } from "@node-minify/utils";
+import { ensureStringContent, wrapMinificationError } from "@node-minify/utils";
 import { minify } from "csso";
 
 /**
@@ -21,7 +21,15 @@ export async function csso({
 }: MinifierOptions): Promise<CompressorResult> {
     const contentStr = ensureStringContent(content, "csso");
 
-    const result = await minify(contentStr, settings?.options);
+    try {
+        const result = await minify(contentStr, settings?.options);
 
-    return { code: result.css };
+        if (!result || typeof result.css !== "string") {
+            throw new Error("csso failed: empty result");
+        }
+
+        return { code: result.css };
+    } catch (error) {
+        throw wrapMinificationError("csso", error);
+    }
 }

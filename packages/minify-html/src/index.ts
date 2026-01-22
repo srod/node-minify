@@ -5,7 +5,11 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { ensureStringContent } from "@node-minify/utils";
+import {
+    ensureStringContent,
+    validateMinifyResult,
+    wrapMinificationError,
+} from "@node-minify/utils";
 
 /**
  * Default options for minify-html.
@@ -34,12 +38,17 @@ export async function minifyHtml({
 }: MinifierOptions): Promise<CompressorResult> {
     const contentStr = ensureStringContent(content, "minify-html");
 
-    const minifyHtmlLib = await import("@minify-html/node");
-    const options = { ...defaultOptions, ...settings?.options };
+    try {
+        const minifyHtmlLib = await import("@minify-html/node");
+        const options = { ...defaultOptions, ...settings?.options };
 
-    const inputBuffer = Buffer.from(contentStr);
-    const outputBuffer = minifyHtmlLib.minify(inputBuffer, options);
-    const code = outputBuffer.toString();
-
-    return { code };
+        const inputBuffer = Buffer.from(contentStr);
+        const outputBuffer = minifyHtmlLib.minify(inputBuffer, options);
+        const code = outputBuffer.toString();
+        const result = { code };
+        validateMinifyResult(result, "minify-html");
+        return result;
+    } catch (error) {
+        throw wrapMinificationError("minify-html", error);
+    }
 }

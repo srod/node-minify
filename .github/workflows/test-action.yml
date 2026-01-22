@@ -2,22 +2,80 @@ name: Test node-minify Action
 
 on:
   push:
-    branches: [feature/github-action]
+    branches: [main, develop, feature/github-action-package]
     paths:
-      - ".github/actions/node-minify/**"
+      - "packages/action/**"
+      - "action.yml"
       - ".github/workflows/test-action.yml"
   pull_request:
     paths:
-      - ".github/actions/node-minify/**"
+      - "packages/action/**"
+      - "action.yml"
       - ".github/workflows/test-action.yml"
   workflow_dispatch:
 
 jobs:
-  test-js-minification:
-    name: Test JS Minification
+  build-action:
+    name: Build Action
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.6"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build dependencies
+        run: |
+          bun run build:deps
+          bun run --filter '@node-minify/core' build
+          bun run --filter '@node-minify/benchmark' build
+
+      - name: Build action
+        run: bun run build
+        working-directory: packages/action
+
+      - name: Upload built action
+        uses: actions/upload-artifact@v4
+        with:
+          name: action-dist
+          path: packages/action/dist/
+          retention-days: 1
+
+  test-js-minification:
+    name: Test JS Minification
+    runs-on: ubuntu-latest
+    needs: build-action
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download built action
+        uses: actions/download-artifact@v4
+        with:
+          name: action-dist
+          path: packages/action/dist/
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install compressor packages
+        # Compressors contain native dependencies (esbuild binaries, swc binaries, etc.)
+        # that cannot be bundled. Users must install the compressor package they need.
+        # See packages/action/README.md for documentation.
+        run: |
+          mkdir -p /tmp/compressors && cd /tmp/compressors
+          npm init -y
+          npm install @node-minify/terser @node-minify/esbuild
+          
+          # Create node_modules and copy packages
+          mkdir -p $GITHUB_WORKSPACE/node_modules
+          cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/node_modules/
 
       - name: Create test file
         run: |
@@ -38,7 +96,7 @@ jobs:
 
       - name: Minify with terser
         id: minify-terser
-        uses: ./.github/actions/node-minify
+        uses: ./
         with:
           input: "test-action/input.js"
           output: "test-action/output.min.js"
@@ -46,16 +104,16 @@ jobs:
 
       - name: Verify terser outputs
         env:
-          ORIGINAL_SIZE: ${{ steps.minify-terser.outputs.original-size-formatted }}
-          MINIFIED_SIZE: ${{ steps.minify-terser.outputs.minified-size-formatted }}
+          ORIGINAL_SIZE: ${{ steps.minify-terser.outputs.original-size }}
+          MINIFIED_SIZE: ${{ steps.minify-terser.outputs.minified-size }}
           REDUCTION_PERCENT: ${{ steps.minify-terser.outputs.reduction-percent }}
-          GZIP_SIZE: ${{ steps.minify-terser.outputs.gzip-size-formatted }}
+          GZIP_SIZE: ${{ steps.minify-terser.outputs.gzip-size }}
           TIME_MS: ${{ steps.minify-terser.outputs.time-ms }}
         run: |
-          echo "Original size: $ORIGINAL_SIZE"
-          echo "Minified size: $MINIFIED_SIZE"
+          echo "Original size: $ORIGINAL_SIZE bytes"
+          echo "Minified size: $MINIFIED_SIZE bytes"
           echo "Reduction: $REDUCTION_PERCENT%"
-          echo "Gzip size: $GZIP_SIZE"
+          echo "Gzip size: $GZIP_SIZE bytes"
           echo "Time: ${TIME_MS}ms"
           
           if [ ! -f "test-action/output.min.js" ]; then
@@ -73,7 +131,7 @@ jobs:
 
       - name: Minify with esbuild
         id: minify-esbuild
-        uses: ./.github/actions/node-minify
+        uses: ./
         with:
           input: "test-action/input.js"
           output: "test-action/output.esbuild.js"
@@ -82,23 +140,47 @@ jobs:
 
       - name: Compare results
         env:
-          TERSER_SIZE: ${{ steps.minify-terser.outputs.minified-size-formatted }}
+          TERSER_SIZE: ${{ steps.minify-terser.outputs.minified-size }}
           TERSER_REDUCTION: ${{ steps.minify-terser.outputs.reduction-percent }}
-          ESBUILD_SIZE: ${{ steps.minify-esbuild.outputs.minified-size-formatted }}
+          ESBUILD_SIZE: ${{ steps.minify-esbuild.outputs.minified-size }}
           ESBUILD_REDUCTION: ${{ steps.minify-esbuild.outputs.reduction-percent }}
         run: |
           echo "## Comparison" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Compressor | Minified Size | Reduction |" >> $GITHUB_STEP_SUMMARY
           echo "|------------|---------------|-----------|" >> $GITHUB_STEP_SUMMARY
-          echo "| terser | $TERSER_SIZE | $TERSER_REDUCTION% |" >> $GITHUB_STEP_SUMMARY
-          echo "| esbuild | $ESBUILD_SIZE | $ESBUILD_REDUCTION% |" >> $GITHUB_STEP_SUMMARY
+          echo "| terser | ${TERSER_SIZE} bytes | ${TERSER_REDUCTION}% |" >> $GITHUB_STEP_SUMMARY
+          echo "| esbuild | ${ESBUILD_SIZE} bytes | ${ESBUILD_REDUCTION}% |" >> $GITHUB_STEP_SUMMARY
 
   test-css-minification:
     name: Test CSS Minification
     runs-on: ubuntu-latest
+    needs: build-action
     steps:
       - uses: actions/checkout@v4
+
+      - name: Download built action
+        uses: actions/download-artifact@v4
+        with:
+          name: action-dist
+          path: packages/action/dist/
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install compressor packages
+        # Compressors contain native dependencies that cannot be bundled.
+        # See packages/action/README.md for documentation.
+        run: |
+          mkdir -p /tmp/compressors && cd /tmp/compressors
+          npm init -y
+          npm install @node-minify/lightningcss
+          
+          # Create node_modules and copy packages
+          mkdir -p $GITHUB_WORKSPACE/node_modules
+          cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/node_modules/
 
       - name: Create test CSS file
         run: |
@@ -129,7 +211,7 @@ jobs:
 
       - name: Minify CSS with lightningcss
         id: minify-css
-        uses: ./.github/actions/node-minify
+        uses: ./
         with:
           input: "test-action/input.css"
           output: "test-action/output.min.css"
@@ -138,8 +220,8 @@ jobs:
 
       - name: Verify CSS output
         run: |
-          echo "Original: ${{ steps.minify-css.outputs.original-size-formatted }}"
-          echo "Minified: ${{ steps.minify-css.outputs.minified-size-formatted }}"
+          echo "Original: ${{ steps.minify-css.outputs.original-size }} bytes"
+          echo "Minified: ${{ steps.minify-css.outputs.minified-size }} bytes"
           echo "Reduction: ${{ steps.minify-css.outputs.reduction-percent }}%"
           
           if [ "$(echo '${{ steps.minify-css.outputs.reduction-percent }} > 0' | bc -l)" -ne 1 ]; then
@@ -155,4 +237,4 @@ jobs:
     needs: [test-js-minification, test-css-minification]
     steps:
       - name: All tests passed
-        run: echo "✅ All node-minify action tests passed!"
+        run: echo "All node-minify action tests passed!"

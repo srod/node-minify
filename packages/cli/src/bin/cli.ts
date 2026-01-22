@@ -49,14 +49,34 @@ function setupProgram(): Command {
         .option("-o, --output [file]", "output file path")
         .option(
             "-t, --type [type]",
-            "file type: js or css (required for esbuild, lightningcss, yui)"
+            "file type: js or css (required for esbuild, yui)"
         )
         .option("-s, --silence", "no output will be printed")
+        .option(
+            "--allow-empty-output",
+            "Skip writing output when result is empty"
+        )
         .option(
             "-O, --option [option]",
             "option for the compressor as JSON object",
             ""
-        );
+        )
+        .action(async () => {
+            const options: SettingsWithCompressor = program.opts();
+            const hasInput =
+                Array.isArray(options.input) && options.input.length > 0;
+            if (!options.compressor || !hasInput || !options.output) {
+                program.help();
+                return;
+            }
+            try {
+                await run(options);
+                process.exit(0);
+            } catch (error) {
+                console.error(error);
+                process.exit(1);
+            }
+        });
 
     program
         .command("benchmark <input>")
@@ -112,6 +132,11 @@ function setupProgram(): Command {
     return program;
 }
 
+/**
+ * Prints the list of available compressors to standard output.
+ *
+ * Outputs a header, each compressor name prefixed with a dash, and a trailing blank line.
+ */
 function displayCompressorsList() {
     console.log("  List of compressors:");
     console.log("");
@@ -121,35 +146,16 @@ function displayCompressorsList() {
     console.log("");
 }
 
-function validateOptions(options: SettingsWithCompressor, program: Command) {
-    if (!options.compressor || !options.input || !options.output) {
-        program.help();
-    }
-}
-
+/**
+ * Initialize the update notifier and start parsing command-line arguments for the CLI.
+ *
+ * Registers the package update notifier and parses process.argv with the configured command-line program.
+ */
 async function main(): Promise<void> {
     updateNotifier({ pkg: packageJson }).notify();
 
     const program = setupProgram();
-    program.parse(process.argv);
-
-    // If no command was executed, validate global options for the main command
-    if (
-        program.args.length === 0 ||
-        (program.args.length > 0 &&
-            AVAILABLE_MINIFIER.some((m) => m.name === program.args[0]))
-    ) {
-        const options: SettingsWithCompressor = program.opts();
-        validateOptions(options, program);
-
-        try {
-            await run(options);
-            process.exit(0);
-        } catch (error) {
-            console.error(error);
-            process.exit(1);
-        }
-    }
+    await program.parseAsync(process.argv);
 }
 
 main();
