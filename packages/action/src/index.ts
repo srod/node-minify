@@ -8,6 +8,7 @@ import { info, setFailed } from "@actions/core";
 import { context } from "@actions/github";
 import { runBenchmark } from "./benchmark.ts";
 import { checkThresholds } from "./checks.ts";
+import { compareWithBase } from "./compare.ts";
 import { parseInputs, validateCompressor } from "./inputs.ts";
 import { runMinification } from "./minify.ts";
 import { setBenchmarkOutputs, setMinifyOutputs } from "./outputs.ts";
@@ -42,7 +43,11 @@ async function run(): Promise<void> {
         }
 
         if (inputs.reportPRComment && context.payload.pull_request) {
-            await postPRComment(result, inputs.githubToken);
+            const comparisons = await compareWithBase(
+                result,
+                inputs.githubToken
+            );
+            await postPRComment(result, inputs.githubToken, comparisons);
         }
 
         if (inputs.reportAnnotations) {

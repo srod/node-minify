@@ -7,7 +7,8 @@
 import { info, warning } from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import { prettyBytes } from "@node-minify/utils";
-import type { MinifyResult } from "../types.ts";
+import { formatChange } from "../compare.ts";
+import type { ComparisonResult, MinifyResult } from "../types.ts";
 
 const COMMENT_TAG = "<!-- node-minify-report -->";
 
@@ -16,10 +17,12 @@ const COMMENT_TAG = "<!-- node-minify-report -->";
  *
  * @param result - Minification results containing per-file metrics, totals, compressor name, and execution time
  * @param githubToken - GitHub API token used to authenticate requests; when `undefined`, the function skips posting
+ * @param comparisons - Optional comparison results against base branch for showing size changes
  */
 export async function postPRComment(
     result: MinifyResult,
-    githubToken: string | undefined
+    githubToken: string | undefined,
+    comparisons: ComparisonResult[] = []
 ): Promise<void> {
     if (!githubToken) {
         warning("No GitHub token provided, skipping PR comment");
@@ -36,7 +39,7 @@ export async function postPRComment(
         const octokit = getOctokit(githubToken);
         const { owner, repo } = context.repo;
 
-        const body = generateCommentBody(result);
+        const body = generateCommentBody(result, comparisons);
 
         const comments = await octokit.paginate(
             octokit.rest.issues.listComments,
@@ -79,22 +82,35 @@ export async function postPRComment(
 /**
  * Builds the Markdown body for the node-minify PR comment, including a per-file table, totals, and a configuration section.
  *
- * @param result - Minification results used to populate the report (expects `files`, `totalOriginalSize`, `totalMinifiedSize`, `totalReduction`, `compressor`, and `totalTimeMs`)
- * @returns The Markdown string for the PR comment, beginning with `COMMENT_TAG` and containing the file table, total summary, and configuration details
+ * @param result - Minification results used to populate the report
+ * @param comparisons - Comparison results against base branch
+ * @returns The Markdown string for the PR comment
  */
-function generateCommentBody(result: MinifyResult): string {
+function generateCommentBody(
+    result: MinifyResult,
+    comparisons: ComparisonResult[]
+): string {
+    const hasComparisons = comparisons.length > 0;
+    const comparisonMap = new Map(comparisons.map((c) => [c.file, c]));
+
     const filesTable = result.files
-        .map(
-            (f) =>
-                `| \`${f.file}\` | ${prettyBytes(f.originalSize)} | ${prettyBytes(f.minifiedSize)} | ${f.reduction.toFixed(1)}% |`
-        )
+        .map((f) => {
+            const comparison = comparisonMap.get(f.file);
+            const changeCol = hasComparisons
+                ? ` ${comparison ? formatChange(comparison) : "-"} |`
+                : "";
+            return `| \`${f.file}\` | ${prettyBytes(f.originalSize)} | ${prettyBytes(f.minifiedSize)} | ${f.reduction.toFixed(1)}% |${changeCol}`;
+        })
         .join("\n");
+
+    const headerChange = hasComparisons ? " vs Base |" : "";
+    const headerSep = hasComparisons ? "---------|" : "";
 
     return `${COMMENT_TAG}
 ## 📦 node-minify Report
 
-| File | Original | Minified | Reduction |
-|------|----------|----------|-----------|
+| File | Original | Minified | Reduction |${headerChange}
+|------|----------|----------|-----------|${headerSep}
 ${filesTable}
 
 **Total:** ${prettyBytes(result.totalOriginalSize)} → ${prettyBytes(result.totalMinifiedSize)} (${result.totalReduction.toFixed(1)}% reduction)
