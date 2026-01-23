@@ -32,11 +32,7 @@ A GitHub Action is the right choice because:
 - `@node-minify/utils` — File size calculations (`getFilesizeGzippedInBytes`, `prettyBytes`, `resolveCompressor`)
 - All compressor packages — terser, esbuild, swc, lightningcss, etc.
 
-> **TODO (Post-Publish):** The action currently inlines `resolveCompressor` logic in `.github/actions/node-minify/minify.ts` because `@node-minify/utils` on npm (v10.2.0) doesn't export it yet. After the next release, update `minify.ts` to import directly:
-> ```typescript
-> import { resolveCompressor } from "@node-minify/utils";
-> ```
-> And remove the inline `KNOWN_COMPRESSOR_EXPORTS` map and `resolveCompressor` function.
+> **DONE:** The action now imports `resolveCompressor` directly from `@node-minify/utils`. The inline implementation was removed after v10.3.0 was published.
 
 **Already in benchmark package:**
 - `reporters/json.ts` — Structured output
