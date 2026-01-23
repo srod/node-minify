@@ -186,8 +186,8 @@ describe("calculateTotalChange", () => {
 
         const result = calculateTotalChange(comparisons);
         expect(result.totalBaseSize).toBe(1000);
-        expect(result.totalCurrentSize).toBe(800);
-        expect(result.totalChangePercent).toBe(-20);
+        expect(result.totalCurrentSize).toBe(1300);
+        expect(result.totalChangePercent).toBe(30);
     });
 
     test("handles all new files", () => {

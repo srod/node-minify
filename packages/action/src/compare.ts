@@ -38,19 +38,18 @@ export async function compareWithBase(
     const octokit = getOctokit(githubToken);
     const { owner, repo } = context.repo;
 
-    const results: ComparisonResult[] = [];
-
-    for (const fileResult of result.files) {
-        const comparison = await compareFile(
-            octokit,
-            owner,
-            repo,
-            baseBranch,
-            fileResult.file,
-            fileResult.minifiedSize
-        );
-        results.push(comparison);
-    }
+    const results = await Promise.all(
+        result.files.map((fileResult) =>
+            compareFile(
+                octokit,
+                owner,
+                repo,
+                baseBranch,
+                fileResult.file,
+                fileResult.minifiedSize
+            )
+        )
+    );
 
     return results;
 }
@@ -192,6 +191,11 @@ export function calculateTotalChange(comparisons: ComparisonResult[]): {
     totalCurrentSize: number;
     totalChangePercent: number | null;
 } {
+    const totalCurrentSize = comparisons.reduce(
+        (sum, c) => sum + c.currentSize,
+        0
+    );
+
     const comparable = comparisons.filter(
         (c) => !c.isNew && c.baseSize !== null
     );
@@ -199,20 +203,13 @@ export function calculateTotalChange(comparisons: ComparisonResult[]): {
     if (comparable.length === 0) {
         return {
             totalBaseSize: 0,
-            totalCurrentSize: comparisons.reduce(
-                (sum, c) => sum + c.currentSize,
-                0
-            ),
+            totalCurrentSize,
             totalChangePercent: null,
         };
     }
 
     const totalBaseSize = comparable.reduce(
         (sum, c) => sum + (c.baseSize ?? 0),
-        0
-    );
-    const totalCurrentSize = comparable.reduce(
-        (sum, c) => sum + c.currentSize,
         0
     );
     const totalChangePercent =
