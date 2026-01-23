@@ -235,6 +235,23 @@ describe("calculateTotalChange", () => {
         const result = calculateTotalChange(comparisons);
         expect(result.totalChangePercent).toBe(20);
     });
+
+    test("handles zero total base size with comparable files", () => {
+        const comparisons: ComparisonResult[] = [
+            {
+                file: "a.js",
+                baseSize: 0,
+                currentSize: 100,
+                change: 100,
+                isNew: false,
+            },
+        ];
+
+        const result = calculateTotalChange(comparisons);
+        expect(result.totalBaseSize).toBe(0);
+        expect(result.totalCurrentSize).toBe(100);
+        expect(result.totalChangePercent).toBe(0);
+    });
 });
 
 describe("compareWithBase", () => {
@@ -463,5 +480,64 @@ describe("compareWithBase", () => {
 
         expect(result).toHaveLength(2);
         expect(mockGetContent).toHaveBeenCalledTimes(2);
+    });
+
+    test("handles zero base size with zero current size", async () => {
+        const zeroResult: MinifyResult = {
+            files: [
+                {
+                    file: "dist/empty.js",
+                    originalSize: 0,
+                    minifiedSize: 0,
+                    reduction: 0,
+                    timeMs: 1,
+                },
+            ],
+            compressor: "terser",
+            totalOriginalSize: 0,
+            totalMinifiedSize: 0,
+            totalReduction: 0,
+            totalTimeMs: 1,
+        };
+
+        (context as { payload: Record<string, unknown> }).payload = {
+            pull_request: { base: { ref: "main" } },
+        };
+
+        const mockGetContent = vi.fn().mockResolvedValue({
+            data: { type: "file", size: 0 },
+        });
+
+        vi.mocked(getOctokit).mockReturnValue({
+            rest: {
+                repos: { getContent: mockGetContent },
+            },
+        } as unknown as ReturnType<typeof getOctokit>);
+
+        const result = await compareWithBase(zeroResult, "fake-token");
+
+        expect(result[0]?.baseSize).toBe(0);
+        expect(result[0]?.change).toBe(0);
+    });
+
+    test("handles non-Error thrown values", async () => {
+        (context as { payload: Record<string, unknown> }).payload = {
+            pull_request: { base: { ref: "main" } },
+        };
+
+        const mockGetContent = vi.fn().mockRejectedValue("string error");
+
+        vi.mocked(getOctokit).mockReturnValue({
+            rest: {
+                repos: { getContent: mockGetContent },
+            },
+        } as unknown as ReturnType<typeof getOctokit>);
+
+        const result = await compareWithBase(mockResult, "fake-token");
+
+        expect(result[0]?.isNew).toBe(true);
+        expect(warning).toHaveBeenCalledWith(
+            expect.stringContaining("string error")
+        );
     });
 });
