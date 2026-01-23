@@ -212,9 +212,13 @@ export function calculateTotalChange(comparisons: ComparisonResult[]): {
         (sum, c) => sum + (c.baseSize ?? 0),
         0
     );
+    const comparableCurrentSize = comparable.reduce(
+        (sum, c) => sum + c.currentSize,
+        0
+    );
     const totalChangePercent =
         totalBaseSize > 0
-            ? ((totalCurrentSize - totalBaseSize) / totalBaseSize) * 100
+            ? ((comparableCurrentSize - totalBaseSize) / totalBaseSize) * 100
             : 0;
 
     return {
