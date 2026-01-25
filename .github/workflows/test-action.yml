@@ -101,6 +101,11 @@ jobs:
           input: "test-action/input.js"
           output: "test-action/output.min.js"
           compressor: "terser"
+          auto: 'false'
+          patterns: ''
+          output-dir: 'dist'
+          ignore: ''
+          dry-run: 'false'
 
       - name: Verify terser outputs
         env:
@@ -137,6 +142,11 @@ jobs:
           output: "test-action/output.esbuild.js"
           compressor: "esbuild"
           type: "js"
+          auto: 'false'
+          patterns: ''
+          output-dir: 'dist'
+          ignore: ''
+          dry-run: 'false'
 
       - name: Compare results
         env:
@@ -217,6 +227,11 @@ jobs:
           output: "test-action/output.min.css"
           compressor: "lightningcss"
           type: "css"
+          auto: 'false'
+          patterns: ''
+          output-dir: 'dist'
+          ignore: ''
+          dry-run: 'false'
 
       - name: Verify CSS output
         run: |
@@ -231,10 +246,161 @@ jobs:
           
           cat test-action/output.min.css
 
+  test-zero-config:
+    name: Test Zero Config (Auto Mode)
+    runs-on: ubuntu-latest
+    needs: build-action
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download built action
+        uses: actions/download-artifact@v4
+        with:
+          name: action-dist
+          path: packages/action/dist/
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install compressors
+        run: |
+          mkdir -p /tmp/compressors && cd /tmp/compressors
+          npm init -y
+          npm install @node-minify/terser @node-minify/lightningcss
+          mkdir -p $GITHUB_WORKSPACE/node_modules
+          cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/node_modules/
+
+      - name: Create test files
+        run: |
+          mkdir -p src
+          cat > src/app.js << 'EOF'
+          function hello() { console.log("hello world"); }
+          EOF
+          
+          cat > src/utils.js << 'EOF'
+          export const add = (a, b) => a + b;
+          EOF
+          
+          cat > src/styles.css << 'EOF'
+          body { margin: 0; padding: 0; }
+          EOF
+
+      - name: Run auto mode
+        uses: ./
+        with:
+          auto: "true"
+          output-dir: "dist"
+
+      - name: Verify outputs
+        run: |
+          test -f dist/src/app.js || (echo "dist/src/app.js not found" && exit 1)
+          test -f dist/src/utils.js || (echo "dist/src/utils.js not found" && exit 1)
+          test -f dist/src/styles.css || (echo "dist/src/styles.css not found" && exit 1)
+          echo "All output files created successfully"
+
+  test-zero-config-dry-run:
+    name: Test Zero Config Dry Run
+    runs-on: ubuntu-latest
+    needs: build-action
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download built action
+        uses: actions/download-artifact@v4
+        with:
+          name: action-dist
+          path: packages/action/dist/
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install compressor
+        run: |
+          mkdir -p /tmp/compressors && cd /tmp/compressors
+          npm init -y
+          npm install @node-minify/terser
+          mkdir -p $GITHUB_WORKSPACE/node_modules
+          cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/node_modules/
+
+      - name: Create test file
+        run: |
+          mkdir -p src
+          cat > src/app.js << 'EOF'
+          function test() { return 42; }
+          EOF
+
+      - name: Run dry-run mode
+        uses: ./
+        with:
+          auto: "true"
+          dry-run: "true"
+          output-dir: "dist"
+
+      - name: Verify no output created
+        run: |
+          test ! -d dist || (echo "dist/ should not exist in dry-run" && exit 1)
+          echo "Dry-run passed - no output created"
+
+  test-zero-config-custom-patterns:
+    name: Test Zero Config Custom Patterns
+    runs-on: ubuntu-latest
+    needs: build-action
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download built action
+        uses: actions/download-artifact@v4
+        with:
+          name: action-dist
+          path: packages/action/dist/
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install compressor
+        run: |
+          mkdir -p /tmp/compressors && cd /tmp/compressors
+          npm init -y
+          npm install @node-minify/terser
+          mkdir -p $GITHUB_WORKSPACE/node_modules
+          cp -r /tmp/compressors/node_modules/* $GITHUB_WORKSPACE/node_modules/
+
+      - name: Create files in custom directory
+        run: |
+          mkdir -p custom/path
+          cat > custom/path/main.js << 'EOF'
+          console.log("custom location");
+          EOF
+
+      - name: Run with custom patterns
+        uses: ./
+        with:
+          auto: "true"
+          patterns: "custom/**/*.js"
+          output-dir: "dist"
+
+      - name: Verify custom output
+        run: |
+          test -f dist/custom/path/main.js || (echo "dist/custom/path/main.js not found" && exit 1)
+          echo "Custom patterns worked correctly"
+
   test-summary:
     name: Summary
     runs-on: ubuntu-latest
-    needs: [test-js-minification, test-css-minification]
+    needs:
+      [
+        test-js-minification,
+        test-css-minification,
+        test-zero-config,
+        test-zero-config-dry-run,
+        test-zero-config-custom-patterns,
+      ]
     steps:
       - name: All tests passed
         run: echo "All node-minify action tests passed!"
