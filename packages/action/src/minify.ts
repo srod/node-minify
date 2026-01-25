@@ -39,8 +39,14 @@ async function getFileSize(filePath: string): Promise<number> {
 export async function runMinification(
     inputs: ActionInputs
 ): Promise<MinifyResult> {
-    const inputPath = resolve(inputs.workingDirectory, inputs.input);
-    const outputPath = resolve(inputs.workingDirectory, inputs.output);
+    const { input, output } = inputs;
+    if (!input || !output) {
+        throw new Error(
+            "Input and output files are required for explicit mode"
+        );
+    }
+    const inputPath = resolve(inputs.workingDirectory, input);
+    const outputPath = resolve(inputs.workingDirectory, output);
 
     const originalSize = await getFileSize(inputPath);
     const { compressor, label } = await resolveCompressor(inputs.compressor);
@@ -72,7 +78,7 @@ export async function runMinification(
     }
 
     const fileResult: FileResult = {
-        file: inputs.input,
+        file: input,
         originalSize,
         minifiedSize,
         reduction,

@@ -15,6 +15,140 @@ Minify JavaScript, CSS, and HTML files directly in your GitHub workflows with de
 - 🎯 **Thresholds** - Fail builds on size regressions
 - 🏁 **Benchmark** - Compare compressor performance
 
+## Zero-Config Mode
+
+Enable automatic file discovery and compressor selection with `auto: true`. The action scans standard directories (`src/`, `app/`, `lib/`, `styles/`), detects file types, and applies appropriate compressors automatically.
+
+### How It Works
+
+1. **File Discovery**: Scans project for JS, CSS, HTML, JSON, and SVG files
+2. **Type Detection**: Determines file type from extension
+3. **Compressor Selection**: Chooses optimal compressor per file type
+4. **Parallel Processing**: Minifies files concurrently with concurrency limit
+5. **Grouped Results**: Summary organized by file type
+
+### Default Behavior
+
+**Included Directories**:
+- `src/**/*.{js,mjs,cjs,jsx,css,html,htm,json,svg}`
+- `app/**/*.{js,mjs,cjs,jsx,css,html,htm,json,svg}`
+- `lib/**/*.{js,mjs,cjs,jsx,css,html,htm,json,svg}`
+- `styles/**/*.{css}`
+- Root-level `*.{js,css,html,json,svg}`
+
+**Excluded By Default**:
+- `**/node_modules/**`
+- `**/dist/**`, `**/build/**`, `**/.next/**`
+- `**/*.min.{js,css}` (already minified)
+- `**/__tests__/**` (test files)
+- `**/.*` (hidden files)
+- `**/*.d.ts` (TypeScript declarations)
+
+**Note**: TypeScript files (`.ts`, `.tsx`) are excluded. Minifiers operate on compiled JavaScript, not TypeScript source. Compile first, then minify.
+
+### Required Compressor Packages
+
+| File Type | Default Compressor | Required Package |
+|-----------|-------------------|------------------|
+| JavaScript (`.js`, `.mjs`, `.cjs`, `.jsx`) | terser | `@node-minify/terser` |
+| CSS (`.css`) | lightningcss | `@node-minify/lightningcss` |
+| HTML (`.html`, `.htm`) | html-minifier | `@node-minify/html-minifier` |
+| JSON (`.json`) | jsonminify | `@node-minify/jsonminify` |
+| SVG (`.svg`) | svgo | `@node-minify/svgo` |
+
+**Install only the compressors you need** based on your project's file types.
+
+### Basic Usage
+
+```yaml
+- name: Setup Node.js
+  uses: actions/setup-node@v4
+  with:
+    node-version: '20'
+
+# Install compressors for your file types
+- name: Install compressors
+  run: |
+    npm install @node-minify/terser @node-minify/lightningcss
+
+- name: Minify all files
+  uses: srod/node-minify@v1
+  with:
+    auto: 'true'
+```
+
+Output files preserve directory structure in `dist/`:
+- `src/app.js` → `dist/src/app.js`
+- `src/styles.css` → `dist/src/styles.css`
+
+### Custom Patterns
+
+Override default patterns to target specific files:
+
+```yaml
+- name: Minify custom locations
+  uses: srod/node-minify@v1
+  with:
+    auto: 'true'
+    patterns: 'public/**/*.js,assets/**/*.css'
+    output-dir: 'build'
+```
+
+### Custom Ignore Patterns
+
+Add additional ignore patterns (merges with defaults):
+
+```yaml
+- name: Minify with custom ignores
+  uses: srod/node-minify@v1
+  with:
+    auto: 'true'
+    ignore: '**/*.config.js,**/vendor/**'
+```
+
+### Dry-Run Mode
+
+Preview which files would be processed without minifying:
+
+```yaml
+- name: Preview auto mode
+  uses: srod/node-minify@v1
+  with:
+    auto: 'true'
+    dry-run: 'true'
+```
+
+Check the job summary or logs to see discovered files.
+
+### Inputs
+
+| Input | Description | Required | Default |
+|-------|-------------|----------|---------|
+| `auto` | Enable zero-config mode | No | `false` |
+| `patterns` | Custom glob patterns (comma-separated) | No | Standard directories |
+| `output-dir` | Output directory | No | `dist` |
+| `ignore` | Additional ignore patterns (comma-separated) | No | - |
+| `dry-run` | Preview mode - discover files without processing | No | `false` |
+
+### Example: Mixed Project
+
+For a project with JavaScript, CSS, and HTML:
+
+```yaml
+- name: Install all compressors
+  run: |
+    npm install \
+      @node-minify/terser \
+      @node-minify/lightningcss \
+      @node-minify/html-minifier
+
+- name: Minify all assets
+  uses: srod/node-minify@v1
+  with:
+    auto: 'true'
+    output-dir: 'public/dist'
+```
+
 ## Quick Start
 
 ```yaml

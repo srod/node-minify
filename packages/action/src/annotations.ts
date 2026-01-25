@@ -5,7 +5,7 @@
  */
 
 import { error, notice, warning } from "@actions/core";
-import type { MinifyResult } from "../types.ts";
+import type { MinifyResult } from "./types.ts";
 
 const LOW_REDUCTION_THRESHOLD = 20;
 const VERY_LOW_REDUCTION_THRESHOLD = 5;

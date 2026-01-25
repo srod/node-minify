@@ -7,8 +7,8 @@
 import { info, warning } from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import { prettyBytes } from "@node-minify/utils";
-import { formatChange } from "../compare.ts";
-import type { ComparisonResult, MinifyResult } from "../types.ts";
+import { formatChange } from "./compare.ts";
+import type { ComparisonResult, MinifyResult } from "./types.ts";
 
 const COMMENT_TAG = "<!-- node-minify-report -->";
 

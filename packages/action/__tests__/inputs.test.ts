@@ -265,3 +265,145 @@ describe("parseInputs edge cases", () => {
         }
     });
 });
+
+describe("parseInputs auto mode", () => {
+    beforeEach(() => {
+        vi.resetAllMocks();
+        vi.mocked(getBooleanInput).mockImplementation((name: string) => {
+            const defaults: Record<string, boolean> = {
+                "report-summary": true,
+                "report-pr-comment": false,
+                "report-annotations": false,
+                benchmark: false,
+                "fail-on-increase": false,
+                "include-gzip": true,
+                auto: false,
+                "dry-run": false,
+            };
+            return defaults[name] ?? false;
+        });
+    });
+
+    test("throws error when auto=false without input/output", () => {
+        vi.mocked(getInput).mockImplementation((name: string) => {
+            if (name === "input") return "";
+            if (name === "output") return "";
+            return "";
+        });
+        vi.mocked(getBooleanInput).mockImplementation((name: string) => {
+            if (name === "auto") return false;
+            return false;
+        });
+
+        expect(() => parseInputs()).toThrow(
+            "Explicit mode requires both 'input' and 'output'"
+        );
+    });
+
+    test("does not throw when auto=true without input/output", () => {
+        vi.mocked(getInput).mockImplementation((name: string) => {
+            if (name === "input") return "";
+            if (name === "output") return "";
+            if (name === "output-dir") return "dist";
+            return "";
+        });
+        vi.mocked(getBooleanInput).mockImplementation((name: string) => {
+            if (name === "auto") return true;
+            return false;
+        });
+
+        expect(() => parseInputs()).not.toThrow();
+    });
+
+    test("parses patterns from comma-separated string", () => {
+        vi.mocked(getInput).mockImplementation((name: string) => {
+            if (name === "patterns") return "src/**/*.js, lib/**/*.ts";
+            if (name === "output-dir") return "dist";
+            return "";
+        });
+        vi.mocked(getBooleanInput).mockImplementation((name: string) => {
+            if (name === "auto") return true;
+            return false;
+        });
+
+        const inputs = parseInputs();
+        expect(inputs.patterns).toEqual(["src/**/*.js", "lib/**/*.ts"]);
+    });
+
+    test("parses ignore from comma-separated string", () => {
+        vi.mocked(getInput).mockImplementation((name: string) => {
+            if (name === "ignore") return "**/*.test.js, **/*.spec.ts";
+            if (name === "output-dir") return "dist";
+            return "";
+        });
+        vi.mocked(getBooleanInput).mockImplementation((name: string) => {
+            if (name === "auto") return true;
+            return false;
+        });
+
+        const inputs = parseInputs();
+        expect(inputs.additionalIgnore).toEqual([
+            "**/*.test.js",
+            "**/*.spec.ts",
+        ]);
+    });
+
+    test("outputDir defaults to 'dist'", () => {
+        vi.mocked(getInput).mockImplementation((name: string) => {
+            if (name === "output-dir") return "";
+            return "";
+        });
+        vi.mocked(getBooleanInput).mockImplementation((name: string) => {
+            if (name === "auto") return true;
+            return false;
+        });
+
+        const inputs = parseInputs();
+        expect(inputs.outputDir).toBe("dist");
+    });
+
+    test("dryRun defaults to false", () => {
+        vi.mocked(getInput).mockImplementation(() => "");
+        vi.mocked(getBooleanInput).mockImplementation((name: string) => {
+            if (name === "auto") return true;
+            if (name === "dry-run") return false;
+            return false;
+        });
+
+        const inputs = parseInputs();
+        expect(inputs.dryRun).toBe(false);
+    });
+
+    test("filters empty strings from patterns", () => {
+        vi.mocked(getInput).mockImplementation((name: string) => {
+            if (name === "patterns") return "src/**/*.js, , lib/**/*.ts, ";
+            if (name === "output-dir") return "dist";
+            return "";
+        });
+        vi.mocked(getBooleanInput).mockImplementation((name: string) => {
+            if (name === "auto") return true;
+            return false;
+        });
+
+        const inputs = parseInputs();
+        expect(inputs.patterns).toEqual(["src/**/*.js", "lib/**/*.ts"]);
+    });
+
+    test("filters empty strings from ignore", () => {
+        vi.mocked(getInput).mockImplementation((name: string) => {
+            if (name === "ignore") return "**/*.test.js, , **/*.spec.ts, ";
+            if (name === "output-dir") return "dist";
+            return "";
+        });
+        vi.mocked(getBooleanInput).mockImplementation((name: string) => {
+            if (name === "auto") return true;
+            return false;
+        });
+
+        const inputs = parseInputs();
+        expect(inputs.additionalIgnore).toEqual([
+            "**/*.test.js",
+            "**/*.spec.ts",
+        ]);
+    });
+});
