@@ -4,9 +4,12 @@
  * MIT Licensed
  */
 
+import path from "node:path";
 import { getBooleanInput, getInput, warning } from "@actions/core";
 import { isBuiltInCompressor } from "@node-minify/utils";
+import { DEFAULT_PATTERNS } from "./discover.ts";
 import type { ActionInputs } from "./types.ts";
+import { validateOutputDir } from "./validate.ts";
 
 const TYPE_REQUIRED_COMPRESSORS = ["esbuild", "yui"];
 
@@ -18,6 +21,20 @@ const DEPRECATED_COMPRESSORS: Record<string, string> = {
     crass: "crass is no longer maintained. Use 'lightningcss' or 'clean-css' instead.",
     sqwish: "sqwish is no longer maintained. Use 'lightningcss' or 'clean-css' instead.",
 };
+
+/**
+ * Parse comma-separated string into array of trimmed non-empty strings.
+ *
+ * @param value - Comma-separated string
+ * @returns Array of trimmed non-empty strings
+ */
+function parseCommaSeparated(value: string): string[] {
+    if (!value) return [];
+    return value
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+}
 
 /**
  * Parse and validate GitHub Action inputs into an ActionInputs object.
@@ -35,9 +52,39 @@ const DEPRECATED_COMPRESSORS: Record<string, string> = {
  * is not provided.
  * @throws Error if the `options` input is present but is not valid JSON.
  * @throws Error if the `type` input is provided but is not 'js' or 'css'.
+ * @throws Error if auto mode is disabled and input/output are not provided.
  */
 export function parseInputs(): ActionInputs {
     const compressor = getInput("compressor") || "terser";
+    const auto = getBooleanInput("auto");
+    const dryRun = getBooleanInput("dry-run");
+    const outputDir = getInput("output-dir") || "dist";
+
+    // Sanitize output-dir to prevent path traversal
+    const segments = outputDir.split(/[/\\]/);
+    if (segments.includes("..") || path.isAbsolute(outputDir)) {
+        throw new Error(
+            'output-dir must be a relative path without ".." segments'
+        );
+    }
+    const patterns = parseCommaSeparated(getInput("patterns"));
+    const additionalIgnore = parseCommaSeparated(getInput("ignore"));
+
+    const input = getInput("input");
+    const output = getInput("output");
+
+    if (!auto && (!input || !output)) {
+        throw new Error(
+            "Explicit mode requires both 'input' and 'output'. Enable 'auto' mode or provide both inputs."
+        );
+    }
+
+    if (auto) {
+        const patternsToValidate =
+            patterns.length > 0 ? patterns : DEFAULT_PATTERNS;
+        const workingDir = getInput("working-directory") || ".";
+        validateOutputDir(outputDir, patternsToValidate, workingDir);
+    }
 
     // Validate type input explicitly
     const typeRaw = getInput("type");
@@ -86,8 +133,8 @@ export function parseInputs(): ActionInputs {
     })();
 
     return {
-        input: getInput("input", { required: true }),
-        output: getInput("output", { required: true }),
+        input,
+        output,
         compressor,
         type,
         options,
@@ -111,6 +158,12 @@ export function parseInputs(): ActionInputs {
         includeGzip: getBooleanInput("include-gzip"),
         workingDirectory: getInput("working-directory") || ".",
         githubToken: getInput("github-token") || process.env.GITHUB_TOKEN,
+        auto,
+        patterns: patterns.length > 0 ? patterns : undefined,
+        outputDir,
+        additionalIgnore:
+            additionalIgnore.length > 0 ? additionalIgnore : undefined,
+        dryRun,
     };
 }
 

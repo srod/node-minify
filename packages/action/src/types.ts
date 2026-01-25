@@ -5,8 +5,16 @@
  */
 
 export interface ActionInputs {
-    input: string;
-    output: string;
+    /**
+     * Input file(s) to minify (glob pattern or path).
+     * Optional when `auto` is true.
+     */
+    input?: string;
+    /**
+     * Output file path.
+     * Optional when `auto` is true.
+     */
+    output?: string;
     compressor: string;
     /**
      * File type hint for compressors that handle multiple types.
@@ -25,6 +33,30 @@ export interface ActionInputs {
     includeGzip: boolean;
     workingDirectory: string;
     githubToken?: string;
+    /**
+     * Enable zero-config auto mode.
+     * When true, automatically discovers and processes files based on patterns.
+     */
+    auto: boolean;
+    /**
+     * Custom glob patterns for auto mode (e.g., ["src/**\/*.js", "lib/**\/*.ts"]).
+     * Only used when `auto` is true.
+     */
+    patterns?: string[];
+    /**
+     * Output directory for auto mode.
+     * Defaults to "dist".
+     */
+    outputDir: string;
+    /**
+     * Additional ignore patterns for auto mode (e.g., ["**\/*.test.js", "**\/*.spec.ts"]).
+     * Only used when `auto` is true.
+     */
+    additionalIgnore?: string[];
+    /**
+     * Preview mode - show what would be processed without actually minifying.
+     */
+    dryRun: boolean;
 }
 
 export interface FileResult {

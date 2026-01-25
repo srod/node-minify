@@ -21,7 +21,11 @@ import type { ActionInputs, BenchmarkResult } from "./types.ts";
 export async function runBenchmark(
     inputs: ActionInputs
 ): Promise<BenchmarkResult> {
-    const inputPath = resolve(inputs.workingDirectory, inputs.input);
+    const { input } = inputs;
+    if (!input) {
+        throw new Error("Input file is required for benchmark mode");
+    }
+    const inputPath = resolve(inputs.workingDirectory, input);
 
     // Filter out compressors that require 'type' when type is not provided
     const compressors = inputs.type
@@ -49,7 +53,7 @@ export async function runBenchmark(
     }
 
     return {
-        file: inputs.input,
+        file: input,
         originalSize: fileResult.originalSizeBytes,
         compressors: fileResult.results.map((r) => ({
             compressor: r.compressor,

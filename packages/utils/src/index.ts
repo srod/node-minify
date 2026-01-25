@@ -34,12 +34,14 @@ import { run } from "./run.ts";
 import { setFileNameMin } from "./setFileNameMin.ts";
 import { setPublicFolder } from "./setPublicFolder.ts";
 import type { BuildArgsOptions } from "./types.ts";
-import { wildcards } from "./wildcards.ts";
+import type { WildcardOptions } from "./wildcards.ts";
+import { DEFAULT_IGNORES, wildcards } from "./wildcards.ts";
 import { writeFile, writeFileAsync } from "./writeFile.ts";
 
 export {
     buildArgs,
     compressSingleFile,
+    DEFAULT_IGNORES,
     deleteFile,
     ensureStringContent,
     getContentFromFiles,
@@ -77,3 +79,4 @@ export {
 
 export type { BuildArgsOptions };
 export type { CompressorResolution } from "./compressor-resolver.ts";
+export type { WildcardOptions };
