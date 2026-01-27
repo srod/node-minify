@@ -1,5 +1,9 @@
 # Implementation Plan - GitHub Action for node-minify
 
+> **Status:** ✅ Complete
+> **Updated:** 2026-01-27
+> **Published as:** `srod/node-minify@v1`
+
 ## Context
 
 Create a GitHub Action that runs node-minify in CI/CD pipelines, providing:
@@ -878,32 +882,30 @@ jobs:
 
 ### Phase 1 (Composite Action)
 
-- [ ] `.github/actions/node-minify/action.yml`
-- [ ] `.github/actions/node-minify/scripts/run.sh`
-- [ ] Documentation in existing docs
+Skipped — went directly to JavaScript Action (Phase 2).
 
 ### Phase 2 (JavaScript Action)
 
-- [ ] `packages/action/package.json`
-- [ ] `packages/action/tsconfig.json`
-- [ ] `packages/action/action.yml`
-- [ ] `packages/action/src/index.ts`
-- [ ] `packages/action/src/inputs.ts`
-- [ ] `packages/action/src/minify.ts`
-- [ ] `packages/action/src/compare.ts`
-- [ ] `packages/action/src/outputs.ts`
-- [ ] `packages/action/src/types.ts`
-- [ ] `packages/action/src/reporters/summary.ts`
-- [ ] `packages/action/src/reporters/comment.ts`
-- [ ] `packages/action/src/reporters/annotations.ts`
-- [ ] `packages/action/README.md`
-- [ ] `packages/action/__tests__/action.test.ts`
+- [x] `packages/action/package.json`
+- [x] `packages/action/tsconfig.json`
+- [x] `packages/action/action.yml`
+- [x] `packages/action/src/index.ts`
+- [x] `packages/action/src/inputs.ts`
+- [x] `packages/action/src/minify.ts`
+- [x] `packages/action/src/compare.ts`
+- [x] `packages/action/src/outputs.ts`
+- [x] `packages/action/src/types.ts`
+- [x] `packages/action/src/reporters/summary.ts`
+- [x] `packages/action/src/reporters/comment.ts` → `packages/action/src/comment.ts`
+- [x] `packages/action/src/reporters/annotations.ts` → `packages/action/src/annotations.ts`
+- [x] `packages/action/README.md`
+- [x] `packages/action/__tests__/action.test.ts`
 
-### Files to Modify
+### Files Modified
 
-- [ ] Root `action.yml` (symlink or copy for marketplace)
-- [ ] `.github/workflows/release-action.yml`
-- [ ] Docs site: new page for GitHub Action
+- [x] Root `action.yml` (in `packages/action/action.yml`, referenced by marketplace)
+- [x] `.github/workflows/test-action.yml`
+- [x] Docs site: `docs/src/content/docs/github-action.md`
 
 ---
 
