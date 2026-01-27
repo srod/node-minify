@@ -5,7 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { ensureStringContent } from "@node-minify/utils";
+import { ensureStringContent, getSourceMapBoolean } from "@node-minify/utils";
 import { transform } from "lightningcss";
 
 /**
@@ -22,12 +22,13 @@ export async function lightningCss({
     const contentStr = ensureStringContent(content, "lightningcss");
 
     const options = settings?.options ?? {};
+    const enableSourceMap = getSourceMapBoolean(options);
 
     const result = transform({
         filename: "input.css",
         code: Buffer.from(contentStr),
         minify: true,
-        sourceMap: !!options.sourceMap,
+        sourceMap: enableSourceMap,
         ...options,
     });
 

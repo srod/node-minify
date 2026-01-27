@@ -5,7 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { ensureStringContent } from "@node-minify/utils";
+import { ensureStringContent, getSourceMapBoolean } from "@node-minify/utils";
 import { minify as swcMinify } from "@swc/core";
 
 /**
@@ -22,11 +22,12 @@ export async function swc({
     const contentStr = ensureStringContent(content, "swc");
 
     const options = settings?.options ?? {};
+    const enableSourceMap = getSourceMapBoolean(options);
 
     const result = await swcMinify(contentStr, {
         compress: true,
         mangle: true,
-        sourceMap: !!options.sourceMap,
+        sourceMap: enableSourceMap,
         ...options,
     });
 

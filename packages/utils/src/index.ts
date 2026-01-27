@@ -33,6 +33,7 @@ import { readFile, readFileAsync } from "./readFile.ts";
 import { run } from "./run.ts";
 import { setFileNameMin } from "./setFileNameMin.ts";
 import { setPublicFolder } from "./setPublicFolder.ts";
+import { extractSourceMapOption, getSourceMapBoolean } from "./sourceMap.ts";
 import type { BuildArgsOptions } from "./types.ts";
 import type { WildcardOptions } from "./wildcards.ts";
 import { DEFAULT_IGNORES, wildcards } from "./wildcards.ts";
@@ -44,6 +45,7 @@ export {
     DEFAULT_IGNORES,
     deleteFile,
     ensureStringContent,
+    extractSourceMapOption,
     getContentFromFiles,
     getContentFromFilesAsync,
     getFilesizeBrotliInBytes,
@@ -52,6 +54,7 @@ export {
     getFilesizeGzippedRaw,
     getFilesizeInBytes,
     getKnownExportName,
+    getSourceMapBoolean,
     isBuiltInCompressor,
     isImageFile,
     isLocalPath,

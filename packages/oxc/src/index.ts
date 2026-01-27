@@ -7,6 +7,7 @@
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import {
     ensureStringContent,
+    getSourceMapBoolean,
     validateMinifyResult,
     wrapMinificationError,
 } from "@node-minify/utils";
@@ -25,10 +26,11 @@ export async function oxc({
 }: MinifierOptions): Promise<CompressorResult> {
     const contentStr = ensureStringContent(content, "oxc");
     const options = settings?.options ?? {};
+    const enableSourceMap = getSourceMapBoolean(options);
 
     try {
         const result = await oxcMinify("input.js", contentStr, {
-            sourcemap: !!options.sourceMap,
+            sourcemap: enableSourceMap,
             ...options,
         });
 
