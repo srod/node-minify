@@ -57,7 +57,7 @@ describe("runAutoMode", () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
-        (context as any).payload = {};
+        (context as { payload: Record<string, unknown> }).payload = {};
         vi.mocked(stat).mockResolvedValue({ size: 100 } as any);
         vi.mocked(resolveCompressor).mockResolvedValue({
             compressor: vi.fn(),
@@ -429,7 +429,9 @@ describe("runAutoMode", () => {
             svg: [],
             unknown: [],
         });
-        (context as any).payload = { pull_request: { number: 123 } };
+        (context as { payload: Record<string, unknown> }).payload = {
+            pull_request: { number: 123 },
+        };
         const comparisons = [
             {
                 file: "file1.js",
