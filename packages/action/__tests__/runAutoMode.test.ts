@@ -3,21 +3,28 @@
 import { mkdir, stat } from "node:fs/promises";
 import path from "node:path";
 import * as core from "@actions/core";
+import { context } from "@actions/github";
 import { minify } from "@node-minify/core";
 import { getFilesizeGzippedRaw, resolveCompressor } from "@node-minify/utils";
 import { beforeEach, describe, expect, test, vi } from "vitest";
+import { addAnnotations } from "../src/annotations.ts";
 import { groupFilesByType, selectCompressor } from "../src/autoDetect.ts";
 import { checkThresholds } from "../src/checks.ts";
+import { postPRComment } from "../src/comment.ts";
+import { compareWithBase } from "../src/compare.ts";
 import { discoverFiles, generateOutputPath } from "../src/discover.ts";
 import { runAutoMode } from "../src/index.ts";
 import { setMinifyOutputs } from "../src/outputs.ts";
-import { generateSummary } from "../src/reporters/summary.ts";
+import { generateAutoModeSummary } from "../src/reporters/summary.ts";
 
 vi.mock("@actions/core");
 vi.mock("@actions/github");
 vi.mock("node:fs/promises");
+vi.mock("../src/annotations.ts");
 vi.mock("../src/discover.ts");
 vi.mock("../src/autoDetect.ts");
+vi.mock("../src/comment.ts");
+vi.mock("../src/compare.ts");
 vi.mock("@node-minify/utils");
 vi.mock("@node-minify/core");
 vi.mock("../src/outputs.ts");
@@ -45,11 +52,12 @@ describe("runAutoMode", () => {
         options: {},
         benchmark: false,
         benchmarkCompressors: [],
-        githubToken: undefined,
+        githubToken: "token",
     };
 
     beforeEach(() => {
         vi.clearAllMocks();
+        (context as { payload: Record<string, unknown> }).payload = {};
         vi.mocked(stat).mockResolvedValue({ size: 100 } as any);
         vi.mocked(resolveCompressor).mockResolvedValue({
             compressor: vi.fn(),
@@ -64,6 +72,7 @@ describe("runAutoMode", () => {
         );
         vi.mocked(minify).mockResolvedValue("minified content");
         vi.mocked(checkThresholds).mockReturnValue(null);
+        vi.mocked(compareWithBase).mockResolvedValue([]);
         vi.mocked(groupFilesByType).mockReturnValue({
             js: [],
             css: [],
@@ -314,7 +323,7 @@ describe("runAutoMode", () => {
         );
     });
 
-    test("should call generateSummary when reportSummary is true", async () => {
+    test("should call generateAutoModeSummary when reportSummary is true", async () => {
         vi.mocked(discoverFiles).mockReturnValue(["file1.js"]);
         vi.mocked(groupFilesByType).mockReturnValue({
             js: ["file1.js"],
@@ -327,10 +336,10 @@ describe("runAutoMode", () => {
 
         await runAutoMode({ ...mockInputs, reportSummary: true });
 
-        expect(generateSummary).toHaveBeenCalled();
+        expect(generateAutoModeSummary).toHaveBeenCalled();
     });
 
-    test("should not call generateSummary when reportSummary is false", async () => {
+    test("should not call generateAutoModeSummary when reportSummary is false", async () => {
         vi.mocked(discoverFiles).mockReturnValue(["file1.js"]);
         vi.mocked(groupFilesByType).mockReturnValue({
             js: ["file1.js"],
@@ -343,7 +352,7 @@ describe("runAutoMode", () => {
 
         await runAutoMode({ ...mockInputs, reportSummary: false });
 
-        expect(generateSummary).not.toHaveBeenCalled();
+        expect(generateAutoModeSummary).not.toHaveBeenCalled();
     });
 
     test("should call setFailed when threshold check fails", async () => {
@@ -380,5 +389,91 @@ describe("runAutoMode", () => {
         expect(mkdir).toHaveBeenCalledWith(path.join("src", "dist"), {
             recursive: true,
         });
+    });
+
+    test("should store repository-relative outputFile in auto mode", async () => {
+        vi.mocked(discoverFiles).mockReturnValue(["file1.js"]);
+        vi.mocked(groupFilesByType).mockReturnValue({
+            js: ["file1.js"],
+            css: [],
+            html: [],
+            json: [],
+            svg: [],
+            unknown: [],
+        });
+
+        await runAutoMode({
+            ...mockInputs,
+            workingDirectory: "src",
+        });
+
+        expect(setMinifyOutputs).toHaveBeenCalledWith(
+            expect.objectContaining({
+                files: [
+                    expect.objectContaining({
+                        file: "file1.js",
+                        outputFile: "src/min/file1.js",
+                    }),
+                ],
+            })
+        );
+    });
+
+    test("should post PR comment in auto mode when enabled in PR context", async () => {
+        vi.mocked(discoverFiles).mockReturnValue(["file1.js"]);
+        vi.mocked(groupFilesByType).mockReturnValue({
+            js: ["file1.js"],
+            css: [],
+            html: [],
+            json: [],
+            svg: [],
+            unknown: [],
+        });
+        (context as { payload: Record<string, unknown> }).payload = {
+            pull_request: { number: 123 },
+        };
+        const comparisons = [
+            {
+                file: "file1.js",
+                baseSize: 120,
+                currentSize: 100,
+                change: -16.7,
+                isNew: false,
+            },
+        ];
+        vi.mocked(compareWithBase).mockResolvedValue(comparisons);
+
+        await runAutoMode({
+            ...mockInputs,
+            reportPRComment: true,
+        });
+
+        expect(compareWithBase).toHaveBeenCalled();
+        expect(postPRComment).toHaveBeenCalledWith(
+            expect.objectContaining({ compressor: "auto" }),
+            "token",
+            comparisons
+        );
+    });
+
+    test("should add annotations in auto mode when enabled", async () => {
+        vi.mocked(discoverFiles).mockReturnValue(["file1.js"]);
+        vi.mocked(groupFilesByType).mockReturnValue({
+            js: ["file1.js"],
+            css: [],
+            html: [],
+            json: [],
+            svg: [],
+            unknown: [],
+        });
+
+        await runAutoMode({
+            ...mockInputs,
+            reportAnnotations: true,
+        });
+
+        expect(addAnnotations).toHaveBeenCalledWith(
+            expect.objectContaining({ compressor: "auto" })
+        );
     });
 });

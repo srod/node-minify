@@ -27,6 +27,7 @@ import { parseInputs, validateCompressor } from "./inputs.ts";
 import { runMinification } from "./minify.ts";
 import { setBenchmarkOutputs, setMinifyOutputs } from "./outputs.ts";
 import {
+    generateAutoModeSummary,
     generateBenchmarkSummary,
     generateSummary,
 } from "./reporters/summary.ts";
@@ -58,6 +59,13 @@ export function chunkArray<T>(array: T[], size: number): T[][] {
 async function getFileSize(filePath: string): Promise<number> {
     const stats = await stat(filePath);
     return stats.size;
+}
+
+/**
+ * Convert an absolute filesystem path to a repository-relative path.
+ */
+function toRepositoryPath(filePath: string): string {
+    return path.relative(process.cwd(), filePath).replace(/\\/g, "/");
 }
 
 /**
@@ -231,6 +239,7 @@ export async function runAutoMode(inputs: ActionInputs): Promise<void> {
 
                 return {
                     file,
+                    outputFile: toRepositoryPath(fullOutputPath),
                     originalSize,
                     minifiedSize,
                     reduction,
@@ -270,7 +279,6 @@ export async function runAutoMode(inputs: ActionInputs): Promise<void> {
         return;
     }
 
-    // Generate summary using existing function (stub for now - Task 6 will implement generateAutoModeSummary)
     const totalOriginalSize = allResults.reduce(
         (sum, r) => sum + r.originalSize,
         0
@@ -298,7 +306,19 @@ export async function runAutoMode(inputs: ActionInputs): Promise<void> {
     setMinifyOutputs(minifyResult);
 
     if (inputs.reportSummary) {
-        await generateSummary(minifyResult);
+        await generateAutoModeSummary([minifyResult], inputs);
+    }
+
+    if (inputs.reportPRComment && context.payload.pull_request) {
+        const comparisons = await compareWithBase(
+            minifyResult,
+            inputs.githubToken
+        );
+        await postPRComment(minifyResult, inputs.githubToken, comparisons);
+    }
+
+    if (inputs.reportAnnotations) {
+        addAnnotations(minifyResult);
     }
 
     const thresholdError = checkThresholds(minifyResult.totalReduction, inputs);

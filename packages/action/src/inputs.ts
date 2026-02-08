@@ -98,7 +98,7 @@ export function parseInputs(): ActionInputs {
         type = typeRaw;
     }
 
-    if (TYPE_REQUIRED_COMPRESSORS.includes(compressor) && !type) {
+    if (!auto && TYPE_REQUIRED_COMPRESSORS.includes(compressor) && !type) {
         throw new Error(
             `Compressor '${compressor}' requires the 'type' input (js or css)`
         );

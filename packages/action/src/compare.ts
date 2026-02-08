@@ -4,9 +4,35 @@
  * MIT Licensed
  */
 
+import path from "node:path";
 import { info, warning } from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import type { ComparisonResult, MinifyResult } from "./types.ts";
+
+/**
+ * Normalize and validate a repository path for GitHub content API lookups.
+ *
+ * @param candidate - Path to validate
+ * @returns Safe repository-relative path or null when invalid
+ */
+function normalizeComparePath(candidate: string): string | null {
+    const withForwardSlashes = candidate.replace(/\\/g, "/");
+    const normalized = path.posix.normalize(withForwardSlashes);
+
+    // GitHub API expects repository-relative paths.
+    if (
+        normalized === "" ||
+        normalized === "." ||
+        normalized === ".." ||
+        normalized.startsWith("../") ||
+        normalized.startsWith("/") ||
+        /^[a-zA-Z]:\//.test(normalized)
+    ) {
+        return null;
+    }
+
+    return normalized;
+}
 
 /**
  * Compares minified file sizes against the base branch for pull requests.
@@ -39,16 +65,39 @@ export async function compareWithBase(
     const { owner, repo } = context.repo;
 
     const results = await Promise.all(
-        result.files.map((fileResult) =>
-            compareFile(
+        result.files.map((fileResult) => {
+            const normalizedOutputPath = fileResult.outputFile
+                ? normalizeComparePath(fileResult.outputFile)
+                : null;
+            if (fileResult.outputFile && normalizedOutputPath === null) {
+                warning(
+                    `Skipping unsafe base-compare path: ${fileResult.outputFile}`
+                );
+            }
+
+            const fallbackPath = normalizeComparePath(fileResult.file);
+            const comparePath = normalizedOutputPath ?? fallbackPath;
+            if (!comparePath) {
+                warning(`Skipping unsafe base-compare path: ${fileResult.file}`);
+                return {
+                    file: fileResult.file,
+                    baseSize: null,
+                    currentSize: fileResult.minifiedSize,
+                    change: null,
+                    isNew: true,
+                } satisfies ComparisonResult;
+            }
+
+            return compareFile(
                 octokit,
                 owner,
                 repo,
                 baseBranch,
                 fileResult.file,
+                comparePath,
                 fileResult.minifiedSize
-            )
-        )
+            );
+        })
     );
 
     return results;
@@ -61,7 +110,8 @@ export async function compareWithBase(
  * @param owner - Repository owner
  * @param repo - Repository name
  * @param baseBranch - Base branch ref (e.g., "main")
- * @param filePath - Path to the file to compare
+ * @param sourceFilePath - Source file path used as display key in reports
+ * @param comparePath - Output file path used to query the base branch content
  * @param currentSize - Current minified size in bytes
  * @returns Comparison result with base size (null if file is new) and change percentage
  */
@@ -70,14 +120,15 @@ async function compareFile(
     owner: string,
     repo: string,
     baseBranch: string,
-    filePath: string,
+    sourceFilePath: string,
+    comparePath: string,
     currentSize: number
 ): Promise<ComparisonResult> {
     try {
         const { data } = await octokit.rest.repos.getContent({
             owner,
             repo,
-            path: filePath,
+            path: comparePath,
             ref: baseBranch,
         });
 
@@ -86,7 +137,7 @@ async function compareFile(
         if (Array.isArray(data)) {
             // Path is a directory, not a file
             return {
-                file: filePath,
+                file: sourceFilePath,
                 baseSize: null,
                 currentSize,
                 change: null,
@@ -97,7 +148,7 @@ async function compareFile(
         if (data.type !== "file" || !("size" in data)) {
             // Not a regular file (could be a symlink or submodule)
             return {
-                file: filePath,
+                file: sourceFilePath,
                 baseSize: null,
                 currentSize,
                 change: null,
@@ -114,7 +165,7 @@ async function compareFile(
                   : 0;
 
         return {
-            file: filePath,
+            file: sourceFilePath,
             baseSize,
             currentSize,
             change,
@@ -128,7 +179,7 @@ async function compareFile(
             (error as { status: number }).status === 404
         ) {
             return {
-                file: filePath,
+                file: sourceFilePath,
                 baseSize: null,
                 currentSize,
                 change: null,
@@ -138,11 +189,11 @@ async function compareFile(
 
         // Log unexpected errors but don't fail the action
         warning(
-            `Failed to fetch base branch version of ${filePath}: ${error instanceof Error ? error.message : String(error)}`
+            `Failed to fetch base branch version of ${comparePath}: ${error instanceof Error ? error.message : String(error)}`
         );
 
         return {
-            file: filePath,
+            file: sourceFilePath,
             baseSize: null,
             currentSize,
             change: null,
