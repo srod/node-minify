@@ -463,6 +463,56 @@ describe("compareWithBase", () => {
         );
     });
 
+    test("marks file as new when both output and source compare paths are unsafe", async () => {
+        const resultWithUnsafePaths: MinifyResult = {
+            files: [
+                {
+                    file: "..",
+                    outputFile: "../secrets.env",
+                    originalSize: 10000,
+                    minifiedSize: 3000,
+                    reduction: 70,
+                    timeMs: 50,
+                },
+            ],
+            compressor: "terser",
+            totalOriginalSize: 10000,
+            totalMinifiedSize: 3000,
+            totalReduction: 70,
+            totalTimeMs: 50,
+        };
+
+        (context as { payload: Record<string, unknown> }).payload = {
+            pull_request: { base: { ref: "main" } },
+        };
+
+        const mockGetContent = vi.fn();
+        vi.mocked(getOctokit).mockReturnValue({
+            rest: {
+                repos: { getContent: mockGetContent },
+            },
+        } as unknown as ReturnType<typeof getOctokit>);
+
+        const result = await compareWithBase(resultWithUnsafePaths, "token");
+
+        expect(result).toEqual([
+            {
+                file: "..",
+                baseSize: null,
+                currentSize: 3000,
+                change: null,
+                isNew: true,
+            },
+        ]);
+        expect(mockGetContent).not.toHaveBeenCalled();
+        expect(warning).toHaveBeenCalledWith(
+            "Skipping unsafe base-compare path: ../secrets.env"
+        );
+        expect(warning).toHaveBeenCalledWith(
+            "Skipping unsafe base-compare path: .."
+        );
+    });
+
     test("handles new file (404 error)", async () => {
         (context as { payload: Record<string, unknown> }).payload = {
             pull_request: { base: { ref: "main" } },
