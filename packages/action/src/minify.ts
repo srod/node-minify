@@ -79,6 +79,7 @@ export async function runMinification(
 
     const fileResult: FileResult = {
         file: input,
+        outputFile: output,
         originalSize,
         minifiedSize,
         reduction,

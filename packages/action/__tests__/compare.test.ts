@@ -330,6 +330,50 @@ describe("compareWithBase", () => {
         });
     });
 
+    test("compares against output file path when provided", async () => {
+        const explicitResultWithOutput: MinifyResult = {
+            files: [
+                {
+                    file: "src/app.js",
+                    outputFile: "dist/app.min.js",
+                    originalSize: 10000,
+                    minifiedSize: 3000,
+                    reduction: 70,
+                    timeMs: 50,
+                },
+            ],
+            compressor: "terser",
+            totalOriginalSize: 10000,
+            totalMinifiedSize: 3000,
+            totalReduction: 70,
+            totalTimeMs: 50,
+        };
+
+        (context as { payload: Record<string, unknown> }).payload = {
+            pull_request: { base: { ref: "main" } },
+        };
+
+        const mockGetContent = vi.fn().mockResolvedValue({
+            data: { type: "file", size: 3500 },
+        });
+
+        vi.mocked(getOctokit).mockReturnValue({
+            rest: {
+                repos: { getContent: mockGetContent },
+            },
+        } as unknown as ReturnType<typeof getOctokit>);
+
+        const result = await compareWithBase(explicitResultWithOutput, "token");
+
+        expect(result[0]?.file).toBe("src/app.js");
+        expect(mockGetContent).toHaveBeenCalledWith({
+            owner: "test-owner",
+            repo: "test-repo",
+            path: "dist/app.min.js",
+            ref: "main",
+        });
+    });
+
     test("handles new file (404 error)", async () => {
         (context as { payload: Record<string, unknown> }).payload = {
             pull_request: { base: { ref: "main" } },

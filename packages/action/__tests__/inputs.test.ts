@@ -315,6 +315,21 @@ describe("parseInputs auto mode", () => {
         expect(() => parseInputs()).not.toThrow();
     });
 
+    test("does not require type for esbuild when auto=true", () => {
+        vi.mocked(getInput).mockImplementation((name: string) => {
+            if (name === "compressor") return "esbuild";
+            if (name === "type") return "";
+            if (name === "output-dir") return "dist";
+            return "";
+        });
+        vi.mocked(getBooleanInput).mockImplementation((name: string) => {
+            if (name === "auto") return true;
+            return false;
+        });
+
+        expect(() => parseInputs()).not.toThrow();
+    });
+
     test("parses patterns from comma-separated string", () => {
         vi.mocked(getInput).mockImplementation((name: string) => {
             if (name === "patterns") return "src/**/*.js, lib/**/*.ts";

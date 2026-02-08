@@ -61,6 +61,7 @@ export interface ActionInputs {
 
 export interface FileResult {
     file: string;
+    outputFile?: string;
     originalSize: number;
     minifiedSize: number;
     reduction: number;

@@ -66,6 +66,7 @@ describe("runMinification", () => {
             files: [
                 {
                     file: "src/app.js",
+                    outputFile: "dist/app.min.js",
                     originalSize: 1000,
                     minifiedSize: 500,
                     reduction: 50,
