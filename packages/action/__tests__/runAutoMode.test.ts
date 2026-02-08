@@ -391,6 +391,34 @@ describe("runAutoMode", () => {
         });
     });
 
+    test("should store repository-relative outputFile in auto mode", async () => {
+        vi.mocked(discoverFiles).mockReturnValue(["file1.js"]);
+        vi.mocked(groupFilesByType).mockReturnValue({
+            js: ["file1.js"],
+            css: [],
+            html: [],
+            json: [],
+            svg: [],
+            unknown: [],
+        });
+
+        await runAutoMode({
+            ...mockInputs,
+            workingDirectory: "src",
+        });
+
+        expect(setMinifyOutputs).toHaveBeenCalledWith(
+            expect.objectContaining({
+                files: [
+                    expect.objectContaining({
+                        file: "file1.js",
+                        outputFile: "src/min/file1.js",
+                    }),
+                ],
+            })
+        );
+    });
+
     test("should post PR comment in auto mode when enabled in PR context", async () => {
         vi.mocked(discoverFiles).mockReturnValue(["file1.js"]);
         vi.mocked(groupFilesByType).mockReturnValue({

@@ -374,6 +374,95 @@ describe("compareWithBase", () => {
         });
     });
 
+    test("normalizes windows separators in output compare path", async () => {
+        const explicitResultWithWindowsPath: MinifyResult = {
+            files: [
+                {
+                    file: "src/app.js",
+                    outputFile: "dist\\app.min.js",
+                    originalSize: 10000,
+                    minifiedSize: 3000,
+                    reduction: 70,
+                    timeMs: 50,
+                },
+            ],
+            compressor: "terser",
+            totalOriginalSize: 10000,
+            totalMinifiedSize: 3000,
+            totalReduction: 70,
+            totalTimeMs: 50,
+        };
+
+        (context as { payload: Record<string, unknown> }).payload = {
+            pull_request: { base: { ref: "main" } },
+        };
+
+        const mockGetContent = vi.fn().mockResolvedValue({
+            data: { type: "file", size: 3500 },
+        });
+
+        vi.mocked(getOctokit).mockReturnValue({
+            rest: {
+                repos: { getContent: mockGetContent },
+            },
+        } as unknown as ReturnType<typeof getOctokit>);
+
+        await compareWithBase(explicitResultWithWindowsPath, "token");
+
+        expect(mockGetContent).toHaveBeenCalledWith({
+            owner: "test-owner",
+            repo: "test-repo",
+            path: "dist/app.min.js",
+            ref: "main",
+        });
+    });
+
+    test("skips unsafe output compare path and falls back to source path", async () => {
+        const explicitResultWithUnsafeOutput: MinifyResult = {
+            files: [
+                {
+                    file: "src/app.js",
+                    outputFile: "../secrets.env",
+                    originalSize: 10000,
+                    minifiedSize: 3000,
+                    reduction: 70,
+                    timeMs: 50,
+                },
+            ],
+            compressor: "terser",
+            totalOriginalSize: 10000,
+            totalMinifiedSize: 3000,
+            totalReduction: 70,
+            totalTimeMs: 50,
+        };
+
+        (context as { payload: Record<string, unknown> }).payload = {
+            pull_request: { base: { ref: "main" } },
+        };
+
+        const mockGetContent = vi.fn().mockResolvedValue({
+            data: { type: "file", size: 3500 },
+        });
+
+        vi.mocked(getOctokit).mockReturnValue({
+            rest: {
+                repos: { getContent: mockGetContent },
+            },
+        } as unknown as ReturnType<typeof getOctokit>);
+
+        await compareWithBase(explicitResultWithUnsafeOutput, "token");
+
+        expect(mockGetContent).toHaveBeenCalledWith({
+            owner: "test-owner",
+            repo: "test-repo",
+            path: "src/app.js",
+            ref: "main",
+        });
+        expect(warning).toHaveBeenCalledWith(
+            "Skipping unsafe base-compare path: ../secrets.env"
+        );
+    });
+
     test("handles new file (404 error)", async () => {
         (context as { payload: Record<string, unknown> }).payload = {
             pull_request: { base: { ref: "main" } },

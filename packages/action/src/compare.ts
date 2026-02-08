@@ -4,9 +4,35 @@
  * MIT Licensed
  */
 
+import path from "node:path";
 import { info, warning } from "@actions/core";
 import { context, getOctokit } from "@actions/github";
 import type { ComparisonResult, MinifyResult } from "./types.ts";
+
+/**
+ * Normalize and validate a repository path for GitHub content API lookups.
+ *
+ * @param candidate - Path to validate
+ * @returns Safe repository-relative path or null when invalid
+ */
+function normalizeComparePath(candidate: string): string | null {
+    const withForwardSlashes = candidate.replace(/\\/g, "/");
+    const normalized = path.posix.normalize(withForwardSlashes);
+
+    // GitHub API expects repository-relative paths.
+    if (
+        normalized === "" ||
+        normalized === "." ||
+        normalized === ".." ||
+        normalized.startsWith("../") ||
+        normalized.startsWith("/") ||
+        /^[a-zA-Z]:\//.test(normalized)
+    ) {
+        return null;
+    }
+
+    return normalized;
+}
 
 /**
  * Compares minified file sizes against the base branch for pull requests.
@@ -39,17 +65,39 @@ export async function compareWithBase(
     const { owner, repo } = context.repo;
 
     const results = await Promise.all(
-        result.files.map((fileResult) =>
-            compareFile(
+        result.files.map((fileResult) => {
+            const normalizedOutputPath = fileResult.outputFile
+                ? normalizeComparePath(fileResult.outputFile)
+                : null;
+            if (fileResult.outputFile && normalizedOutputPath === null) {
+                warning(
+                    `Skipping unsafe base-compare path: ${fileResult.outputFile}`
+                );
+            }
+
+            const fallbackPath = normalizeComparePath(fileResult.file);
+            const comparePath = normalizedOutputPath ?? fallbackPath;
+            if (!comparePath) {
+                warning(`Skipping unsafe base-compare path: ${fileResult.file}`);
+                return {
+                    file: fileResult.file,
+                    baseSize: null,
+                    currentSize: fileResult.minifiedSize,
+                    change: null,
+                    isNew: true,
+                } satisfies ComparisonResult;
+            }
+
+            return compareFile(
                 octokit,
                 owner,
                 repo,
                 baseBranch,
                 fileResult.file,
-                fileResult.outputFile ?? fileResult.file,
+                comparePath,
                 fileResult.minifiedSize
-            )
-        )
+            );
+        })
     );
 
     return results;

@@ -62,6 +62,13 @@ async function getFileSize(filePath: string): Promise<number> {
 }
 
 /**
+ * Convert an absolute filesystem path to a repository-relative path.
+ */
+function toRepositoryPath(filePath: string): string {
+    return path.relative(process.cwd(), filePath).replace(/\\/g, "/");
+}
+
+/**
  * Runs the explicit mode minification workflow (original behavior).
  *
  * @param inputs - Validated action inputs with input/output paths
@@ -232,7 +239,7 @@ export async function runAutoMode(inputs: ActionInputs): Promise<void> {
 
                 return {
                     file,
-                    outputFile: outputPath,
+                    outputFile: toRepositoryPath(fullOutputPath),
                     originalSize,
                     minifiedSize,
                     reduction,

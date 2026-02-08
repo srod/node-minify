@@ -5,7 +5,7 @@
  */
 
 import { stat } from "node:fs/promises";
-import { resolve } from "node:path";
+import { relative, resolve } from "node:path";
 import { minify } from "@node-minify/core";
 import { getFilesizeGzippedRaw, resolveCompressor } from "@node-minify/utils";
 import type { ActionInputs, FileResult, MinifyResult } from "./types.ts";
@@ -19,6 +19,16 @@ import type { ActionInputs, FileResult, MinifyResult } from "./types.ts";
 async function getFileSize(filePath: string): Promise<number> {
     const stats = await stat(filePath);
     return stats.size;
+}
+
+/**
+ * Convert an absolute filesystem path to a repository-relative path.
+ *
+ * @param filePath - Absolute path to normalize
+ * @returns Repository-relative path using POSIX separators
+ */
+function toRepositoryPath(filePath: string): string {
+    return relative(process.cwd(), filePath).replace(/\\/g, "/");
 }
 
 /**
@@ -79,7 +89,7 @@ export async function runMinification(
 
     const fileResult: FileResult = {
         file: input,
-        outputFile: output,
+        outputFile: toRepositoryPath(outputPath),
         originalSize,
         minifiedSize,
         reduction,

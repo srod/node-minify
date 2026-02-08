@@ -1,6 +1,7 @@
 /*! node-minify action tests - MIT Licensed */
 
 import { stat } from "node:fs/promises";
+import path from "node:path";
 import { minify } from "@node-minify/core";
 import { getFilesizeGzippedRaw, resolveCompressor } from "@node-minify/utils";
 import { beforeEach, describe, expect, test, vi } from "vitest";
@@ -170,6 +171,46 @@ describe("runMinification", () => {
                 type: "js",
                 options: { minify: true },
             })
+        );
+    });
+
+    test("should store outputFile as repository-relative path for absolute output", async () => {
+        vi.mocked(stat)
+            .mockResolvedValueOnce({ size: 1000 } as any)
+            .mockResolvedValueOnce({ size: 500 } as any);
+        vi.mocked(resolveCompressor).mockResolvedValue({
+            compressor: vi.fn(),
+            label: "terser",
+        } as any);
+        vi.mocked(minify).mockResolvedValue("minified content");
+
+        const absoluteOutput = path.resolve(process.cwd(), "dist/app.min.js");
+        const result = await runMinification({
+            ...mockInputs,
+            output: absoluteOutput,
+        });
+
+        expect(result.files[0]?.outputFile).toBe("dist/app.min.js");
+    });
+
+    test("should include working-directory prefix in outputFile", async () => {
+        vi.mocked(stat)
+            .mockResolvedValueOnce({ size: 1000 } as any)
+            .mockResolvedValueOnce({ size: 500 } as any);
+        vi.mocked(resolveCompressor).mockResolvedValue({
+            compressor: vi.fn(),
+            label: "terser",
+        } as any);
+        vi.mocked(minify).mockResolvedValue("minified content");
+
+        const result = await runMinification({
+            ...mockInputs,
+            workingDirectory: "packages/action",
+            output: "dist/app.min.js",
+        });
+
+        expect(result.files[0]?.outputFile).toBe(
+            "packages/action/dist/app.min.js"
         );
     });
 });
