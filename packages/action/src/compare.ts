@@ -78,7 +78,9 @@ export async function compareWithBase(
             const fallbackPath = normalizeComparePath(fileResult.file);
             const comparePath = normalizedOutputPath ?? fallbackPath;
             if (!comparePath) {
-                warning(`Skipping unsafe base-compare path: ${fileResult.file}`);
+                warning(
+                    `Skipping unsafe base-compare path: ${fileResult.file}`
+                );
                 return {
                     file: fileResult.file,
                     baseSize: null,
