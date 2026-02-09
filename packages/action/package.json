@@ -58,7 +58,8 @@
         "@node-minify/oxc": "workspace:*",
         "@node-minify/swc": "workspace:*",
         "@node-minify/terser": "workspace:*",
-        "@node-minify/utils": "workspace:*"
+        "@node-minify/utils": "workspace:*",
+        "fast-glob": "^3.3.3"
     },
     "devDependencies": {
         "@node-minify/types": "workspace:*",
