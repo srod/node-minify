@@ -10,6 +10,7 @@ import path from "node:path";
  * Prepend the public folder to each file.
  * @param input Path to file(s)
  * @param publicFolder Path to the public folder
+ * @returns Object containing the updated input path(s), or an empty object if `publicFolder` is invalid
  */
 export function setPublicFolder(
     input: string | string[],
@@ -21,11 +22,19 @@ export function setPublicFolder(
 
     const normalizedPublicFolder = path.normalize(publicFolder);
 
+    const isAlreadyInPublicFolder = (filePath: string) => {
+        const relativePath = path.relative(normalizedPublicFolder, filePath);
+        return (
+            relativePath === "" ||
+            (!relativePath.startsWith("..") && !path.isAbsolute(relativePath))
+        );
+    };
+
     const addPublicFolder = (item: string) => {
         const normalizedPath = path.normalize(item);
-        return normalizedPath.includes(normalizedPublicFolder)
+        return isAlreadyInPublicFolder(normalizedPath)
             ? normalizedPath
-            : path.normalize(normalizedPublicFolder + item);
+            : path.join(normalizedPublicFolder, normalizedPath);
     };
 
     return {

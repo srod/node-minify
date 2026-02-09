@@ -4,7 +4,17 @@
  * MIT Licensed
  */
 
+import path from "node:path";
 import { ValidationError } from "./error.ts";
+
+/**
+ * Normalize any Windows path separators to POSIX separators.
+ * @param value Path-like string
+ * @returns Path string using `/` separators
+ */
+function toPosixPath(value: string): string {
+    return value.replaceAll("\\", "/");
+}
 
 /**
  * Set the file name as minified.
@@ -35,26 +45,29 @@ export function setFileNameMin(
     }
 
     try {
-        const lastSlashIndex = file.lastIndexOf("/");
-        const filePath = file.substring(0, lastSlashIndex + 1);
-        const fileWithoutPath = file.substring(lastSlashIndex + 1);
-        const lastDotIndex = fileWithoutPath.lastIndexOf(".");
+        const parsedFile = path.posix.parse(toPosixPath(file));
 
-        if (lastDotIndex === -1) {
+        if (!parsedFile.ext) {
             throw new ValidationError("File must have an extension");
         }
 
-        let fileWithoutExtension = fileWithoutPath.substring(0, lastDotIndex);
+        let fileWithoutExtension = parsedFile.name;
 
         if (publicFolder) {
             if (typeof publicFolder !== "string") {
                 throw new ValidationError("Public folder must be a string");
             }
-            fileWithoutExtension = publicFolder + fileWithoutExtension;
+            fileWithoutExtension = path.posix.join(
+                toPosixPath(publicFolder),
+                fileWithoutExtension
+            );
         }
 
         if (replaceInPlace) {
-            fileWithoutExtension = filePath + fileWithoutExtension;
+            fileWithoutExtension = path.posix.join(
+                parsedFile.dir,
+                fileWithoutExtension
+            );
         }
 
         return output.replace("$1", fileWithoutExtension);

@@ -5,6 +5,7 @@
  */
 
 import os from "node:os";
+import path from "node:path";
 import fg from "fast-glob";
 
 /**
@@ -40,6 +41,15 @@ export const DEFAULT_IGNORES: string[] = [
  */
 function isWindows() {
     return os.platform() === "win32";
+}
+
+/**
+ * Normalize any Windows path separators to POSIX separators.
+ * @param value Path-like string
+ * @returns Path string using `/` separators
+ */
+function toPosixPath(value: string): string {
+    return value.replaceAll("\\", "/");
 }
 
 /**
@@ -90,7 +100,10 @@ function wildcardsString(input: string, options: WildcardOptions) {
 function wildcardsArray(input: string[], options: WildcardOptions) {
     const inputWithPublicFolder = input.map((item) => {
         const input2 = options.publicFolder
-            ? options.publicFolder + item
+            ? path.posix.join(
+                  toPosixPath(options.publicFolder),
+                  toPosixPath(item)
+              )
             : item;
         return isWindows() ? fg.convertPathToPattern(input2) : input2;
     });
@@ -117,7 +130,7 @@ function wildcardsArray(input: string[], options: WildcardOptions) {
  */
 function getFilesFromWildcards(input: string, options: WildcardOptions) {
     const fullPath = options.publicFolder
-        ? `${options.publicFolder}${input}`
+        ? path.posix.join(toPosixPath(options.publicFolder), toPosixPath(input))
         : input;
     return fg.globSync(
         isWindows() ? fg.convertPathToPattern(fullPath) : fullPath,
