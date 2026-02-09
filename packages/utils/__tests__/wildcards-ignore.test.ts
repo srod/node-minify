@@ -34,6 +34,26 @@ describe("wildcards with ignore patterns", () => {
         });
     });
 
+    test("should support string publicFolder without trailing slash", () => {
+        vi.mocked(fg.globSync).mockReturnValue(["public/app.js"]);
+
+        const result = wildcards("*.js", "public");
+        expect(result).toEqual({ input: ["public/app.js"] });
+        expect(fg.globSync).toHaveBeenLastCalledWith("public/*.js", {
+            ignore: undefined,
+        });
+    });
+
+    test("should normalize backslash publicFolder to forward-slash glob pattern", () => {
+        vi.mocked(fg.globSync).mockReturnValue(["public/app.js"]);
+
+        const result = wildcards("*.js", "public\\");
+        expect(result).toEqual({ input: ["public/app.js"] });
+        expect(fg.globSync).toHaveBeenLastCalledWith("public/*.js", {
+            ignore: undefined,
+        });
+    });
+
     test("should work with object { publicFolder } option", () => {
         vi.mocked(fg.globSync).mockReturnValue(["public/app.js"]);
 

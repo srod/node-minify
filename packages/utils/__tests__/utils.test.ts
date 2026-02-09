@@ -457,10 +457,25 @@ describe("Package: utils", () => {
                 "public/foo.min.js"
             ));
 
+        test("should return file name min with public folder without trailing slash", () =>
+            expect(setFileNameMin("foo.js", "$1.min.js", "public")).toBe(
+                "public/foo.min.js"
+            ));
+
         test("should return file name min in place", () =>
             expect(
                 setFileNameMin("src/foo.js", "$1.min.js", undefined, true)
             ).toBe("src/foo.min.js"));
+
+        test("should normalize windows-style input separators to forward slashes", () =>
+            expect(
+                setFileNameMin("src\\foo.js", "$1.min.js", undefined, true)
+            ).toBe("src/foo.min.js"));
+
+        test("should normalize backslash public folder to forward slashes", () =>
+            expect(setFileNameMin("foo.js", "$1.min.js", "public\\")).toBe(
+                "public/foo.min.js"
+            ));
 
         test("should throw if no file", () => {
             expect(() => setFileNameMin("", "$1.min.js")).toThrow(
@@ -487,15 +502,16 @@ describe("Package: utils", () => {
         });
 
         test("should throw generic error if something unexpected happens", () => {
-            const spy = vi
-                .spyOn(String.prototype, "lastIndexOf")
-                .mockImplementation(() => {
-                    throw new Error("Unexpected error");
-                });
-            expect(() => setFileNameMin("foo.js", "$1.min.js")).toThrow(
-                ValidationError
-            );
-            spy.mockRestore();
+            const spy = vi.spyOn(path.posix, "parse").mockImplementation(() => {
+                throw new Error("Unexpected error");
+            });
+            try {
+                expect(() => setFileNameMin("foo.js", "$1.min.js")).toThrow(
+                    ValidationError
+                );
+            } finally {
+                spy.mockRestore();
+            }
         });
     });
 

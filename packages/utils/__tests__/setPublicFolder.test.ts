@@ -14,6 +14,11 @@ describe("setPublicFolder", () => {
         expect(result).toEqual({ input: path.normalize("public/file.js") });
     });
 
+    test("should prepend public folder without requiring trailing slash", () => {
+        const result = setPublicFolder("file.js", "public");
+        expect(result).toEqual({ input: path.normalize("public/file.js") });
+    });
+
     test("should prepend public folder to array input", () => {
         const result = setPublicFolder(["file1.js", "file2.js"], "public/");
         expect(result).toEqual({
@@ -27,6 +32,13 @@ describe("setPublicFolder", () => {
     test("should not prepend if already present in string input", () => {
         const result = setPublicFolder("public/file.js", "public/");
         expect(result).toEqual({ input: path.normalize("public/file.js") });
+    });
+
+    test("should prepend when public folder name appears in middle of path", () => {
+        const result = setPublicFolder("src/distribute/app.js", "dist");
+        expect(result).toEqual({
+            input: path.normalize("dist/src/distribute/app.js"),
+        });
     });
 
     test("should not prepend if already present in array input", () => {
