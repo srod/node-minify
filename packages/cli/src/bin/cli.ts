@@ -96,7 +96,11 @@ function setupProgram(): Command {
         .option("--brotli", "include brotli size")
         .option("-v, --verbose", "verbose output")
         .action(async (input, options) => {
-            const spinner = ora("Benchmarking...").start();
+            const shouldUseSpinner =
+                options.format !== "json" && !!process.stderr.isTTY;
+            const spinner = shouldUseSpinner
+                ? ora("Benchmarking...").start()
+                : null;
             try {
                 const results = await benchmark({
                     input,
@@ -109,16 +113,18 @@ function setupProgram(): Command {
                     type: program.opts().type,
                     verbose: !!options.verbose,
                     onProgress: (compressor: string, file: string) => {
-                        spinner.text = `Benchmarking ${compressor} on ${file}...`;
+                        if (spinner) {
+                            spinner.text = `Benchmarking ${compressor} on ${file}...`;
+                        }
                     },
                 });
 
-                spinner.stop();
+                spinner?.stop();
                 const reporter = getReporter(options.format);
                 console.log(reporter(results));
                 process.exit(0);
             } catch (error) {
-                spinner.fail("Benchmark failed");
+                spinner?.fail("Benchmark failed");
                 console.error(error);
                 process.exit(1);
             }

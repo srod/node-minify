@@ -7,6 +7,7 @@
 import { existsSync, lstatSync, unlinkSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import type { Settings } from "@node-minify/types";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -1484,21 +1485,21 @@ describe("Package: utils", () => {
             writeFile({ file: firstInput, content: "first" });
             writeFile({ file: secondInput, content: "second" });
 
-            const compressor = vi.fn().mockResolvedValue({
+            const compressor: Settings["compressor"] = async () => ({
                 code: "",
                 outputs: [
                     { format: "webp", content: Buffer.from("FORMAT_WEBP") },
                     { format: "avif", content: Buffer.from("FORMAT_AVIF") },
                 ],
             });
-            const settings = {
+            const settings: Settings = {
                 compressor,
                 input: [firstInput, secondInput],
                 output: [
                     firstInput.replace(/\.png$/, ""),
                     secondInput.replace(/\.png$/, ""),
                 ],
-            } as any;
+            };
 
             await run({
                 settings,

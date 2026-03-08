@@ -16,8 +16,8 @@ const repoRoot = path.resolve(__dirname, "../../..");
 const cliEntry = path.join(repoRoot, "packages/cli/src/bin/cli.ts");
 
 describe("cli benchmark command", () => {
-    test("should use benchmark defaults when compressors are not provided", async () => {
-        const { stdout } = await execFileAsync(
+    test("should emit clean JSON and benchmark defaults when compressors are not provided", async () => {
+        const { stdout, stderr } = await execFileAsync(
             "bun",
             [
                 cliEntry,
@@ -33,8 +33,10 @@ describe("cli benchmark command", () => {
             }
         );
 
-        const jsonStart = stdout.indexOf("{");
-        const parsed = JSON.parse(stdout.slice(jsonStart)) as {
+        expect(stderr).toBe("");
+
+        const trimmedStdout = stdout.trim();
+        const parsed = JSON.parse(trimmedStdout) as {
             files: Array<{
                 results: Array<{ compressor: string }>;
             }>;

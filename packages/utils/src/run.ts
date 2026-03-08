@@ -144,10 +144,11 @@ async function writeOutput<T extends CompressorOptions = CompressorOptions>(
 }
 
 /**
- * Extract the first input file path from the input configuration.
+ * Extract an input file path from the input configuration.
  *
  * @param input - A single file path, an array of paths, or undefined
- * @returns The first input file path, or an empty string if none available
+ * @param index - Optional index of the current input being processed when `input` is an array
+ * @returns The indexed input file path when available, otherwise the first input file path or an empty string
  */
 function getInputFile(
     input: string | string[] | undefined,
