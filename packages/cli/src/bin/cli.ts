@@ -96,20 +96,17 @@ function setupProgram(): Command {
         .option("--brotli", "include brotli size")
         .option("-v, --verbose", "verbose output")
         .action(async (input, options) => {
-            const globalOpts = program.opts();
             const spinner = ora("Benchmarking...").start();
             try {
                 const results = await benchmark({
                     input,
-                    compressors:
-                        options.compressors?.split(",") ||
-                        globalOpts.compressor?.split(","),
+                    compressors: options.compressors?.split(","),
                     iterations: parseInt(options.iterations, 10),
                     format: options.format,
                     output: options.output,
                     includeGzip: !!options.gzip,
                     includeBrotli: !!options.brotli,
-                    type: globalOpts.type,
+                    type: program.opts().type,
                     verbose: !!options.verbose,
                     onProgress: (compressor: string, file: string) => {
                         spinner.text = `Benchmarking ${compressor} on ${file}...`;

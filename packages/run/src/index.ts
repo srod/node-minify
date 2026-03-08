@@ -96,7 +96,7 @@ export async function run({
         child.stdout?.on("error", handleError("child.stdout"));
         child.stderr?.on("error", handleError("child.stderr"));
 
-        child.on("exit", (code: number | null) => {
+        child.on("close", (code: number | null) => {
             if (settled) return;
             settled = true;
             if (timeoutId) clearTimeout(timeoutId);

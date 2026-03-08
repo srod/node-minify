@@ -1468,6 +1468,63 @@ describe("Package: utils", () => {
             );
         });
 
+        test("should derive multi-format targets from the current input when processing input arrays", async () => {
+            const firstInput = `${tmpDir}/multi-array-first.png`;
+            const secondInput = `${tmpDir}/multi-array-second.png`;
+            const firstWebp = `${tmpDir}/multi-array-first.webp`;
+            const firstAvif = `${tmpDir}/multi-array-first.avif`;
+            const secondWebp = `${tmpDir}/multi-array-second.webp`;
+            const secondAvif = `${tmpDir}/multi-array-second.avif`;
+            filesToCleanup.add(firstInput);
+            filesToCleanup.add(secondInput);
+            filesToCleanup.add(firstWebp);
+            filesToCleanup.add(firstAvif);
+            filesToCleanup.add(secondWebp);
+            filesToCleanup.add(secondAvif);
+            writeFile({ file: firstInput, content: "first" });
+            writeFile({ file: secondInput, content: "second" });
+
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [
+                    { format: "webp", content: Buffer.from("FORMAT_WEBP") },
+                    { format: "avif", content: Buffer.from("FORMAT_AVIF") },
+                ],
+            });
+            const settings = {
+                compressor,
+                input: [firstInput, secondInput],
+                output: [
+                    firstInput.replace(/\.png$/, ""),
+                    secondInput.replace(/\.png$/, ""),
+                ],
+            } as any;
+
+            await run({
+                settings,
+                content: Buffer.from("first"),
+                index: 0,
+            });
+            await run({
+                settings,
+                content: Buffer.from("second"),
+                index: 1,
+            });
+
+            expect(readFile(firstWebp, true)).toEqual(
+                Buffer.from("FORMAT_WEBP")
+            );
+            expect(readFile(firstAvif, true)).toEqual(
+                Buffer.from("FORMAT_AVIF")
+            );
+            expect(readFile(secondWebp, true)).toEqual(
+                Buffer.from("FORMAT_WEBP")
+            );
+            expect(readFile(secondAvif, true)).toEqual(
+                Buffer.from("FORMAT_AVIF")
+            );
+        });
+
         test("should fallback to auto-generated path when output is non-string truthy value", async () => {
             const testFile = `${tmpDir}/fallback-nonstring.png`;
             filesToCleanup.add(testFile);

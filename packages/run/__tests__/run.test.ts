@@ -166,7 +166,7 @@ describe("Package: run", () => {
                 mockStdout.emit("error", new Error("stdout error"));
                 mockStderr.emit("error", new Error("stderr error"));
                 mockStdout.emit("data", Buffer.from("output"));
-                mockChild.emit("exit", 0);
+                mockChild.emit("close", 0);
             });
 
             const result = await promise;
@@ -221,7 +221,7 @@ describe("Package: run", () => {
             setImmediate(() => {
                 mockStdin.emit("error", new Error("stdin error"));
                 mockStdout.emit("data", Buffer.from("output"));
-                mockChild.emit("exit", 0);
+                mockChild.emit("close", 0);
             });
 
             const result = await promise;
@@ -229,6 +229,39 @@ describe("Package: run", () => {
             expect(consoleSpy).not.toHaveBeenCalled();
 
             consoleSpy.mockRestore();
+        });
+
+        test("should wait for close before resolving stdout", async () => {
+            const mockChild = new EventEmitter() as ReturnType<
+                typeof childProcess.spawn
+            >;
+            const mockStdin = new EventEmitter();
+            const mockStdout = new EventEmitter();
+            const mockStderr = new EventEmitter();
+
+            Object.assign(mockChild, {
+                stdin: Object.assign(mockStdin, {
+                    end: vi.fn(),
+                }),
+                stdout: mockStdout,
+                stderr: mockStderr,
+                kill: vi.fn(),
+            });
+
+            spy.mockReturnValue(mockChild);
+
+            const promise = runCommandLine({
+                args: ["-jar", "fake.jar"],
+                data: "test",
+            });
+
+            setImmediate(() => {
+                mockChild.emit("exit", 0);
+                mockStdout.emit("data", Buffer.from("delayed-output"));
+                mockChild.emit("close", 0);
+            });
+
+            await expect(promise).resolves.toBe("delayed-output");
         });
 
         test("should reject when maxBuffer is exceeded", async () => {

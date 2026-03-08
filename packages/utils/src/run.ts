@@ -89,7 +89,7 @@ async function writeOutput<T extends CompressorOptions = CompressorOptions>(
     settings: Settings<T>,
     index?: number
 ): Promise<void> {
-    const isInMemoryMode = Boolean(settings.content);
+    const isInMemoryMode = settings.content !== undefined;
     if (isInMemoryMode || !settings.output) {
         return;
     }
@@ -149,11 +149,17 @@ async function writeOutput<T extends CompressorOptions = CompressorOptions>(
  * @param input - A single file path, an array of paths, or undefined
  * @returns The first input file path, or an empty string if none available
  */
-function getFirstInputFile(input: string | string[] | undefined): string {
+function getInputFile(
+    input: string | string[] | undefined,
+    index?: number
+): string {
     if (typeof input === "string") {
         return input;
     }
     if (Array.isArray(input) && input.length > 0) {
+        if (index !== undefined) {
+            return input[index] ?? "";
+        }
         return input[0] ?? "";
     }
     return "";
@@ -176,11 +182,12 @@ async function writeMultipleOutputs<
     index?: number
 ): Promise<void> {
     const output = settings.output;
-    const isArrayOutput = Array.isArray(output);
-    const outputsArray = isArrayOutput ? output : [output];
-    const inputFile = getFirstInputFile(settings.input);
+    const perFormatOutputs = Array.isArray(output) && index === undefined;
+    const inputFile = getInputFile(settings.input, index);
     const inputDir = parse(inputFile).dir;
     const inputBase = parse(inputFile).name;
+    const currentOutput =
+        Array.isArray(output) && index !== undefined ? output[index] : output;
 
     const promises = outputs.map(async (outputResult, i) => {
         if (!outputResult) {
@@ -191,30 +198,39 @@ async function writeMultipleOutputs<
         const format = outputResult.format || "out";
         let targetFile: string;
 
-        const arrayItem = outputsArray[i];
+        const arrayItem = perFormatOutputs ? output[i] : undefined;
 
         if (
-            isArrayOutput &&
+            perFormatOutputs &&
             arrayItem !== undefined &&
             arrayItem !== "$1" &&
             arrayItem.trim() !== ""
         ) {
             // Explicit output path provided in array - use as-is
             targetFile = arrayItem;
-        } else if (typeof output === "string" && output === "$1") {
+        } else if (
+            typeof currentOutput === "string" &&
+            currentOutput === "$1"
+        ) {
             // $1 only: auto-generate from input filename in input directory
             const baseName = inputBase || "output";
             targetFile = inputDir
                 ? join(inputDir, `${baseName}.${format}`)
                 : `${baseName}.${format}`;
-        } else if (typeof output === "string" && output.includes("$1")) {
+        } else if (
+            typeof currentOutput === "string" &&
+            currentOutput.includes("$1")
+        ) {
             // $1 pattern in path: replace and append format
             const extensionlessName = inputBase || "output";
-            const outputFile = output.replace(/\$1/g, extensionlessName);
+            const outputFile = currentOutput.replace(/\$1/g, extensionlessName);
             targetFile = `${outputFile}.${format}`;
-        } else if (typeof output === "string") {
+        } else if (
+            typeof currentOutput === "string" &&
+            currentOutput.trim() !== ""
+        ) {
             // Single string output: append format extension
-            targetFile = `${output}.${format}`;
+            targetFile = `${currentOutput}.${format}`;
         } else {
             // Fallback
             const baseName = inputBase || "output";
