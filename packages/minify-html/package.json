@@ -54,8 +54,8 @@
     "dev": "tsdown src/index.ts --watch"
   },
   "dependencies": {
-    "@node-minify/utils": "workspace:*",
-    "@minify-html/node": "^0.18.0"
+    "@minify-html/node": "^0.18.1",
+    "@node-minify/utils": "workspace:*"
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*"

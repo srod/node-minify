@@ -59,7 +59,7 @@
     "dependencies": {
         "@node-minify/core": "workspace:*",
         "@node-minify/utils": "workspace:*",
-        "imagemin": "^9.0.0",
+        "imagemin": "^9.0.1",
         "imagemin-gifsicle": "^7.0.0",
         "imagemin-mozjpeg": "^10.0.0",
         "imagemin-optipng": "^8.0.0",

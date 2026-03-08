@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@node-minify/utils": "workspace:*",
-    "lightningcss": "^1.28.2"
+    "lightningcss": "^1.31.1"
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*"
