@@ -1661,6 +1661,32 @@ describe("Package: utils", () => {
             );
         });
 
+        test("should use the indexed input filename for multi-output array inputs", async () => {
+            const firstInput = `${tmpDir}/multi-input-first.png`;
+            const secondInput = `${tmpDir}/multi-input-second.png`;
+            const secondOutput = `${tmpDir}/multi-input-second.webp`;
+            filesToCleanup.add(firstInput);
+            filesToCleanup.add(secondInput);
+            filesToCleanup.add(secondOutput);
+            writeFile({ file: firstInput, content: "first" });
+            writeFile({ file: secondInput, content: "second" });
+
+            const webpContent = Buffer.from("SECOND_INPUT_WEBP");
+            const compressor: Settings["compressor"] = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [{ format: "webp", content: webpContent }],
+            });
+            const settings: Settings = {
+                compressor,
+                input: [firstInput, secondInput],
+                output: "$1",
+            };
+
+            await run({ settings, content: "", index: 1 });
+
+            expect(readFile(secondOutput, true)).toEqual(webpContent);
+        });
+
         test("should fallback with 'output' basename when input is empty and output is non-string", async () => {
             const webpContent = Buffer.from("WEBP_FALLBACK_NO_INPUT");
             const compressor = vi.fn().mockResolvedValue({

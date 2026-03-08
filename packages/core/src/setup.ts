@@ -79,10 +79,31 @@ function enhanceSettings<T extends CompressorOptions = CompressorOptions>(
             ...wildcards(enhancedSettings.input, enhancedSettings.publicFolder),
         };
     }
+    const optionsWithFormats = enhancedSettings.options as
+        | { formats?: unknown[] }
+        | undefined;
+    const shouldPreserveBareDollarOneOutput =
+        enhancedSettings.output === "$1" &&
+        !enhancedSettings.publicFolder &&
+        !enhancedSettings.replaceInPlace &&
+        Array.isArray(optionsWithFormats?.formats) &&
+        optionsWithFormats.formats.length > 0;
+
     if (
+        Array.isArray(enhancedSettings.input) &&
+        shouldPreserveBareDollarOneOutput
+    ) {
+        enhancedSettings = {
+            ...enhancedSettings,
+            output: enhancedSettings.input.map((file) =>
+                setFileNameMin(file, "$1", undefined, true)
+            ),
+        };
+    } else if (
         enhancedSettings.input &&
         enhancedSettings.output &&
-        !Array.isArray(enhancedSettings.output)
+        !Array.isArray(enhancedSettings.output) &&
+        !shouldPreserveBareDollarOneOutput
     ) {
         enhancedSettings = {
             ...enhancedSettings,
