@@ -45,6 +45,25 @@ Compressor packages contain native dependencies that cannot be bundled into the 
     compressor: "terser"
 ```
 
+### Zero-Config Mode (Auto Discovery)
+
+Automatically discover and minify files with `auto: true`:
+
+```yaml
+- name: Install compressors
+  # Add other compressors (html-minifier, jsonminify, svgo) if needed
+  run: npm install @node-minify/terser @node-minify/lightningcss
+
+- name: Minify all files
+  uses: srod/node-minify@v1
+  with:
+    auto: 'true'
+```
+
+Scans `src/`, `app/`, `lib/`, `styles/` for JS/CSS/HTML/JSON/SVG files, applies appropriate compressors, and outputs to `dist/` with preserved structure.
+
+See [full zero-config documentation](https://node-minify.2clics.net/github-action#zero-config-mode) for patterns, customization, and dry-run mode.
+
 ### With PR Comment
 
 ```yaml

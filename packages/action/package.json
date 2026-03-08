@@ -51,17 +51,18 @@
     },
     "dependencies": {
         "@actions/core": "^1.11.1",
-        "@actions/github": "^6.0.0",
+        "@actions/github": "^6.0.1",
         "@node-minify/benchmark": "workspace:*",
         "@node-minify/core": "workspace:*",
         "@node-minify/esbuild": "workspace:*",
         "@node-minify/oxc": "workspace:*",
         "@node-minify/swc": "workspace:*",
         "@node-minify/terser": "workspace:*",
-        "@node-minify/utils": "workspace:*"
+        "@node-minify/utils": "workspace:*",
+        "fast-glob": "^3.3.3"
     },
     "devDependencies": {
         "@node-minify/types": "workspace:*",
-        "@vercel/ncc": "^0.38.3"
+        "@vercel/ncc": "^0.38.4"
     }
 }

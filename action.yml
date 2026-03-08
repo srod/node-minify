@@ -8,10 +8,28 @@ branding:
 inputs:
   input:
     description: "Files to minify (glob pattern or path)"
-    required: true
+    required: false
   output:
     description: "Output file path"
-    required: true
+    required: false
+  auto:
+    description: "Enable zero-config auto mode"
+    required: false
+    default: "false"
+  patterns:
+    description: "Custom glob patterns for auto mode (comma-separated)"
+    required: false
+  output-dir:
+    description: "Output directory for auto mode"
+    required: false
+    default: "dist"
+  ignore:
+    description: "Additional ignore patterns for auto mode (comma-separated)"
+    required: false
+  dry-run:
+    description: "Preview mode - show what would be processed without minifying"
+    required: false
+    default: "false"
   compressor:
     description: |
       Compressor to use.

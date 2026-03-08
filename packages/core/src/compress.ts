@@ -5,6 +5,7 @@
  */
 
 import { mkdir } from "node:fs/promises";
+import path from "node:path";
 /**
  * Module dependencies.
  */
@@ -105,13 +106,13 @@ async function createDirectory(filePath: string | string[]) {
     const paths = Array.isArray(filePath) ? filePath : [filePath];
     const uniqueDirs = new Set<string>();
 
-    for (const path of paths) {
-        if (typeof path !== "string") {
+    for (const outputPath of paths) {
+        if (typeof outputPath !== "string") {
             continue;
         }
 
-        // Extract directory path
-        const dirPath = path.substring(0, path.lastIndexOf("/"));
+        // Use platform dirname first, then fallback for Windows-style separators on POSIX.
+        const dirPath = getDirectoryPath(outputPath);
 
         // Early return if no directory path
         if (!dirPath) {
@@ -125,4 +126,23 @@ async function createDirectory(filePath: string | string[]) {
     await Promise.all(
         Array.from(uniqueDirs).map((dir) => mkdir(dir, { recursive: true }))
     );
+}
+
+/**
+ * Resolve the directory path from an output file path.
+ * @param outputPath Full path to the output file
+ * @returns A directory path when resolvable, or an empty string
+ */
+function getDirectoryPath(outputPath: string): string {
+    const dirPath = path.dirname(outputPath);
+    if (dirPath && dirPath !== ".") {
+        return dirPath;
+    }
+
+    const windowsDirPath = path.win32.dirname(outputPath);
+    if (windowsDirPath && windowsDirPath !== ".") {
+        return windowsDirPath;
+    }
+
+    return "";
 }

@@ -5,7 +5,10 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { ensureStringContent } from "@node-minify/utils";
+import {
+    ensureStringContent,
+    extractSourceMapOption,
+} from "@node-minify/utils";
 import { transform } from "esbuild";
 
 /**
@@ -30,12 +33,14 @@ export async function esbuild({
     }
 
     const loader = settings.type === "css" ? "css" : "js";
-    const { sourceMap, ...restOptions } = settings?.options ?? {};
+    const { sourceMap, restOptions } = extractSourceMapOption(
+        settings?.options
+    );
 
     const result = await transform(contentStr, {
         loader,
         minify: true,
-        sourcemap: !!sourceMap,
+        sourcemap: sourceMap,
         ...restOptions,
     });
 

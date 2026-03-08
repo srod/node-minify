@@ -54,12 +54,12 @@
     "dev": "tsdown src/index.ts --watch"
   },
   "dependencies": {
-    "@node-minify/core": "workspace:*",
     "@node-minify/benchmark": "workspace:*",
+    "@node-minify/core": "workspace:*",
     "@node-minify/utils": "workspace:*",
     "chalk": "5.6.2",
-    "commander": "14.0.2",
-    "ora": "9.1.0",
+    "commander": "14.0.3",
+    "ora": "9.3.0",
     "update-notifier": "7.3.1"
   },
   "devDependencies": {

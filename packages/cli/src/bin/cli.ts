@@ -96,32 +96,35 @@ function setupProgram(): Command {
         .option("--brotli", "include brotli size")
         .option("-v, --verbose", "verbose output")
         .action(async (input, options) => {
-            const globalOpts = program.opts();
-            const spinner = ora("Benchmarking...").start();
+            const shouldUseSpinner =
+                options.format !== "json" && !!process.stderr.isTTY;
+            const spinner = shouldUseSpinner
+                ? ora("Benchmarking...").start()
+                : null;
             try {
                 const results = await benchmark({
                     input,
-                    compressors:
-                        options.compressors?.split(",") ||
-                        globalOpts.compressor?.split(","),
+                    compressors: options.compressors?.split(","),
                     iterations: parseInt(options.iterations, 10),
                     format: options.format,
                     output: options.output,
                     includeGzip: !!options.gzip,
                     includeBrotli: !!options.brotli,
-                    type: globalOpts.type,
+                    type: program.opts().type,
                     verbose: !!options.verbose,
                     onProgress: (compressor: string, file: string) => {
-                        spinner.text = `Benchmarking ${compressor} on ${file}...`;
+                        if (spinner) {
+                            spinner.text = `Benchmarking ${compressor} on ${file}...`;
+                        }
                     },
                 });
 
-                spinner.stop();
+                spinner?.stop();
                 const reporter = getReporter(options.format);
                 console.log(reporter(results));
                 process.exit(0);
             } catch (error) {
-                spinner.fail("Benchmark failed");
+                spinner?.fail("Benchmark failed");
                 console.error(error);
                 process.exit(1);
             }

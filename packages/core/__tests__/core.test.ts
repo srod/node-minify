@@ -216,6 +216,15 @@ describe("Package: core", async () => {
             expect(min).toBeDefined();
         });
 
+        test("should accept empty string content in memory mode", async () => {
+            const settings: Settings = {
+                compressor: noCompress,
+                content: "",
+            };
+
+            await expect(minify(settings)).resolves.toBe("");
+        });
+
         test("should throw an error if binary does not exist", async () => {
             const settings: Settings = {
                 compressor: "fake" as unknown as Compressor,

@@ -5,7 +5,7 @@
  */
 
 import { stat } from "node:fs/promises";
-import { resolve } from "node:path";
+import { relative, resolve } from "node:path";
 import { minify } from "@node-minify/core";
 import { getFilesizeGzippedRaw, resolveCompressor } from "@node-minify/utils";
 import type { ActionInputs, FileResult, MinifyResult } from "./types.ts";
@@ -19,6 +19,16 @@ import type { ActionInputs, FileResult, MinifyResult } from "./types.ts";
 async function getFileSize(filePath: string): Promise<number> {
     const stats = await stat(filePath);
     return stats.size;
+}
+
+/**
+ * Convert an absolute filesystem path to a repository-relative path.
+ *
+ * @param filePath - Absolute path to normalize
+ * @returns Repository-relative path using POSIX separators
+ */
+function toRepositoryPath(filePath: string): string {
+    return relative(process.cwd(), filePath).replace(/\\/g, "/");
 }
 
 /**
@@ -39,8 +49,14 @@ async function getFileSize(filePath: string): Promise<number> {
 export async function runMinification(
     inputs: ActionInputs
 ): Promise<MinifyResult> {
-    const inputPath = resolve(inputs.workingDirectory, inputs.input);
-    const outputPath = resolve(inputs.workingDirectory, inputs.output);
+    const { input, output } = inputs;
+    if (!input || !output) {
+        throw new Error(
+            "Input and output files are required for explicit mode"
+        );
+    }
+    const inputPath = resolve(inputs.workingDirectory, input);
+    const outputPath = resolve(inputs.workingDirectory, output);
 
     const originalSize = await getFileSize(inputPath);
     const { compressor, label } = await resolveCompressor(inputs.compressor);
@@ -72,7 +88,8 @@ export async function runMinification(
     }
 
     const fileResult: FileResult = {
-        file: inputs.input,
+        file: input,
+        outputFile: toRepositoryPath(outputPath),
         originalSize,
         minifiedSize,
         reduction,

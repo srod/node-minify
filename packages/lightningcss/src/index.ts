@@ -5,7 +5,10 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { ensureStringContent } from "@node-minify/utils";
+import {
+    ensureStringContent,
+    extractSourceMapOption,
+} from "@node-minify/utils";
 import { transform } from "lightningcss";
 
 /**
@@ -21,14 +24,16 @@ export async function lightningCss({
 }: MinifierOptions): Promise<CompressorResult> {
     const contentStr = ensureStringContent(content, "lightningcss");
 
-    const options = settings?.options ?? {};
+    const { sourceMap, restOptions } = extractSourceMapOption(
+        settings?.options
+    );
 
     const result = transform({
         filename: "input.css",
         code: Buffer.from(contentStr),
         minify: true,
-        sourceMap: !!options.sourceMap,
-        ...options,
+        sourceMap,
+        ...restOptions,
     });
 
     return {
