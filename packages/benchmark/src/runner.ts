@@ -32,6 +32,7 @@ import type {
  * @param warmupFile - Path for warmup output file
  * @param warmupCount - Number of warmup iterations
  * @param options - Benchmark options containing type and compressor options
+ * @returns The warmup output files created during the run
  */
 export async function runWarmup(
     file: string,
@@ -39,16 +40,24 @@ export async function runWarmup(
     warmupFile: string,
     warmupCount: number,
     options: Pick<BenchmarkOptions, "type" | "compressorOptions">
-): Promise<void> {
+): Promise<string[]> {
+    const warmupFiles: string[] = [];
+
     for (let i = 0; i < warmupCount; i++) {
+        const warmupOutput = `${warmupFile}.${i + 1}`;
+
         await minify({
             compressor,
             input: file,
-            output: warmupFile,
+            output: warmupOutput,
             ...(options.type && { type: options.type as "js" | "css" }),
             options: options.compressorOptions,
         });
+
+        warmupFiles.push(warmupOutput);
     }
+
+    return warmupFiles;
 }
 
 /**
@@ -298,8 +307,14 @@ async function benchmarkCompressor(
     try {
         const warmupFile = `${file}.warmup.${uniqueId}.tmp`;
         if (warmup > 0) {
-            await runWarmup(file, compressor, warmupFile, warmup, options);
-            tempFiles.push(warmupFile);
+            const warmupFiles = await runWarmup(
+                file,
+                compressor,
+                warmupFile,
+                warmup,
+                options
+            );
+            tempFiles.push(...warmupFiles);
         }
 
         const outputFile = `${file}.${name}.${uniqueId}.tmp`;
