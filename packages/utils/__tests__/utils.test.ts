@@ -1369,6 +1369,39 @@ describe("Package: utils", () => {
             expect(readFile(outputFile, true)).toEqual(webpContent);
         });
 
+        test("should append format to extensionless per-format array targets", async () => {
+            const testFile = `${tmpDir}/array-explicit-source.png`;
+            const webpOutput = `${tmpDir}/array-explicit-output.webp`;
+            const avifOutput = `${tmpDir}/array-explicit-other.avif`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(webpOutput);
+            filesToCleanup.add(avifOutput);
+            writeFile({ file: testFile, content: "test" });
+
+            const webpContent = Buffer.from("WEBP_ARRAY_EXPLICIT");
+            const avifContent = Buffer.from("AVIF_ARRAY_EXPLICIT");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [
+                    { format: "webp", content: webpContent },
+                    { format: "avif", content: avifContent },
+                ],
+            });
+            const settings: Settings = {
+                compressor,
+                input: testFile,
+                output: [
+                    `${tmpDir}/array-explicit-output`,
+                    `${tmpDir}/array-explicit-other`,
+                ],
+            };
+
+            await run({ settings, content: "" });
+
+            expect(readFile(webpOutput, true)).toEqual(webpContent);
+            expect(readFile(avifOutput, true)).toEqual(avifContent);
+        });
+
         test("should handle empty string in output array (fallback to auto-generated)", async () => {
             const testFile = `${tmpDir}/fallback-test.png`;
             filesToCleanup.add(testFile);

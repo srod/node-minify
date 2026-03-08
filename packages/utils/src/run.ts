@@ -212,10 +212,13 @@ async function writeMultipleOutputs<
         ) {
             if (arrayItem.includes("$1")) {
                 const outputFile = arrayItem.replace(/\$1/g, baseName);
-                targetFile = withFormatExtension(outputFile, format);
+                targetFile = parse(outputFile).ext
+                    ? outputFile
+                    : withFormatExtension(outputFile, format);
             } else {
-                // Explicit output path provided in array - use as-is
-                targetFile = arrayItem;
+                targetFile = parse(arrayItem).ext
+                    ? arrayItem
+                    : withFormatExtension(arrayItem, format);
             }
         } else if (
             typeof currentOutput === "string" &&
