@@ -37,7 +37,7 @@ export async function compressSingleFile<
 async function determineContent<
     T extends CompressorOptions = CompressorOptions,
 >(settings: Settings<T>): Promise<string | Buffer | Buffer[]> {
-    if (settings.content) {
+    if (settings.content !== undefined) {
         return settings.content;
     }
 

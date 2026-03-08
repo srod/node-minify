@@ -33,8 +33,8 @@ function setup<T extends CompressorOptions = CompressorOptions>(
     } as Settings<T>;
 
     // In memory
-    if (settings.content) {
-        validateMandatoryFields(inputSettings, ["compressor", "content"]);
+    if (settings.content !== undefined) {
+        validateMandatoryFields(inputSettings, ["compressor"]);
         return settings;
     }
 

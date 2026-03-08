@@ -7,6 +7,7 @@
 import { existsSync, lstatSync, unlinkSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import type { Settings } from "@node-minify/types";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -1247,11 +1248,11 @@ describe("Package: utils", () => {
                     { format: "avif", content: avifContent },
                 ],
             });
-            const settings = {
+            const settings: Settings = {
                 compressor,
                 input: testFile,
                 output: ["$1", `${tmpDir}/explicit-output.avif`],
-            } as any;
+            };
 
             await run({ settings, content: "" });
 
@@ -1263,6 +1264,39 @@ describe("Package: utils", () => {
             expect(readFile(`${tmpDir}/explicit-output.avif`, true)).toEqual(
                 avifContent
             );
+        });
+
+        test("should replace $1 inside per-format output arrays", async () => {
+            const testFile = `${tmpDir}/array-pattern-source.png`;
+            const webpOutput = `${tmpDir}/array-pattern-source-custom.webp`;
+            const avifOutput = `${tmpDir}/array-pattern-source-custom.avif`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(webpOutput);
+            filesToCleanup.add(avifOutput);
+            writeFile({ file: testFile, content: "test" });
+
+            const webpContent = Buffer.from("WEBP_ARRAY_PATTERN");
+            const avifContent = Buffer.from("AVIF_ARRAY_PATTERN");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [
+                    { format: "webp", content: webpContent },
+                    { format: "avif", content: avifContent },
+                ],
+            });
+            const settings: Settings = {
+                compressor,
+                input: testFile,
+                output: [
+                    `${tmpDir}/$1-custom.webp`,
+                    `${tmpDir}/$1-custom.avif`,
+                ],
+            };
+
+            await run({ settings, content: "" });
+
+            expect(readFile(webpOutput, true)).toEqual(webpContent);
+            expect(readFile(avifOutput, true)).toEqual(avifContent);
         });
 
         test("should handle $1 pattern in path (replace and append format)", async () => {
@@ -1287,6 +1321,85 @@ describe("Package: utils", () => {
             expect(readFile(`${tmpDir}/my-image-converted.webp`, true)).toEqual(
                 webpContent
             );
+        });
+
+        test("should not double-append format for indexed $1 output patterns", async () => {
+            const testFile = `${tmpDir}/indexed-pattern-source.png`;
+            const outputFile = `${tmpDir}/indexed-pattern-source.webp`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(outputFile);
+            writeFile({ file: testFile, content: "test" });
+
+            const webpContent = Buffer.from("WEBP_INDEXED_PATTERN");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [{ format: "webp", content: webpContent }],
+            });
+            const settings: Settings = {
+                compressor,
+                input: [testFile],
+                output: [`${tmpDir}/$1.webp`],
+            };
+
+            await run({ settings, content: "", index: 0 });
+
+            expect(readFile(outputFile, true)).toEqual(webpContent);
+        });
+
+        test("should preserve explicit extension for single string multi-format outputs", async () => {
+            const testFile = `${tmpDir}/explicit-output-source.png`;
+            const outputFile = `${tmpDir}/explicit-output.webp`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(outputFile);
+            writeFile({ file: testFile, content: "test" });
+
+            const webpContent = Buffer.from("WEBP_EXPLICIT_OUTPUT");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [{ format: "webp", content: webpContent }],
+            });
+            const settings: Settings = {
+                compressor,
+                input: testFile,
+                output: outputFile,
+            };
+
+            await run({ settings, content: "" });
+
+            expect(readFile(outputFile, true)).toEqual(webpContent);
+        });
+
+        test("should append format to extensionless per-format array targets", async () => {
+            const testFile = `${tmpDir}/array-explicit-source.png`;
+            const webpOutput = `${tmpDir}/array-explicit-output.webp`;
+            const avifOutput = `${tmpDir}/array-explicit-other.avif`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(webpOutput);
+            filesToCleanup.add(avifOutput);
+            writeFile({ file: testFile, content: "test" });
+
+            const webpContent = Buffer.from("WEBP_ARRAY_EXPLICIT");
+            const avifContent = Buffer.from("AVIF_ARRAY_EXPLICIT");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [
+                    { format: "webp", content: webpContent },
+                    { format: "avif", content: avifContent },
+                ],
+            });
+            const settings: Settings = {
+                compressor,
+                input: testFile,
+                output: [
+                    `${tmpDir}/array-explicit-output`,
+                    `${tmpDir}/array-explicit-other`,
+                ],
+            };
+
+            await run({ settings, content: "" });
+
+            expect(readFile(webpOutput, true)).toEqual(webpContent);
+            expect(readFile(avifOutput, true)).toEqual(avifContent);
         });
 
         test("should handle empty string in output array (fallback to auto-generated)", async () => {
@@ -1465,6 +1578,63 @@ describe("Package: utils", () => {
 
             expect(readFile(`${tmpDir}/output-converted.webp`, true)).toEqual(
                 webpContent
+            );
+        });
+
+        test("should derive multi-format targets from the current input when processing input arrays", async () => {
+            const firstInput = `${tmpDir}/multi-array-first.png`;
+            const secondInput = `${tmpDir}/multi-array-second.png`;
+            const firstWebp = `${tmpDir}/multi-array-first.webp`;
+            const firstAvif = `${tmpDir}/multi-array-first.avif`;
+            const secondWebp = `${tmpDir}/multi-array-second.webp`;
+            const secondAvif = `${tmpDir}/multi-array-second.avif`;
+            filesToCleanup.add(firstInput);
+            filesToCleanup.add(secondInput);
+            filesToCleanup.add(firstWebp);
+            filesToCleanup.add(firstAvif);
+            filesToCleanup.add(secondWebp);
+            filesToCleanup.add(secondAvif);
+            writeFile({ file: firstInput, content: "first" });
+            writeFile({ file: secondInput, content: "second" });
+
+            const compressor: Settings["compressor"] = async () => ({
+                code: "",
+                outputs: [
+                    { format: "webp", content: Buffer.from("FORMAT_WEBP") },
+                    { format: "avif", content: Buffer.from("FORMAT_AVIF") },
+                ],
+            });
+            const settings: Settings = {
+                compressor,
+                input: [firstInput, secondInput],
+                output: [
+                    firstInput.replace(/\.png$/, ""),
+                    secondInput.replace(/\.png$/, ""),
+                ],
+            };
+
+            await run({
+                settings,
+                content: Buffer.from("first"),
+                index: 0,
+            });
+            await run({
+                settings,
+                content: Buffer.from("second"),
+                index: 1,
+            });
+
+            expect(readFile(firstWebp, true)).toEqual(
+                Buffer.from("FORMAT_WEBP")
+            );
+            expect(readFile(firstAvif, true)).toEqual(
+                Buffer.from("FORMAT_AVIF")
+            );
+            expect(readFile(secondWebp, true)).toEqual(
+                Buffer.from("FORMAT_WEBP")
+            );
+            expect(readFile(secondAvif, true)).toEqual(
+                Buffer.from("FORMAT_AVIF")
             );
         });
 
