@@ -237,7 +237,7 @@ async function writeMultipleOutputs<
             currentOutput.trim() !== ""
         ) {
             // Single string output: append format extension
-            targetFile = `${currentOutput}.${format}`;
+            targetFile = withFormatExtension(currentOutput, format);
         } else {
             // Fallback
             targetFile = inputDir

@@ -1346,6 +1346,29 @@ describe("Package: utils", () => {
             expect(readFile(outputFile, true)).toEqual(webpContent);
         });
 
+        test("should preserve explicit extension for single string multi-format outputs", async () => {
+            const testFile = `${tmpDir}/explicit-output-source.png`;
+            const outputFile = `${tmpDir}/explicit-output.webp`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(outputFile);
+            writeFile({ file: testFile, content: "test" });
+
+            const webpContent = Buffer.from("WEBP_EXPLICIT_OUTPUT");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [{ format: "webp", content: webpContent }],
+            });
+            const settings: Settings = {
+                compressor,
+                input: testFile,
+                output: outputFile,
+            };
+
+            await run({ settings, content: "" });
+
+            expect(readFile(outputFile, true)).toEqual(webpContent);
+        });
+
         test("should handle empty string in output array (fallback to auto-generated)", async () => {
             const testFile = `${tmpDir}/fallback-test.png`;
             filesToCleanup.add(testFile);
