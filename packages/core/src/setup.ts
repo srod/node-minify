@@ -72,6 +72,13 @@ function enhanceSettings<T extends CompressorOptions = CompressorOptions>(
     settings: Settings<T>
 ): Settings<T> {
     let enhancedSettings = settings;
+    const optionsWithFormats = enhancedSettings.options as
+        | { formats?: unknown[] }
+        | undefined;
+    const hasMultipleOutputFormats =
+        !Array.isArray(enhancedSettings.input) &&
+        Array.isArray(optionsWithFormats?.formats) &&
+        optionsWithFormats.formats.length > 0;
 
     if (enhancedSettings.input) {
         enhancedSettings = {
@@ -82,7 +89,8 @@ function enhanceSettings<T extends CompressorOptions = CompressorOptions>(
     if (
         enhancedSettings.input &&
         enhancedSettings.output &&
-        !Array.isArray(enhancedSettings.output)
+        !Array.isArray(enhancedSettings.output) &&
+        !hasMultipleOutputFormats
     ) {
         enhancedSettings = {
             ...enhancedSettings,
