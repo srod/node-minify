@@ -1323,6 +1323,29 @@ describe("Package: utils", () => {
             );
         });
 
+        test("should not double-append format for indexed $1 output patterns", async () => {
+            const testFile = `${tmpDir}/indexed-pattern-source.png`;
+            const outputFile = `${tmpDir}/indexed-pattern-source.webp`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(outputFile);
+            writeFile({ file: testFile, content: "test" });
+
+            const webpContent = Buffer.from("WEBP_INDEXED_PATTERN");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [{ format: "webp", content: webpContent }],
+            });
+            const settings: Settings = {
+                compressor,
+                input: [testFile],
+                output: [`${tmpDir}/$1.webp`],
+            };
+
+            await run({ settings, content: "", index: 0 });
+
+            expect(readFile(outputFile, true)).toEqual(webpContent);
+        });
+
         test("should handle empty string in output array (fallback to auto-generated)", async () => {
             const testFile = `${tmpDir}/fallback-test.png`;
             filesToCleanup.add(testFile);

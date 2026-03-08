@@ -190,6 +190,8 @@ async function writeMultipleOutputs<
     const baseName = inputBase || "output";
     const currentOutput =
         Array.isArray(output) && index !== undefined ? output[index] : output;
+    const withFormatExtension = (file: string, format: string): string =>
+        file.endsWith(`.${format}`) ? file : `${file}.${format}`;
 
     const promises = outputs.map(async (outputResult, i) => {
         if (!outputResult) {
@@ -210,10 +212,7 @@ async function writeMultipleOutputs<
         ) {
             if (arrayItem.includes("$1")) {
                 const outputFile = arrayItem.replace(/\$1/g, baseName);
-                const hasFormatExtension = parse(outputFile).ext === `.${format}`;
-                targetFile = hasFormatExtension
-                    ? outputFile
-                    : `${outputFile}.${format}`;
+                targetFile = withFormatExtension(outputFile, format);
             } else {
                 // Explicit output path provided in array - use as-is
                 targetFile = arrayItem;
@@ -232,7 +231,7 @@ async function writeMultipleOutputs<
         ) {
             // $1 pattern in path: replace and append format
             const outputFile = currentOutput.replace(/\$1/g, baseName);
-            targetFile = `${outputFile}.${format}`;
+            targetFile = withFormatExtension(outputFile, format);
         } else if (
             typeof currentOutput === "string" &&
             currentOutput.trim() !== ""
