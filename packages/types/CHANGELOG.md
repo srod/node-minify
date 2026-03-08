@@ -1,5 +1,15 @@
 # @node-minify/types
 
+## 10.5.0
+
+## 10.4.0
+
+### Minor Changes
+
+- 2e64877: feat: add `allowEmptyOutput` option to skip writing empty output files
+
+  When minifiers produce empty output (e.g., CSS files with only comments), the new `allowEmptyOutput` option allows gracefully skipping the file write instead of throwing a validation error. Also adds `--allow-empty-output` CLI flag.
+
 ## 10.3.0
 
 ## 10.2.0

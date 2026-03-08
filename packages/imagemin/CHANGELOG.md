@@ -1,5 +1,31 @@
 # @node-minify/imagemin
 
+## 10.5.0
+
+### Patch Changes
+
+- 1acf60e: chore(deps): refresh workspace dependencies
+
+  Update dependency ranges across the docs site, GitHub Action package, and published minifier wrappers.
+  Align Bun pins used in CI with the repo package manager version and keep the docs CSS compatible with newer lint rules.
+
+- Updated dependencies [43c11f7]
+- Updated dependencies [33a56ab]
+- Updated dependencies [1d5e3ee]
+- Updated dependencies [c21e335]
+  - @node-minify/core@10.5.0
+  - @node-minify/utils@10.5.0
+
+## 10.4.0
+
+### Patch Changes
+
+- Updated dependencies [2e64877]
+- Updated dependencies [3d4d2d0]
+- Updated dependencies [0a51025]
+  - @node-minify/utils@10.4.0
+  - @node-minify/core@10.4.0
+
 ## 10.3.0
 
 ### Patch Changes

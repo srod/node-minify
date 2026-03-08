@@ -1,5 +1,29 @@
 # @node-minify/core
 
+## 10.5.0
+
+### Patch Changes
+
+- 43c11f7: Fix empty in-memory content handling, benchmark CLI defaults, subprocess close handling, and multi-output routing regressions.
+- 33a56ab: Fix multi-format image output path handling when using `$1`, including wildcard image inputs.
+- 1d5e3ee: fix: normalize cross-platform path handling in core and utils
+
+  Improves Windows/POSIX path compatibility for output directory resolution, wildcard handling, and public folder/minified path generation.
+
+- Updated dependencies [43c11f7]
+- Updated dependencies [1d5e3ee]
+- Updated dependencies [c21e335]
+  - @node-minify/utils@10.5.0
+
+## 10.4.0
+
+### Patch Changes
+
+- Updated dependencies [2e64877]
+- Updated dependencies [3d4d2d0]
+- Updated dependencies [0a51025]
+  - @node-minify/utils@10.4.0
+
 ## 10.3.0
 
 ### Patch Changes
