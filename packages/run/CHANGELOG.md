@@ -1,5 +1,11 @@
 # @node-minify/run
 
+## 10.5.0
+
+### Patch Changes
+
+- 43c11f7: Fix empty in-memory content handling, benchmark CLI defaults, subprocess close handling, and multi-output routing regressions.
+
 ## 10.4.0
 
 ## 10.3.0

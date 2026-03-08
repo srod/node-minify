@@ -1,5 +1,16 @@
 # @node-minify/benchmark
 
+## 10.5.0
+
+### Patch Changes
+
+- Updated dependencies [43c11f7]
+- Updated dependencies [33a56ab]
+- Updated dependencies [1d5e3ee]
+- Updated dependencies [c21e335]
+  - @node-minify/core@10.5.0
+  - @node-minify/utils@10.5.0
+
 ## 10.4.0
 
 ### Minor Changes

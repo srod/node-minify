@@ -1,5 +1,20 @@
 # @node-minify/utils
 
+## 10.5.0
+
+### Minor Changes
+
+- c21e335: feat: add zero-config auto mode for GitHub Action with smart file discovery
+
+  Adds `auto: true` mode that automatically discovers and minifies files without explicit input/output configuration. Includes smart file type detection, default glob patterns for common source directories, and comprehensive ignore patterns. Also adds ignore patterns support to the wildcards utility function.
+
+### Patch Changes
+
+- 43c11f7: Fix empty in-memory content handling, benchmark CLI defaults, subprocess close handling, and multi-output routing regressions.
+- 1d5e3ee: fix: normalize cross-platform path handling in core and utils
+
+  Improves Windows/POSIX path compatibility for output directory resolution, wildcard handling, and public folder/minified path generation.
+
 ## 10.4.0
 
 ### Minor Changes
