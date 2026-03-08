@@ -57,9 +57,9 @@
     "chalk": "5.6.2"
   },
   "devDependencies": {
-    "@node-minify/types": "workspace:*",
-    "@node-minify/terser": "workspace:*",
     "@node-minify/esbuild": "workspace:*",
-    "@node-minify/swc": "workspace:*"
+    "@node-minify/swc": "workspace:*",
+    "@node-minify/terser": "workspace:*",
+    "@node-minify/types": "workspace:*"
   }
 }

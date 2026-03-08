@@ -55,7 +55,7 @@
     },
     "dependencies": {
         "@node-minify/utils": "workspace:*",
-        "svgo": "^4.0.0"
+        "svgo": "^4.0.1"
     },
     "devDependencies": {
         "@node-minify/types": "workspace:*"
