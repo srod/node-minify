@@ -96,6 +96,15 @@ describe("Image Integration Tests", () => {
         const cwdFirstAvif = resolve(process.cwd(), "sharp-wildcard-a.avif");
         const cwdSecondWebp = resolve(process.cwd(), "sharp-wildcard-b.webp");
         const cwdSecondAvif = resolve(process.cwd(), "sharp-wildcard-b.avif");
+        const cwdOutputs = [
+            cwdFirstWebp,
+            cwdFirstAvif,
+            cwdSecondWebp,
+            cwdSecondAvif,
+        ];
+        const cwdOutputExistedBefore = new Map(
+            cwdOutputs.map((file) => [file, existsSync(file)])
+        );
 
         copyFileSync(testPng, firstInput);
         copyFileSync(testPng, secondInput);
@@ -121,10 +130,11 @@ describe("Image Integration Tests", () => {
             rmSync(firstAvif, { force: true });
             rmSync(secondWebp, { force: true });
             rmSync(secondAvif, { force: true });
-            rmSync(cwdFirstWebp, { force: true });
-            rmSync(cwdFirstAvif, { force: true });
-            rmSync(cwdSecondWebp, { force: true });
-            rmSync(cwdSecondAvif, { force: true });
+            for (const file of cwdOutputs) {
+                if (!cwdOutputExistedBefore.get(file)) {
+                    rmSync(file, { force: true });
+                }
+            }
         }
     });
 
