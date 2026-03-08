@@ -60,16 +60,5 @@
     "docs",
     "packages/*",
     "examples"
-  ],
-  "overrides": {
-    "cross-spawn": "6.0.6",
-    "devalue": "5.6.3",
-    "http-cache-semantics": "4.1.1",
-    "js-yaml": "4.1.1",
-    "json5": "2.2.3",
-    "rollup": "4.59.0",
-    "semver-regex": "3.1.4",
-    "undici": "6.23.0",
-    "wrangler": "4.71.0"
-  }
+  ]
 }
