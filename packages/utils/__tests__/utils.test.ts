@@ -1672,15 +1672,15 @@ describe("Package: utils", () => {
             writeFile({ file: secondInput, content: "second" });
 
             const webpContent = Buffer.from("SECOND_INPUT_WEBP");
-            const compressor = vi.fn().mockResolvedValue({
+            const compressor: Settings["compressor"] = vi.fn().mockResolvedValue({
                 code: "",
                 outputs: [{ format: "webp", content: webpContent }],
             });
-            const settings = {
+            const settings: Settings = {
                 compressor,
                 input: [firstInput, secondInput],
                 output: "$1",
-            } as any;
+            };
 
             await run({ settings, content: "", index: 1 });
 

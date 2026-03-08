@@ -85,6 +85,49 @@ describe("Image Integration Tests", () => {
         }
     });
 
+    test("should expand wildcard image inputs and keep multi-format outputs beside each source", async () => {
+        const firstInput = resolve(tmpDir, "sharp-wildcard-a.png");
+        const secondInput = resolve(tmpDir, "sharp-wildcard-b.png");
+        const firstWebp = resolve(tmpDir, "sharp-wildcard-a.webp");
+        const firstAvif = resolve(tmpDir, "sharp-wildcard-a.avif");
+        const secondWebp = resolve(tmpDir, "sharp-wildcard-b.webp");
+        const secondAvif = resolve(tmpDir, "sharp-wildcard-b.avif");
+        const cwdFirstWebp = resolve(process.cwd(), "sharp-wildcard-a.webp");
+        const cwdFirstAvif = resolve(process.cwd(), "sharp-wildcard-a.avif");
+        const cwdSecondWebp = resolve(process.cwd(), "sharp-wildcard-b.webp");
+        const cwdSecondAvif = resolve(process.cwd(), "sharp-wildcard-b.avif");
+
+        copyFileSync(testPng, firstInput);
+        copyFileSync(testPng, secondInput);
+
+        try {
+            await minify({
+                compressor: sharp,
+                input: resolve(tmpDir, "sharp-wildcard-*.png"),
+                output: "$1",
+                options: {
+                    formats: ["webp", "avif"],
+                },
+            });
+
+            expect(existsSync(firstWebp)).toBe(true);
+            expect(existsSync(firstAvif)).toBe(true);
+            expect(existsSync(secondWebp)).toBe(true);
+            expect(existsSync(secondAvif)).toBe(true);
+        } finally {
+            rmSync(firstInput, { force: true });
+            rmSync(secondInput, { force: true });
+            rmSync(firstWebp, { force: true });
+            rmSync(firstAvif, { force: true });
+            rmSync(secondWebp, { force: true });
+            rmSync(secondAvif, { force: true });
+            rmSync(cwdFirstWebp, { force: true });
+            rmSync(cwdFirstAvif, { force: true });
+            rmSync(cwdSecondWebp, { force: true });
+            rmSync(cwdSecondAvif, { force: true });
+        }
+    });
+
     test("should handle Buffer input for SVG via minify()", async () => {
         const svgBuffer = readFileSync(testSvg);
 
