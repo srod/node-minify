@@ -1248,11 +1248,11 @@ describe("Package: utils", () => {
                     { format: "avif", content: avifContent },
                 ],
             });
-            const settings = {
+            const settings: Settings = {
                 compressor,
                 input: testFile,
                 output: ["$1", `${tmpDir}/explicit-output.avif`],
-            } as any;
+            };
 
             await run({ settings, content: "" });
 
@@ -1264,6 +1264,39 @@ describe("Package: utils", () => {
             expect(readFile(`${tmpDir}/explicit-output.avif`, true)).toEqual(
                 avifContent
             );
+        });
+
+        test("should replace $1 inside per-format output arrays", async () => {
+            const testFile = `${tmpDir}/array-pattern-source.png`;
+            const webpOutput = `${tmpDir}/array-pattern-source-custom.webp`;
+            const avifOutput = `${tmpDir}/array-pattern-source-custom.avif`;
+            filesToCleanup.add(testFile);
+            filesToCleanup.add(webpOutput);
+            filesToCleanup.add(avifOutput);
+            writeFile({ file: testFile, content: "test" });
+
+            const webpContent = Buffer.from("WEBP_ARRAY_PATTERN");
+            const avifContent = Buffer.from("AVIF_ARRAY_PATTERN");
+            const compressor = vi.fn().mockResolvedValue({
+                code: "",
+                outputs: [
+                    { format: "webp", content: webpContent },
+                    { format: "avif", content: avifContent },
+                ],
+            });
+            const settings: Settings = {
+                compressor,
+                input: testFile,
+                output: [
+                    `${tmpDir}/$1-custom.webp`,
+                    `${tmpDir}/$1-custom.avif`,
+                ],
+            };
+
+            await run({ settings, content: "" });
+
+            expect(readFile(webpOutput, true)).toEqual(webpContent);
+            expect(readFile(avifOutput, true)).toEqual(avifContent);
         });
 
         test("should handle $1 pattern in path (replace and append format)", async () => {

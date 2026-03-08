@@ -187,6 +187,7 @@ async function writeMultipleOutputs<
     const inputFile = getInputFile(settings.input, index);
     const inputDir = parse(inputFile).dir;
     const inputBase = parse(inputFile).name;
+    const baseName = inputBase || "output";
     const currentOutput =
         Array.isArray(output) && index !== undefined ? output[index] : output;
 
@@ -207,14 +208,21 @@ async function writeMultipleOutputs<
             arrayItem !== "$1" &&
             arrayItem.trim() !== ""
         ) {
-            // Explicit output path provided in array - use as-is
-            targetFile = arrayItem;
+            if (arrayItem.includes("$1")) {
+                const outputFile = arrayItem.replace(/\$1/g, baseName);
+                const hasFormatExtension = parse(outputFile).ext === `.${format}`;
+                targetFile = hasFormatExtension
+                    ? outputFile
+                    : `${outputFile}.${format}`;
+            } else {
+                // Explicit output path provided in array - use as-is
+                targetFile = arrayItem;
+            }
         } else if (
             typeof currentOutput === "string" &&
             currentOutput === "$1"
         ) {
             // $1 only: auto-generate from input filename in input directory
-            const baseName = inputBase || "output";
             targetFile = inputDir
                 ? join(inputDir, `${baseName}.${format}`)
                 : `${baseName}.${format}`;
@@ -223,8 +231,7 @@ async function writeMultipleOutputs<
             currentOutput.includes("$1")
         ) {
             // $1 pattern in path: replace and append format
-            const extensionlessName = inputBase || "output";
-            const outputFile = currentOutput.replace(/\$1/g, extensionlessName);
+            const outputFile = currentOutput.replace(/\$1/g, baseName);
             targetFile = `${outputFile}.${format}`;
         } else if (
             typeof currentOutput === "string" &&
@@ -234,7 +241,6 @@ async function writeMultipleOutputs<
             targetFile = `${currentOutput}.${format}`;
         } else {
             // Fallback
-            const baseName = inputBase || "output";
             targetFile = inputDir
                 ? join(inputDir, `${baseName}.${format}`)
                 : `${baseName}.${format}`;
