@@ -12,7 +12,7 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
     "@biomejs/biome": "^2.4.6",
-    "@changesets/cli": "2.29.8",
+    "@changesets/cli": "2.30.0",
     "@total-typescript/tsconfig": "^1.0.4",
     "@types/node": "^22.19.15",
     "@vitest/coverage-v8": "^4.0.18",
