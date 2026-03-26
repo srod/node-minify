@@ -163,18 +163,24 @@ export function parseInputs(): ActionInputs {
 }
 
 /**
- * Validates a compressor identifier and emits warnings for deprecated or non-built-in compressors.
+ * Validates a compressor identifier and throws for removed compressors.
  *
- * Emits a warning when the compressor is listed as deprecated and emits a separate warning
- * when the compressor is not recognized as a built-in compressor (indicating it will be
- * treated as a custom npm package or local file).
+ * Throws an error when the compressor has been removed from node-minify,
+ * providing the recommended replacement. Emits a warning when the compressor
+ * is not recognized as a built-in compressor (indicating it will be treated
+ * as a custom npm package or local file).
  *
  * @param compressor - The compressor name or identifier to validate (e.g., "terser", "esbuild", or a custom package)
+ * @throws Error if the compressor has been removed
  */
 export function validateCompressor(compressor: string): void {
-    const deprecationMessage = DEPRECATED_COMPRESSORS[compressor];
-    if (deprecationMessage) {
-        warning(`⚠️ Deprecated: ${deprecationMessage}`);
+    if (isRemovedCompressor(compressor)) {
+        const entry = getCompressorEntry(compressor);
+        const replacement = entry?.replacement || "terser";
+        throw new Error(
+            `Compressor '${compressor}' has been removed from node-minify. ` +
+                `Use '${replacement}' instead.`
+        );
     }
 
     if (!isBuiltInCompressor(compressor)) {
@@ -185,4 +191,4 @@ export function validateCompressor(compressor: string): void {
     }
 }
 
-export { type DEPRECATED_COMPRESSORS, TYPE_REQUIRED_COMPRESSORS };
+export { TYPE_REQUIRED_COMPRESSORS };

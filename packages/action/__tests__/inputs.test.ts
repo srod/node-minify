@@ -12,10 +12,16 @@ vi.mock("@actions/core", () => ({
 // Mock @node-minify/utils
 vi.mock("@node-minify/utils", () => ({
     isBuiltInCompressor: vi.fn(),
+    isRemovedCompressor: vi.fn(),
+    getCompressorEntry: vi.fn(),
 }));
 
 import { getBooleanInput, getInput, warning } from "@actions/core";
-import { isBuiltInCompressor } from "@node-minify/utils";
+import {
+    getCompressorEntry,
+    isBuiltInCompressor,
+    isRemovedCompressor,
+} from "@node-minify/utils";
 import { parseInputs, validateCompressor } from "../src/inputs.ts";
 
 describe("parseInputs", () => {
@@ -124,17 +130,38 @@ describe("validateCompressor", () => {
         vi.resetAllMocks();
     });
 
-    test("warns for deprecated compressor", () => {
-        vi.mocked(isBuiltInCompressor).mockReturnValue(true);
+    test("throws error for removed compressor", () => {
+        vi.mocked(isRemovedCompressor).mockReturnValue(true);
+        vi.mocked(getCompressorEntry).mockReturnValue({
+            name: "babel-minify",
+            status: "removed",
+            packageName: "@node-minify/babel-minify",
+            replacement: "terser",
+            notes: "Babel 6 no longer maintained",
+        });
 
-        validateCompressor("babel-minify");
+        expect(() => validateCompressor("babel-minify")).toThrow(
+            "Compressor 'babel-minify' has been removed from node-minify"
+        );
+    });
 
-        expect(warning).toHaveBeenCalledWith(
-            expect.stringContaining("Deprecated")
+    test("throws error for removed compressor yui with replacement", () => {
+        vi.mocked(isRemovedCompressor).mockReturnValue(true);
+        vi.mocked(getCompressorEntry).mockReturnValue({
+            name: "yui",
+            status: "removed",
+            packageName: "@node-minify/yui",
+            replacement: "terser or lightningcss",
+            notes: "YUI Compressor no longer maintained",
+        });
+
+        expect(() => validateCompressor("yui")).toThrow(
+            "Use 'terser or lightningcss' instead"
         );
     });
 
     test("warns for non-built-in compressor", () => {
+        vi.mocked(isRemovedCompressor).mockReturnValue(false);
         vi.mocked(isBuiltInCompressor).mockReturnValue(false);
 
         validateCompressor("custom-compressor");
@@ -145,6 +172,7 @@ describe("validateCompressor", () => {
     });
 
     test("does not warn for valid built-in compressor", () => {
+        vi.mocked(isRemovedCompressor).mockReturnValue(false);
         vi.mocked(isBuiltInCompressor).mockReturnValue(true);
 
         validateCompressor("terser");
