@@ -3,6 +3,8 @@ title: "jsonminify"
 description: "jsonminify for node-minify"
 ---
 
+**Status:** Legacy
+
 `jsonminify` can compress only JSON files.
 
 [https://github.com/fkei/JSON.minify](https://github.com/fkei/JSON.minify)

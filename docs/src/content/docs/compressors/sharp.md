@@ -3,6 +3,8 @@ title: "sharp"
 description: "sharp for node-minify"
 ---
 
+**Status:** Recommended
+
 `sharp` converts and compresses images to WebP, AVIF, PNG, and JPEG formats using the high-performance [sharp](https://sharp.pixelplumbing.com/) library.
 
 ## Installation

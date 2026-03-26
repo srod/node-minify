@@ -3,6 +3,8 @@ title: "html-minifier"
 description: "html-minifier for node-minify"
 ---
 
+**Status:** Supported
+
 `html-minifier` can compress only HTML files.
 
 [https://github.com/terser/html-minifier-terser](https://github.com/terser/html-minifier-terser)
