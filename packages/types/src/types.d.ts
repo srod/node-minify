@@ -78,7 +78,7 @@ export type Compressor<TOptions extends CompressorOptions = CompressorOptions> =
     (args: MinifierOptions<TOptions>) => Promise<CompressorResult>;
 
 /**
- * File type for compressors that support multiple types (e.g., YUI).
+ * File type for compressors that support multiple types (e.g., esbuild).
  */
 export type FileType = "js" | "css";
 
@@ -167,7 +167,7 @@ export type Settings<TOptions extends CompressorOptions = CompressorOptions> = {
 
     /**
      * File type for compressors that support multiple types.
-     * Required for YUI compressor.
+     * Required for compressors like esbuild that handle both JS and CSS.
      */
     type?: FileType;
 
