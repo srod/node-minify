@@ -49,7 +49,7 @@ function writePackageJson(
  */
 function writeSourceFile(dir: string, relPath: string, content: string): void {
     const fullPath = join(dir, relPath);
-    const parentDir = fullPath.slice(0, fullPath.lastIndexOf("/"));
+    const parentDir = join(fullPath, "..");
     mkdirSync(parentDir, { recursive: true });
     writeFileSync(fullPath, content);
 }
@@ -360,6 +360,154 @@ describe("Package: doctor", () => {
 
             expect(result).toBe(0);
             expect(output).toBe("");
+        });
+    });
+
+    describe("compressor assignment scanner", () => {
+        test("should detect removed compressor in string assignment", async () => {
+            writePackageJson(tmpDir);
+            writeSourceFile(
+                tmpDir,
+                "src/config.ts",
+                'const config = {\n  compressor: "babel-minify",\n  input: "src/*.js"\n};\n'
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("babel-minify");
+            expect(output).toContain("src/config.ts");
+            expect(output).toContain(":2");
+        });
+
+        test("should detect removed compressor in quoted assignment", async () => {
+            writePackageJson(tmpDir);
+            writeSourceFile(
+                tmpDir,
+                "src/build.js",
+                "const opts = {\n  compressor: 'yui',\n};\n"
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("yui");
+        });
+
+        test("should not flag active compressor in assignment", async () => {
+            writePackageJson(tmpDir);
+            writeSourceFile(
+                tmpDir,
+                "src/config.ts",
+                'const config = {\n  compressor: "terser",\n};\n'
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(0);
+            expect(output).toBe("");
+        });
+    });
+
+    describe("recursive workspace scanning", () => {
+        test("should detect removed dep in apps/*/package.json", async () => {
+            writePackageJson(tmpDir); // root
+            const appDir = join(tmpDir, "apps", "web");
+            mkdirSync(appDir, { recursive: true });
+            writePackageJson(appDir, {
+                "@node-minify/babel-minify": "^10.0.0",
+            });
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("@node-minify/babel-minify");
+            expect(output).toContain("apps");
+        });
+
+        test("should detect removed dep in deeply nested package.json", async () => {
+            writePackageJson(tmpDir); // root
+            const deepDir = join(tmpDir, "services", "api", "functions");
+            mkdirSync(deepDir, { recursive: true });
+            writePackageJson(deepDir, {
+                "@node-minify/uglify-es": "^10.0.0",
+            });
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("@node-minify/uglify-es");
+            expect(output).toContain("services");
+        });
+
+        test("should skip package.json in node_modules", async () => {
+            writePackageJson(tmpDir);
+            const nmDir = join(tmpDir, "node_modules", "some-pkg");
+            mkdirSync(nmDir, { recursive: true });
+            writePackageJson(nmDir, {
+                "@node-minify/babel-minify": "^10.0.0",
+            });
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(0);
+            expect(output).toBe("");
+        });
+    });
+
+    describe("peer and optional dependencies", () => {
+        test("should detect removed dep in peerDependencies", async () => {
+            const pkg = {
+                name: "test-project",
+                version: "1.0.0",
+                peerDependencies: {
+                    "@node-minify/sqwish": "^10.0.0",
+                },
+            };
+            writeFileSync(
+                join(tmpDir, "package.json"),
+                JSON.stringify(pkg, null, 2)
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("@node-minify/sqwish");
+        });
+
+        test("should detect removed dep in optionalDependencies", async () => {
+            const pkg = {
+                name: "test-project",
+                version: "1.0.0",
+                optionalDependencies: {
+                    "@node-minify/crass": "^10.0.0",
+                },
+            };
+            writeFileSync(
+                join(tmpDir, "package.json"),
+                JSON.stringify(pkg, null, 2)
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("@node-minify/crass");
         });
     });
 

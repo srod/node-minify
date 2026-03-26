@@ -99,4 +99,29 @@ describe("Package: google-closure-compiler", async () => {
             })
         ).rejects.toThrow();
     });
+
+    test("should timeout with very short timeout", async () => {
+        await expect(
+            gcc({
+                settings: { compressor: gcc, timeout: 1 },
+                content:
+                    "var x = 1; var y = 2; var z = 3; function foo() { return x + y + z; }",
+            })
+        ).rejects.toThrow("timed out");
+    }, 60000);
+
+    test("should suppress stderr details when silence is true", async () => {
+        try {
+            await gcc({
+                settings: { compressor: gcc, silence: true },
+                content: "function( {{{ invalid",
+            });
+        } catch (err) {
+            // With silence: true, the error message should not contain stderr details
+            const message = err instanceof Error ? err.message : String(err);
+            expect(message).toContain("exited with code");
+            // The message should end at the exit code without stderr details
+            expect(message).not.toContain("ERROR -");
+        }
+    }, 60000);
 });

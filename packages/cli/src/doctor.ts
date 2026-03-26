@@ -41,10 +41,20 @@ const EXCLUDED_DIRS = new Set([
     ".next",
     "__tests__",
 ]);
-const SOURCE_EXTENSIONS = new Set([".js", ".ts", ".mjs", ".cjs"]);
+const SOURCE_EXTENSIONS = new Set([
+    ".js",
+    ".ts",
+    ".jsx",
+    ".tsx",
+    ".mjs",
+    ".cjs",
+    ".mts",
+    ".cts",
+]);
 const IMPORT_REGEX =
     /(?:from\s+["']|(?:require|import)\s*\(\s*["'])(@node-minify\/[^"']+)["']/g;
-const COMPRESSOR_REGEX = /compressor:\s*["']?([a-zA-Z][\w-]*)["']?/;
+const COMPRESSOR_REGEX =
+    /(?:^|[\s,{])["']?compressor["']?:\s*["']?([a-zA-Z][\w-]*)["']?/;
 
 /**
  * Type guard narrowing CompressorStatus to DiagnosticSeverity.
@@ -133,8 +143,45 @@ function getWorkflowFiles(cwd: string): string[] {
 }
 
 /**
+ * Collect all package.json files under cwd, excluding node_modules/dist/.git etc.
+ *
+ * @param cwd - Root directory to scan
+ * @returns Array of absolute file paths to package.json files
+ */
+function getPackageJsonFiles(cwd: string): string[] {
+    const result: string[] = [];
+
+    // Always include root package.json
+    const rootPkg = join(cwd, "package.json");
+    if (existsSync(rootPkg)) {
+        result.push(rootPkg);
+    }
+
+    // Recursively find all other package.json files
+    try {
+        const entries = readdirSync(cwd, {
+            recursive: true,
+            encoding: "utf-8",
+        });
+        for (const entry of entries) {
+            const parts = entry.split(/[\\/]/);
+            // Must be exactly "package.json", not "template-package.json" etc.
+            if (parts[parts.length - 1] !== "package.json") continue;
+            // Skip root (already added)
+            if (parts.length === 1) continue;
+            if (parts.some((part) => EXCLUDED_DIRS.has(part))) continue;
+            result.push(join(cwd, entry));
+        }
+    } catch {
+        // Ignore read errors
+    }
+
+    return result;
+}
+
+/**
  * Scanner 1: Check package.json files for removed/legacy @node-minify dependencies.
- * Scans root package.json and packages/* /package.json for monorepo detection.
+ * Recursively scans all package.json files in the project, excluding node_modules, dist, etc.
  *
  * @param cwd - Project root directory
  * @returns Array of findings for problematic dependencies
@@ -142,34 +189,7 @@ function getWorkflowFiles(cwd: string): string[] {
 function scanPackageJsonFiles(cwd: string): Finding[] {
     const findings: Finding[] = [];
     const packageMap = buildPackageNameMap();
-    const packageJsonPaths: string[] = [];
-
-    const rootPkg = join(cwd, "package.json");
-    if (existsSync(rootPkg)) {
-        packageJsonPaths.push(rootPkg);
-    }
-
-    // Monorepo detection: scan packages/*/package.json
-    const packagesDir = join(cwd, "packages");
-    if (existsSync(packagesDir)) {
-        try {
-            const entries = readdirSync(packagesDir, { withFileTypes: true });
-            for (const entry of entries) {
-                if (entry.isDirectory()) {
-                    const pkgJson = join(
-                        packagesDir,
-                        entry.name,
-                        "package.json"
-                    );
-                    if (existsSync(pkgJson)) {
-                        packageJsonPaths.push(pkgJson);
-                    }
-                }
-            }
-        } catch {
-            // Ignore read errors on packages dir
-        }
-    }
+    const packageJsonPaths = getPackageJsonFiles(cwd);
 
     for (const pkgPath of packageJsonPaths) {
         try {
@@ -178,7 +198,12 @@ function scanPackageJsonFiles(cwd: string): Finding[] {
             if (typeof pkg !== "object" || pkg === null) continue;
 
             const relPath = relative(cwd, pkgPath);
-            const depSections = ["dependencies", "devDependencies"] as const;
+            const depSections = [
+                "dependencies",
+                "devDependencies",
+                "peerDependencies",
+                "optionalDependencies",
+            ] as const;
 
             for (const section of depSections) {
                 const deps: unknown = (pkg as Record<string, unknown>)[section];
@@ -205,7 +230,8 @@ function scanPackageJsonFiles(cwd: string): Finding[] {
 }
 
 /**
- * Scanner 2: Check source files for imports/requires of removed/legacy @node-minify packages.
+ * Scanner 2: Check source files for imports/requires of removed/legacy @node-minify packages,
+ * and for compressor name assignments (e.g. `compressor: "babel-minify"`).
  * Scans all .js/.ts/.mjs/.cjs files, excluding node_modules, dist, and .git directories.
  *
  * @param cwd - Project root directory
@@ -214,6 +240,7 @@ function scanPackageJsonFiles(cwd: string): Finding[] {
 function scanSourceImports(cwd: string): Finding[] {
     const findings: Finding[] = [];
     const packageMap = buildPackageNameMap();
+    const compressorMap = buildCompressorNameMap();
     const sourceFiles = getSourceFiles(cwd);
 
     for (const relPath of sourceFiles) {
@@ -225,6 +252,8 @@ function scanSourceImports(cwd: string): Finding[] {
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
                 if (!line) continue;
+
+                // Check import/require of @node-minify/* packages
                 for (const match of line.matchAll(IMPORT_REGEX)) {
                     const pkgName = match[1];
                     if (!pkgName) continue;
@@ -237,6 +266,24 @@ function scanSourceImports(cwd: string): Finding[] {
                             severity: entry.status,
                             replacement: entry.replacement,
                         });
+                    }
+                }
+
+                // Check compressor: "name" assignments in config objects
+                const compressorMatch = COMPRESSOR_REGEX.exec(line);
+                if (compressorMatch) {
+                    const compressorName = compressorMatch[1];
+                    if (compressorName) {
+                        const entry = compressorMap.get(compressorName);
+                        if (entry && isDiagnosticSeverity(entry.status)) {
+                            findings.push({
+                                file: relPath,
+                                line: i + 1,
+                                name: compressorName,
+                                severity: entry.status,
+                                replacement: entry.replacement,
+                            });
+                        }
                     }
                 }
             }

@@ -45,9 +45,11 @@ export async function gcc({
     const contentStr = ensureStringContent(content, "google-closure-compiler");
 
     const flags = applyOptions({}, settings?.options ?? {});
+    const timeout = settings?.timeout;
+    const silence = settings?.silence ?? false;
 
     try {
-        const result = await runCompiler(flags, contentStr);
+        const result = await runCompiler(flags, contentStr, timeout, silence);
         return { code: result };
     } catch (error) {
         throw wrapMinificationError("google-closure-compiler", error);
@@ -59,20 +61,41 @@ export async function gcc({
  *
  * @param flags - Compiler flags object (e.g. `{ compilation_level: "SIMPLE" }`)
  * @param source - JavaScript source code to compile
+ * @param timeout - Optional timeout in milliseconds; kills the compiler process if exceeded
+ * @param silence - When true, suppresses stderr warnings in error messages
  * @returns The compiled output string
  */
 function runCompiler(
     flags: Record<string, string | boolean | Record<string, unknown>>,
-    source: string
+    source: string,
+    timeout?: number,
+    silence?: boolean
 ): Promise<string> {
     return new Promise((resolve, reject) => {
+        let timeoutId: ReturnType<typeof setTimeout> | undefined;
+        let killed = false;
+
         const compiler = new Compiler(flags);
-        const process = compiler.run(
+        const childProcess = compiler.run(
             (exitCode: number, stdOut: string, stdErr: string) => {
-                if (exitCode !== 0) {
+                if (timeoutId !== undefined) {
+                    clearTimeout(timeoutId);
+                }
+
+                if (killed) {
                     reject(
                         new Error(
-                            `Google Closure Compiler exited with code ${exitCode}: ${stdErr}`
+                            `Google Closure Compiler timed out after ${String(timeout)}ms`
+                        )
+                    );
+                    return;
+                }
+
+                if (exitCode !== 0) {
+                    const detail = silence ? "" : `: ${stdErr}`;
+                    reject(
+                        new Error(
+                            `Google Closure Compiler exited with code ${exitCode}${detail}`
                         )
                     );
                     return;
@@ -91,9 +114,16 @@ function runCompiler(
             }
         );
 
-        if (process.stdin) {
-            process.stdin.write(source);
-            process.stdin.end();
+        if (timeout !== undefined && timeout > 0) {
+            timeoutId = setTimeout(() => {
+                killed = true;
+                childProcess.kill();
+            }, timeout);
+        }
+
+        if (childProcess.stdin) {
+            childProcess.stdin.write(source);
+            childProcess.stdin.end();
         }
     });
 }
