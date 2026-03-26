@@ -1,5 +1,11 @@
 import { buildArgs, toBuildArgsOptions } from "./buildArgs.ts";
 import {
+    COMPRESSOR_REGISTRY,
+    getCompressorEntry,
+    getCompressorsByStatus,
+    isRemovedCompressor,
+} from "./compressor-registry.ts";
+import {
     getKnownExportName,
     isBuiltInCompressor,
     isLocalPath,
@@ -41,11 +47,14 @@ import { writeFile, writeFileAsync } from "./writeFile.ts";
 
 export {
     buildArgs,
+    COMPRESSOR_REGISTRY,
     compressSingleFile,
     DEFAULT_IGNORES,
     deleteFile,
     ensureStringContent,
     extractSourceMapOption,
+    getCompressorsByStatus,
+    getCompressorEntry,
     getContentFromFiles,
     getContentFromFilesAsync,
     getFilesizeBrotliInBytes,
@@ -58,6 +67,7 @@ export {
     isBuiltInCompressor,
     isImageFile,
     isLocalPath,
+    isRemovedCompressor,
     isValidFile,
     isValidFileAsync,
     prettyBytes,
@@ -81,5 +91,9 @@ export {
 };
 
 export type { BuildArgsOptions };
+export type {
+    CompressorEntry,
+    CompressorStatus,
+} from "./compressor-registry.ts";
 export type { CompressorResolution } from "./compressor-resolver.ts";
 export type { WildcardOptions };
