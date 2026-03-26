@@ -6,21 +6,16 @@
 
 import path from "node:path";
 import { getBooleanInput, getInput, warning } from "@actions/core";
-import { isBuiltInCompressor } from "@node-minify/utils";
+import {
+    getCompressorEntry,
+    isBuiltInCompressor,
+    isRemovedCompressor,
+} from "@node-minify/utils";
 import { DEFAULT_PATTERNS } from "./discover.ts";
 import type { ActionInputs } from "./types.ts";
 import { validateOutputDir } from "./validate.ts";
 
-const TYPE_REQUIRED_COMPRESSORS = ["esbuild", "yui"];
-
-const DEPRECATED_COMPRESSORS: Record<string, string> = {
-    "babel-minify":
-        "babel-minify only supports Babel 6 and is no longer maintained. Use 'terser' instead.",
-    "uglify-es": "uglify-es is no longer maintained. Use 'terser' instead.",
-    yui: "YUI Compressor was deprecated by Yahoo in 2013. Use 'terser' for JS or 'lightningcss' for CSS.",
-    crass: "crass is no longer maintained. Use 'lightningcss' or 'clean-css' instead.",
-    sqwish: "sqwish is no longer maintained. Use 'lightningcss' or 'clean-css' instead.",
-};
+const TYPE_REQUIRED_COMPRESSORS = ["esbuild"];
 
 /**
  * Parse comma-separated string into array of trimmed non-empty strings.
@@ -190,4 +185,4 @@ export function validateCompressor(compressor: string): void {
     }
 }
 
-export { DEPRECATED_COMPRESSORS, TYPE_REQUIRED_COMPRESSORS };
+export { type DEPRECATED_COMPRESSORS, TYPE_REQUIRED_COMPRESSORS };

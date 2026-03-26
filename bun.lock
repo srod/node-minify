@@ -285,13 +285,6 @@
         "@node-minify/types": "workspace:*",
       },
     },
-    "packages/run": {
-      "name": "@node-minify/run",
-      "version": "10.5.0",
-      "devDependencies": {
-        "@node-minify/types": "workspace:*",
-      },
-    },
     "packages/sharp": {
       "name": "@node-minify/sharp",
       "version": "10.5.0",
@@ -709,8 +702,6 @@
     "@node-minify/no-compress": ["@node-minify/no-compress@workspace:packages/no-compress"],
 
     "@node-minify/oxc": ["@node-minify/oxc@workspace:packages/oxc"],
-
-    "@node-minify/run": ["@node-minify/run@workspace:packages/run"],
 
     "@node-minify/sharp": ["@node-minify/sharp@workspace:packages/sharp"],
 

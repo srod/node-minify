@@ -3,6 +3,8 @@ title: "CSSO"
 description: "CSSO for node-minify"
 ---
 
+**Status:** Supported
+
 `CSSO` can compress only CSS files.
 
 [https://github.com/css/csso](https://github.com/css/csso)
