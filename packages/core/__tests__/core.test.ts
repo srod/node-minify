@@ -4,20 +4,11 @@
  * MIT Licensed
  */
 
-import childProcess from "node:child_process";
 import { statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Compressor, Settings } from "@node-minify/types";
-import {
-    afterAll,
-    beforeAll,
-    beforeEach,
-    describe,
-    expect,
-    test,
-    vi,
-} from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -31,27 +22,13 @@ vi.mock("node:fs", async (importOriginal) => {
 });
 
 import { filesJS } from "../../../tests/files-path.ts";
-import { runOneTest, tests } from "../../../tests/fixtures.ts";
 import { gcc } from "../../google-closure-compiler/src/index.ts";
 import { htmlMinifier } from "../../html-minifier/src/index.ts";
 import { noCompress } from "../../no-compress/src/index.ts";
-import { uglifyEs } from "../../uglify-es/src/index.ts";
-import { yui } from "../../yui/src/index.ts";
 import { minify } from "../src/index.ts";
 import { setup } from "../src/setup.ts";
 
-const compressorLabel = "uglify-es";
-const compressor = uglifyEs;
-
 describe("Package: core", async () => {
-    if (!tests.commonjs) {
-        throw new Error("Tests not found");
-    }
-
-    for (const options of tests.commonjs) {
-        await runOneTest({ options, compressorLabel, compressor });
-    }
-
     describe("Fake binary", () => {
         test("should throw an error if binary does not exist", async () => {
             const settings: Settings = {
@@ -122,52 +99,6 @@ describe("Package: core", async () => {
                     );
                 }
             }
-        });
-    });
-
-    describe("Create errors", () => {
-        test("should catch an error if yui with bad options", async () => {
-            const settings: Settings = {
-                compressor: yui,
-                type: "js",
-                input: filesJS.oneFile,
-                output: filesJS.fileJSOut,
-                options: {
-                    fake: true,
-                },
-            };
-
-            try {
-                return await minify(settings);
-            } catch (err: unknown) {
-                if (err instanceof Error) {
-                    return expect(err.toString()).toMatch("Error");
-                }
-            }
-        });
-    });
-
-    describe("Create errors", () => {
-        beforeAll(() => {
-            const spy = vi.spyOn(childProcess, "spawn");
-            spy.mockImplementation(() => {
-                throw new Error();
-            });
-        });
-        test("should throw an error on spawn", async () => {
-            const settings: Settings = {
-                compressor: yui,
-                input: filesJS.oneFile,
-                output: filesJS.fileJSOut,
-                options: {
-                    fake: true,
-                },
-            };
-
-            await expect(minify(settings)).rejects.toThrow();
-        });
-        afterAll(() => {
-            vi.restoreAllMocks();
         });
     });
 

@@ -133,42 +133,6 @@ export const COMPRESSOR_REGISTRY = [
         packageName: "@node-minify/jsonminify",
         notes: "JSON minification",
     },
-    // Removed (5)
-    {
-        name: "babel-minify",
-        status: "removed",
-        packageName: "@node-minify/babel-minify",
-        replacement: "terser",
-        notes: "Babel 6 no longer maintained",
-    },
-    {
-        name: "uglify-es",
-        status: "removed",
-        packageName: "@node-minify/uglify-es",
-        replacement: "terser",
-        notes: "Superseded by terser",
-    },
-    {
-        name: "yui",
-        status: "removed",
-        packageName: "@node-minify/yui",
-        replacement: "terser or lightningcss",
-        notes: "YUI Compressor no longer maintained",
-    },
-    {
-        name: "sqwish",
-        status: "removed",
-        packageName: "@node-minify/sqwish",
-        replacement: "lightningcss",
-        notes: "Replaced by modern CSS minifiers",
-    },
-    {
-        name: "crass",
-        status: "removed",
-        packageName: "@node-minify/crass",
-        replacement: "lightningcss",
-        notes: "Replaced by modern CSS minifiers",
-    },
 ] as const;
 
 /**

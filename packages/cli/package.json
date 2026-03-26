@@ -77,7 +77,6 @@
     "@node-minify/swc": "workspace:*",
     "@node-minify/terser": "workspace:*",
     "@node-minify/types": "workspace:*",
-    "@node-minify/uglify-js": "workspace:*",
-    "@node-minify/yui": "workspace:*"
+    "@node-minify/uglify-js": "workspace:*"
   }
 }
