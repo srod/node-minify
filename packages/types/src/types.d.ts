@@ -5,12 +5,6 @@
  */
 
 /**
- * The return type of a compressor function.
- * @deprecated Use `CompressorResult` instead. Will be removed in v11.
- */
-export type CompressorReturnType = string;
-
-/**
  * Supported image formats for image compression.
  */
 export type ImageFormat =
@@ -252,11 +246,3 @@ export type Result = {
      */
     sizeGzip: string;
 };
-
-/**
- * Type alias for user convenience.
- * @deprecated Use `Settings` instead. Will be removed in v11.
- */
-export type MinifyOptions<
-    TOptions extends CompressorOptions = CompressorOptions,
-> = Settings<TOptions>;
