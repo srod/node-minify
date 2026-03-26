@@ -5,26 +5,11 @@
  */
 
 import type { Settings } from "@node-minify/types";
-import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { filesJS } from "../../../tests/files-path.ts";
 import { runOneTest, tests } from "../../../tests/fixtures.ts";
 import { minify } from "../../core/src/index.ts";
 import { gcc } from "../src/index.ts";
-
-const mocks = vi.hoisted(() => ({
-    runCommandLine: vi.fn(),
-    original: null as typeof import("@node-minify/run").runCommandLine | null,
-}));
-
-vi.mock("@node-minify/run", async (importOriginal) => {
-    const actual = await importOriginal<typeof import("@node-minify/run")>();
-    mocks.original = actual.runCommandLine;
-    mocks.runCommandLine.mockImplementation(actual.runCommandLine);
-    return {
-        ...actual,
-        runCommandLine: mocks.runCommandLine,
-    };
-});
 
 const compressorLabel = "google-closure-compiler";
 const compressor = gcc;
@@ -95,26 +80,23 @@ describe("Package: google-closure-compiler", async () => {
         expect(result).not.toBeNull();
     });
 
-    describe("Error handling", () => {
-        beforeAll(() => {
-            mocks.runCommandLine.mockResolvedValue(undefined);
+    test("should compress in-memory content", async (): Promise<void> => {
+        const result = await gcc({
+            settings: { compressor: gcc },
+            content: "var x = 1; var y = 2;",
         });
 
-        afterAll(() => {
-            if (mocks.original) {
-                mocks.runCommandLine.mockImplementation(mocks.original);
-            }
-        });
+        expect(result.code).toBeDefined();
+        expect(typeof result.code).toBe("string");
+        expect(result.code.length).toBeGreaterThan(0);
+    });
 
-        test("should throw when gcc returns empty result", async () => {
-            const settings: Settings = {
-                compressor: gcc,
-                input: filesJS.oneFile,
-                output: filesJS.fileJSOut,
-            };
-            await expect(
-                gcc({ settings, content: "var x = 1;" })
-            ).rejects.toThrow("Google Closure Compiler failed: empty result");
-        });
+    test("should throw on invalid JavaScript", async () => {
+        await expect(
+            gcc({
+                settings: { compressor: gcc },
+                content: "function( {{{ invalid",
+            })
+        ).rejects.toThrow();
     });
 });

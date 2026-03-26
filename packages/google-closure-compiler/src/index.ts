@@ -4,14 +4,9 @@
  * MIT Licensed
  */
 
-import { runCommandLine } from "@node-minify/run";
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import {
-    buildArgs,
-    ensureStringContent,
-    toBuildArgsOptions,
-} from "@node-minify/utils";
-import compilerPath from "google-closure-compiler-java";
+import { ensureStringContent, wrapMinificationError } from "@node-minify/utils";
+import { compiler as Compiler } from "google-closure-compiler";
 
 // the allowed flags, taken from https://github.com/google/closure-compiler/wiki/Flags-and-Options
 const allowedFlags = [
@@ -49,21 +44,58 @@ export async function gcc({
 }: MinifierOptions): Promise<CompressorResult> {
     const contentStr = ensureStringContent(content, "google-closure-compiler");
 
-    const options = applyOptions({}, settings?.options ?? {});
+    const flags = applyOptions({}, settings?.options ?? {});
 
-    const result = await runCommandLine({
-        args: gccCommand(options),
-        data: contentStr,
-        maxBuffer: settings?.buffer,
-        timeout: settings?.timeout,
-        silence: settings?.silence,
-    });
-
-    if (typeof result !== "string") {
-        throw new Error("Google Closure Compiler failed: empty result");
+    try {
+        const result = await runCompiler(flags, contentStr);
+        return { code: result };
+    } catch (error) {
+        throw wrapMinificationError("google-closure-compiler", error);
     }
+}
 
-    return { code: result };
+/**
+ * Runs the Google Closure Compiler with the given flags, piping source code via stdin.
+ *
+ * @param flags - Compiler flags object (e.g. `{ compilation_level: "SIMPLE" }`)
+ * @param source - JavaScript source code to compile
+ * @returns The compiled output string
+ */
+function runCompiler(
+    flags: Record<string, string | boolean | Record<string, unknown>>,
+    source: string
+): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const compiler = new Compiler(flags);
+        const process = compiler.run(
+            (exitCode: number, stdOut: string, stdErr: string) => {
+                if (exitCode !== 0) {
+                    reject(
+                        new Error(
+                            `Google Closure Compiler exited with code ${exitCode}: ${stdErr}`
+                        )
+                    );
+                    return;
+                }
+
+                if (typeof stdOut !== "string" || stdOut.length === 0) {
+                    reject(
+                        new Error(
+                            "Google Closure Compiler failed: empty result"
+                        )
+                    );
+                    return;
+                }
+
+                resolve(stdOut);
+            }
+        );
+
+        if (process.stdin) {
+            process.stdin.write(source);
+            process.stdin.end();
+        }
+    });
 }
 
 /**
@@ -104,16 +136,4 @@ function applyOptions(flags: Flags, options?: Record<string, unknown>): Flags {
             }
         });
     return flags;
-}
-
-/**
- * GCC command line.
- * @param options the options to pass to GCC
- * @returns the command line arguments to pass to GCC
- */
-
-function gccCommand(options: Record<string, unknown>) {
-    return ["-jar", compilerPath].concat(
-        buildArgs(toBuildArgsOptions(options))
-    );
 }
