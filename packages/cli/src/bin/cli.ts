@@ -12,6 +12,7 @@ import { Command } from "commander";
 import ora from "ora";
 import updateNotifier from "update-notifier";
 import packageJson from "../../package.json" with { type: "json" };
+import { doctor } from "../doctor.ts";
 import type { SettingsWithCompressor } from "../index.ts";
 import { run } from "../index.ts";
 
@@ -128,6 +129,13 @@ function setupProgram(): Command {
                 console.error(error);
                 process.exit(1);
             }
+        });
+
+    program
+        .command("doctor")
+        .description("Scan project for v11 migration issues")
+        .action(async () => {
+            await doctor();
         });
 
     program.on("--help", displayCompressorsList);
