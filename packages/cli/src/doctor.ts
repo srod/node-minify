@@ -39,6 +39,7 @@ const EXCLUDED_DIRS = new Set([
     "coverage",
     "build",
     ".next",
+    "__tests__",
 ]);
 const SOURCE_EXTENSIONS = new Set([".js", ".ts", ".mjs", ".cjs"]);
 const IMPORT_REGEX =
@@ -59,7 +60,7 @@ function isDiagnosticSeverity(status: string): status is DiagnosticSeverity {
  * Build a lookup map from @node-minify package names to their registry entries,
  * filtered to only removed and legacy compressors.
  *
- * @returns Map keyed by package name (e.g. "@node-minify/babel-minify")
+ * @returns Map keyed by package name (e.g. "@node-minify/terser")
  */
 function buildPackageNameMap(): Map<string, CompressorEntry> {
     const map = new Map<string, CompressorEntry>();
@@ -75,7 +76,7 @@ function buildPackageNameMap(): Map<string, CompressorEntry> {
  * Build a lookup map from compressor names to their registry entries,
  * filtered to only removed and legacy compressors.
  *
- * @returns Map keyed by compressor name (e.g. "babel-minify")
+ * @returns Map keyed by compressor name (e.g. "terser")
  */
 function buildCompressorNameMap(): Map<string, CompressorEntry> {
     const map = new Map<string, CompressorEntry>();
@@ -223,8 +224,10 @@ function scanSourceImports(cwd: string): Finding[] {
 
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
+                if (!line) continue;
                 for (const match of line.matchAll(IMPORT_REGEX)) {
                     const pkgName = match[1];
+                    if (!pkgName) continue;
                     const entry = packageMap.get(pkgName);
                     if (entry && isDiagnosticSeverity(entry.status)) {
                         findings.push({
@@ -265,9 +268,11 @@ function scanWorkflowYaml(cwd: string): Finding[] {
 
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
+                if (!line) continue;
                 const match = COMPRESSOR_REGEX.exec(line);
                 if (match) {
                     const compressorName = match[1];
+                    if (!compressorName) continue;
                     const entry = compressorMap.get(compressorName);
                     if (entry && isDiagnosticSeverity(entry.status)) {
                         findings.push({

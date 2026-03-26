@@ -99,6 +99,22 @@ function runCompiler(
 }
 
 /**
+ * Type guard to check if a value is a valid flag value.
+ *
+ * @param value - The value to check
+ * @returns True if value is a string, boolean, or plain object (not array)
+ */
+function isFlagValue(
+    value: unknown
+): value is string | boolean | Record<string, unknown> {
+    return (
+        typeof value === "string" ||
+        typeof value === "boolean" ||
+        (typeof value === "object" && value !== null && !Array.isArray(value))
+    );
+}
+
+/**
  * Adds any valid options passed in the options parameters to the flags parameter and returns the flags object.
  * @param flags the flags object to add options to
  * @param options the options object to add to the flags object
@@ -124,15 +140,8 @@ function applyOptions(flags: Flags, options?: Record<string, unknown>): Flags {
         .filter((option) => allowedFlags.indexOf(option) > -1)
         .forEach((option) => {
             const value = options[option];
-            if (
-                typeof value === "string" ||
-                typeof value === "boolean" ||
-                (typeof value === "object" && !Array.isArray(value))
-            ) {
-                flags[option] = value as
-                    | string
-                    | boolean
-                    | Record<string, unknown>;
+            if (isFlagValue(value)) {
+                flags[option] = value;
             }
         });
     return flags;
