@@ -25,7 +25,7 @@
     "preact": "^10.28.4"
   },
   "devDependencies": {
-    "@astrojs/ts-plugin": "1.10.8",
+    "@astrojs/ts-plugin": "1.10.9",
     "@cloudflare/workers-types": "^4.20260307.1",
     "html-escaper": "^3.0.3",
     "wrangler": "^4.71.0"
