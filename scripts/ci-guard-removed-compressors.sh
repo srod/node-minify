@@ -47,22 +47,34 @@ YAML_MATCHES=$(grep -rnE "compressor:[[:space:]]*['\"]?($REMOVED_NAMES)\b" \
   action.yml .github/ packages/action/action.yml \
   2>/dev/null || true)
 
-# 3. Bare removed-compressor names anywhere in shipped, must-stay-clean surfaces:
-#    CLI/Action source, the Action agent notes, the composite actions, and the
-#    root skill/agent files. These must never imply a removed compressor still
-#    works. The removal detector (doctor.ts) names them by design and is skipped.
-#    Intentional "Removed (v11) ..." migration notes are allowed via the trailing
-#    content filter; migration-mapping docs (docs site, action READMEs) keep the
-#    bare names with replacements on purpose and stay on the scoped scan only.
-BARE_MATCHES=$(grep -rnE "\b($REMOVED_NAMES)\b" \
-  --include="*.ts" --include="*.js" --include="*.md" \
+# 3a. Bare removed-compressor names in shipped CODE and action manifests: CLI and
+#     Action source, the composite actions, and the JS action's YAML manifest.
+#     These can never legitimately name a removed compressor, so NO content filter
+#     is applied — a removed name in code or workflow YAML is always a violation.
+#     `*.yml`/`*.yaml` are scanned so a composite-action reference cannot bypass
+#     the guard. The removal detector (doctor.ts) names them by design and is the
+#     only exception.
+BARE_CODE_MATCHES=$(grep -rnE "\b($REMOVED_NAMES)\b" \
+  --include="*.ts" --include="*.js" --include="*.yml" --include="*.yaml" \
   "${EXCLUDE_PATHS[@]}" --exclude="doctor.ts" \
-  packages/cli/src/ packages/action/src/ packages/action/AGENTS.md \
-  .github/actions/ SKILL.md AGENTS.md \
+  packages/cli/src/ packages/action/src/ .github/actions/ \
+  packages/action/action.yml \
+  2>/dev/null || true)
+
+# 3b. Bare removed-compressor names in shipped DOCS: the Action agent notes and the
+#     root skill/agent files. Documentation legitimately carries "Removed (v11) ..."
+#     migration notes, so the content filter exempts those lines — but ONLY for
+#     docs, never for code (see 3a). Migration-mapping docs (docs site, action
+#     READMEs) keep bare names with replacements on purpose and rely on the filter.
+BARE_DOC_MATCHES=$(grep -rnE "\b($REMOVED_NAMES)\b" \
+  --include="*.md" "${EXCLUDE_PATHS[@]}" \
+  packages/cli/src/ packages/action/src/ .github/actions/ \
+  packages/action/AGENTS.md SKILL.md AGENTS.md \
   2>/dev/null \
   | grep -viE "removed|use instead" || true)
 
-MATCHES=$(printf '%s\n%s\n%s' "$SCOPED_MATCHES" "$YAML_MATCHES" "$BARE_MATCHES" \
+MATCHES=$(printf '%s\n%s\n%s\n%s' \
+  "$SCOPED_MATCHES" "$YAML_MATCHES" "$BARE_CODE_MATCHES" "$BARE_DOC_MATCHES" \
   | grep -v '^[[:space:]]*$' || true)
 
 if [ -n "$MATCHES" ]; then
