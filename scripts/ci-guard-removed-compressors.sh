@@ -61,11 +61,13 @@ BARE_CODE_MATCHES=$(grep -rnE "\b($REMOVED_NAMES)\b" \
   packages/action/action.yml \
   2>/dev/null || true)
 
-# 3b. Bare removed-compressor names in shipped DOCS: the Action agent notes and the
-#     root skill/agent files. Documentation legitimately carries "Removed (v11) ..."
-#     migration notes, so the content filter exempts those lines — but ONLY for
-#     docs, never for code (see 3a). Migration-mapping docs (docs site, action
-#     READMEs) keep bare names with replacements on purpose and rely on the filter.
+# 3b. Bare removed-compressor names in shipped DOCS: the Action agent notes, the
+#     composite-action READMEs, and the root skill/agent files. Documentation
+#     legitimately carries "Removed (v11) ..." migration notes, so the content
+#     filter exempts those lines — but ONLY for docs, never for code (see 3a).
+#     Heavier migration-mapping pages (the docs site, packages/action/README.md)
+#     are intentionally out of this scan and are covered only by the scoped pass
+#     (#1); they do not depend on the content filter.
 BARE_DOC_MATCHES=$(grep -rnE "\b($REMOVED_NAMES)\b" \
   --include="*.md" "${EXCLUDE_PATHS[@]}" \
   packages/cli/src/ packages/action/src/ .github/actions/ \
