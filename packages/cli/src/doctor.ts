@@ -348,10 +348,10 @@ function scanWorkflowYaml(cwd: string): Finding[] {
  */
 function formatFinding(finding: Finding): string {
     const prefix = finding.severity === "removed" ? "ERROR" : "WARNING";
+    // Normalize to forward slashes so output is stable across OSes (Windows uses "\").
+    const file = finding.file.replaceAll("\\", "/");
     const location =
-        finding.line !== undefined
-            ? `${finding.file}:${finding.line}`
-            : finding.file;
+        finding.line !== undefined ? `${file}:${finding.line}` : file;
 
     if (finding.severity === "removed") {
         const replacement = finding.replacement ?? "a supported compressor";
