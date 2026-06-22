@@ -4,7 +4,8 @@
  * MIT Licensed
  */
 
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { type Dirent, existsSync, readdirSync, readFileSync } from "node:fs";
+import { readdir } from "node:fs/promises";
 import { extname, join, relative } from "node:path";
 import process from "node:process";
 import type { CompressorEntry } from "@node-minify/utils";
@@ -99,25 +100,51 @@ function buildCompressorNameMap(): Map<string, CompressorEntry> {
 }
 
 /**
+ * Recursively collect files under `dir`, pruning EXCLUDED_DIRS during traversal
+ * so heavy directories like node_modules are never descended into (rather than
+ * walked and filtered afterwards).
+ *
+ * @param dir - Directory to walk
+ * @param cwd - Project root used to compute relative paths
+ * @param accept - Predicate deciding whether a relative file path is kept
+ * @returns Relative file paths (from `cwd`) that satisfy `accept`
+ */
+async function collectFiles(
+    dir: string,
+    cwd: string,
+    accept: (relativePath: string) => boolean
+): Promise<string[]> {
+    let entries: Dirent[];
+    try {
+        entries = await readdir(dir, { withFileTypes: true });
+    } catch {
+        return [];
+    }
+
+    const results: string[] = [];
+    for (const entry of entries) {
+        const fullPath = join(dir, entry.name);
+        if (entry.isDirectory()) {
+            if (EXCLUDED_DIRS.has(entry.name)) continue;
+            results.push(...(await collectFiles(fullPath, cwd, accept)));
+        } else if (entry.isFile()) {
+            const relativePath = relative(cwd, fullPath);
+            if (accept(relativePath)) results.push(relativePath);
+        }
+    }
+    return results;
+}
+
+/**
  * Collect all source files under cwd, excluding node_modules/dist/.git etc.
  *
  * @param cwd - Root directory to scan
  * @returns Array of relative file paths matching source extensions
  */
-function getSourceFiles(cwd: string): string[] {
-    try {
-        const entries = readdirSync(cwd, {
-            recursive: true,
-            encoding: "utf-8",
-        });
-        return entries.filter((entry) => {
-            if (!SOURCE_EXTENSIONS.has(extname(entry))) return false;
-            const parts = entry.split(/[\\/]/);
-            return !parts.some((part) => EXCLUDED_DIRS.has(part));
-        });
-    } catch {
-        return [];
-    }
+function getSourceFiles(cwd: string): Promise<string[]> {
+    return collectFiles(cwd, cwd, (relativePath) =>
+        SOURCE_EXTENSIONS.has(extname(relativePath))
+    );
 }
 
 /**
@@ -148,7 +175,7 @@ function getWorkflowFiles(cwd: string): string[] {
  * @param cwd - Root directory to scan
  * @returns Array of absolute file paths to package.json files
  */
-function getPackageJsonFiles(cwd: string): string[] {
+async function getPackageJsonFiles(cwd: string): Promise<string[]> {
     const result: string[] = [];
 
     // Always include root package.json
@@ -157,23 +184,15 @@ function getPackageJsonFiles(cwd: string): string[] {
         result.push(rootPkg);
     }
 
-    // Recursively find all other package.json files
-    try {
-        const entries = readdirSync(cwd, {
-            recursive: true,
-            encoding: "utf-8",
-        });
-        for (const entry of entries) {
-            const parts = entry.split(/[\\/]/);
-            // Must be exactly "package.json", not "template-package.json" etc.
-            if (parts[parts.length - 1] !== "package.json") continue;
-            // Skip root (already added)
-            if (parts.length === 1) continue;
-            if (parts.some((part) => EXCLUDED_DIRS.has(part))) continue;
-            result.push(join(cwd, entry));
-        }
-    } catch {
-        // Ignore read errors
+    // Recursively find all other package.json files (root added above).
+    const nested = await collectFiles(cwd, cwd, (relativePath) => {
+        const parts = relativePath.split(/[\\/]/);
+        // Must be exactly "package.json", not "template-package.json" etc., and
+        // not the already-added root (which has a single path segment).
+        return parts[parts.length - 1] === "package.json" && parts.length > 1;
+    });
+    for (const relativePath of nested) {
+        result.push(join(cwd, relativePath));
     }
 
     return result;
@@ -186,10 +205,10 @@ function getPackageJsonFiles(cwd: string): string[] {
  * @param cwd - Project root directory
  * @returns Array of findings for problematic dependencies
  */
-function scanPackageJsonFiles(cwd: string): Finding[] {
+async function scanPackageJsonFiles(cwd: string): Promise<Finding[]> {
     const findings: Finding[] = [];
     const packageMap = buildPackageNameMap();
-    const packageJsonPaths = getPackageJsonFiles(cwd);
+    const packageJsonPaths = await getPackageJsonFiles(cwd);
 
     for (const pkgPath of packageJsonPaths) {
         try {
@@ -237,11 +256,11 @@ function scanPackageJsonFiles(cwd: string): Finding[] {
  * @param cwd - Project root directory
  * @returns Array of findings with file path and line number
  */
-function scanSourceImports(cwd: string): Finding[] {
+async function scanSourceImports(cwd: string): Promise<Finding[]> {
     const findings: Finding[] = [];
     const packageMap = buildPackageNameMap();
     const compressorMap = buildCompressorNameMap();
-    const sourceFiles = getSourceFiles(cwd);
+    const sourceFiles = await getSourceFiles(cwd);
 
     for (const relPath of sourceFiles) {
         try {
@@ -398,8 +417,8 @@ export async function runDoctor(cwd?: string): Promise<number> {
     const projectDir = cwd ?? process.cwd();
 
     const findings: Finding[] = [
-        ...scanPackageJsonFiles(projectDir),
-        ...scanSourceImports(projectDir),
+        ...(await scanPackageJsonFiles(projectDir)),
+        ...(await scanSourceImports(projectDir)),
         ...scanWorkflowYaml(projectDir),
     ];
 
