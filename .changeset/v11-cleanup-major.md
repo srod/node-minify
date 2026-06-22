@@ -9,7 +9,7 @@ v11: cleanup major release.
 - **Removed 5 deprecated compressor packages**: `@node-minify/babel-minify`, `@node-minify/uglify-es`, `@node-minify/yui`, `@node-minify/sqwish`, `@node-minify/crass`. Use the recommended replacements (terser/oxc/swc/esbuild for JS, lightningcss/cssnano for CSS).
 - **Removed `@node-minify/run`**: internal Java/process-spawn helper, no longer used by any compressor.
 - **Removed deprecated type aliases** from `@node-minify/types`: `CompressorReturnType` (use `CompressorResult`) and `MinifyOptions` (use `Settings`).
-- **Google Closure Compiler now uses the `google-closure-compiler` npm JS API** instead of the bundled Java wrapper (`google-closure-compiler-java`). Same flags and output; the Java JAR dependency is gone. Note: this does not guarantee zero Java usage in every upstream execution path.
+- **Google Closure Compiler now uses the `google-closure-compiler` npm API** instead of invoking the Java JAR through `@node-minify/run`. Same flags and output. Note: the npm package still bundles `google-closure-compiler-java`, so Java may still be invoked under the hood — this change removes node-minify's custom Java plumbing, not Java itself.
 
 ### New features
 

@@ -13,14 +13,14 @@ inputs:
     description: |
       Compressor to use.
       Recommended: terser, esbuild, swc (fast, no Java).
-      Note: 'gcc' and 'yui' require Java (pre-installed on GitHub runners).
+      Note: 'gcc' may invoke Java (pre-installed on GitHub runners).
     required: false
     default: "terser"
   output:
     description: "Output file path"
     required: true
   type:
-    description: "File type: js or css (required for esbuild, yui)"
+    description: "File type: js or css (required for esbuild)"
     required: false
   options:
     description: "Compressor-specific options (JSON string)"
@@ -35,7 +35,7 @@ inputs:
     required: false
     default: "true"
   java-version:
-    description: "Java version for gcc/yui compressors (optional)"
+    description: "Java version for gcc compressor (optional)"
     required: false
 
 outputs:
@@ -72,18 +72,12 @@ runs:
       run: |
         echo "::warning::This action (.github/actions/node-minify) is DEPRECATED. Please migrate to 'uses: srod/node-minify@v1' for the new bundled action with more features (PR comments, annotations, benchmarking)."
 
-    - name: Setup Java (for gcc/yui)
-      if: contains(fromJSON('["gcc", "google-closure-compiler", "yui"]'), inputs.compressor)
+    - name: Setup Java (for gcc)
+      if: contains(fromJSON('["gcc", "google-closure-compiler"]'), inputs.compressor)
       uses: actions/setup-java@v4
       with:
         distribution: "temurin"
         java-version: ${{ inputs.java-version || '17' }}
-
-    - name: Deprecation warning (yui)
-      if: inputs.compressor == 'yui'
-      shell: bash
-      run: |
-        echo "::warning::YUI Compressor was deprecated by Yahoo in 2013. Consider using 'terser' for JS or 'lightningcss' for CSS."
 
     - name: Setup Bun
       uses: oven-sh/setup-bun@v2

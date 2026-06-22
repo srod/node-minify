@@ -39,10 +39,10 @@ This option will not merge the files.
 
 ```js
 const minify = require('@node-minify/core');
-const babelMinify = require('@node-minify/babel-minify');
+const terser = require('@node-minify/terser');
 
 minify({
-  compressor: babelMinify,
+  compressor: terser,
   input: 'public/**/*.js',
   output: '$1.min.js',
   callback: function(err, min) {}
@@ -55,10 +55,10 @@ If you want to save those files in same directory than source, you can use `repl
 
 ```js
 const minify = require('@node-minify/core');
-const babelMinify = require('@node-minify/babel-minify');
+const terser = require('@node-minify/terser');
 
 minify({
-  compressor: babelMinify,
+  compressor: terser,
   input: 'public/**/*.js',
   output: '$1.min.js',
   replaceInPlace: true
@@ -70,11 +70,10 @@ minify({
 
 ```js
 const minify = require('@node-minify/core');
-const yui = require('@node-minify/yui');
+const terser = require('@node-minify/terser');
 
 minify({
-  compressor: yui,
-  type: 'js',
+  compressor: terser,
   input: 'foo.js',
   output: 'bar.js',
   sync: true,

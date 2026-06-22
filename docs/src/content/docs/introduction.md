@@ -40,9 +40,6 @@ It allows you to compress JavaScript, CSS, HTML, and image files.
 - [swc](/compressors/swc)
 - [terser](/compressors/terser)
 - [uglify-js](/compressors/uglify-js)
-- [babel-minify](/compressors/babel-minify) _(deprecated)_
-- [uglify-es](/compressors/uglify-es) _(deprecated)_
-- [YUI Compressor](/compressors/yui) _(deprecated)_
 
 **CSS:**
 
@@ -51,9 +48,6 @@ It allows you to compress JavaScript, CSS, HTML, and image files.
 - [CSSO](/compressors/csso)
 - [esbuild](/compressors/esbuild)
 - [lightningcss](/compressors/lightningcss)
-- [crass](/compressors/crass) _(deprecated)_
-- [sqwish](/compressors/sqwish) _(deprecated)_
-- [YUI Compressor](/compressors/yui) _(deprecated)_
 
 **HTML:**
 

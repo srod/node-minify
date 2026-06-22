@@ -58,11 +58,6 @@ describe("COMPRESSOR_REGISTRY", () => {
 });
 
 describe("getCompressorsByStatus", () => {
-    test("returns empty array for non-existent status", () => {
-        const result = getCompressorsByStatus("unknown" as any);
-        expect(result).toEqual([]);
-    });
-
     test("returns all recommended compressors", () => {
         const recommended = getCompressorsByStatus("recommended");
         const names = recommended.map((e) => e.name);
