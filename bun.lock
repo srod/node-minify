@@ -12,7 +12,6 @@
         "@types/node": "^22.19.15",
         "@vitest/coverage-v8": "^4.0.18",
         "@vitest/ui": "^4.0.18",
-        "babel-preset-minify": "0.5.2",
         "copyfiles": "2.4.1",
         "rimraf": "6.1.3",
         "tsdown": "^0.21.0",
@@ -1075,67 +1074,7 @@
 
     "axobject-query": ["axobject-query@4.1.0", "", {}, "sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ=="],
 
-    "babel-helper-evaluate-path": ["babel-helper-evaluate-path@0.5.0", "", {}, "sha512-mUh0UhS607bGh5wUMAQfOpt2JX2ThXMtppHRdRU1kL7ZLRWIXxoV2UIV1r2cAeeNeU1M5SB5/RSUgUxrK8yOkA=="],
-
-    "babel-helper-flip-expressions": ["babel-helper-flip-expressions@0.4.3", "", {}, "sha512-rSrkRW4YQ2ETCWww9gbsWk4N0x1BOtln349Tk0dlCS90oT68WMLyGR7WvaMp3eAnsVrCqdUtC19lo1avyGPejA=="],
-
-    "babel-helper-is-nodes-equiv": ["babel-helper-is-nodes-equiv@0.0.1", "", {}, "sha512-ri/nsMFVRqXn7IyT5qW4/hIAGQxuYUFHa3qsxmPtbk6spZQcYlyDogfVpNm2XYOslH/ULS4VEJGUqQX5u7ACQw=="],
-
-    "babel-helper-is-void-0": ["babel-helper-is-void-0@0.4.3", "", {}, "sha512-07rBV0xPRM3TM5NVJEOQEkECX3qnHDjaIbFvWYPv+T1ajpUiVLiqTfC+MmiZxY5KOL/Ec08vJdJD9kZiP9UkUg=="],
-
-    "babel-helper-mark-eval-scopes": ["babel-helper-mark-eval-scopes@0.4.3", "", {}, "sha512-+d/mXPP33bhgHkdVOiPkmYoeXJ+rXRWi7OdhwpyseIqOS8CmzHQXHUp/+/Qr8baXsT0kjGpMHHofHs6C3cskdA=="],
-
-    "babel-helper-remove-or-void": ["babel-helper-remove-or-void@0.4.3", "", {}, "sha512-eYNceYtcGKpifHDir62gHJadVXdg9fAhuZEXiRQnJJ4Yi4oUTpqpNY//1pM4nVyjjDMPYaC2xSf0I+9IqVzwdA=="],
-
-    "babel-helper-to-multiple-sequence-expressions": ["babel-helper-to-multiple-sequence-expressions@0.5.0", "", {}, "sha512-m2CvfDW4+1qfDdsrtf4dwOslQC3yhbgyBFptncp4wvtdrDHqueW7slsYv4gArie056phvQFhT2nRcGS4bnm6mA=="],
-
-    "babel-plugin-minify-builtins": ["babel-plugin-minify-builtins@0.5.0", "", {}, "sha512-wpqbN7Ov5hsNwGdzuzvFcjgRlzbIeVv1gMIlICbPj0xkexnfoIDe7q+AZHMkQmAE/F9R5jkrB6TLfTegImlXag=="],
-
-    "babel-plugin-minify-constant-folding": ["babel-plugin-minify-constant-folding@0.5.0", "", { "dependencies": { "babel-helper-evaluate-path": "^0.5.0" } }, "sha512-Vj97CTn/lE9hR1D+jKUeHfNy+m1baNiJ1wJvoGyOBUx7F7kJqDZxr9nCHjO/Ad+irbR3HzR6jABpSSA29QsrXQ=="],
-
-    "babel-plugin-minify-dead-code-elimination": ["babel-plugin-minify-dead-code-elimination@0.5.2", "", { "dependencies": { "babel-helper-evaluate-path": "^0.5.0", "babel-helper-mark-eval-scopes": "^0.4.3", "babel-helper-remove-or-void": "^0.4.3", "lodash": "^4.17.11" } }, "sha512-krq9Lwi0QIzyAlcNBXTL4usqUvevB4BzktdEsb8srcXC1AaYqRJiAQw6vdKdJSaXbz6snBvziGr6ch/aoRCfpA=="],
-
-    "babel-plugin-minify-flip-comparisons": ["babel-plugin-minify-flip-comparisons@0.4.3", "", { "dependencies": { "babel-helper-is-void-0": "^0.4.3" } }, "sha512-8hNwgLVeJzpeLVOVArag2DfTkbKodzOHU7+gAZ8mGBFGPQHK6uXVpg3jh5I/F6gfi5Q5usWU2OKcstn1YbAV7A=="],
-
-    "babel-plugin-minify-guarded-expressions": ["babel-plugin-minify-guarded-expressions@0.4.4", "", { "dependencies": { "babel-helper-evaluate-path": "^0.5.0", "babel-helper-flip-expressions": "^0.4.3" } }, "sha512-RMv0tM72YuPPfLT9QLr3ix9nwUIq+sHT6z8Iu3sLbqldzC1Dls8DPCywzUIzkTx9Zh1hWX4q/m9BPoPed9GOfA=="],
-
-    "babel-plugin-minify-infinity": ["babel-plugin-minify-infinity@0.4.3", "", {}, "sha512-X0ictxCk8y+NvIf+bZ1HJPbVZKMlPku3lgYxPmIp62Dp8wdtbMLSekczty3MzvUOlrk5xzWYpBpQprXUjDRyMA=="],
-
-    "babel-plugin-minify-mangle-names": ["babel-plugin-minify-mangle-names@0.5.1", "", { "dependencies": { "babel-helper-mark-eval-scopes": "^0.4.3" } }, "sha512-8KMichAOae2FHlipjNDTo2wz97MdEb2Q0jrn4NIRXzHH7SJ3c5TaNNBkeTHbk9WUsMnqpNUx949ugM9NFWewzw=="],
-
-    "babel-plugin-minify-numeric-literals": ["babel-plugin-minify-numeric-literals@0.4.3", "", {}, "sha512-5D54hvs9YVuCknfWywq0eaYDt7qYxlNwCqW9Ipm/kYeS9gYhJd0Rr/Pm2WhHKJ8DC6aIlDdqSBODSthabLSX3A=="],
-
-    "babel-plugin-minify-replace": ["babel-plugin-minify-replace@0.5.0", "", {}, "sha512-aXZiaqWDNUbyNNNpWs/8NyST+oU7QTpK7J9zFEFSA0eOmtUNMU3fczlTTTlnCxHmq/jYNFEmkkSG3DDBtW3Y4Q=="],
-
-    "babel-plugin-minify-simplify": ["babel-plugin-minify-simplify@0.5.1", "", { "dependencies": { "babel-helper-evaluate-path": "^0.5.0", "babel-helper-flip-expressions": "^0.4.3", "babel-helper-is-nodes-equiv": "^0.0.1", "babel-helper-to-multiple-sequence-expressions": "^0.5.0" } }, "sha512-OSYDSnoCxP2cYDMk9gxNAed6uJDiDz65zgL6h8d3tm8qXIagWGMLWhqysT6DY3Vs7Fgq7YUDcjOomhVUb+xX6A=="],
-
-    "babel-plugin-minify-type-constructors": ["babel-plugin-minify-type-constructors@0.4.3", "", { "dependencies": { "babel-helper-is-void-0": "^0.4.3" } }, "sha512-4ADB0irJ/6BeXWHubjCJmrPbzhxDgjphBMjIjxCc25n4NGJ00NsYqwYt+F/OvE9RXx8KaSW7cJvp+iZX436tnQ=="],
-
     "babel-plugin-transform-hook-names": ["babel-plugin-transform-hook-names@1.0.2", "", { "peerDependencies": { "@babel/core": "^7.12.10" } }, "sha512-5gafyjyyBTTdX/tQQ0hRgu4AhNHG/hqWi0ZZmg2xvs2FgRkJXzDNKBZCyoYqgFkovfDrgM8OoKg8karoUvWeCw=="],
-
-    "babel-plugin-transform-inline-consecutive-adds": ["babel-plugin-transform-inline-consecutive-adds@0.4.3", "", {}, "sha512-8D104wbzzI5RlxeVPYeQb9QsUyepiH1rAO5hpPpQ6NPRgQLpIVwkS/Nbx944pm4K8Z+rx7CgjPsFACz/VCBN0Q=="],
-
-    "babel-plugin-transform-member-expression-literals": ["babel-plugin-transform-member-expression-literals@6.9.4", "", {}, "sha512-Xq9/Rarpj+bjOZSl1nBbZYETsNEDDJSrb6Plb1sS3/36FukWFLLRysgecva5KZECjUJTrJoQqjJgtWToaflk5Q=="],
-
-    "babel-plugin-transform-merge-sibling-variables": ["babel-plugin-transform-merge-sibling-variables@6.9.5", "", {}, "sha512-xj/KrWi6/uP+DrD844h66Qh2cZN++iugEIgH8QcIxhmZZPNP6VpOE9b4gP2FFW39xDAY43kCmYMM6U0QNKN8fw=="],
-
-    "babel-plugin-transform-minify-booleans": ["babel-plugin-transform-minify-booleans@6.9.4", "", {}, "sha512-9pW9ePng6DZpzGPalcrULuhSCcauGAbn8AeU3bE34HcDkGm8Ldt0ysjGkyb64f0K3T5ilV4mriayOVv5fg0ASA=="],
-
-    "babel-plugin-transform-property-literals": ["babel-plugin-transform-property-literals@6.9.4", "", { "dependencies": { "esutils": "^2.0.2" } }, "sha512-Pf8JHTjTPxecqVyL6KSwD/hxGpoTZjiEgV7nCx0KFQsJYM0nuuoCajbg09KRmZWeZbJ5NGTySABYv8b/hY1eEA=="],
-
-    "babel-plugin-transform-regexp-constructors": ["babel-plugin-transform-regexp-constructors@0.4.3", "", {}, "sha512-JjymDyEyRNhAoNFp09y/xGwYVYzT2nWTGrBrWaL6eCg2m+B24qH2jR0AA8V8GzKJTgC8NW6joJmc6nabvWBD/g=="],
-
-    "babel-plugin-transform-remove-console": ["babel-plugin-transform-remove-console@6.9.4", "", {}, "sha512-88blrUrMX3SPiGkT1GnvVY8E/7A+k6oj3MNvUtTIxJflFzXTw1bHkuJ/y039ouhFMp2prRn5cQGzokViYi1dsg=="],
-
-    "babel-plugin-transform-remove-debugger": ["babel-plugin-transform-remove-debugger@6.9.4", "", {}, "sha512-Kd+eTBYlXfwoFzisburVwrngsrz4xh9I0ppoJnU/qlLysxVBRgI4Pj+dk3X8F5tDiehp3hhP8oarRMT9v2Z3lw=="],
-
-    "babel-plugin-transform-remove-undefined": ["babel-plugin-transform-remove-undefined@0.5.0", "", { "dependencies": { "babel-helper-evaluate-path": "^0.5.0" } }, "sha512-+M7fJYFaEE/M9CXa0/IRkDbiV3wRELzA1kKQFCJ4ifhrzLKn/9VCCgj9OFmYWwBd8IB48YdgPkHYtbYq+4vtHQ=="],
-
-    "babel-plugin-transform-simplify-comparison-operators": ["babel-plugin-transform-simplify-comparison-operators@6.9.4", "", {}, "sha512-GLInxhGAQWJ9YIdjwF6dAFlmh4U+kN8pL6Big7nkDzHoZcaDQOtBm28atEhQJq6m9GpAovbiGEShKqXv4BSp0A=="],
-
-    "babel-plugin-transform-undefined-to-void": ["babel-plugin-transform-undefined-to-void@6.9.4", "", {}, "sha512-D2UbwxawEY1xVc9svYAUZQM2xarwSNXue2qDIx6CeV2EuMGaes/0su78zlIDIAgE7BvnMw4UpmSo9fDy+znghg=="],
-
-    "babel-preset-minify": ["babel-preset-minify@0.5.2", "", { "dependencies": { "babel-plugin-minify-builtins": "^0.5.0", "babel-plugin-minify-constant-folding": "^0.5.0", "babel-plugin-minify-dead-code-elimination": "^0.5.2", "babel-plugin-minify-flip-comparisons": "^0.4.3", "babel-plugin-minify-guarded-expressions": "^0.4.4", "babel-plugin-minify-infinity": "^0.4.3", "babel-plugin-minify-mangle-names": "^0.5.1", "babel-plugin-minify-numeric-literals": "^0.4.3", "babel-plugin-minify-replace": "^0.5.0", "babel-plugin-minify-simplify": "^0.5.1", "babel-plugin-minify-type-constructors": "^0.4.3", "babel-plugin-transform-inline-consecutive-adds": "^0.4.3", "babel-plugin-transform-member-expression-literals": "^6.9.4", "babel-plugin-transform-merge-sibling-variables": "^6.9.5", "babel-plugin-transform-minify-booleans": "^6.9.4", "babel-plugin-transform-property-literals": "^6.9.4", "babel-plugin-transform-regexp-constructors": "^0.4.3", "babel-plugin-transform-remove-console": "^6.9.4", "babel-plugin-transform-remove-debugger": "^6.9.4", "babel-plugin-transform-remove-undefined": "^0.5.0", "babel-plugin-transform-simplify-comparison-operators": "^6.9.4", "babel-plugin-transform-undefined-to-void": "^6.9.4", "lodash": "^4.17.11" } }, "sha512-v4GL+kk0TfovbRIKZnC3HPbu2cAGmPAby7BsOmuPdMJfHV+4FVdsGXTH/OOGQRKYdjemBuL1+MsE6mobobhe9w=="],
 
     "bail": ["bail@2.0.2", "", {}, "sha512-0xO6mYd7JB2YesxDKplafRpsiOzPt9V02ddPCLbY1xYGPOX24NTyN50qnUxgCPcSoYMhKpAuBTjQoRZCAkUDRw=="],
 
@@ -1434,8 +1373,6 @@
     "esprima": ["esprima@2.7.3", "", { "bin": { "esparse": "./bin/esparse.js", "esvalidate": "./bin/esvalidate.js" } }, "sha512-OarPfz0lFCiW4/AV2Oy1Rp9qu0iusTKqykwTspGCZtPxmF81JR4MmIebvF1F9+UOKth2ZubLQ4XGGaU+hSn99A=="],
 
     "estree-walker": ["estree-walker@3.0.3", "", { "dependencies": { "@types/estree": "^1.0.0" } }, "sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g=="],
-
-    "esutils": ["esutils@2.0.3", "", {}, "sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g=="],
 
     "eventemitter3": ["eventemitter3@5.0.4", "", {}, "sha512-mlsTRyGaPBjPedk6Bvw+aqbsXDtoAyAzm5MO7JgU+yVRyMQ5O8bD4Kcci7BS85f93veegeCPkL8R4GLClnjLFw=="],
 
@@ -1766,8 +1703,6 @@
     "lilconfig": ["lilconfig@3.1.3", "", {}, "sha512-/vlFKAoH5Cgt3Ie+JLhRbwOsCQePABiU3tJ1egGvyQ+33R/vcwM2Zl2QR/LzjsBeItPt3oSVXapn+m4nQDvpzw=="],
 
     "locate-path": ["locate-path@5.0.0", "", { "dependencies": { "p-locate": "^4.1.0" } }, "sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g=="],
-
-    "lodash": ["lodash@4.17.23", "", {}, "sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w=="],
 
     "lodash.memoize": ["lodash.memoize@4.1.2", "", {}, "sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag=="],
 

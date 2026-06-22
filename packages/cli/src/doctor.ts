@@ -408,6 +408,9 @@ export async function runDoctor(cwd?: string): Promise<number> {
  * CLI entry point for the doctor command.
  * Runs the diagnostic scan on the current working directory and exits the process
  * with the appropriate code.
+ *
+ * @returns A promise that does not resolve normally; the process exits with code
+ *   0 (no errors) or 1 (removed-package errors found).
  */
 export async function doctor(): Promise<void> {
     const code = await runDoctor(process.cwd());
