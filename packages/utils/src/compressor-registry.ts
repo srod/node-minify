@@ -31,7 +31,7 @@ export interface CompressorEntry {
 
 /**
  * Static registry of all compressors in node-minify v11.
- * Covers 21 compressors across JS, CSS, HTML, JSON, and image types.
+ * Covers 22 compressors across JS, CSS, HTML, JSON, image, and passthrough use cases.
  */
 export const COMPRESSOR_REGISTRY = [
     // Recommended (9)
@@ -126,12 +126,18 @@ export const COMPRESSOR_REGISTRY = [
         packageName: "@node-minify/html-minifier",
         notes: "HTML minification",
     },
-    // Legacy (1)
+    // Legacy (2)
     {
         name: "jsonminify",
         status: "legacy",
         packageName: "@node-minify/jsonminify",
         notes: "JSON minification",
+    },
+    {
+        name: "no-compress",
+        status: "legacy",
+        packageName: "@node-minify/no-compress",
+        notes: "Passthrough compressor used for concatenation and unknown types",
     },
     // Removed (5)
     {

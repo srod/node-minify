@@ -7,8 +7,8 @@ import {
 } from "../src/compressor-registry.ts";
 
 describe("COMPRESSOR_REGISTRY", () => {
-    test("contains exactly 21 compressors", () => {
-        expect(COMPRESSOR_REGISTRY).toHaveLength(21);
+    test("contains exactly 22 compressors", () => {
+        expect(COMPRESSOR_REGISTRY).toHaveLength(22);
     });
 
     test("has 9 recommended compressors", () => {
@@ -21,9 +21,9 @@ describe("COMPRESSOR_REGISTRY", () => {
         expect(supported).toHaveLength(6);
     });
 
-    test("has 1 legacy compressor", () => {
+    test("has 2 legacy compressors", () => {
         const legacy = getCompressorsByStatus("legacy");
-        expect(legacy).toHaveLength(1);
+        expect(legacy).toHaveLength(2);
     });
 
     test("has 5 removed compressors", () => {
@@ -90,8 +90,10 @@ describe("getCompressorsByStatus", () => {
 
     test("returns legacy compressor", () => {
         const legacy = getCompressorsByStatus("legacy");
-        expect(legacy).toHaveLength(1);
-        expect(legacy[0]?.name).toBe("jsonminify");
+        expect(legacy).toHaveLength(2);
+        const names = legacy.map((entry) => entry.name);
+        expect(names).toContain("jsonminify");
+        expect(names).toContain("no-compress");
     });
 
     test("returns all removed compressors", () => {
@@ -140,6 +142,12 @@ describe("getCompressorEntry", () => {
         expect(entry).toBeDefined();
         expect(entry?.status).toBe("legacy");
     });
+
+    test("returns entry for no-compress", () => {
+        const entry = getCompressorEntry("no-compress");
+        expect(entry).toBeDefined();
+        expect(entry?.status).toBe("legacy");
+    });
 });
 
 describe("isRemovedCompressor", () => {
@@ -164,6 +172,7 @@ describe("isRemovedCompressor", () => {
 
     test("returns false for legacy compressor", () => {
         expect(isRemovedCompressor("jsonminify")).toBe(false);
+        expect(isRemovedCompressor("no-compress")).toBe(false);
     });
 
     test("returns false for non-existent compressor", () => {
