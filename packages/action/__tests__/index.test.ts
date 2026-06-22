@@ -38,6 +38,12 @@ describe("chunkArray", () => {
         expect(result).toEqual([[1], [2], [3]]);
     });
 
+    test("throws for a non-positive or non-integer size", () => {
+        expect(() => chunkArray([1, 2], 0)).toThrow(TypeError);
+        expect(() => chunkArray([1, 2], -2)).toThrow("positive integer");
+        expect(() => chunkArray([1, 2], 1.5)).toThrow("positive integer");
+    });
+
     test("preserves type with generic", () => {
         const result = chunkArray(["a", "b", "c", "d"], 2);
         expect(result).toEqual([
