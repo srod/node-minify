@@ -6,7 +6,7 @@
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import { ensureStringContent, wrapMinificationError } from "@node-minify/utils";
-import { compiler as Compiler } from "google-closure-compiler";
+import googleClosureCompiler from "google-closure-compiler";
 
 // the allowed flags, taken from https://github.com/google/closure-compiler/wiki/Flags-and-Options
 const allowedFlags = [
@@ -45,11 +45,18 @@ export async function gcc({
     const contentStr = ensureStringContent(content, "google-closure-compiler");
 
     const flags = applyOptions({}, settings?.options ?? {});
+    const maxBuffer = settings?.buffer;
     const timeout = settings?.timeout;
     const silence = settings?.silence ?? false;
 
     try {
-        const result = await runCompiler(flags, contentStr, timeout, silence);
+        const result = await runCompiler(
+            flags,
+            contentStr,
+            maxBuffer,
+            timeout,
+            silence
+        );
         return { code: result };
     } catch (error) {
         throw wrapMinificationError("google-closure-compiler", error);
@@ -61,6 +68,7 @@ export async function gcc({
  *
  * @param flags - Compiler flags object (e.g. `{ compilation_level: "SIMPLE" }`)
  * @param source - JavaScript source code to compile
+ * @param maxBuffer - Maximum combined stdout/stderr buffer per stream in bytes
  * @param timeout - Optional timeout in milliseconds; kills the compiler process if exceeded
  * @param silence - When true, suppresses stderr warnings in error messages
  * @returns The compiled output string
@@ -68,32 +76,65 @@ export async function gcc({
 function runCompiler(
     flags: Record<string, string | boolean | Record<string, unknown>>,
     source: string,
+    maxBuffer = 1024 * 1024,
     timeout?: number,
     silence?: boolean
 ): Promise<string> {
     return new Promise((resolve, reject) => {
+        let stdoutLength = 0;
+        let stderrLength = 0;
+        let settled = false;
         let timeoutId: ReturnType<typeof setTimeout> | undefined;
-        let killed = false;
+        const { compiler: Compiler } = googleClosureCompiler;
 
-        const compiler = new Compiler(flags);
-        const childProcess = compiler.run(
+        const clearTimer = () => {
+            if (timeoutId !== undefined) {
+                clearTimeout(timeoutId);
+            }
+        };
+        const resolveOnce = (value: string) => {
+            if (settled) return;
+            settled = true;
+            clearTimer();
+            resolve(value);
+        };
+        const rejectOnce = (error: Error) => {
+            if (settled) return;
+            settled = true;
+            clearTimer();
+            reject(error);
+        };
+        const trackChunk = (
+            chunk: Buffer | string,
+            stream: "stdout" | "stderr"
+        ) => {
+            const size = Buffer.isBuffer(chunk)
+                ? chunk.length
+                : Buffer.byteLength(chunk);
+
+            if (stream === "stdout") {
+                stdoutLength += size;
+                if (maxBuffer > 0 && stdoutLength > maxBuffer) {
+                    childProcess.kill();
+                    rejectOnce(new Error("stdout maxBuffer exceeded"));
+                }
+                return;
+            }
+
+            stderrLength += size;
+            if (maxBuffer > 0 && stderrLength > maxBuffer) {
+                childProcess.kill();
+                rejectOnce(new Error("stderr maxBuffer exceeded"));
+            }
+        };
+
+        const childProcess = new Compiler(flags).run(
             (exitCode: number, stdOut: string, stdErr: string) => {
-                if (timeoutId !== undefined) {
-                    clearTimeout(timeoutId);
-                }
-
-                if (killed) {
-                    reject(
-                        new Error(
-                            `Google Closure Compiler timed out after ${String(timeout)}ms`
-                        )
-                    );
-                    return;
-                }
+                if (settled) return;
 
                 if (exitCode !== 0) {
                     const detail = silence ? "" : `: ${stdErr}`;
-                    reject(
+                    rejectOnce(
                         new Error(
                             `Google Closure Compiler exited with code ${exitCode}${detail}`
                         )
@@ -102,7 +143,7 @@ function runCompiler(
                 }
 
                 if (typeof stdOut !== "string" || stdOut.length === 0) {
-                    reject(
+                    rejectOnce(
                         new Error(
                             "Google Closure Compiler failed: empty result"
                         )
@@ -110,14 +151,35 @@ function runCompiler(
                     return;
                 }
 
-                resolve(stdOut);
+                resolveOnce(stdOut);
             }
         );
 
+        childProcess.on("error", (error) => {
+            rejectOnce(
+                new Error(`Google Closure Compiler process error: ${error.message}`)
+            );
+        });
+        childProcess.stdout?.on("data", (chunk) => {
+            trackChunk(chunk, "stdout");
+        });
+        childProcess.stderr?.on("data", (chunk) => {
+            trackChunk(chunk, "stderr");
+        });
+        childProcess.stdin?.on("error", (error) => {
+            rejectOnce(
+                new Error(`Google Closure Compiler stdin error: ${error.message}`)
+            );
+        });
+
         if (timeout !== undefined && timeout > 0) {
             timeoutId = setTimeout(() => {
-                killed = true;
                 childProcess.kill();
+                rejectOnce(
+                    new Error(
+                        `Google Closure Compiler timed out after ${String(timeout)}ms`
+                    )
+                );
             }, timeout);
         }
 

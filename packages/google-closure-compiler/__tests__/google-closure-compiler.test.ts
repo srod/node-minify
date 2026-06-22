@@ -4,6 +4,9 @@
  * MIT Licensed
  */
 
+import { execFileSync } from "node:child_process";
+import path from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import type { Settings } from "@node-minify/types";
 import { describe, expect, test } from "vitest";
 import { filesJS } from "../../../tests/files-path.ts";
@@ -11,6 +14,9 @@ import { runOneTest, tests } from "../../../tests/fixtures.ts";
 import { minify } from "../../core/src/index.ts";
 import { gcc } from "../src/index.ts";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const packageRoot = path.resolve(__dirname, "..");
+const distEntry = path.join(packageRoot, "dist", "index.js");
 const compressorLabel = "google-closure-compiler";
 const compressor = gcc;
 
@@ -90,6 +96,37 @@ describe("Package: google-closure-compiler", async () => {
         expect(typeof result.code).toBe("string");
         expect(result.code.length).toBeGreaterThan(0);
     });
+
+    test("should load the built package in Node", () => {
+        execFileSync("bun", ["run", "build"], {
+            cwd: packageRoot,
+            stdio: "pipe",
+        });
+
+        expect(() => {
+            execFileSync(
+                "node",
+                [
+                    "--input-type=module",
+                    "-e",
+                    `await import(${JSON.stringify(pathToFileURL(distEntry).href)});`,
+                ],
+                {
+                    cwd: packageRoot,
+                    stdio: "pipe",
+                }
+            );
+        }).not.toThrow();
+    }, 60000);
+
+    test("should honor the configured buffer limit", async () => {
+        await expect(
+            gcc({
+                settings: { compressor: gcc, buffer: 1 },
+                content: "var x = 1; var y = 2;",
+            })
+        ).rejects.toThrow("maxBuffer exceeded");
+    }, 60000);
 
     test("should throw on invalid JavaScript", async () => {
         await expect(

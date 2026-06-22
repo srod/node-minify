@@ -14,4 +14,10 @@ declare module "google-closure-compiler" {
             callback: (exitCode: number, stdOut: string, stdErr: string) => void
         ): ChildProcess;
     }
+
+    const googleClosureCompiler: {
+        compiler: typeof compiler;
+    };
+
+    export default googleClosureCompiler;
 }
