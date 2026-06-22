@@ -6,54 +6,60 @@ set -euo pipefail
 REMOVED_PACKAGES="@node-minify/babel-minify|@node-minify/uglify-es|@node-minify/yui|@node-minify/sqwish|@node-minify/crass|@node-minify/run"
 REMOVED_NAMES="babel-minify|uglify-es|yui|sqwish|crass"
 
-# Exclusions: changelogs, deps, plans, migration guides (which intentionally name
-# removed packages), changesets, the registry data, tests, and bundled dist output.
-#
-# Each pattern is anchored to the PATH only — `^[^:]*` consumes everything before
-# the first `:` in grep's `path:line:text` output — so a removed name mentioned
-# inside a matched line of code can never mask a real violation by accident.
-exclude() {
-  grep -vE "^[^:]*CHANGELOG" \
-    | grep -vE "^[^:]*node_modules" \
-    | grep -vE "^[^:]*docs/plans" \
-    | grep -vE "^[^:]*v11-migration" \
-    | grep -vE "^[^:]*Migrate\.md" \
-    | grep -vE "^[^:]*\.changeset" \
-    | grep -vE "^[^:]*compressor-registry" \
-    | grep -vE "^[^:]*__tests__" \
-    | grep -vE "^[^:]*/dist/"
-}
+# Path-based exclusions applied natively by grep (--exclude-dir / --exclude): grep
+# never descends into these directories and never opens these files. Filtering by
+# path instead of by matched line means a removed name mentioned *inside* a line
+# of code (e.g. a comment referencing node_modules or CHANGELOG) can never mask a
+# real violation. These locations intentionally name removed packages: changelogs,
+# deps, plans, migration guides, changesets, the registry data, tests, and bundled
+# dist output.
+EXCLUDE_PATHS=(
+  --exclude-dir="node_modules"
+  --exclude-dir="dist"
+  --exclude-dir="__tests__"
+  --exclude-dir=".changeset"
+  --exclude-dir="plans"
+  --exclude="CHANGELOG*"
+  --exclude="Migrate.md"
+  --exclude="v11-migration*"
+  --exclude="compressor-registry*"
+)
+
+SCOPED_INCLUDES=(
+  --include="*.ts" --include="*.js" --include="*.json"
+  --include="*.md" --include="*.mdx" --include="*.yml" --include="*.yaml"
+)
 
 # 1. Scoped @node-minify/<removed> across source, examples, the docs site, the
-#    Actions, the root README, and the shipped skill/agent docs — anywhere a real
-#    usage would live.
+#    Actions, the root README/manifest, and the shipped skill/agent docs — anywhere
+#    a real usage would live. Recursive directories honor EXCLUDE_PATHS; the
+#    explicitly named files are hand-picked and always scanned.
 SCOPED_MATCHES=$(grep -rnE "$REMOVED_PACKAGES" \
-  --include="*.ts" --include="*.js" --include="*.json" \
-  --include="*.md" --include="*.mdx" --include="*.yml" --include="*.yaml" \
+  "${SCOPED_INCLUDES[@]}" "${EXCLUDE_PATHS[@]}" \
   packages/ examples/ docs/src/ .github/ \
   action.yml Readme.md SKILL.md AGENTS.md package.json \
-  2>/dev/null | exclude || true)
+  2>/dev/null || true)
 
 # 2. Bare removed-compressor identifiers used as an Action/workflow `compressor:`
 #    value. Anchored to `compressor:` so prose and migration tables don't trip it.
 YAML_MATCHES=$(grep -rnE "compressor:[[:space:]]*['\"]?($REMOVED_NAMES)\b" \
+  --exclude-dir="node_modules" \
   action.yml .github/ packages/action/action.yml \
-  2>/dev/null | grep -vE "^[^:]*node_modules" || true)
+  2>/dev/null || true)
 
 # 3. Bare removed-compressor names anywhere in shipped, must-stay-clean surfaces:
 #    CLI/Action source, the Action agent notes, the composite actions, and the
 #    root skill/agent files. These must never imply a removed compressor still
-#    works. Intentional "Removed (v11) ..." migration notes are allowed via the
-#    line filter; the removal detector (doctor.ts) names them by design and is
-#    skipped. Migration-mapping docs (docs/site, action READMEs) keep the bare
-#    names with replacements on purpose and stay on the scoped scan only.
+#    works. The removal detector (doctor.ts) names them by design and is skipped.
+#    Intentional "Removed (v11) ..." migration notes are allowed via the trailing
+#    content filter; migration-mapping docs (docs site, action READMEs) keep the
+#    bare names with replacements on purpose and stay on the scoped scan only.
 BARE_MATCHES=$(grep -rnE "\b($REMOVED_NAMES)\b" \
   --include="*.ts" --include="*.js" --include="*.md" \
+  "${EXCLUDE_PATHS[@]}" --exclude="doctor.ts" \
   packages/cli/src/ packages/action/src/ packages/action/AGENTS.md \
   .github/actions/ SKILL.md AGENTS.md \
   2>/dev/null \
-  | exclude \
-  | grep -vE "^[^:]*doctor\.ts" \
   | grep -viE "removed|use instead" || true)
 
 MATCHES=$(printf '%s\n%s\n%s' "$SCOPED_MATCHES" "$YAML_MATCHES" "$BARE_MATCHES" \
