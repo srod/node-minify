@@ -160,6 +160,80 @@ describe("Image compressors", () => {
     });
 });
 
+describe("Removed compressors", () => {
+    test("should fail-fast for removed compressor: babel-minify", async () => {
+        const settings: SettingsWithCompressor = {
+            compressor: "babel-minify",
+            input: filesJS.oneFile,
+            output: filesJS.fileJSOut,
+            silence: true,
+        };
+        await expect(cli.run(settings)).rejects.toThrow(
+            "Compressor 'babel-minify' was removed in v11. Use 'terser' instead."
+        );
+    });
+
+    test("should fail-fast for removed compressor: uglify-es", async () => {
+        const settings: SettingsWithCompressor = {
+            compressor: "uglify-es",
+            input: filesJS.oneFile,
+            output: filesJS.fileJSOut,
+            silence: true,
+        };
+        await expect(cli.run(settings)).rejects.toThrow(
+            "Compressor 'uglify-es' was removed in v11. Use 'terser' instead."
+        );
+    });
+
+    test("should fail-fast for removed compressor: yui", async () => {
+        const settings: SettingsWithCompressor = {
+            compressor: "yui",
+            input: filesJS.oneFile,
+            output: filesJS.fileJSOut,
+            silence: true,
+        };
+        await expect(cli.run(settings)).rejects.toThrow(
+            "Compressor 'yui' was removed in v11. Use 'terser or lightningcss' instead."
+        );
+    });
+
+    test("should fail-fast for removed compressor: sqwish", async () => {
+        const settings: SettingsWithCompressor = {
+            compressor: "sqwish",
+            input: filesCSS.fileCSS,
+            output: filesCSS.fileCSSOut,
+            silence: true,
+        };
+        await expect(cli.run(settings)).rejects.toThrow(
+            "Compressor 'sqwish' was removed in v11. Use 'lightningcss' instead."
+        );
+    });
+
+    test("should fail-fast for removed compressor: crass", async () => {
+        const settings: SettingsWithCompressor = {
+            compressor: "crass",
+            input: filesCSS.fileCSS,
+            output: filesCSS.fileCSSOut,
+            silence: true,
+        };
+        await expect(cli.run(settings)).rejects.toThrow(
+            "Compressor 'crass' was removed in v11. Use 'lightningcss' instead."
+        );
+    });
+
+    test("should fail-fast for removed compressor by scoped package name", async () => {
+        const settings: SettingsWithCompressor = {
+            compressor: "@node-minify/yui",
+            input: filesJS.oneFile,
+            output: filesJS.fileJSOut,
+            silence: true,
+        };
+        await expect(cli.run(settings)).rejects.toThrow(
+            "Compressor '@node-minify/yui' was removed in v11. Use 'terser or lightningcss' instead."
+        );
+    });
+});
+
 describe("cli error", () => {
     beforeAll(() => {
         const spy = vi.spyOn(childProcess, "spawn");

@@ -3,6 +3,8 @@ title: "terser"
 description: "terser for node-minify"
 ---
 
+**Status:** Recommended
+
 `terser` can compress only JavaScript files.
 
 [https://github.com/terser-js/terser](https://github.com/terser-js/terser)

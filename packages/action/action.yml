@@ -34,11 +34,11 @@ inputs:
     description: |
       Compressor to use.
       Recommended: terser, esbuild, swc, oxc (fast, no Java).
-      Note: 'gcc' and 'yui' require Java (pre-installed on GitHub runners).
+      Note: 'gcc' may invoke Java (pre-installed on GitHub runners).
     required: false
     default: "terser"
   type:
-    description: "File type: js or css (required for esbuild, yui)"
+    description: "File type: js or css (required for esbuild)"
     required: false
   options:
     description: "Compressor-specific options (JSON string)"

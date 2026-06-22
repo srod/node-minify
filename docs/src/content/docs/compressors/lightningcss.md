@@ -3,6 +3,8 @@ title: "lightningcss"
 description: "lightningcss for node-minify"
 ---
 
+**Status:** Recommended
+
 `lightningcss` can compress only CSS files. It's extremely fast as it's written in Rust.
 
 [https://github.com/parcel-bundler/lightningcss](https://github.com/parcel-bundler/lightningcss)

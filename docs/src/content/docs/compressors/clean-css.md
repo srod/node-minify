@@ -3,6 +3,8 @@ title: "clean-css"
 description: "clean-css for node-minify"
 ---
 
+**Status:** Supported
+
 `clean-css` can compress only CSS files.
 
 [https://github.com/clean-css/clean-css](https://github.com/clean-css/clean-css)

@@ -21,7 +21,7 @@ describe("runWarmup", () => {
 
         const { runWarmup } = await import("../src/runner.ts");
 
-        await runWarmup(
+        const warmupFiles = await runWarmup(
             "fixture.js",
             vi.fn() as never,
             "fixture.js.warmup.tmp",
@@ -36,5 +36,37 @@ describe("runWarmup", () => {
         );
 
         expect(new Set(outputs).size).toBe(2);
+        // The returned paths are exactly the outputs passed to minify.
+        expect(warmupFiles).toEqual(outputs);
+    });
+
+    test("tracks partial warmup paths for cleanup when minify throws mid-loop", async () => {
+        const minify = vi
+            .fn()
+            .mockResolvedValueOnce("ok")
+            .mockRejectedValueOnce(new Error("boom"));
+
+        vi.doMock("@node-minify/core", () => ({ minify }));
+
+        const { runWarmup } = await import("../src/runner.ts");
+
+        const collected: string[] = [];
+        await expect(
+            runWarmup(
+                "fixture.js",
+                vi.fn() as never,
+                "fixture.js.warmup.tmp",
+                3,
+                {},
+                collected
+            )
+        ).rejects.toThrow("boom");
+
+        // Both attempted iterations (the successful first and the failing
+        // second) registered their paths so the caller can delete them.
+        expect(collected).toEqual([
+            "fixture.js.warmup.tmp.1",
+            "fixture.js.warmup.tmp.2",
+        ]);
     });
 });

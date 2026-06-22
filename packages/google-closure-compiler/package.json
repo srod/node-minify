@@ -53,9 +53,8 @@
     "dev": "tsdown src/index.ts --watch"
   },
   "dependencies": {
-    "@node-minify/run": "workspace:*",
     "@node-minify/utils": "workspace:*",
-    "google-closure-compiler-java": "20240317.0.0"
+    "google-closure-compiler": "20240317.0.0"
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*"

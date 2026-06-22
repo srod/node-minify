@@ -291,7 +291,6 @@ Compare multiple compressors to find the best one for your project:
 
 The `type` parameter is **required** for:
 - `esbuild` (specify `js` or `css`)
-- `yui` (specify `js` or `css`)
 
 ### Available Compressors
 
@@ -491,12 +490,12 @@ Enable `report-pr-comment` to automatically post compression results as a commen
 
 Requires `github-token` to be set.
 
-## Deprecation Notices
+## Removed Compressors
 
-The following compressors are deprecated and will emit warnings:
+These compressors were removed in v11. The Action fails early if one is requested — use the replacement instead:
 
-| Deprecated | Use Instead |
-|------------|-------------|
+| Removed | Use Instead |
+|---------|-------------|
 | `babel-minify` | `terser` |
 | `uglify-es` | `terser` |
 | `yui` | `terser` (JS) or `lightningcss` (CSS) |

@@ -3,6 +3,8 @@ title: "oxc"
 description: "oxc for node-minify"
 ---
 
+**Status:** Recommended
+
 `oxc` can compress only JavaScript files. It's extremely fast as it's written in Rust.
 
 [https://github.com/oxc-project/oxc](https://github.com/oxc-project/oxc)

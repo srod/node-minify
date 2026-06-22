@@ -3,6 +3,10 @@ title: "GCC"
 description: "Google Closure Compiler for node-minify"
 ---
 
+**Status:** Supported
+
+**Note:** Starting with v11, this package uses the `google-closure-compiler` npm package JS API instead of a custom Java wrapper. Java may still be used internally by the compiler.
+
 `Google Closure Compiler` can compress only JavaScript files.
 
 [https://developers.google.com/closure/compiler/](https://developers.google.com/closure/compiler/)

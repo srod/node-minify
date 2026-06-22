@@ -4,28 +4,19 @@
  * MIT Licensed
  */
 
+import { execFileSync } from "node:child_process";
+import path from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import type { Settings } from "@node-minify/types";
-import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { filesJS } from "../../../tests/files-path.ts";
 import { runOneTest, tests } from "../../../tests/fixtures.ts";
 import { minify } from "../../core/src/index.ts";
-import { gcc } from "../src/index.ts";
+import { applyOptions, gcc } from "../src/index.ts";
 
-const mocks = vi.hoisted(() => ({
-    runCommandLine: vi.fn(),
-    original: null as typeof import("@node-minify/run").runCommandLine | null,
-}));
-
-vi.mock("@node-minify/run", async (importOriginal) => {
-    const actual = await importOriginal<typeof import("@node-minify/run")>();
-    mocks.original = actual.runCommandLine;
-    mocks.runCommandLine.mockImplementation(actual.runCommandLine);
-    return {
-        ...actual,
-        runCommandLine: mocks.runCommandLine,
-    };
-});
-
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const packageRoot = path.resolve(__dirname, "..");
+const distEntry = path.join(packageRoot, "dist", "index.js");
 const compressorLabel = "google-closure-compiler";
 const compressor = gcc;
 
@@ -95,26 +86,142 @@ describe("Package: google-closure-compiler", async () => {
         expect(result).not.toBeNull();
     });
 
-    describe("Error handling", () => {
-        beforeAll(() => {
-            mocks.runCommandLine.mockResolvedValue(undefined);
+    test("normalizes object flag values to KEY=value entries", () => {
+        // An object define must become ["DEBUG=false"], not "[object Object]".
+        expect(applyOptions({}, { define: { DEBUG: false } })).toEqual({
+            define: ["DEBUG=false"],
         });
-
-        afterAll(() => {
-            if (mocks.original) {
-                mocks.runCommandLine.mockImplementation(mocks.original);
-            }
+        // Strings, booleans, and string arrays pass through unchanged.
+        expect(
+            applyOptions(
+                {},
+                {
+                    compilation_level: "SIMPLE",
+                    rewrite_polyfills: true,
+                    define: ["A=1", "B=2"],
+                }
+            )
+        ).toEqual({
+            compilation_level: "SIMPLE",
+            rewrite_polyfills: true,
+            define: ["A=1", "B=2"],
         });
+        // Unknown flags are dropped.
+        expect(applyOptions({}, { not_a_flag: "x" })).toEqual({});
+    });
 
-        test("should throw when gcc returns empty result", async () => {
-            const settings: Settings = {
-                compressor: gcc,
-                input: filesJS.oneFile,
-                output: filesJS.fileJSOut,
-            };
-            await expect(
-                gcc({ settings, content: "var x = 1;" })
-            ).rejects.toThrow("Google Closure Compiler failed: empty result");
+    test("quotes string defines so they are not coerced to boolean/number", () => {
+        // A string value must stay a string literal: { NAME: "false" } must not
+        // define the boolean false, and { VERSION: "5" } must not define 5.
+        expect(
+            applyOptions({}, { define: { NAME: "false", VERSION: "5" } })
+        ).toEqual({
+            define: ['NAME="false"', 'VERSION="5"'],
+        });
+        // Numbers stay unquoted; mixed types are each handled by their kind.
+        expect(
+            applyOptions({}, { define: { LEVEL: 5, DEBUG: true, TAG: "rc" } })
+        ).toEqual({
+            define: ["LEVEL=5", "DEBUG=true", 'TAG="rc"'],
         });
     });
+
+    test("skips null and nested object/array define values", () => {
+        // Only string/number/boolean entries are emitted; the rest are dropped.
+        expect(
+            applyOptions(
+                {},
+                {
+                    define: {
+                        KEEP: "x",
+                        NIL: null,
+                        NESTED: { a: 1 },
+                        LIST: [1, 2],
+                    },
+                }
+            )
+        ).toEqual({ define: ['KEEP="x"'] });
+        // An object with no usable entries drops the flag entirely.
+        expect(applyOptions({}, { define: { NIL: null } })).toEqual({});
+    });
+
+    test("drops flag values that are not string/boolean/array/object", () => {
+        // Array with non-string entries is not a valid repeated-flag list.
+        expect(applyOptions({}, { language_in: [1, 2] })).toEqual({});
+        // A bare number is neither a flag value nor a KEY=value object.
+        expect(applyOptions({}, { language_in: 5 })).toEqual({});
+        // null is dropped (typeof null === "object" but value === null).
+        expect(applyOptions({}, { language_in: null })).toEqual({});
+    });
+
+    test("should compress in-memory content", async (): Promise<void> => {
+        const result = await gcc({
+            settings: { compressor: gcc },
+            content: "var x = 1; var y = 2;",
+        });
+
+        expect(result.code).toBeDefined();
+        expect(typeof result.code).toBe("string");
+        expect(result.code.length).toBeGreaterThan(0);
+    });
+
+    test("should load the built package in Node", () => {
+        execFileSync("bun", ["run", "build"], {
+            cwd: packageRoot,
+            stdio: "pipe",
+        });
+
+        expect(() => {
+            execFileSync(
+                "node",
+                [
+                    "--input-type=module",
+                    "-e",
+                    `await import(${JSON.stringify(pathToFileURL(distEntry).href)});`,
+                ],
+                {
+                    cwd: packageRoot,
+                    stdio: "pipe",
+                }
+            );
+        }).not.toThrow();
+    }, 60000);
+
+    test("should honor the configured buffer limit", async () => {
+        await expect(
+            gcc({
+                settings: { compressor: gcc, buffer: 1 },
+                content: "var x = 1; var y = 2;",
+            })
+        ).rejects.toThrow("maxBuffer exceeded");
+    }, 60000);
+
+    test("should throw on invalid JavaScript", async () => {
+        await expect(
+            gcc({
+                settings: { compressor: gcc },
+                content: "function( {{{ invalid",
+            })
+        ).rejects.toThrow();
+    });
+
+    test("should timeout with very short timeout", async () => {
+        await expect(
+            gcc({
+                settings: { compressor: gcc, timeout: 1 },
+                content:
+                    "var x = 1; var y = 2; var z = 3; function foo() { return x + y + z; }",
+            })
+        ).rejects.toThrow("timed out");
+    }, 60000);
+
+    test("should suppress stderr details when silence is true", async () => {
+        const promise = gcc({
+            settings: { compressor: gcc, silence: true },
+            content: "function( {{{ invalid",
+        });
+        // Must reject; with silence the message keeps the exit code but drops stderr detail.
+        await expect(promise).rejects.toThrow("exited with code");
+        await expect(promise).rejects.not.toThrow("ERROR -");
+    }, 60000);
 });

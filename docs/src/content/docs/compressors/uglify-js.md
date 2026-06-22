@@ -3,6 +3,8 @@ title: "uglify-js"
 description: "uglify-js for node-minify"
 ---
 
+**Status:** Supported
+
 `uglify-js` can compress only JavaScript files.
 
 [https://github.com/mishoo/UglifyJS](https://github.com/mishoo/UglifyJS)

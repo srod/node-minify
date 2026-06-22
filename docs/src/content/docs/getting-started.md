@@ -125,28 +125,22 @@ const result = await minify({
 ### JavaScript
 
 ```js
-import { babelMinify } from '@node-minify/babel-minify';
 import { esbuild } from '@node-minify/esbuild';
 import { gcc } from '@node-minify/google-closure-compiler';
 import { oxc } from '@node-minify/oxc';
 import { swc } from '@node-minify/swc';
 import { terser } from '@node-minify/terser';
 import { uglifyJs } from '@node-minify/uglify-js';
-import { uglifyEs } from '@node-minify/uglify-es';
-import { yui } from '@node-minify/yui';
 ```
 
 ### CSS
 
 ```js
 import { cleanCss } from '@node-minify/clean-css';
-import { crass } from '@node-minify/crass';
 import { cssnano } from '@node-minify/cssnano';
 import { csso } from '@node-minify/csso';
 import { esbuild } from '@node-minify/esbuild';
 import { lightningCss } from '@node-minify/lightningcss';
-import { sqwish } from '@node-minify/sqwish';
-import { yui } from '@node-minify/yui'; // with type: 'css'
 ```
 
 ### HTML

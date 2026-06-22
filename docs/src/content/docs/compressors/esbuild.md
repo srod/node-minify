@@ -3,6 +3,8 @@ title: "esbuild"
 description: "esbuild for node-minify"
 ---
 
+**Status:** Recommended
+
 `esbuild` can compress both JavaScript and CSS files. It's extremely fast as it's written in Go.
 
 [https://github.com/evanw/esbuild](https://github.com/evanw/esbuild)

@@ -5,12 +5,6 @@
  */
 
 /**
- * The return type of a compressor function.
- * @deprecated Use `CompressorResult` instead. Will be removed in v11.
- */
-export type CompressorReturnType = string;
-
-/**
  * Supported image formats for image compression.
  */
 export type ImageFormat =
@@ -84,7 +78,7 @@ export type Compressor<TOptions extends CompressorOptions = CompressorOptions> =
     (args: MinifierOptions<TOptions>) => Promise<CompressorResult>;
 
 /**
- * File type for compressors that support multiple types (e.g., YUI).
+ * File type for compressors that support multiple types (e.g., esbuild).
  */
 export type FileType = "js" | "css";
 
@@ -173,7 +167,7 @@ export type Settings<TOptions extends CompressorOptions = CompressorOptions> = {
 
     /**
      * File type for compressors that support multiple types.
-     * Required for YUI compressor.
+     * Required for compressors like esbuild that handle both JS and CSS.
      */
     type?: FileType;
 
@@ -252,11 +246,3 @@ export type Result = {
      */
     sizeGzip: string;
 };
-
-/**
- * Type alias for user convenience.
- * @deprecated Use `Settings` instead. Will be removed in v11.
- */
-export type MinifyOptions<
-    TOptions extends CompressorOptions = CompressorOptions,
-> = Settings<TOptions>;

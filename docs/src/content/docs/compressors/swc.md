@@ -3,6 +3,8 @@ title: "swc"
 description: "swc for node-minify"
 ---
 
+**Status:** Recommended
+
 `swc` can compress only JavaScript files. It's extremely fast as it's written in Rust.
 
 [https://github.com/swc-project/swc](https://github.com/swc-project/swc)

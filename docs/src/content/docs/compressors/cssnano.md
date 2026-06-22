@@ -3,6 +3,8 @@ title: "cssnano"
 description: "cssnano for node-minify"
 ---
 
+**Status:** Recommended
+
 `cssnano` can compress only CSS files.
 
 [https://github.com/cssnano/cssnano](https://github.com/cssnano/cssnano)

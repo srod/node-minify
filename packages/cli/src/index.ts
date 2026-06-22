@@ -8,7 +8,7 @@
  * Module dependencies.
  */
 import type { Result, Settings } from "@node-minify/types";
-import { resolveCompressor } from "@node-minify/utils";
+import { getCompressorEntry, resolveCompressor } from "@node-minify/utils";
 import chalk from "chalk";
 import { compress } from "./compress.ts";
 import { AVAILABLE_MINIFIER } from "./config.ts";
@@ -35,8 +35,19 @@ let silence = false;
  * @throws Error if the specified compressor is not found
  * @throws Error if the compressor implementation is missing or not a function
  * @throws Error if the compressor only supports CSS but a non-`css` type is provided
+ * @throws Error if the compressor has been removed
  */
 async function runOne(cli: SettingsWithCompressor): Promise<Result> {
+    // Fail-fast for removed compressors
+    const removedEntry = getCompressorEntry(cli.compressor);
+    if (removedEntry?.status === "removed") {
+        const replacement =
+            removedEntry.replacement ?? "a supported compressor";
+        throw new Error(
+            `Compressor '${cli.compressor}' was removed in v11. Use '${replacement}' instead.`
+        );
+    }
+
     const resolution = await resolveCompressor(cli.compressor);
     const { compressor: minifierImplementation, label: compressorLabel } =
         resolution;

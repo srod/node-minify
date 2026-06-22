@@ -3,6 +3,8 @@ title: "svgo"
 description: "svgo for node-minify"
 ---
 
+**Status:** Recommended
+
 `svgo` optimizes SVG files using [SVGO](https://github.com/svg/svgo).
 
 ## Installation

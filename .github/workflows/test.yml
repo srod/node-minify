@@ -45,6 +45,9 @@ jobs:
       - name: Run tests
         run: bun run ci
 
+      - name: Guard - no removed compressor references
+        run: bash scripts/ci-guard-removed-compressors.sh
+
       - name: Upload coverage to Codecov
         if: runner.os == 'Linux'
         uses: codecov/codecov-action@v5

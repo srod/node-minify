@@ -23,9 +23,6 @@ It allows you to compress JavaScript, CSS, HTML, and image files.
 - [swc](https://node-minify.2clics.net/compressors/swc)
 - [terser](https://node-minify.2clics.net/compressors/terser)
 - [uglify-js](https://node-minify.2clics.net/compressors/uglify-js)
-- [babel-minify](https://node-minify.2clics.net/compressors/babel-minify) _(deprecated)_
-- [uglify-es](https://node-minify.2clics.net/compressors/uglify-es) _(deprecated)_
-- [YUI Compressor](https://node-minify.2clics.net/compressors/yui) _(deprecated)_
 
 **CSS:**
 
@@ -34,9 +31,6 @@ It allows you to compress JavaScript, CSS, HTML, and image files.
 - [CSSO](https://node-minify.2clics.net/compressors/csso)
 - [esbuild](https://node-minify.2clics.net/compressors/esbuild)
 - [lightningcss](https://node-minify.2clics.net/compressors/lightningcss)
-- [crass](https://node-minify.2clics.net/compressors/crass) _(deprecated)_
-- [sqwish](https://node-minify.2clics.net/compressors/sqwish) _(deprecated)_
-- [YUI Compressor](https://node-minify.2clics.net/compressors/yui) _(deprecated)_
 
 **HTML:**
 

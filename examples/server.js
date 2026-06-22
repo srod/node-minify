@@ -1,7 +1,5 @@
-import { babelMinify } from "@node-minify/babel-minify";
 import { cleanCss } from "@node-minify/clean-css";
 import { minify } from "@node-minify/core";
-import { crass } from "@node-minify/crass";
 import { cssnano } from "@node-minify/cssnano";
 import { csso } from "@node-minify/csso";
 import { esbuild } from "@node-minify/esbuild";
@@ -13,13 +11,10 @@ import { lightningCss } from "@node-minify/lightningcss";
 import { noCompress } from "@node-minify/no-compress";
 import { oxc } from "@node-minify/oxc";
 import { sharp } from "@node-minify/sharp";
-import { sqwish } from "@node-minify/sqwish";
 import { svgo } from "@node-minify/svgo";
 import { swc } from "@node-minify/swc";
 import { terser } from "@node-minify/terser";
-import { uglifyEs } from "@node-minify/uglify-es";
 import { uglifyJs } from "@node-minify/uglify-js";
-import { yui } from "@node-minify/yui";
 
 // Helper to run examples and log results
 const run = async (name, fn) => {
@@ -166,85 +161,6 @@ await run("UglifyJS - wildcards", () =>
     })
 );
 
-// UglifyES - wildcards
-await run("UglifyES - wildcards", () =>
-    minify({
-        compressor: uglifyEs,
-        input: "public/js/**/*.js",
-        output: "public/js-dist/uglifyes-wildcards.js",
-    })
-);
-
-// Babel Minify - ES6 wildcards
-await run("Babel Minify - ES6 wildcards", () =>
-    minify({
-        compressor: babelMinify,
-        input: "public/js-es6/**/*.js",
-        output: "public/js-dist/babel-minify-es6.js",
-    })
-);
-
-// Babel Minify - ES6 with $1 pattern
-await run("Babel Minify - ES6 $1 pattern", () =>
-    minify({
-        compressor: babelMinify,
-        input: "public/js-es6/**/*.js",
-        output: "public/js-dist/babel-minify-$1.js",
-    })
-);
-
-// YUI - JS single file
-await run("YUI - JS single file", () =>
-    minify({
-        compressor: yui,
-        input: "public/js/sample.js",
-        output: "public/js-dist/yui-onefile.js",
-        type: "js",
-    })
-);
-
-// YUI - JS concat
-await run("YUI - JS concat", () =>
-    minify({
-        compressor: yui,
-        input: ["public/js/sample.js", "public/js/sample2.js"],
-        output: "public/js-dist/yui-publicfolder-concat.js",
-        type: "js",
-    })
-);
-
-// YUI - JS wildcards
-await run("YUI - JS wildcards", () =>
-    minify({
-        compressor: yui,
-        input: "public/js/**/*.js",
-        output: "public/js-dist/yui-wildcards.js",
-        type: "js",
-    })
-);
-
-// YUI - JS with publicFolder
-await run("YUI - JS publicFolder", () =>
-    minify({
-        compressor: yui,
-        publicFolder: "public/js/",
-        input: "sample.js",
-        output: "public/js-dist/yui-publicfolder.js",
-        type: "js",
-    })
-);
-
-// YUI - JS with publicFolder and array
-await run("YUI - JS publicFolder array", () =>
-    minify({
-        compressor: yui,
-        publicFolder: "public/js/",
-        input: ["sample.js", "sample2.js"],
-        output: "public/js-dist/yui-publicfolder-concat.js",
-        type: "js",
-    })
-);
-
 // No compress - concat
 await run("No Compress - concat", () =>
     minify({
@@ -266,34 +182,6 @@ await run("No Compress - wildcards", () =>
 // ============================================
 // CSS Examples
 // ============================================
-
-// YUI - CSS single file
-await run("YUI - CSS single file", () =>
-    minify({
-        compressor: yui,
-        input: "public/css/sample.css",
-        output: "public/css-dist/yui-onefile.css",
-        type: "css",
-    })
-);
-
-// Sqwish - concat
-await run("Sqwish - concat", () =>
-    minify({
-        compressor: sqwish,
-        input: ["public/css/sample.css", "public/css/sample2.css"],
-        output: "public/css-dist/sqwish-concat.css",
-    })
-);
-
-// Crass - concat
-await run("Crass - concat", () =>
-    minify({
-        compressor: crass,
-        input: ["public/css/sample.css", "public/css/sample2.css"],
-        output: "public/css-dist/crass-concat.css",
-    })
-);
 
 // cssnano - concat
 await run("cssnano - concat", () =>
