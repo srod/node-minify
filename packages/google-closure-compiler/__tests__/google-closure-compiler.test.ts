@@ -110,6 +110,41 @@ describe("Package: google-closure-compiler", async () => {
         expect(applyOptions({}, { not_a_flag: "x" })).toEqual({});
     });
 
+    test("quotes string defines so they are not coerced to boolean/number", () => {
+        // A string value must stay a string literal: { NAME: "false" } must not
+        // define the boolean false, and { VERSION: "5" } must not define 5.
+        expect(
+            applyOptions({}, { define: { NAME: "false", VERSION: "5" } })
+        ).toEqual({
+            define: ['NAME="false"', 'VERSION="5"'],
+        });
+        // Numbers stay unquoted; mixed types are each handled by their kind.
+        expect(
+            applyOptions({}, { define: { LEVEL: 5, DEBUG: true, TAG: "rc" } })
+        ).toEqual({
+            define: ["LEVEL=5", "DEBUG=true", 'TAG="rc"'],
+        });
+    });
+
+    test("skips null and nested object/array define values", () => {
+        // Only string/number/boolean entries are emitted; the rest are dropped.
+        expect(
+            applyOptions(
+                {},
+                {
+                    define: {
+                        KEEP: "x",
+                        NIL: null,
+                        NESTED: { a: 1 },
+                        LIST: [1, 2],
+                    },
+                }
+            )
+        ).toEqual({ define: ['KEEP="x"'] });
+        // An object with no usable entries drops the flag entirely.
+        expect(applyOptions({}, { define: { NIL: null } })).toEqual({});
+    });
+
     test("should compress in-memory content", async (): Promise<void> => {
         const result = await gcc({
             settings: { compressor: gcc },

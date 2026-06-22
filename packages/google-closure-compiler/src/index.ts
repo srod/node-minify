@@ -157,7 +157,9 @@ function runCompiler(
 
         childProcess.on("error", (error) => {
             rejectOnce(
-                new Error(`Google Closure Compiler process error: ${error.message}`)
+                new Error(
+                    `Google Closure Compiler process error: ${error.message}`
+                )
             );
         });
         childProcess.stdout?.on("data", (chunk) => {
@@ -168,7 +170,9 @@ function runCompiler(
         });
         childProcess.stdin?.on("error", (error) => {
             rejectOnce(
-                new Error(`Google Closure Compiler stdin error: ${error.message}`)
+                new Error(
+                    `Google Closure Compiler stdin error: ${error.message}`
+                )
             );
         });
 
@@ -200,7 +204,11 @@ type Flags = {
  *
  * Strings and booleans pass through. Repeated flags like `define` are expressed
  * as `KEY=value` entries: an object such as `{ DEBUG: false }` becomes
- * `["DEBUG=false"]`, and a `string[]` is kept as-is. Anything else is dropped.
+ * `["DEBUG=false"]`. String values are quoted (`{ NAME: "false" }` becomes
+ * `['NAME="false"']`) so the compiler keeps them as string literals instead of
+ * coercing them to a boolean or number. Boolean and number values are emitted
+ * unquoted; `null`, `undefined`, and nested object/array values are skipped. A
+ * `string[]` is kept as-is. Anything else is dropped.
  *
  * Without this, an object value reaches the compiler as `--define=[object Object]`.
  *
@@ -217,9 +225,21 @@ function normalizeFlagValue(value: unknown): FlagValue | undefined {
             : undefined;
     }
     if (typeof value === "object" && value !== null) {
-        return Object.entries(value as Record<string, unknown>).map(
-            ([key, entry]) => `${key}=${String(entry)}`
-        );
+        const entries = Object.entries(
+            value as Record<string, unknown>
+        ).flatMap(([key, entry]) => {
+            if (typeof entry === "string") {
+                // Quote strings so the compiler keeps them as string literals;
+                // an unquoted `false` or `5` would become a boolean or number.
+                return [`${key}=${JSON.stringify(entry)}`];
+            }
+            if (typeof entry === "boolean" || typeof entry === "number") {
+                return [`${key}=${String(entry)}`];
+            }
+            // Skip null, undefined, and nested object/array values.
+            return [];
+        });
+        return entries.length > 0 ? entries : undefined;
     }
     return undefined;
 }
