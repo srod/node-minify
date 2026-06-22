@@ -141,7 +141,7 @@ See [full zero-config documentation](https://node-minify.2clics.net/github-actio
 **Other:**
 - `no-compress` (passthrough, concatenation only)
 
-**Deprecated (emit warnings):**
+**Removed in v11 (fail early):**
 - `babel-minify` → use `terser`
 - `uglify-es` → use `terser`
 - `yui` → use `terser` (JS) or `lightningcss` (CSS)

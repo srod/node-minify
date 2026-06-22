@@ -81,9 +81,9 @@ svg → svgo
 
 ## Inputs Validation
 
-**Type-required compressors**: `esbuild`, `yui` must have `type: "js" | "css"`
+**Type-required compressors**: `esbuild` must have `type: "js" | "css"`
 
-**Deprecated compressors**: `babel-minify`, `uglify-es`, `yui`, `crass`, `sqwish` emit warnings
+**Removed compressors**: `babel-minify`, `uglify-es`, `yui`, `crass`, `sqwish` fail early
 
 **Path security**: `output-dir` cannot contain `..` or be absolute
 

@@ -50,7 +50,7 @@ function setupProgram(): Command {
         .option("-o, --output [file]", "output file path")
         .option(
             "-t, --type [type]",
-            "file type: js or css (required for esbuild, yui)"
+            "file type: js or css (required for esbuild)"
         )
         .option("-s, --silence", "no output will be printed")
         .option(

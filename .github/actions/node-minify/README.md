@@ -47,7 +47,7 @@ The following inputs are **not supported** in the new action and must be removed
 
 #### Java Compressors Migration
 
-If you use `gcc` or `yui` compressors that require Java:
+If you use the `gcc` compressor that requires Java:
 
 **Before (deprecated):**
 ```yaml
@@ -99,7 +99,7 @@ The following documentation is for the deprecated composite action.
 | `options` | Compressor options (JSON) | No | `{}` |
 | `report-summary` | Add results to job summary | No | `true` |
 | `include-gzip` | Include gzip sizes | No | `true` |
-| `java-version` | Java version for gcc/yui | No | - |
+| `java-version` | Java version for gcc | No | - |
 
 ### Outputs
 
