@@ -146,11 +146,13 @@ export function getCompressorsByStatus(
 }
 
 /**
- * Get a compressor entry by name.
+ * Get a compressor entry by its name or its scoped package name.
  *
- * @param name - The compressor name to look up
+ * @param name - The compressor name (e.g. "yui") or package name (e.g. "@node-minify/yui")
  * @returns The compressor entry, or undefined if not found
  */
 export function getCompressorEntry(name: string): CompressorEntry | undefined {
-    return COMPRESSOR_REGISTRY.find((entry) => entry.name === name);
+    return COMPRESSOR_REGISTRY.find(
+        (entry) => entry.name === name || entry.packageName === name
+    );
 }

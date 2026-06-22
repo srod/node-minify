@@ -220,6 +220,18 @@ describe("Removed compressors", () => {
             "Compressor 'crass' was removed in v11. Use 'lightningcss' instead."
         );
     });
+
+    test("should fail-fast for removed compressor by scoped package name", async () => {
+        const settings: SettingsWithCompressor = {
+            compressor: "@node-minify/yui",
+            input: filesJS.oneFile,
+            output: filesJS.fileJSOut,
+            silence: true,
+        };
+        await expect(cli.run(settings)).rejects.toThrow(
+            "Compressor '@node-minify/yui' was removed in v11. Use 'terser or lightningcss' instead."
+        );
+    });
 });
 
 describe("cli error", () => {

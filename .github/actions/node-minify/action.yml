@@ -94,7 +94,12 @@ runs:
         mkdir -p "$TEMP_DIR"
         cd "$TEMP_DIR"
         bun init -y
-        bun add @node-minify/core @node-minify/utils "@node-minify/${COMPRESSOR}"
+        # Map friendly compressor aliases to their package name (mirrors resolveAlias in @node-minify/utils).
+        PACKAGE="$COMPRESSOR"
+        case "$COMPRESSOR" in
+          gcc) PACKAGE="google-closure-compiler" ;;
+        esac
+        bun add @node-minify/core @node-minify/utils "@node-minify/${PACKAGE}"
         cp "$ACTION_PATH/minify.ts" "$TEMP_DIR/"
         echo "NODE_MINIFY_ACTION_DIR=$TEMP_DIR" >> $GITHUB_ENV
 

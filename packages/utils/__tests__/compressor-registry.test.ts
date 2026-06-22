@@ -122,6 +122,13 @@ describe("getCompressorEntry", () => {
         expect(entry?.replacement).toBe("terser");
     });
 
+    test("returns entry when looked up by scoped package name", () => {
+        const entry = getCompressorEntry("@node-minify/yui");
+        expect(entry).toBeDefined();
+        expect(entry?.name).toBe("yui");
+        expect(entry?.status).toBe("removed");
+    });
+
     test("returns entry for yui with replacement", () => {
         const entry = getCompressorEntry("yui");
         expect(entry).toBeDefined();

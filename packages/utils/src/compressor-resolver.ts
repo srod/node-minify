@@ -33,6 +33,24 @@ const KNOWN_COMPRESSOR_EXPORTS: Record<string, string> = {
 };
 
 /**
+ * Friendly aliases mapping a user-facing compressor name to its canonical
+ * built-in package name (e.g. `gcc` → `google-closure-compiler`).
+ */
+const COMPRESSOR_ALIASES: Record<string, string> = {
+    gcc: "google-closure-compiler",
+};
+
+/**
+ * Resolve a compressor alias to its canonical name.
+ *
+ * @param name - The compressor name or alias
+ * @returns The canonical compressor name, or `name` unchanged if it is not an alias
+ */
+function resolveAlias(name: string): string {
+    return COMPRESSOR_ALIASES[name] ?? name;
+}
+
+/**
  * Result from resolving a compressor.
  */
 export type CompressorResolution = {
@@ -140,21 +158,22 @@ function generateLabel(name: string): string {
 export async function tryResolveBuiltIn(
     name: string
 ): Promise<CompressorResolution | null> {
-    if (!(name in KNOWN_COMPRESSOR_EXPORTS)) {
+    const canonical = resolveAlias(name);
+    if (!(canonical in KNOWN_COMPRESSOR_EXPORTS)) {
         return null;
     }
 
     try {
-        const mod = (await import(`@node-minify/${name}`)) as Record<
+        const mod = (await import(`@node-minify/${canonical}`)) as Record<
             string,
             unknown
         >;
-        const compressor = extractCompressor(mod, name);
+        const compressor = extractCompressor(mod, canonical);
 
         if (compressor) {
             return {
                 compressor,
-                label: name,
+                label: canonical,
                 isBuiltIn: true,
             };
         }
@@ -295,7 +314,7 @@ export async function resolveCompressor(
  * @returns `true` if the name corresponds to a known built-in compressor, `false` otherwise.
  */
 export function isBuiltInCompressor(name: string): boolean {
-    return name in KNOWN_COMPRESSOR_EXPORTS;
+    return resolveAlias(name) in KNOWN_COMPRESSOR_EXPORTS;
 }
 
 /**
@@ -305,5 +324,5 @@ export function isBuiltInCompressor(name: string): boolean {
  * @returns The export name used by the built-in package, or `undefined` if the compressor is not a known built-in
  */
 export function getKnownExportName(name: string): string | undefined {
-    return KNOWN_COMPRESSOR_EXPORTS[name];
+    return KNOWN_COMPRESSOR_EXPORTS[resolveAlias(name)];
 }
