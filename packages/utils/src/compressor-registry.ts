@@ -112,7 +112,7 @@ export const COMPRESSOR_REGISTRY = [
         name: "google-closure-compiler",
         status: "supported",
         packageName: "@node-minify/google-closure-compiler",
-        notes: "Advanced optimizations, requires Java",
+        notes: "Advanced optimizations via the google-closure-compiler npm API; may still invoke Java upstream",
     },
     {
         name: "imagemin",

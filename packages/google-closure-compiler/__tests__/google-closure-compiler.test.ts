@@ -148,17 +148,12 @@ describe("Package: google-closure-compiler", async () => {
     }, 60000);
 
     test("should suppress stderr details when silence is true", async () => {
-        try {
-            await gcc({
-                settings: { compressor: gcc, silence: true },
-                content: "function( {{{ invalid",
-            });
-        } catch (err) {
-            // With silence: true, the error message should not contain stderr details
-            const message = err instanceof Error ? err.message : String(err);
-            expect(message).toContain("exited with code");
-            // The message should end at the exit code without stderr details
-            expect(message).not.toContain("ERROR -");
-        }
+        const promise = gcc({
+            settings: { compressor: gcc, silence: true },
+            content: "function( {{{ invalid",
+        });
+        // Must reject; with silence the message keeps the exit code but drops stderr detail.
+        await expect(promise).rejects.toThrow("exited with code");
+        await expect(promise).rejects.not.toThrow("ERROR -");
     }, 60000);
 });

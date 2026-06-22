@@ -171,6 +171,7 @@ export function parseInputs(): ActionInputs {
  * as a custom npm package or local file).
  *
  * @param compressor - The compressor name or identifier to validate (e.g., "terser", "esbuild", or a custom package)
+ * @returns Nothing; throws when the compressor has been removed.
  * @throws Error if the compressor has been removed
  */
 export function validateCompressor(compressor: string): void {

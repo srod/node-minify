@@ -30,18 +30,18 @@ We now categorize compressors into four tiers to clarify their maintenance statu
 
 ### Recommended
 Modern, high-performance compressors. Use these for new projects.
-- **JS**: `terser`, `esbuild`, `swc`, `oxc`
-- **CSS**: `lightningcss`, `esbuild`
-- **HTML**: `html-minifier`, `minify-html`
+- **JS**: `terser`, `oxc`, `swc`, `esbuild`
+- **CSS**: `lightningcss`, `cssnano`
+- **HTML**: `minify-html`
 - **Images**: `sharp`, `svgo`
 
 ### Supported
-Stable compressors with active maintenance.
-- `clean-css`, `cssnano`, `csso`, `uglify-js`, `jsonminify`, `imagemin`
+Stable compressors that stay maintained but are no longer the preferred choice.
+- `clean-css`, `csso`, `uglify-js`, `google-closure-compiler`, `imagemin`, `html-minifier`
 
 ### Legacy
 Functional but not recommended for new projects. May be removed in future versions.
-- `google-closure-compiler`, `no-compress`
+- `jsonminify`, `no-compress`
 
 ### Removed
 No longer available in v11.

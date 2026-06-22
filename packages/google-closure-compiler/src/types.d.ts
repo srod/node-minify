@@ -1,3 +1,9 @@
+/*!
+ * node-minify
+ * Copyright (c) 2011-2026 Rodolphe Stoclin
+ * MIT Licensed
+ */
+
 declare module "google-closure-compiler" {
     import type { ChildProcess } from "node:child_process";
 
