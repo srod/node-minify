@@ -68,32 +68,18 @@ function isDiagnosticSeverity(status: string): status is DiagnosticSeverity {
 }
 
 /**
- * Build a lookup map from @node-minify package names to their registry entries,
- * filtered to only removed and legacy compressors.
+ * Build a lookup map of removed/legacy compressors keyed by the given field.
  *
- * @returns Map keyed by package name (e.g. "@node-minify/terser")
+ * @param key - Entry field to key by ("name" or "packageName")
+ * @returns Map of diagnostic-severity entries keyed by the chosen field
  */
-function buildPackageNameMap(): Map<string, CompressorEntry> {
+function buildEntryMap(
+    key: "name" | "packageName"
+): Map<string, CompressorEntry> {
     const map = new Map<string, CompressorEntry>();
     for (const entry of COMPRESSOR_REGISTRY) {
         if (isDiagnosticSeverity(entry.status)) {
-            map.set(entry.packageName, entry);
-        }
-    }
-    return map;
-}
-
-/**
- * Build a lookup map from compressor names to their registry entries,
- * filtered to only removed and legacy compressors.
- *
- * @returns Map keyed by compressor name (e.g. "terser")
- */
-function buildCompressorNameMap(): Map<string, CompressorEntry> {
-    const map = new Map<string, CompressorEntry>();
-    for (const entry of COMPRESSOR_REGISTRY) {
-        if (isDiagnosticSeverity(entry.status)) {
-            map.set(entry.name, entry);
+            map.set(entry[key], entry);
         }
     }
     return map;
@@ -207,7 +193,7 @@ async function getPackageJsonFiles(cwd: string): Promise<string[]> {
  */
 async function scanPackageJsonFiles(cwd: string): Promise<Finding[]> {
     const findings: Finding[] = [];
-    const packageMap = buildPackageNameMap();
+    const packageMap = buildEntryMap("packageName");
     const packageJsonPaths = await getPackageJsonFiles(cwd);
 
     for (const pkgPath of packageJsonPaths) {
@@ -258,8 +244,8 @@ async function scanPackageJsonFiles(cwd: string): Promise<Finding[]> {
  */
 async function scanSourceImports(cwd: string): Promise<Finding[]> {
     const findings: Finding[] = [];
-    const packageMap = buildPackageNameMap();
-    const compressorMap = buildCompressorNameMap();
+    const packageMap = buildEntryMap("packageName");
+    const compressorMap = buildEntryMap("name");
     const sourceFiles = await getSourceFiles(cwd);
 
     for (const relPath of sourceFiles) {
@@ -323,7 +309,7 @@ async function scanSourceImports(cwd: string): Promise<Finding[]> {
  */
 function scanWorkflowYaml(cwd: string): Finding[] {
     const findings: Finding[] = [];
-    const compressorMap = buildCompressorNameMap();
+    const compressorMap = buildEntryMap("name");
     const workflowFiles = getWorkflowFiles(cwd);
 
     for (const relPath of workflowFiles) {
@@ -387,21 +373,11 @@ function formatFinding(finding: Finding): string {
  * @param findings - Array of diagnostic findings to report
  */
 function reportFindings(findings: Finding[]): void {
-    if (findings.length === 0) return;
-
     const errors = findings.filter((f) => f.severity === "removed");
     const warnings = findings.filter((f) => f.severity === "legacy");
 
-    if (errors.length > 0) {
-        for (const finding of errors) {
-            console.log(formatFinding(finding));
-        }
-    }
-
-    if (warnings.length > 0) {
-        for (const finding of warnings) {
-            console.log(formatFinding(finding));
-        }
+    for (const finding of [...errors, ...warnings]) {
+        console.log(formatFinding(finding));
     }
 }
 

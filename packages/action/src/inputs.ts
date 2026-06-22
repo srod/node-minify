@@ -6,11 +6,7 @@
 
 import path from "node:path";
 import { getBooleanInput, getInput, warning } from "@actions/core";
-import {
-    getCompressorEntry,
-    isBuiltInCompressor,
-    isRemovedCompressor,
-} from "@node-minify/utils";
+import { getCompressorEntry, isBuiltInCompressor } from "@node-minify/utils";
 import { DEFAULT_PATTERNS } from "./discover.ts";
 import type { ActionInputs } from "./types.ts";
 import { validateOutputDir } from "./validate.ts";
@@ -175,9 +171,9 @@ export function parseInputs(): ActionInputs {
  * @throws Error if the compressor has been removed
  */
 export function validateCompressor(compressor: string): void {
-    if (isRemovedCompressor(compressor)) {
-        const entry = getCompressorEntry(compressor);
-        const replacement = entry?.replacement || "terser";
+    const entry = getCompressorEntry(compressor);
+    if (entry?.status === "removed") {
+        const replacement = entry.replacement || "terser";
         throw new Error(
             `Compressor '${compressor}' has been removed from node-minify. ` +
                 `Use '${replacement}' instead.`

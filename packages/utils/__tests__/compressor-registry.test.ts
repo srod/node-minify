@@ -3,7 +3,6 @@ import {
     COMPRESSOR_REGISTRY,
     getCompressorEntry,
     getCompressorsByStatus,
-    isRemovedCompressor,
 } from "../src/compressor-registry.ts";
 
 describe("COMPRESSOR_REGISTRY", () => {
@@ -142,35 +141,5 @@ describe("getCompressorEntry", () => {
         const entry = getCompressorEntry("no-compress");
         expect(entry).toBeDefined();
         expect(entry?.status).toBe("legacy");
-    });
-});
-
-describe("isRemovedCompressor", () => {
-    test("returns true for removed compressor", () => {
-        expect(isRemovedCompressor("babel-minify")).toBe(true);
-        expect(isRemovedCompressor("uglify-es")).toBe(true);
-        expect(isRemovedCompressor("yui")).toBe(true);
-        expect(isRemovedCompressor("sqwish")).toBe(true);
-        expect(isRemovedCompressor("crass")).toBe(true);
-    });
-
-    test("returns false for recommended compressor", () => {
-        expect(isRemovedCompressor("terser")).toBe(false);
-        expect(isRemovedCompressor("oxc")).toBe(false);
-        expect(isRemovedCompressor("esbuild")).toBe(false);
-    });
-
-    test("returns false for supported compressor", () => {
-        expect(isRemovedCompressor("clean-css")).toBe(false);
-        expect(isRemovedCompressor("html-minifier")).toBe(false);
-    });
-
-    test("returns false for legacy compressor", () => {
-        expect(isRemovedCompressor("jsonminify")).toBe(false);
-        expect(isRemovedCompressor("no-compress")).toBe(false);
-    });
-
-    test("returns false for non-existent compressor", () => {
-        expect(isRemovedCompressor("non-existent")).toBe(false);
     });
 });

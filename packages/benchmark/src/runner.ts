@@ -32,10 +32,10 @@ import type {
  * @param warmupFile - Path for warmup output file
  * @param warmupCount - Number of warmup iterations
  * @param options - Benchmark options containing type and compressor options
- * @param collected - Optional array that receives each warmup output path as it
- *   is scheduled, so a caller can clean up partial files even if `minify` throws
- *   part-way through the loop.
- * @returns The warmup output files created during the run
+ * @param collected - Array that receives each warmup output path as it is
+ *   scheduled (defaults to a fresh array). Pass one in to clean up partial files
+ *   even if `minify` throws part-way through the loop.
+ * @returns The warmup output paths (the same array passed as `collected`)
  */
 export async function runWarmup(
     file: string,
@@ -43,17 +43,14 @@ export async function runWarmup(
     warmupFile: string,
     warmupCount: number,
     options: Pick<BenchmarkOptions, "type" | "compressorOptions">,
-    collected?: string[]
+    collected: string[] = []
 ): Promise<string[]> {
-    const warmupFiles: string[] = [];
-
     for (let i = 0; i < warmupCount; i++) {
         const warmupOutput = `${warmupFile}.${i + 1}`;
 
         // Track the path before minifying so a mid-loop failure still lets the
         // caller delete the partial file instead of orphaning it.
-        warmupFiles.push(warmupOutput);
-        collected?.push(warmupOutput);
+        collected.push(warmupOutput);
 
         await minify({
             compressor,
@@ -64,7 +61,7 @@ export async function runWarmup(
         });
     }
 
-    return warmupFiles;
+    return collected;
 }
 
 /**

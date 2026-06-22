@@ -3,7 +3,6 @@ import {
     COMPRESSOR_REGISTRY,
     getCompressorEntry,
     getCompressorsByStatus,
-    isRemovedCompressor,
 } from "./compressor-registry.ts";
 import {
     getKnownExportName,
@@ -67,7 +66,6 @@ export {
     isBuiltInCompressor,
     isImageFile,
     isLocalPath,
-    isRemovedCompressor,
     isValidFile,
     isValidFileAsync,
     prettyBytes,
