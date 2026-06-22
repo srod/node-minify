@@ -31,6 +31,11 @@ const allowedFlags = [
     "warning_level",
 ];
 
+// Default per-stream cap for compiler stdout/stderr. Generous enough for large
+// minified bundles while still bounding runaway output. Set `settings.buffer` to
+// 0 to disable the limit entirely.
+const DEFAULT_MAX_BUFFER = 100 * 1024 * 1024;
+
 /**
  * Minifies JavaScript using the Google Closure Compiler.
  *
@@ -76,7 +81,7 @@ export async function gcc({
 function runCompiler(
     flags: Flags,
     source: string,
-    maxBuffer = 1024 * 1024,
+    maxBuffer = DEFAULT_MAX_BUFFER,
     timeout?: number,
     silence?: boolean
 ): Promise<string> {
@@ -142,10 +147,10 @@ function runCompiler(
                     return;
                 }
 
-                if (typeof stdOut !== "string" || stdOut.length === 0) {
+                if (typeof stdOut !== "string") {
                     rejectOnce(
                         new Error(
-                            "Google Closure Compiler failed: empty result"
+                            "Google Closure Compiler failed: invalid result"
                         )
                     );
                     return;

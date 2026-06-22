@@ -95,11 +95,27 @@ describe("Package: google-closure-compiler (runCompiler edge paths)", () => {
         expect(result.code).toBe("var a=1;");
     });
 
-    test("rejects when the compiler returns an empty result", async () => {
+    test("resolves with empty output when the compiler emits an empty string", async () => {
+        // Empty output is valid (e.g. dead-code elimination); the shared
+        // validateMinifyResult / allowEmptyOutput layer decides what to do with it.
         mock.onRun = (_child, cb) => cb(0, "", "");
+        const result = await gcc({
+            settings: baseSettings,
+            content: "var a = 1;",
+        });
+        expect(result.code).toBe("");
+    });
+
+    test("rejects when the compiler returns a non-string result", async () => {
+        mock.onRun = (_child, cb) =>
+            (cb as (code: number, out: unknown, err: string) => void)(
+                0,
+                null,
+                ""
+            );
         await expect(
             gcc({ settings: baseSettings, content: "var a = 1;" })
-        ).rejects.toThrow("empty result");
+        ).rejects.toThrow("invalid result");
     });
 
     test("rejects on a child process 'error' event", async () => {
