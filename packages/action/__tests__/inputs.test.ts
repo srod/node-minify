@@ -65,6 +65,16 @@ describe("parseInputs", () => {
         expect(inputs.reportSummary).toBe(true);
     });
 
+    test("throws when output-dir escapes the workspace", () => {
+        vi.mocked(getInput).mockImplementation((name: string) =>
+            name === "output-dir" ? "../escape" : ""
+        );
+
+        expect(() => parseInputs()).toThrow(
+            'output-dir must be a relative path without ".." segments'
+        );
+    });
+
     test("throws error for invalid JSON in options", () => {
         vi.mocked(getInput).mockImplementation((name: string) => {
             if (name === "options") return "not-valid-json";

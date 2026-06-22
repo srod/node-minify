@@ -2,8 +2,16 @@
 
 import { summary } from "@actions/core";
 import { describe, expect, test, vi } from "vitest";
-import { generateAutoModeSummary } from "../../src/reporters/summary.ts";
-import type { ActionInputs, MinifyResult } from "../../src/types.ts";
+import {
+    generateAutoModeSummary,
+    generateBenchmarkSummary,
+    generateSummary,
+} from "../../src/reporters/summary.ts";
+import type {
+    ActionInputs,
+    BenchmarkResult,
+    MinifyResult,
+} from "../../src/types.ts";
 
 // Mock @actions/core
 vi.mock("@actions/core", () => ({
@@ -127,5 +135,127 @@ describe("generateAutoModeSummary", () => {
         const results: MinifyResult[] = [];
         await generateAutoModeSummary(results, inputs);
         expect(summary.addRaw).toHaveBeenCalledWith("No files were processed.");
+    });
+});
+
+describe("generateSummary", () => {
+    test("writes a per-file table, compressor, and totals", async () => {
+        const result: MinifyResult = {
+            files: [
+                {
+                    file: "a.js",
+                    originalSize: 1000,
+                    minifiedSize: 400,
+                    reduction: 60,
+                    gzipSize: 150,
+                    timeMs: 10,
+                },
+                {
+                    // No gzipSize -> the "-" placeholder branch.
+                    file: "b.css",
+                    originalSize: 500,
+                    minifiedSize: 450,
+                    reduction: 10,
+                    timeMs: 5,
+                },
+            ],
+            compressor: "terser",
+            totalOriginalSize: 1500,
+            totalMinifiedSize: 850,
+            totalReduction: 43.3,
+            totalTimeMs: 15,
+        };
+
+        await generateSummary(result);
+
+        expect(summary.addHeading).toHaveBeenCalledWith(
+            "📦 node-minify Results",
+            2
+        );
+        expect(summary.addTable).toHaveBeenCalled();
+        expect(summary.addRaw).toHaveBeenCalledWith(
+            expect.stringContaining("**Compressor:** terser")
+        );
+        expect(summary.addRaw).toHaveBeenCalledWith(
+            expect.stringContaining("**Total:**")
+        );
+        expect(summary.write).toHaveBeenCalled();
+    });
+});
+
+describe("generateBenchmarkSummary", () => {
+    test("renders badges, failures, and missing metrics", async () => {
+        const result: BenchmarkResult = {
+            file: "app.js",
+            originalSize: 1000,
+            compressors: [
+                {
+                    compressor: "terser",
+                    success: true,
+                    size: 400,
+                    reduction: 60,
+                    gzipSize: 150,
+                    timeMs: 10,
+                },
+                {
+                    compressor: "esbuild",
+                    success: true,
+                    size: 420,
+                    reduction: 58,
+                    gzipSize: 160,
+                    timeMs: 5,
+                },
+                {
+                    compressor: "gcc",
+                    success: true,
+                    size: 380,
+                    reduction: 62,
+                    gzipSize: 140,
+                    timeMs: 50,
+                },
+                // Succeeded but every metric is missing -> "-" placeholders, no badge.
+                { compressor: "plain", success: true },
+                // Failed with and without an error message.
+                { compressor: "broken", success: false, error: "nope" },
+                { compressor: "broken2", success: false },
+            ],
+            recommended: "terser",
+            bestSpeed: "esbuild",
+            bestCompression: "gcc",
+        };
+
+        await generateBenchmarkSummary(result);
+
+        expect(summary.addHeading).toHaveBeenCalledWith(
+            "🏁 Benchmark Results",
+            2
+        );
+        expect(summary.addRaw).toHaveBeenCalledWith(
+            expect.stringContaining("**Recommended:** terser")
+        );
+        expect(summary.write).toHaveBeenCalled();
+    });
+
+    test("falls back to N/A when no compressor is recommended", async () => {
+        const result: BenchmarkResult = {
+            file: "app.js",
+            originalSize: 100,
+            compressors: [
+                {
+                    compressor: "terser",
+                    success: true,
+                    size: 50,
+                    reduction: 50,
+                    gzipSize: 20,
+                    timeMs: 1,
+                },
+            ],
+        };
+
+        await generateBenchmarkSummary(result);
+
+        expect(summary.addRaw).toHaveBeenCalledWith(
+            expect.stringContaining("**Recommended:** N/A")
+        );
     });
 });
