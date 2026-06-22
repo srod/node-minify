@@ -7,6 +7,7 @@
             "!**/tests/fixtures",
             "!**/tests/tmp",
             "!**/examples/public",
+            "!**/docs/public",
             "!**/node_modules",
             "!**/.DS_Store",
             "!**/dist",
