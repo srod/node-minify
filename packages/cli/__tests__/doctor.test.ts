@@ -8,7 +8,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import { runDoctor } from "../src/doctor.ts";
+import { doctor, runDoctor } from "../src/doctor.ts";
 
 /**
  * Create an isolated temp directory for each test.
@@ -558,6 +558,110 @@ describe("Package: doctor", () => {
             const errorIdx = output.indexOf("ERROR");
             const warningIdx = output.indexOf("WARNING");
             expect(errorIdx).toBeLessThan(warningIdx);
+        });
+    });
+
+    describe("internal edge cases", () => {
+        test("returns 0 when the target directory does not exist", async () => {
+            // readdirSync throws for a missing dir; scanners swallow it and yield [].
+            const { result, output } = await captureOutput(() =>
+                runDoctor(join(tmpDir, "does-not-exist"))
+            );
+
+            expect(result).toBe(0);
+            expect(output).toBe("");
+        });
+
+        test("ignores .github/workflows when it is not a directory", async () => {
+            writePackageJson(tmpDir);
+            mkdirSync(join(tmpDir, ".github"), { recursive: true });
+            // A file (not a dir) at the workflows path makes readdirSync throw.
+            writeFileSync(join(tmpDir, ".github", "workflows"), "oops");
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(0);
+            expect(output).toBe("");
+        });
+
+        test("skips a package.json whose top-level JSON is not an object", async () => {
+            writeFileSync(join(tmpDir, "package.json"), '"not an object"');
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(0);
+            expect(output).toBe("");
+        });
+
+        test("ignores imports of supported (non-removed) @node-minify packages", async () => {
+            writePackageJson(tmpDir);
+            writeSourceFile(
+                tmpDir,
+                "src/app.ts",
+                'import { terser } from "@node-minify/terser";\n'
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(0);
+            expect(output).toBe("");
+        });
+
+        test("skips blank lines while still flagging workflow compressors", async () => {
+            writePackageJson(tmpDir);
+            writeWorkflowFile(
+                tmpDir,
+                "ci.yml",
+                [
+                    "name: CI",
+                    "",
+                    "jobs:",
+                    "  minify:",
+                    "    steps:",
+                    "      - with:",
+                    "          compressor: yui",
+                ].join("\n")
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("yui");
+        });
+
+        test("defaults to process.cwd() when no directory is given", async () => {
+            const cwdSpy = vi.spyOn(process, "cwd").mockReturnValue(tmpDir);
+            try {
+                const { result, output } = await captureOutput(() =>
+                    runDoctor()
+                );
+                expect(result).toBe(0);
+                expect(output).toBe("");
+            } finally {
+                cwdSpy.mockRestore();
+            }
+        });
+
+        test("doctor() scans cwd and exits with the resulting code", async () => {
+            const cwdSpy = vi.spyOn(process, "cwd").mockReturnValue(tmpDir);
+            const exitSpy = vi
+                .spyOn(process, "exit")
+                .mockImplementation((() => undefined) as never);
+            try {
+                await captureOutput(() => doctor());
+                expect(exitSpy).toHaveBeenCalledWith(0);
+            } finally {
+                cwdSpy.mockRestore();
+                exitSpy.mockRestore();
+            }
         });
     });
 });

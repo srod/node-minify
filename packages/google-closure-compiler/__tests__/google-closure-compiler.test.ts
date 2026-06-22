@@ -145,6 +145,15 @@ describe("Package: google-closure-compiler", async () => {
         expect(applyOptions({}, { define: { NIL: null } })).toEqual({});
     });
 
+    test("drops flag values that are not string/boolean/array/object", () => {
+        // Array with non-string entries is not a valid repeated-flag list.
+        expect(applyOptions({}, { language_in: [1, 2] })).toEqual({});
+        // A bare number is neither a flag value nor a KEY=value object.
+        expect(applyOptions({}, { language_in: 5 })).toEqual({});
+        // null is dropped (typeof null === "object" but value === null).
+        expect(applyOptions({}, { language_in: null })).toEqual({});
+    });
+
     test("should compress in-memory content", async (): Promise<void> => {
         const result = await gcc({
             settings: { compressor: gcc },
