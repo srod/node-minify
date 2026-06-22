@@ -74,7 +74,7 @@ export async function gcc({
  * @returns The compiled output string
  */
 function runCompiler(
-    flags: Record<string, string | boolean | Record<string, unknown>>,
+    flags: Flags,
     source: string,
     maxBuffer = 1024 * 1024,
     timeout?: number,
@@ -190,51 +190,63 @@ function runCompiler(
     });
 }
 
+type FlagValue = string | boolean | string[];
+type Flags = {
+    [key: string]: FlagValue;
+};
+
 /**
- * Type guard to check if a value is a valid flag value.
+ * Normalize a user-supplied option value into a Closure-compatible flag value.
  *
- * @param value - The value to check
- * @returns True if value is a string, boolean, or plain object (not array)
+ * Strings and booleans pass through. Repeated flags like `define` are expressed
+ * as `KEY=value` entries: an object such as `{ DEBUG: false }` becomes
+ * `["DEBUG=false"]`, and a `string[]` is kept as-is. Anything else is dropped.
+ *
+ * Without this, an object value reaches the compiler as `--define=[object Object]`.
+ *
+ * @param value - The raw option value to normalize
+ * @returns A string, boolean, or string array flag value, or undefined to skip
  */
-function isFlagValue(
-    value: unknown
-): value is string | boolean | Record<string, unknown> {
-    return (
-        typeof value === "string" ||
-        typeof value === "boolean" ||
-        (typeof value === "object" && value !== null && !Array.isArray(value))
-    );
+function normalizeFlagValue(value: unknown): FlagValue | undefined {
+    if (typeof value === "string" || typeof value === "boolean") {
+        return value;
+    }
+    if (Array.isArray(value)) {
+        return value.every((entry) => typeof entry === "string")
+            ? (value as string[])
+            : undefined;
+    }
+    if (typeof value === "object" && value !== null) {
+        return Object.entries(value as Record<string, unknown>).map(
+            ([key, entry]) => `${key}=${String(entry)}`
+        );
+    }
+    return undefined;
 }
 
 /**
- * Adds any valid options passed in the options parameters to the flags parameter and returns the flags object.
- * @param flags the flags object to add options to
- * @param options the options object to add to the flags object
- * @returns the flags object with the options added
- */
-type Flags = {
-    [key: string]: string | boolean | Record<string, unknown>;
-};
-/**
  * Merge allowed user-provided options into the given flags object.
  *
- * Filters `options` to keys listed in `allowedFlags` and assigns values that are strings, booleans, or plain (non-array) objects into `flags`.
+ * Filters `options` to keys listed in `allowedFlags` and normalizes each value
+ * (see {@link normalizeFlagValue}) before assigning it into `flags`.
  *
  * @param flags - Target flags object to populate with allowed option entries.
- * @param options - Optional user-supplied options to apply; keys not in `allowedFlags` or values that are arrays or unsupported types are ignored.
+ * @param options - Optional user-supplied options to apply; keys not in `allowedFlags` or values that normalize to undefined are ignored.
  * @returns The same `flags` object after applying valid entries from `options`.
  */
-function applyOptions(flags: Flags, options?: Record<string, unknown>): Flags {
+export function applyOptions(
+    flags: Flags,
+    options?: Record<string, unknown>
+): Flags {
     if (!options || Object.keys(options).length === 0) {
         return flags;
     }
-    Object.keys(options)
-        .filter((option) => allowedFlags.indexOf(option) > -1)
-        .forEach((option) => {
-            const value = options[option];
-            if (isFlagValue(value)) {
-                flags[option] = value;
-            }
-        });
+    for (const option of Object.keys(options)) {
+        if (allowedFlags.indexOf(option) === -1) continue;
+        const value = normalizeFlagValue(options[option]);
+        if (value !== undefined) {
+            flags[option] = value;
+        }
+    }
     return flags;
 }

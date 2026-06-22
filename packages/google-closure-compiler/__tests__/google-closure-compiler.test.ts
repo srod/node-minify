@@ -12,7 +12,7 @@ import { describe, expect, test } from "vitest";
 import { filesJS } from "../../../tests/files-path.ts";
 import { runOneTest, tests } from "../../../tests/fixtures.ts";
 import { minify } from "../../core/src/index.ts";
-import { gcc } from "../src/index.ts";
+import { applyOptions, gcc } from "../src/index.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
@@ -84,6 +84,30 @@ describe("Package: google-closure-compiler", async () => {
 
         const result = await minify(settings);
         expect(result).not.toBeNull();
+    });
+
+    test("normalizes object flag values to KEY=value entries", () => {
+        // An object define must become ["DEBUG=false"], not "[object Object]".
+        expect(applyOptions({}, { define: { DEBUG: false } })).toEqual({
+            define: ["DEBUG=false"],
+        });
+        // Strings, booleans, and string arrays pass through unchanged.
+        expect(
+            applyOptions(
+                {},
+                {
+                    compilation_level: "SIMPLE",
+                    rewrite_polyfills: true,
+                    define: ["A=1", "B=2"],
+                }
+            )
+        ).toEqual({
+            compilation_level: "SIMPLE",
+            rewrite_polyfills: true,
+            define: ["A=1", "B=2"],
+        });
+        // Unknown flags are dropped.
+        expect(applyOptions({}, { not_a_flag: "x" })).toEqual({});
     });
 
     test("should compress in-memory content", async (): Promise<void> => {

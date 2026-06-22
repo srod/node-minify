@@ -9,9 +9,7 @@ declare module "google-closure-compiler" {
 
     export class compiler {
         constructor(
-            args:
-                | Record<string, string | boolean | Record<string, unknown>>
-                | string[]
+            args: Record<string, string | boolean | string[]> | string[]
         );
         commandArguments: string[];
         javaPath: string;
