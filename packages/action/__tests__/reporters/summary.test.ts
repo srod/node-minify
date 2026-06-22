@@ -13,6 +13,15 @@ import type {
     MinifyResult,
 } from "../../src/types.ts";
 
+/**
+ * Flatten the `data` values of the most recent summary.addTable() call.
+ */
+function lastTableCells(): string[] {
+    const calls = vi.mocked(summary.addTable).mock.calls;
+    const table = calls[calls.length - 1]?.[0] as { data: unknown }[][];
+    return table.flat().map((cell) => String(cell.data));
+}
+
 // Mock @actions/core
 vi.mock("@actions/core", () => ({
     summary: {
@@ -172,7 +181,10 @@ describe("generateSummary", () => {
             "📦 node-minify Results",
             2
         );
-        expect(summary.addTable).toHaveBeenCalled();
+        const cells = lastTableCells();
+        // a.js has a gzip size; b.css does not -> "-" placeholder.
+        expect(cells).toContain("150 B");
+        expect(cells).toContain("-");
         expect(summary.addRaw).toHaveBeenCalledWith(
             expect.stringContaining("**Compressor:** terser")
         );
@@ -230,6 +242,17 @@ describe("generateBenchmarkSummary", () => {
             "🏁 Benchmark Results",
             2
         );
+        const cells = lastTableCells();
+        // Badges: recommended 🏆, best speed ⚡, best compression 📦.
+        expect(cells).toContain("terser 🏆");
+        expect(cells).toContain("esbuild ⚡");
+        expect(cells).toContain("gcc 📦");
+        // Failed rows, with and without an explicit error message.
+        expect(cells).toContain("❌ Failed");
+        expect(cells).toContain("nope");
+        expect(cells).toContain("Unknown error");
+        // Succeeded-but-missing-metrics row renders "-" placeholders.
+        expect(cells).toContain("-");
         expect(summary.addRaw).toHaveBeenCalledWith(
             expect.stringContaining("**Recommended:** terser")
         );

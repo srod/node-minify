@@ -32,6 +32,9 @@ import type {
  * @param warmupFile - Path for warmup output file
  * @param warmupCount - Number of warmup iterations
  * @param options - Benchmark options containing type and compressor options
+ * @param collected - Optional array that receives each warmup output path as it
+ *   is scheduled, so a caller can clean up partial files even if `minify` throws
+ *   part-way through the loop.
  * @returns The warmup output files created during the run
  */
 export async function runWarmup(
@@ -39,12 +42,18 @@ export async function runWarmup(
     compressor: Compressor,
     warmupFile: string,
     warmupCount: number,
-    options: Pick<BenchmarkOptions, "type" | "compressorOptions">
+    options: Pick<BenchmarkOptions, "type" | "compressorOptions">,
+    collected?: string[]
 ): Promise<string[]> {
     const warmupFiles: string[] = [];
 
     for (let i = 0; i < warmupCount; i++) {
         const warmupOutput = `${warmupFile}.${i + 1}`;
+
+        // Track the path before minifying so a mid-loop failure still lets the
+        // caller delete the partial file instead of orphaning it.
+        warmupFiles.push(warmupOutput);
+        collected?.push(warmupOutput);
 
         await minify({
             compressor,
@@ -53,8 +62,6 @@ export async function runWarmup(
             ...(options.type && { type: options.type as "js" | "css" }),
             options: options.compressorOptions,
         });
-
-        warmupFiles.push(warmupOutput);
     }
 
     return warmupFiles;
@@ -307,14 +314,16 @@ async function benchmarkCompressor(
     try {
         const warmupFile = `${file}.warmup.${uniqueId}.tmp`;
         if (warmup > 0) {
-            const warmupFiles = await runWarmup(
+            // Pass tempFiles so partial warmup outputs are tracked for cleanup
+            // even if runWarmup throws before completing all iterations.
+            await runWarmup(
                 file,
                 compressor,
                 warmupFile,
                 warmup,
-                options
+                options,
+                tempFiles
             );
-            tempFiles.push(...warmupFiles);
         }
 
         const outputFile = `${file}.${name}.${uniqueId}.tmp`;

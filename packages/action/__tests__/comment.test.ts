@@ -147,8 +147,13 @@ describe("postPRComment", () => {
         await postPRComment(multiResult, "token", comparisons);
         const body = vi.mocked(createComment).mock.calls[0]?.[0].body as string;
         expect(body).toContain("vs Base");
-        expect(body).toContain("| `a.js` |");
-        expect(body).toContain("| `b.js` |");
+
+        // a.js has a comparison -> its formatted change is rendered.
+        const aRow = body.split("\n").find((l) => l.includes("`a.js`")) ?? "";
+        expect(aRow).toContain("-66.7% ✅");
+        // b.js has no comparison -> its vs-base column shows the "-" placeholder.
+        const bRow = body.split("\n").find((l) => l.includes("`b.js`")) ?? "";
+        expect(bRow).toContain("| - |");
     });
 
     test("warns instead of throwing when the GitHub API fails", async () => {
