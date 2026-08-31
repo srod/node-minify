@@ -21,7 +21,7 @@
     "@astrojs/preact": "^4.1.3",
     "@astrolib/analytics": "0.6.1",
     "@types/node": "^22.19.15",
-    "astro": "^6.4.6",
+    "astro": "^7.1.0",
     "preact": "^10.28.4"
   },
   "devDependencies": {
