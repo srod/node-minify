@@ -34,6 +34,7 @@ It allows you to compress JavaScript, CSS, HTML, and image files.
 
 **HTML:**
 
+- [minify-html](https://node-minify.2clics.net/compressors/minify-html) - Rust-based, recommended
 - [html-minifier](https://node-minify.2clics.net/compressors/html-minifier)
 
 **JSON:**
@@ -105,6 +106,7 @@ npm install @node-minify/csso          # Structural optimizations
 ### HTML & Other
 
 ```bash
+npm install @node-minify/minify-html   # Recommended - Rust-based, fastest
 npm install @node-minify/html-minifier # HTML minification
 npm install @node-minify/jsonminify    # JSON minification
 ```

@@ -3,33 +3,33 @@ title: "Options"
 description: "Options for node-minify"
 ---
 
+`minify()` is asynchronous and returns a promise resolving to the minified content. All examples below use ESM `import`, which is the only module system node-minify supports.
+
 ## Concatenate Files
 
 In order to concatenate files, simply pass in an array with the compressor `no-compress`.
 
 ```js
-const minify = require('@node-minify/core');
-const noCompress = require('@node-minify/no-compress');
+import { minify } from '@node-minify/core';
+import { noCompress } from '@node-minify/no-compress';
 
-minify({
+await minify({
   compressor: noCompress,
   input: ['foo.js', 'foo2.js', 'foo3.js'],
-  output: 'bar.js',
-  callback: function(err, min) {}
+  output: 'bar.js'
 });
 ```
 
 ## Using wildcards
 
 ```js
-const minify = require('@node-minify/core');
-const gcc = require('@node-minify/google-closure-compiler');
+import { minify } from '@node-minify/core';
+import { gcc } from '@node-minify/google-closure-compiler';
 
-minify({
+await minify({
   compressor: gcc,
   input: 'public/**/*.js',
-  output: 'bar.js',
-  callback: function(err, min) {}
+  output: 'bar.js'
 });
 ```
 
@@ -38,14 +38,13 @@ minify({
 This option will not merge the files.
 
 ```js
-const minify = require('@node-minify/core');
-const terser = require('@node-minify/terser');
+import { minify } from '@node-minify/core';
+import { terser } from '@node-minify/terser';
 
-minify({
+await minify({
   compressor: terser,
   input: 'public/**/*.js',
-  output: '$1.min.js',
-  callback: function(err, min) {}
+  output: '$1.min.js'
 });
 ```
 
@@ -54,30 +53,14 @@ If you have 3 files `file1.js`, `file2.js` and `file3.js`; those files will be o
 If you want to save those files in same directory than source, you can use `replaceInPlace` option.
 
 ```js
-const minify = require('@node-minify/core');
-const terser = require('@node-minify/terser');
+import { minify } from '@node-minify/core';
+import { terser } from '@node-minify/terser';
 
-minify({
+await minify({
   compressor: terser,
   input: 'public/**/*.js',
   output: '$1.min.js',
   replaceInPlace: true
-  callback: function(err, min) {}
-});
-```
-
-## Using sync option
-
-```js
-const minify = require('@node-minify/core');
-const terser = require('@node-minify/terser');
-
-minify({
-  compressor: terser,
-  input: 'foo.js',
-  output: 'bar.js',
-  sync: true,
-  callback: function(err, min) {}
 });
 ```
 
@@ -88,15 +71,14 @@ minify({
 It avoids you to specify the folder for each file.
 
 ```js
-const minify = require('@node-minify/core');
-const gcc = require('@node-minify/google-closure-compiler');
+import { minify } from '@node-minify/core';
+import { gcc } from '@node-minify/google-closure-compiler';
 
-minify({
+await minify({
   compressor: gcc,
   publicFolder: './public/',
   input: ['foo.js', 'foo2.js'],
-  output: 'bar.js',
-  callback: function(err, min) {}
+  output: 'bar.js'
 });
 ```
 
@@ -105,15 +87,14 @@ minify({
 When minifying files that contain only comments (e.g., license headers in CSS), the minifier may produce empty output. By default, this throws a validation error. Use `allowEmptyOutput` to skip writing the file instead.
 
 ```js
-const minify = require('@node-minify/core');
-const cleanCss = require('@node-minify/clean-css');
+import { minify } from '@node-minify/core';
+import { cleanCss } from '@node-minify/clean-css';
 
-minify({
+await minify({
   compressor: cleanCss,
   input: 'styles-with-only-comments.css',
   output: 'styles.min.css',
-  allowEmptyOutput: true, // Skip writing if result is empty
-  callback: function(err, min) {}
+  allowEmptyOutput: true // Skip writing if result is empty
 });
 ```
 
@@ -123,21 +104,34 @@ When `allowEmptyOutput: true`:
 - Returns empty string `""` for in-memory mode
 - Original file is preserved when using `replaceInPlace`
 
-## Max Buffer Size (only for Java)
+## Max Buffer Size
 
-In some cases you might need a bigger max buffer size (for example when minifying really large files).
-By default the buffer is `1000 * 1024` which should be enough. If you however need more buffer, you can simply pass in the desired buffer size as an argument to `minify` like so:
+Some compressors spawn a child process. `buffer` caps how much output that process may produce before it is killed. The default is `1000 * 1024` bytes, which is enough for most files; raise it when minifying very large inputs.
 
 ```js
-const minify = require('@node-minify/core');
-const gcc = require('@node-minify/google-closure-compiler');
+import { minify } from '@node-minify/core';
+import { gcc } from '@node-minify/google-closure-compiler';
 
-minify({
+await minify({
   compressor: gcc,
   input: 'foo.js',
   output: 'bar.js',
-  sync: true,
-  buffer: 1000 * 1024,
-  callback: function(err, min) {}
+  buffer: 1000 * 1024
+});
+```
+
+## Timeout
+
+`timeout` limits how long a compressor may run, in milliseconds.
+
+```js
+import { minify } from '@node-minify/core';
+import { gcc } from '@node-minify/google-closure-compiler';
+
+await minify({
+  compressor: gcc,
+  input: 'foo.js',
+  output: 'bar.js',
+  timeout: 30000
 });
 ```

@@ -4,6 +4,9 @@
  * MIT Licensed
  */
 
+// @minify-html/node is a CommonJS native addon: Node's ESM loader exposes it
+// only through the default export, so named imports fail at runtime.
+import minifyHtmlLib from "@minify-html/node";
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import {
     ensureStringContent,
@@ -39,7 +42,6 @@ export async function minifyHtml({
     const contentStr = ensureStringContent(content, "minify-html");
 
     try {
-        const minifyHtmlLib = await import("@minify-html/node");
         const options = { ...defaultOptions, ...settings?.options };
 
         const inputBuffer = Buffer.from(contentStr);

@@ -25,6 +25,8 @@ export const SIDEBAR: Sidebar = {
         { text: "imagemin", link: "compressors/imagemin" },
         { text: "jsonminify", link: "compressors/jsonminify" },
         { text: "lightningcss", link: "compressors/lightningcss" },
+        { text: "minify-html", link: "compressors/minify-html" },
+        { text: "no-compress", link: "compressors/no-compress" },
         { text: "oxc", link: "compressors/oxc" },
         { text: "sharp", link: "compressors/sharp" },
         { text: "svgo", link: "compressors/svgo" },
