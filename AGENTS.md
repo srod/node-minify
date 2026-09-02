@@ -153,10 +153,10 @@ Custom `scripts/publish.ts` resolves `workspace:*` → concrete versions before 
 
 ## GitHub Action
 
-Published as `srod/node-minify@v1`. See `packages/action/AGENTS.md` for details.
+Published as `srod/node-minify@v11`. See `packages/action/AGENTS.md` for details.
 
 ```yaml
-- uses: srod/node-minify@v1
+- uses: srod/node-minify@v11
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
@@ -165,7 +165,7 @@ Published as `srod/node-minify@v1`. See `packages/action/AGENTS.md` for details.
 
 Zero-config mode:
 ```yaml
-- uses: srod/node-minify@v1
+- uses: srod/node-minify@v11
   with:
     auto: true
     output-dir: dist

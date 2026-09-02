@@ -3,7 +3,7 @@
 > **This action is deprecated.** Please use the new bundled action instead:
 >
 > ```yaml
-> - uses: srod/node-minify@v1
+> - uses: srod/node-minify@v11
 > ```
 
 The new action includes:
@@ -29,7 +29,7 @@ Replace:
 With:
 
 ```yaml
-- uses: srod/node-minify@v1
+- uses: srod/node-minify@v11
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
@@ -64,7 +64,7 @@ If you use the `gcc` compressor that requires Java:
     distribution: 'temurin'
     java-version: '17'
 
-- uses: srod/node-minify@v1
+- uses: srod/node-minify@v11
   with:
     compressor: gcc
 ```

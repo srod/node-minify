@@ -15,7 +15,9 @@ describe("Package: minify-html error handling", () => {
         vi.doUnmock("@minify-html/node");
     });
 
-    test("should wrap minification errors", async () => {
+    // Resetting the module registry and re-importing the compressor exceeds
+    // vitest's 5s default on Windows runners, so widen this test only.
+    test("should wrap minification errors", { timeout: 30000 }, async () => {
         // Mirrors the real module shape: @minify-html/node is CommonJS, so its
         // exports are reached through the default export.
         vi.doMock("@minify-html/node", () => ({

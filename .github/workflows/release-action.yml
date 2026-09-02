@@ -20,6 +20,32 @@ jobs:
     name: Build and Release Action
     runs-on: ubuntu-latest
     steps:
+      # Runs before checkout: a manual dispatch can name any tag-shaped ref,
+      # and this workflow force-updates tags and overwrites release assets.
+      # Require the tag to already exist as a published (non-draft) release.
+      - name: Verify tag is a published release
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_TAG: ${{ github.event.inputs.tag }}
+        run: |
+          if ! [[ "$INPUT_TAG" =~ ^v[0-9]+(\.[0-9]+)*$ ]]; then
+            echo "Error: '$INPUT_TAG' is not a valid release tag."
+            exit 1
+          fi
+
+          if ! gh release view "$INPUT_TAG" \
+              --repo "$GITHUB_REPOSITORY" \
+              --json isDraft > /tmp/release.json 2>/dev/null; then
+            echo "Error: '$INPUT_TAG' is not a published release of this repository."
+            exit 1
+          fi
+
+          if [ "$(jq -r '.isDraft' /tmp/release.json)" != "false" ]; then
+            echo "Error: release '$INPUT_TAG' is a draft; refusing to publish action tags."
+            exit 1
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -124,8 +150,13 @@ jobs:
           cd release-action
           zip -r ../node-minify-action-${{ steps.version.outputs.version }}.zip .
 
+      # Also runs for workflow_dispatch: publish.yml dispatches this workflow
+      # because a GITHUB_TOKEN release never emits `release: published`.
       - name: Upload release artifact
-        if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.version.outputs.version }}
           files: node-minify-action-${{ steps.version.outputs.version }}.zip
+          # Re-runs and repeated dispatches target the same tag. This is the
+          # action's default, set explicitly so the intent survives upgrades.
+          overwrite_files: true

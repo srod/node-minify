@@ -10,6 +10,8 @@ permissions:
   id-token: write
   contents: write
   pull-requests: write
+  # Required to dispatch release-action.yml after the release is created.
+  actions: write
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -61,11 +63,25 @@ jobs:
           # Format package list as markdown
           PACKAGE_LIST=$(echo "$PACKAGES" | jq -r '.[] | "- `\(.name)@\(.version)`"')
 
-          # Create release notes
-          cat > /tmp/release-notes.md << 'EOF'
-          ## Published Packages
+          # Lead with this version's own CHANGELOG entry so breaking changes are
+          # visible on the releases page instead of only in the package files.
+          # awk prints the body between this version's heading and the next one.
+          NOTES=$(awk -v ver="## ${VERSION}" '
+            $0 == ver { capture = 1; next }
+            capture && /^## / { exit }
+            capture { print }
+          ' packages/core/CHANGELOG.md)
 
-          EOF
+          : > /tmp/release-notes.md
+          if [ -n "$(echo "$NOTES" | tr -d '[:space:]')" ]; then
+            echo "$NOTES" >> /tmp/release-notes.md
+            echo "" >> /tmp/release-notes.md
+            echo "---" >> /tmp/release-notes.md
+            echo "" >> /tmp/release-notes.md
+          fi
+
+          echo "## Published Packages" >> /tmp/release-notes.md
+          echo "" >> /tmp/release-notes.md
           echo "$PACKAGE_LIST" >> /tmp/release-notes.md
           echo "" >> /tmp/release-notes.md
           echo "See individual package CHANGELOGs for details." >> /tmp/release-notes.md
@@ -73,5 +89,17 @@ jobs:
           gh release create "v${VERSION}" \
             --title "v${VERSION}" \
             --notes-file /tmp/release-notes.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Releases created with GITHUB_TOKEN do not emit `release: published`,
+      # so release-action.yml would never run on its own. workflow_dispatch is
+      # exempt from that recursion guard, so trigger it explicitly to publish
+      # the action's version and major tags.
+      - name: 🏷️ Trigger action tag release
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          VERSION=$(jq -r '.version' packages/core/package.json)
+          gh workflow run release-action.yml -f tag="v${VERSION}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

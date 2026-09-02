@@ -27,7 +27,7 @@ Compressor packages contain native dependencies that cannot be bundled into the 
   run: npm install @node-minify/terser
 
 - name: Minify JavaScript
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
@@ -38,7 +38,7 @@ Compressor packages contain native dependencies that cannot be bundled into the 
 
 ```yaml
 - name: Minify JavaScript
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
@@ -55,7 +55,7 @@ Automatically discover and minify files with `auto: true`:
   run: npm install @node-minify/terser @node-minify/lightningcss
 
 - name: Minify all files
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     auto: 'true'
 ```
@@ -68,7 +68,7 @@ See [full zero-config documentation](https://node-minify.2clics.net/github-actio
 
 ```yaml
 - name: Minify and Report
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
@@ -83,7 +83,7 @@ See [full zero-config documentation](https://node-minify.2clics.net/github-actio
 
 ```yaml
 - name: Minify with Quality Gates
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
