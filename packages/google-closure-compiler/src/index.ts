@@ -4,6 +4,8 @@
  * MIT Licensed
  */
 
+/// <reference path="./types.d.ts" />
+
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import { ensureStringContent, wrapMinificationError } from "@node-minify/utils";
 import googleClosureCompiler from "google-closure-compiler";
