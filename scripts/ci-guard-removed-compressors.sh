@@ -29,7 +29,9 @@ EXCLUDE_PATHS=(
 )
 
 SCOPED_INCLUDES=(
-  --include="*.ts" --include="*.js" --include="*.json"
+  --include="*.ts" --include="*.tsx" --include="*.mts" --include="*.cts"
+  --include="*.js" --include="*.jsx" --include="*.mjs" --include="*.cjs"
+  --include="*.astro" --include="*.json"
   --include="*.md" --include="*.mdx" --include="*.yml" --include="*.yaml"
 )
 
@@ -61,7 +63,9 @@ YAML_MATCHES=$(grep -rnE "compressor:[[:space:]]*['\"]?($REMOVED_NAMES)\b" \
 #     the guard. The removal detector (doctor.ts) names them by design and is the
 #     only exception.
 BARE_CODE_MATCHES=$(grep -rnE "\b($REMOVED_NAMES)\b" \
-  --include="*.ts" --include="*.js" --include="*.yml" --include="*.yaml" \
+  --include="*.ts" --include="*.tsx" --include="*.mts" --include="*.cts" \
+  --include="*.js" --include="*.jsx" --include="*.mjs" --include="*.cjs" \
+  --include="*.yml" --include="*.yaml" \
   "${EXCLUDE_PATHS[@]}" --exclude="doctor.ts" \
   packages/cli/src/ packages/action/src/ .github/actions/ \
   packages/action/action.yml \
