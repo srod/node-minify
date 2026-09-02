@@ -664,4 +664,162 @@ describe("Package: doctor", () => {
             }
         });
     });
+
+    describe("removed non-compressor packages", () => {
+        test("should detect @node-minify/run in dependencies", async () => {
+            writePackageJson(tmpDir, { "@node-minify/run": "^10.0.0" });
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("ERROR");
+            expect(output).toContain("@node-minify/run");
+            expect(output).toContain("removed in v11");
+        });
+
+        test("should detect @node-minify/run imports in source", async () => {
+            writeSourceFile(
+                tmpDir,
+                "src/build.js",
+                'import { runCommandLine } from "@node-minify/run";\n'
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("src/build.js:1");
+            expect(output).toContain("@node-minify/run");
+        });
+    });
+
+    describe("removed type aliases", () => {
+        test("should detect CompressorReturnType and MinifyOptions", async () => {
+            writeSourceFile(
+                tmpDir,
+                "src/types.ts",
+                'import type { CompressorReturnType, MinifyOptions } from "@node-minify/types";\n'
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("CompressorReturnType");
+            expect(output).toContain("CompressorResult");
+            expect(output).toContain("MinifyOptions");
+            expect(output).toContain("Settings");
+        });
+
+        test("should detect aliases across multi-line import blocks", async () => {
+            writeSourceFile(
+                tmpDir,
+                "src/multi.ts",
+                [
+                    "import {",
+                    "    type CompressorReturnType,",
+                    "    type MinifierOptions,",
+                    '} from "@node-minify/types";',
+                    "",
+                ].join("\n")
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("src/multi.ts:1");
+            expect(output).toContain("CompressorReturnType");
+        });
+
+        test("should resolve renamed imports to the original alias", async () => {
+            writeSourceFile(
+                tmpDir,
+                "src/renamed.ts",
+                'import { MinifyOptions as Opts } from "@node-minify/types";\n'
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("MinifyOptions");
+        });
+
+        test("should ignore local identifiers that share a removed alias name", async () => {
+            writeSourceFile(
+                tmpDir,
+                "src/local.ts",
+                [
+                    'import type { Settings } from "@node-minify/types";',
+                    "const MinifyOptions = 1;",
+                    "export default { MinifyOptions, Settings };",
+                    "",
+                ].join("\n")
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(0);
+            expect(output).toBe("");
+        });
+    });
+
+    describe("engines.node baseline", () => {
+        test("should warn when engines.node allows a release below 22", async () => {
+            writeFileSync(
+                join(tmpDir, "package.json"),
+                JSON.stringify({
+                    name: "test-project",
+                    engines: { node: ">=20.0.0" },
+                })
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            // Engine drift is a warning, so it must not fail the run.
+            expect(result).toBe(0);
+            expect(output).toContain("WARNING");
+            expect(output).toContain("engines.node");
+            expect(output).toContain("Node 20");
+        });
+
+        test("should accept a compound range whose lowest major is 22", async () => {
+            writeFileSync(
+                join(tmpDir, "package.json"),
+                JSON.stringify({
+                    name: "test-project",
+                    engines: { node: "^22.0.0 || >=24" },
+                })
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(0);
+            expect(output).toBe("");
+        });
+
+        test("should ignore package.json without an engines field", async () => {
+            writePackageJson(tmpDir, { "@node-minify/terser": "^11.0.0" });
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(0);
+            expect(output).toBe("");
+        });
+    });
 });

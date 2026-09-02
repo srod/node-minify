@@ -12,7 +12,9 @@ REMOVED_NAMES="babel-minify|uglify-es|yui|sqwish|crass"
 # of code (e.g. a comment referencing node_modules or CHANGELOG) can never mask a
 # real violation. These locations intentionally name removed packages: changelogs,
 # deps, plans, migration guides, changesets, the registry data, tests, and bundled
-# dist output.
+# dist output. cli.md documents the doctor command, so it quotes the removed
+# packages doctor reports on; its only other scoped reference is @node-minify/cli,
+# which is not a removed package.
 EXCLUDE_PATHS=(
   --exclude-dir="node_modules"
   --exclude-dir="dist"
@@ -22,6 +24,7 @@ EXCLUDE_PATHS=(
   --exclude="CHANGELOG*"
   --exclude="Migrate.md"
   --exclude="v11-migration*"
+  --exclude="cli.md"
   --exclude="compressor-registry*"
 )
 
@@ -34,8 +37,11 @@ SCOPED_INCLUDES=(
 #    Actions, the root README/manifest, and the shipped skill/agent docs — anywhere
 #    a real usage would live. Recursive directories honor EXCLUDE_PATHS; the
 #    explicitly named files are hand-picked and always scanned.
+#    doctor.ts is excluded for the same reason as in scan 3: it is the removal
+#    detector and must name the packages it reports on, including the scoped
+#    @node-minify/run form.
 SCOPED_MATCHES=$(grep -rnE "$REMOVED_PACKAGES" \
-  "${SCOPED_INCLUDES[@]}" "${EXCLUDE_PATHS[@]}" \
+  "${SCOPED_INCLUDES[@]}" "${EXCLUDE_PATHS[@]}" --exclude="doctor.ts" \
   packages/ examples/ docs/src/ .github/ \
   action.yml Readme.md SKILL.md AGENTS.md package.json \
   2>/dev/null || true)

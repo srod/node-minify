@@ -15,7 +15,7 @@ v11: cleanup major release.
 ### New features
 
 - **Compressor support tiers**: shared status registry in `@node-minify/utils` (`recommended` / `supported` / `legacy` / `removed`), surfaced in CLI help and the GitHub Action.
-- **`node-minify doctor`**: read-only CLI command that scans `package.json`, source imports, and workflow YAML for removed/legacy compressor references and prints replacement guidance.
+- **`node-minify doctor`**: read-only CLI command covering every v11 break. Scans `package.json`, source imports, `compressor:` values and workflow YAML for removed/legacy compressors, the removed `@node-minify/run` package, the removed `CompressorReturnType`/`MinifyOptions` type aliases, and `engines.node` ranges that still allow Node below 22. Exits non-zero on errors so it can gate CI.
 - **CLI and Action fail early** when a removed compressor is requested, pointing at the replacement.
 - **GCC runtime controls**: configurable `buffer` limit (kills the child process when stdout/stderr exceeds it) plus hardened process/timeout/error handling.
 

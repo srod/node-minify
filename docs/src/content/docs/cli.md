@@ -81,23 +81,34 @@ Scan a project for v11 migration issues with the `doctor` command. It is read-on
 npx node-minify doctor
 ```
 
-Run from your project root. It scans `package.json` files, source imports, and GitHub workflow YAML for references to compressors that were removed or demoted in v11.
+Run it from your project root. It is read-only and checks for every v11 breaking change:
+
+| Check | Where it looks | Severity |
+|-------|----------------|----------|
+| Removed compressors | `package.json` deps, imports, `compressor:` values, workflow YAML | Error |
+| Legacy-tier compressors | same as above | Warning |
+| Removed `@node-minify/run` | `package.json` deps and source imports | Error |
+| Removed type aliases | `CompressorReturnType`, `MinifyOptions` in TypeScript imports | Error |
+| Node baseline | `engines.node` ranges allowing Node below 22 | Warning |
 
 ### Example Output
 
 ```console
-ERROR: .github/workflows/ci.yml:6 - yui was removed in v11. Use terser or lightningcss instead.
-WARNING: src/build.js:2 - @node-minify/jsonminify is legacy tier. Consider migrating.
+ERROR: package.json - @node-minify/run was removed in v11. It was an internal Java/process-spawn helper with no public replacement; remove it from your dependencies.
+ERROR: src/build.ts:1 - type MinifyOptions was removed in v11. Use Settings instead.
+ERROR: .github/workflows/ci.yml:5 - yui was removed in v11. Use terser or lightningcss instead.
+WARNING: package.json - engines.node is ">=20.0.0", which allows Node 20. v11 requires Node >=22.
+WARNING: src/build.ts:2 - @node-minify/jsonminify is legacy tier. Consider migrating.
 ```
 
 ### Exit Codes
 
 | Code | Meaning |
 |------|---------|
-| `0` | No removed compressors found. Legacy-tier warnings may still be printed. |
-| `1` | At least one removed compressor was found. |
+| `0` | No errors. Warnings may still be printed. |
+| `1` | At least one error was found. |
 
-Because removed compressors exit non-zero while legacy warnings do not, you can gate CI on it:
+Because errors exit non-zero while warnings do not, you can gate CI on it:
 
 ```bash
 npx node-minify doctor || exit 1
