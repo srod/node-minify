@@ -144,14 +144,16 @@ Custom `scripts/publish.ts` resolves `workspace:*` → concrete versions before 
 
 ## Anti-Patterns (DO NOT)
 
-- **Never** use `as any` or `as unknown as T` anywhere — Biome's `noExplicitAny` fails the build
-- **Never** use `@ts-ignore` anywhere
+- **Never** use `as any` anywhere — Biome's `noExplicitAny` is set to `error` and fails the build
+- **Never** use `as unknown as T` anywhere. No linter catches this shape, so it is enforced by review: use a real type, or `@ts-expect-error` where the invalidity is the point
+- **Never** use `@ts-ignore` or `@ts-nocheck` anywhere — both silently disable checking rather than proving an error exists
 - **Never** use `@ts-expect-error` in `src/` — fix the type instead
-- In `__tests__` only, `@ts-expect-error` is the sanctioned way to pass deliberately invalid input, and **must** carry a comment naming the invalid condition:
+- In test files only, `@ts-expect-error` is sanctioned for two cases, each of which **must** carry a comment naming the specific condition:
   ```ts
   // @ts-expect-error testing invalid input: settings is missing required fields
+  // @ts-expect-error mock is narrower than the real type it stands in for
   ```
-  Test files are typechecked (`bun run typecheck`), so an unused directive fails the build — the suppression cannot rot.
+  Test files are typechecked (`bun run typecheck`), so an unused directive fails the build — the suppression cannot rot. This covers every `__tests__/` directory plus the shared `tests/` helpers and `tests/integration/`.
 - **Never** remove JSDoc from exported functions
 - **Never** use deprecated packages in new code
 - **Never** commit without `bun run lint`

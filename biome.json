@@ -29,6 +29,7 @@
             },
             "suspicious": {
                 "noExplicitAny": "error",
+                "noTsIgnore": "error",
                 "noConfusingVoidType": "off",
                 "noAssignInExpressions": "off",
                 "noShadowRestrictedNames": "off"
