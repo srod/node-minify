@@ -884,6 +884,29 @@ describe("Package: doctor", () => {
             expect(output).toContain("src/swallow.ts:2");
         });
 
+        test("should treat an escaped quote as part of the string", async () => {
+            // Without backslash handling the escaped quote ends the string
+            // early, so the following /* opens a comment that swallows the
+            // import on the next line.
+            writeSourceFile(
+                tmpDir,
+                "src/escaped.ts",
+                [
+                    'const quoted = "he said \\" /*";',
+                    'import type { MinifyOptions } from "@node-minify/types";',
+                    'const close = "*/";',
+                    "",
+                ].join("\n")
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("src/escaped.ts:2");
+        });
+
         test("should ignore removed aliases embedded in template literals", async () => {
             writeSourceFile(
                 tmpDir,
