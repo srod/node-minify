@@ -15,7 +15,7 @@
     "private": true,
     "type": "module",
     "engines": {
-        "node": ">=20.0.0"
+        "node": ">=22.0.0"
     },
     "directories": {
         "lib": "dist",
@@ -63,6 +63,6 @@
     },
     "devDependencies": {
         "@node-minify/types": "workspace:*",
-        "@vercel/ncc": "^0.38.4"
+        "@vercel/ncc": "^0.45.0"
     }
 }

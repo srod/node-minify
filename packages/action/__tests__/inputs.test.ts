@@ -12,10 +12,11 @@ vi.mock("@actions/core", () => ({
 // Mock @node-minify/utils
 vi.mock("@node-minify/utils", () => ({
     isBuiltInCompressor: vi.fn(),
+    getCompressorEntry: vi.fn(),
 }));
 
 import { getBooleanInput, getInput, warning } from "@actions/core";
-import { isBuiltInCompressor } from "@node-minify/utils";
+import { getCompressorEntry, isBuiltInCompressor } from "@node-minify/utils";
 import { parseInputs, validateCompressor } from "../src/inputs.ts";
 
 describe("parseInputs", () => {
@@ -57,6 +58,16 @@ describe("parseInputs", () => {
         expect(inputs.output).toBe("dist/app.min.js");
         expect(inputs.compressor).toBe("terser");
         expect(inputs.reportSummary).toBe(true);
+    });
+
+    test("throws when output-dir escapes the workspace", () => {
+        vi.mocked(getInput).mockImplementation((name: string) =>
+            name === "output-dir" ? "../escape" : ""
+        );
+
+        expect(() => parseInputs()).toThrow(
+            'output-dir must be a relative path without ".." segments'
+        );
     });
 
     test("throws error for invalid JSON in options", () => {
@@ -124,13 +135,29 @@ describe("validateCompressor", () => {
         vi.resetAllMocks();
     });
 
-    test("warns for deprecated compressor", () => {
-        vi.mocked(isBuiltInCompressor).mockReturnValue(true);
+    test("throws error for removed compressor", () => {
+        vi.mocked(getCompressorEntry).mockReturnValue({
+            name: "babel-minify",
+            status: "removed",
+            packageName: "@node-minify/babel-minify",
+            replacement: "terser",
+        });
 
-        validateCompressor("babel-minify");
+        expect(() => validateCompressor("babel-minify")).toThrow(
+            "Compressor 'babel-minify' has been removed from node-minify"
+        );
+    });
 
-        expect(warning).toHaveBeenCalledWith(
-            expect.stringContaining("Deprecated")
+    test("throws error for removed compressor yui with replacement", () => {
+        vi.mocked(getCompressorEntry).mockReturnValue({
+            name: "yui",
+            status: "removed",
+            packageName: "@node-minify/yui",
+            replacement: "terser or lightningcss",
+        });
+
+        expect(() => validateCompressor("yui")).toThrow(
+            "Use 'terser or lightningcss' instead"
         );
     });
 

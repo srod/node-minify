@@ -16,9 +16,13 @@ describe("Package: minify-html error handling", () => {
     });
 
     test("should wrap minification errors", async () => {
+        // Mirrors the real module shape: @minify-html/node is CommonJS, so its
+        // exports are reached through the default export.
         vi.doMock("@minify-html/node", () => ({
-            minify: () => {
-                throw new Error("Invalid HTML syntax");
+            default: {
+                minify: () => {
+                    throw new Error("Invalid HTML syntax");
+                },
             },
         }));
 
@@ -32,5 +36,13 @@ describe("Package: minify-html error handling", () => {
         ).rejects.toThrow(
             "minify-html minification failed: Invalid HTML syntax"
         );
+    });
+
+    test("should call minify through the CommonJS default export", async () => {
+        // Regression guard: importing `minify` as a named export resolves to
+        // undefined under Node's ESM loader, which shipped broken in v10.
+        const lib = await import("@minify-html/node");
+
+        expect(typeof lib.default.minify).toBe("function");
     });
 });

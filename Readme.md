@@ -23,9 +23,6 @@ It allows you to compress JavaScript, CSS, HTML, and image files.
 - [swc](https://node-minify.2clics.net/compressors/swc)
 - [terser](https://node-minify.2clics.net/compressors/terser)
 - [uglify-js](https://node-minify.2clics.net/compressors/uglify-js)
-- [babel-minify](https://node-minify.2clics.net/compressors/babel-minify) _(deprecated)_
-- [uglify-es](https://node-minify.2clics.net/compressors/uglify-es) _(deprecated)_
-- [YUI Compressor](https://node-minify.2clics.net/compressors/yui) _(deprecated)_
 
 **CSS:**
 
@@ -34,12 +31,10 @@ It allows you to compress JavaScript, CSS, HTML, and image files.
 - [CSSO](https://node-minify.2clics.net/compressors/csso)
 - [esbuild](https://node-minify.2clics.net/compressors/esbuild)
 - [lightningcss](https://node-minify.2clics.net/compressors/lightningcss)
-- [crass](https://node-minify.2clics.net/compressors/crass) _(deprecated)_
-- [sqwish](https://node-minify.2clics.net/compressors/sqwish) _(deprecated)_
-- [YUI Compressor](https://node-minify.2clics.net/compressors/yui) _(deprecated)_
 
 **HTML:**
 
+- [minify-html](https://node-minify.2clics.net/compressors/minify-html) - Rust-based, recommended
 - [html-minifier](https://node-minify.2clics.net/compressors/html-minifier)
 
 **JSON:**
@@ -64,6 +59,15 @@ It allows you to compress JavaScript, CSS, HTML, and image files.
 
 - [Benchmark](https://node-minify.2clics.net/benchmark) - Compare compressor performance
 
+**Upgrading:**
+
+- [v11 Migration Guide](https://node-minify.2clics.net/guides/v11-migration) - Run `npx --package=@node-minify/cli -- node-minify doctor` to scan your project
+
+## Requirements
+
+- **Node.js**: 22 or higher
+- **Module System**: ESM only (`"type": "module"` in package.json)
+
 ## Installation
 
 ```bash
@@ -82,36 +86,37 @@ And install the compressor(s) you want:
 
 ```bash
 npm install @node-minify/terser        # Recommended - modern, fast, well-maintained
-npm install @node-minify/esbuild       # Extremely fast, also handles CSS
-npm install @node-minify/swc           # Rust-based, very fast
-npm install @node-minify/oxc           # Rust-based, cutting-edge
-npm install @node-minify/uglify-js     # Classic, battle-tested
-npm install @node-minify/google-closure-compiler  # Advanced optimizations
+npm install @node-minify/esbuild       # Recommended - extremely fast, also handles CSS
+npm install @node-minify/swc           # Recommended - Rust-based, very fast
+npm install @node-minify/oxc           # Recommended - Rust-based, cutting-edge
+npm install @node-minify/uglify-js     # Supported - classic, battle-tested
+npm install @node-minify/google-closure-compiler  # Supported - advanced optimizations
 ```
 
 ### CSS Compressors
 
 ```bash
 npm install @node-minify/lightningcss  # Recommended - Rust-based, fastest
-npm install @node-minify/esbuild       # Also handles JS
-npm install @node-minify/clean-css     # Feature-rich, reliable
-npm install @node-minify/cssnano       # PostCSS-based, customizable
-npm install @node-minify/csso          # Structural optimizations
+npm install @node-minify/cssnano       # Recommended - PostCSS-based, customizable
+npm install @node-minify/esbuild       # Recommended - also handles JS
+npm install @node-minify/clean-css     # Supported - feature-rich, reliable
+npm install @node-minify/csso          # Supported - structural optimizations
 ```
 
 ### HTML & Other
 
 ```bash
-npm install @node-minify/html-minifier # HTML minification
-npm install @node-minify/jsonminify    # JSON minification
+npm install @node-minify/minify-html   # Recommended - Rust-based, fastest
+npm install @node-minify/html-minifier # Supported - feature-rich HTML minification
+npm install @node-minify/jsonminify    # Legacy - JSON minification
 ```
 
 ### Image Compressors
 
 ```bash
-npm install @node-minify/sharp         # WebP/AVIF conversion, high performance
-npm install @node-minify/svgo          # SVG optimization
-npm install @node-minify/imagemin      # PNG/JPEG/GIF compression
+npm install @node-minify/sharp         # Recommended - WebP/AVIF conversion, high performance
+npm install @node-minify/svgo          # Recommended - SVG optimization
+npm install @node-minify/imagemin      # Supported - PNG/JPEG/GIF compression
 ```
 
 ## Quick Start

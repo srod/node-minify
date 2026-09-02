@@ -32,23 +32,36 @@ import type {
  * @param warmupFile - Path for warmup output file
  * @param warmupCount - Number of warmup iterations
  * @param options - Benchmark options containing type and compressor options
+ * @param collected - Array that receives each warmup output path as it is
+ *   scheduled (defaults to a fresh array). Pass one in to clean up partial files
+ *   even if `minify` throws part-way through the loop.
+ * @returns The warmup output paths (the same array passed as `collected`)
  */
 export async function runWarmup(
     file: string,
     compressor: Compressor,
     warmupFile: string,
     warmupCount: number,
-    options: Pick<BenchmarkOptions, "type" | "compressorOptions">
-): Promise<void> {
+    options: Pick<BenchmarkOptions, "type" | "compressorOptions">,
+    collected: string[] = []
+): Promise<string[]> {
     for (let i = 0; i < warmupCount; i++) {
+        const warmupOutput = `${warmupFile}.${i + 1}`;
+
+        // Track the path before minifying so a mid-loop failure still lets the
+        // caller delete the partial file instead of orphaning it.
+        collected.push(warmupOutput);
+
         await minify({
             compressor,
             input: file,
-            output: warmupFile,
+            output: warmupOutput,
             ...(options.type && { type: options.type as "js" | "css" }),
             options: options.compressorOptions,
         });
     }
+
+    return collected;
 }
 
 /**
@@ -298,8 +311,16 @@ async function benchmarkCompressor(
     try {
         const warmupFile = `${file}.warmup.${uniqueId}.tmp`;
         if (warmup > 0) {
-            await runWarmup(file, compressor, warmupFile, warmup, options);
-            tempFiles.push(warmupFile);
+            // Pass tempFiles so partial warmup outputs are tracked for cleanup
+            // even if runWarmup throws before completing all iterations.
+            await runWarmup(
+                file,
+                compressor,
+                warmupFile,
+                warmup,
+                options,
+                tempFiles
+            );
         }
 
         const outputFile = `${file}.${name}.${uniqueId}.tmp`;

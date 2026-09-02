@@ -40,6 +40,14 @@ node-minify --compressor my-custom-compressor --input 'input.js' --output 'outpu
 node-minify --compressor ./my-compressor.js --input 'input.js' --output 'output.js'
 ```
 
+## Doctor
+
+Scan your project for v11 migration issues. Read-only; exits `1` when a removed compressor is found.
+
+```bash
+npx --package=@node-minify/cli -- node-minify doctor
+```
+
 ## Documentation
 
 Visit https://node-minify.2clics.net/cli.html for full documentation

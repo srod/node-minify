@@ -136,6 +136,12 @@ describe("runBenchmark", () => {
         expect(result.bestSpeed).toBe("terser");
     });
 
+    test("throws when no input file is provided", async () => {
+        await expect(
+            runBenchmark({ ...baseInputs, input: undefined })
+        ).rejects.toThrow("Input file is required for benchmark mode");
+    });
+
     test("throws error when no file results", async () => {
         vi.mocked(benchmark).mockResolvedValue({
             timestamp: new Date().toISOString(),

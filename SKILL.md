@@ -49,7 +49,7 @@ const result = await minify({
 | **Images** | `sharp` (WebP/AVIF) | `svgo` (SVG), `imagemin` (PNG/JPEG/GIF) |
 | **Utility** | `no-compress` | Pass-through for concatenation without minification |
 
-**Deprecated (avoid)**: `babel-minify`, `uglify-es`, `yui`, `crass`, `sqwish`
+**Removed in v11** (will fail; use a replacement above): `babel-minify`, `uglify-es`, `yui`, `crass`, `sqwish`
 
 ## API Reference
 
@@ -62,7 +62,7 @@ type Settings = {
   output?: string | string[];       // Output path(s) or pattern: "$1.min.js"
   content?: string | Buffer;        // In-memory content (skip input/output)
   options?: Record<string, unknown>; // Compressor-specific options
-  type?: "js" | "css";              // Required for esbuild, yui
+  type?: "js" | "css";              // Required for esbuild
   publicFolder?: string;            // Prepend to input paths
   replaceInPlace?: boolean;         // Overwrite input files
   silence?: boolean;                // Suppress console output
@@ -158,7 +158,6 @@ await minify({
 | `esbuild` | Requires `type: "js"` or `type: "css"` |
 | `lightningcss` | Uses Buffer internally, supports `targets: { chrome: 95 }` |
 | `google-closure-compiler` | Requires Java; advanced optimizations available |
-| `yui` | Deprecated; requires Java; needs `type` |
 
 ## Error Handling
 

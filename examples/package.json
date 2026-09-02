@@ -7,10 +7,8 @@
         "start": "node server.js"
     },
     "dependencies": {
-        "@node-minify/babel-minify": "workspace:*",
         "@node-minify/clean-css": "workspace:*",
         "@node-minify/core": "workspace:*",
-        "@node-minify/crass": "workspace:*",
         "@node-minify/cssnano": "workspace:*",
         "@node-minify/csso": "workspace:*",
         "@node-minify/esbuild": "workspace:*",
@@ -22,12 +20,9 @@
         "@node-minify/no-compress": "workspace:*",
         "@node-minify/oxc": "workspace:*",
         "@node-minify/sharp": "workspace:*",
-        "@node-minify/sqwish": "workspace:*",
         "@node-minify/svgo": "workspace:*",
         "@node-minify/swc": "workspace:*",
         "@node-minify/terser": "workspace:*",
-        "@node-minify/uglify-es": "workspace:*",
-        "@node-minify/uglify-js": "workspace:*",
-        "@node-minify/yui": "workspace:*"
+        "@node-minify/uglify-js": "workspace:*"
     }
 }

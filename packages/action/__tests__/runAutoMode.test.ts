@@ -101,6 +101,18 @@ describe("runAutoMode", () => {
         });
     });
 
+    test("normalizes a './' outputDir to '.' for the ignore glob", async () => {
+        vi.mocked(discoverFiles).mockReturnValue([]);
+
+        await runAutoMode({ ...mockInputs, outputDir: "./" });
+
+        expect(discoverFiles).toHaveBeenCalledWith(
+            expect.objectContaining({
+                ignore: expect.arrayContaining(["**/./**"]),
+            })
+        );
+    });
+
     test("should only log info in dry-run mode", async () => {
         vi.mocked(discoverFiles).mockReturnValue(["file1.js", "file2.js"]);
         const inputs = { ...mockInputs, dryRun: true };

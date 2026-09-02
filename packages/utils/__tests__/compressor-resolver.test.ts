@@ -77,6 +77,14 @@ describe("Package: utils/compressor-resolver", () => {
             expect(result?.isBuiltIn).toBe(true);
         });
 
+        test("should resolve the 'gcc' alias to google-closure-compiler", async () => {
+            const result = await tryResolveBuiltIn("gcc");
+            expect(result).not.toBeNull();
+            expect(result?.compressor).toBeTypeOf("function");
+            expect(result?.label).toBe("google-closure-compiler");
+            expect(result?.isBuiltIn).toBe(true);
+        });
+
         test("should return null for unknown compressor name", async () => {
             const result = await tryResolveBuiltIn("unknown-compressor");
             expect(result).toBeNull();
@@ -176,6 +184,10 @@ describe("Package: utils/compressor-resolver", () => {
             expect(isBuiltInCompressor("clean-css")).toBe(true);
         });
 
+        test("should resolve the 'gcc' alias to a built-in", () => {
+            expect(isBuiltInCompressor("gcc")).toBe(true);
+        });
+
         test("should return false for unknown compressors", () => {
             expect(isBuiltInCompressor("unknown-compressor")).toBe(false);
             expect(isBuiltInCompressor("my-custom-pkg")).toBe(false);
@@ -189,6 +201,10 @@ describe("Package: utils/compressor-resolver", () => {
             expect(getKnownExportName("uglify-js")).toBe("uglifyJs");
             expect(getKnownExportName("google-closure-compiler")).toBe("gcc");
             expect(getKnownExportName("clean-css")).toBe("cleanCss");
+        });
+
+        test("should resolve the 'gcc' alias to its export name", () => {
+            expect(getKnownExportName("gcc")).toBe("gcc");
         });
 
         test("should return undefined for unknown compressors", () => {

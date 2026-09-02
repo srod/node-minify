@@ -5,7 +5,7 @@ This file provides guidance to AI coding assistants when working with code in th
 **Generated:** 2026-01-28 | **Commit:** 9b0b0f5f | **Branch:** develop
 
 ## Requirements
-- **Node.js**: >=20.0.0
+- **Node.js**: >=22.0.0
 - **Bun**: 1.3.5+ (package manager & runtime)
 
 ## Commands
@@ -13,13 +13,14 @@ This file provides guidance to AI coding assistants when working with code in th
 |------|---------|
 | Install | `bun install` |
 | Build all | `bun run build` |
-| Build deps first | `bun run build:deps` (utils + run) |
+| Build deps first | `bun run build:deps` (utils) |
 | Lint | `bun run lint` |
 | Format | `bun run format` |
 | Typecheck | `bun run typecheck` |
 | Test all | `bun run test` |
 | Test package | `bun run test packages/<name>` |
 | Test file | `bun run test packages/core/__tests__/core.test.ts` |
+| Doctor | `node-minify doctor` |
 | CI (full) | `bun run ci` |
 | Add changeset | `bun run changeset` |
 
@@ -42,7 +43,6 @@ packages/
 ├── core/           # Main minify() function
 ├── utils/          # Shared utilities (see packages/utils/AGENTS.md)
 ├── types/          # TypeScript definitions (no build, exports src/types.d.ts)
-├── run/            # Java process wrapper (YUI, GCC)
 ├── cli/            # Commander.js CLI
 ├── benchmark/      # Compressor comparison tool
 ├── action/         # GitHub Action (see packages/action/AGENTS.md)
@@ -59,7 +59,7 @@ packages/
 | **JSON** | `jsonminify` | - |
 | **Images** | `sharp` (WebP/AVIF), `svgo` (SVG), `imagemin` (PNG/JPEG/GIF) | - |
 
-**Deprecated** (emit warnings): `babel-minify`, `uglify-es`, `yui`, `crass`, `sqwish`
+**Removed** (v11): `babel-minify`, `uglify-es`, `yui`, `crass`, `sqwish`
 
 ### Dependencies
 ```
@@ -70,7 +70,7 @@ benchmark → core + utils
 compressors → utils + types
 ```
 
-**Build order**: `utils` + `run` first → all others parallel
+**Build order**: `utils` first → all others parallel
 
 ### Package Pattern
 ```
@@ -130,7 +130,7 @@ export async function myCompressor({ settings, content }: MinifierOptions): Prom
 
 **Convention**: Tests auto-isolate to `tests/tmp/` when using `replaceInPlace` or `$1` output patterns.
 
-**Timeouts**: Core/YUI packages use 60s timeout for slow Java compressors.
+**Timeouts**: Some packages use 60s timeout for slow compressors.
 
 ## Changesets
 
@@ -197,4 +197,3 @@ cd docs && bun run build  # Production build
 | Type errors | Run `bun run build` (types from `dist/`) |
 | Test isolation | Uses `tests/tmp/` (gitignored) |
 | Clean rebuild | `bun run clean && bun run build` |
-| Java compressors | Ensure Java installed for `yui`/`gcc` |

@@ -62,9 +62,9 @@ Enable automatic file discovery and compressor selection with `auto: true`. The 
 
 ```yaml
 - name: Setup Node.js
-  uses: actions/setup-node@v4
+  uses: actions/setup-node@v6
   with:
-    node-version: '20'
+    node-version: '22'
 
 # Install compressors for your file types
 - name: Install compressors
@@ -153,9 +153,9 @@ For a project with JavaScript, CSS, and HTML:
 
 ```yaml
 - name: Setup Node.js
-  uses: actions/setup-node@v4
+  uses: actions/setup-node@v6
   with:
-    node-version: "20"
+    node-version: "22"
 
 - name: Install compressor
   run: npm install @node-minify/terser
@@ -185,9 +185,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Install compressor
         run: npm install @node-minify/terser
@@ -291,7 +291,6 @@ Compare multiple compressors to find the best one for your project:
 
 The `type` parameter is **required** for:
 - `esbuild` (specify `js` or `css`)
-- `yui` (specify `js` or `css`)
 
 ### Available Compressors
 
@@ -435,9 +434,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: "20"
+          node-version: "22"
       
       - name: Install dependencies
         run: npm install @node-minify/esbuild
@@ -491,12 +490,12 @@ Enable `report-pr-comment` to automatically post compression results as a commen
 
 Requires `github-token` to be set.
 
-## Deprecation Notices
+## Removed Compressors
 
-The following compressors are deprecated and will emit warnings:
+These compressors were removed in v11. The Action fails early if one is requested — use the replacement instead:
 
-| Deprecated | Use Instead |
-|------------|-------------|
+| Removed | Use Instead |
+|---------|-------------|
 | `babel-minify` | `terser` |
 | `uglify-es` | `terser` |
 | `yui` | `terser` (JS) or `lightningcss` (CSS) |

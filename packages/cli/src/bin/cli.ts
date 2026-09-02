@@ -7,11 +7,12 @@
  */
 
 import { benchmark, getReporter } from "@node-minify/benchmark";
+import { getCompressorsByStatus } from "@node-minify/utils";
 import { Command } from "commander";
 import ora from "ora";
 import updateNotifier from "update-notifier";
 import packageJson from "../../package.json" with { type: "json" };
-import { AVAILABLE_MINIFIER } from "../config.ts";
+import { doctor } from "../doctor.ts";
 import type { SettingsWithCompressor } from "../index.ts";
 import { run } from "../index.ts";
 
@@ -49,7 +50,7 @@ function setupProgram(): Command {
         .option("-o, --output [file]", "output file path")
         .option(
             "-t, --type [type]",
-            "file type: js or css (required for esbuild, yui)"
+            "file type: js or css (required for esbuild)"
         )
         .option("-s, --silence", "no output will be printed")
         .option(
@@ -130,23 +131,55 @@ function setupProgram(): Command {
             }
         });
 
+    program
+        .command("doctor")
+        .description("Scan project for v11 migration issues")
+        .action(async () => {
+            await doctor();
+        });
+
     program.on("--help", displayCompressorsList);
 
     return program;
 }
 
 /**
- * Prints the list of available compressors to standard output.
+ * Prints the list of available compressors grouped by tier to standard output.
  *
- * Outputs a header, each compressor name prefixed with a dash, and a trailing blank line.
+ * Outputs compressors organized by status (recommended, supported, legacy),
+ * with each tier clearly labeled.
  */
 function displayCompressorsList() {
     console.log("  List of compressors:");
     console.log("");
-    AVAILABLE_MINIFIER.forEach((compressor) => {
-        console.log(`    - ${compressor.name}`);
-    });
-    console.log("");
+
+    const recommended = getCompressorsByStatus("recommended");
+    const supported = getCompressorsByStatus("supported");
+    const legacy = getCompressorsByStatus("legacy");
+
+    if (recommended.length > 0) {
+        console.log("    Recommended:");
+        recommended.forEach((compressor) => {
+            console.log(`      - ${compressor.name}`);
+        });
+        console.log("");
+    }
+
+    if (supported.length > 0) {
+        console.log("    Supported:");
+        supported.forEach((compressor) => {
+            console.log(`      - ${compressor.name}`);
+        });
+        console.log("");
+    }
+
+    if (legacy.length > 0) {
+        console.log("    Legacy:");
+        legacy.forEach((compressor) => {
+            console.log(`      - ${compressor.name}`);
+        });
+        console.log("");
+    }
 }
 
 /**
