@@ -63,6 +63,6 @@
     },
     "devDependencies": {
         "@node-minify/types": "workspace:*",
-        "@vercel/ncc": "^0.44.0"
+        "@vercel/ncc": "^0.45.0"
     }
 }
