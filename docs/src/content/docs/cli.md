@@ -86,8 +86,8 @@ Run from your project root. It scans `package.json` files, source imports, and G
 ### Example Output
 
 ```console
-ERROR: package.json - @node-minify/babel-minify was removed in v11. Use @node-minify/terser instead.
-WARNING: src/build.js:9 - @node-minify/jsonminify is legacy tier. Consider migrating.
+ERROR: .github/workflows/ci.yml:6 - yui was removed in v11. Use terser or lightningcss instead.
+WARNING: src/build.js:2 - @node-minify/jsonminify is legacy tier. Consider migrating.
 ```
 
 ### Exit Codes
