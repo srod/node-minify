@@ -166,20 +166,69 @@ function lineNumberAt(content: string, index: number): number {
 }
 
 /**
- * Blank out line and block comments, replacing each comment character with a
- * space (newlines preserved) so byte offsets and line numbers are unchanged.
+ * Blank out comments and template-literal bodies, replacing each character with
+ * a space (newlines preserved) so byte offsets and line numbers are unchanged.
  *
- * Keeps a migration example written in a doc comment from being reported as a
- * real import.
+ * Quoted strings are walked but left intact, because an import specifier lives
+ * inside quotes and must still match. Walking them is what stops a comment
+ * marker inside a string from swallowing the code that follows. Template
+ * literals are blanked, since a migration example embedded in one is prose, not
+ * a real import.
  *
  * @param content - Full file contents
- * @returns The contents with comment bodies replaced by spaces
+ * @returns The contents with comment and template bodies replaced by spaces
  */
 function stripComments(content: string): string {
-    return content.replace(
-        /\/\*[\s\S]*?\*\/|\/\/[^\n]*/g,
-        (comment) => comment.replace(/[^\n]/g, " ")
-    );
+    const out = content.split("");
+    const blank = (from: number, to: number): void => {
+        for (let j = from; j < to && j < out.length; j++) {
+            if (out[j] !== "\n") out[j] = " ";
+        }
+    };
+    let i = 0;
+
+    while (i < content.length) {
+        const char = content[i];
+        const next = content[i + 1];
+
+        if (char === '"' || char === "'" || char === "`") {
+            const quote = char;
+            const start = i;
+            i++;
+            while (i < content.length) {
+                if (content[i] === "\\") {
+                    i += 2;
+                    continue;
+                }
+                if (content[i] === quote) {
+                    i++;
+                    break;
+                }
+                i++;
+            }
+            if (quote === "`") blank(start + 1, i - 1);
+            continue;
+        }
+
+        if (char === "/" && next === "*") {
+            const end = content.indexOf("*/", i + 2);
+            const stop = end === -1 ? content.length : end + 2;
+            blank(i, stop);
+            i = stop;
+            continue;
+        }
+
+        if (char === "/" && next === "/") {
+            const start = i;
+            while (i < content.length && content[i] !== "\n") i++;
+            blank(start, i);
+            continue;
+        }
+
+        i++;
+    }
+
+    return out.join("");
 }
 
 /**

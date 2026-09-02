@@ -864,6 +864,47 @@ describe("Package: doctor", () => {
             expect(output).not.toContain("CompressorReturnType");
         });
 
+        test("should not let comment markers inside strings hide a real import", async () => {
+            writeSourceFile(
+                tmpDir,
+                "src/swallow.ts",
+                [
+                    'const open = "/*";',
+                    'import type { MinifyOptions } from "@node-minify/types";',
+                    'const close = "*/";',
+                    "",
+                ].join("\n")
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("src/swallow.ts:2");
+        });
+
+        test("should ignore removed aliases embedded in template literals", async () => {
+            writeSourceFile(
+                tmpDir,
+                "src/tpl.ts",
+                [
+                    "const doc = `",
+                    '  import type { MinifyOptions } from "@node-minify/types";',
+                    "`;",
+                    "export const ok = doc.length > 0;",
+                    "",
+                ].join("\n")
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(0);
+            expect(output).toBe("");
+        });
+
         test("should ignore local identifiers that share a removed alias name", async () => {
             writeSourceFile(
                 tmpDir,

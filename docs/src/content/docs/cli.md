@@ -91,7 +91,7 @@ Run it from your project root. It is read-only and checks for every v11 breaking
 | Removed type aliases | `CompressorReturnType`, `MinifyOptions` in TypeScript imports and re-exports | Error |
 | Node baseline | `engines.node` ranges allowing Node below 22, or placing no lower bound | Warning |
 
-Comments are ignored, so a migration example written in a doc comment is not reported as a real import.
+The type-alias check ignores comments and template literals, so a migration example written in either is not reported as a real import.
 
 ### Example Output
 
