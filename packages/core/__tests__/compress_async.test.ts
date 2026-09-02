@@ -35,7 +35,7 @@ describe("compress async", () => {
             compressor: noCompress,
             input: ["", "file.js"],
             output: ["out1.js", "out2.js"],
-        } as any;
+        };
 
         await expect(compress(settings)).rejects.toThrow(
             "Invalid input at index 0: expected non-empty string, got empty string"

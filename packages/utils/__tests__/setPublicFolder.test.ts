@@ -4,7 +4,7 @@ import { setPublicFolder } from "../src/setPublicFolder.js";
 
 describe("setPublicFolder", () => {
     test("should return empty object if publicFolder is not a string", () => {
-        // @ts-expect-error testing invalid input
+        // @ts-expect-error testing invalid input: publicFolder is null, not a string
         const result = setPublicFolder("file.js", null);
         expect(result).toEqual({});
     });

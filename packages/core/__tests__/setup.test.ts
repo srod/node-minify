@@ -1,6 +1,6 @@
 /*! node-minify core setup tests - MIT Licensed */
 
-import type { Settings } from "@node-minify/types";
+import type { Compressor } from "@node-minify/types";
 import { describe, expect, test, vi } from "vitest";
 
 // Keep input untouched so checkOutput receives the literal paths instead of
@@ -15,7 +15,7 @@ vi.mock("@node-minify/utils", async (importOriginal) => {
 
 import { setup } from "../src/setup.ts";
 
-const compressor = (() => ({ code: "" })) as unknown as Settings["compressor"];
+const compressor: Compressor = async () => ({ code: "" });
 
 describe("setup $1 output handling", () => {
     test("rewrites the $1 placeholder for a single file", () => {

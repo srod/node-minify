@@ -44,7 +44,8 @@ describe("getContentFromFilesAsync", () => {
     });
 
     test("should throw if input is null", async () => {
-        await expect(getContentFromFilesAsync(null as any)).rejects.toThrow(
+        // @ts-expect-error testing invalid input: getContentFromFilesAsync requires a string or string[] input
+        await expect(getContentFromFilesAsync(null)).rejects.toThrow(
             "Input must be a string or array of strings"
         );
     });
