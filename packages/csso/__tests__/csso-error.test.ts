@@ -23,7 +23,8 @@ describe("Package: csso error handling", () => {
         const { csso } = await import("../src/index.ts");
 
         await expect(
-            csso({ settings: {} as any, content: ".a { color: red; }" })
+            // @ts-expect-error testing invalid input: settings is missing required fields
+            csso({ settings: {}, content: ".a { color: red; }" })
         ).rejects.toThrow("csso failed: empty result");
     });
 
@@ -37,7 +38,8 @@ describe("Package: csso error handling", () => {
         const { csso } = await import("../src/index.ts");
 
         await expect(
-            csso({ settings: {} as any, content: ".a { color: red; }" })
+            // @ts-expect-error testing invalid input: settings is missing required fields
+            csso({ settings: {}, content: ".a { color: red; }" })
         ).rejects.toThrow("csso");
     });
 });

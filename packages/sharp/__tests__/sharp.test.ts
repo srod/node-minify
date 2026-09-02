@@ -91,7 +91,7 @@ describe("sharp", () => {
                     compressor: sharp,
                     options: {},
                 },
-                content: "not a buffer" as unknown as Buffer,
+                content: "not a buffer",
             })
         ).rejects.toThrow("Sharp compressor requires Buffer content");
     });
@@ -119,7 +119,7 @@ describe("sharp", () => {
         const pngMock = vi.fn().mockReturnThis();
         const jpegMock = vi.fn().mockReturnThis();
 
-        // @ts-expect-error
+        // @ts-expect-error mock implementation only provides the methods this test exercises, narrower than the real Sharp instance type
         mockSharp.mockImplementation(() => ({
             webp: webpMock,
             avif: avifMock,
@@ -195,7 +195,7 @@ describe("sharp", () => {
         const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
         const { default: mockSharp } = await import("sharp");
         const pngMock = vi.fn().mockReturnThis();
-        // @ts-expect-error
+        // @ts-expect-error mock implementation only provides the methods this test exercises, narrower than the real Sharp instance type
         mockSharp.mockImplementationOnce(() => ({
             png: pngMock,
             toBuffer: vi.fn().mockResolvedValue(Buffer.from("converted")),
@@ -220,7 +220,7 @@ describe("sharp", () => {
     test("should wrap and rethrow sharp errors", async () => {
         const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
         const { default: mockSharp } = await import("sharp");
-        // @ts-expect-error
+        // @ts-expect-error mock implementation only provides the methods this test exercises, narrower than the real Sharp instance type
         mockSharp.mockImplementationOnce(() => ({
             webp: vi.fn().mockImplementation(() => {
                 throw new Error("Sharp error");
@@ -241,7 +241,7 @@ describe("sharp", () => {
     test("should rethrow non-Error exceptions", async () => {
         const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
         const { default: mockSharp } = await import("sharp");
-        // @ts-expect-error
+        // @ts-expect-error mock implementation only provides the methods this test exercises, narrower than the real Sharp instance type
         mockSharp.mockImplementationOnce(() => ({
             webp: vi.fn().mockImplementation(() => {
                 throw "string error";

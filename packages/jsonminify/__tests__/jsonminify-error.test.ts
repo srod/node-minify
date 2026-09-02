@@ -25,7 +25,8 @@ describe("Package: jsonminify error handling", () => {
         const { jsonMinify } = await import("../src/index.ts");
 
         await expect(
-            jsonMinify({ settings: {} as any, content: '{"key": "value"}' })
+            // @ts-expect-error testing invalid input: settings is missing required fields
+            jsonMinify({ settings: {}, content: '{"key": "value"}' })
         ).rejects.toThrow("jsonminify minification failed: JSON parse error");
     });
 });
