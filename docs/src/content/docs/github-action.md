@@ -62,7 +62,7 @@ Enable automatic file discovery and compressor selection with `auto: true`. The 
 
 ```yaml
 - name: Setup Node.js
-  uses: actions/setup-node@v4
+  uses: actions/setup-node@v6
   with:
     node-version: '22'
 
@@ -153,7 +153,7 @@ For a project with JavaScript, CSS, and HTML:
 
 ```yaml
 - name: Setup Node.js
-  uses: actions/setup-node@v4
+  uses: actions/setup-node@v6
   with:
     node-version: "22"
 
@@ -185,7 +185,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "22"
 
@@ -434,7 +434,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: "22"
       

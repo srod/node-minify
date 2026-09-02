@@ -5,7 +5,7 @@ This file provides guidance to AI coding assistants when working with code in th
 **Generated:** 2026-01-28 | **Commit:** 9b0b0f5f | **Branch:** develop
 
 ## Requirements
-- **Node.js**: >=20.0.0
+- **Node.js**: >=22.0.0
 - **Bun**: 1.3.5+ (package manager & runtime)
 
 ## Commands
