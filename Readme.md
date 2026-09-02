@@ -58,6 +58,15 @@ It allows you to compress JavaScript, CSS, HTML, and image files.
 
 - [Benchmark](https://node-minify.2clics.net/benchmark) - Compare compressor performance
 
+**Upgrading:**
+
+- [v11 Migration Guide](https://node-minify.2clics.net/guides/v11-migration) - Run `npx node-minify doctor` to scan your project
+
+## Requirements
+
+- **Node.js**: 22 or higher
+- **Module System**: ESM only (`"type": "module"` in package.json)
+
 ## Installation
 
 ```bash

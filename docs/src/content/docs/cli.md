@@ -73,6 +73,36 @@ When minifying files that produce empty output (e.g., CSS with only comments), u
 node-minify --compressor clean-css --input 'comments-only.css' --output 'output.css' --allow-empty-output
 ```
 
+## Doctor Command
+
+Scan a project for v11 migration issues with the `doctor` command. It is read-only — it reports findings and changes nothing.
+
+```bash
+npx node-minify doctor
+```
+
+Run from your project root. It scans `package.json` files, source imports, and GitHub workflow YAML for references to compressors that were removed or demoted in v11.
+
+### Example Output
+
+```console
+ERROR: package.json - @node-minify/babel-minify was removed in v11. Use @node-minify/terser instead.
+WARNING: src/build.js:9 - @node-minify/jsonminify is legacy tier. Consider migrating.
+```
+
+### Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | No removed compressors found. Legacy-tier warnings may still be printed. |
+| `1` | At least one removed compressor was found. |
+
+Because removed compressors exit non-zero while legacy warnings do not, you can gate CI on it:
+
+```bash
+npx node-minify doctor || exit 1
+```
+
 ## Benchmark Command
 
 Compare the performance of different compressors using the `benchmark` command.
