@@ -7,7 +7,7 @@
 import { type Stats, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import type { Compressor, Settings } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -370,10 +370,11 @@ describe("Package: core", async () => {
         });
 
         test("should handle publicFolder as non-string", async () => {
-            const settings: any = {
+            const settings: Settings = {
                 compressor: noCompress,
                 input: filesJS.oneFile,
                 output: filesJS.fileJSOut,
+                // @ts-expect-error testing invalid input: publicFolder must be a string, not a number
                 publicFolder: 123,
             };
 

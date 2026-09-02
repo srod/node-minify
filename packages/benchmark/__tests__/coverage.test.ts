@@ -1,3 +1,5 @@
+import type * as NodeFs from "node:fs";
+import type * as NodeMinifyUtils from "@node-minify/utils";
 import { describe, expect, test, vi } from "vitest";
 import * as compressorLoader from "../src/compressor-loader.ts";
 import { loadCompressor } from "../src/compressor-loader.ts";
@@ -7,7 +9,7 @@ import { runBenchmark } from "../src/runner.ts";
 import type { BenchmarkResult } from "../src/types.ts";
 
 vi.mock("node:fs", async () => {
-    const actual = await vi.importActual<any>("node:fs");
+    const actual = await vi.importActual<typeof NodeFs>("node:fs");
     return {
         ...actual,
         statSync: vi.fn((file) => {
@@ -37,7 +39,8 @@ vi.mock("node:fs", async () => {
 });
 
 vi.mock("@node-minify/utils", async () => {
-    const actual = await vi.importActual<any>("@node-minify/utils");
+    const actual =
+        await vi.importActual<typeof NodeMinifyUtils>("@node-minify/utils");
     return {
         ...actual,
         getFilesizeGzippedInBytes: vi.fn().mockResolvedValue("100 B"),

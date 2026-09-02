@@ -28,7 +28,7 @@
                 "noParameterAssign": "off"
             },
             "suspicious": {
-                "noExplicitAny": "off",
+                "noExplicitAny": "error",
                 "noConfusingVoidType": "off",
                 "noAssignInExpressions": "off",
                 "noShadowRestrictedNames": "off"

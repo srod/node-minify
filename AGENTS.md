@@ -144,7 +144,14 @@ Custom `scripts/publish.ts` resolves `workspace:*` → concrete versions before 
 
 ## Anti-Patterns (DO NOT)
 
-- **Never** suppress types: `as any`, `@ts-ignore`, `@ts-expect-error`
+- **Never** use `as any` or `as unknown as T` anywhere — Biome's `noExplicitAny` fails the build
+- **Never** use `@ts-ignore` anywhere
+- **Never** use `@ts-expect-error` in `src/` — fix the type instead
+- In `__tests__` only, `@ts-expect-error` is the sanctioned way to pass deliberately invalid input, and **must** carry a comment naming the invalid condition:
+  ```ts
+  // @ts-expect-error testing invalid input: settings is missing required fields
+  ```
+  Test files are typechecked (`bun run typecheck`), so an unused directive fails the build — the suppression cannot rot.
 - **Never** remove JSDoc from exported functions
 - **Never** use deprecated packages in new code
 - **Never** commit without `bun run lint`
