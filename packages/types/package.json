@@ -26,5 +26,8 @@
   },
   "bugs": {
     "url": "https://github.com/srod/node-minify/issues"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
   }
 }

@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import type { Settings } from "@node-minify/types";
+import type { Compressor, Settings } from "@node-minify/types";
 import { expect, test } from "vitest";
 import { minify } from "../packages/core/src/index.ts";
 import { filesCSS, filesHTML, filesJS, filesJSON } from "./files-path.ts";
@@ -17,7 +17,7 @@ interface TestOptions {
 interface TestConfig {
     options: TestOptions;
     compressorLabel: string;
-    compressor: any;
+    compressor: Compressor;
 }
 
 type MinifyResult = string;
@@ -39,7 +39,7 @@ const runOneTest = async ({
 
 const createTestOptions = (
     options: TestOptions,
-    compressor: any
+    compressor: Compressor
 ): TestOptions => {
     const testOptions = structuredClone(options);
     testOptions.minify.compressor = compressor;
@@ -183,8 +183,8 @@ function isRetriableFileSystemError(
     return (
         error instanceof Error &&
         "code" in error &&
-        (error as any).code &&
-        ["ENOENT", "EPERM", "EBUSY"].includes((error as any).code)
+        typeof error.code === "string" &&
+        ["ENOENT", "EPERM", "EBUSY"].includes(error.code)
     );
 }
 
