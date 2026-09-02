@@ -264,7 +264,7 @@ describe("CLI Coverage", () => {
     describe("run dynamic import", () => {
         test("should throw if compressor not found", async () => {
             const settings = {
-                compressor: "invalid-compressor" as any,
+                compressor: "invalid-compressor",
                 input: "foo.js",
                 output: "bar.js",
                 silence: true,
@@ -279,7 +279,8 @@ describe("CLI Coverage", () => {
             await expect(
                 cli.run({
                     compressor: "imagemin",
-                    input: null as any,
+                    // @ts-expect-error testing invalid input: input must be string | string[] | undefined, not null
+                    input: null,
                     output: filesImages.filePNGOut,
                     silence: true,
                 })
@@ -289,7 +290,7 @@ describe("CLI Coverage", () => {
 
         test("should throw if implementation is invalid (non-existent package)", async () => {
             const settings = {
-                compressor: "definitely-not-a-real-package-xyz" as any,
+                compressor: "definitely-not-a-real-package-xyz",
                 input: "foo.js",
                 output: "bar.js",
                 silence: true,
@@ -316,45 +317,45 @@ describe("CLI Coverage", () => {
     describe("compress default results", () => {
         test("should return default result if output is an array", async () => {
             const settings = {
-                compressor: () => ({ code: "minified" }),
+                compressor: async () => ({ code: "minified" }),
                 content: "foo",
                 output: ["bar.js"],
             };
-            const result = await compress(settings as any);
+            const result = await compress(settings);
             expect(result.size).toBe("0");
         });
 
         test("should return default result if output contains $1", async () => {
             const settings = {
-                compressor: () => ({ code: "minified" }),
+                compressor: async () => ({ code: "minified" }),
                 content: "foo",
                 output: "$1.min.js",
             };
-            const result = await compress(settings as any);
+            const result = await compress(settings);
             expect(result.size).toBe("0");
         });
 
         test("should throw if minify fails", async () => {
             const settings = {
-                compressor: () => {
+                compressor: async () => {
                     throw new Error("Minify failed");
                 },
                 content: "foo",
                 output: "bar.js",
             };
-            await expect(compress(settings as any)).rejects.toThrow(
+            await expect(compress(settings)).rejects.toThrow(
                 "Compression failed: Minify failed"
             );
         });
 
         test("should return default result when allowEmptyOutput skips writing", async () => {
             const settings = {
-                compressor: () => ({ code: "" }),
+                compressor: async () => ({ code: "" }),
                 content: "/* comment only */",
                 output: "/tmp/nonexistent-output-file.js",
                 allowEmptyOutput: true,
             };
-            const result = await compress(settings as any);
+            const result = await compress(settings);
             expect(result.size).toBe("0");
             expect(result.sizeGzip).toBe("0");
         });
