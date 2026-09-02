@@ -737,6 +737,27 @@ describe("Package: doctor", () => {
             expect(output).toContain("CompressorReturnType");
         });
 
+        test("should report the line the import actually starts on", async () => {
+            writeSourceFile(
+                tmpDir,
+                "src/late.ts",
+                [
+                    "// header comment",
+                    'import { readFile } from "node:fs";',
+                    "",
+                    'import type { MinifyOptions } from "@node-minify/types";',
+                    "",
+                ].join("\n")
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("src/late.ts:4");
+        });
+
         test("should resolve renamed imports to the original alias", async () => {
             writeSourceFile(
                 tmpDir,
