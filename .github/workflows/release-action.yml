@@ -131,3 +131,6 @@ jobs:
         with:
           tag_name: ${{ steps.version.outputs.version }}
           files: node-minify-action-${{ steps.version.outputs.version }}.zip
+          # Re-runs and repeated dispatches target the same tag. This is the
+          # action's default, set explicitly so the intent survives upgrades.
+          overwrite_files: true
