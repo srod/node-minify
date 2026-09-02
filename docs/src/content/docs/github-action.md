@@ -72,7 +72,7 @@ Enable automatic file discovery and compressor selection with `auto: true`. The 
     npm install @node-minify/terser @node-minify/lightningcss
 
 - name: Minify all files
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     auto: 'true'
 ```
@@ -87,7 +87,7 @@ Override default patterns to target specific files:
 
 ```yaml
 - name: Minify custom locations
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     auto: 'true'
     patterns: 'public/**/*.js,assets/**/*.css'
@@ -100,7 +100,7 @@ Add additional ignore patterns (merges with defaults):
 
 ```yaml
 - name: Minify with custom ignores
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     auto: 'true'
     ignore: '**/*.config.js,**/vendor/**'
@@ -112,7 +112,7 @@ Preview which files would be processed without minifying:
 
 ```yaml
 - name: Preview auto mode
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     auto: 'true'
     dry-run: 'true'
@@ -143,7 +143,7 @@ For a project with JavaScript, CSS, and HTML:
       @node-minify/html-minifier
 
 - name: Minify all assets
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     auto: 'true'
     output-dir: 'public/dist'
@@ -161,7 +161,7 @@ For a project with JavaScript, CSS, and HTML:
   run: npm install @node-minify/terser
 
 - name: Minify JavaScript
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
@@ -193,7 +193,7 @@ jobs:
         run: npm install @node-minify/terser
 
       - name: Minify JS
-        uses: srod/node-minify@v1
+        uses: srod/node-minify@v11
         with:
           input: "src/app.js"
           output: "dist/app.min.js"
@@ -211,7 +211,7 @@ When enabled, PR comments include a **"vs Base"** column showing size changes co
 
 ```yaml
 - name: Minify and Report
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
@@ -229,7 +229,7 @@ When enabled, PR comments include a **"vs Base"** column showing size changes co
   run: npm install @node-minify/lightningcss
 
 - name: Minify CSS
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     input: "src/styles.css"
     output: "dist/styles.min.css"
@@ -240,7 +240,7 @@ When enabled, PR comments include a **"vs Base"** column showing size changes co
 
 ```yaml
 - name: Minify with Thresholds
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
@@ -258,7 +258,7 @@ Compare multiple compressors to find the best one for your project:
   run: npm install @node-minify/terser @node-minify/esbuild @node-minify/swc @node-minify/oxc
 
 - name: Benchmark Compressors
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
@@ -344,7 +344,7 @@ The `type` parameter is **required** for:
 ```yaml
 - name: Minify
   id: minify
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
@@ -372,7 +372,7 @@ The `type` parameter is **required** for:
   run: npm install @node-minify/google-closure-compiler
 
 - name: Minify with GCC
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     input: "src/app.js"
     output: "dist/app.min.js"
@@ -387,7 +387,7 @@ The `type` parameter is **required** for:
   run: npm install @node-minify/html-minifier
 
 - name: Minify HTML
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     input: "src/index.html"
     output: "dist/index.html"
@@ -402,14 +402,14 @@ The `type` parameter is **required** for:
   run: npm install @node-minify/terser @node-minify/lightningcss
 
 - name: Minify JS bundle
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     input: "src/**/*.js"
     output: "dist/bundle.min.js"
     compressor: "terser"
 
 - name: Minify CSS bundle
-  uses: srod/node-minify@v1
+  uses: srod/node-minify@v11
   with:
     input: "src/**/*.css"
     output: "dist/styles.min.css"
@@ -446,7 +446,7 @@ jobs:
       
       - name: Minify Assets
         id: minify
-        uses: srod/node-minify@v1
+        uses: srod/node-minify@v11
         with:
           input: "dist/**/*.js"
           compressor: "esbuild"

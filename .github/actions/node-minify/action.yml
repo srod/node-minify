@@ -1,5 +1,5 @@
 name: "node-minify (deprecated)"
-description: "DEPRECATED: Use srod/node-minify@v1 instead. This composite action will be removed in a future release."
+description: "DEPRECATED: Use srod/node-minify@v11 instead. This composite action will be removed in a future release."
 author: "srod"
 branding:
   icon: "minimize-2"
@@ -70,7 +70,7 @@ runs:
     - name: Deprecation warning
       shell: bash
       run: |
-        echo "::warning::This action (.github/actions/node-minify) is DEPRECATED. Please migrate to 'uses: srod/node-minify@v1' for the new bundled action with more features (PR comments, annotations, benchmarking)."
+        echo "::warning::This action (.github/actions/node-minify) is DEPRECATED. Please migrate to 'uses: srod/node-minify@v11' for the new bundled action with more features (PR comments, annotations, benchmarking)."
 
     - name: Setup Java (for gcc)
       if: contains(fromJSON('["gcc", "google-closure-compiler"]'), inputs.compressor)
@@ -136,6 +136,6 @@ runs:
         | **Gzip Size** | ${{ steps.minify.outputs.gzip-size-formatted }} |
         | **Time** | ${{ steps.minify.outputs.time-ms }}ms |
 
-        > **Note:** This action is deprecated. Please migrate to \`uses: srod/node-minify@v1\` for enhanced features.
+        > **Note:** This action is deprecated. Please migrate to \`uses: srod/node-minify@v11\` for enhanced features.
 
         EOF
