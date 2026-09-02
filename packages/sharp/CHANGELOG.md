@@ -1,5 +1,13 @@
 # @node-minify/sharp
 
+## 11.0.0
+
+### Patch Changes
+
+- Updated dependencies [1a1be73]
+  - @node-minify/core@11.0.0
+  - @node-minify/utils@11.0.0
+
 ## 10.5.0
 
 ### Patch Changes
