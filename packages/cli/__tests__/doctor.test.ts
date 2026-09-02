@@ -820,6 +820,50 @@ describe("Package: doctor", () => {
             expect(output).toContain("MinifyOptions");
         });
 
+        test("should ignore removed aliases inside comments", async () => {
+            writeSourceFile(
+                tmpDir,
+                "src/doc.ts",
+                [
+                    "/**",
+                    ' * Example: import type { CompressorReturnType } from "@node-minify/types";',
+                    " */",
+                    '// import type { MinifyOptions } from "@node-minify/types";',
+                    'export const note = "use Settings";',
+                    "",
+                ].join("\n")
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(0);
+            expect(output).toBe("");
+        });
+
+        test("should still flag a real import that follows comment examples", async () => {
+            writeSourceFile(
+                tmpDir,
+                "src/mix.ts",
+                [
+                    "/**",
+                    ' * Example: import type { CompressorReturnType } from "@node-minify/types";',
+                    " */",
+                    'import type { MinifyOptions } from "@node-minify/types";',
+                    "",
+                ].join("\n")
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("src/mix.ts:4");
+            expect(output).not.toContain("CompressorReturnType");
+        });
+
         test("should ignore local identifiers that share a removed alias name", async () => {
             writeSourceFile(
                 tmpDir,
@@ -877,6 +921,24 @@ describe("Package: doctor", () => {
 
             expect(result).toBe(0);
             expect(output).toBe("");
+        });
+
+        test("should warn when engines.node places no lower bound", async () => {
+            writeFileSync(
+                join(tmpDir, "package.json"),
+                JSON.stringify({
+                    name: "test-project",
+                    engines: { node: "*" },
+                })
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(0);
+            expect(output).toContain("WARNING");
+            expect(output).toContain("no lower bound");
         });
 
         test("should ignore package.json without an engines field", async () => {

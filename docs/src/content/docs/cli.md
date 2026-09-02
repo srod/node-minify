@@ -89,7 +89,9 @@ Run it from your project root. It is read-only and checks for every v11 breaking
 | Legacy-tier compressors | same as above | Warning |
 | Removed `@node-minify/run` | `package.json` deps and source imports | Error |
 | Removed type aliases | `CompressorReturnType`, `MinifyOptions` in TypeScript imports and re-exports | Error |
-| Node baseline | `engines.node` ranges allowing Node below 22 | Warning |
+| Node baseline | `engines.node` ranges allowing Node below 22, or placing no lower bound | Warning |
+
+Comments are ignored, so a migration example written in a doc comment is not reported as a real import.
 
 ### Example Output
 

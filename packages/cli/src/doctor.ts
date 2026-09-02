@@ -166,11 +166,30 @@ function lineNumberAt(content: string, index: number): number {
 }
 
 /**
+ * Blank out line and block comments, replacing each comment character with a
+ * space (newlines preserved) so byte offsets and line numbers are unchanged.
+ *
+ * Keeps a migration example written in a doc comment from being reported as a
+ * real import.
+ *
+ * @param content - Full file contents
+ * @returns The contents with comment bodies replaced by spaces
+ */
+function stripComments(content: string): string {
+    return content.replace(
+        /\/\*[\s\S]*?\*\/|\/\/[^\n]*/g,
+        (comment) => comment.replace(/[^\n]/g, " ")
+    );
+}
+
+/**
  * Report a package.json whose engines.node range still admits a Node release
  * below the v11 minimum.
  *
  * The lowest major version mentioned in the range is used, which is accurate for
  * the range styles seen in practice (">=20.0.0", "^20 || ^22", "20.x", ">=20 <24").
+ * A range naming no version at all ("*", "x") places no floor on the runtime, so
+ * it is reported rather than assumed safe.
  *
  * @param pkg - Parsed package.json object
  * @param relPath - Relative path used in the diagnostic
@@ -189,7 +208,14 @@ function checkNodeEngine(
     const majors = [...nodeRange.matchAll(/(\d+)(?:\.\d+)*/g)]
         .map((match) => Number(match[1]))
         .filter((major) => Number.isFinite(major));
-    if (majors.length === 0) return undefined;
+
+    if (majors.length === 0) {
+        return {
+            file: relPath,
+            message: `engines.node is "${nodeRange}", which places no lower bound on the runtime. v11 requires Node >=${MIN_NODE_MAJOR}.`,
+            severity: "warning",
+        };
+    }
 
     const lowest = Math.min(...majors);
     if (lowest >= MIN_NODE_MAJOR) return undefined;
@@ -435,9 +461,12 @@ async function scanSourceImports(cwd: string): Promise<Finding[]> {
             }
 
             // Removed type aliases, matched across the whole file so multi-line
-            // named-import blocks are covered.
+            // named-import blocks are covered. Comments are blanked first so a
+            // migration example in a doc comment is not reported as a real
+            // import; blanking preserves offsets so line numbers stay correct.
             if (TYPE_SOURCE_EXTENSIONS.has(extname(relPath))) {
-                for (const match of content.matchAll(NAMED_IMPORT_REGEX)) {
+                const code = stripComments(content);
+                for (const match of code.matchAll(NAMED_IMPORT_REGEX)) {
                     const specifiers = match[1];
                     if (!specifiers) continue;
 
