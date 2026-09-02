@@ -56,16 +56,25 @@ const SOURCE_EXTENSIONS = new Set([
     ".mts",
     ".cts",
 ]);
-const IMPORT_REGEX =
-    /(?:from\s+["']|(?:require|import)\s*\(\s*["'])(@node-minify\/[^"']+)["']/g;
-const COMPRESSOR_REGEX =
-    /(?:^|[\s,{])["']?compressor["']?:\s*["']?([a-zA-Z][\w-]*)["']?/;
 /**
- * Named-import block from a @node-minify package. Matches multi-line forms so a
- * wrapped import list cannot slip past the type-alias scanner.
+ * A @node-minify specifier reached through `from "..."`, `require("...")`,
+ * `import("...")`, or a side-effect `import "..."`.
+ */
+const IMPORT_REGEX =
+    /(?:from\s+["']|(?:require|import)\s*\(\s*["']|import\s+["'])(@node-minify\/[^"']+)["']/g;
+/**
+ * A `compressor:` assignment. Whitespace is allowed before the colon so
+ * formatted config objects are not skipped.
+ */
+const COMPRESSOR_REGEX =
+    /(?:^|[\s,{])["']?compressor["']?\s*:\s*["']?([a-zA-Z][\w-]*)["']?/;
+/**
+ * Named import or re-export block from a @node-minify package. Matches
+ * multi-line forms so a wrapped list cannot slip past the type-alias scanner,
+ * and `export ... from` so re-exported aliases are still reported.
  */
 const NAMED_IMPORT_REGEX =
-    /import\s+(?:type\s+)?\{([^}]*)\}\s*from\s*["'](@node-minify\/[^"']+)["']/g;
+    /(?:import|export)\s+(?:type\s+)?\{([^}]*)\}\s*from\s*["'](@node-minify\/[^"']+)["']/g;
 
 /** Minimum Node.js major version required by v11. */
 const MIN_NODE_MAJOR = 22;

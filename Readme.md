@@ -61,7 +61,7 @@ It allows you to compress JavaScript, CSS, HTML, and image files.
 
 **Upgrading:**
 
-- [v11 Migration Guide](https://node-minify.2clics.net/guides/v11-migration) - Run `npx node-minify doctor` to scan your project
+- [v11 Migration Guide](https://node-minify.2clics.net/guides/v11-migration) - Run `npx --package=@node-minify/cli -- node-minify doctor` to scan your project
 
 ## Requirements
 

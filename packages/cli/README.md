@@ -45,7 +45,7 @@ node-minify --compressor ./my-compressor.js --input 'input.js' --output 'output.
 Scan your project for v11 migration issues. Read-only; exits `1` when a removed compressor is found.
 
 ```bash
-npx node-minify doctor
+npx --package=@node-minify/cli -- node-minify doctor
 ```
 
 ## Documentation

@@ -21,4 +21,4 @@ v11: cleanup major release.
 
 ### Migration
 
-See the [v11 migration guide](https://github.com/srod/node-minify/blob/main/docs/src/content/docs/guides/v11-migration.md), or run `npx node-minify doctor` in your project.
+See the [v11 migration guide](https://github.com/srod/node-minify/blob/main/docs/src/content/docs/guides/v11-migration.md), or run `npx --package=@node-minify/cli -- node-minify doctor` in your project.

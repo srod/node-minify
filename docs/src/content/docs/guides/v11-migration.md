@@ -74,10 +74,10 @@ The `google-closure-compiler` compressor now uses the official npm JS API instea
 
 ## Automated Migration Check
 
-Run `npx node-minify doctor` in your project to check every breaking change on this page automatically. It is read-only and reports removed and legacy compressors, the removed `@node-minify/run` package, the removed type aliases, and an `engines.node` range that still allows Node below 22.
+Run `npx --package=@node-minify/cli -- node-minify doctor` in your project to check every breaking change on this page automatically. It is read-only and reports removed and legacy compressors, the removed `@node-minify/run` package, the removed type aliases, and an `engines.node` range that still allows Node below 22.
 
 ```bash
-npx node-minify doctor
+npx --package=@node-minify/cli -- node-minify doctor
 ```
 
 It exits `1` when it finds an error and `0` when only warnings remain, so you can run it as a CI gate. See the [CLI documentation](/cli) for the full check list and sample output.

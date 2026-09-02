@@ -694,6 +694,37 @@ describe("Package: doctor", () => {
             expect(output).toContain("src/build.js:1");
             expect(output).toContain("@node-minify/run");
         });
+
+        test("should detect side-effect imports of removed packages", async () => {
+            writeSourceFile(
+                tmpDir,
+                "src/side.ts",
+                'import "@node-minify/crass";\n'
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("src/side.ts:1");
+            expect(output).toContain("@node-minify/crass");
+        });
+
+        test("should detect compressor keys with whitespace before the colon", async () => {
+            writeSourceFile(
+                tmpDir,
+                "src/space.ts",
+                'const config = { compressor : "yui" };\n'
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("yui");
+        });
     });
 
     describe("removed type aliases", () => {
@@ -770,6 +801,22 @@ describe("Package: doctor", () => {
             );
 
             expect(result).toBe(1);
+            expect(output).toContain("MinifyOptions");
+        });
+
+        test("should detect removed aliases in re-exports", async () => {
+            writeSourceFile(
+                tmpDir,
+                "src/reexport.ts",
+                'export type { MinifyOptions } from "@node-minify/types";\n'
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(1);
+            expect(output).toContain("src/reexport.ts:1");
             expect(output).toContain("MinifyOptions");
         });
 

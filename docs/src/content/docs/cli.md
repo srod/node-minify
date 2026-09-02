@@ -78,7 +78,7 @@ node-minify --compressor clean-css --input 'comments-only.css' --output 'output.
 Scan a project for v11 migration issues with the `doctor` command. It is read-only — it reports findings and changes nothing.
 
 ```bash
-npx node-minify doctor
+npx --package=@node-minify/cli -- node-minify doctor
 ```
 
 Run it from your project root. It is read-only and checks for every v11 breaking change:
@@ -88,7 +88,7 @@ Run it from your project root. It is read-only and checks for every v11 breaking
 | Removed compressors | `package.json` deps, imports, `compressor:` values, workflow YAML | Error |
 | Legacy-tier compressors | same as above | Warning |
 | Removed `@node-minify/run` | `package.json` deps and source imports | Error |
-| Removed type aliases | `CompressorReturnType`, `MinifyOptions` in TypeScript imports | Error |
+| Removed type aliases | `CompressorReturnType`, `MinifyOptions` in TypeScript imports and re-exports | Error |
 | Node baseline | `engines.node` ranges allowing Node below 22 | Warning |
 
 ### Example Output
@@ -111,7 +111,7 @@ WARNING: src/build.ts:2 - @node-minify/jsonminify is legacy tier. Consider migra
 Because errors exit non-zero while warnings do not, you can gate CI on it:
 
 ```bash
-npx node-minify doctor || exit 1
+npx --package=@node-minify/cli -- node-minify doctor || exit 1
 ```
 
 ## Benchmark Command
