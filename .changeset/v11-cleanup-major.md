@@ -6,6 +6,7 @@ v11: cleanup major release.
 
 ### Breaking changes
 
+- **Minimum Node.js is now 22**: `engines.node` moved from `>=20.0.0` to `>=22.0.0` across all packages. Node 20 reached end-of-life on 2026-04-30 and is no longer covered by CI (the test matrix runs 22.x and 24.x). Upgrade to Node 22 or later.
 - **Removed 5 deprecated compressor packages**: `@node-minify/babel-minify`, `@node-minify/uglify-es`, `@node-minify/yui`, `@node-minify/sqwish`, `@node-minify/crass`. Use the recommended replacements (terser/oxc/swc/esbuild for JS, lightningcss/cssnano for CSS).
 - **Removed `@node-minify/run`**: internal Java/process-spawn helper, no longer used by any compressor.
 - **Removed deprecated type aliases** from `@node-minify/types`: `CompressorReturnType` (use `CompressorResult`) and `MinifyOptions` (use `Settings`).

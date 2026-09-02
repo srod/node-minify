@@ -5,7 +5,7 @@ description: 'Getting Started for node-minify'
 
 ## Requirements
 
-- **Node.js**: 20 or higher (Node 22 recommended)
+- **Node.js**: 22 or higher
 - **Module System**: ESM only (`"type": "module"` in package.json)
 
 ## Installation

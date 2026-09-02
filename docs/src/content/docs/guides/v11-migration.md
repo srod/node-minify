@@ -5,6 +5,18 @@ description: Migration guide for node-minify v11
 
 Node-minify v11 introduces breaking changes to modernize the library, improve performance, and reduce the maintenance burden of legacy compressors.
 
+## Node.js 22 Required
+
+v11 raises the minimum supported Node.js version from 20 to **22** (`engines.node` is now `>=22.0.0`). Node 20 reached end-of-life on 2026-04-30 and is no longer covered by our CI matrix, which tests Node 22 and 24.
+
+Upgrade your runtime before installing v11, and bump any CI workflows still pinned to Node 20:
+
+```yaml
+- uses: actions/setup-node@v6
+  with:
+    node-version: "22"
+```
+
 ## Removed Compressors
 
 The following compressors have been removed. If you use them, switch to the recommended alternatives.

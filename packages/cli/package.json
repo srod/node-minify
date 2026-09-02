@@ -15,7 +15,7 @@
     "node-minify": "dist/bin/cli.js"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "directories": {
     "lib": "dist",

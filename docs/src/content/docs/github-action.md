@@ -64,7 +64,7 @@ Enable automatic file discovery and compressor selection with `auto: true`. The 
 - name: Setup Node.js
   uses: actions/setup-node@v4
   with:
-    node-version: '20'
+    node-version: '22'
 
 # Install compressors for your file types
 - name: Install compressors
@@ -155,7 +155,7 @@ For a project with JavaScript, CSS, and HTML:
 - name: Setup Node.js
   uses: actions/setup-node@v4
   with:
-    node-version: "20"
+    node-version: "22"
 
 - name: Install compressor
   run: npm install @node-minify/terser
@@ -187,7 +187,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Install compressor
         run: npm install @node-minify/terser
@@ -436,7 +436,7 @@ jobs:
       
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
       
       - name: Install dependencies
         run: npm install @node-minify/esbuild

@@ -27,7 +27,7 @@
   },
   "description": "Monorepo for node-minify",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "homepage": "https://github.com/srod/node-minify",
   "license": "MIT",
