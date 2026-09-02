@@ -46,6 +46,9 @@ jobs:
         run: bun run ci
 
       - name: Guard - no removed compressor references
+        # Static grep over source, docs and action files: OS- and Node-version
+        # independent, so one leg is enough.
+        if: runner.os == 'Linux' && matrix.node-version == '22.x'
         run: bash scripts/ci-guard-removed-compressors.sh
 
       - name: Upload coverage to Codecov
