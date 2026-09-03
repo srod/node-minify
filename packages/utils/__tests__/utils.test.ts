@@ -1496,10 +1496,7 @@ describe("Package: utils", () => {
             const avifContent = Buffer.from("AVIF_SPARSE");
             const compressor = vi.fn().mockResolvedValue({
                 code: "",
-                outputs: [
-                    undefined,
-                    { format: "avif", content: avifContent },
-                ],
+                outputs: [undefined, { format: "avif", content: avifContent }],
             });
             const settings = {
                 compressor,
@@ -1552,10 +1549,7 @@ describe("Package: utils", () => {
             const settings = {
                 compressor,
                 input: testFile,
-                output: [
-                    undefined,
-                    undefined,
-                ],
+                output: [undefined, undefined],
             };
 
             // @ts-expect-error testing invalid input: output array elements are undefined instead of strings

@@ -52,13 +52,14 @@ describe("Package: core", async () => {
 
     describe("No mandatory", () => {
         test("should throw an error if no compressor", async () => {
-            const settings: Partial<Settings> = {
+            // @ts-expect-error testing invalid input: compressor is mandatory and intentionally omitted
+            const settings: Settings = {
                 input: filesJS.oneFileWithWildcards,
                 output: filesJS.fileJSOut,
             };
 
             try {
-                return await minify(settings as Settings);
+                return await minify(settings);
             } catch (err: unknown) {
                 if (err instanceof Error) {
                     return expect(err.toString()).toEqual(
@@ -105,7 +106,7 @@ describe("Package: core", async () => {
 
     describe("Mandatory", () => {
         test("should show throw on type option", async () => {
-            const settings: Partial<Settings> = {
+            const settings: Settings = {
                 // @ts-expect-error testing invalid input: "uglifyjs" is not a valid FileType ("js" | "css")
                 type: "uglifyjs",
                 input: filesJS.oneFileWithWildcards,
@@ -113,7 +114,7 @@ describe("Package: core", async () => {
             };
 
             try {
-                return await minify(settings as Settings);
+                return await minify(settings);
             } catch (err: unknown) {
                 if (err instanceof Error) {
                     return expect(err.toString()).toEqual(
@@ -215,15 +216,14 @@ describe("Package: core", async () => {
         });
 
         test("should skip non-string paths in array", async () => {
-            const settings = {
-                compressor: async () => ({ code: "minified" }),
-                input: [filesJS.oneFile],
-                output: [123],
-            };
-            // @ts-expect-error testing invalid input: output array element is a number, not a string path
-            await expect(minify(settings)).rejects.toThrow(
-                "Invalid target file path"
-            );
+            await expect(
+                minify({
+                    compressor: async () => ({ code: "minified" }),
+                    input: [filesJS.oneFile],
+                    // @ts-expect-error testing invalid input: output array element is a number, not a string path
+                    output: [123],
+                })
+            ).rejects.toThrow("Invalid target file path");
         });
 
         test("should throw an error if an input in the array is an empty string", async () => {
@@ -239,40 +239,40 @@ describe("Package: core", async () => {
         });
 
         test("should throw an error if an input in the array is null", async () => {
-            const settings = {
-                compressor: noCompress,
-                input: [filesJS.oneFile, null],
-                output: [filesJS.fileJSOut, filesJS.fileJSOut],
-            };
-
-            // @ts-expect-error testing invalid input: array element is null, not a string path
-            await expect(minify(settings)).rejects.toThrow(
+            await expect(
+                minify({
+                    compressor: noCompress,
+                    // @ts-expect-error testing invalid input: array element is null, not a string path
+                    input: [filesJS.oneFile, null],
+                    output: [filesJS.fileJSOut, filesJS.fileJSOut],
+                })
+            ).rejects.toThrow(
                 "Invalid input at index 1: expected non-empty string, got object"
             );
         });
 
         test("should throw an error if an input in the array is undefined", async () => {
-            const settings = {
-                compressor: noCompress,
-                input: [filesJS.oneFile, undefined],
-                output: [filesJS.fileJSOut, filesJS.fileJSOut],
-            };
-
-            // @ts-expect-error testing invalid input: array element is undefined, not a string path
-            await expect(minify(settings)).rejects.toThrow(
+            await expect(
+                minify({
+                    compressor: noCompress,
+                    // @ts-expect-error testing invalid input: array element is undefined, not a string path
+                    input: [filesJS.oneFile, undefined],
+                    output: [filesJS.fileJSOut, filesJS.fileJSOut],
+                })
+            ).rejects.toThrow(
                 "Invalid input at index 1: expected non-empty string, got undefined"
             );
         });
 
         test("should throw an error if an input in the array is a number", async () => {
-            const settings = {
-                compressor: noCompress,
-                input: [filesJS.oneFile, 123],
-                output: [filesJS.fileJSOut, filesJS.fileJSOut],
-            };
-
-            // @ts-expect-error testing invalid input: array element is a number, not a string path
-            await expect(minify(settings)).rejects.toThrow(
+            await expect(
+                minify({
+                    compressor: noCompress,
+                    // @ts-expect-error testing invalid input: array element is a number, not a string path
+                    input: [filesJS.oneFile, 123],
+                    output: [filesJS.fileJSOut, filesJS.fileJSOut],
+                })
+            ).rejects.toThrow(
                 "Invalid input at index 1: expected non-empty string, got number"
             );
         });

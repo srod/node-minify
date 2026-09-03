@@ -30,21 +30,19 @@ describe("Package: cli", () => {
 });
 
 describe("JavaScript compressors", () => {
-    test.each([
-        ["terser"],
-        ["uglify-js"],
-        ["swc"],
-        ["oxc"],
-    ] as const)("should minify with %s", async (compressor) => {
-        const spy = vi.spyOn(cli, "run");
-        await cli.run({
-            compressor,
-            input: filesJS.oneFile,
-            output: filesJS.fileJSOut,
-            silence: true,
-        });
-        expect(spy).toHaveBeenCalled();
-    });
+    test.each([["terser"], ["uglify-js"], ["swc"], ["oxc"]] as const)(
+        "should minify with %s",
+        async (compressor) => {
+            const spy = vi.spyOn(cli, "run");
+            await cli.run({
+                compressor,
+                input: filesJS.oneFile,
+                output: filesJS.fileJSOut,
+                silence: true,
+            });
+            expect(spy).toHaveBeenCalled();
+        }
+    );
 
     test("should minify with esbuild (requires type)", async () => {
         const spy = vi.spyOn(cli, "run");
@@ -71,20 +69,19 @@ describe("JavaScript compressors", () => {
 });
 
 describe("CSS compressors", () => {
-    test.each([
-        ["clean-css"],
-        ["cssnano"],
-        ["csso"],
-    ] as const)("should minify with %s", async (compressor) => {
-        const spy = vi.spyOn(cli, "run");
-        await cli.run({
-            compressor,
-            input: filesCSS.fileCSS,
-            output: filesCSS.fileCSSOut,
-            silence: true,
-        });
-        expect(spy).toHaveBeenCalled();
-    });
+    test.each([["clean-css"], ["cssnano"], ["csso"]] as const)(
+        "should minify with %s",
+        async (compressor) => {
+            const spy = vi.spyOn(cli, "run");
+            await cli.run({
+                compressor,
+                input: filesCSS.fileCSS,
+                output: filesCSS.fileCSSOut,
+                silence: true,
+            });
+            expect(spy).toHaveBeenCalled();
+        }
+    );
 
     test("should minify with lightningcss", async () => {
         const spy = vi.spyOn(cli, "run");

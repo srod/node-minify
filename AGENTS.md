@@ -144,16 +144,20 @@ Custom `scripts/publish.ts` resolves `workspace:*` → concrete versions before 
 
 ## Anti-Patterns (DO NOT)
 
-- **Never** use `as any` anywhere — Biome's `noExplicitAny` is set to `error` and fails the build
+- **Never** use `any` — not as `as any`, not as an annotation, not as a type argument. Biome's `noExplicitAny` is set to `error` and fires on every explicit `any` in any position, so the gate is broader than the `as any` symptom it was introduced for.
 - **Never** use `as unknown as T` anywhere. No linter catches this shape, so it is enforced by review: use a real type, or `@ts-expect-error` where the invalidity is the point
 - **Never** use `@ts-ignore` or `@ts-nocheck` anywhere — both silently disable checking rather than proving an error exists
 - **Never** use `@ts-expect-error` in `src/` — fix the type instead
-- In test files only, `@ts-expect-error` is sanctioned for two cases, each of which **must** carry a comment naming the specific condition:
+- In test files only, `@ts-expect-error` is sanctioned for two cases, each of which **must** carry a comment on the same line naming the specific condition:
   ```ts
   // @ts-expect-error testing invalid input: settings is missing required fields
   // @ts-expect-error mock is narrower than the real type it stands in for
   ```
   Test files are typechecked (`bun run typecheck`), so an unused directive fails the build — the suppression cannot rot. This covers every `__tests__/` directory plus the shared `tests/` helpers and `tests/integration/`.
+
+  Place the directive on the line the compiler reports, which is not always the offending property: a missing required field is reported on the object-literal or declaration line, so the directive belongs there rather than on a property. Where several errors would be reported for one literal, TypeScript surfaces only the first — keep the comment to the error actually being suppressed instead of listing every latent one.
+
+  Enforcement of these four rules is split. Biome's `noTsIgnore` catches `@ts-ignore` only, and the root `lint` script runs per workspace, so it never reaches `tests/` or `scripts/`. `scripts/ci-guard-type-suppressions.sh` is the mechanism for the rest: it bans `@ts-nocheck` and `@ts-ignore` repo-wide, bans `@ts-expect-error` under any `src/`, and rejects a directive with no reason after it. Run it locally with `bash scripts/ci-guard-type-suppressions.sh`; CI runs it on the Linux/Node 22 leg.
 - **Never** remove JSDoc from exported functions
 - **Never** use deprecated packages in new code
 - **Never** commit without `bun run lint`
