@@ -26,6 +26,9 @@ describe("runBenchmark", () => {
         minReduction: 0,
         includeGzip: true,
         workingDirectory: ".",
+        auto: false,
+        outputDir: "dist",
+        dryRun: false,
     };
 
     beforeEach(() => {

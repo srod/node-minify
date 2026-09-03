@@ -1,10 +1,12 @@
 /*! node-minify action tests - MIT Licensed */
 
+import type { Stats } from "node:fs";
 import { mkdir, stat } from "node:fs/promises";
 import path from "node:path";
 import * as core from "@actions/core";
 import { context } from "@actions/github";
 import { minify } from "@node-minify/core";
+import type { CompressorResolution } from "@node-minify/utils";
 import { getFilesizeGzippedRaw, resolveCompressor } from "@node-minify/utils";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { addAnnotations } from "../src/annotations.ts";
@@ -58,11 +60,12 @@ describe("runAutoMode", () => {
     beforeEach(() => {
         vi.clearAllMocks();
         (context as { payload: Record<string, unknown> }).payload = {};
-        vi.mocked(stat).mockResolvedValue({ size: 100 } as any);
+        vi.mocked(stat).mockResolvedValue({ size: 100 } as Stats);
         vi.mocked(resolveCompressor).mockResolvedValue({
             compressor: vi.fn(),
             label: "terser",
-        } as any);
+            isBuiltIn: true,
+        } as CompressorResolution);
         vi.mocked(selectCompressor).mockReturnValue({
             compressor: "terser",
             package: "@node-minify/terser",
@@ -170,8 +173,8 @@ describe("runAutoMode", () => {
             svg: [],
             unknown: [],
         });
-        vi.mocked(stat).mockResolvedValueOnce({ size: 100 } as any);
-        vi.mocked(stat).mockResolvedValueOnce({ size: 50 } as any);
+        vi.mocked(stat).mockResolvedValueOnce({ size: 100 } as Stats);
+        vi.mocked(stat).mockResolvedValueOnce({ size: 50 } as Stats);
 
         await runAutoMode(mockInputs);
 
@@ -324,7 +327,7 @@ describe("runAutoMode", () => {
             svg: [],
             unknown: [],
         });
-        vi.mocked(stat).mockResolvedValue({ size: 0 } as any);
+        vi.mocked(stat).mockResolvedValue({ size: 0 } as Stats);
 
         await runAutoMode(mockInputs);
 

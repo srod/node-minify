@@ -51,6 +51,13 @@ jobs:
         if: runner.os == 'Linux' && matrix.node-version == '22.x'
         run: bash scripts/ci-guard-removed-compressors.sh
 
+      - name: Guard - no banned type suppressions
+        # Static grep over hand-written code: covers @ts-nocheck (invisible to
+        # Biome), @ts-expect-error in src/, and reason-less directives. OS- and
+        # Node-version independent, so one leg is enough.
+        if: runner.os == 'Linux' && matrix.node-version == '22.x'
+        run: bash scripts/ci-guard-type-suppressions.sh
+
       - name: Upload coverage to Codecov
         if: runner.os == 'Linux'
         uses: codecov/codecov-action@v5

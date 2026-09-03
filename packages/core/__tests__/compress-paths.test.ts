@@ -104,9 +104,10 @@ describe("compress path handling", () => {
         await expect(
             compress({
                 compressor,
+                // @ts-expect-error testing invalid input: array element is a number, not a string path
                 input: [123, "b.js"],
                 output: ["a.min.js", "b.min.js"],
-            } as unknown as Settings)
+            })
         ).rejects.toThrow("got number");
     });
 });

@@ -27,7 +27,8 @@ describe("Package: clean-css error handling", () => {
         const { cleanCss } = await import("../src/index.ts");
 
         await expect(
-            cleanCss({ settings: {} as any, content: ".a { color: red; }" })
+            // @ts-expect-error testing invalid input: settings is missing required fields
+            cleanCss({ settings: {}, content: ".a { color: red; }" })
         ).rejects.toThrow("clean-css failed: empty result");
     });
 
@@ -46,7 +47,8 @@ describe("Package: clean-css error handling", () => {
         const { cleanCss } = await import("../src/index.ts");
 
         await expect(
-            cleanCss({ settings: {} as any, content: ".a { color: red; }" })
+            // @ts-expect-error testing invalid input: settings is missing required fields
+            cleanCss({ settings: {}, content: ".a { color: red; }" })
         ).rejects.toThrow("Invalid CSS syntax; Another error");
     });
 
@@ -62,7 +64,8 @@ describe("Package: clean-css error handling", () => {
         const { cleanCss } = await import("../src/index.ts");
 
         await expect(
-            cleanCss({ settings: {} as any, content: ".a { color: red; }" })
+            // @ts-expect-error testing invalid input: settings is missing required fields
+            cleanCss({ settings: {}, content: ".a { color: red; }" })
         ).rejects.toThrow("clean-css");
     });
 });

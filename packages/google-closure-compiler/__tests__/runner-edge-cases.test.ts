@@ -66,9 +66,7 @@ vi.mock("google-closure-compiler", () => {
         run(callback: RunCallback): FakeChildProcess {
             const child = new FakeChildProcess();
             // Defer until gcc has wired up its listeners + written stdin.
-            setImmediate(() =>
-                mock.onRun?.(child as unknown as FakeChild, callback)
-            );
+            setImmediate(() => mock.onRun?.(child, callback));
             return child;
         }
     }

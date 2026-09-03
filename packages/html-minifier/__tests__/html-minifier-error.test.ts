@@ -24,7 +24,8 @@ describe("Package: html-minifier error handling", () => {
 
         await expect(
             htmlMinifier({
-                settings: {} as any,
+                // @ts-expect-error testing invalid input: settings is missing required fields
+                settings: {},
                 content: "<html><body>test</body></html>",
             })
         ).rejects.toThrow("html-minifier failed: empty result");
@@ -41,7 +42,8 @@ describe("Package: html-minifier error handling", () => {
 
         await expect(
             htmlMinifier({
-                settings: {} as any,
+                // @ts-expect-error testing invalid input: settings is missing required fields
+                settings: {},
                 content: "<html><body>test</body></html>",
             })
         ).rejects.toThrow("html-minifier");

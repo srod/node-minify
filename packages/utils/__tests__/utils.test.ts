@@ -166,7 +166,7 @@ describe("Package: utils", () => {
         test("should run the compressor", async () => {
             const compressor = vi.fn().mockResolvedValue({ code: "minified" });
             const result = await run({
-                settings: { compressor } as any,
+                settings: { compressor },
                 content: "content",
             });
             expect(result).toBe("minified");
@@ -178,11 +178,13 @@ describe("Package: utils", () => {
         });
 
         test("should throw if no settings", async () => {
-            await expect(run({} as any)).rejects.toThrow(ValidationError);
+            // @ts-expect-error testing invalid input: run() requires a settings object
+            await expect(run({})).rejects.toThrow(ValidationError);
         });
 
         test("should throw if no compressor", async () => {
-            await expect(run({ settings: {} } as any)).rejects.toThrow(
+            // @ts-expect-error testing invalid input: settings is missing the required compressor
+            await expect(run({ settings: {} })).rejects.toThrow(
                 ValidationError
             );
         });
@@ -196,7 +198,7 @@ describe("Package: utils", () => {
                     settings: {
                         compressor,
                         compressorLabel: "bad-compressor",
-                    } as any,
+                    },
                     content: "content",
                 })
             ).rejects.toThrow(
@@ -213,7 +215,7 @@ describe("Package: utils", () => {
                     settings: {
                         compressor,
                         compressorLabel: "bad-compressor",
-                    } as any,
+                    },
                     content: "content",
                 })
             ).rejects.toThrow(
@@ -305,7 +307,8 @@ describe("Package: utils", () => {
         test("should throw if targetFile is not a string", () => {
             expect(() =>
                 writeFile({
-                    file: [null as any],
+                    // @ts-expect-error testing invalid input: array element is null, not a string path
+                    file: [null],
                     content: "content",
                     index: 0,
                 })
@@ -381,7 +384,8 @@ describe("Package: utils", () => {
         test("should throw if targetFile is not a string", async () => {
             await expect(
                 writeFileAsync({
-                    file: [null as any],
+                    // @ts-expect-error testing invalid input: array element is null, not a string path
+                    file: [null],
                     content: "content",
                     index: 0,
                 })
@@ -408,7 +412,8 @@ describe("Package: utils", () => {
             ).toEqual(["--foo", "bar"]));
 
         test("should throw if options is null", () => {
-            expect(() => buildArgs(null as any)).toThrow(ValidationError);
+            // @ts-expect-error testing invalid input: buildArgs requires a non-null options object
+            expect(() => buildArgs(null)).toThrow(ValidationError);
         });
 
         test("should filter out undefined and false values", () => {
@@ -439,7 +444,7 @@ describe("Package: utils", () => {
 
     describe("pretty bytes", () => {
         test("should throw when not a number", () => {
-            // @ts-expect-error
+            // @ts-expect-error testing invalid input: prettyBytes requires a number, not a string
             expect(() => prettyBytes("a")).toThrow();
         });
 
@@ -498,7 +503,8 @@ describe("Package: utils", () => {
 
         test("should throw if publicFolder is not a string", () => {
             expect(() =>
-                setFileNameMin("foo.js", "$1.min.js", 123 as any)
+                // @ts-expect-error testing invalid input: publicFolder must be a string, not a number
+                setFileNameMin("foo.js", "$1.min.js", 123)
             ).toThrow(ValidationError);
         });
 
@@ -625,7 +631,8 @@ describe("Package: utils", () => {
         });
 
         test("should throw if input is null", () => {
-            expect(() => getContentFromFiles(null as any)).toThrow();
+            // @ts-expect-error testing invalid input: getContentFromFiles requires a string or string[] input
+            expect(() => getContentFromFiles(null)).toThrow();
         });
 
         test("should throw if one file does not exist", () => {
@@ -647,7 +654,7 @@ describe("Package: utils", () => {
             const settings = {
                 compressor,
                 content: "content",
-            } as any;
+            };
             const result = await compressSingleFile(settings);
             expect(result).toBe("minified");
         });
@@ -657,7 +664,7 @@ describe("Package: utils", () => {
             const settings = {
                 compressor,
                 input: fixtureFile,
-            } as any;
+            };
             const result = await compressSingleFile(settings);
             expect(result).toBe("minified");
         });
@@ -666,7 +673,7 @@ describe("Package: utils", () => {
             const compressor = vi.fn().mockResolvedValue({ code: "minified" });
             const settings = {
                 compressor,
-            } as any;
+            };
             await compressSingleFile(settings);
             expect(compressor).toHaveBeenCalledWith(
                 expect.objectContaining({ content: "" })
@@ -679,7 +686,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: undefined,
                 content: undefined,
-            } as any;
+            };
             const result = await compressSingleFile(settings);
             expect(result).toBe("");
             expect(compressor).toHaveBeenCalledWith(
@@ -802,7 +809,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: fixtureFile,
                 output: outputFile,
-            } as any;
+            };
 
             await run({ settings, content: "content" });
 
@@ -825,7 +832,7 @@ describe("Package: utils", () => {
                 options: {
                     sourceMap: { url: mapFile },
                 },
-            } as any;
+            };
 
             await run({ settings, content: "content" });
 
@@ -849,7 +856,7 @@ describe("Package: utils", () => {
                 options: {
                     sourceMap: { filename: mapFile },
                 },
-            } as any;
+            };
 
             await run({ settings, content: "content" });
 
@@ -872,7 +879,7 @@ describe("Package: utils", () => {
                 options: {
                     _sourceMap: { url: mapFile },
                 },
-            } as any;
+            };
 
             await run({ settings, content: "content" });
 
@@ -893,7 +900,7 @@ describe("Package: utils", () => {
                 options: {
                     sourceMap: { inline: true },
                 },
-            } as any;
+            };
 
             await run({ settings, content: "content" });
 
@@ -905,7 +912,7 @@ describe("Package: utils", () => {
             const settings = {
                 compressor,
                 content: "source content",
-            } as any;
+            };
 
             const result = await run({ settings, content: "source content" });
 
@@ -917,7 +924,7 @@ describe("Package: utils", () => {
             const settings = {
                 compressor,
                 input: fixtureFile,
-            } as any;
+            };
 
             const result = await run({ settings, content: "content" });
 
@@ -935,7 +942,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: fixtureFile,
                 output: outputFile,
-            } as any;
+            };
 
             await run({ settings, content: "content" });
 
@@ -958,7 +965,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: `${tmpDir}/input.png`,
                 output: outputFile,
-            } as any;
+            };
 
             const result = await run({ settings, content: "" });
 
@@ -977,7 +984,7 @@ describe("Package: utils", () => {
             const settings = {
                 compressor,
                 content: "source content",
-            } as any;
+            };
 
             const result = await run({ settings, content: "source content" });
 
@@ -997,7 +1004,7 @@ describe("Package: utils", () => {
                 input: fixtureFile,
                 output: outputFile,
                 allowEmptyOutput: true,
-            } as any;
+            };
 
             const result = await run({
                 settings,
@@ -1018,7 +1025,7 @@ describe("Package: utils", () => {
                 input: fixtureFile,
                 output: outputFile,
                 allowEmptyOutput: true,
-            } as any;
+            };
 
             const result = await run({ settings, content: "content" });
 
@@ -1035,7 +1042,7 @@ describe("Package: utils", () => {
                 input: fixtureFile,
                 output: outputFile,
                 allowEmptyOutput: false,
-            } as any;
+            };
 
             await expect(
                 run({ settings, content: "/* comment only */" })
@@ -1051,7 +1058,7 @@ describe("Package: utils", () => {
                 input: fixtureFile,
                 output: outputFile,
                 // allowEmptyOutput not set - uses default (false)
-            } as any;
+            };
 
             await expect(
                 run({ settings, content: "/* comment only */" })
@@ -1075,7 +1082,7 @@ describe("Package: utils", () => {
                 options: {
                     sourceMap: { url: mapFile },
                 },
-            } as any;
+            };
 
             const result = await run({ settings, content: "/* comment */" });
 
@@ -1090,7 +1097,7 @@ describe("Package: utils", () => {
                 compressor,
                 content: "/* comment only */",
                 allowEmptyOutput: true,
-            } as any;
+            };
 
             const result = await run({
                 settings,
@@ -1122,7 +1129,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: `${tmpDir}/input.png`,
                 output: [webpFile, avifFile],
-            } as any;
+            };
 
             const result = await run({ settings, content: "" });
 
@@ -1151,7 +1158,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: testFile,
                 output: "$1", // Will generate test-image.webp and test-image.avif
-            } as any;
+            };
 
             const result = await run({ settings, content: "" });
 
@@ -1176,7 +1183,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: `${tmpDir}/input.png`,
                 output: outputFile,
-            } as any;
+            };
 
             await run({ settings, content: "" });
 
@@ -1193,7 +1200,7 @@ describe("Package: utils", () => {
             const settings = {
                 compressor,
                 input: `${tmpDir}/input.png`,
-            } as any;
+            };
 
             const result = await run({ settings, content: "" });
 
@@ -1209,7 +1216,7 @@ describe("Package: utils", () => {
             const settings = {
                 compressor,
                 content: "source content",
-            } as any;
+            };
 
             const result = await run({ settings, content: "source content" });
 
@@ -1225,7 +1232,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: `${tmpDir}/input.png`,
                 output: `${tmpDir}/output.png`,
-            } as any;
+            };
 
             const result = await run({ settings, content: "" });
 
@@ -1313,7 +1320,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: testFile,
                 output: `${tmpDir}/$1-converted`,
-            } as any;
+            };
 
             await run({ settings, content: "" });
 
@@ -1416,7 +1423,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: testFile,
                 output: [""],
-            } as any;
+            };
 
             await run({ settings, content: "" });
 
@@ -1448,7 +1455,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: testFile,
                 output: [`${tmpDir}/first.webp`], // Only one explicit, two need fallback
-            } as any;
+            };
 
             await run({ settings, content: "" });
 
@@ -1472,7 +1479,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: `${tmpDir}/input.png`,
                 output: `${tmpDir}/no-format-output`,
-            } as any;
+            };
 
             await run({ settings, content: "" });
 
@@ -1489,16 +1496,13 @@ describe("Package: utils", () => {
             const avifContent = Buffer.from("AVIF_SPARSE");
             const compressor = vi.fn().mockResolvedValue({
                 code: "",
-                outputs: [
-                    undefined,
-                    { format: "avif", content: avifContent },
-                ] as any,
+                outputs: [undefined, { format: "avif", content: avifContent }],
             });
             const settings = {
                 compressor,
                 input: testFile,
                 output: "$1",
-            } as any;
+            };
 
             await run({ settings, content: "" });
 
@@ -1517,7 +1521,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: [],
                 output: `${tmpDir}/default-output`,
-            } as any;
+            };
             filesToCleanup.add(`${tmpDir}/default-output.webp`);
 
             await run({ settings, content: "" });
@@ -1545,12 +1549,10 @@ describe("Package: utils", () => {
             const settings = {
                 compressor,
                 input: testFile,
-                output: [
-                    undefined as unknown as string,
-                    undefined as unknown as string,
-                ],
-            } as any;
+                output: [undefined, undefined],
+            };
 
+            // @ts-expect-error testing invalid input: output array elements are undefined instead of strings
             await run({ settings, content: "" });
 
             expect(
@@ -1571,7 +1573,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: "",
                 output: `${tmpDir}/$1-converted`,
-            } as any;
+            };
             filesToCleanup.add(`${tmpDir}/output-converted.webp`);
 
             await run({ settings, content: "" });
@@ -1652,8 +1654,9 @@ describe("Package: utils", () => {
                 compressor,
                 input: testFile,
                 output: { invalid: "object" },
-            } as any;
+            };
 
+            // @ts-expect-error testing invalid input: output is a non-string object, not a valid path
             await run({ settings, content: "" });
 
             expect(readFile(`${tmpDir}/fallback-nonstring.webp`, true)).toEqual(
@@ -1699,7 +1702,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: "",
                 output: `${tmpDir}/output`,
-            } as any;
+            };
             filesToCleanup.add(`${tmpDir}/output.webp`);
 
             await run({ settings, content: "" });
@@ -1719,7 +1722,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: "",
                 output: `${tmpDir}/$1`,
-            } as any;
+            };
             filesToCleanup.add(`${tmpDir}/output.webp`);
 
             await run({ settings, content: "" });
@@ -1737,11 +1740,12 @@ describe("Package: utils", () => {
             });
             const settings = {
                 compressor,
-                input: [undefined as unknown as string],
+                input: [undefined],
                 output: `${tmpDir}/$1`,
-            } as any;
+            };
             filesToCleanup.add(`${tmpDir}/output.webp`);
 
+            // @ts-expect-error testing invalid input: input array element is undefined instead of a string
             await run({ settings, content: "" });
 
             expect(readFile(`${tmpDir}/output.webp`, true)).toEqual(
@@ -1757,7 +1761,7 @@ describe("Package: utils", () => {
             const settings = {
                 compressor,
                 content: bufferContent,
-            } as any;
+            };
             const result = await compressSingleFile(settings);
             expect(result).toBe("minified");
             expect(compressor).toHaveBeenCalledWith(
@@ -1803,7 +1807,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: [`${tmpDir}/image.png`, `${tmpDir}/script.js`],
                 output: `${tmpDir}/output.js`,
-            } as any;
+            };
 
             await expect(compressSingleFile(settings)).rejects.toThrow(
                 "Cannot mix image and text files in the same input array"
@@ -1823,7 +1827,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: [testFile1, testFile2],
                 output: `${tmpDir}/output.png`,
-            } as any;
+            };
 
             await compressSingleFile(settings);
             expect(compressor).toHaveBeenCalledWith(
@@ -1843,7 +1847,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: [testFile],
                 output: `${tmpDir}/output-single.png`,
-            } as any;
+            };
 
             await compressSingleFile(settings);
             expect(compressor).toHaveBeenCalledWith(
@@ -1863,7 +1867,7 @@ describe("Package: utils", () => {
                 compressor,
                 input: testFile,
                 output: `${tmpDir}/output.png`,
-            } as any;
+            };
 
             await compressSingleFile(settings);
             expect(compressor).toHaveBeenCalledWith(

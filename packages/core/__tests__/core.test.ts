@@ -4,10 +4,10 @@
  * MIT Licensed
  */
 
-import { statSync } from "node:fs";
+import { type Stats, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import type { Compressor, Settings } from "@node-minify/types";
+import type { Settings } from "@node-minify/types";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -32,7 +32,8 @@ describe("Package: core", async () => {
     describe("Fake binary", () => {
         test("should throw an error if binary does not exist", async () => {
             const settings: Settings = {
-                compressor: "fake" as unknown as Compressor,
+                // @ts-expect-error testing invalid input: compressor is a string, not a Compressor function
+                compressor: "fake",
                 input: filesJS.oneFileWithWildcards,
                 output: filesJS.fileJSOut,
             };
@@ -51,13 +52,14 @@ describe("Package: core", async () => {
 
     describe("No mandatory", () => {
         test("should throw an error if no compressor", async () => {
-            const settings: Partial<Settings> = {
+            // @ts-expect-error testing invalid input: compressor is mandatory and intentionally omitted
+            const settings: Settings = {
                 input: filesJS.oneFileWithWildcards,
                 output: filesJS.fileJSOut,
             };
 
             try {
-                return await minify(settings as Settings);
+                return await minify(settings);
             } catch (err: unknown) {
                 if (err instanceof Error) {
                     return expect(err.toString()).toEqual(
@@ -104,14 +106,15 @@ describe("Package: core", async () => {
 
     describe("Mandatory", () => {
         test("should show throw on type option", async () => {
-            const settings: Partial<Settings> = {
-                type: "uglifyjs" as unknown as "js",
+            const settings: Settings = {
+                // @ts-expect-error testing invalid input: "uglifyjs" is not a valid FileType ("js" | "css")
+                type: "uglifyjs",
                 input: filesJS.oneFileWithWildcards,
                 output: filesJS.fileJSOut,
             };
 
             try {
-                return await minify(settings as Settings);
+                return await minify(settings);
             } catch (err: unknown) {
                 if (err instanceof Error) {
                     return expect(err.toString()).toEqual(
@@ -158,7 +161,8 @@ describe("Package: core", async () => {
 
         test("should throw an error if binary does not exist", async () => {
             const settings: Settings = {
-                compressor: "fake" as unknown as Compressor,
+                // @ts-expect-error testing invalid input: compressor is a string, not a Compressor function
+                compressor: "fake",
                 content:
                     "<html lang='en'><body><div>content</div></body></html>",
             };
@@ -212,14 +216,14 @@ describe("Package: core", async () => {
         });
 
         test("should skip non-string paths in array", async () => {
-            const settings = {
-                compressor: () => ({ code: "minified" }),
-                input: [filesJS.oneFile],
-                output: [123 as any],
-            };
-            await expect(minify(settings as any)).rejects.toThrow(
-                "Invalid target file path"
-            );
+            await expect(
+                minify({
+                    compressor: async () => ({ code: "minified" }),
+                    input: [filesJS.oneFile],
+                    // @ts-expect-error testing invalid input: output array element is a number, not a string path
+                    output: [123],
+                })
+            ).rejects.toThrow("Invalid target file path");
         });
 
         test("should throw an error if an input in the array is an empty string", async () => {
@@ -229,43 +233,46 @@ describe("Package: core", async () => {
                 output: [filesJS.fileJSOut, filesJS.fileJSOut],
             };
 
-            await expect(minify(settings as any)).rejects.toThrow(
+            await expect(minify(settings)).rejects.toThrow(
                 "Invalid input at index 1: expected non-empty string, got empty string"
             );
         });
 
         test("should throw an error if an input in the array is null", async () => {
-            const settings = {
-                compressor: noCompress,
-                input: [filesJS.oneFile, null],
-                output: [filesJS.fileJSOut, filesJS.fileJSOut],
-            };
-
-            await expect(minify(settings as any)).rejects.toThrow(
+            await expect(
+                minify({
+                    compressor: noCompress,
+                    // @ts-expect-error testing invalid input: array element is null, not a string path
+                    input: [filesJS.oneFile, null],
+                    output: [filesJS.fileJSOut, filesJS.fileJSOut],
+                })
+            ).rejects.toThrow(
                 "Invalid input at index 1: expected non-empty string, got object"
             );
         });
 
         test("should throw an error if an input in the array is undefined", async () => {
-            const settings = {
-                compressor: noCompress,
-                input: [filesJS.oneFile, undefined],
-                output: [filesJS.fileJSOut, filesJS.fileJSOut],
-            };
-
-            await expect(minify(settings as any)).rejects.toThrow(
+            await expect(
+                minify({
+                    compressor: noCompress,
+                    // @ts-expect-error testing invalid input: array element is undefined, not a string path
+                    input: [filesJS.oneFile, undefined],
+                    output: [filesJS.fileJSOut, filesJS.fileJSOut],
+                })
+            ).rejects.toThrow(
                 "Invalid input at index 1: expected non-empty string, got undefined"
             );
         });
 
         test("should throw an error if an input in the array is a number", async () => {
-            const settings = {
-                compressor: noCompress,
-                input: [filesJS.oneFile, 123],
-                output: [filesJS.fileJSOut, filesJS.fileJSOut],
-            };
-
-            await expect(minify(settings as any)).rejects.toThrow(
+            await expect(
+                minify({
+                    compressor: noCompress,
+                    // @ts-expect-error testing invalid input: array element is a number, not a string path
+                    input: [filesJS.oneFile, 123],
+                    output: [filesJS.fileJSOut, filesJS.fileJSOut],
+                })
+            ).rejects.toThrow(
                 "Invalid input at index 1: expected non-empty string, got number"
             );
         });
@@ -285,20 +292,20 @@ describe("Package: core", async () => {
 
         test("should handle missing directory path", async () => {
             const settings = {
-                compressor: () => ({ code: "minified" }),
+                compressor: async () => ({ code: "minified" }),
                 content: "foo",
                 output: "bar.js",
             };
-            await minify(settings as any);
+            await minify(settings);
         });
 
         test("should handle missing filePath", async () => {
             const settings = {
-                compressor: () => ({ code: "minified" }),
+                compressor: async () => ({ code: "minified" }),
                 content: "foo",
                 output: "",
             };
-            await minify(settings as any);
+            await minify(settings);
         });
 
         test("should handle directoryExists returning false (catch block)", async () => {
@@ -306,23 +313,23 @@ describe("Package: core", async () => {
                 throw new Error("Not found");
             });
             const settings = {
-                compressor: () => ({ code: "minified" }),
+                compressor: async () => ({ code: "minified" }),
                 content: "foo",
                 output: "newdir/bar.js", // Must have a slash
             };
-            await minify(settings as any);
+            await minify(settings);
         });
 
         test("should handle directoryExists returning false (isDirectory false)", async () => {
-            vi.mocked(statSync).mockImplementationOnce(() => {
-                return { isDirectory: () => false } as any;
-            });
+            vi.mocked(statSync).mockImplementationOnce(
+                () => ({ isDirectory: () => false }) as Stats
+            );
             const settings = {
-                compressor: () => ({ code: "minified" }),
+                compressor: async () => ({ code: "minified" }),
                 content: "foo",
                 output: "notadir/bar.js", // Must have a slash
             };
-            await minify(settings as any);
+            await minify(settings);
         });
     });
 
@@ -358,15 +365,16 @@ describe("Package: core", async () => {
                 compressor: noCompress,
                 input: ["foo.js"],
                 output: ["bar.js"],
-            } as any);
+            });
             expect(result.output).toEqual(["bar.js"]);
         });
 
         test("should handle publicFolder as non-string", async () => {
-            const settings: any = {
+            const settings: Settings = {
                 compressor: noCompress,
                 input: filesJS.oneFile,
                 output: filesJS.fileJSOut,
+                // @ts-expect-error testing invalid input: publicFolder must be a string, not a number
                 publicFolder: 123,
             };
 
