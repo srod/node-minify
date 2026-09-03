@@ -44,7 +44,7 @@
     "clean:test": "bunx rimraf tests/tmp/*.{js,js.map,css,html,json}",
     "dev": "bun run --filter '*' dev",
     "lint": "bun run --filter '*' lint && bun run lint:root",
-    "lint:root": "biome lint tests scripts",
+    "lint:root": "biome lint tests scripts examples",
     "local-release": "bun run changeset:version && bun run changeset:release",
     "test": "vitest run",
     "test:watch": "vitest",

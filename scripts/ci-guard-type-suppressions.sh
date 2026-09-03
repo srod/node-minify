@@ -4,10 +4,9 @@ set -euo pipefail
 # Enforces the type-suppression rules documented in AGENTS.md > Anti-Patterns.
 #
 # Biome covers only part of this: `noTsIgnore` catches `@ts-ignore`, but it never
-# sees `@ts-nocheck`, and the root `lint` script runs `bun run --filter '*' lint`,
-# which reaches workspace packages only. The shared `tests/` helpers and
-# `scripts/` live outside `workspaces`, so no Biome rule applies to them at all.
-# This guard is the mechanism behind the claims; without it they are review-only.
+# sees `@ts-nocheck`, and no Biome rule requires a reason comment on
+# `@ts-expect-error` or bans it from `src/`. This guard is the mechanism behind
+# those claims; without it they are review-only.
 #
 # Three rules, all mechanical:
 #   1. `@ts-nocheck` and `@ts-ignore` are banned everywhere — both disable
@@ -30,11 +29,12 @@ EXCLUDE_PATHS=(
   --exclude-dir="coverage"
   --exclude-dir="tmp"
   --exclude-dir=".astro"
+  --exclude-dir=".git"
 )
 
-# Every hand-written code location in the repo. `tests/` and `scripts/` are
-# listed explicitly because they are not workspace packages.
-SCAN_ROOTS=(packages/ tests/ scripts/ examples/ docs/src/)
+# Scan the repository root so root-level files and any future source directory
+# are covered without maintaining a directory list.
+SCAN_ROOTS=(.)
 
 # 1. @ts-nocheck / @ts-ignore anywhere.
 NOCHECK_MATCHES=$(grep -rnE "@ts-(nocheck|ignore)\b" \
@@ -47,7 +47,7 @@ NOCHECK_MATCHES=$(grep -rnE "@ts-(nocheck|ignore)\b" \
 SRC_EXPECT_MATCHES=$(grep -rnE "@ts-expect-error" \
   "${CODE_INCLUDES[@]}" "${EXCLUDE_PATHS[@]}" \
   "${SCAN_ROOTS[@]}" \
-  2>/dev/null | grep -E "(^|/)src/" || true)
+  2>/dev/null | awk -F: '$1 ~ /(^|\/)src\//' || true)
 
 # 3. Bare @ts-expect-error: the directive with nothing after it but optional
 #    whitespace and an optional block-comment terminator. A reason comment makes

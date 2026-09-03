@@ -157,7 +157,7 @@ Custom `scripts/publish.ts` resolves `workspace:*` → concrete versions before 
 
   Place the directive on the line the compiler reports, which is not always the offending property: a missing required field is reported on the object-literal or declaration line, so the directive belongs there rather than on a property. Where several errors would be reported for one literal, TypeScript surfaces only the first — keep the comment to the error actually being suppressed instead of listing every latent one.
 
-  Enforcement of these four rules is split. Biome's `noTsIgnore` catches `@ts-ignore` only, and the root `lint` script runs per workspace, so it never reaches `tests/` or `scripts/`. `scripts/ci-guard-type-suppressions.sh` is the mechanism for the rest: it bans `@ts-nocheck` and `@ts-ignore` repo-wide, bans `@ts-expect-error` under any `src/`, and rejects a directive with no reason after it. Run it locally with `bash scripts/ci-guard-type-suppressions.sh`; CI runs it on the Linux/Node 22 leg.
+  Enforcement of these four rules is split. Biome's `noTsIgnore` catches `@ts-ignore`, and root lint covers workspace packages plus `tests/`, `scripts/`, and `examples/` via `lint:root`. `scripts/ci-guard-type-suppressions.sh` is the mechanism for what no Biome rule covers: it bans `@ts-nocheck` and `@ts-ignore` across the whole repository, bans `@ts-expect-error` under any `src/`, and rejects a directive with no reason after it. Run it locally with `bash scripts/ci-guard-type-suppressions.sh`; CI runs it on the Linux/Node 22 leg.
 - **Never** remove JSDoc from exported functions
 - **Never** use deprecated packages in new code
 - **Never** commit without `bun run lint`

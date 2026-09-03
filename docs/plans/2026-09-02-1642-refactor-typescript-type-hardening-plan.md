@@ -201,7 +201,7 @@ AGENTS.md bans `as any`, `@ts-ignore`, and `@ts-expect-error`, but nothing enfor
 | Full test suite | `bun run test` | Behavior preserved — zero assertion changes |
 | Build + exports | `bun run build && bun run check-exports` | Published type surfaces unaffected |
 | Full gate | `bun run ci` | Success criteria end-to-end |
-| Cast grep | grep for `as any` and `as unknown as` across `packages/` and `tests/` | R4, R6 — zero matches |
+| Cast grep | grep for `as any` and `as unknown as` across all source roots (`packages/`, `tests/`, `scripts/`, `examples/`, `docs/src/`) | R4, R6 — zero matches |
 
 ---
 
