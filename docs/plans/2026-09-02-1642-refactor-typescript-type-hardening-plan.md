@@ -31,7 +31,7 @@ Bring all `__tests__` files under `tsc` typecheck, replace every deliberate inva
 
 ### Problem Frame
 
-AGENTS.md bans `as any`, `@ts-ignore`, and `@ts-expect-error`, but nothing enforces the ban: Biome's `noExplicitAny` rule is off, and every package's tsconfig includes only `src/**/*`, so test files are never typechecked at all. The result is ~147 `as any` sites, ~40 `as unknown as T` double-casts, and ~5 bare `@ts-expect-error` directives — all in test files, accumulated invisibly because no tool ever looked. Most casts are legitimate in intent (tests deliberately passing invalid input to exercise runtime validation) but illegitimate in form: an unchecked cast can silently rot into passing valid input, at which point the test verifies nothing.
+AGENTS.md bans `as any`, `@ts-ignore`, and `@ts-expect-error`, but nothing enforces the ban: Biome's `noExplicitAny` rule is off, and every package's tsconfig includes only `src/**/*`, so test files are never typechecked at all. The result is 136 `as any` sites, 29 `as unknown as T` double-casts, and 5 bare `@ts-expect-error` directives — all in test files, accumulated invisibly because no tool ever looked. Most casts are legitimate in intent (tests deliberately passing invalid input to exercise runtime validation) but illegitimate in form: an unchecked cast can silently rot into passing valid input, at which point the test verifies nothing.
 
 ### Key Decisions
 
