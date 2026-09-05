@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/srod/node-minify",
   "license": "MIT",
-  "packageManager": "bun@1.4.1",
+  "packageManager": "bun@1.4.2",
   "private": true,
   "scripts": {
     "build": "bun run build:deps && bun run --filter '!@node-minify/action' --parallel build && bun run --filter '@node-minify/action' build",
