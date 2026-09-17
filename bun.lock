@@ -34,7 +34,7 @@
         "preact": "^10.28.4",
       },
       "devDependencies": {
-        "@astrojs/ts-plugin": "1.10.11",
+        "@astrojs/ts-plugin": "1.10.12",
         "@cloudflare/workers-types": "^4.20260307.1",
         "html-escaper": "^3.0.3",
         "wrangler": "^4.71.0",
@@ -413,7 +413,7 @@
 
     "@astrojs/telemetry": ["@astrojs/telemetry@3.3.3", "", { "dependencies": { "ci-info": "^4.4.0", "dset": "^3.1.4", "is-docker": "^4.0.0", "package-manager-detector": "^1.6.0" } }, "sha512-C1TLn5sPJr0x4vk56piHWKbnqlEB8BKyte5Y45V02U+D7BGO5eMqZDH5aPjnkXQWJggvmsTXxH03QMZ9NgWLzQ=="],
 
-    "@astrojs/ts-plugin": ["@astrojs/ts-plugin@1.10.11", "", { "dependencies": { "@astrojs/compiler": "^2.13.1", "@astrojs/yaml2ts": "^0.2.4", "@jridgewell/sourcemap-codec": "^1.5.5", "@volar/language-core": "~2.4.28", "@volar/typescript": "~2.4.28", "semver": "^7.7.4", "vscode-languageserver-textdocument": "^1.0.12" } }, "sha512-W7Fmbaw81mcecFgJWgfY8FX7G7nCiooiakgd8ZAVprglEo81W2HzXh2I+okmAorCZLICl4PeEELkpGzrEXze4g=="],
+    "@astrojs/ts-plugin": ["@astrojs/ts-plugin@1.10.12", "", { "dependencies": { "@astrojs/compiler": "^2.13.1", "@astrojs/yaml2ts": "^0.2.4", "@jridgewell/sourcemap-codec": "^1.5.5", "@volar/language-core": "~2.4.28", "@volar/typescript": "~2.4.28", "vscode-languageserver-textdocument": "^1.0.12" } }, "sha512-EOT4VUYPGJTTHRcbWjAq7ABS79Q8X6sNq9k4a8sWoQmo8cLlrjCoUOO4LTxIbfsssNPmq68HHyk8rmh8+TdJTQ=="],
 
     "@astrojs/underscore-redirects": ["@astrojs/underscore-redirects@1.0.3", "", {}, "sha512-cxnGSw+sJigBLdX4TMSZKkzV6C3gMLJMucDk2W+n281Xhie68T2/9f1+1NMNDCZsc5i0FED7Qt5I10g2O9wtZg=="],
 
