@@ -53,7 +53,7 @@
   },
   "dependencies": {
     "@node-minify/utils": "workspace:*",
-    "oxc-minify": "^0.148.0"
+    "oxc-minify": "^0.150.0"
   },
   "devDependencies": {
     "@node-minify/types": "workspace:*"
