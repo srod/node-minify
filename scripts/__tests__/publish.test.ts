@@ -1,9 +1,15 @@
 /*! node-minify - MIT Licensed */
 
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import {
+    mkdirSync,
+    mkdtempSync,
+    readFileSync,
+    rmSync,
+    writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, join } from "node:path";
-import { beforeEach, describe, expect, test } from "vitest";
+import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import { type CommandResult, isPublished, publishAll } from "../publish.ts";
 
 const e404 = JSON.stringify({ error: { code: "E404", summary: "Not found" } });
@@ -76,6 +82,10 @@ describe("publishAll", () => {
                 `${JSON.stringify(manifest, null, 2)}\n`
             );
         }
+    });
+
+    afterEach(() => {
+        rmSync(packagesDir, { recursive: true, force: true });
     });
 
     const manifestOf = (dir: string) =>
