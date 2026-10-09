@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 /*! node-minify - MIT Licensed */
 
-import { execSync } from "node:child_process";
+import { execSync, spawnSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -15,6 +15,8 @@ interface PackageJson {
     peerDependencies?: Record<string, string>;
     optionalDependencies?: Record<string, string>;
 }
+
+export type CommandResult = { status: number; stdout: string; stderr: string };
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PACKAGES_DIR = join(__dirname, "..", "packages");
@@ -97,9 +99,55 @@ function resolveDependencies(
 }
 
 /**
- * Publishes non-private workspace packages and creates changeset tags.
+ * Read an `npm view <name>@<version> version --json` result. Only an exact
+ * match counts as published; E404 means not yet; any other failure throws, so
+ * a broken registry or auth never reads as "already published".
  *
- * For each package under the packages directory, resolves `workspace:` dependency references to actual package versions, writes the updated package.json, attempts `npm publish --access public --provenance`, restores the original package.json, and logs progress. After processing all packages, runs `changeset tag` to create git tags; publish or tag failures are logged but do not stop processing.
+ * @param version - The version being released
+ * @param view - The exit status and output of `npm view`
+ * @returns `true` if that exact version is on the registry
+ * @throws {Error} When `npm view` fails for any reason other than E404
+ */
+export function isPublished(version: string, view: CommandResult): boolean {
+    if (view.status !== 0) {
+        if (errorCode(view.stdout) === "E404") return false;
+        const output = `${view.stdout}${view.stderr}`.trim() || "no output";
+        throw new Error(`npm view failed (exit ${view.status}): ${output}`);
+    }
+    if (view.stdout.trim() === "") return false;
+    const parsed: unknown = JSON.parse(view.stdout);
+    return (Array.isArray(parsed) ? parsed : [parsed]).includes(version);
+}
+
+function errorCode(stdout: string): string | undefined {
+    try {
+        return JSON.parse(stdout)?.error?.code;
+    } catch {
+        return undefined;
+    }
+}
+
+function npmView(name: string, version: string): CommandResult {
+    const result = spawnSync(
+        "npm",
+        ["view", `${name}@${version}`, "version", "--json"],
+        { encoding: "utf-8" }
+    );
+    if (result.error) throw result.error;
+    return {
+        status: result.status ?? 1,
+        stdout: result.stdout,
+        stderr: result.stderr,
+    };
+}
+
+/**
+ * Publishes every non-private workspace package not already on the registry,
+ * then creates changeset tags if anything was published.
+ *
+ * A version is skipped only when the registry returns that exact version. Any
+ * other lookup or publish failure stops the run with a non-zero exit, so the
+ * release job cannot go green without shipping.
  *
  * @returns Nothing.
  */
@@ -109,6 +157,7 @@ function main() {
 
     console.log(`Found ${packageDirs.length} packages to publish\n`);
 
+    let published = 0;
     for (const dir of packageDirs) {
         const pkgPath = join(PACKAGES_DIR, dir, "package.json");
         const originalContent = readFileSync(pkgPath, "utf-8");
@@ -116,6 +165,11 @@ function main() {
 
         if (pkg.private) {
             console.log(`Skipping private package: ${pkg.name}`);
+            continue;
+        }
+
+        if (isPublished(pkg.version, npmView(pkg.name, pkg.version))) {
+            console.log(`Already on npm: ${pkg.name}@${pkg.version}`);
             continue;
         }
 
@@ -142,40 +196,37 @@ function main() {
                 cwd: join(PACKAGES_DIR, dir),
                 stdio: "inherit",
             });
+            published++;
             console.log(`Published ${pkg.name}@${pkg.version}\n`);
-        } catch (err) {
-            if (err instanceof Error) {
-                console.log(
-                    `Failed to publish ${pkg.name}@${pkg.version} (may already exist)\n`
-                );
-            }
         } finally {
             writeFileSync(pkgPath, originalContent);
         }
     }
 
-    console.log("\nCreating git tags...");
-    try {
-        execSync("changeset tag", {
-            cwd: join(__dirname, ".."),
-            stdio: "inherit",
-        });
-    } catch (err) {
-        if (err instanceof Error) {
-            console.log("Failed to create tags (may already exist)");
-        }
+    // No publish, no tags: changesets/action reads "New tag:" lines as a release.
+    if (published === 0) {
+        console.log("\nNothing to publish, no tags created.");
+        return;
     }
+
+    console.log("\nCreating git tags...");
+    execSync("changeset tag", {
+        cwd: join(__dirname, ".."),
+        stdio: "inherit",
+    });
 
     console.log("\nDone!");
 }
 
-try {
-    main();
-} catch (error) {
-    if (error instanceof Error) {
-        console.error("Publish failed:", error.message);
-    } else {
-        console.error("Publish failed:", error);
+if (import.meta.main) {
+    try {
+        main();
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error("Publish failed:", error.message);
+        } else {
+            console.error("Publish failed:", error);
+        }
+        process.exit(1);
     }
-    process.exit(1);
 }
