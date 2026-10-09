@@ -131,7 +131,8 @@ function npmView(name: string, version: string): CommandResult {
     const result = spawnSync(
         "npm",
         ["view", `${name}@${version}`, "version", "--json"],
-        { encoding: "utf-8" }
+        // A registry that never answers would otherwise hold the job for 6h.
+        { encoding: "utf-8", timeout: 120_000 }
     );
     if (result.error) throw result.error;
     return {
