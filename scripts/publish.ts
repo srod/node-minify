@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 /*! node-minify - MIT Licensed */
 
-import { execSync, spawnSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -18,19 +18,26 @@ interface PackageJson {
 
 export type CommandResult = { status: number; stdout: string; stderr: string };
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const PACKAGES_DIR = join(__dirname, "..", "packages");
+/** Runs a command; `inherit` streams its output to this process instead of capturing it. */
+export type Run = (
+    command: string,
+    args: string[],
+    options?: { cwd?: string; inherit?: boolean }
+) => CommandResult;
+
+const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 /**
  * List package directory names inside the packages directory that contain a package.json file.
  *
- * @returns A sorted (alphabetical) array of directory names under PACKAGES_DIR that contain a package.json
+ * @param packagesDir - The directory holding the workspace packages
+ * @returns A sorted (alphabetical) array of directory names under packagesDir that contain a package.json
  */
-function getPackageDirs(): string[] {
-    return readdirSync(PACKAGES_DIR, { withFileTypes: true })
+function getPackageDirs(packagesDir: string): string[] {
+    return readdirSync(packagesDir, { withFileTypes: true })
         .filter((entry) => entry.isDirectory())
         .filter((entry) =>
-            existsSync(join(PACKAGES_DIR, entry.name, "package.json"))
+            existsSync(join(packagesDir, entry.name, "package.json"))
         )
         .map((entry) => entry.name)
         .sort();
@@ -39,24 +46,26 @@ function getPackageDirs(): string[] {
 /**
  * Read and parse the package.json file for a package located under the packages root.
  *
- * @param packageDir - The directory name of the package inside PACKAGES_DIR
+ * @param packagesDir - The directory holding the workspace packages
+ * @param packageDir - The directory name of the package inside packagesDir
  * @returns The parsed package.json as a `PackageJson`
  */
-function readPackageJson(packageDir: string): PackageJson {
-    const pkgPath = join(PACKAGES_DIR, packageDir, "package.json");
+function readPackageJson(packagesDir: string, packageDir: string): PackageJson {
+    const pkgPath = join(packagesDir, packageDir, "package.json");
     return JSON.parse(readFileSync(pkgPath, "utf-8"));
 }
 
 /**
  * Builds a map from each package's name to its version by reading package.json for all packages.
  *
+ * @param packagesDir - The directory holding the workspace packages
  * @returns A Map where each key is a package name and each value is that package's version string.
  */
-function buildVersionMap(): Map<string, string> {
+function buildVersionMap(packagesDir: string): Map<string, string> {
     const versionMap = new Map<string, string>();
 
-    for (const dir of getPackageDirs()) {
-        const pkg = readPackageJson(dir);
+    for (const dir of getPackageDirs(packagesDir)) {
+        const pkg = readPackageJson(packagesDir, dir);
         versionMap.set(pkg.name, pkg.version);
     }
 
@@ -127,19 +136,27 @@ function errorCode(stdout: string): string | undefined {
     }
 }
 
-function npmView(name: string, version: string): CommandResult {
-    const result = spawnSync(
-        "npm",
-        ["view", `${name}@${version}`, "version", "--json"],
-        // A registry that never answers would otherwise hold the job for 6h.
-        { encoding: "utf-8", timeout: 120_000 }
-    );
+const spawnRun: Run = (command, args, options = {}) => {
+    const result = spawnSync(command, args, {
+        cwd: options.cwd,
+        encoding: "utf-8",
+        stdio: options.inherit ? "inherit" : "pipe",
+        // Only captured lookups time out: a registry that never answers would
+        // otherwise hold the job for 6h. Publishes and tagging stream and run long.
+        timeout: options.inherit ? undefined : 120_000,
+    });
     if (result.error) throw result.error;
     return {
         status: result.status ?? 1,
-        stdout: result.stdout,
-        stderr: result.stderr,
+        stdout: result.stdout ?? "",
+        stderr: result.stderr ?? "",
     };
+};
+
+function succeed(label: string, result: CommandResult): void {
+    if (result.status !== 0) {
+        throw new Error(`${label} failed (exit ${result.status})`);
+    }
 }
 
 /**
@@ -147,30 +164,44 @@ function npmView(name: string, version: string): CommandResult {
  * then creates changeset tags if anything was published.
  *
  * A version is skipped only when the registry returns that exact version. Any
- * other lookup or publish failure stops the run with a non-zero exit, so the
- * release job cannot go green without shipping.
+ * other lookup or publish failure throws, so the release job cannot go green
+ * without shipping. Each rewritten package.json is restored after its publish.
  *
- * @returns Nothing.
+ * @param options - `packagesDir` holds the packages, `repoRoot` is where `changeset tag` runs, `run` executes commands
+ * @returns The number of packages published
+ * @throws {Error} When a lookup, publish, or `changeset tag` fails
  */
-function main() {
-    const packageDirs = getPackageDirs();
-    const versionMap = buildVersionMap();
+export function publishAll(options: {
+    packagesDir: string;
+    repoRoot: string;
+    run: Run;
+    log?: (line: string) => void;
+}): number {
+    const { packagesDir, repoRoot, run, log = console.log } = options;
+    const packageDirs = getPackageDirs(packagesDir);
+    const versionMap = buildVersionMap(packagesDir);
 
-    console.log(`Found ${packageDirs.length} packages to publish\n`);
+    log(`Found ${packageDirs.length} packages to publish\n`);
 
     let published = 0;
     for (const dir of packageDirs) {
-        const pkgPath = join(PACKAGES_DIR, dir, "package.json");
+        const pkgPath = join(packagesDir, dir, "package.json");
         const originalContent = readFileSync(pkgPath, "utf-8");
         const pkg: PackageJson = JSON.parse(originalContent);
 
         if (pkg.private) {
-            console.log(`Skipping private package: ${pkg.name}`);
+            log(`Skipping private package: ${pkg.name}`);
             continue;
         }
 
-        if (isPublished(pkg.version, npmView(pkg.name, pkg.version))) {
-            console.log(`Already on npm: ${pkg.name}@${pkg.version}`);
+        const view = run("npm", [
+            "view",
+            `${pkg.name}@${pkg.version}`,
+            "version",
+            "--json",
+        ]);
+        if (isPublished(pkg.version, view)) {
+            log(`Already on npm: ${pkg.name}@${pkg.version}`);
             continue;
         }
 
@@ -190,15 +221,18 @@ function main() {
 
         writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`);
 
-        console.log(`Publishing ${pkg.name}@${pkg.version}...`);
+        log(`Publishing ${pkg.name}@${pkg.version}...`);
 
         try {
-            execSync("npm publish --access public --provenance", {
-                cwd: join(PACKAGES_DIR, dir),
-                stdio: "inherit",
-            });
+            succeed(
+                `npm publish ${pkg.name}@${pkg.version}`,
+                run("npm", ["publish", "--access", "public", "--provenance"], {
+                    cwd: join(packagesDir, dir),
+                    inherit: true,
+                })
+            );
             published++;
-            console.log(`Published ${pkg.name}@${pkg.version}\n`);
+            log(`Published ${pkg.name}@${pkg.version}\n`);
         } finally {
             writeFileSync(pkgPath, originalContent);
         }
@@ -206,22 +240,27 @@ function main() {
 
     // No publish, no tags: changesets/action reads "New tag:" lines as a release.
     if (published === 0) {
-        console.log("\nNothing to publish, no tags created.");
-        return;
+        log("\nNothing to publish, no tags created.");
+        return 0;
     }
 
-    console.log("\nCreating git tags...");
-    execSync("changeset tag", {
-        cwd: join(__dirname, ".."),
-        stdio: "inherit",
-    });
+    log("\nCreating git tags...");
+    succeed(
+        "changeset tag",
+        run("changeset", ["tag"], { cwd: repoRoot, inherit: true })
+    );
 
-    console.log("\nDone!");
+    log("\nDone!");
+    return published;
 }
 
 if (import.meta.main) {
     try {
-        main();
+        publishAll({
+            packagesDir: join(REPO_ROOT, "packages"),
+            repoRoot: REPO_ROOT,
+            run: spawnRun,
+        });
     } catch (error) {
         if (error instanceof Error) {
             console.error("Publish failed:", error.message);
