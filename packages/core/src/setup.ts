@@ -15,7 +15,6 @@ import { setFileNameMin, setPublicFolder, wildcards } from "@node-minify/utils";
  */
 const defaultSettings: Partial<Settings> = {
     options: {},
-    buffer: 1000 * 1024,
 };
 
 /**

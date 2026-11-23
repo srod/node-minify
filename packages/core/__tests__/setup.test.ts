@@ -50,3 +50,32 @@ describe("setup $1 output handling", () => {
         expect(settings.output).toBe("dist/a.min.js");
     });
 });
+
+describe("setup buffer handling", () => {
+    test("omits buffer when caller does not specify one", () => {
+        const settings = setup({
+            compressor,
+            input: "a.js",
+            output: "dist/a.min.js",
+        });
+        expect(settings.buffer).toBeUndefined();
+    });
+
+    test("omits buffer in in-memory mode when caller does not specify one", () => {
+        const settings = setup({
+            compressor,
+            content: "var a = 1;",
+        });
+        expect(settings.buffer).toBeUndefined();
+    });
+
+    test("preserves a caller-supplied buffer value", () => {
+        const settings = setup({
+            compressor,
+            input: "a.js",
+            output: "dist/a.min.js",
+            buffer: 1024,
+        });
+        expect(settings.buffer).toBe(1024);
+    });
+});

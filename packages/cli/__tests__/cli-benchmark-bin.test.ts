@@ -5,6 +5,8 @@
  */
 
 import { execFile } from "node:child_process";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
@@ -45,5 +47,50 @@ describe("cli benchmark command", () => {
         expect(
             parsed.files[0]?.results.map((result) => result.compressor)
         ).toEqual(["terser", "esbuild", "swc", "oxc"]);
+    }, 60000);
+
+    test("should write JSON report to -o and keep stdout empty", async () => {
+        const tempDir = await mkdtemp(
+            path.join(os.tmpdir(), "node-minify-cli-bench-")
+        );
+        const outputPath = path.join(tempDir, "r.json");
+
+        try {
+            const { stdout, stderr } = await execFileAsync(
+                "bun",
+                [
+                    cliEntry,
+                    "benchmark",
+                    "tests/fixtures/es5/fixture-1.js",
+                    "-c",
+                    "terser",
+                    "-f",
+                    "json",
+                    "-o",
+                    outputPath,
+                ],
+                {
+                    cwd: repoRoot,
+                }
+            );
+
+            expect(stdout).toBe("");
+            expect(stderr).toBe("");
+
+            const content = await readFile(outputPath, "utf-8");
+            const parsed = JSON.parse(content) as {
+                files: Array<{
+                    results: Array<{ compressor: string }>;
+                }>;
+                summary: Record<string, string>;
+            };
+
+            expect(
+                parsed.files[0]?.results.map((result) => result.compressor)
+            ).toEqual(["terser"]);
+            expect(parsed.summary).toBeDefined();
+        } finally {
+            await rm(tempDir, { recursive: true, force: true });
+        }
     }, 60000);
 });

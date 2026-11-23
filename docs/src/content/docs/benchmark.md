@@ -70,6 +70,8 @@ node-minify benchmark src/app.js -f markdown
 
 ### Save to File
 
+The report is written to the specified file instead of stdout, and console format is written without terminal color codes.
+
 ```bash
 node-minify benchmark src/app.js -f json -o results.json
 node-minify benchmark src/app.js -f markdown -o BENCHMARK.md

@@ -31,6 +31,7 @@ function setupProgram(): Command {
     const program = new Command();
 
     program
+        .enablePositionalOptions()
         .storeOptionsAsProperties()
         .version(packageJson.version, "-v, --version")
         .option(
@@ -93,6 +94,10 @@ function setupProgram(): Command {
             "console"
         )
         .option("-o, --output [output]", "output file path")
+        .option(
+            "-t, --type [type]",
+            "file type: js or css (required for esbuild)"
+        )
         .option("--gzip", "include gzip size")
         .option("--brotli", "include brotli size")
         .option("-v, --verbose", "verbose output")
@@ -111,7 +116,7 @@ function setupProgram(): Command {
                     output: options.output,
                     includeGzip: !!options.gzip,
                     includeBrotli: !!options.brotli,
-                    type: program.opts().type,
+                    type: options.type ?? program.opts().type,
                     verbose: !!options.verbose,
                     onProgress: (compressor: string, file: string) => {
                         if (spinner) {
@@ -121,8 +126,10 @@ function setupProgram(): Command {
                 });
 
                 spinner?.stop();
-                const reporter = getReporter(options.format);
-                console.log(reporter(results));
+                if (!options.output) {
+                    const reporter = getReporter(options.format);
+                    console.log(reporter(results));
+                }
                 process.exit(0);
             } catch (error) {
                 spinner?.fail("Benchmark failed");

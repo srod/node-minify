@@ -1,4 +1,7 @@
-# Node-minify migration from `9.x.x` to `10.x.x`
+---
+title: Upgrading to v10
+description: Migration guide for node-minify v10 and earlier versions
+---
 
 ## Breaking Changes Overview
 

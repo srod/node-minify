@@ -158,6 +158,46 @@ describe("Package: google-closure-compiler (runCompiler edge paths)", () => {
         ).rejects.toThrow("stdout maxBuffer exceeded");
     });
 
+    test("resolves for 3 MB stdout when buffer is omitted", async () => {
+        const largeOutput = "a".repeat(3 * 1024 * 1024);
+        mock.onRun = (child, cb) => {
+            child.stdout.emit("data", largeOutput);
+            cb(0, largeOutput, "");
+        };
+        const result = await gcc({
+            settings: baseSettings,
+            content: "var a = 1;",
+        });
+        expect(result.code).toBe(largeOutput);
+    });
+
+    test("rejects for 3 MB stdout when buffer is 1024", async () => {
+        const largeOutput = "a".repeat(3 * 1024 * 1024);
+        mock.onRun = (child, cb) => {
+            child.stdout.emit("data", largeOutput);
+            cb(0, largeOutput, "");
+        };
+        await expect(
+            gcc({
+                settings: { compressor: gcc, buffer: 1024 },
+                content: "var a = 1;",
+            })
+        ).rejects.toThrow("stdout maxBuffer exceeded");
+    });
+
+    test("resolves for 3 MB stdout when buffer is 0", async () => {
+        const largeOutput = "a".repeat(3 * 1024 * 1024);
+        mock.onRun = (child, cb) => {
+            child.stdout.emit("data", largeOutput);
+            cb(0, largeOutput, "");
+        };
+        const result = await gcc({
+            settings: { compressor: gcc, buffer: 0 },
+            content: "var a = 1;",
+        });
+        expect(result.code).toBe(largeOutput);
+    });
+
     test("settles only once when multiple errors fire", async () => {
         mock.onRun = (child) => {
             child.emit("error", new Error("first"));

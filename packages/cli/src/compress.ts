@@ -31,45 +31,39 @@ import {
 async function compress<T extends CompressorOptions = CompressorOptions>(
     options: Settings<T>
 ): Promise<Result> {
-    try {
-        await minify(options);
+    await minify(options);
 
-        const defaultResult: Result = {
-            compressorLabel: options.compressorLabel ?? "",
-            size: "0",
-            sizeGzip: "0",
-        };
+    const defaultResult: Result = {
+        compressorLabel: options.compressorLabel ?? "",
+        size: "0",
+        sizeGzip: "0",
+    };
 
-        // Return default result if output contains pattern, is an array, or is undefined
-        // Arrays and $1 patterns produce multiple files, so we can't calculate a single size
-        if (
-            !options.output ||
-            Array.isArray(options.output) ||
-            options.output.includes("$1")
-        ) {
-            return defaultResult;
-        }
-
-        // Check if file exists (may not exist if allowEmptyOutput skipped writing)
-        const fileExists = await isValidFileAsync(options.output);
-        if (!fileExists) {
-            return defaultResult;
-        }
-
-        // Get file sizes - let IO/permission errors propagate
-        const sizeGzip = await getFilesizeGzippedInBytes(options.output);
-        const size = getFilesizeInBytes(options.output);
-
-        return {
-            ...defaultResult,
-            size,
-            sizeGzip,
-        };
-    } catch (error) {
-        const errorMessage =
-            error instanceof Error ? error.message : "Unknown error occurred";
-        throw new Error(`Compression failed: ${errorMessage}`);
+    // Return default result if output contains pattern, is an array, or is undefined
+    // Arrays and $1 patterns produce multiple files, so we can't calculate a single size
+    if (
+        !options.output ||
+        Array.isArray(options.output) ||
+        options.output.includes("$1")
+    ) {
+        return defaultResult;
     }
+
+    // Check if file exists (may not exist if allowEmptyOutput skipped writing)
+    const fileExists = await isValidFileAsync(options.output);
+    if (!fileExists) {
+        return defaultResult;
+    }
+
+    // Get file sizes - let IO/permission errors propagate
+    const sizeGzip = await getFilesizeGzippedInBytes(options.output);
+    const size = getFilesizeInBytes(options.output);
+
+    return {
+        ...defaultResult,
+        size,
+        sizeGzip,
+    };
 }
 
 export { compress };
