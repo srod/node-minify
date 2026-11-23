@@ -106,7 +106,7 @@ When `allowEmptyOutput: true`:
 
 ## Max Buffer Size
 
-Some compressors spawn a child process. `buffer` caps how much output that process may produce before it is killed. The default is `1000 * 1024` bytes, which is enough for most files; raise it when minifying very large inputs.
+Some compressors spawn a child process. `buffer` caps how much output that process may produce (in bytes) before it is killed. When omitted, the compressor's own limit applies (100 MB per stream for Google Closure Compiler). Set `buffer` to `0` or less to disable the cap.
 
 ```js
 import { minify } from '@node-minify/core';
@@ -116,7 +116,7 @@ await minify({
   compressor: gcc,
   input: 'foo.js',
   output: 'bar.js',
-  buffer: 1000 * 1024
+  buffer: 200 * 1024 * 1024
 });
 ```
 
