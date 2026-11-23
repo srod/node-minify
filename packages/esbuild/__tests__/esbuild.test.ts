@@ -55,11 +55,7 @@ describe("Package: esbuild", async () => {
                 type: "js",
             };
 
-            try {
-                return await minify(settings);
-            } catch (err) {
-                return expect(err).not.toBeNull();
-            }
+            await expect(minify(settings)).rejects.toThrow("Transform failed");
         });
     });
 
@@ -100,10 +96,8 @@ describe("Package: esbuild", async () => {
             output: filesJS.fileJSOut,
         };
 
-        try {
-            return await minify(settings);
-        } catch (err) {
-            return expect(err).toBeInstanceOf(Error);
-        }
+        await expect(minify(settings)).rejects.toThrow(
+            "You must specify a type: js or css"
+        );
     });
 });

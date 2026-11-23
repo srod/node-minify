@@ -39,10 +39,6 @@ describe("Package: terser", async () => {
             },
         };
 
-        try {
-            return await minify(settings);
-        } catch (err) {
-            return expect(err).not.toBeNull();
-        }
+        await expect(minify(settings)).rejects.toThrow();
     });
 });
