@@ -84,18 +84,18 @@ function setupProgram(): Command {
         .command("benchmark <input>")
         .description("Benchmark compressors on input files")
         .option(
-            "-c, --compressors [compressors]",
+            "-c, --compressors <compressors>",
             "comma-separated list of compressors"
         )
-        .option("-n, --iterations [iterations]", "number of iterations", "1")
+        .option("-n, --iterations <iterations>", "number of iterations", "1")
         .option(
-            "-f, --format [format]",
+            "-f, --format <format>",
             "output format: console|json|markdown",
             "console"
         )
-        .option("-o, --output [output]", "output file path")
+        .option("-o, --output <output>", "output file path")
         .option(
-            "-t, --type [type]",
+            "-t, --type <type>",
             "file type: js or css (required for esbuild)"
         )
         .option("--gzip", "include gzip size")
