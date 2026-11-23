@@ -4,11 +4,18 @@
  * MIT Licensed
  */
 
+import { existsSync } from "node:fs";
+import fsPromises from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, test, vi } from "vitest";
 import { benchmark } from "../src/index.ts";
-import { calculateCompressorMetrics, runIterations } from "../src/runner.ts";
+import {
+    calculateCompressorMetrics,
+    runBenchmark,
+    runIterations,
+} from "../src/runner.ts";
 import type { BenchmarkOptions } from "../src/types.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -301,6 +308,132 @@ describe("Runner Edge Cases", () => {
             ).rejects.toThrow(
                 "Cannot calculate metrics for 'test': no timing data provided"
             );
+        });
+    });
+
+    describe("temp output isolation and cleanup", () => {
+        test("succeeds on an input file in a read-only directory without writing next to it", async () => {
+            const inputDir = await fsPromises.mkdtemp(
+                path.join(os.tmpdir(), "node-minify-ro-input-")
+            );
+            const copiedInput = path.join(inputDir, "fixture-1.js");
+            await fsPromises.copyFile(fixtureJS, copiedInput);
+
+            if (process.platform !== "win32") {
+                await fsPromises.chmod(inputDir, 0o555);
+            }
+
+            try {
+                const results = await runBenchmark({
+                    input: copiedInput,
+                    compressors: ["terser"],
+                    iterations: 2,
+                });
+
+                expect(results.files).toHaveLength(1);
+                expect(results.files[0]?.results[0]?.success).toBe(true);
+                const entries = await fsPromises.readdir(inputDir);
+                expect(entries).toEqual(["fixture-1.js"]);
+            } finally {
+                if (process.platform !== "win32") {
+                    await fsPromises.chmod(inputDir, 0o755);
+                }
+                await fsPromises.rm(inputDir, { recursive: true, force: true });
+            }
+        });
+
+        test("removes the created temp folder after a successful run", async () => {
+            const createdTempDirs: string[] = [];
+            const realMkdtemp = fsPromises.mkdtemp.bind(fsPromises);
+            const mkdtempSpy = vi
+                .spyOn(fsPromises, "mkdtemp")
+                .mockImplementation(async (prefix, options) => {
+                    const dir = await realMkdtemp(prefix, options);
+                    createdTempDirs.push(dir);
+                    return dir;
+                });
+
+            try {
+                const results = await runBenchmark({
+                    input: fixtureJS,
+                    compressors: ["terser"],
+                    iterations: 1,
+                });
+
+                expect(results.files[0]?.results[0]?.success).toBe(true);
+                expect(createdTempDirs.length).toBeGreaterThan(0);
+                for (const dir of createdTempDirs) {
+                    expect(existsSync(dir)).toBe(false);
+                }
+            } finally {
+                mkdtempSpy.mockRestore();
+            }
+        });
+
+        test("removes the created temp folder and leaves input folder unchanged when minify fails mid-run", async () => {
+            const inputDir = await fsPromises.mkdtemp(
+                path.join(os.tmpdir(), "node-minify-fail-input-")
+            );
+            const copiedInput = path.join(inputDir, "fixture-1.js");
+            await fsPromises.copyFile(fixtureJS, copiedInput);
+
+            const createdTempDirs: string[] = [];
+            const realMkdtemp = fsPromises.mkdtemp.bind(fsPromises);
+            const mkdtempSpy = vi
+                .spyOn(fsPromises, "mkdtemp")
+                .mockImplementation(async (prefix, options) => {
+                    const dir = await realMkdtemp(prefix, options);
+                    createdTempDirs.push(dir);
+                    return dir;
+                });
+
+            vi.resetModules();
+            const mockMinify = vi
+                .fn()
+                .mockImplementationOnce(
+                    async (args: { output: string }): Promise<string> => {
+                        await fsPromises.writeFile(
+                            args.output,
+                            "var a=1;",
+                            "utf-8"
+                        );
+                        return "var a=1;";
+                    }
+                )
+                .mockRejectedValueOnce(new Error("second iteration boom"));
+
+            vi.doMock("@node-minify/core", () => ({
+                minify: mockMinify,
+            }));
+
+            try {
+                const { runBenchmark: isolatedRunBenchmark } = await import(
+                    "../src/runner.ts"
+                );
+                const results = await isolatedRunBenchmark({
+                    input: copiedInput,
+                    compressors: ["terser"],
+                    iterations: 2,
+                    warmup: 0,
+                });
+
+                const firstResult = results.files[0]?.results[0];
+                expect(firstResult?.success).toBe(false);
+                expect(firstResult?.error).toContain("second iteration boom");
+
+                const entries = await fsPromises.readdir(inputDir);
+                expect(entries).toEqual(["fixture-1.js"]);
+
+                expect(createdTempDirs.length).toBeGreaterThan(0);
+                for (const dir of createdTempDirs) {
+                    expect(existsSync(dir)).toBe(false);
+                }
+            } finally {
+                vi.doUnmock("@node-minify/core");
+                vi.resetModules();
+                mkdtempSpy.mockRestore();
+                await fsPromises.rm(inputDir, { recursive: true, force: true });
+            }
         });
     });
 });

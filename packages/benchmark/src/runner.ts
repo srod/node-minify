@@ -4,7 +4,10 @@
  * MIT Licensed
  */
 
-import { statSync, unlinkSync } from "node:fs";
+import { statSync } from "node:fs";
+import fsPromises from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { basename, join } from "node:path";
 import { minify } from "@node-minify/core";
 import type { Compressor } from "@node-minify/types";
 import {
@@ -187,21 +190,6 @@ export function createErrorMetrics(
 }
 
 /**
- * Clean up temporary files created during benchmarking.
- *
- * @param files - Array of file paths to delete
- */
-export function cleanupTempFiles(files: string[]): void {
-    for (const file of files) {
-        try {
-            unlinkSync(file);
-        } catch {
-            // Ignore cleanup errors
-        }
-    }
-}
-
-/**
  * Run a complete benchmark across all input files and compressors.
  *
  * @param options - Benchmark configuration
@@ -305,25 +293,21 @@ async function benchmarkCompressor(
 
     const iterations = options.iterations || 1;
     const warmup = options.warmup ?? (iterations > 1 ? 1 : 0);
-    const tempFiles: string[] = [];
-    const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const fileBase = basename(file);
+    const safeName = name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    let tempDir: string | undefined;
 
     try {
-        const warmupFile = `${file}.warmup.${uniqueId}.tmp`;
+        tempDir = await fsPromises.mkdtemp(
+            join(tmpdir(), "node-minify-bench-")
+        );
+
+        const warmupFile = join(tempDir, `${fileBase}.warmup.tmp`);
         if (warmup > 0) {
-            // Pass tempFiles so partial warmup outputs are tracked for cleanup
-            // even if runWarmup throws before completing all iterations.
-            await runWarmup(
-                file,
-                compressor,
-                warmupFile,
-                warmup,
-                options,
-                tempFiles
-            );
+            await runWarmup(file, compressor, warmupFile, warmup, options);
         }
 
-        const outputFile = `${file}.${name}.${uniqueId}.tmp`;
+        const outputFile = join(tempDir, `${fileBase}.${safeName}.tmp`);
         const { times } = await runIterations(
             file,
             compressor,
@@ -331,24 +315,23 @@ async function benchmarkCompressor(
             iterations,
             options
         );
-        tempFiles.push(outputFile);
 
-        const metrics = await calculateCompressorMetrics(
+        return await calculateCompressorMetrics(
             name,
             times,
             outputFile,
             originalSizeBytes,
             options
         );
-
-        cleanupTempFiles(tempFiles);
-        return metrics;
     } catch (err) {
-        cleanupTempFiles(tempFiles);
         return createErrorMetrics(
             name,
             err instanceof Error ? err.message : String(err)
         );
+    } finally {
+        if (tempDir) {
+            await fsPromises.rm(tempDir, { recursive: true, force: true });
+        }
     }
 }
 
