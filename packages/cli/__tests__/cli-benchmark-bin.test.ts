@@ -93,4 +93,27 @@ describe("cli benchmark command", () => {
             await rm(tempDir, { recursive: true, force: true });
         }
     }, 60000);
+
+    test.each(["-o", "-c", "-t", "-f", "-n"])(
+        "should reject %s without a value before benchmarking",
+        async (flag) => {
+            const error = await execFileAsync(
+                "bun",
+                [
+                    cliEntry,
+                    "benchmark",
+                    "tests/fixtures/es5/fixture-1.js",
+                    flag,
+                ],
+                { cwd: repoRoot }
+            ).then(
+                () => null,
+                (err: { code: number; stderr: string }) => err
+            );
+
+            expect(error?.code).toBe(1);
+            expect(error?.stderr).toContain("argument missing");
+        },
+        60000
+    );
 });
