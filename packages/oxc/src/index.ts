@@ -19,6 +19,7 @@ import { minify as oxcMinify } from "oxc-minify";
  * @param settings - Minifier settings; `settings.options` are forwarded to oxc-minify (sourcemap enabled when `options.sourceMap` is truthy).
  * @param content - Input to minify; converted to a string before minification.
  * @returns The minified output: `code` contains the minified JavaScript, `map` contains the source map when available.
+ * @throws {Error} When oxc reports a parse error
  */
 export async function oxc({
     settings,
@@ -34,6 +35,14 @@ export async function oxc({
             sourcemap: sourceMap,
             ...restOptions,
         });
+
+        // String(): Severity is an ambient const enum, unusable under isolatedModules
+        const errors = result.errors.filter(
+            (error) => String(error.severity) === "Error"
+        );
+        if (errors.length > 0) {
+            throw new Error(errors.map((error) => error.message).join("; "));
+        }
 
         validateMinifyResult(result, "oxc");
 
