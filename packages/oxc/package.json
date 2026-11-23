@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/oxc",
-  "version": "11.0.0",
+  "version": "11.0.1",
   "description": "oxc plugin for @node-minify",
   "keywords": [
     "compressor",

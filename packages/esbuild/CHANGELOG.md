@@ -1,5 +1,11 @@
 # @node-minify/esbuild
 
+## 11.0.1
+
+### Patch Changes
+
+- @node-minify/utils@11.0.1
+
 ## 11.0.0
 
 ### Patch Changes
