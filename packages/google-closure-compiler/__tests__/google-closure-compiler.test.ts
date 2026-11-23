@@ -51,7 +51,7 @@ describe("Package: google-closure-compiler", async () => {
             output: filesJS.fileJSOut,
         };
 
-        await expect(minify(settings)).rejects.toThrow();
+        await expect(minify(settings)).rejects.toThrow("exited with code");
     });
 
     test("should compress with boolean options", async (): Promise<void> => {

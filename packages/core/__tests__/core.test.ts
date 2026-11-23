@@ -81,7 +81,7 @@ describe("Package: core", async () => {
     });
 
     describe("Mandatory", () => {
-        test("should show throw on type option", async () => {
+        test("should require a compressor even when type is set", async () => {
             const settings: Settings = {
                 // @ts-expect-error testing invalid input: "uglifyjs" is not a valid FileType ("js" | "css")
                 type: "uglifyjs",

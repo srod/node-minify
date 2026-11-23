@@ -55,7 +55,7 @@ describe("Package: esbuild", async () => {
                 type: "js",
             };
 
-            await expect(minify(settings)).rejects.toThrow();
+            await expect(minify(settings)).rejects.toThrow("Transform failed");
         });
     });
 
