@@ -1,5 +1,15 @@
 # @node-minify/core
 
+## 11.0.2
+
+### Patch Changes
+
+- 8903c65: Fail when no input file is left after glob expansion.
+
+  `minify()` used to resolve with an empty string and write nothing when a wildcard input such as `src/**/*.js` matched nothing and the output used `$1`; with a plain output it failed with `No content provided`. Both cases now throw `No files matched input pattern: <pattern>`. An array where at least one entry matches keeps working, and unmatched globs in it are skipped as before. Explicit empty arrays and in-memory `content` are unaffected.
+
+  - @node-minify/utils@11.0.2
+
 ## 11.0.1
 
 ### Patch Changes

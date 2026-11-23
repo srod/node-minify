@@ -1,5 +1,15 @@
 # @node-minify/oxc
 
+## 11.0.2
+
+### Patch Changes
+
+- ce1a1c2: Fix the oxc compressor ignoring parse errors reported by `oxc-minify`.
+
+  A JavaScript syntax error used to surface as `No content provided`, or as a silent success when `allowEmptyOutput` was set. It now fails with `oxc minification failed: <oxc's message>`.
+
+  - @node-minify/utils@11.0.2
+
 ## 11.0.1
 
 ### Patch Changes
