@@ -238,6 +238,55 @@ describe("sharp", () => {
         ).rejects.toThrow("Sharp conversion to webp failed: Sharp error");
     });
 
+    test("should wrap async toBuffer encode rejections with target format", async () => {
+        const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+        const { default: mockSharp } = await import("sharp");
+        // @ts-expect-error mock implementation only provides the methods this test exercises, narrower than the real Sharp instance type
+        mockSharp.mockImplementationOnce(() => ({
+            webp: vi.fn().mockReturnThis(),
+            toBuffer: vi.fn().mockRejectedValue(new Error("encode failed")),
+        }));
+
+        await expect(
+            sharp({
+                settings: {
+                    compressor: sharp,
+                    options: { format: "webp" },
+                },
+                content: inputBuffer,
+            })
+        ).rejects.toThrow("Sharp conversion to webp failed: encode failed");
+    });
+
+    test("should wrap async toBuffer encode rejection naming failing format in multi-format run", async () => {
+        const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+        const { default: mockSharp } = await import("sharp");
+        // @ts-expect-error mock implementation only provides the methods this test exercises, narrower than the real Sharp instance type
+        mockSharp.mockImplementationOnce(() => ({
+            webp: vi.fn().mockReturnThis(),
+            toBuffer: vi.fn().mockResolvedValue(Buffer.from("webp-ok")),
+        }));
+        // @ts-expect-error mock implementation only provides the methods this test exercises, narrower than the real Sharp instance type
+        mockSharp.mockImplementationOnce(() => ({
+            avif: vi.fn().mockReturnThis(),
+            toBuffer: vi
+                .fn()
+                .mockRejectedValue(new Error("avif encode failed")),
+        }));
+
+        await expect(
+            sharp({
+                settings: {
+                    compressor: sharp,
+                    options: { formats: ["webp", "avif"] },
+                },
+                content: inputBuffer,
+            })
+        ).rejects.toThrow(
+            "Sharp conversion to avif failed: avif encode failed"
+        );
+    });
+
     test("should rethrow non-Error exceptions", async () => {
         const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
         const { default: mockSharp } = await import("sharp");
