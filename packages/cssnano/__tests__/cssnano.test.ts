@@ -41,10 +41,8 @@ describe("Package: cssnano", async () => {
             output: filesCSS.fileCSSOut,
         };
 
-        try {
-            return await minify(settings);
-        } catch (err) {
-            return expect(err).not.toBeNull();
-        }
+        await expect(minify(settings)).rejects.toThrow(
+            "cssnano minification failed"
+        );
     });
 });

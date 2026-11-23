@@ -22,6 +22,7 @@ const defaultSettings: Partial<Settings> = {
  *
  * @param inputSettings - User-provided settings that override defaults
  * @returns The validated and enhanced Settings object ready for use
+ * @throws {Error} When wildcard expansion of the input leaves no file
  */
 function setup<T extends CompressorOptions = CompressorOptions>(
     inputSettings: Settings<T>
@@ -66,6 +67,7 @@ function setup<T extends CompressorOptions = CompressorOptions>(
  *
  * @param settings - The initial settings to enhance
  * @returns The enhanced Settings object with derived inputs, outputs, and public-folder values applied
+ * @throws {Error} When wildcard expansion of the input leaves no file
  */
 function enhanceSettings<T extends CompressorOptions = CompressorOptions>(
     settings: Settings<T>
@@ -73,10 +75,23 @@ function enhanceSettings<T extends CompressorOptions = CompressorOptions>(
     let enhancedSettings = settings;
 
     if (enhancedSettings.input) {
+        const requestedInput = enhancedSettings.input;
         enhancedSettings = {
             ...enhancedSettings,
-            ...wildcards(enhancedSettings.input, enhancedSettings.publicFolder),
+            ...wildcards(requestedInput, enhancedSettings.publicFolder),
         };
+
+        const patterns = [requestedInput].flat();
+        const hasWildcard = patterns.some((pattern) => pattern.includes("*"));
+        if (
+            hasWildcard &&
+            Array.isArray(enhancedSettings.input) &&
+            enhancedSettings.input.length === 0
+        ) {
+            throw new Error(
+                `No files matched input pattern: ${patterns.join(", ")}`
+            );
+        }
     }
     const optionsWithFormats = enhancedSettings.options as
         | { formats?: unknown[] }

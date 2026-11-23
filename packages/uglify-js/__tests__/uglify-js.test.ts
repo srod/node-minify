@@ -35,10 +35,6 @@ describe("Package: uglify-js", async () => {
             output: filesJS.fileJSOut,
         };
 
-        try {
-            return await minify(settings);
-        } catch (err) {
-            return expect(err).not.toBeNull();
-        }
+        await expect(minify(settings)).rejects.toThrow();
     });
 });
