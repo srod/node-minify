@@ -22,7 +22,7 @@ const defaultSettings: Partial<Settings> = {
  *
  * @param inputSettings - User-provided settings that override defaults
  * @returns The validated and enhanced Settings object ready for use
- * @throws {Error} When an input glob matches no file
+ * @throws {Error} When wildcard expansion of the input leaves no file
  */
 function setup<T extends CompressorOptions = CompressorOptions>(
     inputSettings: Settings<T>
@@ -67,7 +67,7 @@ function setup<T extends CompressorOptions = CompressorOptions>(
  *
  * @param settings - The initial settings to enhance
  * @returns The enhanced Settings object with derived inputs, outputs, and public-folder values applied
- * @throws {Error} When an input glob matches no file
+ * @throws {Error} When wildcard expansion of the input leaves no file
  */
 function enhanceSettings<T extends CompressorOptions = CompressorOptions>(
     settings: Settings<T>

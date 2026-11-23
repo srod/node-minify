@@ -4,6 +4,7 @@
  * MIT Licensed
  */
 
+import { randomUUID } from "node:crypto";
 import os from "node:os";
 import path from "node:path";
 import type { Compressor } from "@node-minify/types";
@@ -12,7 +13,7 @@ import { setup } from "../src/setup.ts";
 
 const compressor: Compressor = async () => ({ code: "" });
 const noMatch = path
-    .join(os.tmpdir(), "node-minify-no-such-dir", "**", "*.js")
+    .join(os.tmpdir(), `node-minify-no-such-dir-${randomUUID()}`, "**", "*.js")
     .replaceAll("\\", "/");
 
 describe("setup glob with no matching files", () => {
