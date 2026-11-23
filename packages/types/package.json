@@ -26,5 +26,9 @@
   },
   "bugs": {
     "url": "https://github.com/srod/node-minify/issues"
+  },
+  "scripts": {
+    "lint": "biome lint .",
+    "typecheck": "tsc --noEmit"
   }
 }

@@ -21,7 +21,7 @@ beforeEach(() => {
 
 describe("spinner", () => {
     test("spinnerStart sets a compressing message and starts", () => {
-        spinnerStart({ compressorLabel: "terser" } as unknown as Settings);
+        spinnerStart({ compressorLabel: "terser" } as Settings);
         expect(oraInstance.text).toContain("Compressing file(s)");
         expect(oraInstance.start).toHaveBeenCalled();
     });
@@ -31,13 +31,13 @@ describe("spinner", () => {
             compressorLabel: "terser",
             size: "1 kB",
             sizeGzip: "0.5 kB",
-        } as unknown as Result);
+        } as Result);
         expect(oraInstance.text).toContain("compressed successfully");
         expect(oraInstance.succeed).toHaveBeenCalled();
     });
 
     test("spinnerError sets a failure message and fails", () => {
-        spinnerError({ compressorLabel: "terser" } as unknown as Settings);
+        spinnerError({ compressorLabel: "terser" } as Settings);
         expect(oraInstance.text).toContain("Error - file(s) not compressed");
         expect(oraInstance.text).toContain("terser");
         expect(oraInstance.fail).toHaveBeenCalled();

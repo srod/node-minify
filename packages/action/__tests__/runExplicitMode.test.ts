@@ -16,7 +16,12 @@ import {
     generateBenchmarkSummary,
     generateSummary,
 } from "../src/reporters/summary.ts";
-import type { ActionInputs, MinifyResult } from "../src/types.ts";
+import type {
+    ActionInputs,
+    BenchmarkResult,
+    ComparisonResult,
+    MinifyResult,
+} from "../src/types.ts";
 
 vi.mock("@actions/core");
 vi.mock("@actions/github");
@@ -79,7 +84,7 @@ describe("runExplicitMode", () => {
         vi.mocked(runMinification).mockResolvedValue(mockResult);
         vi.mocked(checkThresholds).mockReturnValue(null);
         // Reset context
-        (context as any).payload = {};
+        (context as { payload: Record<string, unknown> }).payload = {};
     });
 
     test("1. Compressor validation error", async () => {
@@ -112,11 +117,19 @@ describe("runExplicitMode", () => {
     });
 
     test("4. PR comment posting (when in PR context + enabled)", async () => {
-        (context as any).payload = { pull_request: { number: 123 } };
-        const comparisons = [
-            { file: "src/app.js", baseSize: 1200, diff: -200 },
+        (context as { payload: Record<string, unknown> }).payload = {
+            pull_request: { number: 123 },
+        };
+        const comparisons: ComparisonResult[] = [
+            {
+                file: "src/app.js",
+                baseSize: 1200,
+                currentSize: 1000,
+                change: -16.7,
+                isNew: false,
+            },
         ];
-        vi.mocked(compareWithBase).mockResolvedValue(comparisons as any);
+        vi.mocked(compareWithBase).mockResolvedValue(comparisons);
 
         await runExplicitMode({ ...mockInputs, reportPRComment: true });
 
@@ -142,13 +155,15 @@ describe("runExplicitMode", () => {
     });
 
     test("7. Benchmark mode enabled with multiple compressors", async () => {
-        const benchmarkResult = {
-            results: [],
+        const benchmarkResult: BenchmarkResult = {
+            file: "src/app.js",
+            originalSize: 1000,
+            compressors: [],
             recommended: "esbuild",
             bestCompression: "esbuild",
             bestSpeed: "swc",
         };
-        vi.mocked(runBenchmark).mockResolvedValue(benchmarkResult as any);
+        vi.mocked(runBenchmark).mockResolvedValue(benchmarkResult);
         const inputs = {
             ...mockInputs,
             benchmark: true,
@@ -168,11 +183,13 @@ describe("runExplicitMode", () => {
     });
 
     test("8. Benchmark winner logging", async () => {
-        const benchmarkResult = {
-            results: [],
+        const benchmarkResult: BenchmarkResult = {
+            file: "src/app.js",
+            originalSize: 1000,
+            compressors: [],
             recommended: "esbuild",
         };
-        vi.mocked(runBenchmark).mockResolvedValue(benchmarkResult as any);
+        vi.mocked(runBenchmark).mockResolvedValue(benchmarkResult);
 
         await runExplicitMode({ ...mockInputs, benchmark: true });
 
@@ -203,7 +220,7 @@ describe("runExplicitMode", () => {
     });
 
     test("11. No PR comment when not in PR context", async () => {
-        (context as any).payload = {}; // No pull_request
+        (context as { payload: Record<string, unknown> }).payload = {}; // No pull_request
 
         await runExplicitMode({ ...mockInputs, reportPRComment: true });
 
@@ -212,7 +229,9 @@ describe("runExplicitMode", () => {
     });
 
     test("12. Combined: summary + PR comment + annotations", async () => {
-        (context as any).payload = { pull_request: { number: 123 } };
+        (context as { payload: Record<string, unknown> }).payload = {
+            pull_request: { number: 123 },
+        };
         const inputs = {
             ...mockInputs,
             reportSummary: true,

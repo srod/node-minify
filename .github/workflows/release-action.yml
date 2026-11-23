@@ -55,14 +55,14 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "1.4.0"
+          bun-version: "1.4.5"
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      # The action bundles 7 workspace packages (benchmark, core, esbuild, oxc,
-      # swc, terser, utils), so build the whole workspace. The root script
-      # already orders utils first and the action last.
+      # The action bundles benchmark, core and utils and loads compressors at
+      # runtime, so build the whole workspace. The root script already orders
+      # utils first and the action last.
       - name: Build action
         run: bun run build
 

@@ -15,7 +15,8 @@ describe("Package: terser error handling", async () => {
         const { terser } = await import("../src/index.ts");
 
         await expect(
-            terser({ settings: {} as any, content: "var x = 1;" })
+            // @ts-expect-error testing invalid input: settings is missing required fields
+            terser({ settings: {}, content: "var x = 1;" })
         ).rejects.toThrow("Terser failed: empty result");
     });
 });

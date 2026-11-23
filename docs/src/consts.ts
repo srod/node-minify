@@ -34,5 +34,8 @@ export const SIDEBAR: Sidebar = {
         { text: "terser", link: "compressors/terser" },
         { text: "uglify-js", link: "compressors/uglify-js" },
     ],
-    Guides: [{ text: "Upgrading to v11", link: "guides/v11-migration" }],
+    Guides: [
+        { text: "Upgrading to v11", link: "guides/v11-migration" },
+        { text: "Upgrading to v10", link: "guides/v10-migration" },
+    ],
 };

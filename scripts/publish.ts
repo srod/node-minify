@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 /*! node-minify - MIT Licensed */
 
-import { execSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -16,19 +16,28 @@ interface PackageJson {
     optionalDependencies?: Record<string, string>;
 }
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const PACKAGES_DIR = join(__dirname, "..", "packages");
+export type CommandResult = { status: number; stdout: string; stderr: string };
+
+/** Runs a command; `inherit` streams its output to this process instead of capturing it. */
+export type Run = (
+    command: string,
+    args: string[],
+    options?: { cwd?: string; inherit?: boolean }
+) => CommandResult;
+
+const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 /**
  * List package directory names inside the packages directory that contain a package.json file.
  *
- * @returns A sorted (alphabetical) array of directory names under PACKAGES_DIR that contain a package.json
+ * @param packagesDir - The directory holding the workspace packages
+ * @returns A sorted (alphabetical) array of directory names under packagesDir that contain a package.json
  */
-function getPackageDirs(): string[] {
-    return readdirSync(PACKAGES_DIR, { withFileTypes: true })
+function getPackageDirs(packagesDir: string): string[] {
+    return readdirSync(packagesDir, { withFileTypes: true })
         .filter((entry) => entry.isDirectory())
         .filter((entry) =>
-            existsSync(join(PACKAGES_DIR, entry.name, "package.json"))
+            existsSync(join(packagesDir, entry.name, "package.json"))
         )
         .map((entry) => entry.name)
         .sort();
@@ -37,24 +46,26 @@ function getPackageDirs(): string[] {
 /**
  * Read and parse the package.json file for a package located under the packages root.
  *
- * @param packageDir - The directory name of the package inside PACKAGES_DIR
+ * @param packagesDir - The directory holding the workspace packages
+ * @param packageDir - The directory name of the package inside packagesDir
  * @returns The parsed package.json as a `PackageJson`
  */
-function readPackageJson(packageDir: string): PackageJson {
-    const pkgPath = join(PACKAGES_DIR, packageDir, "package.json");
+function readPackageJson(packagesDir: string, packageDir: string): PackageJson {
+    const pkgPath = join(packagesDir, packageDir, "package.json");
     return JSON.parse(readFileSync(pkgPath, "utf-8"));
 }
 
 /**
  * Builds a map from each package's name to its version by reading package.json for all packages.
  *
+ * @param packagesDir - The directory holding the workspace packages
  * @returns A Map where each key is a package name and each value is that package's version string.
  */
-function buildVersionMap(): Map<string, string> {
+function buildVersionMap(packagesDir: string): Map<string, string> {
     const versionMap = new Map<string, string>();
 
-    for (const dir of getPackageDirs()) {
-        const pkg = readPackageJson(dir);
+    for (const dir of getPackageDirs(packagesDir)) {
+        const pkg = readPackageJson(packagesDir, dir);
         versionMap.set(pkg.name, pkg.version);
     }
 
@@ -97,25 +108,100 @@ function resolveDependencies(
 }
 
 /**
- * Publishes non-private workspace packages and creates changeset tags.
+ * Read an `npm view <name>@<version> version --json` result. Only an exact
+ * match counts as published; E404 means not yet; any other failure throws, so
+ * a broken registry or auth never reads as "already published".
  *
- * For each package under the packages directory, resolves `workspace:` dependency references to actual package versions, writes the updated package.json, attempts `npm publish --access public --provenance`, restores the original package.json, and logs progress. After processing all packages, runs `changeset tag` to create git tags; publish or tag failures are logged but do not stop processing.
- *
- * @returns Nothing.
+ * @param version - The version being released
+ * @param view - The exit status and output of `npm view`
+ * @returns `true` if that exact version is on the registry
+ * @throws {Error} When `npm view` fails for any reason other than E404
  */
-function main() {
-    const packageDirs = getPackageDirs();
-    const versionMap = buildVersionMap();
+export function isPublished(version: string, view: CommandResult): boolean {
+    if (view.status !== 0) {
+        if (errorCode(view.stdout) === "E404") return false;
+        const output = `${view.stdout}${view.stderr}`.trim() || "no output";
+        throw new Error(`npm view failed (exit ${view.status}): ${output}`);
+    }
+    if (view.stdout.trim() === "") return false;
+    const parsed: unknown = JSON.parse(view.stdout);
+    return (Array.isArray(parsed) ? parsed : [parsed]).includes(version);
+}
 
-    console.log(`Found ${packageDirs.length} packages to publish\n`);
+function errorCode(stdout: string): string | undefined {
+    try {
+        return JSON.parse(stdout)?.error?.code;
+    } catch {
+        return undefined;
+    }
+}
 
+const spawnRun: Run = (command, args, options = {}) => {
+    const result = spawnSync(command, args, {
+        cwd: options.cwd,
+        encoding: "utf-8",
+        stdio: options.inherit ? "inherit" : "pipe",
+        // Only captured lookups time out: a registry that never answers would
+        // otherwise hold the job for 6h. Publishes and tagging stream and run long.
+        timeout: options.inherit ? undefined : 120_000,
+    });
+    if (result.error) throw result.error;
+    return {
+        status: result.status ?? 1,
+        stdout: result.stdout ?? "",
+        stderr: result.stderr ?? "",
+    };
+};
+
+function succeed(label: string, result: CommandResult): void {
+    if (result.status !== 0) {
+        throw new Error(`${label} failed (exit ${result.status})`);
+    }
+}
+
+/**
+ * Publishes every non-private workspace package not already on the registry,
+ * then creates changeset tags if anything was published.
+ *
+ * A version is skipped only when the registry returns that exact version. Any
+ * other lookup or publish failure throws, so the release job cannot go green
+ * without shipping. Each rewritten package.json is restored after its publish.
+ *
+ * @param options - `packagesDir` holds the packages, `repoRoot` is where `changeset tag` runs, `run` executes commands
+ * @returns The number of packages published
+ * @throws {Error} When a lookup, publish, or `changeset tag` fails
+ */
+export function publishAll(options: {
+    packagesDir: string;
+    repoRoot: string;
+    run: Run;
+    log?: (line: string) => void;
+}): number {
+    const { packagesDir, repoRoot, run, log = console.log } = options;
+    const packageDirs = getPackageDirs(packagesDir);
+    const versionMap = buildVersionMap(packagesDir);
+
+    log(`Found ${packageDirs.length} packages to publish\n`);
+
+    let published = 0;
     for (const dir of packageDirs) {
-        const pkgPath = join(PACKAGES_DIR, dir, "package.json");
+        const pkgPath = join(packagesDir, dir, "package.json");
         const originalContent = readFileSync(pkgPath, "utf-8");
         const pkg: PackageJson = JSON.parse(originalContent);
 
         if (pkg.private) {
-            console.log(`Skipping private package: ${pkg.name}`);
+            log(`Skipping private package: ${pkg.name}`);
+            continue;
+        }
+
+        const view = run("npm", [
+            "view",
+            `${pkg.name}@${pkg.version}`,
+            "version",
+            "--json",
+        ]);
+        if (isPublished(pkg.version, view)) {
+            log(`Already on npm: ${pkg.name}@${pkg.version}`);
             continue;
         }
 
@@ -135,47 +221,52 @@ function main() {
 
         writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`);
 
-        console.log(`Publishing ${pkg.name}@${pkg.version}...`);
+        log(`Publishing ${pkg.name}@${pkg.version}...`);
 
         try {
-            execSync("npm publish --access public --provenance", {
-                cwd: join(PACKAGES_DIR, dir),
-                stdio: "inherit",
-            });
-            console.log(`Published ${pkg.name}@${pkg.version}\n`);
-        } catch (err) {
-            if (err instanceof Error) {
-                console.log(
-                    `Failed to publish ${pkg.name}@${pkg.version} (may already exist)\n`
-                );
-            }
+            succeed(
+                `npm publish ${pkg.name}@${pkg.version}`,
+                run("npm", ["publish", "--access", "public", "--provenance"], {
+                    cwd: join(packagesDir, dir),
+                    inherit: true,
+                })
+            );
+            published++;
+            log(`Published ${pkg.name}@${pkg.version}\n`);
         } finally {
             writeFileSync(pkgPath, originalContent);
         }
     }
 
-    console.log("\nCreating git tags...");
-    try {
-        execSync("changeset tag", {
-            cwd: join(__dirname, ".."),
-            stdio: "inherit",
-        });
-    } catch (err) {
-        if (err instanceof Error) {
-            console.log("Failed to create tags (may already exist)");
-        }
+    // No publish, no tags: changesets/action reads "New tag:" lines as a release.
+    if (published === 0) {
+        log("\nNothing to publish, no tags created.");
+        return 0;
     }
 
-    console.log("\nDone!");
+    log("\nCreating git tags...");
+    succeed(
+        "changeset tag",
+        run("changeset", ["tag"], { cwd: repoRoot, inherit: true })
+    );
+
+    log("\nDone!");
+    return published;
 }
 
-try {
-    main();
-} catch (error) {
-    if (error instanceof Error) {
-        console.error("Publish failed:", error.message);
-    } else {
-        console.error("Publish failed:", error);
+if (import.meta.main) {
+    try {
+        publishAll({
+            packagesDir: join(REPO_ROOT, "packages"),
+            repoRoot: REPO_ROOT,
+            run: spawnRun,
+        });
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error("Publish failed:", error.message);
+        } else {
+            console.error("Publish failed:", error);
+        }
+        process.exit(1);
     }
-    process.exit(1);
 }

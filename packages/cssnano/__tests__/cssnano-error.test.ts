@@ -25,7 +25,8 @@ describe("Package: cssnano error handling", () => {
         const { cssnano } = await import("../src/index.ts");
 
         await expect(
-            cssnano({ settings: {} as any, content: ".a { color: red; }" })
+            // @ts-expect-error testing invalid input: settings is missing required fields
+            cssnano({ settings: {}, content: ".a { color: red; }" })
         ).rejects.toThrow(
             "cssnano minification failed: cssnano failed: empty or invalid result"
         );

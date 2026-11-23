@@ -194,7 +194,7 @@ describe("Package: imagemin", () => {
                     compressor: imagemin,
                     options: {},
                 },
-                content: "not a buffer" as unknown as Buffer,
+                content: "not a buffer",
             })
         ).rejects.toThrow("Imagemin compressor requires Buffer content");
     });

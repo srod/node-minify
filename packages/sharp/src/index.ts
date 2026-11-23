@@ -94,7 +94,7 @@ async function convertImage(
                 break;
         }
 
-        return converter.toBuffer();
+        return await converter.toBuffer();
     } catch (err) {
         if (err instanceof Error) {
             throw new Error(

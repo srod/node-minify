@@ -1,8 +1,10 @@
 /*! node-minify action tests - MIT Licensed */
 
+import type { Stats } from "node:fs";
 import { stat } from "node:fs/promises";
 import path from "node:path";
 import { minify } from "@node-minify/core";
+import type { CompressorResolution } from "@node-minify/utils";
 import { getFilesizeGzippedRaw, resolveCompressor } from "@node-minify/utils";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { runMinification } from "../src/minify.ts";
@@ -52,12 +54,13 @@ describe("runMinification", () => {
 
     test("should perform basic minification and calculate sizes", async () => {
         vi.mocked(stat)
-            .mockResolvedValueOnce({ size: 1000 } as any)
-            .mockResolvedValueOnce({ size: 500 } as any);
+            .mockResolvedValueOnce({ size: 1000 } as Stats)
+            .mockResolvedValueOnce({ size: 500 } as Stats);
         vi.mocked(resolveCompressor).mockResolvedValue({
             compressor: vi.fn(),
             label: "terser",
-        } as any);
+            isBuiltIn: true,
+        } as CompressorResolution);
         vi.mocked(minify).mockResolvedValue("minified content");
         vi.mocked(getFilesizeGzippedRaw).mockResolvedValue(300);
 
@@ -85,12 +88,13 @@ describe("runMinification", () => {
 
     test("should include gzip size when includeGzip is true", async () => {
         vi.mocked(stat)
-            .mockResolvedValueOnce({ size: 1000 } as any)
-            .mockResolvedValueOnce({ size: 500 } as any);
+            .mockResolvedValueOnce({ size: 1000 } as Stats)
+            .mockResolvedValueOnce({ size: 500 } as Stats);
         vi.mocked(resolveCompressor).mockResolvedValue({
             compressor: vi.fn(),
             label: "terser",
-        } as any);
+            isBuiltIn: true,
+        } as CompressorResolution);
         vi.mocked(getFilesizeGzippedRaw).mockResolvedValue(300);
 
         const result = await runMinification({
@@ -105,12 +109,13 @@ describe("runMinification", () => {
 
     test("should skip gzip size when includeGzip is false", async () => {
         vi.mocked(stat)
-            .mockResolvedValueOnce({ size: 1000 } as any)
-            .mockResolvedValueOnce({ size: 500 } as any);
+            .mockResolvedValueOnce({ size: 1000 } as Stats)
+            .mockResolvedValueOnce({ size: 500 } as Stats);
         vi.mocked(resolveCompressor).mockResolvedValue({
             compressor: vi.fn(),
             label: "terser",
-        } as any);
+            isBuiltIn: true,
+        } as CompressorResolution);
 
         const result = await runMinification({
             ...mockInputs,
@@ -124,12 +129,13 @@ describe("runMinification", () => {
 
     test("should calculate zero reduction when sizes are equal", async () => {
         vi.mocked(stat)
-            .mockResolvedValueOnce({ size: 1000 } as any)
-            .mockResolvedValueOnce({ size: 1000 } as any);
+            .mockResolvedValueOnce({ size: 1000 } as Stats)
+            .mockResolvedValueOnce({ size: 1000 } as Stats);
         vi.mocked(resolveCompressor).mockResolvedValue({
             compressor: vi.fn(),
             label: "terser",
-        } as any);
+            isBuiltIn: true,
+        } as CompressorResolution);
 
         const result = await runMinification(mockInputs);
         expect(result.totalReduction).toBe(0);
@@ -137,24 +143,26 @@ describe("runMinification", () => {
 
     test("should handle zero original size", async () => {
         vi.mocked(stat)
-            .mockResolvedValueOnce({ size: 0 } as any)
-            .mockResolvedValueOnce({ size: 0 } as any);
+            .mockResolvedValueOnce({ size: 0 } as Stats)
+            .mockResolvedValueOnce({ size: 0 } as Stats);
         vi.mocked(resolveCompressor).mockResolvedValue({
             compressor: vi.fn(),
             label: "terser",
-        } as any);
+            isBuiltIn: true,
+        } as CompressorResolution);
 
         const result = await runMinification(mockInputs);
         expect(result.totalReduction).toBe(0);
     });
 
     test("should pass type and options to minify", async () => {
-        vi.mocked(stat).mockResolvedValue({ size: 100 } as any);
+        vi.mocked(stat).mockResolvedValue({ size: 100 } as Stats);
         const mockComp = vi.fn();
         vi.mocked(resolveCompressor).mockResolvedValue({
             compressor: mockComp,
             label: "esbuild",
-        } as any);
+            isBuiltIn: true,
+        } as CompressorResolution);
 
         const inputs = {
             ...mockInputs,
@@ -176,12 +184,13 @@ describe("runMinification", () => {
 
     test("should store outputFile as repository-relative path for absolute output", async () => {
         vi.mocked(stat)
-            .mockResolvedValueOnce({ size: 1000 } as any)
-            .mockResolvedValueOnce({ size: 500 } as any);
+            .mockResolvedValueOnce({ size: 1000 } as Stats)
+            .mockResolvedValueOnce({ size: 500 } as Stats);
         vi.mocked(resolveCompressor).mockResolvedValue({
             compressor: vi.fn(),
             label: "terser",
-        } as any);
+            isBuiltIn: true,
+        } as CompressorResolution);
         vi.mocked(minify).mockResolvedValue("minified content");
 
         const absoluteOutput = path.resolve(process.cwd(), "dist/app.min.js");
@@ -195,12 +204,13 @@ describe("runMinification", () => {
 
     test("should include working-directory prefix in outputFile", async () => {
         vi.mocked(stat)
-            .mockResolvedValueOnce({ size: 1000 } as any)
-            .mockResolvedValueOnce({ size: 500 } as any);
+            .mockResolvedValueOnce({ size: 1000 } as Stats)
+            .mockResolvedValueOnce({ size: 500 } as Stats);
         vi.mocked(resolveCompressor).mockResolvedValue({
             compressor: vi.fn(),
             label: "terser",
-        } as any);
+            isBuiltIn: true,
+        } as CompressorResolution);
         vi.mocked(minify).mockResolvedValue("minified content");
 
         const result = await runMinification({

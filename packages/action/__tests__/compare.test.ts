@@ -25,6 +25,22 @@ import {
 } from "../src/compare.ts";
 import type { ComparisonResult, MinifyResult } from "../src/types.ts";
 
+/**
+ * Wire up a fake octokit for the mocked getOctokit.
+ *
+ * compareWithBase only reads `rest.repos.getContent`, so the mock intentionally
+ * implements just that subset rather than the full Octokit surface.
+ */
+function mockOctokit(getContent: ReturnType<typeof vi.fn>) {
+    const octokit = {
+        rest: {
+            repos: { getContent },
+        },
+    };
+    // @ts-expect-error mocked octokit only implements the rest.repos.getContent subset compareWithBase reads, not the full Octokit type
+    vi.mocked(getOctokit).mockReturnValue(octokit);
+}
+
 describe("formatChange", () => {
     test("formats size increase with warning emoji", () => {
         const comparison: ComparisonResult = {
@@ -307,11 +323,7 @@ describe("compareWithBase", () => {
             data: { type: "file", size: 3500 },
         });
 
-        vi.mocked(getOctokit).mockReturnValue({
-            rest: {
-                repos: { getContent: mockGetContent },
-            },
-        } as unknown as ReturnType<typeof getOctokit>);
+        mockOctokit(mockGetContent);
 
         const result = await compareWithBase(mockResult, "fake-token");
 
@@ -357,11 +369,7 @@ describe("compareWithBase", () => {
             data: { type: "file", size: 3500 },
         });
 
-        vi.mocked(getOctokit).mockReturnValue({
-            rest: {
-                repos: { getContent: mockGetContent },
-            },
-        } as unknown as ReturnType<typeof getOctokit>);
+        mockOctokit(mockGetContent);
 
         const result = await compareWithBase(explicitResultWithOutput, "token");
 
@@ -401,11 +409,7 @@ describe("compareWithBase", () => {
             data: { type: "file", size: 3500 },
         });
 
-        vi.mocked(getOctokit).mockReturnValue({
-            rest: {
-                repos: { getContent: mockGetContent },
-            },
-        } as unknown as ReturnType<typeof getOctokit>);
+        mockOctokit(mockGetContent);
 
         await compareWithBase(explicitResultWithWindowsPath, "token");
 
@@ -444,11 +448,7 @@ describe("compareWithBase", () => {
             data: { type: "file", size: 3500 },
         });
 
-        vi.mocked(getOctokit).mockReturnValue({
-            rest: {
-                repos: { getContent: mockGetContent },
-            },
-        } as unknown as ReturnType<typeof getOctokit>);
+        mockOctokit(mockGetContent);
 
         await compareWithBase(explicitResultWithUnsafeOutput, "token");
 
@@ -487,11 +487,7 @@ describe("compareWithBase", () => {
         };
 
         const mockGetContent = vi.fn();
-        vi.mocked(getOctokit).mockReturnValue({
-            rest: {
-                repos: { getContent: mockGetContent },
-            },
-        } as unknown as ReturnType<typeof getOctokit>);
+        mockOctokit(mockGetContent);
 
         const result = await compareWithBase(resultWithUnsafePaths, "token");
 
@@ -523,11 +519,7 @@ describe("compareWithBase", () => {
         });
         const mockGetContent = vi.fn().mockRejectedValue(notFoundError);
 
-        vi.mocked(getOctokit).mockReturnValue({
-            rest: {
-                repos: { getContent: mockGetContent },
-            },
-        } as unknown as ReturnType<typeof getOctokit>);
+        mockOctokit(mockGetContent);
 
         const result = await compareWithBase(mockResult, "fake-token");
 
@@ -546,11 +538,7 @@ describe("compareWithBase", () => {
             data: [{ type: "file", name: "index.js" }],
         });
 
-        vi.mocked(getOctokit).mockReturnValue({
-            rest: {
-                repos: { getContent: mockGetContent },
-            },
-        } as unknown as ReturnType<typeof getOctokit>);
+        mockOctokit(mockGetContent);
 
         const result = await compareWithBase(mockResult, "fake-token");
 
@@ -566,11 +554,7 @@ describe("compareWithBase", () => {
             data: { type: "symlink", target: "some-target" },
         });
 
-        vi.mocked(getOctokit).mockReturnValue({
-            rest: {
-                repos: { getContent: mockGetContent },
-            },
-        } as unknown as ReturnType<typeof getOctokit>);
+        mockOctokit(mockGetContent);
 
         const result = await compareWithBase(mockResult, "fake-token");
 
@@ -585,11 +569,7 @@ describe("compareWithBase", () => {
         const unexpectedError = new Error("Network error");
         const mockGetContent = vi.fn().mockRejectedValue(unexpectedError);
 
-        vi.mocked(getOctokit).mockReturnValue({
-            rest: {
-                repos: { getContent: mockGetContent },
-            },
-        } as unknown as ReturnType<typeof getOctokit>);
+        mockOctokit(mockGetContent);
 
         const result = await compareWithBase(mockResult, "fake-token");
 
@@ -608,11 +588,7 @@ describe("compareWithBase", () => {
             data: { type: "file", size: 0 },
         });
 
-        vi.mocked(getOctokit).mockReturnValue({
-            rest: {
-                repos: { getContent: mockGetContent },
-            },
-        } as unknown as ReturnType<typeof getOctokit>);
+        mockOctokit(mockGetContent);
 
         const result = await compareWithBase(mockResult, "fake-token");
 
@@ -654,11 +630,7 @@ describe("compareWithBase", () => {
             .mockResolvedValueOnce({ data: { type: "file", size: 1600 } })
             .mockResolvedValueOnce({ data: { type: "file", size: 1400 } });
 
-        vi.mocked(getOctokit).mockReturnValue({
-            rest: {
-                repos: { getContent: mockGetContent },
-            },
-        } as unknown as ReturnType<typeof getOctokit>);
+        mockOctokit(mockGetContent);
 
         const result = await compareWithBase(multiFileResult, "fake-token");
 
@@ -692,11 +664,7 @@ describe("compareWithBase", () => {
             data: { type: "file", size: 0 },
         });
 
-        vi.mocked(getOctokit).mockReturnValue({
-            rest: {
-                repos: { getContent: mockGetContent },
-            },
-        } as unknown as ReturnType<typeof getOctokit>);
+        mockOctokit(mockGetContent);
 
         const result = await compareWithBase(zeroResult, "fake-token");
 
@@ -711,11 +679,7 @@ describe("compareWithBase", () => {
 
         const mockGetContent = vi.fn().mockRejectedValue("string error");
 
-        vi.mocked(getOctokit).mockReturnValue({
-            rest: {
-                repos: { getContent: mockGetContent },
-            },
-        } as unknown as ReturnType<typeof getOctokit>);
+        mockOctokit(mockGetContent);
 
         const result = await compareWithBase(mockResult, "fake-token");
 

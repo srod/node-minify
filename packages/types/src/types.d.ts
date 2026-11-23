@@ -154,8 +154,9 @@ export type Settings<TOptions extends CompressorOptions = CompressorOptions> = {
     option?: string;
 
     /**
-     * Buffer size for file operations (in bytes).
-     * @default 1024000 (1MB)
+     * Caps how much output a child-process compressor may produce (in bytes).
+     * When omitted, the compressor's own limit applies (100 MB per stream for Google Closure Compiler).
+     * `0` or less disables the cap.
      */
     buffer?: number;
 

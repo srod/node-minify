@@ -4,6 +4,13 @@
  * MIT Licensed
  */
 
+// Load-bearing: this package's own tsconfig globs `src/**/*`, so `types.d.ts` is
+// picked up without this reference and an in-package typecheck stays green
+// either way. Consumers that import this file directly do not glob it —
+// packages/core/__tests__/core.test.ts imports `../../google-closure-compiler/src/index.ts`
+// and fails with TS7016/TS7006 if this line is removed. Do not delete.
+/// <reference path="./types.d.ts" />
+
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import { ensureStringContent, wrapMinificationError } from "@node-minify/utils";
 import googleClosureCompiler from "google-closure-compiler";

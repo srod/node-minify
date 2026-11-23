@@ -32,7 +32,8 @@ describe("Package: minify-html error handling", () => {
 
         await expect(
             minifyHtml({
-                settings: {} as any,
+                // @ts-expect-error testing invalid input: settings is missing required fields
+                settings: {},
                 content: "<html><body>test</body></html>",
             })
         ).rejects.toThrow(

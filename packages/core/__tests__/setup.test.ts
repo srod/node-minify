@@ -1,6 +1,6 @@
 /*! node-minify core setup tests - MIT Licensed */
 
-import type { Settings } from "@node-minify/types";
+import type { Compressor } from "@node-minify/types";
 import { describe, expect, test, vi } from "vitest";
 
 // Keep input untouched so checkOutput receives the literal paths instead of
@@ -15,7 +15,7 @@ vi.mock("@node-minify/utils", async (importOriginal) => {
 
 import { setup } from "../src/setup.ts";
 
-const compressor = (() => ({ code: "" })) as unknown as Settings["compressor"];
+const compressor: Compressor = async () => ({ code: "" });
 
 describe("setup $1 output handling", () => {
     test("rewrites the $1 placeholder for a single file", () => {
@@ -48,5 +48,34 @@ describe("setup $1 output handling", () => {
             output: "dist/a.min.js",
         });
         expect(settings.output).toBe("dist/a.min.js");
+    });
+});
+
+describe("setup buffer handling", () => {
+    test("omits buffer when caller does not specify one", () => {
+        const settings = setup({
+            compressor,
+            input: "a.js",
+            output: "dist/a.min.js",
+        });
+        expect(settings.buffer).toBeUndefined();
+    });
+
+    test("omits buffer in in-memory mode when caller does not specify one", () => {
+        const settings = setup({
+            compressor,
+            content: "var a = 1;",
+        });
+        expect(settings.buffer).toBeUndefined();
+    });
+
+    test("preserves a caller-supplied buffer value", () => {
+        const settings = setup({
+            compressor,
+            input: "a.js",
+            output: "dist/a.min.js",
+            buffer: 1024,
+        });
+        expect(settings.buffer).toBe(1024);
     });
 });

@@ -1,12 +1,15 @@
+import type * as NodeFs from "node:fs";
+import type * as NodeMinifyUtils from "@node-minify/utils";
 import { describe, expect, test, vi } from "vitest";
 import * as compressorLoader from "../src/compressor-loader.ts";
 import { loadCompressor } from "../src/compressor-loader.ts";
 import { formatConsoleOutput } from "../src/reporters/console.ts";
 import { formatMarkdownOutput } from "../src/reporters/markdown.ts";
 import { runBenchmark } from "../src/runner.ts";
+import type { BenchmarkResult } from "../src/types.ts";
 
 vi.mock("node:fs", async () => {
-    const actual = await vi.importActual<any>("node:fs");
+    const actual = await vi.importActual<typeof NodeFs>("node:fs");
     return {
         ...actual,
         statSync: vi.fn((file) => {
@@ -36,7 +39,8 @@ vi.mock("node:fs", async () => {
 });
 
 vi.mock("@node-minify/utils", async () => {
-    const actual = await vi.importActual<any>("@node-minify/utils");
+    const actual =
+        await vi.importActual<typeof NodeMinifyUtils>("@node-minify/utils");
     return {
         ...actual,
         getFilesizeGzippedInBytes: vi.fn().mockResolvedValue("100 B"),
@@ -107,7 +111,7 @@ describe("Coverage Gaps", () => {
     });
 
     test("Reporters - handles gzip/brotli columns and errors", () => {
-        const mockResult = {
+        const mockResult: BenchmarkResult = {
             timestamp: "2024-01-01",
             options: { verbose: true },
             summary: {
@@ -146,7 +150,7 @@ describe("Coverage Gaps", () => {
             ],
         };
 
-        const consoleOut = formatConsoleOutput(mockResult as any);
+        const consoleOut = formatConsoleOutput(mockResult);
         expect(consoleOut).toContain("Gzip");
         expect(consoleOut).toContain("Brotli");
         expect(consoleOut).toContain("0.3 KB");
@@ -154,7 +158,7 @@ describe("Coverage Gaps", () => {
         expect(consoleOut).toContain("Failed");
         expect(consoleOut).toContain("90ms, 110ms");
 
-        const markdownOut = formatMarkdownOutput(mockResult as any);
+        const markdownOut = formatMarkdownOutput(mockResult);
         expect(markdownOut).toContain("| Gzip |");
         expect(markdownOut).toContain("| Brotli |");
         expect(markdownOut).toContain("| 0.3 KB |");
@@ -163,7 +167,7 @@ describe("Coverage Gaps", () => {
     });
 
     test("Reporters - verbose output", () => {
-        const mockResult = {
+        const mockResult: BenchmarkResult = {
             timestamp: "2024-01-01",
             options: { verbose: true },
             summary: {
@@ -190,7 +194,7 @@ describe("Coverage Gaps", () => {
                 },
             ],
         };
-        const output = formatConsoleOutput(mockResult as any);
+        const output = formatConsoleOutput(mockResult);
         expect(output).toContain("└─ 100ms");
     });
 });

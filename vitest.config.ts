@@ -4,7 +4,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
     plugins: [tsconfigPaths()],
     test: {
-        projects: ["packages/*"],
+        projects: ["packages/*", "scripts"],
         reporters: ["default"],
         coverage: {
             reporter: ["text", "json", "html"],

@@ -4,6 +4,7 @@ import { setFailed } from "@actions/core";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { _internal, chunkArray, run } from "../src/index.ts";
 import { parseInputs } from "../src/inputs.ts";
+import type { ActionInputs } from "../src/types.ts";
 
 vi.mock("@actions/core");
 vi.mock("../src/inputs.ts");
@@ -63,7 +64,7 @@ describe("run", () => {
     });
 
     test("calls runAutoMode when auto is true", async () => {
-        vi.mocked(parseInputs).mockReturnValue({ auto: true } as any);
+        vi.mocked(parseInputs).mockReturnValue({ auto: true } as ActionInputs);
         await run();
         expect(_internal.runAutoMode).toHaveBeenCalledWith({ auto: true });
         expect(_internal.runExplicitMode).not.toHaveBeenCalled();
@@ -71,7 +72,7 @@ describe("run", () => {
     });
 
     test("calls runExplicitMode when auto is false", async () => {
-        vi.mocked(parseInputs).mockReturnValue({ auto: false } as any);
+        vi.mocked(parseInputs).mockReturnValue({ auto: false } as ActionInputs);
         await run();
         expect(_internal.runExplicitMode).toHaveBeenCalledWith({ auto: false });
         expect(_internal.runAutoMode).not.toHaveBeenCalled();
@@ -96,7 +97,7 @@ describe("run", () => {
     });
 
     test("calls setFailed when runAutoMode fails", async () => {
-        vi.mocked(parseInputs).mockReturnValue({ auto: true } as any);
+        vi.mocked(parseInputs).mockReturnValue({ auto: true } as ActionInputs);
         const error = new Error("Auto mode failed");
         vi.mocked(_internal.runAutoMode).mockRejectedValue(error);
         await run();
@@ -104,7 +105,7 @@ describe("run", () => {
     });
 
     test("calls setFailed when runExplicitMode fails", async () => {
-        vi.mocked(parseInputs).mockReturnValue({ auto: false } as any);
+        vi.mocked(parseInputs).mockReturnValue({ auto: false } as ActionInputs);
         const error = new Error("Explicit mode failed");
         vi.mocked(_internal.runExplicitMode).mockRejectedValue(error);
         await run();
@@ -112,14 +113,14 @@ describe("run", () => {
     });
 
     test("no error on success (auto mode)", async () => {
-        vi.mocked(parseInputs).mockReturnValue({ auto: true } as any);
+        vi.mocked(parseInputs).mockReturnValue({ auto: true } as ActionInputs);
         vi.mocked(_internal.runAutoMode).mockResolvedValue(undefined);
         await run();
         expect(setFailed).not.toHaveBeenCalled();
     });
 
     test("no error on success (explicit mode)", async () => {
-        vi.mocked(parseInputs).mockReturnValue({ auto: false } as any);
+        vi.mocked(parseInputs).mockReturnValue({ auto: false } as ActionInputs);
         vi.mocked(_internal.runExplicitMode).mockResolvedValue(undefined);
         await run();
         expect(setFailed).not.toHaveBeenCalled();

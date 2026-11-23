@@ -26,12 +26,12 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "1.4.0"
+          bun-version: "1.4.5"
 
       - name: Set up JDK 11
         uses: actions/setup-java@v5
         with:
-          java-version: '11'
+          java-version: '11.0.33+10'
           distribution: 'temurin'
 
       - name: Use Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
@@ -50,6 +50,13 @@ jobs:
         # independent, so one leg is enough.
         if: runner.os == 'Linux' && matrix.node-version == '22.x'
         run: bash scripts/ci-guard-removed-compressors.sh
+
+      - name: Guard - no banned type suppressions
+        # Static grep over hand-written code: covers @ts-nocheck (invisible to
+        # Biome), @ts-expect-error in src/, and reason-less directives. OS- and
+        # Node-version independent, so one leg is enough.
+        if: runner.os == 'Linux' && matrix.node-version == '22.x'
+        run: bash scripts/ci-guard-type-suppressions.sh
 
       - name: Upload coverage to Codecov
         if: runner.os == 'Linux'

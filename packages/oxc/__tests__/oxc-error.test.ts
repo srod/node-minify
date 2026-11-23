@@ -25,7 +25,8 @@ describe("Package: oxc error handling", () => {
         const { oxc } = await import("../src/index.ts");
 
         await expect(
-            oxc({ settings: {} as any, content: "var x = 1;" })
+            // @ts-expect-error testing invalid input: settings is missing required fields
+            oxc({ settings: {}, content: "var x = 1;" })
         ).rejects.toThrow("oxc");
     });
 });

@@ -39,16 +39,21 @@ const result: MinifyResult = {
 
 /**
  * Wire up a fake octokit for the mocked getOctokit.
+ *
+ * postPRComment only reads `paginate` and `rest.issues.{listComments,updateComment,createComment}`,
+ * so the mock intentionally implements just that subset rather than the full Octokit surface.
  */
 function mockOctokit(comments: { id: number; body?: string }[] = []) {
     const listComments = vi.fn();
     const paginate = vi.fn().mockResolvedValue(comments);
     const updateComment = vi.fn().mockResolvedValue({ data: { id: 1 } });
     const createComment = vi.fn().mockResolvedValue({ data: { id: 99 } });
-    vi.mocked(getOctokit).mockReturnValue({
+    const octokit = {
         paginate,
         rest: { issues: { listComments, updateComment, createComment } },
-    } as unknown as ReturnType<typeof getOctokit>);
+    };
+    // @ts-expect-error mocked octokit only implements the paginate/issues subset postPRComment reads, not the full Octokit type
+    vi.mocked(getOctokit).mockReturnValue(octokit);
     return { paginate, updateComment, createComment };
 }
 
@@ -157,11 +162,8 @@ describe("postPRComment", () => {
     });
 
     test("warns instead of throwing when the GitHub API fails", async () => {
-        const paginate = vi.fn().mockRejectedValue(new Error("boom"));
-        vi.mocked(getOctokit).mockReturnValue({
-            paginate,
-            rest: { issues: { listComments: vi.fn() } },
-        } as unknown as ReturnType<typeof getOctokit>);
+        const { paginate } = mockOctokit([]);
+        paginate.mockRejectedValue(new Error("boom"));
         await expect(postPRComment(result, "token")).resolves.toBeUndefined();
         expect(warning).toHaveBeenCalledWith(
             expect.stringContaining("Failed to post PR comment")
