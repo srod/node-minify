@@ -51,13 +51,14 @@ packages/
 
 ### Compressors by Type
 
-| Type | Recommended | Alternatives |
-|------|-------------|--------------|
-| **JS** | `terser` | `esbuild`, `swc`, `oxc`, `uglify-js`, `google-closure-compiler` |
-| **CSS** | `lightningcss` | `esbuild`, `clean-css`, `cssnano`, `csso` |
-| **HTML** | `html-minifier` | `minify-html` |
-| **JSON** | `jsonminify` | - |
-| **Images** | `sharp` (WebP/AVIF), `svgo` (SVG), `imagemin` (PNG/JPEG/GIF) | - |
+| Type | Recommended | Supported | Legacy |
+|------|-------------|-----------|--------|
+| **JS** | `terser`, `oxc`, `swc`, `esbuild` | `uglify-js`, `google-closure-compiler` | - |
+| **CSS** | `lightningcss`, `cssnano`, `esbuild` | `clean-css`, `csso` | - |
+| **HTML** | `minify-html` | `html-minifier` | - |
+| **JSON** | - | - | `jsonminify` |
+| **Images** | `sharp` (WebP/AVIF/PNG/JPEG), `svgo` (SVG) | `imagemin` (PNG/JPEG/GIF) | - |
+| **Passthrough** | - | - | `no-compress` |
 
 **Removed** (v11): `babel-minify`, `uglify-es`, `yui`, `crass`, `sqwish`
 
