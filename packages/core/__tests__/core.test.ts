@@ -38,15 +38,9 @@ describe("Package: core", async () => {
                 output: filesJS.fileJSOut,
             };
 
-            try {
-                return await minify(settings);
-            } catch (err: unknown) {
-                if (err instanceof Error) {
-                    return expect(err.toString()).toEqual(
-                        "Error: compressor should be a function, maybe you forgot to install the compressor"
-                    );
-                }
-            }
+            await expect(minify(settings)).rejects.toThrow(
+                "compressor should be a function, maybe you forgot to install the compressor"
+            );
         });
     });
 
@@ -58,15 +52,9 @@ describe("Package: core", async () => {
                 output: filesJS.fileJSOut,
             };
 
-            try {
-                return await minify(settings);
-            } catch (err: unknown) {
-                if (err instanceof Error) {
-                    return expect(err.toString()).toEqual(
-                        "Error: compressor is mandatory."
-                    );
-                }
-            }
+            await expect(minify(settings)).rejects.toThrow(
+                "compressor is mandatory."
+            );
         });
 
         test("should throw an error if no input", async () => {
@@ -75,15 +63,9 @@ describe("Package: core", async () => {
                 output: filesJS.fileJSOut,
             };
 
-            try {
-                return await minify(settings);
-            } catch (err: unknown) {
-                if (err instanceof Error) {
-                    return expect(err.toString()).toEqual(
-                        "Error: input is mandatory."
-                    );
-                }
-            }
+            await expect(minify(settings)).rejects.toThrow(
+                "input is mandatory."
+            );
         });
 
         test("should throw an error if no output", async () => {
@@ -92,15 +74,9 @@ describe("Package: core", async () => {
                 input: filesJS.oneFileWithWildcards,
             };
 
-            try {
-                return await minify(settings);
-            } catch (err: unknown) {
-                if (err instanceof Error) {
-                    return expect(err.toString()).toEqual(
-                        "Error: output is mandatory."
-                    );
-                }
-            }
+            await expect(minify(settings)).rejects.toThrow(
+                "output is mandatory."
+            );
         });
     });
 
@@ -113,15 +89,9 @@ describe("Package: core", async () => {
                 output: filesJS.fileJSOut,
             };
 
-            try {
-                return await minify(settings);
-            } catch (err: unknown) {
-                if (err instanceof Error) {
-                    return expect(err.toString()).toEqual(
-                        "Error: compressor is mandatory."
-                    );
-                }
-            }
+            await expect(minify(settings)).rejects.toThrow(
+                "compressor is mandatory."
+            );
         });
     });
 
@@ -167,15 +137,9 @@ describe("Package: core", async () => {
                     "<html lang='en'><body><div>content</div></body></html>",
             };
 
-            try {
-                return await minify(settings);
-            } catch (err: unknown) {
-                if (err instanceof Error) {
-                    return expect(err.toString()).toEqual(
-                        "Error: compressor should be a function, maybe you forgot to install the compressor"
-                    );
-                }
-            }
+            await expect(minify(settings)).rejects.toThrow(
+                "compressor should be a function, maybe you forgot to install the compressor"
+            );
         });
     });
 
