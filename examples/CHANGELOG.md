@@ -1,5 +1,28 @@
 # @node-minify/examples
 
+## 11.0.1
+
+### Patch Changes
+
+- Updated dependencies [f8f121e]
+  - @node-minify/core@11.0.1
+  - @node-minify/sharp@11.0.1
+  - @node-minify/imagemin@11.0.1
+  - @node-minify/clean-css@11.0.1
+  - @node-minify/cssnano@11.0.1
+  - @node-minify/csso@11.0.1
+  - @node-minify/esbuild@11.0.1
+  - @node-minify/google-closure-compiler@11.0.1
+  - @node-minify/html-minifier@11.0.1
+  - @node-minify/jsonminify@11.0.1
+  - @node-minify/lightningcss@11.0.1
+  - @node-minify/no-compress@11.0.1
+  - @node-minify/oxc@11.0.1
+  - @node-minify/svgo@11.0.1
+  - @node-minify/swc@11.0.1
+  - @node-minify/terser@11.0.1
+  - @node-minify/uglify-js@11.0.1
+
 ## 11.0.0
 
 ### Patch Changes

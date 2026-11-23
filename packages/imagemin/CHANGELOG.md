@@ -1,5 +1,13 @@
 # @node-minify/imagemin
 
+## 11.0.1
+
+### Patch Changes
+
+- Updated dependencies [f8f121e]
+  - @node-minify/core@11.0.1
+  - @node-minify/utils@11.0.1
+
 ## 11.0.0
 
 ### Patch Changes
