@@ -11,7 +11,15 @@ export interface BenchmarkOptions {
     warmup?: number;
     includeGzip?: boolean;
     includeBrotli?: boolean;
+    /**
+     * Report format used when writing to `output` (defaults to `"console"`).
+     */
     format?: "console" | "json" | "markdown";
+    /**
+     * File path to write the formatted benchmark report to.
+     * Parent directories are created automatically; console format is written
+     * without terminal color codes.
+     */
     output?: string;
     verbose?: boolean;
     type?: "js" | "css" | "html";
