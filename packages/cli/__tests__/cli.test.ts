@@ -340,9 +340,7 @@ describe("CLI Coverage", () => {
                 content: "foo",
                 output: "bar.js",
             };
-            await expect(compress(settings)).rejects.toThrow(
-                "Compression failed: Minify failed"
-            );
+            await expect(compress(settings)).rejects.toThrow(/^Minify failed$/);
         });
 
         test("should return default result when allowEmptyOutput skips writing", async () => {
@@ -355,6 +353,65 @@ describe("CLI Coverage", () => {
             const result = await compress(settings);
             expect(result.size).toBe("0");
             expect(result.sizeGzip).toBe("0");
+        });
+    });
+
+    describe("CLI error prefix", () => {
+        test("prefixes missing input file errors exactly once", async () => {
+            let caught: unknown;
+            try {
+                await cli.run({
+                    compressor: "terser",
+                    input: "nonexistent-missing-input-file.js",
+                    output: filesJS.fileJSOut,
+                    silence: true,
+                });
+            } catch (error) {
+                caught = error;
+            }
+            expect(caught).toBeInstanceOf(Error);
+            const message = (caught as Error).message;
+            expect(message).toMatch(/^Compression failed: Failed to read file/);
+            expect(message.match(/Compression failed:/g)).toHaveLength(1);
+        });
+
+        test("prefixes invalid option JSON errors exactly once", async () => {
+            let caught: unknown;
+            try {
+                await cli.run({
+                    compressor: "terser",
+                    input: filesJS.oneFile,
+                    output: filesJS.fileJSOut,
+                    option: "{invalid json",
+                    silence: true,
+                });
+            } catch (error) {
+                caught = error;
+            }
+            expect(caught).toBeInstanceOf(Error);
+            const message = (caught as Error).message;
+            expect(message).toMatch(/^Compression failed:/);
+            expect(message.match(/Compression failed:/g)).toHaveLength(1);
+        });
+
+        test("prefixes removed compressor errors exactly once", async () => {
+            let caught: unknown;
+            try {
+                await cli.run({
+                    compressor: "babel-minify",
+                    input: filesJS.oneFile,
+                    output: filesJS.fileJSOut,
+                    silence: true,
+                });
+            } catch (error) {
+                caught = error;
+            }
+            expect(caught).toBeInstanceOf(Error);
+            const message = (caught as Error).message;
+            expect(message).toMatch(
+                /^Compression failed: Compressor 'babel-minify' was removed in v11/
+            );
+            expect(message.match(/Compression failed:/g)).toHaveLength(1);
         });
     });
 });
