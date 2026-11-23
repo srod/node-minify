@@ -7,7 +7,7 @@
 import { statSync } from "node:fs";
 import fsPromises from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { basename, join } from "node:path";
+import { join } from "node:path";
 import { minify } from "@node-minify/core";
 import type { Compressor } from "@node-minify/types";
 import {
@@ -293,8 +293,6 @@ async function benchmarkCompressor(
 
     const iterations = options.iterations || 1;
     const warmup = options.warmup ?? (iterations > 1 ? 1 : 0);
-    const fileBase = basename(file);
-    const safeName = name.replace(/[^a-zA-Z0-9._-]/g, "_");
     let tempDir: string | undefined;
 
     try {
@@ -302,12 +300,13 @@ async function benchmarkCompressor(
             join(tmpdir(), "node-minify-bench-")
         );
 
-        const warmupFile = join(tempDir, `${fileBase}.warmup.tmp`);
+        // Fixed names: the folder is already unique, and input or compressor names could exceed filename limits.
+        const warmupFile = join(tempDir, "warmup.tmp");
         if (warmup > 0) {
             await runWarmup(file, compressor, warmupFile, warmup, options);
         }
 
-        const outputFile = join(tempDir, `${fileBase}.${safeName}.tmp`);
+        const outputFile = join(tempDir, "output.tmp");
         const { times } = await runIterations(
             file,
             compressor,
@@ -330,7 +329,10 @@ async function benchmarkCompressor(
         );
     } finally {
         if (tempDir) {
-            await fsPromises.rm(tempDir, { recursive: true, force: true });
+            // Best-effort: a locked file (e.g. antivirus on Windows) must not discard the metrics.
+            await fsPromises
+                .rm(tempDir, { recursive: true, force: true })
+                .catch(() => {});
         }
     }
 }

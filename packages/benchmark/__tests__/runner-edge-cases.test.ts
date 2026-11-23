@@ -370,6 +370,30 @@ describe("Runner Edge Cases", () => {
             }
         });
 
+        test("keeps successful metrics when temp folder cleanup fails", async () => {
+            const realRm = fsPromises.rm.bind(fsPromises);
+            const rmSpy = vi
+                .spyOn(fsPromises, "rm")
+                .mockRejectedValue(new Error("EBUSY: resource busy"));
+
+            try {
+                const results = await runBenchmark({
+                    input: fixtureJS,
+                    compressors: ["terser"],
+                    iterations: 1,
+                });
+
+                expect(results.files[0]?.results[0]?.success).toBe(true);
+                expect(rmSpy).toHaveBeenCalledTimes(1);
+            } finally {
+                const leftover = rmSpy.mock.calls[0]?.[0];
+                rmSpy.mockRestore();
+                if (typeof leftover === "string") {
+                    await realRm(leftover, { recursive: true, force: true });
+                }
+            }
+        });
+
         test("removes the created temp folder and leaves input folder unchanged when minify fails mid-run", async () => {
             const inputDir = await fsPromises.mkdtemp(
                 path.join(os.tmpdir(), "node-minify-fail-input-")
@@ -424,7 +448,12 @@ describe("Runner Edge Cases", () => {
                 const entries = await fsPromises.readdir(inputDir);
                 expect(entries).toEqual(["fixture-1.js"]);
 
-                expect(createdTempDirs.length).toBeGreaterThan(0);
+                expect(createdTempDirs).toHaveLength(1);
+                // Deterministic even where chmod cannot make a folder read-only (Windows, root).
+                expect(mockMinify).toHaveBeenCalledTimes(2);
+                for (const [args] of mockMinify.mock.calls) {
+                    expect(path.dirname(args.output)).toBe(createdTempDirs[0]);
+                }
                 for (const dir of createdTempDirs) {
                     expect(existsSync(dir)).toBe(false);
                 }
