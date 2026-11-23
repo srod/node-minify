@@ -1,5 +1,11 @@
 # @node-minify/csso
 
+## 11.0.2
+
+### Patch Changes
+
+- @node-minify/utils@11.0.2
+
 ## 11.0.1
 
 ### Patch Changes

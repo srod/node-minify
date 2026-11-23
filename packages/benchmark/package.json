@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/benchmark",
-  "version": "11.0.1",
+  "version": "11.0.2",
   "description": "Benchmark tool for @node-minify compressors",
   "keywords": [
     "compressor",

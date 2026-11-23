@@ -1,5 +1,19 @@
 # @node-minify/action
 
+## 11.0.2
+
+### Patch Changes
+
+- Updated dependencies [8903c65]
+- Updated dependencies [ce1a1c2]
+  - @node-minify/core@11.0.2
+  - @node-minify/oxc@11.0.2
+  - @node-minify/benchmark@11.0.2
+  - @node-minify/esbuild@11.0.2
+  - @node-minify/swc@11.0.2
+  - @node-minify/terser@11.0.2
+  - @node-minify/utils@11.0.2
+
 ## 11.0.1
 
 ### Patch Changes
