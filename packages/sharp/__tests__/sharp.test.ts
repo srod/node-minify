@@ -235,7 +235,9 @@ describe("sharp", () => {
                 },
                 content: inputBuffer,
             })
-        ).rejects.toThrow("Sharp conversion to webp failed: Sharp error");
+        ).rejects.toThrow(
+            "sharp minification failed: conversion to webp: Sharp error"
+        );
     });
 
     test("should wrap async toBuffer encode rejections with target format", async () => {
@@ -255,7 +257,9 @@ describe("sharp", () => {
                 },
                 content: inputBuffer,
             })
-        ).rejects.toThrow("Sharp conversion to webp failed: encode failed");
+        ).rejects.toThrow(
+            "sharp minification failed: conversion to webp: encode failed"
+        );
     });
 
     test("should wrap async toBuffer encode rejection naming failing format in multi-format run", async () => {
@@ -283,11 +287,11 @@ describe("sharp", () => {
                 content: inputBuffer,
             })
         ).rejects.toThrow(
-            "Sharp conversion to avif failed: avif encode failed"
+            "sharp minification failed: conversion to avif: avif encode failed"
         );
     });
 
-    test("should rethrow non-Error exceptions", async () => {
+    test("should wrap non-Error exceptions without a cause", async () => {
         const inputBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
         const { default: mockSharp } = await import("sharp");
         // @ts-expect-error mock implementation only provides the methods this test exercises, narrower than the real Sharp instance type
@@ -297,14 +301,17 @@ describe("sharp", () => {
             }),
         }));
 
-        await expect(
-            sharp({
-                settings: {
-                    compressor: sharp,
-                    options: { format: "webp" },
-                },
-                content: inputBuffer,
-            })
-        ).rejects.toBe("string error");
+        const error = await sharp({
+            settings: {
+                compressor: sharp,
+                options: { format: "webp" },
+            },
+            content: inputBuffer,
+        }).catch((e: unknown) => e);
+
+        expect((error as Error).message).toBe(
+            "sharp minification failed: conversion to webp: string error"
+        );
+        expect((error as Error).cause).toBeUndefined();
     });
 });

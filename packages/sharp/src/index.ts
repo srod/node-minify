@@ -5,6 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { wrapMinificationError } from "@node-minify/utils";
 import type { Sharp } from "sharp";
 
 type SharpConstructor = (input: Buffer | string) => Sharp;
@@ -51,7 +52,7 @@ const clamp = (val: number, min: number, max: number) =>
  * @param format - Target image format: `"webp"`, `"avif"`, `"png"`, or `"jpeg"`
  * @param options - Encoding options that adjust quality, lossless mode, effort, and compression level
  * @returns A Buffer containing the converted image data
- * @throws An Error prefixed with `Sharp conversion to <format> failed:` when conversion fails
+ * @throws Error `sharp minification failed: conversion to <format>: <message>` with sharp's original error as `cause` when conversion fails
  */
 async function convertImage(
     input: Buffer,
@@ -95,13 +96,8 @@ async function convertImage(
         }
 
         return await converter.toBuffer();
-    } catch (err) {
-        if (err instanceof Error) {
-            throw new Error(
-                `Sharp conversion to ${format} failed: ${err.message}`
-            );
-        }
-        throw err;
+    } catch (error) {
+        throw wrapMinificationError("sharp", error, `conversion to ${format}`);
     }
 }
 
@@ -119,6 +115,7 @@ async function convertImage(
  *  - `buffer`: a Buffer with the converted image for single-format conversion.
  *  The returned object also includes `code`, which is an empty string.
  * @throws If `content` is not a Buffer.
+ * @throws Error `sharp minification failed: conversion to <format>: <message>` if sharp cannot convert the image.
  */
 export async function sharp({
     settings,
