@@ -12,12 +12,15 @@ Exports 30+ utilities from 24 source files.
 
 ## Architecture Layers
 
-### 1. Compressor Resolution
+### 1. Compressor Registry & Resolution
+`COMPRESSOR_REGISTRY` (`compressor-registry.ts`) is the single compressor list: name, status, packageName, exportName, cssOnly, aliases, replacement. The CLI, Action, resolver, benchmark and `doctor` read from it. To add, retire or rename a compressor, edit that one entry. `CompressorName` (non-removed names) is derived from it.
 ```ts
-resolveCompressor(name)  // Built-in → npm → local file fallback
+resolveCompressor(name)  // Removed check, then built-in → npm → local file fallback
 isBuiltInCompressor(name)
 tryResolveBuiltIn/NpmPackage/LocalFile()
+getCompressorEntry(name) // Matches name or packageName
 ```
+`resolveCompressor` is the only place a removed compressor is rejected (`Compressor '<name>' was removed in v11. Use '<replacement>' instead.`).
 
 ### 2. Compression Orchestration
 ```ts

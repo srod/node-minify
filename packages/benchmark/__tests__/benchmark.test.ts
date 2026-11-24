@@ -45,7 +45,9 @@ describe("Package: benchmark", () => {
         const firstFile = results.files[0];
         const firstResult = firstFile?.results[0];
         expect(firstResult?.success).toBe(false);
-        expect(firstResult?.error).toContain("not found");
+        expect(firstResult?.error).toContain(
+            "Could not resolve compressor 'non-existent'"
+        );
     });
 
     test("writes markdown report when format is markdown and output is set", async () => {

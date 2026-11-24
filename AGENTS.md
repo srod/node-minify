@@ -117,8 +117,11 @@ export async function myCompressor({ settings, content }: MinifierOptions): Prom
     }
 }
 ```
-3. Add tests using `runOneTest` from `tests/fixtures.ts`
-4. Add changeset: `bun run changeset`
+3. Add one entry to `COMPRESSOR_REGISTRY` in `packages/utils/src/compressor-registry.ts` (name, status, packageName, exportName, plus `cssOnly` or `aliases` if they apply). The resolver, the CLI and `doctor` read from it, so no other list of compressors needs editing. Also add the package as a `workspace:*` dependency of each package that loads it by name (e.g. `packages/cli/package.json`), since built-in resolution imports `@node-minify/<name>` at runtime.
+4. Add tests using `runOneTest` from `tests/fixtures.ts`
+5. Add changeset: `bun run changeset`
+
+The defaults stay in their own files, typed `CompressorName`: the CLI's `DEFAULT_COMPRESSOR`, the Action's per-file-type defaults (`COMPRESSOR_MAP`) and default benchmark set, and the benchmark's default set. Renaming or removing a compressor in the registry fails typecheck there.
 
 ## Testing
 

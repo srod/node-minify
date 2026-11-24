@@ -11,6 +11,7 @@ import { join } from "node:path";
 import { minify } from "@node-minify/core";
 import type { Compressor } from "@node-minify/types";
 import {
+    type CompressorName,
     getFilesizeBrotliInBytes,
     getFilesizeBrotliRaw,
     getFilesizeGzippedInBytes,
@@ -26,6 +27,17 @@ import type {
     CompressorMetrics,
     FileResult,
 } from "./types.ts";
+
+/**
+ * Compressors benchmarked when the caller does not pick any.
+ * Typed with `CompressorName` so renaming or removing one in the registry fails typecheck.
+ */
+const DEFAULT_COMPRESSORS: readonly CompressorName[] = [
+    "terser",
+    "esbuild",
+    "swc",
+    "oxc",
+];
 
 /**
  * Run warmup iterations for a compressor to stabilize JIT and caches.
@@ -243,12 +255,7 @@ async function benchmarkFile(
     const originalSize = prettyBytes(originalSizeBytes);
     const results: CompressorMetrics[] = [];
 
-    const compressors = options.compressors || [
-        "terser",
-        "esbuild",
-        "swc",
-        "oxc",
-    ];
+    const compressors = options.compressors || DEFAULT_COMPRESSORS;
 
     for (const name of compressors) {
         if (options.onProgress) {
@@ -282,20 +289,13 @@ async function benchmarkCompressor(
     options: BenchmarkOptions,
     originalSizeBytes: number
 ): Promise<CompressorMetrics> {
-    const compressor = await loadCompressor(name);
-
-    if (!compressor) {
-        return createErrorMetrics(
-            name,
-            "Compressor not found or not installed"
-        );
-    }
-
     const iterations = options.iterations || 1;
     const warmup = options.warmup ?? (iterations > 1 ? 1 : 0);
     let tempDir: string | undefined;
 
     try {
+        const compressor = await loadCompressor(name);
+
         tempDir = await fsPromises.mkdtemp(
             join(tmpdir(), "node-minify-bench-")
         );

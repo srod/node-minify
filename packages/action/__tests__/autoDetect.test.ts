@@ -4,6 +4,7 @@
  * MIT Licensed
  */
 
+import { getCompressorEntry } from "@node-minify/utils";
 import { describe, expect, test } from "vitest";
 import {
     type CompressorSelection,
@@ -124,6 +125,16 @@ describe("autoDetect", () => {
             expect(result.package).toBe("@node-minify/no-compress");
             expect(result.type).toBeUndefined();
         });
+
+        test.each(["js", "css", "html", "json", "svg", "unknown"] as const)(
+            "package for %s files matches the registry",
+            (fileType) => {
+                const { compressor, package: pkg } = selectCompressor(fileType);
+                const entry = getCompressorEntry(compressor);
+                expect(entry?.status).not.toBe("removed");
+                expect(pkg).toBe(entry?.packageName);
+            }
+        );
 
         test("returns CompressorSelection with correct structure", () => {
             const result: CompressorSelection = selectCompressor("js");

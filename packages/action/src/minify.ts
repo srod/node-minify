@@ -58,8 +58,9 @@ export async function runMinification(
     const inputPath = resolve(inputs.workingDirectory, input);
     const outputPath = resolve(inputs.workingDirectory, output);
 
-    const originalSize = await getFileSize(inputPath);
+    // Resolve first so a removed or unknown compressor fails before any file is read.
     const { compressor, label } = await resolveCompressor(inputs.compressor);
+    const originalSize = await getFileSize(inputPath);
 
     const startTime = performance.now();
 

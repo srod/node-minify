@@ -457,7 +457,9 @@ describe("Benchmark Integration Tests", () => {
             expect(failedResult).toBeDefined();
             expect(failedResult?.success).toBe(false);
             expect(failedResult?.error).toBeDefined();
-            expect(failedResult?.error).toContain("not found");
+            expect(failedResult?.error).toContain(
+                "Could not resolve compressor 'non-existent-compressor'"
+            );
         });
 
         test("should handle mixed successful and failed compressors", async () => {

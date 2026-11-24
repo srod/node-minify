@@ -5,6 +5,7 @@
  */
 
 import path from "node:path";
+import type { CompressorName } from "@node-minify/utils";
 
 /**
  * Supported file types for auto-detection.
@@ -38,8 +39,14 @@ const EXTENSION_MAP: Record<string, FileType> = {
 
 /**
  * Maps file types to recommended compressors.
+ * Typed with `CompressorName` so renaming or removing a compressor in the registry fails typecheck.
  */
-const COMPRESSOR_MAP: Record<FileType, Omit<CompressorSelection, "package">> = {
+const COMPRESSOR_MAP: Record<
+    FileType,
+    Omit<CompressorSelection, "package" | "compressor"> & {
+        compressor: CompressorName;
+    }
+> = {
     js: { compressor: "terser" },
     css: { compressor: "lightningcss" },
     html: { compressor: "html-minifier" },
