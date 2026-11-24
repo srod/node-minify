@@ -53,7 +53,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: "1.4.5"
 
@@ -150,7 +150,7 @@ jobs:
       # Also runs for workflow_dispatch: publish.yml dispatches this workflow
       # because a GITHUB_TOKEN release never emits `release: published`.
       - name: Upload release artifact
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
         with:
           tag_name: ${{ steps.version.outputs.version }}
           files: node-minify-action-${{ steps.version.outputs.version }}.zip
