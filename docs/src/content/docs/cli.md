@@ -86,7 +86,7 @@ Run it from your project root. It is read-only and checks for every v11 breaking
 | Check | Where it looks | Severity |
 |-------|----------------|----------|
 | Removed compressors | `package.json` deps, imports, `compressor:` values, workflow YAML | Error |
-| Legacy-tier compressors | same as above | Warning |
+| Legacy-tier compressors (`csso`, `imagemin` and `uglify-js` also say they are removed in v12 and name the replacement) | same as above | Warning |
 | Removed `@node-minify/run` | `package.json` deps and source imports | Error |
 | Removed type aliases | `CompressorReturnType`, `MinifyOptions` in TypeScript imports and re-exports | Error |
 | Node baseline | `engines.node` ranges allowing Node below 22, or placing no lower bound | Warning |
@@ -100,7 +100,7 @@ ERROR: package.json - @node-minify/run was removed in v11. It was an internal Ja
 ERROR: src/build.ts:1 - type MinifyOptions was removed in v11. Use Settings instead.
 ERROR: .github/workflows/ci.yml:5 - yui was removed in v11. Use terser or lightningcss instead.
 WARNING: package.json - engines.node is ">=20.0.0", which allows Node 20. v11 requires Node >=22.
-WARNING: src/build.ts:2 - @node-minify/jsonminify is legacy tier. Consider migrating.
+WARNING: src/build.ts:2 - @node-minify/csso is legacy tier and will be removed in v12. Use lightningcss or cssnano instead.
 ```
 
 ### Exit Codes

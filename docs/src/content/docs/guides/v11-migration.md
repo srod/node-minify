@@ -49,11 +49,16 @@ Modern, high-performance compressors. Use these for new projects.
 
 ### Supported
 Stable compressors that stay maintained but are no longer the preferred choice.
-- `clean-css`, `csso`, `uglify-js`, `google-closure-compiler`, `imagemin`, `html-minifier`
+- `clean-css`, `google-closure-compiler`, `html-minifier`, `jsonminify`
 
 ### Legacy
 Functional but not recommended for new projects. May be removed in future versions.
-- `jsonminify`, `no-compress`
+- `no-compress`
+- Removed in v12: `csso` (use `lightningcss` or `cssnano`), `imagemin` (use `sharp`, or `svgo` for SVG), `uglify-js` (use `terser`)
+
+:::note
+In v11.0 `csso`, `imagemin` and `uglify-js` were Supported and `jsonminify` was Legacy. v11.1 moves the first three to Legacy, because they are removed in v12, and moves `jsonminify` back to Supported, because v12 keeps it. They keep working in v11, and `node-minify doctor` and `node-minify --help` flag them.
+:::
 
 ### Removed
 No longer available in v11.

@@ -89,7 +89,7 @@ npm install @node-minify/terser        # Recommended - modern, fast, well-mainta
 npm install @node-minify/esbuild       # Recommended - extremely fast, also handles CSS
 npm install @node-minify/swc           # Recommended - Rust-based, very fast
 npm install @node-minify/oxc           # Recommended - Rust-based, cutting-edge
-npm install @node-minify/uglify-js     # Supported - classic, battle-tested
+npm install @node-minify/uglify-js     # Legacy - removed in v12, use terser
 npm install @node-minify/google-closure-compiler  # Supported - advanced optimizations
 ```
 
@@ -100,7 +100,7 @@ npm install @node-minify/lightningcss  # Recommended - Rust-based, fastest
 npm install @node-minify/cssnano       # Recommended - PostCSS-based, customizable
 npm install @node-minify/esbuild       # Recommended - also handles JS
 npm install @node-minify/clean-css     # Supported - feature-rich, reliable
-npm install @node-minify/csso          # Supported - structural optimizations
+npm install @node-minify/csso          # Legacy - removed in v12, use lightningcss or cssnano
 ```
 
 ### HTML & Other
@@ -108,7 +108,7 @@ npm install @node-minify/csso          # Supported - structural optimizations
 ```bash
 npm install @node-minify/minify-html   # Recommended - Rust-based, fastest
 npm install @node-minify/html-minifier # Supported - feature-rich HTML minification
-npm install @node-minify/jsonminify    # Legacy - JSON minification
+npm install @node-minify/jsonminify    # Supported - JSON minification
 ```
 
 ### Image Compressors
@@ -116,7 +116,7 @@ npm install @node-minify/jsonminify    # Legacy - JSON minification
 ```bash
 npm install @node-minify/sharp         # Recommended - WebP/AVIF conversion, high performance
 npm install @node-minify/svgo          # Recommended - SVG optimization
-npm install @node-minify/imagemin      # Supported - PNG/JPEG/GIF compression
+npm install @node-minify/imagemin      # Legacy - removed in v12, use sharp (svgo for SVG)
 ```
 
 ## Quick Start

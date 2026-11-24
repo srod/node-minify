@@ -53,12 +53,14 @@ packages/
 
 | Type | Recommended | Supported | Legacy |
 |------|-------------|-----------|--------|
-| **JS** | `terser`, `oxc`, `swc`, `esbuild` | `uglify-js`, `google-closure-compiler` | - |
-| **CSS** | `lightningcss`, `cssnano`, `esbuild` | `clean-css`, `csso` | - |
+| **JS** | `terser`, `oxc`, `swc`, `esbuild` | `google-closure-compiler` | `uglify-js` (removed in v12, use `terser`) |
+| **CSS** | `lightningcss`, `cssnano`, `esbuild` | `clean-css` | `csso` (removed in v12, use `lightningcss` or `cssnano`) |
 | **HTML** | `minify-html` | `html-minifier` | - |
-| **JSON** | - | - | `jsonminify` |
-| **Images** | `sharp` (WebP/AVIF/PNG/JPEG), `svgo` (SVG) | `imagemin` (PNG/JPEG/GIF) | - |
+| **JSON** | - | `jsonminify` | - |
+| **Images** | `sharp` (WebP/AVIF/PNG/JPEG), `svgo` (SVG) | - | `imagemin` (removed in v12, use `sharp`, or `svgo` for SVG) |
 | **Passthrough** | - | - | `no-compress` |
+
+A legacy entry with a `replacement` in the registry is removed in the next major (v12). `doctor` and the CLI compressor list say so. Nothing is printed at runtime.
 
 **Removed** (v11): `babel-minify`, `uglify-es`, `yui`, `crass`, `sqwish`
 
