@@ -52,21 +52,20 @@ SCOPED_MATCHES=$(grep -rnE "$REMOVED_PACKAGES" \
 #    value. Anchored to `compressor:` so prose and migration tables don't trip it.
 YAML_MATCHES=$(grep -rnE "compressor:[[:space:]]*['\"]?($REMOVED_NAMES)\b" \
   --exclude-dir="node_modules" \
-  action.yml .github/ packages/action/action.yml \
+  action.yml .github/ \
   2>/dev/null || true)
 
-# 3. Bare removed-compressor names in shipped CODE and action manifests: CLI and
-#     Action source, and the JS action's YAML manifest. These can never
-#     legitimately name a removed compressor, so NO content filter is applied.
-#     The removal detector (doctor.ts) names them by design and is the only
-#     exception.
+# 3. Bare removed-compressor names in shipped CODE and the action manifest: CLI
+#     and Action source, and the root action.yml. These can never legitimately
+#     name a removed compressor, so NO content filter is applied. The removal
+#     detector (doctor.ts) names them by design and is the only exception.
 BARE_CODE_MATCHES=$(grep -rnE "\b($REMOVED_NAMES)\b" \
   --include="*.ts" --include="*.tsx" --include="*.mts" --include="*.cts" \
   --include="*.js" --include="*.jsx" --include="*.mjs" --include="*.cjs" \
   --include="*.yml" --include="*.yaml" \
   "${EXCLUDE_PATHS[@]}" --exclude="doctor.ts" \
   packages/cli/src/ packages/action/src/ \
-  packages/action/action.yml \
+  action.yml \
   2>/dev/null || true)
 
 MATCHES=$(printf '%s\n%s\n%s' \

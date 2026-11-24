@@ -9,7 +9,7 @@ vi.mock("@actions/core", () => ({
 }));
 
 import { error, notice, warning } from "@actions/core";
-import { addAnnotations, addErrorAnnotation } from "../src/annotations.ts";
+import { addAnnotations } from "../src/annotations.ts";
 import type { MinifyResult } from "../src/types.ts";
 
 /**
@@ -76,14 +76,5 @@ describe("addAnnotations", () => {
         expect(error).toHaveBeenCalledTimes(1);
         expect(warning).toHaveBeenCalledTimes(1);
         expect(notice).toHaveBeenCalledTimes(1);
-    });
-});
-
-describe("addErrorAnnotation", () => {
-    test("records a minification-failed error annotation", () => {
-        addErrorAnnotation("x.js", "kaboom");
-        expect(error).toHaveBeenCalledWith("Minification failed: kaboom", {
-            file: "x.js",
-        });
     });
 });

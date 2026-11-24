@@ -6,7 +6,6 @@ GitHub Action for node-minify. **Different build process than other packages.**
 
 ```bash
 bun run build      # bun build (bundled + minified)
-bun run build:ncc  # Alternative: Vercel ncc bundler
 ```
 
 **NOT** tsdown like other packages. Output: `dist/index.js` (bundled).

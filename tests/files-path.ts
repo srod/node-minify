@@ -20,7 +20,6 @@ const filesArrayWithWildcards2 = [
     `${__dirname}/fixtures/es5/fixture-2.js`,
     `${__dirname}/fixtures/es5/**/*.js`,
 ];
-const babelrc = `${__dirname}/fixtures/.babelrc`;
 const errors = `${__dirname}/fixtures/js-errors/**/*.js`;
 const publicFolderES5 = `${__dirname}/fixtures/es5/`;
 const fileJSOut = `${__dirname}/tmp/fixture-output-1.js`;
@@ -36,7 +35,6 @@ export const filesJS = {
     filesArrayWithoutPath,
     filesArrayWithWildcards,
     filesArrayWithWildcards2,
-    babelrc,
     errors,
     publicFolderES5,
     fileJSOut,
