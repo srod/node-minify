@@ -7,9 +7,9 @@
 /**
  * Module dependencies.
  */
+import { styleText } from "node:util";
 import type { Result, Settings } from "@node-minify/types";
 import { getCompressorEntry, resolveCompressor } from "@node-minify/utils";
-import chalk from "chalk";
 import { compress } from "./compress.ts";
 import { AVAILABLE_MINIFIER } from "./config.ts";
 import { spinnerError, spinnerStart, spinnerStop } from "./spinner.ts";
@@ -123,8 +123,8 @@ function logMessage(
 ) {
     console.log("");
     console.log(
-        chalk[badgeColor].black(` ${badge} `),
-        messageColor ? chalk[messageColor](message) : message
+        styleText([badgeColor, "black"], ` ${badge} `),
+        messageColor ? styleText(messageColor, message) : message
     );
     console.log("");
 }

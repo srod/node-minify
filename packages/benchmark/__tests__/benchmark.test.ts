@@ -8,8 +8,7 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import chalk from "chalk";
-import { afterEach, describe, expect, test } from "vitest";
+import { afterEach, describe, expect, test, vi } from "vitest";
 import { benchmark } from "../src/index.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -97,13 +96,12 @@ describe("Package: benchmark", () => {
     });
 
     describe("with terminal colors enabled", () => {
-        const originalLevel = chalk.level;
         afterEach(() => {
-            chalk.level = originalLevel;
+            vi.unstubAllEnvs();
         });
 
         test("creates missing parent folders and strips ANSI colors for default console format", async () => {
-            chalk.level = 1;
+            vi.stubEnv("FORCE_COLOR", "1");
             const tempDir = await mkdtemp(
                 path.join(os.tmpdir(), "node-minify-bench-out-")
             );
@@ -130,7 +128,7 @@ describe("Package: benchmark", () => {
         });
 
         test("strips ANSI colors for an unknown format that falls back to the console reporter", async () => {
-            chalk.level = 1;
+            vi.stubEnv("FORCE_COLOR", "1");
             const tempDir = await mkdtemp(
                 path.join(os.tmpdir(), "node-minify-bench-out-")
             );
