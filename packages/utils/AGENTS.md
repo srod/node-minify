@@ -60,7 +60,7 @@ buildArgs(options)  // Options object → CLI args array
 warnDeprecation(packageName, message)  // One-time per process
 
 // Errors
-wrapMinificationError(name, error, context?)  // "<name> minification failed: <message>", original error as `cause`
+wrapMinificationError(name, error, context?)  // "<name> minification failed: <message>"; `cause` is the original error when it is an Error, otherwise undefined
 validateMinifyResult()
 FileOperationError, ValidationError             // classes, exported from the entry point
 ```
@@ -83,7 +83,7 @@ FileOperationError, ValidationError             // classes, exported from the en
 import { FileOperationError, ValidationError } from "@node-minify/utils";
 // All file ops throw FileOperationError with cause chaining
 ```
-Input-validation errors (array content from `ensureStringContent`, esbuild's missing `type`, the sharp and imagemin Buffer checks) are thrown before the `try` and stay unwrapped. Only library failures get the `<name> minification failed:` format.
+Input-validation errors (array content from `ensureStringContent`, esbuild's missing `type`, the sharp and imagemin Buffer checks) are thrown before the `try` and stay unwrapped. Everything inside the `try` gets the `<name> minification failed:` format: errors the library throws, and the compressor's own checks on the library's result (for example terser's `empty result`, imagemin's `no output`, `validateMinifyResult`).
 
 ### Type-Safe Overloads
 ```ts

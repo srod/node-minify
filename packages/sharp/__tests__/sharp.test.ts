@@ -309,6 +309,7 @@ describe("sharp", () => {
             content: inputBuffer,
         }).catch((e: unknown) => e);
 
+        expect(error).toBeInstanceOf(Error);
         expect((error as Error).message).toBe(
             "sharp minification failed: conversion to webp: string error"
         );

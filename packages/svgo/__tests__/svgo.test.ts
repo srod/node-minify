@@ -183,6 +183,7 @@ describe("svgo (error handling)", () => {
             content: validSvg,
         }).catch((e: unknown) => e);
 
+        expect(error).toBeInstanceOf(Error);
         expect((error as Error).message).toBe(
             "svgo minification failed: string error"
         );
