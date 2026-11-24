@@ -29,8 +29,7 @@
     },
     "sideEffects": false,
     "files": [
-        "dist/**/*",
-        "action.yml"
+        "dist/**/*"
     ],
     "repository": {
         "type": "git",
@@ -41,7 +40,6 @@
     },
     "scripts": {
         "build": "bun build src/index.ts --outdir dist --target node --format esm --bundle --minify && cp src/index.d.ts dist/index.d.ts",
-        "build:ncc": "ncc build src/index.ts -o dist --source-map --license licenses.txt",
         "format:check": "biome check .",
         "lint": "biome lint .",
         "test": "vitest run",
@@ -62,7 +60,6 @@
         "fast-glob": "^3.3.3"
     },
     "devDependencies": {
-        "@node-minify/types": "workspace:*",
-        "@vercel/ncc": "^0.45.0"
+        "@node-minify/types": "workspace:*"
     }
 }

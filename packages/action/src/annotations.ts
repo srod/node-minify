@@ -43,13 +43,3 @@ export function addAnnotations(result: MinifyResult): void {
         }
     }
 }
-
-/**
- * Record an error annotation for a specific file indicating that minification failed.
- *
- * @param file - The file path to associate with the annotation
- * @param errorMsg - A human-readable message describing the minification error
- */
-export function addErrorAnnotation(file: string, errorMsg: string): void {
-    error(`Minification failed: ${errorMsg}`, { file });
-}

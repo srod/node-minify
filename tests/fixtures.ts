@@ -536,49 +536,6 @@ const tests: Tests = {
             },
         },
     ],
-    babelMinify: [
-        {
-            it: "should compress javascript with {compressor} and a single file with a babelrc",
-            minify: {
-                input: filesJS.oneFile,
-                output: filesJS.fileJSOut,
-                options: {
-                    babelrc: filesJS.babelrc,
-                },
-            },
-        },
-        {
-            it: "should compress javascript with {compressor} and a single file with a preset",
-            minify: {
-                input: filesJS.oneFile,
-                output: filesJS.fileJSOut,
-                options: {
-                    presets: ["env"],
-                },
-            },
-        },
-        {
-            it: "should compress javascript with {compressor} and a single file with a babelrc and preset",
-            minify: {
-                input: filesJS.oneFile,
-                output: filesJS.fileJSOut,
-                options: {
-                    babelrc: filesJS.babelrc,
-                    presets: ["env"],
-                },
-            },
-        },
-        {
-            it: "should compress with {compressor} and some options",
-            minify: {
-                input: filesJS.oneFileWithWildcards,
-                output: filesJS.fileJSOut,
-                options: {
-                    charset: "utf8",
-                },
-            },
-        },
-    ],
     uglifyjs: [
         {
             it: "should create a source map with {compressor}",
