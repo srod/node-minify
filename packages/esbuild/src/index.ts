@@ -8,6 +8,7 @@ import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import {
     ensureStringContent,
     extractSourceMapOption,
+    wrapMinificationError,
 } from "@node-minify/utils";
 import { transform } from "esbuild";
 
@@ -18,6 +19,7 @@ import { transform } from "esbuild";
  * @param content - Input content to be minified; will be converted to a string if necessary.
  * @returns An object with `code` containing the minified output and `map` containing the source map if produced, otherwise `undefined`.
  * @throws Error if `settings.type` is missing or not `"js"` or `"css"`.
+ * @throws Error `esbuild minification failed: <message>` with the original error as `cause` if esbuild fails.
  */
 export async function esbuild({
     settings,
@@ -37,15 +39,19 @@ export async function esbuild({
         settings?.options
     );
 
-    const result = await transform(contentStr, {
-        loader,
-        minify: true,
-        sourcemap: sourceMap,
-        ...restOptions,
-    });
+    try {
+        const result = await transform(contentStr, {
+            loader,
+            minify: true,
+            sourcemap: sourceMap,
+            ...restOptions,
+        });
 
-    return {
-        code: result.code,
-        map: result.map || undefined,
-    };
+        return {
+            code: result.code,
+            map: result.map || undefined,
+        };
+    } catch (error) {
+        throw wrapMinificationError("esbuild", error);
+    }
 }

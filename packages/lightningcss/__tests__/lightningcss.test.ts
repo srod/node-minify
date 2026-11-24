@@ -55,7 +55,12 @@ describe("Package: lightningcss", async () => {
             output: filesCSS.fileCSSOut,
         };
 
-        await expect(minify(settings)).rejects.toThrow(SyntaxError);
+        const error = await minify(settings).catch((e: unknown) => e);
+
+        expect((error as Error).message).toMatch(
+            /^lightningcss minification failed: /
+        );
+        expect((error as Error).cause).toBeInstanceOf(SyntaxError);
     });
 
     test("should throw an error for array content", async () => {
