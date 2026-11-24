@@ -43,7 +43,7 @@ async function runOne(cli: SettingsWithCompressor): Promise<Result> {
 
     if (
         resolution.isBuiltIn &&
-        getCompressorEntry(cli.compressor)?.cssOnly &&
+        getCompressorEntry(compressorLabel)?.cssOnly &&
         cli.type &&
         cli.type !== "css"
     ) {

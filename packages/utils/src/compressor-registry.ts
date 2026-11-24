@@ -34,11 +34,24 @@ export interface CompressorEntry {
 }
 
 /**
+ * Shape each registry entry must satisfy: a removed entry names its replacement,
+ * and every other entry names the function its package exports.
+ */
+type RegistryEntry =
+    | (CompressorEntry & { status: "removed"; replacement: string })
+    | (CompressorEntry & {
+          status: Exclude<CompressorStatus, "removed">;
+          exportName: string;
+      });
+
+/**
  * Static registry of all compressors in node-minify v11.
  * Covers 22 compressors across JS, CSS, HTML, JSON, image, and passthrough use cases.
  *
- * This is the single list the CLI, the Action, the resolver, the benchmark and
- * `doctor` read from: add, retire or rename a compressor here and nowhere else.
+ * This is the single compressor list. The resolver, the CLI's CSS-only check and
+ * compressor list, and `doctor` read from it. The default compressors picked by
+ * the CLI, the Action and the benchmark stay in their own files, typed
+ * `CompressorName`, so renaming or removing an entry here fails typecheck there.
  */
 export const COMPRESSOR_REGISTRY = [
     // Recommended (9)
@@ -182,7 +195,7 @@ export const COMPRESSOR_REGISTRY = [
         packageName: "@node-minify/crass",
         replacement: "lightningcss",
     },
-] as const;
+] as const satisfies readonly RegistryEntry[];
 
 /**
  * Name of a compressor that is still shipped (every registry entry that is not removed).

@@ -7,7 +7,10 @@
  */
 
 import { benchmark, getReporter } from "@node-minify/benchmark";
-import { getCompressorsByStatus } from "@node-minify/utils";
+import {
+    type CompressorName,
+    getCompressorsByStatus,
+} from "@node-minify/utils";
 import { Command } from "commander";
 import ora from "ora";
 import updateNotifier from "update-notifier";
@@ -16,7 +19,7 @@ import { doctor } from "../doctor.ts";
 import type { SettingsWithCompressor } from "../index.ts";
 import { run } from "../index.ts";
 
-const DEFAULT_COMPRESSOR = "uglify-js";
+const DEFAULT_COMPRESSOR: CompressorName = "uglify-js";
 
 /**
  * Create and configure the command-line interface for the node-minify tool.

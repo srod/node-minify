@@ -148,7 +148,9 @@ Your `index.ts` should export the compressor function.
 
 ### 2. Registering the Compressor
 
-Add one entry to `COMPRESSOR_REGISTRY` in `packages/utils/src/compressor-registry.ts`. The CLI, the GitHub Action, the resolver, the benchmark and `node-minify doctor` all read from this list, so nothing else needs to change.
+Add one entry to `COMPRESSOR_REGISTRY` in `packages/utils/src/compressor-registry.ts`. The resolver, the CLI and `node-minify doctor` read from this list, so no other list of compressors needs editing.
+
+Built-in resolution imports `@node-minify/<name>` at runtime, so also add the new package as a `workspace:*` dependency of each package that should load it by name (for example `packages/cli/package.json`).
 
 ```typescript
 // packages/utils/src/compressor-registry.ts
