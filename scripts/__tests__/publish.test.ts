@@ -102,7 +102,7 @@ describe("publishAll", () => {
             const call: Call = { command, args, cwd: options.cwd };
             calls.push(call);
             if (args[0] === "view") {
-                const dir = args[1].split("/")[1].split("@")[0];
+                const dir = (args[1] ?? "").split("/")[1]?.split("@")[0] ?? "";
                 return onRegistry.includes(dir)
                     ? { status: 0, stdout: '"11.0.1"', stderr: "" }
                     : { status: 1, stdout: e404, stderr: "" };
@@ -139,9 +139,11 @@ describe("publishAll", () => {
 
         const publishes = calls.filter((c) => c.args[0] === "publish");
         expect(publishes.map((c) => basename(c.cwd ?? ""))).toEqual(["core"]);
-        expect(JSON.parse(publishes[0].manifest ?? "{}").dependencies).toEqual({
-            "@node-minify/utils": "11.0.1",
-        });
+        expect(JSON.parse(publishes[0]?.manifest ?? "{}").dependencies).toEqual(
+            {
+                "@node-minify/utils": "11.0.1",
+            }
+        );
         expect(manifestOf("core")).toBe(before);
         expect(calls.at(-1)).toMatchObject({
             command: "changeset",

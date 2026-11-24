@@ -154,7 +154,7 @@ Custom `scripts/publish.ts` resolves `workspace:*` → concrete versions before 
   // @ts-expect-error testing invalid input: settings is missing required fields
   // @ts-expect-error mock is narrower than the real type it stands in for
   ```
-  Test files are typechecked (`bun run typecheck`), so an unused directive fails the build — the suppression cannot rot. This covers every `__tests__/` directory plus the shared `tests/` helpers and `tests/integration/`.
+  Test files are typechecked (`bun run typecheck`), so an unused directive fails the build — the suppression cannot rot. This covers every `__tests__/` directory, through each package's `tsc`, plus `tests/` and `scripts/`, through the root `tsconfig.typecheck.json`.
 
   Place the directive on the line the compiler reports, which is not always the offending property: a missing required field is reported on the object-literal or declaration line, so the directive belongs there rather than on a property. Where several errors would be reported for one literal, TypeScript surfaces only the first — keep the comment to the error actually being suppressed instead of listing every latent one.
 
