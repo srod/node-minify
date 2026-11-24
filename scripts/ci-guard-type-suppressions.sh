@@ -11,9 +11,13 @@ set -euo pipefail
 # Three rules, all mechanical:
 #   1. `@ts-nocheck` and `@ts-ignore` are banned everywhere — both disable
 #      checking without proving an error exists.
-#   2. `@ts-expect-error` is banned in `src/` — production types get fixed.
+#   2. `@ts-expect-error` is allowed only in test code: a `__tests__/`
+#      directory or the root `tests/` folder. Everywhere else the type gets fixed.
 #   3. `@ts-expect-error` in tests MUST carry a reason on the same line, so the
 #      suppression states which specific condition it tolerates.
+#
+# grep exits 1 for "no match" and 2 for an error such as an unreadable file. Only
+# 1 counts as clean: a scan that could not read everything must not pass.
 
 CODE_INCLUDES=(
   --include="*.ts" --include="*.tsx" --include="*.mts" --include="*.cts"
@@ -36,26 +40,30 @@ EXCLUDE_PATHS=(
 # are covered without maintaining a directory list.
 SCAN_ROOTS=(.)
 
-# 1. @ts-nocheck / @ts-ignore anywhere.
-NOCHECK_MATCHES=$(grep -rnE "@ts-(nocheck|ignore)\b" \
-  "${CODE_INCLUDES[@]}" "${EXCLUDE_PATHS[@]}" \
-  "${SCAN_ROOTS[@]}" \
-  2>/dev/null || true)
+# Runs grep over the scan roots with the shared filters and prints the matches.
+# Exits non-zero, with grep's own message on stderr, when grep fails to scan.
+scan() {
+  local status=0
+  grep -rnE "$1" "${CODE_INCLUDES[@]}" "${EXCLUDE_PATHS[@]}" "${SCAN_ROOTS[@]}" || status=$?
+  if [ "$status" -gt 1 ]; then
+    echo "ERROR: grep could not scan every file (exit $status); see the message above." >&2
+    exit 2
+  fi
+}
 
-# 2. @ts-expect-error inside any src/ directory. Matched on the path so a
-#    directive in production code is caught regardless of how it is worded.
-SRC_EXPECT_MATCHES=$(grep -rnE "@ts-expect-error" \
-  "${CODE_INCLUDES[@]}" "${EXCLUDE_PATHS[@]}" \
-  "${SCAN_ROOTS[@]}" \
-  2>/dev/null | awk -F: '$1 ~ /(^|\/)src\//' || true)
+# 1. @ts-nocheck / @ts-ignore anywhere.
+NOCHECK_MATCHES=$(scan "@ts-(nocheck|ignore)\b")
+
+# 2. @ts-expect-error outside test code. Matched on the path so a directive in
+#    production code or tooling is caught regardless of how it is worded.
+EXPECT_MATCHES=$(scan "@ts-expect-error")
+NON_TEST_EXPECT_MATCHES=$(printf '%s\n' "$EXPECT_MATCHES" |
+  awk -F: 'NF && $1 !~ /(^|\/)__tests__\// && $1 !~ /^(\.\/)?tests\//')
 
 # 3. Bare @ts-expect-error: the directive with nothing after it but optional
 #    whitespace and an optional block-comment terminator. A reason comment makes
 #    the suppression self-documenting and is required by AGENTS.md.
-BARE_EXPECT_MATCHES=$(grep -rnE "@ts-expect-error[[:space:]]*(\*/)?[[:space:]]*$" \
-  "${CODE_INCLUDES[@]}" "${EXCLUDE_PATHS[@]}" \
-  "${SCAN_ROOTS[@]}" \
-  2>/dev/null || true)
+BARE_EXPECT_MATCHES=$(scan "@ts-expect-error[[:space:]]*(\*/)?[[:space:]]*$")
 
 FAILED=0
 
@@ -66,9 +74,9 @@ if [ -n "$NOCHECK_MATCHES" ]; then
   FAILED=1
 fi
 
-if [ -n "$SRC_EXPECT_MATCHES" ]; then
-  echo "ERROR: @ts-expect-error is not allowed in src/ — fix the type instead."
-  echo "$SRC_EXPECT_MATCHES"
+if [ -n "$NON_TEST_EXPECT_MATCHES" ]; then
+  echo "ERROR: @ts-expect-error is allowed only in __tests__/ and tests/ — fix the type instead."
+  echo "$NON_TEST_EXPECT_MATCHES"
   echo
   FAILED=1
 fi
