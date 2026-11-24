@@ -186,7 +186,10 @@ function displayCompressorsList() {
     if (legacy.length > 0) {
         console.log("    Legacy:");
         legacy.forEach((compressor) => {
-            console.log(`      - ${compressor.name}`);
+            const note = compressor.replacement
+                ? ` (removed in v12, use ${compressor.replacement})`
+                : "";
+            console.log(`      - ${compressor.name}${note}`);
         });
         console.log("");
     }
