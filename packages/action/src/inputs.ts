@@ -6,12 +6,23 @@
 
 import path from "node:path";
 import { getBooleanInput, getInput, warning } from "@actions/core";
-import { getCompressorEntry, isBuiltInCompressor } from "@node-minify/utils";
+import {
+    type CompressorName,
+    getCompressorEntry,
+    isBuiltInCompressor,
+} from "@node-minify/utils";
 import { DEFAULT_PATTERNS } from "./discover.ts";
 import type { ActionInputs } from "./types.ts";
 import { validateOutputDir } from "./validate.ts";
 
-const TYPE_REQUIRED_COMPRESSORS = ["esbuild"];
+const TYPE_REQUIRED_COMPRESSORS: readonly CompressorName[] = ["esbuild"];
+
+const DEFAULT_BENCHMARK_COMPRESSORS: readonly CompressorName[] = [
+    "terser",
+    "esbuild",
+    "swc",
+    "oxc",
+];
 
 /**
  * Parse comma-separated string into array of trimmed non-empty strings.
@@ -89,7 +100,11 @@ export function parseInputs(): ActionInputs {
         type = typeRaw;
     }
 
-    if (!auto && TYPE_REQUIRED_COMPRESSORS.includes(compressor) && !type) {
+    if (
+        !auto &&
+        TYPE_REQUIRED_COMPRESSORS.some((c) => c === compressor) &&
+        !type
+    ) {
         throw new Error(
             `Compressor '${compressor}' requires the 'type' input (js or css)`
         );
@@ -112,7 +127,7 @@ export function parseInputs(): ActionInputs {
     const benchmarkCompressorsInput = getInput("benchmark-compressors");
     const benchmarkCompressors = (() => {
         if (!benchmarkCompressorsInput) {
-            return ["terser", "esbuild", "swc", "oxc"];
+            return [...DEFAULT_BENCHMARK_COMPRESSORS];
         }
         const parsed = benchmarkCompressorsInput
             .split(",")
@@ -120,7 +135,7 @@ export function parseInputs(): ActionInputs {
             .filter((c) => c.length > 0);
         // Deduplicate while preserving order
         const unique = [...new Set(parsed)];
-        return unique.length > 0 ? unique : ["terser", "esbuild", "swc", "oxc"];
+        return unique.length > 0 ? unique : [...DEFAULT_BENCHMARK_COMPRESSORS];
     })();
 
     return {

@@ -9,9 +9,8 @@
  */
 import { styleText } from "node:util";
 import type { Result, Settings } from "@node-minify/types";
-import { resolveCompressor } from "@node-minify/utils";
+import { getCompressorEntry, resolveCompressor } from "@node-minify/utils";
 import { compress } from "./compress.ts";
-import { AVAILABLE_MINIFIER } from "./config.ts";
 import { spinnerError, spinnerStart, spinnerStop } from "./spinner.ts";
 
 export type SettingsWithCompressor = Omit<Settings, "compressor"> & {
@@ -42,18 +41,13 @@ async function runOne(cli: SettingsWithCompressor): Promise<Result> {
     const { compressor: minifierImplementation, label: compressorLabel } =
         resolution;
 
-    if (resolution.isBuiltIn) {
-        const minifierDefinition = AVAILABLE_MINIFIER.find(
-            (c) => c.name === cli.compressor
-        );
-        if (
-            minifierDefinition &&
-            "cssOnly" in minifierDefinition &&
-            cli.type &&
-            cli.type !== "css"
-        ) {
-            throw new Error(`${cli.compressor} only supports type 'css'`);
-        }
+    if (
+        resolution.isBuiltIn &&
+        getCompressorEntry(cli.compressor)?.cssOnly &&
+        cli.type &&
+        cli.type !== "css"
+    ) {
+        throw new Error(`${cli.compressor} only supports type 'css'`);
     }
 
     const inputValue = cli.input;

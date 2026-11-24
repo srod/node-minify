@@ -31,7 +31,7 @@ export async function runBenchmark(
     const compressors = inputs.type
         ? inputs.benchmarkCompressors
         : inputs.benchmarkCompressors.filter(
-              (c) => !TYPE_REQUIRED_COMPRESSORS.includes(c)
+              (c) => !TYPE_REQUIRED_COMPRESSORS.some((r) => r === c)
           );
 
     const result = await benchmark({
