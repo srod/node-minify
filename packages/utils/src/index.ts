@@ -91,6 +91,7 @@ export {
 export type { BuildArgsOptions };
 export type {
     CompressorEntry,
+    CompressorName,
     CompressorStatus,
 } from "./compressor-registry.ts";
 export type { CompressorResolution } from "./compressor-resolver.ts";

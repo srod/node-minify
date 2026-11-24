@@ -25,11 +25,20 @@ export interface CompressorEntry {
     packageName: string;
     /** Recommended replacement for removed compressors */
     replacement?: string;
+    /** Name of the function the package exports (e.g., "lightningCss"). Set on every non-removed entry. */
+    exportName?: string;
+    /** `true` when the compressor only accepts CSS input */
+    cssOnly?: boolean;
+    /** Friendly alternative names that resolve to this compressor (e.g., "gcc") */
+    aliases?: readonly string[];
 }
 
 /**
  * Static registry of all compressors in node-minify v11.
  * Covers 22 compressors across JS, CSS, HTML, JSON, image, and passthrough use cases.
+ *
+ * This is the single list the CLI, the Action, the resolver, the benchmark and
+ * `doctor` read from: add, retire or rename a compressor here and nowhere else.
  */
 export const COMPRESSOR_REGISTRY = [
     // Recommended (9)
@@ -37,68 +46,110 @@ export const COMPRESSOR_REGISTRY = [
         name: "terser",
         status: "recommended",
         packageName: "@node-minify/terser",
+        exportName: "terser",
     },
-    { name: "oxc", status: "recommended", packageName: "@node-minify/oxc" },
-    { name: "swc", status: "recommended", packageName: "@node-minify/swc" },
+    {
+        name: "oxc",
+        status: "recommended",
+        packageName: "@node-minify/oxc",
+        exportName: "oxc",
+    },
+    {
+        name: "swc",
+        status: "recommended",
+        packageName: "@node-minify/swc",
+        exportName: "swc",
+    },
     {
         name: "esbuild",
         status: "recommended",
         packageName: "@node-minify/esbuild",
+        exportName: "esbuild",
     },
     {
         name: "lightningcss",
         status: "recommended",
         packageName: "@node-minify/lightningcss",
+        exportName: "lightningCss",
+        cssOnly: true,
     },
     {
         name: "cssnano",
         status: "recommended",
         packageName: "@node-minify/cssnano",
+        exportName: "cssnano",
+        cssOnly: true,
     },
     {
         name: "minify-html",
         status: "recommended",
         packageName: "@node-minify/minify-html",
+        exportName: "minifyHtml",
     },
-    { name: "sharp", status: "recommended", packageName: "@node-minify/sharp" },
-    { name: "svgo", status: "recommended", packageName: "@node-minify/svgo" },
+    {
+        name: "sharp",
+        status: "recommended",
+        packageName: "@node-minify/sharp",
+        exportName: "sharp",
+    },
+    {
+        name: "svgo",
+        status: "recommended",
+        packageName: "@node-minify/svgo",
+        exportName: "svgo",
+    },
     // Supported (6)
     {
         name: "clean-css",
         status: "supported",
         packageName: "@node-minify/clean-css",
+        exportName: "cleanCss",
+        cssOnly: true,
     },
-    { name: "csso", status: "supported", packageName: "@node-minify/csso" },
+    {
+        name: "csso",
+        status: "supported",
+        packageName: "@node-minify/csso",
+        exportName: "csso",
+        cssOnly: true,
+    },
     {
         name: "uglify-js",
         status: "supported",
         packageName: "@node-minify/uglify-js",
+        exportName: "uglifyJs",
     },
     {
         name: "google-closure-compiler",
         status: "supported",
         packageName: "@node-minify/google-closure-compiler",
+        exportName: "gcc",
+        aliases: ["gcc"],
     },
     {
         name: "imagemin",
         status: "supported",
         packageName: "@node-minify/imagemin",
+        exportName: "imagemin",
     },
     {
         name: "html-minifier",
         status: "supported",
         packageName: "@node-minify/html-minifier",
+        exportName: "htmlMinifier",
     },
     // Legacy (2)
     {
         name: "jsonminify",
         status: "legacy",
         packageName: "@node-minify/jsonminify",
+        exportName: "jsonMinify",
     },
     {
         name: "no-compress",
         status: "legacy",
         packageName: "@node-minify/no-compress",
+        exportName: "noCompress",
     },
     // Removed (5)
     {
@@ -132,6 +183,15 @@ export const COMPRESSOR_REGISTRY = [
         replacement: "lightningcss",
     },
 ] as const;
+
+/**
+ * Name of a compressor that is still shipped (every registry entry that is not removed).
+ * Renaming or removing a registry entry makes any stale use of its name fail typecheck.
+ */
+export type CompressorName = Exclude<
+    (typeof COMPRESSOR_REGISTRY)[number],
+    { status: "removed" }
+>["name"];
 
 /**
  * Get all compressors with a specific status.

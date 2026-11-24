@@ -7,38 +7,29 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import type { Compressor } from "@node-minify/types";
+import { COMPRESSOR_REGISTRY } from "./compressor-registry.ts";
 
 /**
- * Known compressor exports for built-in @node-minify packages.
- * Maps package name to the exported function name.
+ * Known compressor exports for built-in @node-minify packages, derived from the registry.
+ * Maps compressor name to the exported function name.
  */
-const KNOWN_COMPRESSOR_EXPORTS: Record<string, string> = {
-    esbuild: "esbuild",
-    "google-closure-compiler": "gcc",
-    oxc: "oxc",
-    swc: "swc",
-    terser: "terser",
-    "uglify-js": "uglifyJs",
-    "clean-css": "cleanCss",
-    cssnano: "cssnano",
-    csso: "csso",
-    lightningcss: "lightningCss",
-    "html-minifier": "htmlMinifier",
-    "minify-html": "minifyHtml",
-    jsonminify: "jsonMinify",
-    imagemin: "imagemin",
-    sharp: "sharp",
-    svgo: "svgo",
-    "no-compress": "noCompress",
-};
+const KNOWN_COMPRESSOR_EXPORTS: Record<string, string> = {};
 
 /**
  * Friendly aliases mapping a user-facing compressor name to its canonical
- * built-in package name (e.g. `gcc` → `google-closure-compiler`).
+ * built-in package name (e.g. `gcc` → `google-closure-compiler`), derived from the registry.
  */
-const COMPRESSOR_ALIASES: Record<string, string> = {
-    gcc: "google-closure-compiler",
-};
+const COMPRESSOR_ALIASES: Record<string, string> = {};
+
+for (const entry of COMPRESSOR_REGISTRY) {
+    if (!("exportName" in entry)) continue;
+    KNOWN_COMPRESSOR_EXPORTS[entry.name] = entry.exportName;
+    if ("aliases" in entry) {
+        for (const alias of entry.aliases) {
+            COMPRESSOR_ALIASES[alias] = entry.name;
+        }
+    }
+}
 
 /**
  * Resolve a compressor alias to its canonical name.
