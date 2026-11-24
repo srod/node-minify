@@ -146,38 +146,34 @@ packages/my-compressor/
 
 Your `index.ts` should export the compressor function.
 
-### 2. Registering for CLI Support
+### 2. Registering the Compressor
 
-To make your compressor available via the CLI (e.g., `node-minify --compressor my-tool`), you must register it in `packages/cli/src/config.ts`. This makes it discoverable as a built-in option in help menus and enables CLI-specific validation.
-
-Add your compressor to the `AVAILABLE_MINIFIER` array:
+Add one entry to `COMPRESSOR_REGISTRY` in `packages/utils/src/compressor-registry.ts`. The CLI, the GitHub Action, the resolver, the benchmark and `node-minify doctor` all read from this list, so nothing else needs to change.
 
 ```typescript
-// packages/cli/src/config.ts
-export const AVAILABLE_MINIFIER = [
+// packages/utils/src/compressor-registry.ts
+export const COMPRESSOR_REGISTRY = [
     // ...
-    { name: "my-tool", export: "myTool" },
-];
+    {
+        name: "my-tool",
+        status: "supported",
+        packageName: "@node-minify/my-tool",
+        exportName: "myTool",
+    },
+] as const;
 ```
 
 *   **name**: The CLI argument (kebab-case).
-*   **export**: The named export from your package (camelCase).
+*   **status**: `recommended`, `supported`, `legacy` or `removed`.
+*   **packageName**: The npm package name.
+*   **exportName**: The named export from your package (camelCase). Required unless the status is `removed`.
+*   **cssOnly** (optional): `true` if the compressor only accepts CSS input.
+*   **aliases** (optional): Friendly alternative names, such as `gcc` for `google-closure-compiler`.
+*   **replacement**: For `removed` entries only, the compressor to suggest instead. `resolveCompressor` rejects a removed name with that suggestion.
 
-### 3. Registering for Resolution (Benchmark & Core)
+The `CompressorName` type is derived from this list, so renaming or removing an entry makes any stale use of its name in the Action or benchmark defaults fail typecheck.
 
-To enable proper resolution for your tool (used by Benchmark and CLI internals), update `packages/utils/src/compressor-resolver.ts`. This ensures the system recognizes it as a built-in package rather than an external npm dependency.
-
-Add your compressor to the `KNOWN_COMPRESSOR_EXPORTS` object:
-
-```typescript
-// packages/utils/src/compressor-resolver.ts
-const KNOWN_COMPRESSOR_EXPORTS: Record<string, string> = {
-    // ...
-    "my-tool": "myTool",
-};
-```
-
-### 4. Testing
+### 3. Testing
 
 Add tests in `packages/my-tool/__tests__/`. We use Vitest for testing. You can use the shared test helpers from the root `tests/fixtures.ts` if applicable.
 

@@ -117,8 +117,11 @@ export async function myCompressor({ settings, content }: MinifierOptions): Prom
     }
 }
 ```
-3. Add tests using `runOneTest` from `tests/fixtures.ts`
-4. Add changeset: `bun run changeset`
+3. Add one entry to `COMPRESSOR_REGISTRY` in `packages/utils/src/compressor-registry.ts` (name, status, packageName, exportName, plus `cssOnly` or `aliases` if they apply). The CLI, Action, resolver, benchmark and `doctor` read from it, so nothing else lists compressors.
+4. Add tests using `runOneTest` from `tests/fixtures.ts`
+5. Add changeset: `bun run changeset`
+
+The Action's per-file-type defaults (`COMPRESSOR_MAP`) and the benchmark's default set stay in their own files, typed `CompressorName`. Renaming or removing a compressor in the registry fails typecheck there.
 
 ## Testing
 
