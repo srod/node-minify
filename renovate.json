@@ -10,6 +10,10 @@
             "matchUpdateTypes": ["minor", "patch"],
             "matchCurrentVersion": "!/^0/",
             "automerge": true
+        },
+        {
+            "matchManagers": ["github-actions"],
+            "automerge": false
         }
     ],
     "lockFileMaintenance": {
