@@ -5,7 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { ensureStringContent } from "@node-minify/utils";
+import { ensureStringContent, wrapMinificationError } from "@node-minify/utils";
 import { minify } from "terser";
 
 /**
@@ -14,7 +14,7 @@ import { minify } from "terser";
  * @param settings - Optional minifier settings; `settings.options` are forwarded to Terser
  * @param content - Input to minify; non-string inputs will be converted to a string
  * @returns An object with `code` containing the minified source and `map` containing the source map string when available
- * @throws Error if Terser produces no output code
+ * @throws Error `terser minification failed: <message>` with the original error as `cause` if Terser fails or produces no output code
  */
 export async function terser({
     settings,
@@ -22,14 +22,18 @@ export async function terser({
 }: MinifierOptions): Promise<CompressorResult> {
     const contentStr = ensureStringContent(content, "terser");
 
-    const result = await minify(contentStr, settings?.options);
+    try {
+        const result = await minify(contentStr, settings?.options);
 
-    if (typeof result.code !== "string") {
-        throw new Error("Terser failed: empty result");
+        if (typeof result.code !== "string") {
+            throw new Error("empty result");
+        }
+
+        return {
+            code: result.code,
+            map: typeof result.map === "string" ? result.map : undefined,
+        };
+    } catch (error) {
+        throw wrapMinificationError("terser", error);
     }
-
-    return {
-        code: result.code,
-        map: typeof result.map === "string" ? result.map : undefined,
-    };
 }

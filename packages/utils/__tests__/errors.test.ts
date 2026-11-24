@@ -13,6 +13,20 @@ describe("wrapMinificationError", () => {
         expect(wrapped.cause).toBe(originalError);
     });
 
+    test("puts the optional context before the original message and keeps the cause", () => {
+        const originalError = new Error("unsupported image format");
+        const wrapped = wrapMinificationError(
+            "sharp",
+            originalError,
+            "conversion to webp"
+        );
+
+        expect(wrapped.message).toBe(
+            "sharp minification failed: conversion to webp: unsupported image format"
+        );
+        expect(wrapped.cause).toBe(originalError);
+    });
+
     test("wraps string error without cause", () => {
         const wrapped = wrapMinificationError("oxc", "unexpected token");
 

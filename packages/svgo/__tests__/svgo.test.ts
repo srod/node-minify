@@ -158,31 +158,35 @@ describe("svgo (error handling)", () => {
                 },
                 content: invalidSvg,
             })
-        ).rejects.toThrow("SVGO optimization failed:");
+        ).rejects.toThrow("svgo minification failed:");
     });
 
-    test("should re-throw non-Error exceptions", async () => {
+    test("should wrap non-Error exceptions without a cause", async () => {
         // Use a plugin that throws a non-Error value
         const validSvg =
             '<svg xmlns="http://www.w3.org/2000/svg"><rect/></svg>';
 
-        await expect(
-            svgo({
-                settings: {
-                    compressor: svgo,
-                    options: {
-                        plugins: [
-                            {
-                                name: "throwNonError",
-                                fn: () => {
-                                    throw "string error"; // Non-Error throw
-                                },
+        const error = await svgo({
+            settings: {
+                compressor: svgo,
+                options: {
+                    plugins: [
+                        {
+                            name: "throwNonError",
+                            fn: () => {
+                                throw "string error"; // Non-Error throw
                             },
-                        ],
-                    },
+                        },
+                    ],
                 },
-                content: validSvg,
-            })
-        ).rejects.toBe("string error");
+            },
+            content: validSvg,
+        }).catch((e: unknown) => e);
+
+        expect(error).toBeInstanceOf(Error);
+        expect((error as Error).message).toBe(
+            "svgo minification failed: string error"
+        );
+        expect((error as Error).cause).toBeUndefined();
     });
 });

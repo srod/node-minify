@@ -199,6 +199,7 @@ describe("Package: imagemin", () => {
         ).rejects.toThrow("Imagemin compressor requires Buffer content");
     });
 
+    // imagemin only returns an empty buffer for an empty result, which no real input produces, so this one needs the mock
     test("should throw error when imagemin returns empty result", async () => {
         vi.mocked(imageminLib.buffer).mockResolvedValueOnce(new Uint8Array(0));
 
@@ -210,6 +211,6 @@ describe("Package: imagemin", () => {
                 },
                 content: Buffer.from([0x89, 0x50, 0x4e, 0x47]),
             })
-        ).rejects.toThrow("Imagemin returned no output");
+        ).rejects.toThrow("imagemin minification failed: no output");
     });
 });

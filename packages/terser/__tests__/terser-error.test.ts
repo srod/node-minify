@@ -10,6 +10,7 @@ vi.mock("terser", () => ({
     minify: vi.fn().mockResolvedValue({ code: undefined }),
 }));
 
+// terser never returns an empty result for real input, so this one needs a mock
 describe("Package: terser error handling", async () => {
     test("should throw when terser returns empty code", async () => {
         const { terser } = await import("../src/index.ts");
@@ -17,6 +18,6 @@ describe("Package: terser error handling", async () => {
         await expect(
             // @ts-expect-error testing invalid input: settings is missing required fields
             terser({ settings: {}, content: "var x = 1;" })
-        ).rejects.toThrow("Terser failed: empty result");
+        ).rejects.toThrow("terser minification failed: empty result");
     });
 });

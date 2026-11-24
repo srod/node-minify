@@ -8,6 +8,7 @@ import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import {
     ensureStringContent,
     extractSourceMapOption,
+    wrapMinificationError,
 } from "@node-minify/utils";
 import { transform } from "lightningcss";
 
@@ -17,6 +18,7 @@ import { transform } from "lightningcss";
  * @param settings - Minifier settings; `settings.options`, if present, are forwarded to lightningcss transform as transform options.
  * @param content - Input CSS content to be minified; non-string inputs will be converted to a string.
  * @returns An object with `code` containing the minified CSS and `map` containing the source map as a string when available, otherwise `undefined`.
+ * @throws Error `lightningcss minification failed: <message>` with the original error as `cause` if lightningcss fails.
  */
 export async function lightningCss({
     settings,
@@ -28,16 +30,20 @@ export async function lightningCss({
         settings?.options
     );
 
-    const result = transform({
-        filename: "input.css",
-        code: Buffer.from(contentStr),
-        minify: true,
-        sourceMap,
-        ...restOptions,
-    });
+    try {
+        const result = transform({
+            filename: "input.css",
+            code: Buffer.from(contentStr),
+            minify: true,
+            sourceMap,
+            ...restOptions,
+        });
 
-    return {
-        code: result.code.toString(),
-        map: result.map ? result.map.toString() : undefined,
-    };
+        return {
+            code: result.code.toString(),
+            map: result.map ? result.map.toString() : undefined,
+        };
+    } catch (error) {
+        throw wrapMinificationError("lightningcss", error);
+    }
 }

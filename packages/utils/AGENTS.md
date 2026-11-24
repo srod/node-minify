@@ -60,7 +60,9 @@ buildArgs(options)  // Options object → CLI args array
 warnDeprecation(packageName, message)  // One-time per process
 
 // Errors
-wrapMinificationError(), validateMinifyResult()
+wrapMinificationError(name, error, context?)  // "<name> minification failed: <message>"; `cause` is the original error when it is an Error, otherwise undefined
+validateMinifyResult()
+FileOperationError, ValidationError             // classes, exported from the entry point
 ```
 
 ## Key Exports by Usage
@@ -68,7 +70,7 @@ wrapMinificationError(), validateMinifyResult()
 **High (10+ packages)**:
 - `ensureStringContent` — All compressors
 - `resolveCompressor` — core, cli, action, benchmark
-- `wrapMinificationError` — 8+ compressors
+- `wrapMinificationError` — all 16 compressors except `no-compress` (no library to fail); each wraps its library call in `try`/`catch` and none builds the `<name> minification failed:` prefix by hand. Some inner messages still repeat the name (clean-css, csso and html-minifier throw `<name> failed: empty result`, and `validateMinifyResult` throws `<name> failed: empty or invalid result`), so those read `<name> minification failed: <name> failed: …`
 
 **Medium (5-9 packages)**:
 - `getFilesizeGzippedRaw`, `prettyBytes` — action, benchmark
@@ -81,6 +83,7 @@ wrapMinificationError(), validateMinifyResult()
 import { FileOperationError, ValidationError } from "@node-minify/utils";
 // All file ops throw FileOperationError with cause chaining
 ```
+Input-validation errors (array content from `ensureStringContent`, esbuild's missing `type`, the sharp and imagemin Buffer checks) are thrown before the `try` and stay unwrapped. Everything inside the `try` gets the `<name> minification failed:` format: errors the library throws, and the compressor's own checks on the library's result (for example terser's `empty result`, imagemin's `no output`, `validateMinifyResult`).
 
 ### Type-Safe Overloads
 ```ts

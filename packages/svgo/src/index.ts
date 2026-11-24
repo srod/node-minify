@@ -5,7 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import { ensureStringContent } from "@node-minify/utils";
+import { ensureStringContent, wrapMinificationError } from "@node-minify/utils";
 import { optimize, type PluginConfig } from "svgo";
 
 /**
@@ -69,16 +69,17 @@ export type SvgOptions = {
  * @param settings - Minifier settings; when present, `settings.options` configures SVGO behavior (for example: `plugins`, `floatPrecision`, `datauri`, `js2svg`, and `multipass`).
  * @param content - The SVG content to minify.
  * @returns A CompressorResult with the minified SVG in the `code` property.
+ * @throws Error `svgo minification failed: <message>` with the original error as `cause` if SVGO fails.
  */
 export async function svgo({
     settings,
     content,
 }: MinifierOptions<SvgOptions>): Promise<CompressorResult> {
+    const svgContent = ensureStringContent(content, "svgo");
+
+    const options = settings?.options ?? {};
+
     try {
-        const svgContent = ensureStringContent(content, "svgo");
-
-        const options = settings?.options ?? {};
-
         const result = optimize(svgContent, {
             multipass: true,
             ...options,
@@ -87,10 +88,7 @@ export async function svgo({
         return {
             code: result.data,
         };
-    } catch (err) {
-        if (err instanceof Error) {
-            throw new Error(`SVGO optimization failed: ${err.message}`);
-        }
-        throw err;
+    } catch (error) {
+        throw wrapMinificationError("svgo", error);
     }
 }

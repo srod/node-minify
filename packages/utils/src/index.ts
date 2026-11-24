@@ -17,6 +17,7 @@ import { compressSingleFile } from "./compressSingleFile.ts";
 import { deleteFile } from "./deleteFile.ts";
 import { resetDeprecationWarnings, warnDeprecation } from "./deprecation.ts";
 import { ensureStringContent } from "./ensureStringContent.ts";
+import { FileOperationError, ValidationError } from "./error.ts";
 import { validateMinifyResult, wrapMinificationError } from "./errors.ts";
 import {
     getContentFromFiles,
@@ -52,6 +53,7 @@ export {
     deleteFile,
     ensureStringContent,
     extractSourceMapOption,
+    FileOperationError,
     getCompressorsByStatus,
     getCompressorEntry,
     getContentFromFiles,
@@ -80,6 +82,7 @@ export {
     tryResolveBuiltIn,
     tryResolveLocalFile,
     tryResolveNpmPackage,
+    ValidationError,
     validateMinifyResult,
     warnDeprecation,
     wildcards,
