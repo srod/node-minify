@@ -8,9 +8,9 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import chalk from "chalk";
-import { afterEach, describe, expect, test } from "vitest";
+import { afterEach, describe, expect, test, vi } from "vitest";
 import { benchmark } from "../src/index.ts";
+import { getReporter } from "../src/reporters/index.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const input = path.resolve(
@@ -97,13 +97,12 @@ describe("Package: benchmark", () => {
     });
 
     describe("with terminal colors enabled", () => {
-        const originalLevel = chalk.level;
         afterEach(() => {
-            chalk.level = originalLevel;
+            vi.unstubAllEnvs();
         });
 
         test("creates missing parent folders and strips ANSI colors for default console format", async () => {
-            chalk.level = 1;
+            vi.stubEnv("FORCE_COLOR", "1");
             const tempDir = await mkdtemp(
                 path.join(os.tmpdir(), "node-minify-bench-out-")
             );
@@ -115,12 +114,13 @@ describe("Package: benchmark", () => {
             );
 
             try {
-                await benchmark({
+                const results = await benchmark({
                     input,
                     compressors: ["terser"],
                     output: outputPath,
                 });
 
+                expect(getReporter()(results)).toContain("\u001b[");
                 const content = await readFile(outputPath, "utf-8");
                 expect(content).toContain("terser");
                 expect(content).not.toContain("\u001b[");
@@ -130,14 +130,14 @@ describe("Package: benchmark", () => {
         });
 
         test("strips ANSI colors for an unknown format that falls back to the console reporter", async () => {
-            chalk.level = 1;
+            vi.stubEnv("FORCE_COLOR", "1");
             const tempDir = await mkdtemp(
                 path.join(os.tmpdir(), "node-minify-bench-out-")
             );
             const outputPath = path.join(tempDir, "bench.txt");
 
             try {
-                await benchmark({
+                const results = await benchmark({
                     input,
                     compressors: ["terser"],
                     // @ts-expect-error testing invalid input: the CLI passes any -f value through
@@ -145,6 +145,7 @@ describe("Package: benchmark", () => {
                     output: outputPath,
                 });
 
+                expect(getReporter("txt")(results)).toContain("\u001b[");
                 const content = await readFile(outputPath, "utf-8");
                 expect(content).toContain("terser");
                 expect(content).not.toContain("\u001b[");

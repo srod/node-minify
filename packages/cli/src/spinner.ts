@@ -7,8 +7,8 @@
 /**
  * Module dependencies.
  */
+import { styleText } from "node:util";
 import type { Result, Settings } from "@node-minify/types";
-import chalk from "chalk";
 import ora from "ora";
 
 const spinner = ora();
@@ -18,9 +18,9 @@ const spinner = ora();
  */
 function formatCompressionMessage(
     status: string,
-    compressorLabel?: string
+    compressorLabel = ""
 ): string {
-    return `${status} with ${chalk.green(compressorLabel)}`;
+    return `${status} with ${styleText("green", compressorLabel)}`;
 }
 
 /**
@@ -41,8 +41,8 @@ function stop({ compressorLabel, size, sizeGzip }: Result): void {
     spinner.text = [
         "File(s) compressed successfully",
         formatCompressionMessage("", compressorLabel),
-        `(${chalk.green(size)} minified,`,
-        `${chalk.green(sizeGzip)} gzipped)`,
+        `(${styleText("green", size)} minified,`,
+        `${styleText("green", sizeGzip)} gzipped)`,
     ].join(" ");
     spinner.succeed();
 }

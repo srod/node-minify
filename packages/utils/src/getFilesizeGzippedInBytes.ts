@@ -5,9 +5,14 @@
  */
 
 import { existsSync } from "node:fs";
+import { readFile } from "node:fs/promises";
+import { promisify } from "node:util";
+import { constants, gzip } from "node:zlib";
 import { FileOperationError } from "./error.ts";
 import { isValidFile } from "./isValidFile.ts";
 import { prettyBytes } from "./prettyBytes.ts";
+
+const gzipAsync = promisify(gzip);
 
 /**
  * Compute the gzipped size of a file in bytes.
@@ -34,10 +39,12 @@ async function getGzipSize(file: string): Promise<number> {
         );
     }
 
-    const { gzipSize } = await import("gzip-size");
-    const { readFile } = await import("node:fs/promises");
     const content = await readFile(file);
-    return gzipSize(content);
+    const compressed = await gzipAsync(content, {
+        level: constants.Z_BEST_COMPRESSION,
+    });
+
+    return compressed.length;
 }
 
 /**
