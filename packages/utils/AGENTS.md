@@ -70,7 +70,7 @@ FileOperationError, ValidationError             // classes, exported from the en
 **High (10+ packages)**:
 - `ensureStringContent` — All compressors
 - `resolveCompressor` — core, cli, action, benchmark
-- `wrapMinificationError` — all 16 compressors except `no-compress` (no library to fail); each wraps its library call in `try`/`catch` and none builds its own prefix
+- `wrapMinificationError` — all 16 compressors except `no-compress` (no library to fail); each wraps its library call in `try`/`catch` and none builds the `<name> minification failed:` prefix by hand. Some inner messages still repeat the name (clean-css, csso and html-minifier throw `<name> failed: empty result`, and `validateMinifyResult` throws `<name> failed: empty or invalid result`), so those read `<name> minification failed: <name> failed: …`
 
 **Medium (5-9 packages)**:
 - `getFilesizeGzippedRaw`, `prettyBytes` — action, benchmark
