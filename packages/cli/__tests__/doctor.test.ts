@@ -239,7 +239,7 @@ describe("Package: doctor", () => {
             writeSourceFile(
                 tmpDir,
                 "src/config.ts",
-                'import { jsonminify } from "@node-minify/jsonminify";\n'
+                'import { noCompress } from "@node-minify/no-compress";\n'
             );
 
             const { result, output } = await captureOutput(() =>
@@ -248,7 +248,7 @@ describe("Package: doctor", () => {
 
             expect(result).toBe(0);
             expect(output).toContain("WARNING");
-            expect(output).toContain("@node-minify/jsonminify");
+            expect(output).toContain("@node-minify/no-compress");
             expect(output).toContain("legacy");
         });
 
@@ -514,7 +514,7 @@ describe("Package: doctor", () => {
     describe("legacy-only findings", () => {
         test("should return 0 with warnings for legacy deps only", async () => {
             writePackageJson(tmpDir, {
-                "@node-minify/jsonminify": "^10.0.0",
+                "@node-minify/no-compress": "^10.0.0",
             });
 
             const { result, output } = await captureOutput(() =>
@@ -523,8 +523,82 @@ describe("Package: doctor", () => {
 
             expect(result).toBe(0);
             expect(output).toContain("WARNING");
-            expect(output).toContain("@node-minify/jsonminify");
+            expect(output).toContain("@node-minify/no-compress");
             expect(output).toContain("legacy");
+        });
+
+        test("keeps the plain legacy message for no-compress", async () => {
+            writePackageJson(tmpDir, {
+                "@node-minify/no-compress": "^11.0.0",
+            });
+
+            const { output } = await captureOutput(() => runDoctor(tmpDir));
+
+            expect(output).toContain(
+                "@node-minify/no-compress is legacy tier. Consider migrating."
+            );
+            expect(output).not.toContain("v12");
+        });
+
+        test("warns that csso is removed in v12 and exits 0", async () => {
+            writePackageJson(tmpDir, { "@node-minify/csso": "^11.0.0" });
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(0);
+            expect(output).toContain("WARNING");
+            expect(output).toContain(
+                "@node-minify/csso is legacy tier and will be removed in v12. Use lightningcss or cssnano instead."
+            );
+        });
+
+        test.each([
+            [
+                "@node-minify/uglify-js",
+                "@node-minify/uglify-js is legacy tier and will be removed in v12. Use terser instead.",
+            ],
+            [
+                "@node-minify/imagemin",
+                "@node-minify/imagemin is legacy tier and will be removed in v12. Use sharp, or svgo for SVG instead.",
+            ],
+        ])("names the replacement for %s", async (pkg, message) => {
+            writePackageJson(tmpDir, { [pkg]: "^11.0.0" });
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(0);
+            expect(output).toContain(message);
+        });
+
+        test("gives no tier warning for jsonminify", async () => {
+            writePackageJson(tmpDir, { "@node-minify/jsonminify": "^11.0.0" });
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(0);
+            expect(output).toBe("");
+        });
+
+        test("gives no tier warning for a jsonminify import", async () => {
+            writePackageJson(tmpDir);
+            writeSourceFile(
+                tmpDir,
+                "src/config.ts",
+                'import { jsonMinify } from "@node-minify/jsonminify";\n'
+            );
+
+            const { result, output } = await captureOutput(() =>
+                runDoctor(tmpDir)
+            );
+
+            expect(result).toBe(0);
+            expect(output).toBe("");
         });
     });
 
@@ -532,7 +606,7 @@ describe("Package: doctor", () => {
         test("should return 1 when both removed and legacy deps exist", async () => {
             writePackageJson(tmpDir, {
                 "@node-minify/babel-minify": "^10.0.0",
-                "@node-minify/jsonminify": "^10.0.0",
+                "@node-minify/no-compress": "^10.0.0",
             });
 
             const { result, output } = await captureOutput(() =>
@@ -546,7 +620,7 @@ describe("Package: doctor", () => {
 
         test("should report errors before warnings", async () => {
             writePackageJson(tmpDir, {
-                "@node-minify/jsonminify": "^10.0.0",
+                "@node-minify/no-compress": "^10.0.0",
                 "@node-minify/babel-minify": "^10.0.0",
             });
 

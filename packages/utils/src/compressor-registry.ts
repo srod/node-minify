@@ -23,7 +23,10 @@ export interface CompressorEntry {
     status: CompressorStatus;
     /** NPM package name (e.g., "@node-minify/terser") */
     packageName: string;
-    /** Recommended replacement for removed compressors */
+    /**
+     * Recommended replacement. On a removed compressor it is the compressor to use instead.
+     * On a legacy compressor it means the compressor is removed in the next major (v12).
+     */
     replacement?: string;
     /** Name of the function the package exports (e.g., "lightningCss"). Set on every non-removed entry. */
     exportName?: string;
@@ -35,7 +38,8 @@ export interface CompressorEntry {
 
 /**
  * Shape each registry entry must satisfy: a removed entry names its replacement,
- * and every other entry names the function its package exports.
+ * and every other entry names the function its package exports. A legacy entry
+ * may also name a replacement, which marks it as removed in v12.
  */
 type RegistryEntry =
     | (CompressorEntry & { status: "removed"; replacement: string })
@@ -111,26 +115,13 @@ export const COMPRESSOR_REGISTRY = [
         packageName: "@node-minify/svgo",
         exportName: "svgo",
     },
-    // Supported (6)
+    // Supported (4)
     {
         name: "clean-css",
         status: "supported",
         packageName: "@node-minify/clean-css",
         exportName: "cleanCss",
         cssOnly: true,
-    },
-    {
-        name: "csso",
-        status: "supported",
-        packageName: "@node-minify/csso",
-        exportName: "csso",
-        cssOnly: true,
-    },
-    {
-        name: "uglify-js",
-        status: "supported",
-        packageName: "@node-minify/uglify-js",
-        exportName: "uglifyJs",
     },
     {
         name: "google-closure-compiler",
@@ -140,23 +131,39 @@ export const COMPRESSOR_REGISTRY = [
         aliases: ["gcc"],
     },
     {
-        name: "imagemin",
-        status: "supported",
-        packageName: "@node-minify/imagemin",
-        exportName: "imagemin",
-    },
-    {
         name: "html-minifier",
         status: "supported",
         packageName: "@node-minify/html-minifier",
         exportName: "htmlMinifier",
     },
-    // Legacy (2)
     {
         name: "jsonminify",
-        status: "legacy",
+        status: "supported",
         packageName: "@node-minify/jsonminify",
         exportName: "jsonMinify",
+    },
+    // Legacy (4): csso, imagemin and uglify-js are removed in v12 (they carry a replacement)
+    {
+        name: "csso",
+        status: "legacy",
+        packageName: "@node-minify/csso",
+        exportName: "csso",
+        cssOnly: true,
+        replacement: "lightningcss or cssnano",
+    },
+    {
+        name: "uglify-js",
+        status: "legacy",
+        packageName: "@node-minify/uglify-js",
+        exportName: "uglifyJs",
+        replacement: "terser",
+    },
+    {
+        name: "imagemin",
+        status: "legacy",
+        packageName: "@node-minify/imagemin",
+        exportName: "imagemin",
+        replacement: "sharp, or svgo for SVG",
     },
     {
         name: "no-compress",
