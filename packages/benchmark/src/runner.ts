@@ -282,20 +282,13 @@ async function benchmarkCompressor(
     options: BenchmarkOptions,
     originalSizeBytes: number
 ): Promise<CompressorMetrics> {
-    const compressor = await loadCompressor(name);
-
-    if (!compressor) {
-        return createErrorMetrics(
-            name,
-            "Compressor not found or not installed"
-        );
-    }
-
     const iterations = options.iterations || 1;
     const warmup = options.warmup ?? (iterations > 1 ? 1 : 0);
     let tempDir: string | undefined;
 
     try {
+        const compressor = await loadCompressor(name);
+
         tempDir = await fsPromises.mkdtemp(
             join(tmpdir(), "node-minify-bench-")
         );

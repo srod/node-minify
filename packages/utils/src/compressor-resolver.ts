@@ -7,7 +7,10 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import type { Compressor } from "@node-minify/types";
-import { COMPRESSOR_REGISTRY } from "./compressor-registry.ts";
+import {
+    COMPRESSOR_REGISTRY,
+    getCompressorEntry,
+} from "./compressor-registry.ts";
 
 /**
  * Known compressor exports for built-in @node-minify packages, derived from the registry.
@@ -264,11 +267,20 @@ export async function tryResolveLocalFile(
  *
  * @param name - Compressor identifier: a built-in name (e.g., "terser"), an npm package name, or a local path (e.g., "./compressor.js")
  * @returns The resolved CompressorResolution containing the compressor function, a display `label`, and `isBuiltIn` flag
+ * @throws Error if the compressor was removed in v11 (matched by name or package name), naming its replacement
  * @throws Error if the compressor cannot be found or the module does not export a valid compressor function
  */
 export async function resolveCompressor(
     name: string
 ): Promise<CompressorResolution> {
+    const entry = getCompressorEntry(name);
+    if (entry?.status === "removed") {
+        throw new Error(
+            `Compressor '${name}' was removed in v11. ` +
+                `Use '${entry.replacement ?? "a supported compressor"}' instead.`
+        );
+    }
+
     // 1. Try built-in @node-minify package
     const builtIn = await tryResolveBuiltIn(name);
     if (builtIn) {

@@ -159,28 +159,21 @@ export function parseInputs(): ActionInputs {
 }
 
 /**
- * Validates a compressor identifier and throws for removed compressors.
+ * Warns when a compressor identifier is not a built-in compressor.
  *
- * Throws an error when the compressor has been removed from node-minify,
- * providing the recommended replacement. Emits a warning when the compressor
- * is not recognized as a built-in compressor (indicating it will be treated
- * as a custom npm package or local file).
+ * Emits a warning when the compressor is not recognized as a built-in
+ * compressor (indicating it will be treated as a custom npm package or local
+ * file). Removed compressors get no warning: `resolveCompressor` rejects them
+ * with the shared removed-compressor error.
  *
  * @param compressor - The compressor name or identifier to validate (e.g., "terser", "esbuild", or a custom package)
- * @returns Nothing; throws when the compressor has been removed.
- * @throws Error if the compressor has been removed
+ * @returns Nothing
  */
 export function validateCompressor(compressor: string): void {
-    const entry = getCompressorEntry(compressor);
-    if (entry?.status === "removed") {
-        const replacement = entry.replacement || "terser";
-        throw new Error(
-            `Compressor '${compressor}' has been removed from node-minify. ` +
-                `Use '${replacement}' instead.`
-        );
-    }
-
-    if (!isBuiltInCompressor(compressor)) {
+    if (
+        !isBuiltInCompressor(compressor) &&
+        getCompressorEntry(compressor)?.status !== "removed"
+    ) {
         warning(
             `Compressor '${compressor}' is not a built-in compressor. ` +
                 `Treating as custom npm package or local file.`

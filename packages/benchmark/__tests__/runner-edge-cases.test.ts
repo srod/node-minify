@@ -274,6 +274,24 @@ describe("Runner Edge Cases", () => {
         expect(results.files).toHaveLength(0);
     });
 
+    test("reports the resolver's message for a compressor that cannot be resolved", async () => {
+        const results = await benchmark({
+            input: fixtureJS,
+            compressors: ["does-not-exist", "yui"],
+            iterations: 1,
+        });
+
+        const [missing, removed] = results.files[0]?.results ?? [];
+        expect(missing?.success).toBe(false);
+        expect(missing?.error).toBe(
+            "Could not resolve compressor 'does-not-exist'. Is it installed? For local files, use a path starting with './' or '/'."
+        );
+        expect(removed?.success).toBe(false);
+        expect(removed?.error).toBe(
+            "Compressor 'yui' was removed in v11. Use 'terser or lightningcss' instead."
+        );
+    });
+
     test("should use default warmup of 0 when iterations is 1 and warmup not specified", async () => {
         const results = await benchmark({
             input: fixtureJS,

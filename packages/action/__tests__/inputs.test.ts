@@ -135,20 +135,8 @@ describe("validateCompressor", () => {
         vi.resetAllMocks();
     });
 
-    test("throws error for removed compressor", () => {
-        vi.mocked(getCompressorEntry).mockReturnValue({
-            name: "babel-minify",
-            status: "removed",
-            packageName: "@node-minify/babel-minify",
-            replacement: "terser",
-        });
-
-        expect(() => validateCompressor("babel-minify")).toThrow(
-            "Compressor 'babel-minify' has been removed from node-minify"
-        );
-    });
-
-    test("throws error for removed compressor yui with replacement", () => {
+    test("does not warn 'custom npm package' for a removed compressor", () => {
+        vi.mocked(isBuiltInCompressor).mockReturnValue(false);
         vi.mocked(getCompressorEntry).mockReturnValue({
             name: "yui",
             status: "removed",
@@ -156,13 +144,13 @@ describe("validateCompressor", () => {
             replacement: "terser or lightningcss",
         });
 
-        expect(() => validateCompressor("yui")).toThrow(
-            "Use 'terser or lightningcss' instead"
-        );
+        expect(() => validateCompressor("yui")).not.toThrow();
+        expect(warning).not.toHaveBeenCalled();
     });
 
     test("warns for non-built-in compressor", () => {
         vi.mocked(isBuiltInCompressor).mockReturnValue(false);
+        vi.mocked(getCompressorEntry).mockReturnValue(undefined);
 
         validateCompressor("custom-compressor");
 
