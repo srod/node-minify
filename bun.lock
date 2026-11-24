@@ -279,7 +279,7 @@
       "version": "11.0.2",
       "dependencies": {
         "@node-minify/utils": "workspace:*",
-        "oxc-minify": "^0.159.0",
+        "oxc-minify": "^0.160.0",
       },
       "devDependencies": {
         "@node-minify/types": "workspace:*",
@@ -813,43 +813,43 @@
 
     "@oslojs/encoding": ["@oslojs/encoding@1.1.0", "", {}, "sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ=="],
 
-    "@oxc-minify/binding-android-arm-eabi": ["@oxc-minify/binding-android-arm-eabi@0.159.0", "", { "os": "android", "cpu": "arm" }, "sha512-Wy0hS7hIYsPeD42XU1V7iez+0UhtGvFFvg5OVkyeZmbwNcw8ktCfNpJ+6wPo3MxhJfV+n/9bd9WL9lZjQPDhjw=="],
+    "@oxc-minify/binding-android-arm-eabi": ["@oxc-minify/binding-android-arm-eabi@0.160.0", "", { "os": "android", "cpu": "arm" }, "sha512-6OfDUvVNo+uwh7Ropa0Q/X2QgkWZptrnVMbwojktfW06sGB63utd52C5PFqFF0uXPNaQbzsqaloUxBrrQabpSA=="],
 
-    "@oxc-minify/binding-android-arm64": ["@oxc-minify/binding-android-arm64@0.159.0", "", { "os": "android", "cpu": "arm64" }, "sha512-BPpHxgmG9egT7f6RAWR5UfW+khwChap1U/mELichNZNSVG1GlHTFmaZUUbVyVDmOBj4ySRmDUqjdU23RAHJHDg=="],
+    "@oxc-minify/binding-android-arm64": ["@oxc-minify/binding-android-arm64@0.160.0", "", { "os": "android", "cpu": "arm64" }, "sha512-2CqcxpNW52sy0hbuI2/xd2zrSkOJ4Jxm87gnUs7wCygZ7uXKOLbp4VDO2Z2iTAZVES5vKg+WMTyf5wlhA4yGuA=="],
 
-    "@oxc-minify/binding-darwin-arm64": ["@oxc-minify/binding-darwin-arm64@0.159.0", "", { "os": "darwin", "cpu": "arm64" }, "sha512-TeuTnNcumJWnRv05GDja73lFOYmW+9f8z0x4k6qf8EyUCUYSrDPrIxbEUBqz5JOMZkiOd5FGB0H0qXka7uZMmA=="],
+    "@oxc-minify/binding-darwin-arm64": ["@oxc-minify/binding-darwin-arm64@0.160.0", "", { "os": "darwin", "cpu": "arm64" }, "sha512-97AFpl/52PH/ZTQX1aQUkvCMh+bfRk7yOgMBuHkx3aVMF+5Ni1Fg4NbGyYNVvv636SWTj7o/DbzVs8g++KJG4A=="],
 
-    "@oxc-minify/binding-darwin-x64": ["@oxc-minify/binding-darwin-x64@0.159.0", "", { "os": "darwin", "cpu": "x64" }, "sha512-lZwXgsVus2veNnuWBeG6NvVYJ5Y199JQM6sQOnOjr4tgiVochFClmgtK3Zxi3ameMyvFYcxFLhgLDug6g8pMXw=="],
+    "@oxc-minify/binding-darwin-x64": ["@oxc-minify/binding-darwin-x64@0.160.0", "", { "os": "darwin", "cpu": "x64" }, "sha512-hFwq0/s1YPi4DuMWUBf+2Lh8AK0f7jCOqPGGfMjnEEovJQmz6MdGKAB/5QgdFZ43GV07sMshCA6qXl5wN6IYig=="],
 
-    "@oxc-minify/binding-freebsd-x64": ["@oxc-minify/binding-freebsd-x64@0.159.0", "", { "os": "freebsd", "cpu": "x64" }, "sha512-o3cnyqOwZ+B/2Hb+euBeKTKepK3OWoboBm5fkAFDaYU3bunh2XAfmR0TxQJCLIyPIYKkErkFmIgh1rxRggtGvA=="],
+    "@oxc-minify/binding-freebsd-x64": ["@oxc-minify/binding-freebsd-x64@0.160.0", "", { "os": "freebsd", "cpu": "x64" }, "sha512-MvssXEqQ5afvoqSHGiIskN6uaRv92wQuoueBfw3mwrxVvCXadYGt6CtnLwohtD77sZ1MKM9A7G1ToLzrSE3Qyw=="],
 
-    "@oxc-minify/binding-linux-arm-gnueabihf": ["@oxc-minify/binding-linux-arm-gnueabihf@0.159.0", "", { "os": "linux", "cpu": "arm" }, "sha512-B92Gno9IGjgvGqXLe4lN7f6DJP1Ds6NSrbEMCc58LksnNLo53his9T5saQBgltldNcLNJ+bAPs7qhALCSBN7iQ=="],
+    "@oxc-minify/binding-linux-arm-gnueabihf": ["@oxc-minify/binding-linux-arm-gnueabihf@0.160.0", "", { "os": "linux", "cpu": "arm" }, "sha512-IP3nPzenW7rIHJ1O9Ls+gC79MUNg9RxtS1eNfNrqYwP+WA6DuwrLmX0+CjzftNqr4qzz8VBZOYfMmX2xyUbvbQ=="],
 
-    "@oxc-minify/binding-linux-arm-musleabihf": ["@oxc-minify/binding-linux-arm-musleabihf@0.159.0", "", { "os": "linux", "cpu": "arm" }, "sha512-Sc3Egv4BXo4dbFIJzhsEZ8iqp39eMTFWaUatNmr+s+UgD1bN5T6vTFzKW8nPAnQukzXYTbgON18BLdTjO4zyyQ=="],
+    "@oxc-minify/binding-linux-arm-musleabihf": ["@oxc-minify/binding-linux-arm-musleabihf@0.160.0", "", { "os": "linux", "cpu": "arm" }, "sha512-PIVD0DR8boEVdIxLnk07go2EEj8hScZQT+CH3h0kDy6wcpNODgoqKJDYMi7Aee33To6uk5VfT3DLYsNemtY86w=="],
 
-    "@oxc-minify/binding-linux-arm64-gnu": ["@oxc-minify/binding-linux-arm64-gnu@0.159.0", "", { "os": "linux", "cpu": "arm64", "libc": "glibc" }, "sha512-8P1/CIj4l4vgnV4uNaurQ+CyAmCt16V8K4uWvrgaU9JPyDQB20tj9rySuQCDpXgxkbulfmQgm1RM17UfEhO1bw=="],
+    "@oxc-minify/binding-linux-arm64-gnu": ["@oxc-minify/binding-linux-arm64-gnu@0.160.0", "", { "os": "linux", "cpu": "arm64", "libc": "glibc" }, "sha512-zpUMMc3XqOeVYhWdQENsf4E672ml/GyBrTKv3AJLS8aJnZ2zjR5X5EEyUFmAgxbUr2KztdG9Z9eH+x/cAntm8Q=="],
 
-    "@oxc-minify/binding-linux-arm64-musl": ["@oxc-minify/binding-linux-arm64-musl@0.159.0", "", { "os": "linux", "cpu": "arm64", "libc": "musl" }, "sha512-SBdMHxoEOkGcSQDGwX9h6hCiBwsrKK6YVfeLHh7FP5fY2EcPqlknizOnuJRlWZKkfMzxSNrozwCfsNmN483Wew=="],
+    "@oxc-minify/binding-linux-arm64-musl": ["@oxc-minify/binding-linux-arm64-musl@0.160.0", "", { "os": "linux", "cpu": "arm64", "libc": "musl" }, "sha512-ST01biDnOBDDHTMgKY7BmptL3jUKCGLsVg6onTfj7RY/nMnEelsJ72CC+nMBigznA5t2/Lm0JRa6eIw3PI8ylg=="],
 
-    "@oxc-minify/binding-linux-ppc64-gnu": ["@oxc-minify/binding-linux-ppc64-gnu@0.159.0", "", { "os": "linux", "cpu": "ppc64", "libc": "glibc" }, "sha512-bKmsZf95qQ/uzVUisX3UDcsRgtYV9NvWJBl/FeBCH8X2nqW6Oj1iR8lI5pJvJ5Dt3gJI239JegfuK4De/X88ow=="],
+    "@oxc-minify/binding-linux-ppc64-gnu": ["@oxc-minify/binding-linux-ppc64-gnu@0.160.0", "", { "os": "linux", "cpu": "ppc64", "libc": "glibc" }, "sha512-7OQ2Zf8K83qpIrk71HmVwq23IyKQjK8Q+drdnT2iYHcKyNOn1TjrxU/y6itLi9LFM7f3kUjo6l0oWcpAvDPNMA=="],
 
-    "@oxc-minify/binding-linux-riscv64-gnu": ["@oxc-minify/binding-linux-riscv64-gnu@0.159.0", "", { "os": "linux", "cpu": "none", "libc": "glibc" }, "sha512-BBTZIfy/96C6vpof/3D4e39SzFg/+5maTUAo5diogiu43Gm5VPLJ4Ep5AChgsnQRg4rnaB2LubClNAxj/1mdXw=="],
+    "@oxc-minify/binding-linux-riscv64-gnu": ["@oxc-minify/binding-linux-riscv64-gnu@0.160.0", "", { "os": "linux", "cpu": "none", "libc": "glibc" }, "sha512-u3GEMTxrlYcjJyG318f6KiWhrhI3lJmKDm2W2bn5z8PS/2dkDgQmKpMwms58PsVSzjgccP0kWADtMPZwUIZzpg=="],
 
-    "@oxc-minify/binding-linux-riscv64-musl": ["@oxc-minify/binding-linux-riscv64-musl@0.159.0", "", { "os": "linux", "cpu": "none", "libc": "musl" }, "sha512-yYoBc854n6N2LLJlw0GKbIO3KE9vkr+KsQ+Uo1roNE01jv3cibo5gJzfDf02kfWQoMsVqCA4xnOc3Pma3PYCIw=="],
+    "@oxc-minify/binding-linux-riscv64-musl": ["@oxc-minify/binding-linux-riscv64-musl@0.160.0", "", { "os": "linux", "cpu": "none", "libc": "musl" }, "sha512-KIhZwnfvy5UO/Lu9llqJKUnGp/3MTtfH050uaZxqG+yJ51F0OW0PhsTyqbvRo+aL/oyavvjmcl4DfiFO3cUT2A=="],
 
-    "@oxc-minify/binding-linux-s390x-gnu": ["@oxc-minify/binding-linux-s390x-gnu@0.159.0", "", { "os": "linux", "cpu": "s390x", "libc": "glibc" }, "sha512-5cy82+o5zusFMKOnDtfiRbsdmvE7fmN1PrcaVzfqAgmnL5ZtNk5w1dhePBK/dverIdqdRWwDcPu5HVDLXWQtjQ=="],
+    "@oxc-minify/binding-linux-s390x-gnu": ["@oxc-minify/binding-linux-s390x-gnu@0.160.0", "", { "os": "linux", "cpu": "s390x", "libc": "glibc" }, "sha512-spzb72KMerP3F4jA6FmJmOfYXzQR7aHOnBCvtrvw6uer/+kEDHXxEHtqhZdj3KNst9bZJSW73jBjAnydg1/+6Q=="],
 
-    "@oxc-minify/binding-linux-x64-gnu": ["@oxc-minify/binding-linux-x64-gnu@0.159.0", "", { "os": "linux", "cpu": "x64", "libc": "glibc" }, "sha512-AxeV8r7BbRc4ShmcHRjhtlmCnkuQnhfOgsQ8U3wL6zpiko1cfbwQCA4HBSlieyR1MxYtW+fZp7ufAaitOeTFzg=="],
+    "@oxc-minify/binding-linux-x64-gnu": ["@oxc-minify/binding-linux-x64-gnu@0.160.0", "", { "os": "linux", "cpu": "x64", "libc": "glibc" }, "sha512-H8rJMaWAL7LZUvNsYj57lzQ7umFTrJS9fpd1NRbPK3LTTeul18BVVVZtjCPzPDjYjzQEFHIl04/CwmrqBgvjTg=="],
 
-    "@oxc-minify/binding-linux-x64-musl": ["@oxc-minify/binding-linux-x64-musl@0.159.0", "", { "os": "linux", "cpu": "x64", "libc": "musl" }, "sha512-hYFcJyzdAHEZeCC+vbRef2fo84+CudsZqOQZ3fIu8nKk6lF4AtvbkuO9y6vZi4VSrSnunxoV8awFP57nrRCZ2w=="],
+    "@oxc-minify/binding-linux-x64-musl": ["@oxc-minify/binding-linux-x64-musl@0.160.0", "", { "os": "linux", "cpu": "x64", "libc": "musl" }, "sha512-bImC/+scY+HykAGSTN/1qxZBlv/NFQ0Bced9UjIXDzxWPB13AacsIC8SKOJeoPlaDXhgmShk4bQsJ648Mgza5g=="],
 
-    "@oxc-minify/binding-openharmony-arm64": ["@oxc-minify/binding-openharmony-arm64@0.159.0", "", { "os": "none", "cpu": "arm64" }, "sha512-uG49Xr+VaMF2izjcNFnoiOqLRKzFy68bUTI011KhQv+wg6OHz4EqdZO2QoksdduFKnoFx5XQUFzSFOrKhy0kug=="],
+    "@oxc-minify/binding-openharmony-arm64": ["@oxc-minify/binding-openharmony-arm64@0.160.0", "", { "os": "none", "cpu": "arm64" }, "sha512-kjjCffzfsT+OgmOr2uJc+T+x2N2aQviaSzmkqkxElvUXvRsHYmiqS2Y5VOxwz0q0DHn3Ej1LebvFFRJYf/1Dtg=="],
 
-    "@oxc-minify/binding-win32-arm64-msvc": ["@oxc-minify/binding-win32-arm64-msvc@0.159.0", "", { "os": "win32", "cpu": "arm64" }, "sha512-gBO5U0Zbp14CQyhyAJAzoA0U/Ep0dxOVPCXunPcFLEovfN02x4Cqf2ikFGfcXkyUDEejYVFYNvbaNmvo86LClg=="],
+    "@oxc-minify/binding-win32-arm64-msvc": ["@oxc-minify/binding-win32-arm64-msvc@0.160.0", "", { "os": "win32", "cpu": "arm64" }, "sha512-jqUwxWPZx7ewxIm09CHUA5ccZTcOeB3iGRguydt8hV9ME+2i9Xx+PoHDZdEWvNPS7QHV4dCdhK//L+36wh8t/A=="],
 
-    "@oxc-minify/binding-win32-ia32-msvc": ["@oxc-minify/binding-win32-ia32-msvc@0.159.0", "", { "os": "win32", "cpu": "ia32" }, "sha512-NyvEXWjL3x9lUFCZCfHbX0i6fQf1v2xmjKTYayo9GIq2VCLjxqwGS/KOW9zuNOlEpz4SpTEvreS3esFfHqDhUw=="],
+    "@oxc-minify/binding-win32-ia32-msvc": ["@oxc-minify/binding-win32-ia32-msvc@0.160.0", "", { "os": "win32", "cpu": "ia32" }, "sha512-B7oRNIzuOJ9P8OfJ0fgcpoPvZ//VgVCXO2BE2u81AfyZi8mJ6wno6yOwRyjktqOASb2WvWRWq9M/10B0Ynh94A=="],
 
-    "@oxc-minify/binding-win32-x64-msvc": ["@oxc-minify/binding-win32-x64-msvc@0.159.0", "", { "os": "win32", "cpu": "x64" }, "sha512-iYCCL4EnaoY9c2lL04QFjEJkoB0hsqjpA+WfGznma5ND0whJs0flfFEHSkccXjj+BHZQ+0LnVhS2PCRkFKSbTw=="],
+    "@oxc-minify/binding-win32-x64-msvc": ["@oxc-minify/binding-win32-x64-msvc@0.160.0", "", { "os": "win32", "cpu": "x64" }, "sha512-sZQAWLJ1EFkXoWbdqTtDUsq15H4ZhtX0o9ttWxGKihTfLbw+/hjGGfRHB2PXbbM+OikVHgmwESiZe3+E9JboJA=="],
 
     "@oxc-project/types": ["@oxc-project/types@0.159.0", "", {}, "sha512-QWjWhxheluOJ82kDHNyps00UvRpQCtI34B5A/SzpgQycUD/79FuvT4I0aQIfE/bdPwKmX4QPftnywFBH6FxJhQ=="],
 
@@ -1919,7 +1919,7 @@
 
     "ow": ["ow@2.0.0", "", { "dependencies": { "@sindresorhus/is": "^6.3.0", "callsites": "^4.1.0", "dot-prop": "^8.0.2", "environment": "^1.0.0", "fast-equals": "^5.0.1", "is-identifier": "^1.0.0" } }, "sha512-ESUigmGrdhUZ2nQSFNkeKSl6ZRPupXzprMs3yF9DYlNVpJ8XAjM/fI9RUZxA7PI1K9HQDCCvBo1jr/GEIo9joQ=="],
 
-    "oxc-minify": ["oxc-minify@0.159.0", "", { "optionalDependencies": { "@oxc-minify/binding-android-arm-eabi": "0.159.0", "@oxc-minify/binding-android-arm64": "0.159.0", "@oxc-minify/binding-darwin-arm64": "0.159.0", "@oxc-minify/binding-darwin-x64": "0.159.0", "@oxc-minify/binding-freebsd-x64": "0.159.0", "@oxc-minify/binding-linux-arm-gnueabihf": "0.159.0", "@oxc-minify/binding-linux-arm-musleabihf": "0.159.0", "@oxc-minify/binding-linux-arm64-gnu": "0.159.0", "@oxc-minify/binding-linux-arm64-musl": "0.159.0", "@oxc-minify/binding-linux-ppc64-gnu": "0.159.0", "@oxc-minify/binding-linux-riscv64-gnu": "0.159.0", "@oxc-minify/binding-linux-riscv64-musl": "0.159.0", "@oxc-minify/binding-linux-s390x-gnu": "0.159.0", "@oxc-minify/binding-linux-x64-gnu": "0.159.0", "@oxc-minify/binding-linux-x64-musl": "0.159.0", "@oxc-minify/binding-openharmony-arm64": "0.159.0", "@oxc-minify/binding-win32-arm64-msvc": "0.159.0", "@oxc-minify/binding-win32-ia32-msvc": "0.159.0", "@oxc-minify/binding-win32-x64-msvc": "0.159.0" } }, "sha512-fv5DZVVuXmpYUW+i5E2d/yLqABzns+6ayt1fGBFqyTaunrNwF8f2AgIbXcTgoJjvLCSFq66QIxH/ZW7TUeu4hg=="],
+    "oxc-minify": ["oxc-minify@0.160.0", "", { "optionalDependencies": { "@oxc-minify/binding-android-arm-eabi": "0.160.0", "@oxc-minify/binding-android-arm64": "0.160.0", "@oxc-minify/binding-darwin-arm64": "0.160.0", "@oxc-minify/binding-darwin-x64": "0.160.0", "@oxc-minify/binding-freebsd-x64": "0.160.0", "@oxc-minify/binding-linux-arm-gnueabihf": "0.160.0", "@oxc-minify/binding-linux-arm-musleabihf": "0.160.0", "@oxc-minify/binding-linux-arm64-gnu": "0.160.0", "@oxc-minify/binding-linux-arm64-musl": "0.160.0", "@oxc-minify/binding-linux-ppc64-gnu": "0.160.0", "@oxc-minify/binding-linux-riscv64-gnu": "0.160.0", "@oxc-minify/binding-linux-riscv64-musl": "0.160.0", "@oxc-minify/binding-linux-s390x-gnu": "0.160.0", "@oxc-minify/binding-linux-x64-gnu": "0.160.0", "@oxc-minify/binding-linux-x64-musl": "0.160.0", "@oxc-minify/binding-openharmony-arm64": "0.160.0", "@oxc-minify/binding-win32-arm64-msvc": "0.160.0", "@oxc-minify/binding-win32-ia32-msvc": "0.160.0", "@oxc-minify/binding-win32-x64-msvc": "0.160.0" } }, "sha512-ydJfjcOi9RBDbzK7sAnwopEpoLsJ/Ne7oqVhAfxjvay3ufPa/hrY/d0VjumgrmDCwPSbJkDTdVuzFjnriZ+lqQ=="],
 
     "p-cancelable": ["p-cancelable@0.3.0", "", {}, "sha512-RVbZPLso8+jFeq1MfNvgXtCRED2raz/dKpacfTNxsx6pLEpEomM7gah6VeHSYV3+vo0OAi4MkArtQcWWXuQoyw=="],
 
