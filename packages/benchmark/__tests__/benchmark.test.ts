@@ -10,6 +10,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { benchmark } from "../src/index.ts";
+import { getReporter } from "../src/reporters/index.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const input = path.resolve(
@@ -113,12 +114,13 @@ describe("Package: benchmark", () => {
             );
 
             try {
-                await benchmark({
+                const results = await benchmark({
                     input,
                     compressors: ["terser"],
                     output: outputPath,
                 });
 
+                expect(getReporter()(results)).toContain("\u001b[");
                 const content = await readFile(outputPath, "utf-8");
                 expect(content).toContain("terser");
                 expect(content).not.toContain("\u001b[");
@@ -135,7 +137,7 @@ describe("Package: benchmark", () => {
             const outputPath = path.join(tempDir, "bench.txt");
 
             try {
-                await benchmark({
+                const results = await benchmark({
                     input,
                     compressors: ["terser"],
                     // @ts-expect-error testing invalid input: the CLI passes any -f value through
@@ -143,6 +145,7 @@ describe("Package: benchmark", () => {
                     output: outputPath,
                 });
 
+                expect(getReporter("txt")(results)).toContain("\u001b[");
                 const content = await readFile(outputPath, "utf-8");
                 expect(content).toContain("terser");
                 expect(content).not.toContain("\u001b[");
