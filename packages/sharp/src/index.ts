@@ -6,12 +6,6 @@
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import { wrapMinificationError } from "@node-minify/utils";
-import type { Sharp, SharpOptions as SharpInputOptions } from "sharp";
-
-type SharpConstructor = (
-    input: Buffer | string,
-    options?: SharpInputOptions
-) => Sharp;
 
 type OutputFormat = "webp" | "avif" | "png" | "jpeg" | "gif";
 
@@ -30,20 +24,6 @@ export type SharpOptions = BaseSharpOptions &
     );
 
 type SharpInput = MinifierOptions<SharpOptions>;
-
-// Lazy-loaded sharp instance
-let sharpLib: SharpConstructor | undefined;
-
-/**
- * Get sharp instance, loading it lazily on first use.
- * This reduces initial bundle size for users who may not use the sharp compressor.
- */
-async function getSharp(): Promise<SharpConstructor> {
-    if (!sharpLib) {
-        sharpLib = (await import("sharp")).default;
-    }
-    return sharpLib;
-}
 
 const clamp = (val: number, min: number, max: number) =>
     Math.max(min, Math.min(max, val));
@@ -65,7 +45,8 @@ async function convertImage(
     options: SharpOptions
 ): Promise<Buffer> {
     try {
-        const sharpInstance = await getSharp();
+        // Lazy import: keeps sharp's native module off the load path of users who never run this compressor.
+        const sharpInstance = (await import("sharp")).default;
         // GIF output keeps every frame of an animated input; sharp reads only the first frame by default.
         let converter =
             format === "gif"
