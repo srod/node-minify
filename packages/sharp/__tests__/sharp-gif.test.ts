@@ -73,18 +73,31 @@ describe("Package: sharp GIF output (real library)", () => {
         expect(metadata.pages ?? 1).toBe(1);
     });
 
-    test("clamps effort into sharp's 1-10 GIF range", async () => {
-        for (const effort of [0, 99]) {
-            const result = await sharp({
-                settings: {
-                    compressor: sharp,
-                    options: { format: "gif", effort },
-                },
-                content: png,
-            });
-            expect(result.buffer?.subarray(0, 4).toString("latin1")).toBe(
-                "GIF8"
-            );
-        }
+    test.each([
+        [0, 1],
+        [99, 10],
+    ])("clamps effort %i to sharp's GIF effort %i", async (effort, clamped) => {
+        const result = await sharp({
+            settings: {
+                compressor: sharp,
+                options: { format: "gif", effort },
+            },
+            content: png,
+        });
+        const expected = await realSharp(png)
+            .gif({ effort: clamped })
+            .toBuffer();
+
+        expect(result.buffer?.equals(expected)).toBe(true);
+    });
+
+    test("defaults GIF effort to 7", async () => {
+        const result = await sharp({
+            settings: { compressor: sharp, options: { format: "gif" } },
+            content: png,
+        });
+        const expected = await realSharp(png).gif({ effort: 7 }).toBuffer();
+
+        expect(result.buffer?.equals(expected)).toBe(true);
     });
 });
