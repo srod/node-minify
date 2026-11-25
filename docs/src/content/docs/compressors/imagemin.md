@@ -7,7 +7,7 @@ description: "imagemin for node-minify"
 
 `imagemin` compresses PNG, JPEG, and GIF images using [imagemin](https://github.com/imagemin/imagemin) and its plugins.
 
-> **Note**: For new projects, consider using `@node-minify/sharp` which is more actively maintained and offers better performance.
+> **Note**: For new projects, consider using `@node-minify/sharp` which is more actively maintained and offers better performance. For GIF files, use `format: 'gif'`, which re-encodes rather than optimizing losslessly like gifsicle.
 
 ## Installation
 
