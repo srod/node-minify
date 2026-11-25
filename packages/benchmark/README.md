@@ -71,7 +71,7 @@ node-minify benchmark src/app.js -c terser,esbuild -f markdown
 | `format` | `-f, --format` | Output format: `console`, `json`, `markdown` | `console` |
 | `output` | `-o, --output` | Output file path | stdout |
 | `includeGzip` | `--gzip` | Include gzip size in results | `false` |
-| `type` | `-t, --type` | File type: `js`, `css`, `html` | auto-detect |
+| `type` | `-t, --type` | File type: `js`, `css`, `html`. When omitted, detected per file from its extension | auto-detect |
 
 ## Output Formats
 
