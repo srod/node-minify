@@ -28,11 +28,10 @@ npm install @node-minify/utils
 
 | Function | Description |
 |----------|-------------|
-| `readFile(filePath)` | Read file contents as a string |
-| `writeFile({ file, content, index })` | Write content to a file |
-| `deleteFile(file)` | Delete a file from the filesystem |
-| `isValidFile(filePath)` | Check if a file exists and is readable |
-| `getContentFromFiles(settings)` | Read and concatenate content from multiple files |
+| `readFileAsync(filePath)` | Read file contents as a string |
+| `writeFileAsync({ file, content, index })` | Write content to a file |
+| `isValidFileAsync(filePath)` | Check if a file exists and is readable |
+| `getContentFromFilesAsync(input)` | Read and concatenate content from multiple files |
 
 ### File Size Utilities
 
@@ -48,27 +47,38 @@ npm install @node-minify/utils
 |----------|-------------|
 | `compressSingleFile(settings)` | Compress a single file using the configured compressor |
 | `run(settings)` | Execute compression with the provided settings |
-| `buildArgs(options)` | Build command line arguments from options object |
-| `toBuildArgsOptions(options, definitions)` | Convert options to buildArgs format |
 | `setFileNameMin(file, output, publicFolder, replaceInPlace)` | Generate output filename from input |
 
-### Deprecation Warnings
+### Deprecated (removed in v12)
 
-| Function | Description |
-|----------|-------------|
-| `warnDeprecation(packageName, message)` | Display a deprecation warning (once per package) |
-| `resetDeprecationWarnings()` | Reset warning state (useful for testing) |
+These exports still work in v11 and print nothing extra. Your editor shows them as deprecated.
+
+| Export | Use instead |
+|--------|-------------|
+| `readFile` | `readFileAsync` |
+| `writeFile` | `writeFileAsync` |
+| `getContentFromFiles` | `getContentFromFilesAsync` |
+| `isValidFile` | `isValidFileAsync` |
+| `deleteFile` | `fs.promises.unlink` |
+| `getSourceMapBoolean` | `extractSourceMapOption` |
+| `tryResolveBuiltIn`, `tryResolveNpmPackage`, `tryResolveLocalFile` | `resolveCompressor` |
+| `getKnownExportName` | `getCompressorEntry(name)?.exportName` |
+| `isLocalPath` | none (`resolveCompressor` accepts local paths) |
+| `validateMinifyResult` | none (`run` already validates every compressor's result) |
+| `buildArgs`, `toBuildArgsOptions`, `BuildArgsOptions` | none |
+| `warnDeprecation`, `resetDeprecationWarnings` | none |
+| `WildcardOptions` and its `ignore` option (the object form of `wildcards` options) | pass the public folder as a string: `wildcards(input, publicFolder)` |
 
 ## Usage Example
 
 ```ts
-import { readFile, writeFile, getFilesizeInBytes } from '@node-minify/utils';
+import { readFileAsync, writeFileAsync, getFilesizeInBytes } from '@node-minify/utils';
 
 // Read a file
-const content = await readFile('src/app.js');
+const content = await readFileAsync('src/app.js');
 
 // Write minified content
-await writeFile({
+await writeFileAsync({
   file: 'dist/app.min.js',
   content: minifiedContent,
   index: 0

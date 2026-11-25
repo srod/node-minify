@@ -17,7 +17,7 @@ Exports 30+ utilities from 24 source files.
 ```ts
 resolveCompressor(name)  // Removed check, then built-in → npm → local file fallback
 isBuiltInCompressor(name)
-tryResolveBuiltIn/NpmPackage/LocalFile()
+tryResolveBuiltIn/NpmPackage/LocalFile()  // @deprecated, removed in v12: use resolveCompressor
 getCompressorEntry(name) // Matches name or packageName
 ```
 `resolveCompressor` is the only place a removed compressor is rejected (`Compressor '<name>' was removed in v11. Use '<replacement>' instead.`).
@@ -30,10 +30,12 @@ compressSingleFile(settings)       // Entry point, routes by content type
 
 ### 3. File Operations (Dual Sync/Async)
 ```ts
-readFile() / readFileAsync()           // Overloaded for string/Buffer
-writeFile() / writeFileAsync()         // Array-aware with index
-getContentFromFiles() / Async()        // Parallel file concatenation
-deleteFile(), isValidFile(), isImageFile()
+readFileAsync()                        // Overloaded for string/Buffer
+writeFileAsync()                       // Array-aware with index
+getContentFromFilesAsync()             // Parallel file concatenation
+isValidFileAsync(), isImageFile()
+// Sync readFile(), writeFile(), getContentFromFiles(), isValidFile() and deleteFile()
+// are @deprecated, removed in v12 (see "Deprecated exports")
 ```
 
 ### 4. Content Normalization
@@ -51,17 +53,10 @@ prettyBytes()
 wildcards(input, options)  // fast-glob with DEFAULT_IGNORES
 
 // Source maps
-extractSourceMapOption(), getSourceMapBoolean()
-
-// CLI
-buildArgs(options)  // Options object → CLI args array
-
-// Deprecation
-warnDeprecation(packageName, message)  // One-time per process
+extractSourceMapOption()
 
 // Errors
 wrapMinificationError(name, error, context?)  // "<name> minification failed: <message>"; `cause` is the original error when it is an Error, otherwise undefined
-validateMinifyResult()
 FileOperationError, ValidationError             // classes, exported from the entry point
 ```
 
@@ -74,7 +69,7 @@ FileOperationError, ValidationError             // classes, exported from the en
 
 **Medium (5-9 packages)**:
 - `getFilesizeGzippedRaw`, `prettyBytes` — action, benchmark
-- `buildArgs`, `wildcards` — core, cli
+- `wildcards` — core, benchmark
 
 ## Patterns
 
@@ -87,23 +82,32 @@ Input-validation errors (array content from `ensureStringContent`, esbuild's mis
 
 ### Type-Safe Overloads
 ```ts
-function readFile(path: string): string;
-function readFile(path: string, asBuffer: true): Buffer;
+function readFileAsync(path: string): Promise<string>;
+function readFileAsync(path: string, asBuffer: true): Promise<Buffer>;
 ```
 
-### Deprecation (One-Time)
-```ts
-const warned = new Set<string>();
-export function warnDeprecation(pkg: string, msg: string) {
-    if (warned.has(pkg)) return;
-    warned.add(pkg);
-    console.warn(`[${pkg}] Deprecated: ${msg}`);
-}
-```
+## Deprecated exports (removed in v12)
+
+Each carries `@deprecated` JSDoc on its declaration, naming the replacement. They keep their 11.0.x behavior for all of v11: no runtime warning, no signature change. Put the tag on every overload signature, or editors only flag the overload that has it. No new code uses them.
+
+| Export | Use instead |
+|--------|-------------|
+| `readFile`, `writeFile`, `getContentFromFiles`, `isValidFile` | `readFileAsync`, `writeFileAsync`, `getContentFromFilesAsync`, `isValidFileAsync` |
+| `deleteFile` | `fs.promises.unlink` |
+| `getSourceMapBoolean` | `extractSourceMapOption` |
+| `tryResolveBuiltIn`, `tryResolveNpmPackage`, `tryResolveLocalFile` | `resolveCompressor` |
+| `getKnownExportName` | `getCompressorEntry(name)?.exportName` |
+| `isLocalPath` | none (`resolveCompressor` accepts local paths) |
+| `validateMinifyResult` | none (`run` already validates every compressor's result) |
+| `buildArgs`, `toBuildArgsOptions`, `BuildArgsOptions` | none |
+| `warnDeprecation`, `resetDeprecationWarnings` | none |
+| `WildcardOptions`, `ignore` (object form of `wildcards` options) | pass the public folder as a string |
+
+Internal callers still using them (migrated in a separate cleanup): `isValidFile` in `getContentFromFiles.ts`, `getFilesizeGzippedInBytes.ts`, `getFilesizeBrotliInBytes.ts`; `validateMinifyResult` in cssnano, oxc and minify-html.
 
 ## Anti-Patterns
 
 - **Never** use sync variants in hot paths (use async)
-- **Never** mix image/text files in `getContentFromFiles()`
+- **Never** mix image/text files in `getContentFromFilesAsync()`
 - **Never** bypass `ensureStringContent()` in compressors
 - **Never** throw raw errors — wrap with `wrapMinificationError()`
