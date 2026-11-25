@@ -58,7 +58,7 @@ function toPosixPath(value: string): string {
 /**
  * Handle wildcards in a path, get the real path of each file.
  * @param input - Path with wildcards
- * @param options - The public folder as a string. The `WildcardOptions` object form (including `ignore`) is deprecated and removed in v12; pass the public folder as a string instead.
+ * @param options - The public folder as a string. The `WildcardOptions` object form is deprecated and removed in v12: pass the public folder as a string instead of `publicFolder`; `ignore` has no replacement.
  * @returns Object with resolved file paths
  */
 export function wildcards(

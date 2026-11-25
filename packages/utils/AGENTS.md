@@ -88,7 +88,7 @@ function readFileAsync(path: string, asBuffer: true): Promise<Buffer>;
 
 ## Deprecated exports (removed in v12)
 
-Each carries `@deprecated` JSDoc on its declaration, naming the replacement. They keep their 11.0.x behavior for all of v11: no runtime warning, no signature change. Put the tag on every overload signature, or editors only flag the overload that has it. No new code uses them.
+Each carries `@deprecated` JSDoc on its declaration, naming the replacement. They keep their 11.0.x behavior for all of v11: no new runtime warning, no signature change. Put the tag on every overload signature, or editors only flag the overload that has it. No new code uses them.
 
 | Export | Use instead |
 |--------|-------------|
@@ -96,12 +96,13 @@ Each carries `@deprecated` JSDoc on its declaration, naming the replacement. The
 | `deleteFile` | `fs.promises.unlink` |
 | `getSourceMapBoolean` | `extractSourceMapOption` |
 | `tryResolveBuiltIn`, `tryResolveNpmPackage`, `tryResolveLocalFile` | `resolveCompressor` |
-| `getKnownExportName` | `getCompressorEntry(name)?.exportName` |
+| `getKnownExportName` | `getCompressorEntry(name)?.exportName`, with the canonical name (no alias resolution: `"gcc"` → `undefined`) |
 | `isLocalPath` | none (`resolveCompressor` accepts local paths) |
 | `validateMinifyResult` | none (`run` already validates every compressor's result) |
 | `buildArgs`, `toBuildArgsOptions`, `BuildArgsOptions` | none |
 | `warnDeprecation`, `resetDeprecationWarnings` | none |
-| `WildcardOptions`, `ignore` (object form of `wildcards` options) | pass the public folder as a string |
+| `WildcardOptions.publicFolder` (object form of `wildcards` options) | pass the public folder as a string |
+| `WildcardOptions.ignore` | none |
 
 Internal callers still using them (migrated in a separate cleanup): `isValidFile` in `getContentFromFiles.ts`, `getFilesizeGzippedInBytes.ts`, `getFilesizeBrotliInBytes.ts`; `validateMinifyResult` in cssnano, oxc and minify-html.
 

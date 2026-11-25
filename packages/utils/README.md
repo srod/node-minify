@@ -51,7 +51,7 @@ npm install @node-minify/utils
 
 ### Deprecated (removed in v12)
 
-These exports still work in v11 and print nothing extra. Your editor shows them as deprecated.
+These exports still work in v11, and none of them emits a new deprecation warning. Your editor shows them as deprecated.
 
 | Export | Use instead |
 |--------|-------------|
@@ -62,12 +62,13 @@ These exports still work in v11 and print nothing extra. Your editor shows them 
 | `deleteFile` | `fs.promises.unlink` |
 | `getSourceMapBoolean` | `extractSourceMapOption` |
 | `tryResolveBuiltIn`, `tryResolveNpmPackage`, `tryResolveLocalFile` | `resolveCompressor` |
-| `getKnownExportName` | `getCompressorEntry(name)?.exportName` |
+| `getKnownExportName` | `getCompressorEntry(name)?.exportName`, with the canonical name (it does not resolve aliases: use `"google-closure-compiler"`, not `"gcc"`) |
 | `isLocalPath` | none (`resolveCompressor` accepts local paths) |
 | `validateMinifyResult` | none (`run` already validates every compressor's result) |
 | `buildArgs`, `toBuildArgsOptions`, `BuildArgsOptions` | none |
 | `warnDeprecation`, `resetDeprecationWarnings` | none |
-| `WildcardOptions` and its `ignore` option (the object form of `wildcards` options) | pass the public folder as a string: `wildcards(input, publicFolder)` |
+| `WildcardOptions.publicFolder` (the object form of `wildcards` options) | pass the public folder as a string: `wildcards(input, publicFolder)` |
+| `WildcardOptions.ignore` | none |
 
 ## Usage Example
 
