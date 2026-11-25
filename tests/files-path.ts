@@ -186,14 +186,18 @@ export const filesJSON = {
  */
 const filePNG = `${__dirname}/fixtures/images/test.png`;
 const fileSVG = `${__dirname}/fixtures/images/test.svg`;
+const fileAnimatedGIF = `${__dirname}/fixtures/images/animated.gif`;
 const filePNGOut = `${__dirname}/tmp/test.min.png`;
 const fileWebPOut = `${__dirname}/tmp/test.webp`;
+const fileGIFOut = `${__dirname}/tmp/test.gif`;
 const fileSVGOut = `${__dirname}/tmp/test.min.svg`;
 
 export const filesImages = {
     filePNG,
     fileSVG,
+    fileAnimatedGIF,
     filePNGOut,
     fileWebPOut,
+    fileGIFOut,
     fileSVGOut,
 };
