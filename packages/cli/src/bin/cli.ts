@@ -163,34 +163,23 @@ function displayCompressorsList() {
     console.log("  List of compressors:");
     console.log("");
 
-    const recommended = getCompressorsByStatus("recommended");
-    const supported = getCompressorsByStatus("supported");
-    const legacy = getCompressorsByStatus("legacy");
+    for (const [label, status] of [
+        ["Recommended", "recommended"],
+        ["Supported", "supported"],
+        ["Legacy", "legacy"],
+    ] as const) {
+        const compressors = getCompressorsByStatus(status);
+        if (compressors.length === 0) {
+            continue;
+        }
 
-    if (recommended.length > 0) {
-        console.log("    Recommended:");
-        recommended.forEach((compressor) => {
-            console.log(`      - ${compressor.name}`);
-        });
-        console.log("");
-    }
-
-    if (supported.length > 0) {
-        console.log("    Supported:");
-        supported.forEach((compressor) => {
-            console.log(`      - ${compressor.name}`);
-        });
-        console.log("");
-    }
-
-    if (legacy.length > 0) {
-        console.log("    Legacy:");
-        legacy.forEach((compressor) => {
+        console.log(`    ${label}:`);
+        for (const compressor of compressors) {
             const note = compressor.replacement
                 ? ` (removed in v12, use ${compressor.replacement})`
                 : "";
             console.log(`      - ${compressor.name}${note}`);
-        });
+        }
         console.log("");
     }
 }
