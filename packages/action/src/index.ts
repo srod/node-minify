@@ -52,6 +52,51 @@ export function chunkArray<T>(array: T[], size: number): T[][] {
 }
 
 /**
+ * Sets the outputs, then writes the summary, PR comment and annotations the inputs ask for.
+ *
+ * @param result - The minification result to report
+ * @param inputs - Action inputs holding the report flags and token
+ * @param summarize - Writes the mode's job summary; called only when `reportSummary` is set
+ * @returns A promise that resolves when reporting is done.
+ */
+async function reportResult(
+    result: MinifyResult,
+    inputs: ActionInputs,
+    summarize: () => Promise<void>
+): Promise<void> {
+    setMinifyOutputs(result);
+
+    if (inputs.reportSummary) {
+        await summarize();
+    }
+
+    if (inputs.reportPRComment && context.payload.pull_request) {
+        const comparisons = await compareWithBase(result, inputs.githubToken);
+        await postPRComment(result, inputs.githubToken, comparisons);
+    }
+
+    if (inputs.reportAnnotations) {
+        addAnnotations(result);
+    }
+}
+
+/**
+ * Fails the action when the result breaks a configured threshold.
+ *
+ * @param result - The minification result to check
+ * @param inputs - Action inputs holding the thresholds
+ * @returns `true` when the action was failed
+ */
+function failOnThreshold(result: MinifyResult, inputs: ActionInputs): boolean {
+    const thresholdError = checkThresholds(result.totalReduction, inputs);
+    if (thresholdError) {
+        setFailed(thresholdError);
+        return true;
+    }
+    return false;
+}
+
+/**
  * Runs the explicit mode minification workflow (original behavior).
  *
  * @param inputs - Validated action inputs with input/output paths
@@ -64,20 +109,7 @@ export async function runExplicitMode(inputs: ActionInputs): Promise<void> {
 
     const result = await runMinification(inputs);
 
-    setMinifyOutputs(result);
-
-    if (inputs.reportSummary) {
-        await generateSummary(result);
-    }
-
-    if (inputs.reportPRComment && context.payload.pull_request) {
-        const comparisons = await compareWithBase(result, inputs.githubToken);
-        await postPRComment(result, inputs.githubToken, comparisons);
-    }
-
-    if (inputs.reportAnnotations) {
-        addAnnotations(result);
-    }
+    await reportResult(result, inputs, () => generateSummary(result));
 
     if (inputs.benchmark) {
         info(
@@ -95,9 +127,7 @@ export async function runExplicitMode(inputs: ActionInputs): Promise<void> {
         }
     }
 
-    const thresholdError = checkThresholds(result.totalReduction, inputs);
-    if (thresholdError) {
-        setFailed(thresholdError);
+    if (failOnThreshold(result, inputs)) {
         return;
     }
 
@@ -260,27 +290,11 @@ export async function runAutoMode(inputs: ActionInputs): Promise<void> {
         totalTimeMs,
     };
 
-    setMinifyOutputs(minifyResult);
+    await reportResult(minifyResult, inputs, () =>
+        generateAutoModeSummary([minifyResult], inputs)
+    );
 
-    if (inputs.reportSummary) {
-        await generateAutoModeSummary([minifyResult], inputs);
-    }
-
-    if (inputs.reportPRComment && context.payload.pull_request) {
-        const comparisons = await compareWithBase(
-            minifyResult,
-            inputs.githubToken
-        );
-        await postPRComment(minifyResult, inputs.githubToken, comparisons);
-    }
-
-    if (inputs.reportAnnotations) {
-        addAnnotations(minifyResult);
-    }
-
-    const thresholdError = checkThresholds(minifyResult.totalReduction, inputs);
-    if (thresholdError) {
-        setFailed(thresholdError);
+    if (failOnThreshold(minifyResult, inputs)) {
         return;
     }
 
