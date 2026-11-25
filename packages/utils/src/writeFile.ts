@@ -19,6 +19,7 @@ interface WriteFileParams {
  *
  * When `file` is an array and `index` is provided, the file at that index is used; otherwise `file` is used directly.
  *
+ * @deprecated Removed in v12. Use `writeFileAsync` instead.
  * @param file - Target path or array of target paths
  * @param content - Content to write; may be a `string` or `Buffer`
  * @param index - Optional index to select a file when `file` is an array

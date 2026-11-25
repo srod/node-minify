@@ -10,14 +10,17 @@ import fg from "fast-glob";
 
 /**
  * Options for wildcards function
+ * @deprecated Removed in v12. Pass the public folder as a string instead.
  */
 export interface WildcardOptions {
     /**
      * Path to the public folder
+     * @deprecated Removed in v12. Pass the public folder as a string instead.
      */
     publicFolder?: string;
     /**
      * Patterns to ignore when matching files
+     * @deprecated Removed in v12, with no replacement.
      */
     ignore?: string[];
 }
@@ -55,7 +58,7 @@ function toPosixPath(value: string): string {
 /**
  * Handle wildcards in a path, get the real path of each file.
  * @param input - Path with wildcards
- * @param options - Options object or string publicFolder for backward compatibility
+ * @param options - The public folder as a string. The `WildcardOptions` object form (including `ignore`) is deprecated and removed in v12; pass the public folder as a string instead.
  * @returns Object with resolved file paths
  */
 export function wildcards(

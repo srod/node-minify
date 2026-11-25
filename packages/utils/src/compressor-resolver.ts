@@ -67,6 +67,7 @@ export type CompressorResolution = {
 /**
  * Determines whether a string represents a local file path.
  *
+ * @deprecated Removed in v12, with no replacement. `resolveCompressor` already accepts local paths.
  * @param name - The path string to test
  * @returns `true` if `name` appears to be a local file path, `false` otherwise
  */
@@ -146,6 +147,7 @@ function generateLabel(name: string): string {
 /**
  * Try to resolve a compressor from a built-in @node-minify package.
  *
+ * @deprecated Removed in v12. Use `resolveCompressor` instead.
  * @param name - The compressor name (e.g., "terser", "esbuild")
  * @returns The resolved CompressorResolution if found, or `null` if not installed/available
  */
@@ -181,6 +183,7 @@ export async function tryResolveBuiltIn(
 /**
  * Try to resolve a compressor from an npm package.
  *
+ * @deprecated Removed in v12. Use `resolveCompressor` instead.
  * @param name - The npm package name
  * @returns The resolved CompressorResolution if found, or `null` if not resolvable
  * @throws Error if the package is found but doesn't export a valid compressor
@@ -219,6 +222,7 @@ export async function tryResolveNpmPackage(
 /**
  * Try to resolve a compressor from a local file path.
  *
+ * @deprecated Removed in v12. Use `resolveCompressor` instead.
  * @param name - The local file path (e.g., "./my-compressor.js")
  * @returns The resolved CompressorResolution if found, or `null` if not a local path
  * @throws Error if the file is found but doesn't export a valid compressor
@@ -323,6 +327,7 @@ export function isBuiltInCompressor(name: string): boolean {
 /**
  * Return the known exported symbol name for a built-in compressor package.
  *
+ * @deprecated Removed in v12. Use `getCompressorEntry(name)?.exportName` instead; it does not resolve aliases such as `gcc`.
  * @param name - The compressor package name (for example, `"esbuild"`, `"terser"`)
  * @returns The export name used by the built-in package, or `undefined` if the compressor is not a known built-in
  */

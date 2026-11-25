@@ -6,6 +6,7 @@
 
 /**
  * Supported image formats for image compression.
+ * @deprecated Removed in v12, with no replacement.
  */
 export type ImageFormat =
     | "webp"
@@ -149,6 +150,7 @@ export type Settings<TOptions extends CompressorOptions = CompressorOptions> = {
 
     /**
      * CLI option string (used by CLI only).
+     * @deprecated Removed from `Settings` in v12. Use `options` instead; the CLI keeps the raw `-O` string in its own type.
      * @internal
      */
     option?: string;

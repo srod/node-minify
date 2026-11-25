@@ -7,6 +7,7 @@
 /**
  * Normalize sourceMap option to boolean for compressors that only accept boolean.
  *
+ * @deprecated Removed in v12. Use `extractSourceMapOption` instead.
  * @param options - Compressor options object that may contain a `sourceMap` property
  * @returns `true` if `sourceMap` is truthy, `false` otherwise
  */

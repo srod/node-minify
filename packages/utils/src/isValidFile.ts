@@ -10,6 +10,7 @@ import { FileOperationError } from "./error.ts";
 
 /**
  * Check if the path is a valid file.
+ * @deprecated Removed in v12. Use `isValidFileAsync` instead.
  * @param path Path to check
  * @returns true if path exists and is a file, false otherwise
  * @throws {FileOperationError} If filesystem operations fail
