@@ -71,7 +71,7 @@ node-minify benchmark src/app.js -c terser,esbuild -f markdown
 | `format` | `-f, --format` | Output format: `console`, `json`, `markdown` | `console` |
 | `output` | `-o, --output` | Output file path | stdout |
 | `includeGzip` | `--gzip` | Include gzip size in results | `false` |
-| `type` | `-t, --type` | File type: `js`, `css`, `html`. When omitted, detected per file from its extension | auto-detect |
+| `type` | `-t, --type` | File type: `js`, `css`, `html`. When omitted, detected per file from its extension (`.js .mjs .cjs .jsx`, `.css`, `.html .htm`); other extensions get no type, so esbuild needs `-t` | auto-detect |
 
 ## Output Formats
 

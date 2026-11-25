@@ -133,7 +133,7 @@ for (const file of results.files) {
 | `includeBrotli` | `boolean` | Include brotli size in results | `false` |
 | `format` | `string` | Output format: `console`, `json`, `markdown` | `console` |
 | `output` | `string` | Output file path | stdout |
-| `type` | `string` | File type: `js`, `css`, `html`. When omitted, detected per file from its extension (`.js .mjs .cjs .jsx`, `.css`, `.html .htm`) | auto-detect |
+| `type` | `string` | File type: `js`, `css`, `html`. When omitted, detected per file from its extension (`.js .mjs .cjs .jsx`, `.css`, `.html .htm`); other extensions get no type, so esbuild needs `-t` | auto-detect |
 | `verbose` | `boolean` | Show per-iteration details | `false` |
 
 ## Result Structure
