@@ -99,7 +99,7 @@ function setupProgram(): Command {
         .option("-o, --output <output>", "output file path")
         .option(
             "-t, --type <type>",
-            "file type: js or css (required for esbuild)"
+            "file type: js, css or html (detected from the file extension when omitted)"
         )
         .option("--gzip", "include gzip size")
         .option("--brotli", "include brotli size")
