@@ -36,6 +36,30 @@ describe("Package: no-compress", async () => {
         );
     });
 
+    test.each([[{ a: 1 }], [null], [true]])(
+        "should throw when content is %j",
+        async (content) => {
+            await expect(
+                // @ts-expect-error testing invalid input: settings is missing required fields, content is not a string
+                noCompress({ settings: {}, content })
+            ).rejects.toThrow(
+                `no-compress failed: content must be a string or Buffer but received ${typeof content}`
+            );
+        }
+    );
+
+    test("should throw when content is an array", async () => {
+        await expect(
+            noCompress({
+                // @ts-expect-error testing invalid input: settings is missing required fields
+                settings: {},
+                content: [Buffer.from("a")],
+            })
+        ).rejects.toThrow(
+            "no-compress compressor does not support array content"
+        );
+    });
+
     test("should handle Buffer content", async () => {
         const buffer = Buffer.from("buffer content");
         const result = await noCompress({
