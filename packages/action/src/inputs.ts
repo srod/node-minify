@@ -124,19 +124,13 @@ export function parseInputs(): ActionInputs {
     }
 
     // Parse benchmark compressors with deduplication and empty string filtering
-    const benchmarkCompressorsInput = getInput("benchmark-compressors");
-    const benchmarkCompressors = (() => {
-        if (!benchmarkCompressorsInput) {
-            return [...DEFAULT_BENCHMARK_COMPRESSORS];
-        }
-        const parsed = benchmarkCompressorsInput
-            .split(",")
-            .map((c) => c.trim())
-            .filter((c) => c.length > 0);
-        // Deduplicate while preserving order
-        const unique = [...new Set(parsed)];
-        return unique.length > 0 ? unique : [...DEFAULT_BENCHMARK_COMPRESSORS];
-    })();
+    const parsedBenchmarkCompressors = [
+        ...new Set(parseCommaSeparated(getInput("benchmark-compressors"))),
+    ];
+    const benchmarkCompressors =
+        parsedBenchmarkCompressors.length > 0
+            ? parsedBenchmarkCompressors
+            : [...DEFAULT_BENCHMARK_COMPRESSORS];
 
     return {
         input,

@@ -6,6 +6,7 @@
 
 import path from "node:path";
 import * as core from "@actions/core";
+import { DEFAULT_IGNORES } from "@node-minify/utils";
 import fg from "fast-glob";
 
 export interface DiscoverOptions {
@@ -21,17 +22,6 @@ export const DEFAULT_PATTERNS = [
     "lib/**/*.{js,mjs,cjs,jsx,css,html,htm,json,svg}",
     "styles/**/*.css",
     "*.{js,mjs,cjs,css,html,htm}",
-];
-
-export const DEFAULT_IGNORES = [
-    "**/node_modules/**",
-    "**/dist/**",
-    "**/build/**",
-    "**/.next/**",
-    "**/*.min.{js,css}",
-    "**/*.d.ts",
-    "**/__tests__/**",
-    "**/.*",
 ];
 
 /**
