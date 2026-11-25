@@ -520,6 +520,24 @@ describe("Benchmark Integration Tests", () => {
         });
     });
 
+    describe("File Type Detection", () => {
+        test("detects js and css from each file's extension when type is omitted", async () => {
+            const result = await benchmark({
+                input: [fixtureJS, fixtureCSS],
+                compressors: ["esbuild"],
+                iterations: 2,
+            });
+
+            expect(result.files.map((f) => f.file)).toEqual([
+                fixtureJS,
+                fixtureCSS,
+            ]);
+            for (const file of result.files) {
+                assertSuccessfulCompressor(file.results[0], "esbuild");
+            }
+        });
+    });
+
     describe("Cross-Type Compressors", () => {
         test("should benchmark esbuild for both JS and CSS", async () => {
             const jsResult = await benchmark({
