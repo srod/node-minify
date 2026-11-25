@@ -98,7 +98,7 @@ Each carries `@deprecated` JSDoc on its declaration, naming the replacement. The
 | `WildcardOptions.publicFolder` (object form of `wildcards` options) | pass the public folder as a string |
 | `WildcardOptions.ignore` | none |
 
-Internal callers still using them (migrated in a separate cleanup): `isValidFile` in `getContentFromFiles.ts`, `getFilesizeGzippedInBytes.ts`, `getFilesizeBrotliInBytes.ts`; `validateMinifyResult` in cssnano, oxc and minify-html.
+Internal callers still using them, each left in place until v12 removes the export: `getContentFromFiles` (the deprecated sync API) calls `isValidFile`; `compressor-resolver.ts` calls its own `isLocalPath` and `tryResolveBuiltIn`/`tryResolveNpmPackage`/`tryResolveLocalFile` from `resolveCompressor`; the CLI reads `Settings.option` (`packages/cli/src/index.ts`). Nothing else in a package `src/` uses a deprecated export.
 
 ## Anti-Patterns
 
