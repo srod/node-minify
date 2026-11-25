@@ -1,14 +1,8 @@
 # packages/utils/AGENTS.md
 
-Cross-cutting utilities shared by all packages. **Multi-file build.**
+Cross-cutting utilities shared by all packages. Standard single-entry build (`tsdown src/index.ts`): the exports map only exposes `.`, so a new utility must be exported from `src/index.ts` to be reachable.
 
-## Build (Non-Standard)
-
-```bash
-bun run build  # tsdown src/*.ts (all files, not just index.ts)
-```
-
-Exports 30+ utilities from 24 source files.
+Exports 30+ utilities from the source files under `src/`.
 
 ## Architecture Layers
 

@@ -89,7 +89,6 @@ packages/<name>/
 - `types`: No build, exports `src/types.d.ts` directly
 - `action`: Uses `bun build` (bundled), has `action.yml`
 - `cli`: Dual entry (`src/index.ts` + `src/bin/cli.ts`)
-- `utils`: Multi-file build (`tsdown src/*.ts`)
 
 ## Key Types
 
