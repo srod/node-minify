@@ -6,9 +6,14 @@
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import { wrapMinificationError } from "@node-minify/utils";
-import type { Sharp } from "sharp";
+import type { Sharp, SharpOptions as SharpInputOptions } from "sharp";
 
-type SharpConstructor = (input: Buffer | string) => Sharp;
+type SharpConstructor = (
+    input: Buffer | string,
+    options?: SharpInputOptions
+) => Sharp;
+
+type OutputFormat = "webp" | "avif" | "png" | "jpeg" | "gif";
 
 type BaseSharpOptions = {
     quality?: number;
@@ -20,8 +25,8 @@ type BaseSharpOptions = {
 
 export type SharpOptions = BaseSharpOptions &
     (
-        | { format?: "webp" | "avif" | "png" | "jpeg"; formats?: never }
-        | { formats?: Array<"webp" | "avif" | "png" | "jpeg">; format?: never }
+        | { format?: OutputFormat; formats?: never }
+        | { formats?: Array<OutputFormat>; format?: never }
     );
 
 type SharpInput = MinifierOptions<SharpOptions>;
@@ -49,19 +54,23 @@ const clamp = (val: number, min: number, max: number) =>
  * Options control per-format encoding parameters such as quality, lossless, effort, and compression level.
  *
  * @param input - Source image data as a Buffer
- * @param format - Target image format: `"webp"`, `"avif"`, `"png"`, or `"jpeg"`
+ * @param format - Target image format: `"webp"`, `"avif"`, `"png"`, `"jpeg"`, or `"gif"`
  * @param options - Encoding options that adjust quality, lossless mode, effort, and compression level
  * @returns A Buffer containing the converted image data
  * @throws Error `sharp minification failed: conversion to <format>: <message>` with sharp's original error as `cause` when conversion fails
  */
 async function convertImage(
     input: Buffer,
-    format: "webp" | "avif" | "png" | "jpeg",
+    format: OutputFormat,
     options: SharpOptions
 ): Promise<Buffer> {
     try {
         const sharpInstance = await getSharp();
-        let converter = sharpInstance(input);
+        // GIF output keeps every frame of an animated input; sharp reads only the first frame by default.
+        let converter =
+            format === "gif"
+                ? sharpInstance(input, { animated: true })
+                : sharpInstance(input);
 
         switch (format) {
             case "webp":
@@ -93,6 +102,11 @@ async function convertImage(
                     mozjpeg: options.mozjpeg ?? true,
                 });
                 break;
+            case "gif":
+                converter = converter.gif({
+                    effort: clamp(options.effort ?? 7, 1, 10),
+                });
+                break;
         }
 
         return await converter.toBuffer();
@@ -106,7 +120,8 @@ async function convertImage(
  *
  * When `options.formats` is provided and non-empty, produces an `outputs` array with one entry per
  * requested format; otherwise converts to a single target format (default `"webp"`) and returns a
- * `buffer`.
+ * `buffer`. Supported formats are `"webp"`, `"avif"`, `"png"`, `"jpeg"`, and `"gif"`. GIF output is
+ * re-encoded by sharp (not losslessly optimized) and keeps every frame of an animated input.
  *
  * @param settings - Optional compressor settings object containing `options` (e.g., `format`, `formats`, `quality`, `lossless`, `effort`, `compressionLevel`).
  * @param content - The input image as a Buffer.

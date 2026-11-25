@@ -85,6 +85,25 @@ describe("Image Integration Tests", () => {
         }
     });
 
+    test("should write a GIF file with sharp via minify()", async () => {
+        const output = resolve(tmpDir, "sharp-gif-output.gif");
+
+        try {
+            await minify({
+                compressor: sharp,
+                input: testPng,
+                output,
+                options: { format: "gif" },
+            });
+
+            expect(readFileSync(output).subarray(0, 4).toString("latin1")).toBe(
+                "GIF8"
+            );
+        } finally {
+            rmSync(output, { force: true });
+        }
+    });
+
     test("should expand wildcard image inputs and keep multi-format outputs beside each source", async () => {
         const firstInput = resolve(tmpDir, "sharp-wildcard-a.png");
         const secondInput = resolve(tmpDir, "sharp-wildcard-b.png");
