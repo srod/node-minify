@@ -1,9 +1,13 @@
-/*! node-minify filesize guard tests - MIT Licensed */
+/*!
+ * node-minify
+ * Copyright (c) 2011-2026 Rodolphe Stoclin
+ * MIT Licensed
+ */
 
-import { mkdtempSync } from "node:fs";
+import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { describe, expect, test } from "vitest";
+import { afterAll, describe, expect, test } from "vitest";
 import { FileOperationError } from "../src/error.ts";
 import {
     getFilesizeBrotliInBytes,
@@ -16,6 +20,8 @@ import {
 
 const dir = mkdtempSync(join(tmpdir(), "nm-filesize-guards-"));
 const missing = join(dir, "missing.js");
+
+afterAll(() => rmSync(dir, { recursive: true, force: true }));
 
 const helpers = {
     getFilesizeGzippedInBytes,
