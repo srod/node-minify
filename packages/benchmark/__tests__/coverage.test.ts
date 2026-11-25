@@ -46,8 +46,6 @@ vi.mock("@node-minify/utils", async () => {
         await vi.importActual<typeof NodeMinifyUtils>("@node-minify/utils");
     return {
         ...actual,
-        getFilesizeGzippedInBytes: vi.fn().mockResolvedValue("100 B"),
-        getFilesizeBrotliInBytes: vi.fn().mockResolvedValue("90 B"),
         getContentFromFilesAsync: vi.fn().mockResolvedValue("mock content"),
         wildcards: vi.fn(async (pattern) => {
             if (pattern === "mock-glob") return ["expanded.js"];
