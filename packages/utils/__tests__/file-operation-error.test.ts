@@ -17,6 +17,14 @@ describe("FileOperationError cause", () => {
         expect(error.message).toBe("Failed to read file x: boom");
     });
 
+    // v11 keeps cause as an enumerable own property; v12 moves to the native, non-enumerable one
+    test("is an enumerable own property in v11", () => {
+        const error = new FileOperationError("read", "x", new Error("boom"));
+
+        expect(Object.keys(error)).toContain("cause");
+        expect("cause" in new FileOperationError("read", "x")).toBe(true);
+    });
+
     test("is undefined without an original error", () => {
         const error = new FileOperationError("read", "x");
 
