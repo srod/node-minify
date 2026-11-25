@@ -38,8 +38,8 @@ function toRepositoryPath(filePath: string): string {
  * compressor fails before any file is touched.
  *
  * @param args.compressor - Compressor name to resolve
- * @param args.inputPath - Absolute path of the file to minify
- * @param args.outputPath - Absolute path to write the minified file to
+ * @param args.inputPath - Path of the file to minify, absolute or relative to the cwd
+ * @param args.outputPath - Path to write the minified file to, absolute or relative to the cwd
  * @param args.file - Name reported in the `FileResult`
  * @param args.type - File type hint passed to `minify`, when set
  * @param args.options - Compressor options passed to `minify`, when non-empty
