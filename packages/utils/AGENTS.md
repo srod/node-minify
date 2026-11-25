@@ -1,14 +1,8 @@
 # packages/utils/AGENTS.md
 
-Cross-cutting utilities shared by all packages. **Multi-file build.**
+Cross-cutting utilities shared by all packages. Standard single-entry build (`tsdown src/index.ts`): the exports map only exposes `.`, so a new utility must be exported from `src/index.ts` to be reachable.
 
-## Build (Non-Standard)
-
-```bash
-bun run build  # tsdown src/*.ts (all files, not just index.ts)
-```
-
-Exports 30+ utilities from 24 source files.
+Exports 30+ utilities from the source files under `src/`.
 
 ## Architecture Layers
 
@@ -65,7 +59,7 @@ FileOperationError, ValidationError             // classes, exported from the en
 **High (10+ packages)**:
 - `ensureStringContent` — All compressors
 - `resolveCompressor` — core, cli, action, benchmark
-- `wrapMinificationError` — all 16 compressors except `no-compress` (no library to fail); each wraps its library call in `try`/`catch` and none builds the `<name> minification failed:` prefix by hand. Some inner messages still repeat the name (clean-css, csso and html-minifier throw `<name> failed: empty result`, and `validateMinifyResult` throws `<name> failed: empty or invalid result`), so those read `<name> minification failed: <name> failed: …`
+- `wrapMinificationError` — all 16 compressors except `no-compress` (no library to fail); each wraps its library call in `try`/`catch` and none builds the `<name> minification failed:` prefix by hand. Some inner messages still repeat the name (clean-css, csso and html-minifier throw `<name> failed: empty result`), so those read `<name> minification failed: <name> failed: …`
 
 **Medium (5-9 packages)**:
 - `getFilesizeGzippedRaw`, `prettyBytes` — action, benchmark
@@ -78,7 +72,7 @@ FileOperationError, ValidationError             // classes, exported from the en
 import { FileOperationError, ValidationError } from "@node-minify/utils";
 // All file ops throw FileOperationError with cause chaining
 ```
-Input-validation errors (array content from `ensureStringContent`, esbuild's missing `type`, the sharp and imagemin Buffer checks) are thrown before the `try` and stay unwrapped. Everything inside the `try` gets the `<name> minification failed:` format: errors the library throws, and the compressor's own checks on the library's result (for example terser's `empty result`, imagemin's `no output`, `validateMinifyResult`).
+Input-validation errors (array content from `ensureStringContent`, esbuild's missing `type`, the sharp and imagemin Buffer checks) are thrown before the `try` and stay unwrapped. Everything inside the `try` gets the `<name> minification failed:` format: errors the library throws, and the compressor's own checks on the library's result (for example terser's `empty result`, imagemin's `no output`).
 
 ### Type-Safe Overloads
 ```ts
@@ -104,7 +98,7 @@ Each carries `@deprecated` JSDoc on its declaration, naming the replacement. The
 | `WildcardOptions.publicFolder` (object form of `wildcards` options) | pass the public folder as a string |
 | `WildcardOptions.ignore` | none |
 
-Internal callers still using them (migrated in a separate cleanup): `isValidFile` in `getContentFromFiles.ts`, `getFilesizeGzippedInBytes.ts`, `getFilesizeBrotliInBytes.ts`; `validateMinifyResult` in cssnano, oxc and minify-html.
+Internal callers still using them, each left in place until v12 removes the export: `getContentFromFiles` (the deprecated sync API) calls `isValidFile`; `compressor-resolver.ts` calls its own `isLocalPath` and `tryResolveBuiltIn`/`tryResolveNpmPackage`/`tryResolveLocalFile` from `resolveCompressor`; the CLI reads `Settings.option` (`packages/cli/src/index.ts`). Nothing else in a package `src/` uses a deprecated export.
 
 ## Anti-Patterns
 

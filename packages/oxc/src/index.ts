@@ -8,7 +8,6 @@ import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import {
     ensureStringContent,
     extractSourceMapOption,
-    validateMinifyResult,
     wrapMinificationError,
 } from "@node-minify/utils";
 import { minify as oxcMinify } from "oxc-minify";
@@ -43,8 +42,6 @@ export async function oxc({
         if (errors.length > 0) {
             throw new Error(errors.map((error) => error.message).join("; "));
         }
-
-        validateMinifyResult(result, "oxc");
 
         return {
             code: result.code,
