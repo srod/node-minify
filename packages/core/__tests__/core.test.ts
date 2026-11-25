@@ -202,6 +202,18 @@ describe("Package: core", async () => {
             );
         });
 
+        test("should throw an error if the first input in the array is an empty string", async () => {
+            await expect(
+                minify({
+                    compressor: noCompress,
+                    input: ["", filesJS.oneFile],
+                    output: [filesJS.fileJSOut, filesJS.fileJSOut],
+                })
+            ).rejects.toThrow(
+                "Invalid input at index 0: expected non-empty string, got empty string"
+            );
+        });
+
         test("should throw an error if an input in the array is null", async () => {
             await expect(
                 minify({

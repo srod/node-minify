@@ -12,9 +12,7 @@ import { minify } from "@node-minify/core";
 import type { Compressor } from "@node-minify/types";
 import {
     type CompressorName,
-    getFilesizeBrotliInBytes,
     getFilesizeBrotliRaw,
-    getFilesizeGzippedInBytes,
     getFilesizeGzippedRaw,
     prettyBytes,
     wildcards,
@@ -167,13 +165,15 @@ export async function calculateCompressorMetrics(
     };
 
     if (options.includeGzip) {
-        metrics.gzipSize = await getFilesizeGzippedInBytes(outputFile);
-        metrics.gzipBytes = await getFilesizeGzippedRaw(outputFile);
+        const gzipBytes = await getFilesizeGzippedRaw(outputFile);
+        metrics.gzipBytes = gzipBytes;
+        metrics.gzipSize = prettyBytes(gzipBytes);
     }
 
     if (options.includeBrotli) {
-        metrics.brotliSize = await getFilesizeBrotliInBytes(outputFile);
-        metrics.brotliBytes = await getFilesizeBrotliRaw(outputFile);
+        const brotliBytes = await getFilesizeBrotliRaw(outputFile);
+        metrics.brotliBytes = brotliBytes;
+        metrics.brotliSize = prettyBytes(brotliBytes);
     }
 
     return metrics;

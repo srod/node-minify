@@ -30,18 +30,6 @@ describe("compress async", () => {
         expect(result).toBe("");
     });
 
-    test("should throw error for input array with empty/null values", async () => {
-        const settings: Settings = {
-            compressor: noCompress,
-            input: ["", "file.js"],
-            output: ["out1.js", "out2.js"],
-        };
-
-        await expect(compress(settings)).rejects.toThrow(
-            "Invalid input at index 0: expected non-empty string, got empty string"
-        );
-    });
-
     test("should handle array of image files and read as Buffer", async () => {
         const imageFile1 = path.join(tempDir, "test-image1.png");
         const imageFile2 = path.join(tempDir, "test-image2.png");
