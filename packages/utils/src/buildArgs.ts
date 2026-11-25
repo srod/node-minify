@@ -10,6 +10,7 @@ import type { BuildArgsOptions } from "./types.ts";
 /**
  * Converts a generic options object to BuildArgsOptions by filtering out non-primitive values.
  * Only keeps string, number, boolean, and undefined values.
+ * @deprecated Removed in v12, with no replacement.
  * @param options - Generic options object
  * @returns Filtered options compatible with buildArgs
  */
@@ -32,6 +33,7 @@ export function toBuildArgsOptions(
 
 /**
  * Builds arguments array based on an object.
+ * @deprecated Removed in v12, with no replacement.
  * @param options Object containing command line arguments
  * @returns Array of command line arguments
  * @throws {ValidationError} If options is null or undefined

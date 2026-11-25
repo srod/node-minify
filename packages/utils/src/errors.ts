@@ -28,6 +28,7 @@ export function wrapMinificationError(
 /**
  * Validates that a minification result contains valid output.
  *
+ * @deprecated Removed in v12, with no replacement. `run` already validates every compressor's result.
  * @param result - The result object to validate
  * @param compressorName - The name of the compressor (for error messages)
  * @throws Error if result is falsy or result.code is not a string

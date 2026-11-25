@@ -9,6 +9,7 @@ import { FileOperationError } from "./error.ts";
 
 /**
  * Delete file from the filesystem.
+ * @deprecated Removed in v12. Use `fs.promises.unlink` instead.
  * @param file Path to the file to delete
  * @throws {FileOperationError} If file doesn't exist or deletion fails
  * @example

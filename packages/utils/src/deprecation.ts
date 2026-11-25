@@ -10,6 +10,7 @@ const warnedPackages = new Set<string>();
  * Show a deprecation warning for a package, but only once per process.
  * Subsequent calls with the same package name will be ignored.
  *
+ * @deprecated Removed in v12, with no replacement.
  * @param packageName - The package name (e.g., "babel-minify", "uglify-es")
  * @param message - The deprecation message explaining why and what to use instead
  *
@@ -34,6 +35,8 @@ export function warnDeprecation(packageName: string, message: string): void {
 /**
  * Reset the deprecation warning state.
  * Only intended for testing purposes.
+ *
+ * @deprecated Removed in v12, with no replacement.
  */
 export function resetDeprecationWarnings(): void {
     warnedPackages.clear();

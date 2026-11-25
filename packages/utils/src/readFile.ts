@@ -10,6 +10,7 @@ import { FileOperationError } from "./error.ts";
 
 /**
  * Read content from file.
+ * @deprecated Removed in v12. Use `readFileAsync` instead.
  * @param file - Path to file
  * @param asBuffer - If true, return Buffer; if false, return string (default: false)
  * @returns File content as string or Buffer
@@ -22,8 +23,11 @@ import { FileOperationError } from "./error.ts";
  * const buffer = readFile('image.png', true);
  */
 export function readFile(file: string): string;
+/** @deprecated Removed in v12. Use `readFileAsync` instead. */
 export function readFile(file: string, asBuffer: true): Buffer;
+/** @deprecated Removed in v12. Use `readFileAsync` instead. */
 export function readFile(file: string, asBuffer: false): string;
+/** @deprecated Removed in v12. Use `readFileAsync` instead. */
 export function readFile(file: string, asBuffer?: boolean): string | Buffer;
 /**
  * Read a file from disk and return its contents as a UTF-8 string by default or as a raw Buffer.
