@@ -57,7 +57,7 @@ Functional but not recommended for new projects. May be removed in future versio
 - Removed in v12: `csso` (use `lightningcss` or `cssnano`), `imagemin` (use `sharp`, or `svgo` for SVG), `uglify-js` (use `terser`)
 
 :::note
-In v11.0 `csso`, `imagemin` and `uglify-js` were Supported and `jsonminify` was Legacy. v11.1 moves the first three to Legacy, because they are removed in v12, and moves `jsonminify` back to Supported. They keep working in v11, and `node-minify doctor` and `node-minify --help` flag them.
+In v11.0 `csso`, `imagemin` and `uglify-js` were Supported and `jsonminify` was Legacy. v11.1 moves the first three to Legacy, because they are removed in v12, and moves `jsonminify` back to Supported. All four keep working in v11. `node-minify doctor` warns on every Legacy compressor, and it and `node-minify --help` name the three that are removed in v12 with their replacements.
 :::
 
 ### Removed

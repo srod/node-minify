@@ -51,7 +51,7 @@ describe("runExplicitMode with a removed compressor", () => {
         );
     });
 
-    test("does not warn about a custom npm package or local file", async () => {
+    test("fails without printing a warning", async () => {
         await expect(runExplicitMode(inputs)).rejects.toThrow();
 
         expect(core.warning).not.toHaveBeenCalled();
