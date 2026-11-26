@@ -28,13 +28,18 @@ async function getReleaseLine(changeset, _type, options) {
 }
 
 /**
- * Format the "dependencies updated" lines of a package's CHANGELOG.
- * Always empty: all packages share one version (`fixed` group), so the lines only repeat noise.
+ * Format the "dependencies updated" part of a package's CHANGELOG as one line.
+ * All packages share one version (`fixed` group), so listing each changeset and dependency only repeats noise.
  *
- * @returns {Promise<string>} An empty string, which changesets leaves out of the CHANGELOG
+ * @param {unknown[]} _changesets - The changesets that updated the dependencies, unused
+ * @param {{ newVersion: string }[]} dependenciesUpdated - The internal dependencies bumped in this release
+ * @returns {Promise<string>} One line naming the new version, or an empty string when no dependency changed
  */
-async function getDependencyReleaseLine() {
-    return "";
+async function getDependencyReleaseLine(_changesets, dependenciesUpdated) {
+    if (dependenciesUpdated.length === 0) {
+        return "";
+    }
+    return `- Updated \`@node-minify/*\` dependencies to ${dependenciesUpdated[0].newVersion}.`;
 }
 
 /**
