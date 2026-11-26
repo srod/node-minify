@@ -19,7 +19,7 @@ Every export that v12 removes is now marked `@deprecated`, and editors show it s
 | `@node-minify/utils` | `validateMinifyResult` | none (`run` already validates every compressor's result) |
 | `@node-minify/utils` | `buildArgs`, `toBuildArgsOptions`, `BuildArgsOptions` | none |
 | `@node-minify/utils` | `warnDeprecation`, `resetDeprecationWarnings` | none |
-| `@node-minify/utils` | `WildcardOptions.publicFolder` (the object form of the `wildcards` second argument) | pass the public folder as a string: `wildcards(input, publicFolder)` |
+| `@node-minify/utils` | `WildcardOptions` (the type) and `WildcardOptions.publicFolder` (the object form of the `wildcards` second argument) | pass the public folder as a string: `wildcards(input, publicFolder)` |
 | `@node-minify/utils` | `WildcardOptions.ignore` | none |
 | `@node-minify/types` | `ImageFormat` | none |
 | `@node-minify/types` | `Settings.option` (the CLI's raw `-O` string) | `options` (v12 moves the field to the CLI's own type) |

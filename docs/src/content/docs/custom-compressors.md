@@ -171,7 +171,7 @@ export const COMPRESSOR_REGISTRY = [
 *   **exportName**: The named export from your package (camelCase). Required unless the status is `removed`.
 *   **cssOnly** (optional): `true` if the compressor only accepts CSS input.
 *   **aliases** (optional): Friendly alternative names, such as `gcc` for `google-closure-compiler`.
-*   **replacement**: The compressor to suggest instead. On a `removed` entry, `resolveCompressor` rejects the name with that suggestion. On a `legacy` entry it means the compressor is removed in the next major version, and `node-minify doctor` and the CLI compressor list say so.
+*   **replacement**: The compressor to suggest instead. Required on a `removed` entry, optional otherwise. On a `removed` entry, `resolveCompressor` rejects the name with that suggestion. On a `legacy` entry it means the compressor is removed in the next major version, and `node-minify doctor` and the CLI compressor list say so.
 
 The `CompressorName` type is derived from this list, so renaming or removing an entry makes any stale use of its name in the Action or benchmark defaults fail typecheck.
 
