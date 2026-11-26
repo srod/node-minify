@@ -54,7 +54,8 @@ const result = await minify({
 | `formats` | `Array<'webp' \| 'avif' \| 'png' \| 'jpeg' \| 'gif'>` | - | Multiple output formats |
 | `quality` | `number` | `80` | Quality setting (1-100) |
 | `lossless` | `boolean` | `false` | Use lossless compression |
-| `effort` | `number` | `4` (`6` for PNG, `7` for GIF) | CPU effort/compression level (0-9 for AVIF/PNG, 0-6 for WebP, 1-10 for GIF) |
+| `effort` | `number` | `4` (`6` for PNG, `7` for GIF) | CPU effort/compression level (0-9 for AVIF/PNG, 0-6 for WebP, 1-10 for GIF). For PNG, `compressionLevel` wins when set |
+| `compressionLevel` | `number` | - | PNG only (0-9). Overrides `effort` |
 
 ## GIF Output
 
