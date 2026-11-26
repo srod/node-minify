@@ -43,9 +43,10 @@ const SECTION_TITLES: Record<Kind, string> = {
 
 // `- abc1234: text` (changesets' default) or `- [`abc1234`](url): text` (.changeset/changelog.cjs).
 const ENTRY_START = /^- (?:([0-9a-f]{7})|\[`([0-9a-f]{7})`\]\([^)]*\)): (.*)$/;
-// What changesets writes for internal dependency bumps, old format and .changeset/changelog.cjs.
+// The exact lines changesets writes for internal dependency bumps: `@changesets/changelog-git`
+// (`- Updated dependencies [abc1234]`, `- @node-minify/utils@11.0.2`) and .changeset/changelog.cjs.
 const DEPENDENCY_LINE =
-    /^- (?:Updated dependencies|Updated `@node-minify\/\*` dependencies|@node-minify\/)/;
+    /^- (?:Updated dependencies(?: \[[0-9a-f]{7}\])?|Updated `@node-minify\/\*` dependencies to \S+\.|@node-minify\/[a-z0-9-]+@\S+)$/;
 
 /**
  * Return the lines of the `## <version>` section of a changelog, up to the next `## ` heading.
@@ -97,7 +98,7 @@ function parseSection(lines: string[]): RawEntry[] {
         } else if (
             kind &&
             line.startsWith("- ") &&
-            !DEPENDENCY_LINE.test(line)
+            !DEPENDENCY_LINE.test(line.trimEnd())
         ) {
             // changesets writes `- text` for a changeset that has no commit.
             current = { hash: undefined, kind, lines: [line.slice(2).trimEnd()] };

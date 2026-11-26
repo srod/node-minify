@@ -93,6 +93,34 @@ describe("buildReleaseNotes", () => {
         expect(notes).not.toContain("@node-minify/utils@11.1.0");
     });
 
+    test("drops only the exact dependency lines, not changes that start the same way", () => {
+        const notes = buildReleaseNotes("11.1.0", [
+            changelog(
+                "core",
+                [
+                    "## 11.1.0",
+                    "",
+                    "### Patch Changes",
+                    "",
+                    "- Updated dependencies",
+                    "- Updated dependencies [bbbbbbb]",
+                    "- @node-minify/utils@11.1.0",
+                    "- Updated `@node-minify/*` dependencies to 11.1.0.",
+                    "- Updated dependencies to fix the lockfile.",
+                    "- @node-minify/utils now exports `CompressorName`.",
+                    "",
+                ].join("\n")
+            ),
+        ]);
+
+        expect(notes).toContain("Updated dependencies to fix the lockfile.");
+        expect(notes).toContain("@node-minify/utils now exports `CompressorName`.");
+        expect(notes).not.toContain("[bbbbbbb]");
+        expect(notes).not.toContain("utils@11.1.0");
+        expect(notes).not.toContain("dependencies to 11.1.0.");
+        expect(notes.match(/^- \*\*/gm)).toHaveLength(2);
+    });
+
     test("reads changelogs with CRLF line endings", () => {
         const notes = buildReleaseNotes("11.1.0", [
             changelog(
