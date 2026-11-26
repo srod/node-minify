@@ -23,10 +23,10 @@ npm install @node-minify/core @node-minify/uglify-js
 
 ```js
 import { minify } from '@node-minify/core';
-import { uglifyjs } from '@node-minify/uglify-js';
+import { uglifyJs } from '@node-minify/uglify-js';
 
 const result = await minify({
-  compressor: uglifyjs,
+  compressor: uglifyJs,
   input: 'foo.js',
   output: 'bar.js'
 });
@@ -36,7 +36,7 @@ const result = await minify({
 
 ```js
 const result = await minify({
-  compressor: uglifyjs,
+  compressor: uglifyJs,
   input: 'foo.js',
   output: 'bar.js',
   options: {
