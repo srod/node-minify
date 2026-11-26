@@ -1,5 +1,24 @@
 # @node-minify/core
 
+## 11.1.0
+
+### Patch Changes
+
+- eb58f73: Internal cleanup, no change to output.
+
+  - `benchmark` measures each gzip and brotli size once instead of twice. The reported sizes are unchanged.
+  - `cli` prints the three compressor tiers in `--help` from one loop. The text is unchanged from before this cleanup.
+  - `core` validates the entries of an array `input` once, in `setup`, instead of a second time before compressing.
+  - `sharp` no longer caches the lazily imported `sharp` module itself, because Node already does.
+
+- Updated dependencies [40b0a9e]
+- Updated dependencies [a701d3c]
+- Updated dependencies [9da123b]
+- Updated dependencies [8e88aec]
+- Updated dependencies [8258abb]
+- Updated dependencies [f80a2a3]
+  - @node-minify/utils@11.1.0
+
 ## 11.0.2
 
 ### Patch Changes

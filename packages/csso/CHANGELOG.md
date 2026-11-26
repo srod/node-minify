@@ -1,5 +1,17 @@
 # @node-minify/csso
 
+## 11.1.0
+
+### Patch Changes
+
+- Updated dependencies [40b0a9e]
+- Updated dependencies [a701d3c]
+- Updated dependencies [9da123b]
+- Updated dependencies [8e88aec]
+- Updated dependencies [8258abb]
+- Updated dependencies [f80a2a3]
+  - @node-minify/utils@11.1.0
+
 ## 11.0.2
 
 ### Patch Changes
