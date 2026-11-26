@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/esbuild",
-  "version": "11.0.2",
+  "version": "11.1.0",
   "description": "esbuild plugin for @node-minify",
   "keywords": [
     "compressor",
