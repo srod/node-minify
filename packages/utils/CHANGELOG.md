@@ -1,5 +1,47 @@
 # @node-minify/utils
 
+## 11.1.0
+
+### Minor Changes
+
+- 40b0a9e: Every export that v12 removes is now marked `@deprecated`, and editors show it struck through. All of them keep working exactly as in 11.0.x through v11, and none of them emits a new deprecation warning at runtime.
+
+  | Package              | Deprecated export                                                                  | Use instead                                                                                                                                                                          |
+  | -------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+  | `@node-minify/utils` | `readFile` (every overload)                                                        | `readFileAsync`                                                                                                                                                                      |
+  | `@node-minify/utils` | `writeFile`                                                                        | `writeFileAsync`                                                                                                                                                                     |
+  | `@node-minify/utils` | `getContentFromFiles`                                                              | `getContentFromFilesAsync`                                                                                                                                                           |
+  | `@node-minify/utils` | `isValidFile`                                                                      | `isValidFileAsync`                                                                                                                                                                   |
+  | `@node-minify/utils` | `deleteFile`                                                                       | `fs.promises.unlink`                                                                                                                                                                 |
+  | `@node-minify/utils` | `getSourceMapBoolean`                                                              | `extractSourceMapOption`                                                                                                                                                             |
+  | `@node-minify/utils` | `tryResolveBuiltIn`, `tryResolveNpmPackage`, `tryResolveLocalFile`                 | `resolveCompressor`                                                                                                                                                                  |
+  | `@node-minify/utils` | `getKnownExportName`                                                               | `getCompressorEntry(name)?.exportName`, with the canonical name: `getCompressorEntry` does not resolve aliases, so `"gcc"` returns `undefined` and needs `"google-closure-compiler"` |
+  | `@node-minify/utils` | `isLocalPath`                                                                      | none (`resolveCompressor` accepts local paths)                                                                                                                                       |
+  | `@node-minify/utils` | `validateMinifyResult`                                                             | none (`run` already validates every compressor's result)                                                                                                                             |
+  | `@node-minify/utils` | `buildArgs`, `toBuildArgsOptions`, `BuildArgsOptions`                              | none                                                                                                                                                                                 |
+  | `@node-minify/utils` | `warnDeprecation`, `resetDeprecationWarnings`                                      | none                                                                                                                                                                                 |
+  | `@node-minify/utils` | `WildcardOptions` (the type of the object form of the `wildcards` second argument) | none (pass the public folder as a string)                                                                                                                                            |
+  | `@node-minify/utils` | `WildcardOptions.publicFolder`                                                     | pass the public folder as a string: `wildcards(input, publicFolder)`                                                                                                                 |
+  | `@node-minify/utils` | `WildcardOptions.ignore`                                                           | none                                                                                                                                                                                 |
+  | `@node-minify/types` | `ImageFormat`                                                                      | none                                                                                                                                                                                 |
+  | `@node-minify/types` | `Settings.option` (the CLI's raw `-O` string)                                      | `options` (v12 moves the field to the CLI's own type)                                                                                                                                |
+
+  `wildcards` itself is not deprecated, only its object form. These exports are removed in v12.
+
+- 9da123b: Removed compressors (such as `yui`) now fail the same way everywhere, including `resolveCompressor`, with one message naming the replacement. The benchmark now reports the resolver's actual error for a compressor it cannot load instead of "Compressor not found or not installed". `@node-minify/utils` also exports a `CompressorName` type, and `COMPRESSOR_REGISTRY` is now the single list of compressors, including the removed ones and their replacements: `resolveCompressor` (used by the CLI, the Action and the benchmark), the CLI's compressor list and `doctor` all read it.
+- 8e88aec: Every built-in compressor now reports a minification failure as `<compressor> minification failed: <original message>`, with the original error as its `cause`. Input checks that run before minifying keep their own messages, such as esbuild's `You must specify a type: js or css` and sharp's and imagemin's `requires Buffer content`. `terser`, `esbuild`, `swc`, `lightningcss`, `uglify-js`, `svgo`, `sharp` and `imagemin` used to throw the library's error as it was or with their own wording (`SVGO optimization failed:`, `Sharp conversion to webp failed:`, `Imagemin returned no output`), so code that matched on that text or on the error's class (for example `instanceof SyntaxError` for lightningcss) should read `error.cause` instead. `@node-minify/utils` also exports `FileOperationError` and `ValidationError`, and `wrapMinificationError` takes an optional `context` string.
+- 8258abb: `csso`, `imagemin` and `uglify-js` move from the supported tier to the legacy tier, because they are removed in v12. `node-minify doctor` now warns that each is removed in v12 and names its replacement (`lightningcss` or `cssnano`, `sharp` or `svgo` for SVG, and `terser`), and the compressor list in `node-minify --help` says the same. `jsonminify` moves from the legacy tier back to the supported tier, so `doctor` no longer warns about it. All four keep working in v11, and nothing extra is printed when you run them. In `@node-minify/utils`, `getCompressorsByStatus` and `COMPRESSOR_REGISTRY` return the new tiers, and a legacy entry with a `replacement` is removed in the next major version.
+
+### Patch Changes
+
+- a701d3c: Drop the `gzip-size` and `chalk` dependencies in favor of Node built-ins. Reported gzip and brotli sizes are unchanged (gzip still uses level 9, as `gzip-size` did), and so is terminal output, with two exceptions: the CLI now honors `NO_COLOR`, and on Node 22.0–22.7 redirected CLI output can contain color codes (benchmark files written with `--output` are still stripped).
+- f80a2a3: Internal cleanup with no change to output or reported sizes.
+
+  - `cssnano`, `oxc` and `minify-html` no longer run `validateMinifyResult` on their own result, because `run` already validates it and the libraries always return a string.
+  - `no-compress` uses `ensureStringContent`. Array content (several image files) now throws `no-compress compressor does not support array content` instead of `no-compress failed: content must be a string or Buffer but received object`.
+  - `@node-minify/utils` builds only its `index` entry, because the package exports map only exposes `.`. The exported names are unchanged.
+  - The gzip and brotli size helpers check the file with `isValidFileAsync` instead of the deprecated `isValidFile`.
+
 ## 11.0.2
 
 ## 11.0.1

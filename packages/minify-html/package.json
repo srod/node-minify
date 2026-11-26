@@ -1,6 +1,6 @@
 {
   "name": "@node-minify/minify-html",
-  "version": "11.0.2",
+  "version": "11.1.0",
   "description": "minify-html plugin for @node-minify (Rust-based HTML minifier)",
   "keywords": [
     "compressor",

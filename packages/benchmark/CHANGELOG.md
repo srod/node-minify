@@ -1,5 +1,29 @@
 # @node-minify/benchmark
 
+## 11.1.0
+
+### Patch Changes
+
+- eb58f73: Internal cleanup, no change to output.
+
+  - `benchmark` measures each gzip and brotli size once instead of twice. The reported sizes are unchanged.
+  - `cli` prints the three compressor tiers in `--help` from one loop. The text is unchanged from before this cleanup.
+  - `core` validates the entries of an array `input` once, in `setup`, instead of a second time before compressing.
+  - `sharp` no longer caches the lazily imported `sharp` module itself, because Node already does.
+
+- 47f2880: `benchmark` detects the file type from each input file's extension when `type` is not given, so `node-minify benchmark src/app.js -c terser,esbuild` no longer reports esbuild as failed with `You must specify a type: js or css`. `.js .mjs .cjs .jsx` give `js`, `.css` gives `css`, `.html .htm` give `html`. An explicit `type` still wins, and other extensions pass no type as before. The `benchmark -t` help text says so.
+- a701d3c: Drop the `gzip-size` and `chalk` dependencies in favor of Node built-ins. Reported gzip and brotli sizes are unchanged (gzip still uses level 9, as `gzip-size` did), and so is terminal output, with two exceptions: the CLI now honors `NO_COLOR`, and on Node 22.0–22.7 redirected CLI output can contain color codes (benchmark files written with `--output` are still stripped).
+- 9da123b: Removed compressors (such as `yui`) now fail the same way everywhere, including `resolveCompressor`, with one message naming the replacement. The benchmark now reports the resolver's actual error for a compressor it cannot load instead of "Compressor not found or not installed". `@node-minify/utils` also exports a `CompressorName` type, and `COMPRESSOR_REGISTRY` is now the single list of compressors, including the removed ones and their replacements: `resolveCompressor` (used by the CLI, the Action and the benchmark), the CLI's compressor list and `doctor` all read it.
+- Updated dependencies [eb58f73]
+- Updated dependencies [40b0a9e]
+- Updated dependencies [a701d3c]
+- Updated dependencies [9da123b]
+- Updated dependencies [8e88aec]
+- Updated dependencies [8258abb]
+- Updated dependencies [f80a2a3]
+  - @node-minify/core@11.1.0
+  - @node-minify/utils@11.1.0
+
 ## 11.0.2
 
 ### Patch Changes

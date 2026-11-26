@@ -1,5 +1,31 @@
 # @node-minify/sharp
 
+## 11.1.0
+
+### Minor Changes
+
+- d7c8ad4: Add `gif` as an output format, as `format: "gif"` or inside `formats`. This gives `@node-minify/imagemin` users, which is removed in v12, a GIF path in v11. sharp re-encodes the image with libvips instead of optimizing the GIF losslessly like gifsicle, so output sizes differ from imagemin's. Animated GIFs keep all their frames. `effort` (1-10, default 7) is the only option that applies to GIF. Other output formats are unchanged.
+
+### Patch Changes
+
+- eb58f73: Internal cleanup, no change to output.
+
+  - `benchmark` measures each gzip and brotli size once instead of twice. The reported sizes are unchanged.
+  - `cli` prints the three compressor tiers in `--help` from one loop. The text is unchanged from before this cleanup.
+  - `core` validates the entries of an array `input` once, in `setup`, instead of a second time before compressing.
+  - `sharp` no longer caches the lazily imported `sharp` module itself, because Node already does.
+
+- 8e88aec: Every built-in compressor now reports a minification failure as `<compressor> minification failed: <original message>`, with the original error as its `cause`. Input checks that run before minifying keep their own messages, such as esbuild's `You must specify a type: js or css` and sharp's and imagemin's `requires Buffer content`. `terser`, `esbuild`, `swc`, `lightningcss`, `uglify-js`, `svgo`, `sharp` and `imagemin` used to throw the library's error as it was or with their own wording (`SVGO optimization failed:`, `Sharp conversion to webp failed:`, `Imagemin returned no output`), so code that matched on that text or on the error's class (for example `instanceof SyntaxError` for lightningcss) should read `error.cause` instead. `@node-minify/utils` also exports `FileOperationError` and `ValidationError`, and `wrapMinificationError` takes an optional `context` string.
+- Updated dependencies [eb58f73]
+- Updated dependencies [40b0a9e]
+- Updated dependencies [a701d3c]
+- Updated dependencies [9da123b]
+- Updated dependencies [8e88aec]
+- Updated dependencies [8258abb]
+- Updated dependencies [f80a2a3]
+  - @node-minify/core@11.1.0
+  - @node-minify/utils@11.1.0
+
 ## 11.0.2
 
 ### Patch Changes

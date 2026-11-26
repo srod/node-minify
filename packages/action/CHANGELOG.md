@@ -1,5 +1,32 @@
 # @node-minify/action
 
+## 11.1.0
+
+### Patch Changes
+
+- dd7d133: Internal cleanup, no change to behavior.
+
+  - The explicit and auto modes share one per-file minify-and-measure step and one reporting sequence.
+  - The Action uses `DEFAULT_IGNORES` from `@node-minify/utils` instead of its own copy.
+  - `benchmark-compressors` is parsed with the same helper as the other comma-separated inputs.
+
+- 9da123b: Removed compressors (such as `yui`) now fail the same way everywhere, including `resolveCompressor`, with one message naming the replacement. The benchmark now reports the resolver's actual error for a compressor it cannot load instead of "Compressor not found or not installed". `@node-minify/utils` also exports a `CompressorName` type, and `COMPRESSOR_REGISTRY` is now the single list of compressors, including the removed ones and their replacements: `resolveCompressor` (used by the CLI, the Action and the benchmark), the CLI's compressor list and `doctor` all read it.
+- Updated dependencies [eb58f73]
+- Updated dependencies [47f2880]
+- Updated dependencies [40b0a9e]
+- Updated dependencies [a701d3c]
+- Updated dependencies [9da123b]
+- Updated dependencies [8e88aec]
+- Updated dependencies [8258abb]
+- Updated dependencies [f80a2a3]
+  - @node-minify/benchmark@11.1.0
+  - @node-minify/core@11.1.0
+  - @node-minify/utils@11.1.0
+  - @node-minify/terser@11.1.0
+  - @node-minify/esbuild@11.1.0
+  - @node-minify/swc@11.1.0
+  - @node-minify/oxc@11.1.0
+
 ## 11.0.2
 
 ### Patch Changes
