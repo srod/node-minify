@@ -1,4 +1,7 @@
 import type * as NodeFs from "node:fs";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import type * as NodeMinifyUtils from "@node-minify/utils";
 import { describe, expect, test, vi } from "vitest";
 import * as compressorLoader from "../src/compressor-loader.ts";
@@ -43,8 +46,6 @@ vi.mock("@node-minify/utils", async () => {
         await vi.importActual<typeof NodeMinifyUtils>("@node-minify/utils");
     return {
         ...actual,
-        getFilesizeGzippedInBytes: vi.fn().mockResolvedValue("100 B"),
-        getFilesizeBrotliInBytes: vi.fn().mockResolvedValue("90 B"),
         getContentFromFilesAsync: vi.fn().mockResolvedValue("mock content"),
         wildcards: vi.fn(async (pattern) => {
             if (pattern === "mock-glob") return ["expanded.js"];
@@ -81,16 +82,19 @@ describe("Coverage Gaps", () => {
     });
 
     test("loadCompressor - falls back to mod.default when no named export", async () => {
-        vi.resetModules();
-        vi.doMock("@node-minify/unknown-pkg", () => ({
-            default: async () => ({ code: "default-export" }),
-        }));
-
-        const { loadCompressor: loadComp } = await import(
-            "../src/compressor-loader.ts"
+        const dir = await mkdtemp(join(tmpdir(), "nm-default-export-"));
+        const file = join(dir, "default-only.mjs");
+        await writeFile(
+            file,
+            'export default async () => ({ code: "default-export" });\n'
         );
-        const compressor = await loadComp("unknown-pkg");
-        expect(compressor).toBeDefined();
+
+        try {
+            const compressor = await loadCompressor(file);
+            expect(typeof compressor).toBe("function");
+        } finally {
+            await rm(dir, { recursive: true, force: true });
+        }
     });
 
     test("runBenchmark - handles non-Error throw in compressor", async () => {

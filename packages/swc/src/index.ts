@@ -8,6 +8,7 @@ import type { CompressorResult, MinifierOptions } from "@node-minify/types";
 import {
     ensureStringContent,
     extractSourceMapOption,
+    wrapMinificationError,
 } from "@node-minify/utils";
 import { minify as swcMinify } from "@swc/core";
 
@@ -17,6 +18,7 @@ import { minify as swcMinify } from "@swc/core";
  * @param settings - Optional minifier settings; `settings.options` are merged into SWC options and may include `sourceMap`.
  * @param content - The input source to minify. Non-string inputs will be coerced to a string.
  * @returns An object with `code` containing the minified source and `map` containing the source map if produced, otherwise `undefined`.
+ * @throws Error `swc minification failed: <message>` with the original error as `cause` if SWC fails.
  */
 export async function swc({
     settings,
@@ -28,15 +30,19 @@ export async function swc({
         settings?.options
     );
 
-    const result = await swcMinify(contentStr, {
-        compress: true,
-        mangle: true,
-        sourceMap,
-        ...restOptions,
-    });
+    try {
+        const result = await swcMinify(contentStr, {
+            compress: true,
+            mangle: true,
+            sourceMap,
+            ...restOptions,
+        });
 
-    return {
-        code: result.code,
-        map: result.map || undefined,
-    };
+        return {
+            code: result.code,
+            map: result.map || undefined,
+        };
+    } catch (error) {
+        throw wrapMinificationError("swc", error);
+    }
 }

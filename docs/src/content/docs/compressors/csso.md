@@ -3,7 +3,7 @@ title: "CSSO"
 description: "CSSO for node-minify"
 ---
 
-**Status:** Supported
+**Status:** Legacy, removed in v12. Use [`lightningcss`](/compressors/lightningcss) or [`cssnano`](/compressors/cssnano) instead.
 
 `CSSO` can compress only CSS files.
 

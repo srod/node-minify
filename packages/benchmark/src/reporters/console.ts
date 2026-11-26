@@ -4,23 +4,23 @@
  * MIT Licensed
  */
 
-import chalk from "chalk";
+import { styleText } from "node:util";
 import type { BenchmarkResult, CompressorMetrics } from "../types.ts";
 
 export function formatConsoleOutput(result: BenchmarkResult): string {
     let output = "";
 
     for (const file of result.files) {
-        output += `\n${chalk.cyan("🔍 Benchmarking:")} ${chalk.bold(file.file)} (${file.originalSize})\n`;
-        output += `${chalk.gray("━".repeat(60))}\n\n`;
+        output += `\n${styleText("cyan", "🔍 Benchmarking:")} ${styleText("bold", file.file)} (${file.originalSize})\n`;
+        output += `${styleText("gray", "━".repeat(60))}\n\n`;
 
         output += formatTable(file.results, result.options);
-        output += `\n${chalk.gray("━".repeat(60))}\n`;
+        output += `\n${styleText("gray", "━".repeat(60))}\n`;
     }
 
-    output += `\n${chalk.yellow("🏆 Best compression:")} ${chalk.bold(result.summary.bestCompression)}\n`;
-    output += `${chalk.green("⚡ Fastest:")} ${chalk.bold(result.summary.bestPerformance)}\n`;
-    output += `${chalk.blue("💡 Recommended:")} ${chalk.bold(result.summary.recommended)}\n`;
+    output += `\n${styleText("yellow", "🏆 Best compression:")} ${styleText("bold", result.summary.bestCompression)}\n`;
+    output += `${styleText("green", "⚡ Fastest:")} ${styleText("bold", result.summary.bestPerformance)}\n`;
+    output += `${styleText("blue", "💡 Recommended:")} ${styleText("bold", result.summary.recommended)}\n`;
 
     return output;
 }
@@ -58,10 +58,11 @@ function formatTable(
 
     const totalWidth = colWidths.reduce((a, b) => a + b, 0);
 
-    let table = `${chalk.bold(
+    let table = `${styleText(
+        "bold",
         headers.map((h, i) => h.padEnd(colWidths[i] ?? 10)).join("")
     )}\n`;
-    table += `${chalk.gray("─".repeat(totalWidth))}\n`;
+    table += `${styleText("gray", "─".repeat(totalWidth))}\n`;
 
     for (const r of results) {
         if (r.success) {
@@ -73,11 +74,12 @@ function formatTable(
             ];
             if (hasGzip) row.push((r.gzipSize ?? "-").padEnd(COL_GZIP));
             if (hasBrotli) row.push((r.brotliSize ?? "-").padEnd(COL_BROTLI));
-            row.push(chalk.green("OK".padEnd(COL_STATUS)));
+            row.push(styleText("green", "OK".padEnd(COL_STATUS)));
             table += `${row.join("")}\n`;
 
             if (isVerbose && r.iterationTimes) {
-                table += `${chalk.gray(
+                table += `${styleText(
+                    "gray",
                     "  └─ " +
                         r.iterationTimes
                             .map((t) => `${Math.round(t)}ms`)
@@ -86,14 +88,16 @@ function formatTable(
             }
         } else {
             const row = [
-                chalk.red(r.compressor.padEnd(COL_COMPRESSOR)),
-                chalk.red("-".padEnd(COL_SIZE)),
-                chalk.red("-".padEnd(COL_REDUCTION)),
-                chalk.red("-".padEnd(COL_TIME)),
+                styleText("red", r.compressor.padEnd(COL_COMPRESSOR)),
+                styleText("red", "-".padEnd(COL_SIZE)),
+                styleText("red", "-".padEnd(COL_REDUCTION)),
+                styleText("red", "-".padEnd(COL_TIME)),
             ];
-            if (hasGzip) row.push(chalk.red("-".padEnd(COL_GZIP)));
-            if (hasBrotli) row.push(chalk.red("-".padEnd(COL_BROTLI)));
-            row.push(chalk.red((r.error ?? "Error").padEnd(COL_STATUS)));
+            if (hasGzip) row.push(styleText("red", "-".padEnd(COL_GZIP)));
+            if (hasBrotli) row.push(styleText("red", "-".padEnd(COL_BROTLI)));
+            row.push(
+                styleText("red", (r.error ?? "Error").padEnd(COL_STATUS))
+            );
             table += `${row.join("")}\n`;
         }
     }

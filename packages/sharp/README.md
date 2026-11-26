@@ -14,7 +14,7 @@
 
 `sharp` is a plugin for [`node-minify`](https://github.com/srod/node-minify)
 
-It allows you to convert and compress images to WebP, AVIF, PNG, and JPEG formats using the high-performance [sharp](https://sharp.pixelplumbing.com/) library.
+It allows you to convert and compress images to WebP, AVIF, PNG, JPEG, and GIF formats using the high-performance [sharp](https://sharp.pixelplumbing.com/) library.
 
 ## Installation
 
@@ -55,11 +55,16 @@ await minify({
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `format` | `'webp' \| 'avif' \| 'png' \| 'jpeg'` | `'webp'` | Output format for single conversion |
-| `formats` | `Array<'webp' \| 'avif'>` | - | Multiple output formats |
+| `format` | `'webp' \| 'avif' \| 'png' \| 'jpeg' \| 'gif'` | `'webp'` | Output format for single conversion |
+| `formats` | `Array<'webp' \| 'avif' \| 'png' \| 'jpeg' \| 'gif'>` | - | Multiple output formats |
 | `quality` | `number` | `80` | Quality setting (1-100) |
 | `lossless` | `boolean` | `false` | Use lossless compression |
-| `effort` | `number` | `4` | CPU effort/compression level (0-9 for AVIF/PNG, 0-6 for WebP) |
+| `effort` | `number` | `4` (`6` for PNG, `7` for GIF) | CPU effort/compression level (0-9 for AVIF/PNG, 0-6 for WebP, 1-10 for GIF). For PNG, `compressionLevel` wins when set |
+| `compressionLevel` | `number` | - | PNG only (0-9). Overrides `effort` |
+
+### GIF output
+
+`format: 'gif'` re-encodes the image with sharp (libvips) instead of optimizing the GIF losslessly like gifsicle, so sizes differ from `@node-minify/imagemin`. Animated GIFs keep all their frames. Only `effort` applies to GIF; `quality` and `lossless` are ignored.
 
 ## Documentation
 

@@ -1,6 +1,6 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": ["config:recommended"],
+    "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
     "baseBranchPatterns": ["develop"],
     "major": {
         "dependencyDashboardApproval": true
@@ -10,6 +10,10 @@
             "matchUpdateTypes": ["minor", "patch"],
             "matchCurrentVersion": "!/^0/",
             "automerge": true
+        },
+        {
+            "matchManagers": ["github-actions"],
+            "automerge": false
         }
     ],
     "lockFileMaintenance": {

@@ -4,13 +4,11 @@
  * MIT Licensed
  */
 
-import { mkdir, stat } from "node:fs/promises";
+import { mkdir } from "node:fs/promises";
 import path from "node:path";
-import { performance } from "node:perf_hooks";
 import { info, setFailed, warning } from "@actions/core";
 import { context } from "@actions/github";
-import { minify } from "@node-minify/core";
-import { getFilesizeGzippedRaw, resolveCompressor } from "@node-minify/utils";
+import { resolveCompressor } from "@node-minify/utils";
 import { addAnnotations } from "./annotations.ts";
 import type { FileType } from "./autoDetect.ts";
 import {
@@ -24,7 +22,7 @@ import { postPRComment } from "./comment.ts";
 import { compareWithBase } from "./compare.ts";
 import { discoverFiles, generateOutputPath } from "./discover.ts";
 import { parseInputs, validateCompressor } from "./inputs.ts";
-import { runMinification } from "./minify.ts";
+import { minifyAndMeasure, runMinification } from "./minify.ts";
 import { setBenchmarkOutputs, setMinifyOutputs } from "./outputs.ts";
 import {
     generateAutoModeSummary,
@@ -54,18 +52,48 @@ export function chunkArray<T>(array: T[], size: number): T[][] {
 }
 
 /**
- * Get the size of a file in bytes.
+ * Sets the outputs, then writes the summary, PR comment and annotations the inputs ask for.
+ *
+ * @param result - The minification result to report
+ * @param inputs - Action inputs holding the report flags and token
+ * @param summarize - Writes the mode's job summary; called only when `reportSummary` is set
+ * @returns A promise that resolves when reporting is done.
  */
-async function getFileSize(filePath: string): Promise<number> {
-    const stats = await stat(filePath);
-    return stats.size;
+async function reportResult(
+    result: MinifyResult,
+    inputs: ActionInputs,
+    summarize: () => Promise<void>
+): Promise<void> {
+    setMinifyOutputs(result);
+
+    if (inputs.reportSummary) {
+        await summarize();
+    }
+
+    if (inputs.reportPRComment && context.payload.pull_request) {
+        const comparisons = await compareWithBase(result, inputs.githubToken);
+        await postPRComment(result, inputs.githubToken, comparisons);
+    }
+
+    if (inputs.reportAnnotations) {
+        addAnnotations(result);
+    }
 }
 
 /**
- * Convert an absolute filesystem path to a repository-relative path.
+ * Fails the action when the result breaks a configured threshold.
+ *
+ * @param result - The minification result to check
+ * @param inputs - Action inputs holding the thresholds
+ * @returns `true` when the action was failed
  */
-function toRepositoryPath(filePath: string): string {
-    return path.relative(process.cwd(), filePath).replace(/\\/g, "/");
+function failOnThreshold(result: MinifyResult, inputs: ActionInputs): boolean {
+    const thresholdError = checkThresholds(result.totalReduction, inputs);
+    if (thresholdError) {
+        setFailed(thresholdError);
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -81,20 +109,7 @@ export async function runExplicitMode(inputs: ActionInputs): Promise<void> {
 
     const result = await runMinification(inputs);
 
-    setMinifyOutputs(result);
-
-    if (inputs.reportSummary) {
-        await generateSummary(result);
-    }
-
-    if (inputs.reportPRComment && context.payload.pull_request) {
-        const comparisons = await compareWithBase(result, inputs.githubToken);
-        await postPRComment(result, inputs.githubToken, comparisons);
-    }
-
-    if (inputs.reportAnnotations) {
-        addAnnotations(result);
-    }
+    await reportResult(result, inputs, () => generateSummary(result));
 
     if (inputs.benchmark) {
         info(
@@ -112,9 +127,7 @@ export async function runExplicitMode(inputs: ActionInputs): Promise<void> {
         }
     }
 
-    const thresholdError = checkThresholds(result.totalReduction, inputs);
-    if (thresholdError) {
-        setFailed(thresholdError);
+    if (failOnThreshold(result, inputs)) {
         return;
     }
 
@@ -211,42 +224,16 @@ export async function runAutoMode(inputs: ActionInputs): Promise<void> {
                 const { compressor, type } = selectCompressor(
                     fileType as FileType
                 );
-                const { compressor: compressorFn, label } =
-                    await resolveCompressor(compressor);
-
-                const originalSize = await getFileSize(inputPath);
-                const startTime = performance.now();
-
-                await minify({
-                    compressor: compressorFn,
-                    input: inputPath,
-                    output: fullOutputPath,
-                    ...(type && { type }),
+                const { fileResult, label } = await minifyAndMeasure({
+                    compressor,
+                    inputPath,
+                    outputPath: fullOutputPath,
+                    file,
+                    type,
+                    includeGzip: inputs.includeGzip,
                 });
 
-                const endTime = performance.now();
-                const timeMs = Math.round(endTime - startTime);
-                const minifiedSize = await getFileSize(fullOutputPath);
-                const reduction =
-                    originalSize > 0
-                        ? ((originalSize - minifiedSize) / originalSize) * 100
-                        : 0;
-
-                let gzipSize: number | undefined;
-                if (inputs.includeGzip) {
-                    gzipSize = await getFilesizeGzippedRaw(fullOutputPath);
-                }
-
-                return {
-                    file,
-                    outputFile: toRepositoryPath(fullOutputPath),
-                    originalSize,
-                    minifiedSize,
-                    reduction,
-                    gzipSize,
-                    timeMs,
-                    compressor: label,
-                } as FileResult & { compressor: string };
+                return { ...fileResult, compressor: label };
             })
         );
 
@@ -303,27 +290,11 @@ export async function runAutoMode(inputs: ActionInputs): Promise<void> {
         totalTimeMs,
     };
 
-    setMinifyOutputs(minifyResult);
+    await reportResult(minifyResult, inputs, () =>
+        generateAutoModeSummary([minifyResult], inputs)
+    );
 
-    if (inputs.reportSummary) {
-        await generateAutoModeSummary([minifyResult], inputs);
-    }
-
-    if (inputs.reportPRComment && context.payload.pull_request) {
-        const comparisons = await compareWithBase(
-            minifyResult,
-            inputs.githubToken
-        );
-        await postPRComment(minifyResult, inputs.githubToken, comparisons);
-    }
-
-    if (inputs.reportAnnotations) {
-        addAnnotations(minifyResult);
-    }
-
-    const thresholdError = checkThresholds(minifyResult.totalReduction, inputs);
-    if (thresholdError) {
-        setFailed(thresholdError);
+    if (failOnThreshold(minifyResult, inputs)) {
         return;
     }
 

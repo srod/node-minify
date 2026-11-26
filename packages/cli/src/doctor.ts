@@ -144,6 +144,13 @@ function describeEntry(
         };
     }
 
+    if (entry.replacement) {
+        return {
+            message: `${displayName} is legacy tier and will be removed in v12. Use ${entry.replacement} instead.`,
+            severity: "warning",
+        };
+    }
+
     return {
         message: `${displayName} is legacy tier. Consider migrating.`,
         severity: "warning",

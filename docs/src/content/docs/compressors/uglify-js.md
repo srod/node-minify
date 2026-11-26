@@ -3,7 +3,7 @@ title: "uglify-js"
 description: "uglify-js for node-minify"
 ---
 
-**Status:** Supported
+**Status:** Legacy, removed in v12. Use [`terser`](/compressors/terser) instead.
 
 `uglify-js` can compress only JavaScript files.
 

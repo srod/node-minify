@@ -51,7 +51,7 @@ node-minify benchmark src/app.js -c terser,esbuild -n 3
 # Include gzip size in results
 node-minify benchmark src/app.js -c terser,esbuild --gzip
 
-# Specify file type (required for esbuild)
+# Specify file type (detected from the file extension when omitted)
 node-minify benchmark src/app.js -c terser,esbuild -t js
 ```
 
@@ -133,7 +133,7 @@ for (const file of results.files) {
 | `includeBrotli` | `boolean` | Include brotli size in results | `false` |
 | `format` | `string` | Output format: `console`, `json`, `markdown` | `console` |
 | `output` | `string` | Output file path | stdout |
-| `type` | `string` | File type: `js`, `css`, `html` | auto-detect |
+| `type` | `string` | File type: `js`, `css`, `html`. When omitted, detected per file from its extension (`.js .mjs .cjs .jsx`, `.css`, `.html .htm`); other extensions get no type, so esbuild needs `-t` | auto-detect |
 | `verbose` | `boolean` | Show per-iteration details | `false` |
 
 ## Result Structure
@@ -279,4 +279,4 @@ uglify-js       11.9 KB   73.7%       456ms     OK
 1. **Use multiple iterations** for more accurate timing results
 2. **Warmup runs** help avoid JIT compilation overhead
 3. **Include gzip size** for realistic production comparisons
-4. **Specify file type** when using compressors like esbuild that require it
+4. **Specify file type** with `-t` when a file has an unusual extension; compressors like esbuild need it and it is otherwise detected from the extension

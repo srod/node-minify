@@ -10,16 +10,13 @@ import { resolveCompressor } from "@node-minify/utils";
 /**
  * Load a compressor implementation by name.
  *
- * Attempts to resolve and return a Compressor matching the given name; returns `null` if resolution fails or no compressor is available.
+ * Resolution errors (unknown, removed or invalid compressor) propagate unchanged so callers can report the resolver's message.
  *
  * @param name - The compressor package name or identifier to resolve
- * @returns A `Compressor` instance for the given name, or `null` if none could be resolved
+ * @returns The resolved `Compressor` function
+ * @throws Error if the compressor cannot be resolved
  */
-export async function loadCompressor(name: string): Promise<Compressor | null> {
-    try {
-        const resolution = await resolveCompressor(name);
-        return resolution.compressor;
-    } catch {
-        return null;
-    }
+export async function loadCompressor(name: string): Promise<Compressor> {
+    const resolution = await resolveCompressor(name);
+    return resolution.compressor;
 }

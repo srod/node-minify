@@ -3,11 +3,11 @@ title: "imagemin"
 description: "imagemin for node-minify"
 ---
 
-**Status:** Supported
+**Status:** Legacy, removed in v12. Use [`sharp`](/compressors/sharp), or [`svgo`](/compressors/svgo) for SVG, instead.
 
 `imagemin` compresses PNG, JPEG, and GIF images using [imagemin](https://github.com/imagemin/imagemin) and its plugins.
 
-> **Note**: For new projects, consider using `@node-minify/sharp` which is more actively maintained and offers better performance.
+> **Note**: For new projects, consider using `@node-minify/sharp` which is more actively maintained and offers better performance. For GIF files, use [`@node-minify/sharp`](/compressors/sharp#gif-output) with `options: { format: 'gif' }`, which re-encodes rather than optimizing losslessly like gifsicle.
 
 ## Installation
 

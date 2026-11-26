@@ -85,6 +85,51 @@ describe("Image Integration Tests", () => {
         }
     });
 
+    test("should write a GIF file with sharp via minify()", async () => {
+        const output = resolve(tmpDir, "sharp-gif-output.gif");
+
+        try {
+            await minify({
+                compressor: sharp,
+                input: testPng,
+                output,
+                options: { format: "gif" },
+            });
+
+            expect(readFileSync(output).subarray(0, 4).toString("latin1")).toBe(
+                "GIF8"
+            );
+        } finally {
+            rmSync(output, { force: true });
+        }
+    });
+
+    test("should name a multi-format gif output with a .gif extension", async () => {
+        const inputFile = resolve(tmpDir, "sharp-gif-multi-source.png");
+        const webpOutput = resolve(tmpDir, "sharp-gif-multi-source.webp");
+        const gifOutput = resolve(tmpDir, "sharp-gif-multi-source.gif");
+
+        copyFileSync(testPng, inputFile);
+
+        try {
+            await minify({
+                compressor: sharp,
+                input: inputFile,
+                output: "$1",
+                options: { formats: ["webp", "gif"] },
+            });
+
+            expect(existsSync(webpOutput)).toBe(true);
+            expect(
+                readFileSync(gifOutput).subarray(0, 4).toString("latin1")
+            ).toBe("GIF8");
+        } finally {
+            rmSync(inputFile, { force: true });
+            rmSync(webpOutput, { force: true });
+            rmSync(gifOutput, { force: true });
+        }
+    });
+
     test("should expand wildcard image inputs and keep multi-format outputs beside each source", async () => {
         const firstInput = resolve(tmpDir, "sharp-wildcard-a.png");
         const secondInput = resolve(tmpDir, "sharp-wildcard-b.png");

@@ -3,7 +3,7 @@ title: "jsonminify"
 description: "jsonminify for node-minify"
 ---
 
-**Status:** Legacy
+**Status:** Supported
 
 `jsonminify` can compress only JSON files.
 

@@ -5,6 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { wrapMinificationError } from "@node-minify/utils";
 import imageminLib from "imagemin";
 import imageminGifsicle from "imagemin-gifsicle";
 import imageminMozjpeg from "imagemin-mozjpeg";
@@ -47,7 +48,7 @@ export type ImageminOptions = {
  * @param content - Image data to compress; must be a Buffer
  * @returns The compressed image as a `CompressorResult` containing `code` (binary string) and `buffer` (Buffer)
  * @throws Error if `content` is not a Buffer
- * @throws Error if imagemin produces no output
+ * @throws Error `imagemin minification failed: <message>` with the original error as `cause` if imagemin fails or produces no output
  */
 export async function imagemin({
     settings,
@@ -107,18 +108,22 @@ export async function imagemin({
         );
     }
 
-    const result = await imageminLib.buffer(content, {
-        plugins,
-    });
+    try {
+        const result = await imageminLib.buffer(content, {
+            plugins,
+        });
 
-    if (!result || result.length === 0) {
-        throw new Error("Imagemin returned no output");
+        if (!result || result.length === 0) {
+            throw new Error("no output");
+        }
+
+        const outputBuffer = Buffer.from(result);
+
+        return {
+            code: outputBuffer.toString("latin1"),
+            buffer: outputBuffer,
+        };
+    } catch (error) {
+        throw wrapMinificationError("imagemin", error);
     }
-
-    const outputBuffer = Buffer.from(result);
-
-    return {
-        code: outputBuffer.toString("latin1"),
-        buffer: outputBuffer,
-    };
 }

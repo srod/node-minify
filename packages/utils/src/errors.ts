@@ -9,13 +9,16 @@
  *
  * @param compressorName - The name of the compressor that failed
  * @param error - The original error (unknown type for proper catch handling)
+ * @param context - Optional detail placed before the original message, e.g. the target format a compressor was converting to
  * @returns A new Error with a standardized message format
  */
 export function wrapMinificationError(
     compressorName: string,
-    error: unknown
+    error: unknown,
+    context?: string
 ): Error {
-    const message = error instanceof Error ? error.message : String(error);
+    const original = error instanceof Error ? error.message : String(error);
+    const message = context ? `${context}: ${original}` : original;
     const cause = error instanceof Error ? error : undefined;
     return new Error(`${compressorName} minification failed: ${message}`, {
         cause,
@@ -25,6 +28,7 @@ export function wrapMinificationError(
 /**
  * Validates that a minification result contains valid output.
  *
+ * @deprecated Removed in v12, with no replacement. `run` already validates every compressor's result.
  * @param result - The result object to validate
  * @param compressorName - The name of the compressor (for error messages)
  * @throws Error if result is falsy or result.code is not a string

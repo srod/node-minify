@@ -457,7 +457,9 @@ describe("Benchmark Integration Tests", () => {
             expect(failedResult).toBeDefined();
             expect(failedResult?.success).toBe(false);
             expect(failedResult?.error).toBeDefined();
-            expect(failedResult?.error).toContain("not found");
+            expect(failedResult?.error).toContain(
+                "Could not resolve compressor 'non-existent-compressor'"
+            );
         });
 
         test("should handle mixed successful and failed compressors", async () => {
@@ -515,6 +517,24 @@ describe("Benchmark Integration Tests", () => {
             expect(compressorNames).toContain("terser");
             expect(compressorNames).toContain("esbuild");
             expect(compressorNames).toContain("swc");
+        });
+    });
+
+    describe("File Type Detection", () => {
+        test("detects js and css from each file's extension when type is omitted", async () => {
+            const result = await benchmark({
+                input: [fixtureJS, fixtureCSS],
+                compressors: ["esbuild"],
+                iterations: 2,
+            });
+
+            expect(result.files.map((f) => f.file)).toEqual([
+                fixtureJS,
+                fixtureCSS,
+            ]);
+            for (const file of result.files) {
+                assertSuccessfulCompressor(file.results[0], "esbuild");
+            }
         });
     });
 

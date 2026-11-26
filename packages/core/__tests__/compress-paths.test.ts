@@ -85,29 +85,4 @@ describe("compress path handling", () => {
         expect(vi.mocked(mkdir)).not.toHaveBeenCalled();
         expect(vi.mocked(compressSingleFile)).toHaveBeenCalledTimes(1);
     });
-
-    test("throws for an array input containing an empty string", async () => {
-        const compressor: Compressor = async () => ({ code: "ok" });
-
-        await expect(
-            compress({
-                compressor,
-                input: ["", "b.js"],
-                output: ["a.min.js", "b.min.js"],
-            } as Settings)
-        ).rejects.toThrow("expected non-empty string, got empty string");
-    });
-
-    test("throws for an array input containing a non-string", async () => {
-        const compressor: Compressor = async () => ({ code: "ok" });
-
-        await expect(
-            compress({
-                compressor,
-                // @ts-expect-error testing invalid input: array element is a number, not a string path
-                input: [123, "b.js"],
-                output: ["a.min.js", "b.min.js"],
-            })
-        ).rejects.toThrow("got number");
-    });
 });

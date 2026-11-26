@@ -7,38 +7,32 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import type { Compressor } from "@node-minify/types";
+import {
+    COMPRESSOR_REGISTRY,
+    getCompressorEntry,
+} from "./compressor-registry.ts";
 
 /**
- * Known compressor exports for built-in @node-minify packages.
- * Maps package name to the exported function name.
+ * Known compressor exports for built-in @node-minify packages, derived from the registry.
+ * Maps compressor name to the exported function name.
  */
-const KNOWN_COMPRESSOR_EXPORTS: Record<string, string> = {
-    esbuild: "esbuild",
-    "google-closure-compiler": "gcc",
-    oxc: "oxc",
-    swc: "swc",
-    terser: "terser",
-    "uglify-js": "uglifyJs",
-    "clean-css": "cleanCss",
-    cssnano: "cssnano",
-    csso: "csso",
-    lightningcss: "lightningCss",
-    "html-minifier": "htmlMinifier",
-    "minify-html": "minifyHtml",
-    jsonminify: "jsonMinify",
-    imagemin: "imagemin",
-    sharp: "sharp",
-    svgo: "svgo",
-    "no-compress": "noCompress",
-};
+const KNOWN_COMPRESSOR_EXPORTS: Record<string, string> = {};
 
 /**
  * Friendly aliases mapping a user-facing compressor name to its canonical
- * built-in package name (e.g. `gcc` → `google-closure-compiler`).
+ * built-in package name (e.g. `gcc` → `google-closure-compiler`), derived from the registry.
  */
-const COMPRESSOR_ALIASES: Record<string, string> = {
-    gcc: "google-closure-compiler",
-};
+const COMPRESSOR_ALIASES: Record<string, string> = {};
+
+for (const entry of COMPRESSOR_REGISTRY) {
+    if (!("exportName" in entry)) continue;
+    KNOWN_COMPRESSOR_EXPORTS[entry.name] = entry.exportName;
+    if ("aliases" in entry) {
+        for (const alias of entry.aliases) {
+            COMPRESSOR_ALIASES[alias] = entry.name;
+        }
+    }
+}
 
 /**
  * Resolve a compressor alias to its canonical name.
@@ -73,6 +67,7 @@ export type CompressorResolution = {
 /**
  * Determines whether a string represents a local file path.
  *
+ * @deprecated Removed in v12, with no replacement. `resolveCompressor` already accepts local paths.
  * @param name - The path string to test
  * @returns `true` if `name` appears to be a local file path, `false` otherwise
  */
@@ -152,6 +147,7 @@ function generateLabel(name: string): string {
 /**
  * Try to resolve a compressor from a built-in @node-minify package.
  *
+ * @deprecated Removed in v12. Use `resolveCompressor` instead.
  * @param name - The compressor name (e.g., "terser", "esbuild")
  * @returns The resolved CompressorResolution if found, or `null` if not installed/available
  */
@@ -187,6 +183,7 @@ export async function tryResolveBuiltIn(
 /**
  * Try to resolve a compressor from an npm package.
  *
+ * @deprecated Removed in v12. Use `resolveCompressor` instead.
  * @param name - The npm package name
  * @returns The resolved CompressorResolution if found, or `null` if not resolvable
  * @throws Error if the package is found but doesn't export a valid compressor
@@ -225,6 +222,7 @@ export async function tryResolveNpmPackage(
 /**
  * Try to resolve a compressor from a local file path.
  *
+ * @deprecated Removed in v12. Use `resolveCompressor` instead.
  * @param name - The local file path (e.g., "./my-compressor.js")
  * @returns The resolved CompressorResolution if found, or `null` if not a local path
  * @throws Error if the file is found but doesn't export a valid compressor
@@ -273,11 +271,20 @@ export async function tryResolveLocalFile(
  *
  * @param name - Compressor identifier: a built-in name (e.g., "terser"), an npm package name, or a local path (e.g., "./compressor.js")
  * @returns The resolved CompressorResolution containing the compressor function, a display `label`, and `isBuiltIn` flag
+ * @throws Error if the compressor was removed in v11 (matched by name or package name), naming its replacement
  * @throws Error if the compressor cannot be found or the module does not export a valid compressor function
  */
 export async function resolveCompressor(
     name: string
 ): Promise<CompressorResolution> {
+    const entry = getCompressorEntry(name);
+    if (entry?.status === "removed") {
+        throw new Error(
+            `Compressor '${name}' was removed in v11. ` +
+                `Use '${entry.replacement ?? "a supported compressor"}' instead.`
+        );
+    }
+
     // 1. Try built-in @node-minify package
     const builtIn = await tryResolveBuiltIn(name);
     if (builtIn) {
@@ -320,6 +327,7 @@ export function isBuiltInCompressor(name: string): boolean {
 /**
  * Return the known exported symbol name for a built-in compressor package.
  *
+ * @deprecated Removed in v12. Use `getCompressorEntry(name)?.exportName` instead; it does not resolve aliases such as `gcc`.
  * @param name - The compressor package name (for example, `"esbuild"`, `"terser"`)
  * @returns The export name used by the built-in package, or `undefined` if the compressor is not a known built-in
  */

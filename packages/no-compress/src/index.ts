@@ -5,6 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
+import { ensureStringContent } from "@node-minify/utils";
 
 /**
  * Passes input content through unchanged.
@@ -13,24 +14,23 @@ import type { CompressorResult, MinifierOptions } from "@node-minify/types";
  *
  * @param content - Input content to pass through; may be a `Buffer`, `string`, or `undefined`
  * @returns An object whose `code` property contains the input as a string (empty string when `content` is `undefined`)
- * @throws Error if `content` is not a `Buffer`, `string`, or `undefined`
+ * @throws Error "no-compress compressor does not support array content" if `content` is an array
+ * @throws Error if `content` is anything else that is not a `Buffer`, `string`, or `undefined`
  */
 export async function noCompress({
     content,
 }: MinifierOptions): Promise<CompressorResult> {
-    if (content instanceof Buffer) {
-        return { code: content.toString() };
+    // Plain-JS callers can pass numbers, objects or null, which ensureStringContent would let through
+    if (
+        content !== undefined &&
+        typeof content !== "string" &&
+        !Buffer.isBuffer(content) &&
+        !Array.isArray(content)
+    ) {
+        throw new Error(
+            `no-compress failed: content must be a string or Buffer but received ${typeof content}`
+        );
     }
 
-    if (typeof content === "string") {
-        return { code: content };
-    }
-
-    if (content === undefined) {
-        return { code: "" };
-    }
-
-    throw new Error(
-        `no-compress failed: content must be a string or Buffer but received ${typeof content}`
-    );
+    return { code: ensureStringContent(content, "no-compress") };
 }

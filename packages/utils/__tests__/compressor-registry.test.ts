@@ -15,14 +15,14 @@ describe("COMPRESSOR_REGISTRY", () => {
         expect(recommended).toHaveLength(9);
     });
 
-    test("has 6 supported compressors", () => {
+    test("has 4 supported compressors", () => {
         const supported = getCompressorsByStatus("supported");
-        expect(supported).toHaveLength(6);
+        expect(supported).toHaveLength(4);
     });
 
-    test("has 2 legacy compressors", () => {
+    test("has 4 legacy compressors", () => {
         const legacy = getCompressorsByStatus("legacy");
-        expect(legacy).toHaveLength(2);
+        expect(legacy).toHaveLength(4);
     });
 
     test("has 5 removed compressors", () => {
@@ -74,20 +74,34 @@ describe("getCompressorsByStatus", () => {
     test("returns all supported compressors", () => {
         const supported = getCompressorsByStatus("supported");
         const names = supported.map((e) => e.name);
-        expect(names).toContain("clean-css");
-        expect(names).toContain("csso");
-        expect(names).toContain("uglify-js");
-        expect(names).toContain("google-closure-compiler");
-        expect(names).toContain("imagemin");
-        expect(names).toContain("html-minifier");
+        expect(names.sort()).toEqual([
+            "clean-css",
+            "google-closure-compiler",
+            "html-minifier",
+            "jsonminify",
+        ]);
     });
 
-    test("returns legacy compressor", () => {
+    test("returns legacy compressors", () => {
         const legacy = getCompressorsByStatus("legacy");
-        expect(legacy).toHaveLength(2);
         const names = legacy.map((entry) => entry.name);
-        expect(names).toContain("jsonminify");
-        expect(names).toContain("no-compress");
+        expect(names.sort()).toEqual([
+            "csso",
+            "imagemin",
+            "no-compress",
+            "uglify-js",
+        ]);
+    });
+
+    test("only the legacy compressors removed in v12 carry a replacement", () => {
+        const withReplacement = getCompressorsByStatus("legacy")
+            .filter((entry) => entry.replacement !== undefined)
+            .map((entry) => [entry.name, entry.replacement]);
+        expect(withReplacement.sort()).toEqual([
+            ["csso", "lightningcss or cssnano"],
+            ["imagemin", "sharp, or svgo for SVG"],
+            ["uglify-js", "terser"],
+        ]);
     });
 
     test("returns all removed compressors", () => {
@@ -139,9 +153,14 @@ describe("getCompressorEntry", () => {
     });
 
     test("returns entry for legacy compressor", () => {
-        const entry = getCompressorEntry("jsonminify");
+        const entry = getCompressorEntry("csso");
         expect(entry).toBeDefined();
         expect(entry?.status).toBe("legacy");
+    });
+
+    test("returns jsonminify as supported", () => {
+        const entry = getCompressorEntry("jsonminify");
+        expect(entry?.status).toBe("supported");
     });
 
     test("returns entry for no-compress", () => {

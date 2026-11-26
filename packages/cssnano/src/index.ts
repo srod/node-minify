@@ -5,11 +5,7 @@
  */
 
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import {
-    ensureStringContent,
-    validateMinifyResult,
-    wrapMinificationError,
-} from "@node-minify/utils";
+import { ensureStringContent, wrapMinificationError } from "@node-minify/utils";
 import minify from "cssnano";
 import postcss from "postcss";
 
@@ -32,7 +28,6 @@ export async function cssnano({
             from: undefined,
         });
 
-        validateMinifyResult({ code: result.css }, "cssnano");
         return { code: result.css };
     } catch (error) {
         throw wrapMinificationError("cssnano", error);

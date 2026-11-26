@@ -1,9 +1,9 @@
 import path from "node:path";
 import * as core from "@actions/core";
+import { DEFAULT_IGNORES } from "@node-minify/utils";
 import fg from "fast-glob";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import {
-    DEFAULT_IGNORES,
     DEFAULT_PATTERNS,
     discoverFiles,
     generateOutputPath,

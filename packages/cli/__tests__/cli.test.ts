@@ -5,6 +5,7 @@
  */
 
 import childProcess from "node:child_process";
+import { resolveCompressor } from "@node-minify/utils";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import {
     filesCSS,
@@ -216,6 +217,25 @@ describe("Removed compressors", () => {
         await expect(cli.run(settings)).rejects.toThrow(
             "Compressor 'crass' was removed in v11. Use 'lightningcss' instead."
         );
+    });
+
+    test("AE1: fails with the message resolveCompressor throws", async () => {
+        const fromResolver = await resolveCompressor("yui").then(
+            () => undefined,
+            (error: Error) => error.message
+        );
+        expect(fromResolver).toBe(
+            "Compressor 'yui' was removed in v11. Use 'terser or lightningcss' instead."
+        );
+
+        await expect(
+            cli.run({
+                compressor: "yui",
+                input: filesJS.oneFile,
+                output: filesJS.fileJSOut,
+                silence: true,
+            })
+        ).rejects.toThrow(new Error(`Compression failed: ${fromResolver}`));
     });
 
     test("should fail-fast for removed compressor by scoped package name", async () => {

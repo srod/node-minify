@@ -53,12 +53,14 @@ packages/
 
 | Type | Recommended | Supported | Legacy |
 |------|-------------|-----------|--------|
-| **JS** | `terser`, `oxc`, `swc`, `esbuild` | `uglify-js`, `google-closure-compiler` | - |
-| **CSS** | `lightningcss`, `cssnano`, `esbuild` | `clean-css`, `csso` | - |
+| **JS** | `terser`, `oxc`, `swc`, `esbuild` | `google-closure-compiler` | `uglify-js` (removed in v12, use `terser`) |
+| **CSS** | `lightningcss`, `cssnano`, `esbuild` | `clean-css` | `csso` (removed in v12, use `lightningcss` or `cssnano`) |
 | **HTML** | `minify-html` | `html-minifier` | - |
-| **JSON** | - | - | `jsonminify` |
-| **Images** | `sharp` (WebP/AVIF/PNG/JPEG), `svgo` (SVG) | `imagemin` (PNG/JPEG/GIF) | - |
+| **JSON** | - | `jsonminify` | - |
+| **Images** | `sharp` (WebP/AVIF/PNG/JPEG/GIF), `svgo` (SVG) | - | `imagemin` (removed in v12, use `sharp`, or `svgo` for SVG) |
 | **Passthrough** | - | - | `no-compress` |
+
+A legacy entry with a `replacement` in the registry is removed in the next major (v12). `doctor` and the CLI compressor list say so. Nothing is printed at runtime.
 
 **Removed** (v11): `babel-minify`, `uglify-es`, `yui`, `crass`, `sqwish`
 
@@ -87,7 +89,6 @@ packages/<name>/
 - `types`: No build, exports `src/types.d.ts` directly
 - `action`: Uses `bun build` (bundled), has `action.yml`
 - `cli`: Dual entry (`src/index.ts` + `src/bin/cli.ts`)
-- `utils`: Multi-file build (`tsdown src/*.ts`)
 
 ## Key Types
 
@@ -117,8 +118,11 @@ export async function myCompressor({ settings, content }: MinifierOptions): Prom
     }
 }
 ```
-3. Add tests using `runOneTest` from `tests/fixtures.ts`
-4. Add changeset: `bun run changeset`
+3. Add one entry to `COMPRESSOR_REGISTRY` in `packages/utils/src/compressor-registry.ts` (name, status, packageName, exportName, plus `cssOnly` or `aliases` if they apply). The resolver, the CLI and `doctor` read from it, so no other list of compressors needs editing. Also add the package as a `workspace:*` dependency of each package that loads it by name (e.g. `packages/cli/package.json`), since built-in resolution imports `@node-minify/<name>` at runtime.
+4. Add tests using `runOneTest` from `tests/fixtures.ts`
+5. Add changeset: `bun run changeset`
+
+The defaults stay in their own files, typed `CompressorName`: the CLI's `DEFAULT_COMPRESSOR`, the Action's per-file-type defaults (`COMPRESSOR_MAP`) and default benchmark set, and the benchmark's default set. Renaming or removing a compressor in the registry fails typecheck there.
 
 ## Testing
 
@@ -154,11 +158,11 @@ Custom `scripts/publish.ts` resolves `workspace:*` → concrete versions before 
   // @ts-expect-error testing invalid input: settings is missing required fields
   // @ts-expect-error mock is narrower than the real type it stands in for
   ```
-  Test files are typechecked (`bun run typecheck`), so an unused directive fails the build — the suppression cannot rot. This covers every `__tests__/` directory plus the shared `tests/` helpers and `tests/integration/`.
+  Test files are typechecked (`bun run typecheck`), so an unused directive fails the build — the suppression cannot rot. This covers every `__tests__/` directory, through each package's `tsc`, plus `tests/` and `scripts/`, through the root `tsconfig.typecheck.json`.
 
   Place the directive on the line the compiler reports, which is not always the offending property: a missing required field is reported on the object-literal or declaration line, so the directive belongs there rather than on a property. Where several errors would be reported for one literal, TypeScript surfaces only the first — keep the comment to the error actually being suppressed instead of listing every latent one.
 
-  Enforcement of these four rules is split. Biome's `noTsIgnore` catches `@ts-ignore`, and root lint covers workspace packages plus `tests/`, `scripts/`, and `examples/` via `lint:root`. `scripts/ci-guard-type-suppressions.sh` is the mechanism for what no Biome rule covers: it bans `@ts-nocheck` and `@ts-ignore` across the whole repository, bans `@ts-expect-error` under any `src/`, and rejects a directive with no reason after it. Run it locally with `bash scripts/ci-guard-type-suppressions.sh`; CI runs it on the Linux/Node 22 leg.
+  Enforcement of these four rules is split. Biome's `noTsIgnore` catches `@ts-ignore`, and root lint covers workspace packages plus `tests/`, `scripts/`, and `examples/` via `lint:root`. `scripts/ci-guard-type-suppressions.sh` is the mechanism for what no Biome rule covers: it bans `@ts-nocheck` and `@ts-ignore` across the whole repository, allows `@ts-expect-error` only under `__tests__/` and `tests/`, rejects a directive with no reason after it, and fails when grep cannot read a file. Run it locally with `bash scripts/ci-guard-type-suppressions.sh`; CI runs it on the Linux/Node 22 leg.
 - **Never** remove JSDoc from exported functions
 - **Never** use deprecated packages in new code
 - **Never** commit without `bun run lint`

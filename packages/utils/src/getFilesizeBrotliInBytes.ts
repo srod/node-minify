@@ -9,7 +9,7 @@ import { readFile } from "node:fs/promises";
 import { promisify } from "node:util";
 import { brotliCompress, constants } from "node:zlib";
 import { FileOperationError } from "./error.ts";
-import { isValidFile } from "./isValidFile.ts";
+import { isValidFileAsync } from "./isValidFile.ts";
 import { prettyBytes } from "./prettyBytes.ts";
 
 const brotliCompressAsync = promisify(brotliCompress);
@@ -31,7 +31,7 @@ async function getBrotliSize(file: string): Promise<number> {
         );
     }
 
-    if (!isValidFile(file)) {
+    if (!(await isValidFileAsync(file))) {
         throw new FileOperationError(
             "access",
             file,

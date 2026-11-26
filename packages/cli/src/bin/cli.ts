@@ -7,7 +7,10 @@
  */
 
 import { benchmark, getReporter } from "@node-minify/benchmark";
-import { getCompressorsByStatus } from "@node-minify/utils";
+import {
+    type CompressorName,
+    getCompressorsByStatus,
+} from "@node-minify/utils";
 import { Command } from "commander";
 import ora from "ora";
 import updateNotifier from "update-notifier";
@@ -16,7 +19,7 @@ import { doctor } from "../doctor.ts";
 import type { SettingsWithCompressor } from "../index.ts";
 import { run } from "../index.ts";
 
-const DEFAULT_COMPRESSOR = "uglify-js";
+const DEFAULT_COMPRESSOR: CompressorName = "uglify-js";
 
 /**
  * Create and configure the command-line interface for the node-minify tool.
@@ -96,7 +99,7 @@ function setupProgram(): Command {
         .option("-o, --output <output>", "output file path")
         .option(
             "-t, --type <type>",
-            "file type: js or css (required for esbuild)"
+            "file type: js, css or html (detected from the file extension when omitted)"
         )
         .option("--gzip", "include gzip size")
         .option("--brotli", "include brotli size")
@@ -160,31 +163,23 @@ function displayCompressorsList() {
     console.log("  List of compressors:");
     console.log("");
 
-    const recommended = getCompressorsByStatus("recommended");
-    const supported = getCompressorsByStatus("supported");
-    const legacy = getCompressorsByStatus("legacy");
+    for (const [label, status] of [
+        ["Recommended", "recommended"],
+        ["Supported", "supported"],
+        ["Legacy", "legacy"],
+    ] as const) {
+        const compressors = getCompressorsByStatus(status);
+        if (compressors.length === 0) {
+            continue;
+        }
 
-    if (recommended.length > 0) {
-        console.log("    Recommended:");
-        recommended.forEach((compressor) => {
-            console.log(`      - ${compressor.name}`);
-        });
-        console.log("");
-    }
-
-    if (supported.length > 0) {
-        console.log("    Supported:");
-        supported.forEach((compressor) => {
-            console.log(`      - ${compressor.name}`);
-        });
-        console.log("");
-    }
-
-    if (legacy.length > 0) {
-        console.log("    Legacy:");
-        legacy.forEach((compressor) => {
-            console.log(`      - ${compressor.name}`);
-        });
+        console.log(`    ${label}:`);
+        for (const compressor of compressors) {
+            const note = compressor.replacement
+                ? ` (removed in v12, use ${compressor.replacement})`
+                : "";
+            console.log(`      - ${compressor.name}${note}`);
+        }
         console.log("");
     }
 }

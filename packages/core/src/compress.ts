@@ -64,22 +64,11 @@ export async function compress<T extends CompressorOptions = CompressorOptions>(
  *
  * @param settings - Configuration object where `settings.input` and `settings.output` are arrays of equal length; each `settings.input[i]` is a file path to compress and corresponds to `settings.output[i]`.
  * @returns The result of the last compression task, or an empty string if no tasks ran.
- * @throws Error if any entry in `settings.input` is not a non-empty string.
  */
 async function compressArrayOfFiles<
     T extends CompressorOptions = CompressorOptions,
 >(settings: Settings<T>): Promise<string> {
     const inputs = settings.input as string[];
-
-    inputs.forEach((input, index) => {
-        if (!input || typeof input !== "string") {
-            throw new Error(
-                `Invalid input at index ${index}: expected non-empty string, got ${
-                    typeof input === "string" ? "empty string" : typeof input
-                }`
-            );
-        }
-    });
 
     const compressionTasks = inputs.map(async (input, index) => {
         const content = isImageFile(input)

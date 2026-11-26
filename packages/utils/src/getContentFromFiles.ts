@@ -46,6 +46,7 @@ async function readFileContentAsync(path: string): Promise<string> {
 
 /**
  * Concatenate all input files and get the data.
+ * @deprecated Removed in v12. Use `getContentFromFilesAsync` instead.
  * @param input Single file path or array of file paths
  * @returns Concatenated content of all files
  * @throws {FileOperationError} If any file operation fails

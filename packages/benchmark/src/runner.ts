@@ -7,13 +7,12 @@
 import { statSync } from "node:fs";
 import fsPromises from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { extname, join } from "node:path";
 import { minify } from "@node-minify/core";
 import type { Compressor } from "@node-minify/types";
 import {
-    getFilesizeBrotliInBytes,
+    type CompressorName,
     getFilesizeBrotliRaw,
-    getFilesizeGzippedInBytes,
     getFilesizeGzippedRaw,
     prettyBytes,
     wildcards,
@@ -26,6 +25,45 @@ import type {
     CompressorMetrics,
     FileResult,
 } from "./types.ts";
+
+/**
+ * Compressors benchmarked when the caller does not pick any.
+ * Typed with `CompressorName` so renaming or removing one in the registry fails typecheck.
+ */
+const DEFAULT_COMPRESSORS: readonly CompressorName[] = [
+    "terser",
+    "esbuild",
+    "swc",
+    "oxc",
+];
+
+const TYPE_BY_EXTENSION: Record<
+    string,
+    NonNullable<BenchmarkOptions["type"]>
+> = {
+    ".js": "js",
+    ".mjs": "js",
+    ".cjs": "js",
+    ".jsx": "js",
+    ".css": "css",
+    ".html": "html",
+    ".htm": "html",
+};
+
+/**
+ * Pick the file type passed to `minify`: the caller's explicit type, else the one
+ * implied by the file extension. Compressors that need a type (esbuild) fail without it.
+ *
+ * @param file - Input file path
+ * @param type - Explicit type from the benchmark options
+ * @returns The type, or undefined when none is given and the extension is unknown
+ */
+function resolveType(
+    file: string,
+    type: BenchmarkOptions["type"]
+): BenchmarkOptions["type"] {
+    return type ?? TYPE_BY_EXTENSION[extname(file).toLowerCase()];
+}
 
 /**
  * Run warmup iterations for a compressor to stabilize JIT and caches.
@@ -48,6 +86,8 @@ export async function runWarmup(
     options: Pick<BenchmarkOptions, "type" | "compressorOptions">,
     collected: string[] = []
 ): Promise<string[]> {
+    const type = resolveType(file, options.type);
+
     for (let i = 0; i < warmupCount; i++) {
         const warmupOutput = `${warmupFile}.${i + 1}`;
 
@@ -59,7 +99,7 @@ export async function runWarmup(
             compressor,
             input: file,
             output: warmupOutput,
-            ...(options.type && { type: options.type as "js" | "css" }),
+            ...(type && { type: type as "js" | "css" }),
             options: options.compressorOptions,
         });
     }
@@ -99,6 +139,7 @@ export async function runIterations(
     }
 
     const times: number[] = [];
+    const type = resolveType(file, options.type);
 
     for (let i = 0; i < iterationCount; i++) {
         const start = performance.now();
@@ -106,7 +147,7 @@ export async function runIterations(
             compressor,
             input: file,
             output: outputFileBase,
-            ...(options.type && { type: options.type as "js" | "css" }),
+            ...(type && { type: type as "js" | "css" }),
             options: options.compressorOptions,
         });
         times.push(performance.now() - start);
@@ -155,13 +196,15 @@ export async function calculateCompressorMetrics(
     };
 
     if (options.includeGzip) {
-        metrics.gzipSize = await getFilesizeGzippedInBytes(outputFile);
-        metrics.gzipBytes = await getFilesizeGzippedRaw(outputFile);
+        const gzipBytes = await getFilesizeGzippedRaw(outputFile);
+        metrics.gzipBytes = gzipBytes;
+        metrics.gzipSize = prettyBytes(gzipBytes);
     }
 
     if (options.includeBrotli) {
-        metrics.brotliSize = await getFilesizeBrotliInBytes(outputFile);
-        metrics.brotliBytes = await getFilesizeBrotliRaw(outputFile);
+        const brotliBytes = await getFilesizeBrotliRaw(outputFile);
+        metrics.brotliBytes = brotliBytes;
+        metrics.brotliSize = prettyBytes(brotliBytes);
     }
 
     return metrics;
@@ -243,12 +286,7 @@ async function benchmarkFile(
     const originalSize = prettyBytes(originalSizeBytes);
     const results: CompressorMetrics[] = [];
 
-    const compressors = options.compressors || [
-        "terser",
-        "esbuild",
-        "swc",
-        "oxc",
-    ];
+    const compressors = options.compressors || DEFAULT_COMPRESSORS;
 
     for (const name of compressors) {
         if (options.onProgress) {
@@ -282,20 +320,13 @@ async function benchmarkCompressor(
     options: BenchmarkOptions,
     originalSizeBytes: number
 ): Promise<CompressorMetrics> {
-    const compressor = await loadCompressor(name);
-
-    if (!compressor) {
-        return createErrorMetrics(
-            name,
-            "Compressor not found or not installed"
-        );
-    }
-
     const iterations = options.iterations || 1;
     const warmup = options.warmup ?? (iterations > 1 ? 1 : 0);
     let tempDir: string | undefined;
 
     try {
+        const compressor = await loadCompressor(name);
+
         tempDir = await fsPromises.mkdtemp(
             join(tmpdir(), "node-minify-bench-")
         );

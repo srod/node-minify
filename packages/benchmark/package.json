@@ -53,8 +53,7 @@
   },
   "dependencies": {
     "@node-minify/core": "workspace:*",
-    "@node-minify/utils": "workspace:*",
-    "chalk": "5.6.2"
+    "@node-minify/utils": "workspace:*"
   },
   "devDependencies": {
     "@node-minify/esbuild": "workspace:*",

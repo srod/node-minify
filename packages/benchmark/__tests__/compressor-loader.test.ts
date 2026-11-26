@@ -26,19 +26,24 @@ describe("Compressor Loader", () => {
         expect(typeof compressor).toBe("function");
     });
 
-    test("should return null for non-existent compressor", async () => {
-        const compressor = await loadCompressor("non-existent-compressor");
-        expect(compressor).toBeNull();
+    test("should reject with the resolver error for non-existent compressor", async () => {
+        await expect(loadCompressor("non-existent-compressor")).rejects.toThrow(
+            "Could not resolve compressor 'non-existent-compressor'"
+        );
     });
 
-    test("should return null for non-existent package", async () => {
-        const compressor = await loadCompressor("@node-minify/fake-package");
-        expect(compressor).toBeNull();
+    test("should reject with the resolver error for non-existent package", async () => {
+        await expect(
+            loadCompressor("@node-minify/fake-package")
+        ).rejects.toThrow(
+            "Could not resolve compressor '@node-minify/fake-package'"
+        );
     });
 
-    test("should handle import errors gracefully", async () => {
-        const compressor = await loadCompressor("invalid-module");
-        expect(compressor).toBeNull();
+    test("should reject with the removed-compressor message for a removed name", async () => {
+        await expect(loadCompressor("yui")).rejects.toThrow(
+            "Compressor 'yui' was removed in v11. Use 'terser or lightningcss' instead."
+        );
     });
 
     test("should load clean-css compressor", async () => {

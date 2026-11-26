@@ -463,6 +463,43 @@ describe("Package: utils/compressor-resolver", () => {
             });
         });
 
+        describe("removed compressors", () => {
+            test.each([
+                ["babel-minify", "terser"],
+                ["uglify-es", "terser"],
+                ["yui", "terser or lightningcss"],
+                ["sqwish", "lightningcss"],
+                ["crass", "lightningcss"],
+            ])(
+                "AE1: rejects removed '%s' naming '%s'",
+                async (name, replacement) => {
+                    await expect(resolveCompressor(name)).rejects.toThrow(
+                        new Error(
+                            `Compressor '${name}' was removed in v11. Use '${replacement}' instead.`
+                        )
+                    );
+                }
+            );
+
+            test("AE1: rejects a removed compressor given as its package name", async () => {
+                await expect(
+                    resolveCompressor("@node-minify/yui")
+                ).rejects.toThrow(
+                    new Error(
+                        "Compressor '@node-minify/yui' was removed in v11. Use 'terser or lightningcss' instead."
+                    )
+                );
+            });
+
+            test("does not reject a supported package name", async () => {
+                const resolution = await resolveCompressor(
+                    "@node-minify/terser"
+                );
+                expect(resolution.label).toBe("@node-minify/terser");
+                expect(resolution.isBuiltIn).toBe(false);
+            });
+        });
+
         describe("error messages", () => {
             test("should suggest local path format for unknown packages", async () => {
                 await expect(

@@ -16,8 +16,6 @@
     "@total-typescript/tsconfig": "^1.0.4",
     "@types/node": "^22.20.5",
     "@vitest/coverage-v8": "^4.1.12",
-    "@vitest/ui": "^4.1.12",
-    "copyfiles": "2.4.1",
     "rimraf": "6.1.4",
     "tsdown": "^0.23.7",
     "typescript": "5.9.3",
@@ -54,7 +52,7 @@
     "changeset:release": "bun run build && bun scripts/publish.ts",
     "format:check": "bun run --filter '*' format:check",
     "format": "biome check --write .",
-    "typecheck": "bun run --filter '*' typecheck"
+    "typecheck": "bun run --filter '*' typecheck && tsc -p tsconfig.typecheck.json"
   },
   "type": "module",
   "workspaces": [

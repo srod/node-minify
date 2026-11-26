@@ -8,11 +8,7 @@
 // only through the default export, so named imports fail at runtime.
 import minifyHtmlLib from "@minify-html/node";
 import type { CompressorResult, MinifierOptions } from "@node-minify/types";
-import {
-    ensureStringContent,
-    validateMinifyResult,
-    wrapMinificationError,
-} from "@node-minify/utils";
+import { ensureStringContent, wrapMinificationError } from "@node-minify/utils";
 
 /**
  * Default options for minify-html.
@@ -46,10 +42,7 @@ export async function minifyHtml({
 
         const inputBuffer = Buffer.from(contentStr);
         const outputBuffer = minifyHtmlLib.minify(inputBuffer, options);
-        const code = outputBuffer.toString();
-        const result = { code };
-        validateMinifyResult(result, "minify-html");
-        return result;
+        return { code: outputBuffer.toString() };
     } catch (error) {
         throw wrapMinificationError("minify-html", error);
     }
