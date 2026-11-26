@@ -1,6 +1,6 @@
 {
     "$schema": "https://unpkg.com/@changesets/config@3.0.3/schema.json",
-    "changelog": ["@changesets/cli/changelog", { "repo": "srod/node-minify" }],
+    "changelog": ["./changelog.cjs", { "repo": "srod/node-minify" }],
     "commit": false,
     "fixed": [["@node-minify/*"]],
     "linked": [],
