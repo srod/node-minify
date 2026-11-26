@@ -6,7 +6,7 @@ import { describe, expect, test } from "vitest";
 import { buildReleaseNotes, readChangelogs } from "../release-notes.ts";
 
 const FOOTER =
-    "All `@node-minify/*` packages are published at `11.1.0`. Each package's `CHANGELOG.md` has its own entries.";
+    "All `@node-minify/*` npm packages are published at `11.1.0`, and the GitHub Action is released as `v11.1.0`. Each package's `CHANGELOG.md` has its own entries.";
 
 function changelog(name: string, body: string) {
     return {
@@ -71,6 +71,40 @@ describe("buildReleaseNotes", () => {
         expect(notes).not.toContain("Updated dependencies");
         expect(notes).not.toContain("@node-minify/utils@11.1.0");
         expect(notes).not.toContain("bbbbbbb");
+    });
+
+    test("keeps an entry changesets wrote without a commit, merged by its text", () => {
+        const notes = buildReleaseNotes("11.1.0", [
+            changelog(
+                "core",
+                "## 11.1.0\n\n### Patch Changes\n\n- No commit here.\n  Second line.\n- Updated `@node-minify/*` dependencies to 11.1.0.\n"
+            ),
+            changelog(
+                "cli",
+                "## 11.1.0\n\n### Patch Changes\n\n- No commit here.\n  Second line.\n- @node-minify/utils@11.1.0\n"
+            ),
+        ]);
+
+        expect(notes).toContain(
+            "- **`cli`, `core`**: No commit here.\n  Second line."
+        );
+        expect(notes.match(/No commit here/g)).toHaveLength(1);
+        expect(notes).not.toContain("dependencies to 11.1.0");
+        expect(notes).not.toContain("@node-minify/utils@11.1.0");
+    });
+
+    test("reads changelogs with CRLF line endings", () => {
+        const notes = buildReleaseNotes("11.1.0", [
+            changelog(
+                "core",
+                "## 11.1.0\r\n\r\n### Minor Changes\r\n\r\n- aaaaaaa: Windows checkout.\r\n  Body line.\r\n"
+            ),
+        ]);
+
+        expect(notes).toContain(
+            "## Features\n\n- **`core`**: Windows checkout.\n  Body line.\n"
+        );
+        expect(notes).not.toContain("\r");
     });
 
     test("parses plain and linked hash entries", () => {

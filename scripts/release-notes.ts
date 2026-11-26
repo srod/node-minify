@@ -14,7 +14,8 @@ export type Kind = "major" | "minor" | "patch";
 
 /** One change, merged across every package that lists it. */
 export type ReleaseEntry = {
-    hash: string;
+    /** Commit hash, or undefined for an entry changesets wrote without one. */
+    hash: string | undefined;
     kind: Kind;
     /** Short package names (without `@node-minify/`), sorted. */
     packages: string[];
@@ -42,6 +43,9 @@ const SECTION_TITLES: Record<Kind, string> = {
 
 // `- abc1234: text` (changesets' default) or `- [`abc1234`](url): text` (.changeset/changelog.cjs).
 const ENTRY_START = /^- (?:([0-9a-f]{7})|\[`([0-9a-f]{7})`\]\([^)]*\)): (.*)$/;
+// What changesets writes for internal dependency bumps, old format and .changeset/changelog.cjs.
+const DEPENDENCY_LINE =
+    /^- (?:Updated dependencies|Updated `@node-minify\/\*` dependencies|@node-minify\/)/;
 
 /**
  * Return the lines of the `## <version>` section of a changelog, up to the next `## ` heading.
@@ -51,7 +55,8 @@ const ENTRY_START = /^- (?:([0-9a-f]{7})|\[`([0-9a-f]{7})`\]\([^)]*\)): (.*)$/;
  * @returns The lines under the heading, or an empty array when the version is absent
  */
 function sectionLines(text: string, version: string): string[] {
-    const lines = text.split("\n");
+    // A Windows checkout can turn LF into CRLF, and `.` in a RegExp does not match `\r`.
+    const lines = text.split(/\r?\n/);
     const start = lines.findIndex((line) => line.trimEnd() === `## ${version}`);
     if (start === -1) {
         return [];
@@ -62,13 +67,13 @@ function sectionLines(text: string, version: string): string[] {
     return lines.slice(start + 1, end === -1 ? undefined : end);
 }
 
-type RawEntry = { hash: string; kind: Kind; lines: string[] };
+type RawEntry = { hash: string | undefined; kind: Kind; lines: string[] };
 
 /**
- * Parse the entries of one version section, skipping `Updated dependencies` entries.
+ * Parse the entries of one version section, skipping dependency-bump entries.
  *
  * @param lines - The lines of the version section
- * @returns The entries that start with a commit hash, with their continuation lines
+ * @returns The entries, with or without a commit hash, with their continuation lines
  */
 function parseSection(lines: string[]): RawEntry[] {
     const entries: RawEntry[] = [];
@@ -84,10 +89,18 @@ function parseSection(lines: string[]): RawEntry[] {
         const start = ENTRY_START.exec(line);
         if (start && kind) {
             current = {
-                hash: start[1] ?? start[2] ?? "",
+                hash: start[1] ?? start[2],
                 kind,
                 lines: [(start[3] ?? "").trimEnd()],
             };
+            entries.push(current);
+        } else if (
+            kind &&
+            line.startsWith("- ") &&
+            !DEPENDENCY_LINE.test(line)
+        ) {
+            // changesets writes `- text` for a changeset that has no commit.
+            current = { hash: undefined, kind, lines: [line.slice(2).trimEnd()] };
             entries.push(current);
         } else if (line.startsWith("- ") || /^\S/.test(line)) {
             current = undefined;
@@ -108,6 +121,7 @@ function parseSection(lines: string[]): RawEntry[] {
  * Collect one version's entries from every package changelog, merged by commit hash.
  *
  * An entry listed by several packages becomes one entry that lists all of them.
+ * Entries are matched by commit hash, or by their first line when they have no hash.
  * Its kind is the highest one any package filed it under.
  *
  * @param version - The version to collect, such as `11.1.0`
@@ -125,10 +139,11 @@ export function collectEntries(
             ? name.slice(SCOPE.length)
             : name;
         for (const raw of parseSection(sectionLines(text, version))) {
-            const existing = merged.get(raw.hash);
+            const key = raw.hash ?? `text:${raw.lines[0] ?? ""}`;
+            const existing = merged.get(key);
             if (!existing) {
                 const [firstLine = "", ...rest] = raw.lines;
-                merged.set(raw.hash, {
+                merged.set(key, {
                     hash: raw.hash,
                     kind: raw.kind,
                     packages: [shortName],
@@ -153,7 +168,7 @@ export function collectEntries(
 }
 
 /**
- * Order entries by PR number ascending, entries without a PR last, then by hash.
+ * Order entries by PR number ascending, entries without a PR last, then by hash, then by first line.
  *
  * @param a - First entry
  * @param b - Second entry
@@ -165,12 +180,17 @@ function compareEntries(
     b: ReleaseEntry,
     prNumbers: Map<string, number>
 ): number {
-    const prA = prNumbers.get(a.hash) ?? Number.POSITIVE_INFINITY;
-    const prB = prNumbers.get(b.hash) ?? Number.POSITIVE_INFINITY;
+    const prOf = (entry: ReleaseEntry) =>
+        (entry.hash === undefined ? undefined : prNumbers.get(entry.hash)) ??
+        Number.POSITIVE_INFINITY;
+    const prA = prOf(a);
+    const prB = prOf(b);
     if (prA !== prB) {
         return prA < prB ? -1 : 1;
     }
-    return a.hash < b.hash ? -1 : a.hash > b.hash ? 1 : 0;
+    const keyA = `${a.hash ?? "~"} ${a.firstLine}`;
+    const keyB = `${b.hash ?? "~"} ${b.firstLine}`;
+    return keyA < keyB ? -1 : keyA > keyB ? 1 : 0;
 }
 
 /**
@@ -187,7 +207,7 @@ export function buildReleaseNotes(
     prNumbers: Map<string, number> = new Map()
 ): string {
     const entries = collectEntries(version, changelogs);
-    const footer = `All \`@node-minify/*\` packages are published at \`${version}\`. Each package's \`CHANGELOG.md\` has its own entries.`;
+    const footer = `All \`@node-minify/*\` npm packages are published at \`${version}\`, and the GitHub Action is released as \`v${version}\`. Each package's \`CHANGELOG.md\` has its own entries.`;
     if (entries.length === 0) {
         return footer;
     }
@@ -203,7 +223,8 @@ export function buildReleaseNotes(
         lines.push(`## ${SECTION_TITLES[kind]}`, "");
         for (const entry of inKind) {
             const packages = entry.packages.map((p) => `\`${p}\``).join(", ");
-            const pr = prNumbers.get(entry.hash);
+            const pr =
+                entry.hash === undefined ? undefined : prNumbers.get(entry.hash);
             lines.push(
                 `- **${packages}**${pr === undefined ? "" : ` (#${pr})`}: ${entry.firstLine}`,
                 ...entry.rest
@@ -272,6 +293,9 @@ if (import.meta.main) {
     const changelogs = readChangelogs(join(REPO_ROOT, "packages"));
     const prNumbers = new Map<string, number>();
     for (const { hash } of collectEntries(version, changelogs)) {
+        if (!hash) {
+            continue;
+        }
         const pr = findPrNumber(hash);
         if (pr !== undefined) {
             prNumbers.set(hash, pr);
